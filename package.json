@@ -1,0 +1,32 @@
+{
+  "name": "nativescript-angular",
+  "version": "0.0.1",
+  "description": "",
+  "homepage": "http://www.telerik.com",
+  "bugs": "http://www.telerik.com",
+  "contributors": [
+    "Hristo Deshev <hristo.deshev@telerik.com>"
+  ],
+  "license": "Apache-2.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/hdeshev/nativescript-angular.git"
+  },
+  "scripts": {
+  },
+  "dependencies": {
+    "reflect-metadata": "0.1.0",
+    "rtts_assert": "2.0.0-alpha.26",
+    "zone.js": "0.5.0",
+    "rx": "2.5.3"
+  },
+  "devDependencies": {
+    "grunt": "0.4.5",
+    "grunt-contrib-copy": "0.8.0",
+    "grunt-contrib-clean": "0.6.0",
+    "grunt-shell": "1.1.2",
+    "grunt-file": "1.0.2",
+    "grunt-ts": "4.1.0",
+    "typescript": "1.5.0-beta"
+  }
+}
