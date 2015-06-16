@@ -1,3 +1,8 @@
+//
+// Types needed by Angular 2.
+// TODO: remove when we get rid of no-default-lib="true"
+//
+
 interface TypedPropertyDescriptor<T> {
     enumerable?: boolean;
     configurable?: boolean;

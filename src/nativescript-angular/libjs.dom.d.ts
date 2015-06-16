@@ -1,3 +1,8 @@
+//
+// Types needed by Angular 2.
+// TODO: remove when we get rid of no-default-lib="true"
+//
+
 declare var window: Window;
 declare var document: any;
 
