@@ -6,3 +6,11 @@ typings
 !/src/nativescript-angular/
 .baseDir.ts
 .tscache
+
+
+ng-sample/app
+ng-sample/platforms
+ng-sample/lib
+ng-sample/node_modules
+ng-sample/src/tns_modules
+ng-sample/src/typings
