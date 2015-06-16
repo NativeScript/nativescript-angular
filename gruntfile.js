@@ -3,9 +3,23 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-shell');
     grunt.loadNpmTasks('grunt-contrib-copy');
     grunt.loadNpmTasks('grunt-contrib-clean');
+    grunt.loadNpmTasks('grunt-env');
 
     var runEnv = JSON.parse(JSON.stringify(process.env));
     runEnv['NODE_PATH'] = 'bin/dist/modules';
+
+    var ngSampleSubDir = {
+        execOptions: {
+            cwd: 'ng-sample',
+        }
+    }
+
+    var nsSubDir = {
+        execOptions: {
+            cwd: 'deps/NativeScript',
+        }
+    }
+
 
     grunt.initConfig({
         ts: {
@@ -116,15 +130,27 @@ module.exports = function(grunt) {
             }
         },
         shell: {
-            runApp: {
-                command: 'node bin/dist/modules/app.js',
-                options: {
-                    execOptions: {
-                        env: runEnv
-                    }
-                }
+            ngSampleFull: {
+                command: 'grunt app-full',
+                options: ngSampleSubDir
+            },
+            ngSampleInit: {
+                command: [
+                    'npm install',
+                    'tns platform add android',
+                ].join('&&'),
+                options: ngSampleSubDir
+            },
+            depBuildNS: {
+                command: 'grunt --no-runtslint',
+                options: nsSubDir
             }
         },
+        env: {
+            ngSample: {
+                NSDIST: '../deps/NativeScript/bin/dist',
+            }
+        }
     });
 
     grunt.registerTask("run", ['ts', 'shell:runApp']);
@@ -136,4 +162,6 @@ module.exports = function(grunt) {
     ]);
 
     grunt.registerTask("prepare", ["prepareAngular", "copy:nativeScriptSource"]);
+
+    grunt.registerTask("ng-sample", ["env:ngSample", "shell:ngSampleFull"]);
 }
