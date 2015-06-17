@@ -1,4 +1,5 @@
 var path = require("path");
+var fs = require("fs");
 
 module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-ts');
@@ -11,6 +12,7 @@ module.exports = function(grunt) {
 
     var modulesDestPath = "app/tns_modules";
     var typingsDestPath = "src/typings/nativescript";
+    var angularSrcPath = grunt.option("angularSrcPath") || "../src"
 
     grunt.initConfig({
         ts: {
@@ -54,9 +56,40 @@ module.exports = function(grunt) {
                 cwd: typingsPath,
                 src: [
                     '**/*',
+                    '!es6-promise.d.ts',
+                    '!es-collections.d.ts',
                 ],
                 dest: typingsDestPath
-            }
+            },
+            angularFiles: {
+                expand: true,
+                cwd: angularSrcPath,
+                src: [
+                    'angular2/**/*',
+                    'nativescript-angular/**/*',
+                ],
+                dest: 'src/'
+            },
+            tnsifyAngular: {
+                expand: true,
+                cwd: 'app/',
+                src: [
+                    "angular2/**/*",
+                    "nativescript-angular/**/*",
+                ],
+                dest: 'app/tns_modules',
+            },
+            tnsifyNpmDeps: {
+                expand: true,
+                cwd: 'node_modules/',
+                src: [
+                    "reflect-metadata/**/*",
+                    "rtts_assert/**/*",
+                    "zone.js/**/*",
+                    "rx/**/*",
+                ],
+                dest: 'app/tns_modules',
+            },
         },
     });
 
@@ -80,17 +113,27 @@ module.exports = function(grunt) {
         }
     });
 
+    grunt.registerTask("checkAngular", function() {
+        if (!grunt.file.exists(path.join(angularSrcPath, 'angular2'))) {
+            grunt.fail.fatal("angular2 path does not exist.");
+        }
+        if (!grunt.file.exists(path.join(angularSrcPath, 'nativescript-angular'))) {
+            grunt.fail.fatal("nativescript-angular path does not exist.");
+        }
+    });
+
     grunt.registerTask("app", [
-        "ts:build",
         "copy:appFiles",
+        "ts:build",
+        "prepareTnsModules",
     ]);
 
     grunt.registerTask("app-full", [
         "clean",
-        "copy:appFiles",
         "updateTypings",
         "updateModules",
-        "ts:build",
+        "updateAngular",
+        "app",
     ]);
 
     grunt.registerTask("updateModules", [
@@ -101,6 +144,16 @@ module.exports = function(grunt) {
     grunt.registerTask("updateTypings", [
         "checkTypings",
         "copy:typingsFiles",
+    ]);
+
+    grunt.registerTask("updateAngular", [
+        "checkAngular",
+        "copy:angularFiles",
+    ]);
+
+    grunt.registerTask("prepareTnsModules", [
+        "copy:tnsifyAngular",
+        "copy:tnsifyNpmDeps",
     ]);
 
     grunt.registerTask("clean", [

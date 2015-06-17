@@ -22,11 +22,23 @@
 		"url": "https://github.com/NativeScript/template-hello-world/issues"
 	},
 	"homepage": "https://github.com/NativeScript/template-hello-world",
-
-    "devDependencies": {
-        "grunt": "0.4.5",
-        "grunt-ts": "4.1.0",
-        "grunt-contrib-copy": "0.8.0",
-        "typescript": "1.5.0-beta"
-    }
+	"dependencies": {
+		"reflect-metadata": "0.1.0",
+		"rtts_assert": "2.0.0-alpha.26",
+		"zone.js": "0.5.0",
+		"rx": "2.5.3"
+	},
+	"devDependencies": {
+		"grunt": "0.4.5",
+		"grunt-ts": "4.1.0",
+		"grunt-contrib-copy": "0.8.0",
+		"typescript": "1.5.0-beta"
+	},
+	"nativescript": {
+		"id": "org.nativescript.ngsample",
+		"tns-android": {
+			"version": "1.1.0"
+		},
+		"node-modules-cache-path": "/home/local/TELERIK/hdeshev/w/nativescript-angular/ng-sample/tmp/funnel-output_path-P3RtPN9a.tmp"
+	}
 }

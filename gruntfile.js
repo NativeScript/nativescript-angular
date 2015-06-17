@@ -1,3 +1,5 @@
+var path = require("path");
+
 module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-ts');
     grunt.loadNpmTasks('grunt-shell');
@@ -7,6 +9,9 @@ module.exports = function(grunt) {
 
     var runEnv = JSON.parse(JSON.stringify(process.env));
     runEnv['NODE_PATH'] = 'bin/dist/modules';
+
+    var angularDest = grunt.option('angularDest') || 'src/';
+    console.log(angularDest);
 
     var ngSampleSubDir = {
         execOptions: {
@@ -70,7 +75,7 @@ module.exports = function(grunt) {
                     //'!angular2/typings/hammerjs/**/*',
                     '!angular2/typings/selenium-webdriver/**/*',
                 ],
-                dest: 'src/'
+                dest: angularDest
             },
             reflect: {
                 expand: true,
@@ -78,7 +83,15 @@ module.exports = function(grunt) {
                 src: [
                     'reflect-metadata/reflect-metadata.d.ts',
                 ],
-                dest: 'src/'
+                dest: path.join(angularDest, 'typings')
+            },
+            ngSampleSrc: {
+                expand: true,
+                cwd: 'src/',
+                src: [
+                    'nativescript-angular/**/*.ts',
+                ],
+                dest: angularDest
             },
             nativeScriptSource: {
                 expand: true,
@@ -161,7 +174,17 @@ module.exports = function(grunt) {
         'copy:angularSource',
     ]);
 
-    grunt.registerTask("prepare", ["prepareAngular", "copy:nativeScriptSource"]);
+    grunt.registerTask("prepare", [
+        "prepareAngular",
+        "copy:nativeScriptSource",
+        "ts:build",
+    ]);
 
-    grunt.registerTask("ng-sample", ["env:ngSample", "shell:ngSampleFull"]);
+    grunt.registerTask("ng-sample", [
+        "env:ngSample",
+        "copy:reflect",
+        "copy:angularSource",
+        "copy:ngSampleSrc",
+        "shell:ngSampleFull"
+    ]);
 }

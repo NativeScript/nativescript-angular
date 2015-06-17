@@ -14,3 +14,5 @@ ng-sample/lib
 ng-sample/node_modules
 ng-sample/src/tns_modules
 ng-sample/src/typings
+ng-sample/src/angular2
+ng-sample/src/nativescript-angular
