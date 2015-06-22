@@ -3,3 +3,5 @@ bin
 build
 android17.d.ts
 ios.d.ts
+ng-sample/src/angular2
+src/angular2

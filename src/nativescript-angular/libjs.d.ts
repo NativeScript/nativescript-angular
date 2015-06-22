@@ -3,6 +3,8 @@
 // TODO: remove when we get rid of no-default-lib="true"
 //
 
+// <reference no-default-lib="true"/>
+
 interface TypedPropertyDescriptor<T> {
     enumerable?: boolean;
     configurable?: boolean;

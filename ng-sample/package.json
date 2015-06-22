@@ -26,7 +26,11 @@
 		"reflect-metadata": "0.1.0",
 		"rtts_assert": "2.0.0-alpha.26",
 		"zone.js": "0.5.0",
-		"rx": "2.5.3"
+		"rx": "2.5.3",
+		"parse5": "1.4.2",
+		"punycode": "1.3.2",
+		"querystring": "0.2.0",
+		"url": "0.10.3"
 	},
 	"devDependencies": {
 		"grunt": "0.4.5",
@@ -39,6 +43,6 @@
 		"tns-android": {
 			"version": "1.1.0"
 		},
-		"node-modules-cache-path": "/home/local/TELERIK/hdeshev/w/nativescript-angular/ng-sample/tmp/funnel-output_path-P3RtPN9a.tmp"
+		"node-modules-cache-path": "/home/local/TELERIK/hdeshev/w/nativescript-angular/ng-sample/tmp/funnel-output_path-ubFoeCoJ.tmp"
 	}
 }
