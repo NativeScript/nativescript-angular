@@ -36,7 +36,7 @@ interface ViewClass {
     new(): View
 }
 
-class ViewNode {
+export class ViewNode {
     //TODO: move element registration and imports to a new module
     private static allowedElements: Map<string, ViewClass> = new Map<string, ViewClass>([
         ["button", Button],
