@@ -154,8 +154,11 @@ module.exports = function(grunt) {
                 ].join('&&'),
                 options: ngSampleSubDir
             },
-            depBuildNS: {
-                command: 'grunt --no-runtslint',
+            depNSInit: {
+                command: [
+                    'npm install',
+                    'grunt --no-runtslint',
+                ].join('&&'),
                 options: nsSubDir
             }
         },
@@ -176,6 +179,7 @@ module.exports = function(grunt) {
 
     grunt.registerTask("prepare", [
         "prepareAngular",
+        "shell:depNSInit",
         "copy:nativeScriptSource",
         "ts:build",
     ]);
