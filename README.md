@@ -56,3 +56,12 @@ $ (cd ng-sample && grunt app && tns emulate android --avd nexus4-x64)
 ```
 
 On Windows, you can wrap those commands in a BAT file.
+
+# Finding your way around
+
+1. The `./src/nativescript-angular` folder holds the integration source code.
+2. The sample app below `ng-sample` is assembled by copying typescript dependencies in its `src` folder:
+    * angular2 source code
+    * nativescript-angular code
+    * NativeScript typings: typings/nativescript
+3. All required JavaScript packages (including compiled NativeScript modules) are copied to `ng-sample/app/tns_modules`
