@@ -65,3 +65,16 @@ On Windows, you can wrap those commands in a BAT file.
     * nativescript-angular code
     * NativeScript typings: typings/nativescript
 3. All required JavaScript packages (including compiled NativeScript modules) are copied to `ng-sample/app/tns_modules`
+
+# How the integration code works
+
+1. Use the Angular Parse5DomAdapter to parse component markup.
+2. Provide a custom renderer (`NativeScriptRenderer`) that works with the parsed DOM and creates NativeScript UI elements. Only limited number of visual elements supported so far.
+
+# Known issues
+
+1. The renderer code needs to be cleaned up and made extensible, so that people can register new visual elements.
+2. There are certain issues with the Parse5DomAdapter and we'll likely need to provide our own later on:
+  * Element and attribute names always get lowercased.
+  * Self-closing elements (`<Label text="Name" /><Button text="Save" />`) get parsed wrong (in this case Button gets parsed as a Label child.
+3. The renderer implementation is by no means complete: we are still need to support view (de)hydration, DOM text updates, event dispatching, actions, etc.
