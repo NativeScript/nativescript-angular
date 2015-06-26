@@ -51,6 +51,8 @@ $ grunt ng-sample
 
 Protip: combine #2 and #3 above in a single command run from the project root directory (works only on Unixy shells):
 
-(cd ng-sample && grunt app && tns emulate android --avd nexus4-x64)
+```
+$ (cd ng-sample && grunt app && tns emulate android --avd nexus4-x64)
+```
 
 On Windows, you can wrap those commands in a BAT file.
