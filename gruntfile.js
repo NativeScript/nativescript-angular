@@ -38,6 +38,7 @@ module.exports = function(grunt) {
                     module: "commonjs",
                     target: "es5",
                     sourceMap: true,
+                    emitDecoratorMetadata: true,
                     declaration: true,
                     removeComments: false,
                     compiler: "node_modules/typescript/bin/tsc",

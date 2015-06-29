@@ -4,8 +4,7 @@ import {TextView} from 'ui/text-view';
 import 'reflect-metadata';
 import {Component, View} from 'angular2/angular2';
 
-import {bootstrap} from 'nativescript-angular/application';
-//import {bootstrap} from 'angular2/angular2';
+import {nativeScriptBootstrap} from 'nativescript-angular/application';
 
 @Component({
 	selector: 'main-page',
@@ -35,7 +34,7 @@ export function pageLoaded(args) {
     var page = args.object;
     page.bindingContext = "";
 
-    bootstrap(MainPage, []).then((appRef) => {
+    nativeScriptBootstrap(MainPage, []).then((appRef) => {
         console.log('ANGULAR BOOTSTRAP DONE.');
     }, (err) =>{
         console.log('ERROR BOOTSTRAPPING ANGULAR');

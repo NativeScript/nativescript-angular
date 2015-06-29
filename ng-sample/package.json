@@ -34,7 +34,7 @@
 	},
 	"devDependencies": {
 		"grunt": "0.4.5",
-		"grunt-ts": "4.1.0",
+		"grunt-ts": "git+https://github.com/hdeshev/grunt-ts#emitDecoratorMetadata",
 		"grunt-contrib-copy": "0.8.0",
 		"typescript": "1.5.0-beta"
 	},
@@ -42,7 +42,6 @@
 		"id": "org.nativescript.ngsample",
 		"tns-android": {
 			"version": "1.1.0"
-		},
-		"node-modules-cache-path": "/home/local/TELERIK/hdeshev/w/nativescript-angular/ng-sample/tmp/funnel-output_path-ubFoeCoJ.tmp"
+		}
 	}
 }

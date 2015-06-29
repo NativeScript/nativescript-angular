@@ -5,7 +5,7 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-ts');
     grunt.loadNpmTasks('grunt-contrib-copy');
 
-    var nsDistPath = process.env.NSDIST || '../nativescript/bin/dist';
+    var nsDistPath = process.env.NSDIST || '../deps/NativeScript/bin/dist';
 
     var modulesPath = grunt.option("modulesPath", path.join(nsDistPath, 'modules'));
     var typingsPath = grunt.option("typingsPath", path.join(nsDistPath, 'definitions'));
@@ -27,6 +27,7 @@ module.exports = function(grunt) {
                     target: "es5",
                     sourceMap: true,
                     removeComments: false,
+                    emitDecoratorMetadata: true,
                     compiler: "node_modules/typescript/bin/tsc",
                     noEmitOnError: true
                 },
