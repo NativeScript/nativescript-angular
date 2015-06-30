@@ -66,6 +66,7 @@ module.exports = function(grunt) {
                     '!angular2/router*',
                     '!angular2/src/router/**/*',
                     '!angular2/src/mock/**/*',
+                    '!angular2/mock.ts',
                     '!angular2/docs/**/*',
                     '!angular2/test*',
                     '!angular2/src/test_lib/**/*',
