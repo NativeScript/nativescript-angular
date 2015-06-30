@@ -2,7 +2,7 @@ import {View} from 'ui/core/view';
 import {Injectable} from 'angular2/angular2';
 import {MapWrapper} from 'angular2/src/facade/collection';
 import {DomProtoView, resolveInternalDomProtoView} from 'angular2/src/render/dom/view/proto_view';
-import {Renderer, RenderProtoViewRef, RenderViewRef, EventDispatcher} from 'angular2/src/render/api';
+import {Renderer, RenderElementRef, RenderProtoViewRef, RenderViewRef, EventDispatcher} from 'angular2/src/render/api';
 import {NG_BINDING_CLASS} from 'angular2/src/render/dom/util';
 import {DOM} from 'angular2/src/dom/dom_adapter';
 import {topmost} from 'ui/frame';
@@ -179,26 +179,28 @@ export class NativeScriptRenderer extends Renderer {
 		// noop for now
 	}
 
-	attachComponentView(hostViewRef: RenderViewRef, elementIndex: number,
-            componentViewRef: RenderViewRef) {
+	attachComponentView(location: RenderElementRef, componentViewRef: RenderViewRef) {
 		console.log("NativeScriptRenderer.attachComponentView");
-        var hostView = (<NativeScriptViewRef>hostViewRef).resolveView();
-        var parent = hostView.boundElements[elementIndex];
+        var hostView = (<NativeScriptViewRef>location.renderView).resolveView();
+        var parent = hostView.boundElements[location.boundElementIndex];
         var componentView = (<NativeScriptViewRef>componentViewRef).resolveView();
         componentView.rootChildElements.forEach((child, index) => {
             parent.insertChildAt(index, child);
         });
 	}
 
-	detachComponentView(hostViewRef: RenderViewRef, boundElementIndex: number, componentViewRef: RenderViewRef) {
+    /**
+    * Detaches a componentView into the given hostView at the given element
+    */
+    detachComponentView(location: RenderElementRef, componentViewRef: RenderViewRef) {
 		console.log("NativeScriptRenderer.detachComponentView ");
 	}
 
-	attachViewInContainer(parentViewRef: RenderViewRef, boundElementIndex: number, atIndex: number, viewRef: RenderViewRef) {
+    attachViewInContainer(location: RenderElementRef, atIndex: number, viewRef: RenderViewRef) {
 		console.log("NativeScriptRenderer.attachViewInContainer ");
 	}
 
-	detachViewInContainer(parentViewRef: RenderViewRef, boundElementIndex: number, atIndex: number, viewRef: RenderViewRef) {
+    detachViewInContainer(location: RenderElementRef, atIndex: number, viewRef: RenderViewRef) {
 		console.log("NativeScriptRenderer.detachViewInContainer ");
 	}
 
@@ -210,11 +212,11 @@ export class NativeScriptRenderer extends Renderer {
 		console.log("NativeScriptRenderer.dehydrateView");
 	}
 
-	setElementProperty(viewRef: RenderViewRef, elementIndex: number, propertyName: string, propertyValue: any) {
+    setElementProperty(location: RenderElementRef, propertyName: string, propertyValue: any) {
 		console.log("NativeScriptRenderer.setElementProperty " + propertyName + " = " + propertyValue);
 
-        var view = (<NativeScriptViewRef>viewRef).resolveView();
-        var element = view.boundElements[elementIndex];
+        var view = (<NativeScriptViewRef>location.renderView).resolveView();
+        var element = view.boundElements[location.boundElementIndex];
         element.setProperty(propertyName, propertyValue);
 	}
 
