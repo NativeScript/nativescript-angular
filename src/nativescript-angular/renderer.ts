@@ -1,8 +1,10 @@
 import {View} from 'ui/core/view';
+import {Observable, EventData} from 'data/observable';
 import {Injectable} from 'angular2/angular2';
 import {MapWrapper} from 'angular2/src/facade/collection';
 import {DomProtoView, resolveInternalDomProtoView} from 'angular2/src/render/dom/view/proto_view';
 import {Renderer, RenderElementRef, RenderProtoViewRef, RenderViewRef, EventDispatcher} from 'angular2/src/render/api';
+import {AST} from 'angular2/src/change_detection/parser/ast';
 import {NG_BINDING_CLASS} from 'angular2/src/render/dom/util';
 import {DOM} from 'angular2/src/dom/dom_adapter';
 import {topmost} from 'ui/frame';
@@ -13,6 +15,8 @@ import {Label} from 'ui/label';
 import {TextField} from 'ui/text-field';
 
 export class NativeScriptView {
+    public eventDispatcher: EventDispatcher;
+
     constructor(public proto: DomProtoView,
         public rootChildElements,
         public boundElements: Array<ViewNode>,
@@ -36,6 +40,8 @@ interface ViewClass {
     new(): View
 }
 
+type EventHandler = (args: EventData) => void;
+
 export class ViewNode {
     //TODO: move element registration and imports to a new module
     private static allowedElements: Map<string, ViewClass> = new Map<string, ViewClass>([
@@ -44,6 +50,8 @@ export class ViewNode {
         ["textfield", TextField],
         ["label", Label]
     ]);
+
+    private eventListeners: Map<string, EventHandler> = new Map<string, EventHandler>();
 
 	private ui: View;
 	private _parentView: View;
@@ -102,6 +110,7 @@ export class ViewNode {
 
         if ((<any>this.parentView)._addChildFromBuilder) {
             (<any>this.parentView)._addChildFromBuilder(this.viewName, this.ui);
+            this.attachUIEvents();
         } else {
             throw new Error("Parent view can't have children! " + this._parentView);
         }
@@ -129,6 +138,13 @@ export class ViewNode {
         }
     }
 
+    private attachUIEvents() {
+        this.eventListeners.forEach((callback, eventName) => {
+            console.log('Attaching event listener for: ' + eventName);
+            this.ui.addEventListener(eventName, callback);
+        });
+    }
+
     public insertChildAt(index: number, childNode: ViewNode) {
         this.children[index] = childNode;
         childNode.parentNode = this;
@@ -139,14 +155,19 @@ export class ViewNode {
 
     setProperty(name: string, value: any) {
         console.log(this.viewName + ' setProperty ' + name + ' ' + value);
-        //this.ui._setValue(name, value);
         if (this.ui) {
-            //var page = topmost().currentPage;
-            //var button = <Button> page.content;
-            //(<Button>this.ui).text = value;
             console.log('actual setProperty ');
             this.ui[name] = value;
         }
+    }
+
+    createEventListener(view: NativeScriptView, bindingIndex: number, eventName: string, eventLocals: AST) {
+        console.log('createEventListener ' + this.viewName + ' ' + eventName + ' ' + eventLocals);
+        this.eventListeners.set(eventName, (args: EventData) => {
+			var locals = new Map<string, any>();
+			locals.set('$event', args);
+			view.eventDispatcher.dispatchEvent(bindingIndex, eventName, locals);
+        });
     }
 }
 
@@ -219,17 +240,22 @@ export class NativeScriptRenderer extends Renderer {
         var element = view.boundElements[location.boundElementIndex];
         element.setProperty(propertyName, propertyValue);
 	}
+    
+    /**
+    * Calls a method on an element.
+    */
+    invokeElementMethod(location: RenderElementRef, methodName: string, args: List<any>) {
+        console.log("NativeScriptRenderer.invokeElementMethod " + methodName + " " + args);
+    }
 
-	callAction(viewRef: RenderViewRef, elementIndex: number, actionExpression: string, actionArgs: any) {
-		console.log("NativeScriptRenderer.callAction ");
-	}
-
-	setText(viewRef: RenderViewRef, textNodeIndex: number, text: string) {
-		console.log("NativeScriptRenderer.setText ");
-	}
+    setText(viewRef: RenderViewRef, textNodeIndex: number, text: string) {
+        console.log("NativeScriptRenderer.setText ");
+    }
 
 	setEventDispatcher(viewRef: RenderViewRef, dispatcher: EventDispatcher) {
 		console.log("NativeScriptRenderer.setEventDispatcher ");
+        var view = (<NativeScriptViewRef>viewRef).resolveView();
+        view.eventDispatcher = dispatcher;
 	}
 
 	_createView(proto: DomProtoView, isRoot = false): NativeScriptView {
@@ -248,6 +274,19 @@ export class NativeScriptRenderer extends Renderer {
 		}
 		var boundTextNodes = this._createBoundTextNodes(proto, boundElements);
 		var view = new NativeScriptView(proto, nativeElements, boundElements, boundTextNodes);
+
+		var binders = proto.elementBinders;
+        for (var binderIdx = 0; binderIdx < binders.length; binderIdx++) {
+            var binder = binders[binderIdx];
+            var viewNode = boundElements[binderIdx];
+
+            // events
+            if (binder.eventLocals != null && binder.localEvents != null) {
+                for (var i = 0; i < binder.localEvents.length; i++) {
+                    viewNode.createEventListener(view, binderIdx, binder.localEvents[i].name, binder.eventLocals);
+                }
+            }
+        }
 
 		return view;
 	}

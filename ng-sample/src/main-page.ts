@@ -15,8 +15,8 @@ import {nativeScriptBootstrap} from 'nativescript-angular/application';
 	template: `
 <StackLayout orientation='vertical'>
     <Label text='Name' fontSize='32' verticalAlignment='center' padding='20'></Label>
-    <TextField text='John' fontSize='32' padding='20'></TextField>
-    <Button [text]='buttonText'></Button>
+    <TextField #nameText text='John' fontSize='32' padding='20'></TextField>
+    <Button [text]='buttonText' (tap)='onButtonTap($event)'></Button>
 </StackLayout>
 `,
 	directives: []
@@ -26,6 +26,10 @@ class MainPage {
 
     constructor() {
         this.buttonText = 'Tap me, baby, one more time!'
+    }
+
+    onButtonTap($event) {
+        console.log('onButtonTap event ' + $event);
     }
 }
 
