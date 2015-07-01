@@ -5,6 +5,7 @@ android17.d.ts
 ios.d.ts
 ng-sample/app
 ng-sample/src/angular2
+ng-sample/src/nativescript-angular
 ng-sample/platforms
 ng-sample/lib
 ng-sample/src/typings
