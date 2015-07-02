@@ -30,6 +30,7 @@ class MainPage {
 
     onButtonTap($event) {
         console.log('onButtonTap event ' + $event);
+        alert($event.object.text);
     }
 }
 
