@@ -80,21 +80,6 @@ module.exports = function(grunt) {
                 ],
                 dest: 'app/tns_modules',
             },
-            tnsifyNpmDeps: {
-                expand: true,
-                cwd: 'node_modules/',
-                src: [
-                    "reflect-metadata/**/*",
-                    "rtts_assert/**/*",
-                    "zone.js/**/*",
-                    "rx/**/*",
-                    "parse5/**/*",
-                    "punycode/**/*",
-                    "querystring/**/*",
-                    "url/**/*",
-                ],
-                dest: 'app/tns_modules',
-            },
         },
     });
 
@@ -159,7 +144,7 @@ module.exports = function(grunt) {
     grunt.registerTask("prepareQuerystringPackage", function() {
         //The {N} require doesn't look for index.js automatically
         //so we need to declare it as main
-        var packagePath = "app/tns_modules/querystring/package.json";
+        var packagePath = "node_modules/querystring/package.json";
 
         var packageData = grunt.file.readJSON(packagePath);
         packageData.main = './index.js';
@@ -168,7 +153,6 @@ module.exports = function(grunt) {
 
     grunt.registerTask("prepareTnsModules", [
         "copy:tnsifyAngular",
-        "copy:tnsifyNpmDeps",
         "prepareQuerystringPackage",
     ]);
 
