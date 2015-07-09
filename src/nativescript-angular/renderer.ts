@@ -81,7 +81,16 @@ export class NativeScriptRenderer extends Renderer {
     }
 
     attachViewInContainer(location: RenderElementRef, atIndex: number, viewRef: RenderViewRef) {
-        console.log("NativeScriptRenderer.attachViewInContainer ");
+        console.log("NativeScriptRenderer.attachViewInContainer " + atIndex);
+
+        var hostView = (<NativeScriptViewRef>location.renderView).resolveView();
+        var parentNode = hostView.getBoundNode(location.boundElementIndex);
+
+        var childView = (<NativeScriptViewRef>viewRef).resolveView();
+        childView.rootChildElements.forEach((child, index) => {
+            console.log('Inserting child at index: ' + (atIndex + index));
+            parentNode.insertChildAt(atIndex + index, child);
+        });
     }
 
     detachViewInContainer(location: RenderElementRef, atIndex: number, viewRef: RenderViewRef) {
@@ -177,6 +186,11 @@ export class NativeScriptRenderer extends Renderer {
                 viewNode = new ViewNode(parent, node.name, node.attribs);
             } else if (node.type == "text") {
                 viewNode = new ViewNode(parent, "rawtext", new Map<string, string>([["text", node.data]]));
+            } else if (node.type == "root") {
+                viewNode = new ViewNode(parent, "root", new Map<string, string>());
+            } else {
+                console.dump(node);
+                throw new Error('Unknown parse node type');
             }
 
             if (DOM.hasClass(node, NG_BINDING_CLASS)) {
