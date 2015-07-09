@@ -2,9 +2,12 @@ import {topmost} from 'ui/frame';
 import {TextView} from 'ui/text-view';
 
 import 'reflect-metadata';
-import {Component, View, NgIf} from 'angular2/angular2';
+import {Inject, Component, View, NgIf} from 'angular2/angular2';
+import {LifeCycle} from 'angular2/src/core/life_cycle/life_cycle';
 
 import {nativeScriptBootstrap} from 'nativescript-angular/application';
+
+var lifeCycle: LifeCycle = null;
 
 @Component({
 	selector: 'main-page',
@@ -41,6 +44,9 @@ class MainPage {
     onToggleDetails() {
         console.log('onToggleDetails current: ' + this.showDetails);
         this.showDetails = !this.showDetails;
+
+        //TODO: make the zone do this for us automatically.
+        lifeCycle.tick();
     }
 }
 
@@ -51,6 +57,7 @@ export function pageLoaded(args) {
 
     nativeScriptBootstrap(MainPage, []).then((appRef) => {
         console.log('ANGULAR BOOTSTRAP DONE.');
+        lifeCycle = appRef.injector.get(LifeCycle);
     }, (err) =>{
         console.log('ERROR BOOTSTRAPPING ANGULAR');
         let errorMessage = err.message + "\n\n" + err.stack;
