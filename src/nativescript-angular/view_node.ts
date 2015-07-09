@@ -25,7 +25,7 @@ export class ViewNode {
 
     private eventListeners: Map<string, EventHandler> = new Map<string, EventHandler>();
 
-    private ui: View;
+    public nativeView: View;
     private _parentView: View;
     private _attachedToView: boolean = false;
 
@@ -38,15 +38,15 @@ export class ViewNode {
             this.parentNode.children.push(this);
     }
 
-    get parentView(): View {
+    get parentNativeView(): View {
         if (this._parentView)
             return this._parentView
 
         if (this.parentNode) {
-            if(this.parentNode.ui) {
-                this._parentView = this.parentNode.ui;
+            if(this.parentNode.nativeView) {
+                this._parentView = this.parentNode.nativeView;
             } else {
-                this._parentView = this.parentNode.parentView;
+                this._parentView = this.parentNode.parentNativeView;
             }
         }
         if (!this._parentView) {
@@ -72,13 +72,13 @@ export class ViewNode {
 
         console.log('createUI: ' + this.viewName + ', parent: ' + this.parentNode.viewName);
 
-        let uiClass = ViewNode.allowedElements.get(this.viewName);
-        this.ui = new uiClass();
+        let viewClass = ViewNode.allowedElements.get(this.viewName);
+        this.nativeView = new viewClass();
 
         this.configureUI();
 
-        if ((<any>this.parentView)._addChildFromBuilder) {
-            (<any>this.parentView)._addChildFromBuilder(this.viewName, this.ui);
+        if ((<any>this.parentNativeView)._addChildFromBuilder) {
+            (<any>this.parentNativeView)._addChildFromBuilder(this.viewName, this.nativeView);
             this.attachUIEvents();
         } else {
             throw new Error("Parent view can't have children! " + this._parentView);
@@ -91,7 +91,7 @@ export class ViewNode {
 
         //parse5 lowercases attribute names, so we need to find the actual property name
         var propMap = {};
-        for (var propName in this.ui) {
+        for (var propName in this.nativeView) {
             propMap[propName.toLowerCase()] = propName;
         }
 
@@ -103,14 +103,14 @@ export class ViewNode {
                 propertyName = propMap[attribute];
             }
 
-            this.ui[propertyName] = propertyValue;
+            this.nativeView[propertyName] = propertyValue;
         }
     }
 
     private attachUIEvents() {
         this.eventListeners.forEach((callback, eventName) => {
             console.log('Attaching event listener for: ' + eventName);
-            this.ui.addEventListener(eventName, callback);
+            this.nativeView.addEventListener(eventName, callback);
         });
     }
 
@@ -124,9 +124,9 @@ export class ViewNode {
 
     setProperty(name: string, value: any) {
         console.log(this.viewName + ' setProperty ' + name + ' ' + value);
-        if (this.ui) {
+        if (this.nativeView) {
             console.log('actual setProperty ');
-            this.ui[name] = value;
+            this.nativeView[name] = value;
         }
     }
 

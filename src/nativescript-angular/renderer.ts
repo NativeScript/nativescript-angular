@@ -15,6 +15,10 @@ export class NativeScriptView {
         public boundElements: Array<ViewNode>,
     public boundTextNodes) {
     }
+
+    getBoundNode(index: number): ViewNode {
+        return this.boundElements[index];
+    }
 }
 
 export class NativeScriptViewRef extends RenderViewRef {
@@ -61,10 +65,10 @@ export class NativeScriptRenderer extends Renderer {
     attachComponentView(location: RenderElementRef, componentViewRef: RenderViewRef) {
         console.log("NativeScriptRenderer.attachComponentView");
         var hostView = (<NativeScriptViewRef>location.renderView).resolveView();
-        var parent = hostView.boundElements[location.boundElementIndex];
+        var parentNode = hostView.getBoundNode(location.boundElementIndex);
         var componentView = (<NativeScriptViewRef>componentViewRef).resolveView();
         componentView.rootChildElements.forEach((child, index) => {
-            parent.insertChildAt(index, child);
+            parentNode.insertChildAt(index, child);
         });
     }
 
@@ -98,8 +102,20 @@ export class NativeScriptRenderer extends Renderer {
         console.log("NativeScriptRenderer.setElementProperty " + propertyName + " = " + propertyValue);
 
         var view = (<NativeScriptViewRef>location.renderView).resolveView();
-        var element = view.boundElements[location.boundElementIndex];
-        element.setProperty(propertyName, propertyValue);
+        var node = view.getBoundNode(location.boundElementIndex);
+        node.setProperty(propertyName, propertyValue);
+    }
+
+    setElementAttribute(location: RenderElementRef, attributeName: string, attributeValue: string) {
+        console.log("NativeScriptRenderer.setElementAttribute " + attributeName + " = " + attributeValue);
+    }
+
+    getNativeElementSync(location: RenderElementRef): any {
+        console.log("NativeScriptRenderer.getNativeElementSync");
+
+        var view = (<NativeScriptViewRef>location.renderView).resolveView();
+        var node = view.getBoundNode(location.boundElementIndex);
+        return node.nativeView;
     }
 
     /**
