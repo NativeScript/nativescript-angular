@@ -5,6 +5,7 @@ import {Button} from 'ui/button';
 import {StackLayout} from 'ui/layouts/stack-layout';
 import {Label} from 'ui/label';
 import {TextField} from 'ui/text-field';
+import {TextView} from 'ui/text-view';
 import {NativeScriptView} from 'nativescript-angular/renderer';
 import {AST} from 'angular2/src/change_detection/parser/ast';
 
@@ -20,6 +21,7 @@ export class ViewNode {
         ["button", Button],
         ["stacklayout", StackLayout],
         ["textfield", TextField],
+        ["textview", TextView],
         ["label", Label]
     ]);
 
@@ -115,6 +117,7 @@ export class ViewNode {
     }
 
     public insertChildAt(index: number, childNode: ViewNode) {
+        console.log('ViewNode.insertChildAt: ' + this.viewName + ' ' + index + ' ' + childNode.viewName);
         this.children[index] = childNode;
         childNode.parentNode = this;
 
