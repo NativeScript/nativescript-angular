@@ -1,4 +1,6 @@
+import 'reflect-metadata';
 import 'nativescript-angular/polyfills/array';
+import 'nativescript-angular/zone';
 import {Type} from 'angular2/src/facade/lang';
 import {Promise, PromiseWrapper} from 'angular2/src/facade/async';
 import {ApplicationRef} from 'angular2/src/core/application';

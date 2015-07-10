@@ -149,10 +149,13 @@ export class ViewNode {
 
     createEventListener(view: NativeScriptView, bindingIndex: number, eventName: string, eventLocals: AST) {
         console.log('createEventListener ' + this.viewName + ' ' + eventName + ' ' + eventLocals);
-        this.eventListeners.set(eventName, (args: EventData) => {
+
+        let handler = (args: EventData) => {
             var locals = new Map<string, any>();
             locals.set('$event', args);
             view.eventDispatcher.dispatchEvent(bindingIndex, eventName, locals);
-        });
+        }
+        let zonedHandler = global.zone.bind(handler);
+        this.eventListeners.set(eventName, zonedHandler);
     }
 }
