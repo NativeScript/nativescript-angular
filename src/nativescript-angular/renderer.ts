@@ -88,13 +88,22 @@ export class NativeScriptRenderer extends Renderer {
 
         var childView = (<NativeScriptViewRef>viewRef).resolveView();
         childView.rootChildElements.forEach((child, index) => {
-            console.log('Inserting child at index: ' + (atIndex + index));
+            console.log('Inserting child at index: ' + (atIndex + index) + ' child ' + child.viewName);
             parentNode.insertChildAt(atIndex + index, child);
         });
     }
 
     detachViewInContainer(location: RenderElementRef, atIndex: number, viewRef: RenderViewRef) {
         console.log("NativeScriptRenderer.detachViewInContainer ");
+
+        var hostView = (<NativeScriptViewRef>location.renderView).resolveView();
+        var parentNode = hostView.getBoundNode(location.boundElementIndex);
+        var childView = (<NativeScriptViewRef>viewRef).resolveView();
+
+        childView.rootChildElements.forEach((child, index) => {
+            console.log('Removing child at index: ' + (atIndex + index) + ' child ' + child.viewName);
+            parentNode.removeChild(child);
+        });
     }
 
     hydrateView(viewRef: RenderViewRef) {

@@ -6,6 +6,7 @@ import {StackLayout} from 'ui/layouts/stack-layout';
 import {Label} from 'ui/label';
 import {TextField} from 'ui/text-field';
 import {TextView} from 'ui/text-view';
+import {Layout} from 'ui/layouts/layout';
 import {NativeScriptView} from 'nativescript-angular/renderer';
 import {AST} from 'angular2/src/change_detection/parser/ast';
 
@@ -123,6 +124,19 @@ export class ViewNode {
 
         if (this._attachedToView)
             childNode.attachToView();
+    }
+
+    public removeChild(childNode: ViewNode) {
+        console.log('removeChild before: ' + this.children.length);
+        this.children = this.children.filter((item) => item !== childNode);
+
+        if (childNode.nativeView && this.parentNativeView) {
+            if (this.parentNativeView instanceof Layout) {
+                (<Layout>this.parentNativeView).removeChild(childNode.nativeView);
+            } else {
+                this.parentNativeView._removeView(childNode.nativeView);
+            }
+        }
     }
 
     setProperty(name: string, value: any) {
