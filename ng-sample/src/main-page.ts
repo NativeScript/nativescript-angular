@@ -1,11 +1,10 @@
 import {topmost} from 'ui/frame';
 import {TextView} from 'ui/text-view';
 
-import 'reflect-metadata';
+import {nativeScriptBootstrap} from 'nativescript-angular/application';
 import {Inject, Component, View, NgIf, NgFor} from 'angular2/angular2';
 import {LifeCycle} from 'angular2/src/core/life_cycle/life_cycle';
 
-import {nativeScriptBootstrap} from 'nativescript-angular/application';
 
 var lifeCycle: LifeCycle = null;
 
@@ -60,9 +59,6 @@ class MainPage {
     onToggleDetails() {
         console.log('onToggleDetails current: ' + this.showDetails);
         this.showDetails = !this.showDetails;
-
-        //TODO: make the zone do this for us automatically.
-        lifeCycle.tick();
     }
 }
 
