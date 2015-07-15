@@ -25,7 +25,6 @@ var lifeCycle: LifeCycle = null;
     <Button [text]='buttonText' (tap)='onSave($event, name.text)'></Button>
     <Button text='Toggle details' (tap)='onToggleDetails()'></Button>
     <TextView *ng-if='showDetails' [text]='detailsText'></TextView>
-    <Label [text]='moreDetailsText' *ng-if='showDetails'></Label>
     <StackLayout #more *ng-if='showDetails' orientation='vertical'>
         <TextField *ng-for='#detailLine of detailLines' [text]='detailLine'></TextField>
     </StackLayout>
@@ -41,14 +40,14 @@ class MainPage {
 
     constructor() {
         this.buttonText = 'Save...'
-        this.showDetails = true;
-        this.detailsText = 'Some details and all...';
+        this.showDetails = false;
+        this.detailsText = 'plain ng-if directive \ndetail 1-2-3...';
         this.moreDetailsText = 'More details:';
 
         this.detailLines = [
-            "detail line 1",
-            "detail line 2",
-            "detail line 3",
+            "ng-for inside a ng-if",
+            "Street address",
+            "Country, city",
         ];
     }
 
@@ -56,6 +55,7 @@ class MainPage {
         console.log('onSave event ' + $event + ' name ' + name);
         alert(name);
     }
+
     onToggleDetails() {
         console.log('onToggleDetails current: ' + this.showDetails);
         this.showDetails = !this.showDetails;
