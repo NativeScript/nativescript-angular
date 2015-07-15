@@ -60,6 +60,11 @@ export class ViewNode {
 
     public attachToView() {
         console.log('ViewNode.attachToView ' + this.viewName);
+        if (this._attachedToView) {
+            console.log('already attached.');
+            return;
+        }
+
         this._attachedToView = true;
 
         this.createUI();
@@ -73,10 +78,16 @@ export class ViewNode {
         if (!ViewNode.allowedElements.has(this.viewName))
             return;
 
-        console.log('createUI: ' + this.viewName + ', parent: ' + this.parentNode.viewName);
+        console.log('createUI: ' + this.viewName +
+            ', parent: ' + this.parentNode.viewName +
+            ', parent UI ' + (<any>this.parentNativeView.constructor).name);
 
         let viewClass = ViewNode.allowedElements.get(this.viewName);
-        this.nativeView = new viewClass();
+        if (!this.nativeView) {
+            this.nativeView = new viewClass();
+        } else {
+            console.log('Reattaching old view: ' + this.viewName);
+        }
 
         this.configureUI();
 
@@ -106,6 +117,7 @@ export class ViewNode {
                 propertyName = propMap[attribute];
             }
 
+            console.log('Set attribute: ' + propertyName + ' = ' + propertyValue);
             this.nativeView[propertyName] = propertyValue;
         }
     }
@@ -127,23 +139,27 @@ export class ViewNode {
     }
 
     public removeChild(childNode: ViewNode) {
-        console.log('removeChild before: ' + this.children.length);
+        childNode.parentNode = null;
+        childNode._attachedToView = false;
         this.children = this.children.filter((item) => item !== childNode);
 
         if (childNode.nativeView && this.parentNativeView) {
             if (this.parentNativeView instanceof Layout) {
+                console.log('native removeChild ' + childNode.viewName);
                 (<Layout>this.parentNativeView).removeChild(childNode.nativeView);
             } else {
+                console.log('native _removeView ' + childNode.viewName);
                 this.parentNativeView._removeView(childNode.nativeView);
             }
         }
     }
 
     setProperty(name: string, value: any) {
-        console.log(this.viewName + ' setProperty ' + name + ' ' + value);
+        console.log('ViewNode.setProperty ' + this.viewName + ' setProperty ' + name + ' ' + value);
         if (this.nativeView) {
-            console.log('actual setProperty ');
             this.nativeView[name] = value;
+        } else {
+            console.log('setProperty called without a nativeView');
         }
     }
 

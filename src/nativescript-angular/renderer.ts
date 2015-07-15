@@ -194,9 +194,9 @@ export class NativeScriptRenderer extends Renderer {
             if (node.type == "tag") {
                 viewNode = new ViewNode(parent, node.name, node.attribs);
             } else if (node.type == "text") {
-                viewNode = new ViewNode(parent, "rawtext", new Map<string, string>([["text", node.data]]));
+                viewNode = new ViewNode(parent, "rawtext", {text: node.data});
             } else if (node.type == "root") {
-                viewNode = new ViewNode(parent, "root", new Map<string, string>());
+                viewNode = new ViewNode(parent, "root", {});
             } else {
                 console.dump(node);
                 throw new Error('Unknown parse node type');
