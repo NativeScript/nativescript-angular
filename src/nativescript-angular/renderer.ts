@@ -72,11 +72,6 @@ export class NativeScriptRenderer extends Renderer {
             console.log('attachComponentView: ' + child.viewName);
             parentNode.insertChildAt(index, child);
             child.attachToView(index);
-
-            console.log('attachComponentView.child');
-            child.print();
-            console.log('attachComponentView.parent');
-            parentNode.print();
         });
     }
 
@@ -89,21 +84,16 @@ export class NativeScriptRenderer extends Renderer {
     }
 
     attachViewInContainer(location: RenderElementRef, atIndex: number, viewRef: RenderViewRef) {
-        console.log("NativeScriptRenderer.attachViewInContainer " + atIndex);
+        console.log("NativeScriptRenderer.attachViewInContainer  container index: " + location.boundElementIndex + " atIndex " + atIndex);
 
         var hostView = (<NativeScriptViewRef>location.renderView).resolveView();
         var parentNode = hostView.getBoundNode(location.boundElementIndex);
 
         var childView = (<NativeScriptViewRef>viewRef).resolveView();
         childView.rootChildElements.forEach((child) => {
-            console.log('(attachViewInContainer) Inserting child at index: ' + (atIndex) + ' child ' + child.viewName);
+            console.log('(attachViewInContainer) Inserting child in ' + parentNode.viewName + ' at index: ' + (atIndex) + ' child ' + child.viewName);
             parentNode.insertChildAt(atIndex, child);
             child.attachToView(atIndex);
-
-            console.log('attachComponentView.child');
-            child.print();
-            console.log('attachComponentView.parent');
-            parentNode.print();
         });
     }
 
@@ -225,8 +215,6 @@ export class NativeScriptRenderer extends Renderer {
             }
 
             if (DOM.hasClass(node, NG_BINDING_CLASS)) {
-                //TODO: maybe detect and store #id/var-id variable bindings and
-                //pass them as the locals map to event handlers.
                 boundElements.push(viewNode);
             }
 

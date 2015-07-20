@@ -1,4 +1,5 @@
 import {View} from 'ui/core/view';
+import {ContentView} from 'ui/content-view';
 import {Observable, EventData} from 'data/observable';
 import {topmost} from 'ui/frame';
 import {Button} from 'ui/button';
@@ -23,7 +24,8 @@ export class ViewNode {
         ["stacklayout", StackLayout],
         ["textfield", TextField],
         ["textview", TextView],
-        ["label", Label]
+        ["label", Label],
+        ["template", ContentView],
     ]);
 
     private eventListeners: Map<string, EventHandler> = new Map<string, EventHandler>();
@@ -67,7 +69,7 @@ export class ViewNode {
             return this._parentView
 
         if (this.parentNode) {
-            if(this.parentNode.nativeView) {
+            if(this.parentNode.viewName !== "template" && this.parentNode.nativeView) {
                 this._parentView = this.parentNode.nativeView;
             } else {
                 this._parentView = this.parentNode.parentNativeView;
@@ -117,7 +119,12 @@ export class ViewNode {
             let parentLayout = <Layout>this.parentNativeView;
             if (attachAtIndex != -1) {
                 console.log('Layout.insertChild');
-                parentLayout.insertChild(attachAtIndex, this.nativeView);
+                let indexOffset = 0;
+                if (this.parentNode.viewName === "template") {
+                    indexOffset = parentLayout.getChildIndex(this.parentNode.nativeView);
+                    console.log("attaching inside a template. index offset is: " + indexOffset);
+                }
+                parentLayout.insertChild(indexOffset + attachAtIndex, this.nativeView);
             } else {
                 console.log('Layout.addChild');
                 parentLayout.addChild(this.nativeView);
