@@ -22,12 +22,13 @@ var lifeCycle: LifeCycle = null;
 <StackLayout orientation='vertical'>
     <Label text='Name' fontSize='32' verticalAlignment='center' padding='20'></Label>
     <TextField #name text='John' fontSize='32' padding='20'></TextField>
-    <Button [text]='buttonText' (tap)='onSave($event, name.text)'></Button>
+    <Button [text]='buttonText' (tap)='onSave($event, name.text, $el)'></Button>
     <Button text='Toggle details' (tap)='onToggleDetails()'></Button>
     <TextView *ng-if='showDetails' [text]='detailsText'></TextView>
     <StackLayout #more *ng-if='showDetails' orientation='vertical'>
         <TextField *ng-for='#detailLine of detailLines' [text]='detailLine'></TextField>
     </StackLayout>
+    <Label text='..............' fontSize='32' verticalAlignment='center' padding='20'></Label>
 </StackLayout>
 `,
 })
@@ -40,7 +41,7 @@ class MainPage {
 
     constructor() {
         this.buttonText = 'Save...'
-        this.showDetails = false;
+        this.showDetails = true;
         this.detailsText = 'plain ng-if directive \ndetail 1-2-3...';
         this.moreDetailsText = 'More details:';
 
@@ -51,9 +52,10 @@ class MainPage {
         ];
     }
 
-    onSave($event, name) {
+    onSave($event, name, $el) {
         console.log('onSave event ' + $event + ' name ' + name);
-        alert(name);
+        //alert(name);
+        $el.printTree();
     }
 
     onToggleDetails() {
