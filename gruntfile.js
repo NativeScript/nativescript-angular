@@ -183,7 +183,7 @@ module.exports = function(grunt) {
         "prepareAngular",
         "shell:depNSInit",
         "copy:nativeScriptSource",
-        "ts:build",
+        //"ts:build",
     ]);
 
     grunt.registerTask("ng-sample", [
