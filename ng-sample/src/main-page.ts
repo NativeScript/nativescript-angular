@@ -28,7 +28,7 @@ var lifeCycle: LifeCycle = null;
     <StackLayout #more *ng-if='showDetails' orientation='vertical'>
         <TextField *ng-for='#detailLine of detailLines' [text]='detailLine'></TextField>
     </StackLayout>
-    <Label text='..............' fontSize='32' verticalAlignment='center' padding='20'></Label>
+    <Label text='-----=END=-----' fontSize='32' verticalAlignment='center' padding='20'></Label>
 </StackLayout>
 `,
 })
