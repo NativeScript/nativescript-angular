@@ -12,8 +12,9 @@ export class NativeScriptView {
 
     constructor(public proto: DomProtoView,
         public rootChildElements,
-        public boundElements: Array<ViewNode>,
-    public boundTextNodes) {
+        public boundElements: Array<ViewNode>
+        //public boundTextNodes
+        ) {
     }
 
     getBoundNode(index: number): ViewNode {
@@ -68,7 +69,14 @@ export class NativeScriptRenderer extends Renderer {
         var parentNode = hostView.getBoundNode(location.boundElementIndex);
         var componentView = (<NativeScriptViewRef>componentViewRef).resolveView();
         componentView.rootChildElements.forEach((child, index) => {
+            console.log('attachComponentView: ' + child.viewName);
             parentNode.insertChildAt(index, child);
+            child.attachToView(index);
+
+            console.log('attachComponentView.child');
+            child.print();
+            console.log('attachComponentView.parent');
+            parentNode.print();
         });
     }
 
@@ -87,9 +95,15 @@ export class NativeScriptRenderer extends Renderer {
         var parentNode = hostView.getBoundNode(location.boundElementIndex);
 
         var childView = (<NativeScriptViewRef>viewRef).resolveView();
-        childView.rootChildElements.forEach((child, index) => {
-            console.log('Inserting child at index: ' + (atIndex + index) + ' child ' + child.viewName);
-            parentNode.insertChildAt(atIndex + index, child);
+        childView.rootChildElements.forEach((child) => {
+            console.log('(attachViewInContainer) Inserting child at index: ' + (atIndex) + ' child ' + child.viewName);
+            parentNode.insertChildAt(atIndex, child);
+            child.attachToView(atIndex);
+
+            console.log('attachComponentView.child');
+            child.print();
+            console.log('attachComponentView.parent');
+            parentNode.print();
         });
     }
 
@@ -167,8 +181,8 @@ export class NativeScriptRenderer extends Renderer {
         if (isRoot) {
             nativeElements[0].attachToView();
         }
-        var boundTextNodes = this._createBoundTextNodes(proto, boundElements);
-        var view = new NativeScriptView(proto, nativeElements, boundElements, boundTextNodes);
+        //var boundTextNodes = this._createBoundTextNodes(proto, boundElements);
+        var view = new NativeScriptView(proto, nativeElements, boundElements);
 
         var binders = proto.elementBinders;
         for (var binderIdx = 0; binderIdx < binders.length; binderIdx++) {
@@ -183,6 +197,10 @@ export class NativeScriptRenderer extends Renderer {
             }
         }
 
+        console.log('nativeElements...');
+        nativeElements.forEach((child) => {
+            child.print();
+        });
         return view;
     }
 
@@ -194,9 +212,13 @@ export class NativeScriptRenderer extends Renderer {
             if (node.type == "tag") {
                 viewNode = new ViewNode(parent, node.name, node.attribs);
             } else if (node.type == "text") {
-                viewNode = new ViewNode(parent, "rawtext", {text: node.data});
+                //viewNode = new ViewNode(parent, "rawtext", {text: node.data});
+                //Ignore text nodes
+                return;
             } else if (node.type == "root") {
-                viewNode = new ViewNode(parent, "root", {});
+                //viewNode = new ViewNode(parent, "root", {});
+                //Ignore "root" elements.
+                return;
             } else {
                 console.dump(node);
                 throw new Error('Unknown parse node type');
@@ -219,17 +241,17 @@ export class NativeScriptRenderer extends Renderer {
         return viewNodes;
     }
 
-    _createBoundTextNodes(proto: DomProtoView, boundElements: Array<ViewNode>) {
-        var boundTextNodes = [];
-        var elementBinders = proto.elementBinders;
-        for (var i = 0; i < elementBinders.length; i++) {
-            var indicies = elementBinders[i].textNodeIndices;
-            var nativeNodes = boundElements[i].children;
-            for (var j = 0; j < indicies.length; j++) {
-                var index = indicies[j];
-                boundTextNodes.push(nativeNodes[index]);
-            }
-        }
-        return boundTextNodes;
-    }
+    //_createBoundTextNodes(proto: DomProtoView, boundElements: Array<ViewNode>) {
+        //var boundTextNodes = [];
+        //var elementBinders = proto.elementBinders;
+        //for (var i = 0; i < elementBinders.length; i++) {
+            //var indicies = elementBinders[i].textNodeIndices;
+            //var nativeNodes = boundElements[i].children;
+            //for (var j = 0; j < indicies.length; j++) {
+                //var index = indicies[j];
+                //boundTextNodes.push(nativeNodes[index]);
+            //}
+        //}
+        //return boundTextNodes;
+    //}
 }

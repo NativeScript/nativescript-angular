@@ -41,6 +41,27 @@ export class ViewNode {
             this.parentNode.children.push(this);
     }
 
+    print(depth: number = 0) {
+        let line = "";
+
+        for (let i = 0; i < depth; i++)
+            line += "    "
+
+        console.log(line + this.viewName + '(' + this._attachedToView + ') ' + (this.nativeView != null ? (<any>this.nativeView).__id : 'NULL'));
+
+        this.children.forEach(child => {
+            child.print(depth + 1);
+        });
+    }
+
+    printTree() {
+        let root = this;
+        while (root.parentNode !== null) {
+            root = root.parentNode;
+        }
+        root.print();
+    }
+
     get parentNativeView(): View {
         if (this._parentView)
             return this._parentView
@@ -58,7 +79,7 @@ export class ViewNode {
         return this._parentView;
     }
 
-    public attachToView() {
+    public attachToView(atIndex: number = -1) {
         console.log('ViewNode.attachToView ' + this.viewName);
         if (this._attachedToView) {
             console.log('already attached.');
@@ -67,18 +88,19 @@ export class ViewNode {
 
         this._attachedToView = true;
 
-        this.createUI();
+        this.createUI(atIndex);
 
         this.children.forEach(child => {
             child.attachToView();
         });
     }
 
-    private createUI() {
+    private createUI(attachAtIndex: number) {
         if (!ViewNode.allowedElements.has(this.viewName))
             return;
 
         console.log('createUI: ' + this.viewName +
+            ', attachAt: ' + attachAtIndex +
             ', parent: ' + this.parentNode.viewName +
             ', parent UI ' + (<any>this.parentNativeView.constructor).name);
 
@@ -91,7 +113,18 @@ export class ViewNode {
 
         this.configureUI();
 
-        if ((<any>this.parentNativeView)._addChildFromBuilder) {
+        if (this.parentNativeView instanceof Layout) {
+            let parentLayout = <Layout>this.parentNativeView;
+            if (attachAtIndex != -1) {
+                console.log('Layout.insertChild');
+                parentLayout.insertChild(attachAtIndex, this.nativeView);
+            } else {
+                console.log('Layout.addChild');
+                parentLayout.addChild(this.nativeView);
+            }
+            this.attachUIEvents();
+        } else if ((<any>this.parentNativeView)._addChildFromBuilder) {
+            console.log('_addChildFromBuilder ' + (<any>this.parentNativeView)._addChildFromBuilder);
             (<any>this.parentNativeView)._addChildFromBuilder(this.viewName, this.nativeView);
             this.attachUIEvents();
         } else {
@@ -131,15 +164,17 @@ export class ViewNode {
 
     public insertChildAt(index: number, childNode: ViewNode) {
         console.log('ViewNode.insertChildAt: ' + this.viewName + ' ' + index + ' ' + childNode.viewName);
-        this.children[index] = childNode;
+        if (childNode.parentNode) {
+            console.log('Moving child to new parent');
+            childNode.parentNode.removeChild(childNode);
+        }
+        this.children.splice(index, 0, childNode);
         childNode.parentNode = this;
-
-        if (this._attachedToView)
-            childNode.attachToView();
     }
 
     public removeChild(childNode: ViewNode) {
         childNode.parentNode = null;
+        childNode._parentView = null;
         childNode._attachedToView = false;
         this.children = this.children.filter((item) => item !== childNode);
 
@@ -169,6 +204,8 @@ export class ViewNode {
         let handler = (args: EventData) => {
             var locals = new Map<string, any>();
             locals.set('$event', args);
+            //TODO: remove -- used for debug prints triggered from outside the renderer code.
+            locals.set('$el', this);
             view.eventDispatcher.dispatchEvent(bindingIndex, eventName, locals);
         }
         let zonedHandler = global.zone.bind(handler);
