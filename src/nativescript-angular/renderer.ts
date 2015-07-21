@@ -10,11 +10,10 @@ import {ViewNode} from 'nativescript-angular/view_node';
 export class NativeScriptView {
     public eventDispatcher: EventDispatcher;
 
-    constructor(public proto: DomProtoView,
+    constructor(
+        public proto: DomProtoView,
         public rootChildElements,
-        public boundElements: Array<ViewNode>
-        //public boundTextNodes
-        ) {
+        public boundElements: Array<ViewNode>) {
     }
 
     getBoundNode(index: number): ViewNode {
@@ -171,7 +170,7 @@ export class NativeScriptRenderer extends Renderer {
         if (isRoot) {
             nativeElements[0].attachToView();
         }
-        //var boundTextNodes = this._createBoundTextNodes(proto, boundElements);
+
         var view = new NativeScriptView(proto, nativeElements, boundElements);
 
         var binders = proto.elementBinders;
@@ -187,10 +186,6 @@ export class NativeScriptRenderer extends Renderer {
             }
         }
 
-        console.log('nativeElements...');
-        nativeElements.forEach((child) => {
-            child.print();
-        });
         return view;
     }
 
@@ -228,18 +223,4 @@ export class NativeScriptRenderer extends Renderer {
         });
         return viewNodes;
     }
-
-    //_createBoundTextNodes(proto: DomProtoView, boundElements: Array<ViewNode>) {
-        //var boundTextNodes = [];
-        //var elementBinders = proto.elementBinders;
-        //for (var i = 0; i < elementBinders.length; i++) {
-            //var indicies = elementBinders[i].textNodeIndices;
-            //var nativeNodes = boundElements[i].children;
-            //for (var j = 0; j < indicies.length; j++) {
-                //var index = indicies[j];
-                //boundTextNodes.push(nativeNodes[index]);
-            //}
-        //}
-        //return boundTextNodes;
-    //}
 }
