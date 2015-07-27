@@ -49,6 +49,8 @@ module.exports = function(grunt) {
                 cwd: modulesPath,
                 src: [
                     '**/*',
+                    '!node_modules',
+                    '!node_modules/**/*',
                 ],
                 dest: modulesDestPath
             },
