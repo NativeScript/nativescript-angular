@@ -1,7 +1,7 @@
 {
 	"name": "tns-template-hello-world",
 	"main": "app.js",
-	"version": "1.1.0",
+	"version": "1.2.0",
 	"author": "Telerik <support@telerik.com>",
 	"description": "Nativescript hello-world project template",
 	"license": "BSD",
