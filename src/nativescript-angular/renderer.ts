@@ -1,14 +1,22 @@
 import {Injectable} from 'angular2/angular2';
 import {MapWrapper} from 'angular2/src/facade/collection';
 import {DomProtoView, resolveInternalDomProtoView} from 'angular2/src/render/dom/view/proto_view';
-import {Renderer, RenderElementRef, RenderProtoViewRef, RenderViewRef, EventDispatcher} from 'angular2/src/render/api';
-import {NG_BINDING_CLASS} from 'angular2/src/render/dom/util';
+import {
+    Renderer,
+    RenderEventDispatcher,
+    RenderElementRef,
+    RenderProtoViewRef,
+    RenderViewRef,
+    RenderFragmentRef,
+    RenderViewWithFragments
+} from 'angular2/src/render/api';
+import {NG_BINDING_CLASS, cloneAndQueryProtoView} from 'angular2/src/render/dom/util';
 import {DOM} from 'angular2/src/dom/dom_adapter';
 
 import {ViewNode} from 'nativescript-angular/view_node';
 
 export class NativeScriptView {
-    public eventDispatcher: EventDispatcher;
+    public eventDispatcher: RenderEventDispatcher;
 
     constructor(
         public proto: DomProtoView,
@@ -33,6 +41,16 @@ export class NativeScriptViewRef extends RenderViewRef {
     }
 }
 
+export class NativeScriptFragmentRef extends RenderFragmentRef {
+    constructor(private nodes: ViewNode[]) {
+        super();
+    }
+
+    resolveNodes(): ViewNode[] {
+        return this.nodes;
+    }
+}
+
 @Injectable()
 export class NativeScriptRenderer extends Renderer {
     constructor() {
@@ -40,20 +58,24 @@ export class NativeScriptRenderer extends Renderer {
         super();
     }
 
-    createRootHostView(hostProtoViewRef: RenderProtoViewRef): RenderViewRef {
+    createRootHostView(hostProtoViewRef: RenderProtoViewRef,
+                        fragmentCount: number,
+                        hostElementSelector: string): RenderViewWithFragments {
         console.log("NativeScriptRenderer.createRootHostView");
         var hostProtoView = resolveInternalDomProtoView(hostProtoViewRef);
-        return new NativeScriptViewRef(this._createView(hostProtoView, true));
+        //return new NativeScriptViewRef(this._createView(hostProtoView, null, true));
+        return this._createView(hostProtoView, null, true);
     }
 
     detachFreeHostView(parentHostViewRef: RenderViewRef, hostViewRef: RenderViewRef) {
         console.log("NativeScriptRenderer.detachFreeHostView");
     }
 
-    createView(protoViewRef: RenderProtoViewRef): RenderViewRef {
+    createView(protoViewRef: RenderProtoViewRef, fragmentCount: number): RenderViewWithFragments {
         console.log("NativeScriptRenderer.createView");
         var protoView = resolveInternalDomProtoView(protoViewRef);
-        return new NativeScriptViewRef(this._createView(protoView, false));
+        //return new NativeScriptViewRef(this._createView(protoView, null, false));
+        return this._createView(protoView, null, false);
     }
 
     destroyView(viewRef: RenderViewRef) {
@@ -62,50 +84,42 @@ export class NativeScriptRenderer extends Renderer {
         //TODO: handle this when we resolve routing and navigation.
     }
 
-    attachComponentView(location: RenderElementRef, componentViewRef: RenderViewRef) {
-        console.log("NativeScriptRenderer.attachComponentView");
+    attachFragmentAfterFragment(previousFragmentRef: RenderFragmentRef, fragmentRef: RenderFragmentRef) {
+        console.log("NativeScriptRenderer.attachFragmentAfterFragment");
+        var previousFragmentNodes = (<NativeScriptFragmentRef>previousFragmentRef).resolveNodes();
+        var lastNode: ViewNode = previousFragmentNodes[previousFragmentNodes.length - 1];
+        var fragmentNodes = (<NativeScriptFragmentRef>fragmentRef).resolveNodes();
+
+        this.attachFragmentAfter(lastNode, fragmentNodes);
+    }
+
+    attachFragmentAfterElement(location: RenderElementRef, fragmentRef: RenderFragmentRef) {
+        console.log("NativeScriptRenderer.attachFragmentAfterElement");
         var hostView = (<NativeScriptViewRef>location.renderView).resolveView();
-        var parentNode = hostView.getBoundNode(location.boundElementIndex);
-        var componentView = (<NativeScriptViewRef>componentViewRef).resolveView();
-        componentView.rootChildElements.forEach((child, index) => {
-            console.log('attachComponentView: ' + child.viewName);
-            parentNode.insertChildAt(index, child);
-            child.attachToView(index);
+        var startNode: ViewNode = hostView.getBoundNode(location.renderBoundElementIndex);
+        var fragmentNodes = (<NativeScriptFragmentRef>fragmentRef).resolveNodes();
+
+        this.attachFragmentAfter(startNode, fragmentNodes);
+    }
+
+    private attachFragmentAfter(anchorNode: ViewNode, fragmentNodes: ViewNode[]) {
+        var startIndex = anchorNode.parentNode.getChildIndex(anchorNode) + 1;
+
+        fragmentNodes.forEach((node, index) => {
+            console.log('attachFragmentAfterElement: child: ' + node.viewName + ' after: ' + anchorNode.viewName + ' startIndex: ' + startIndex + ' index: ' + index);
+            anchorNode.parentNode.insertChildAt(startIndex + index, node);
+            node.attachToView(startIndex + index);
         });
     }
 
-    /**
-    * Detaches a componentView into the given hostView at the given element
-    */
-    detachComponentView(location: RenderElementRef, componentViewRef: RenderViewRef) {
-        console.log("NativeScriptRenderer.detachComponentView ");
-        //TODO: detach/destroy visual tree
-    }
-
-    attachViewInContainer(location: RenderElementRef, atIndex: number, viewRef: RenderViewRef) {
-        console.log("NativeScriptRenderer.attachViewInContainer  container index: " + location.boundElementIndex + " atIndex " + atIndex);
-
-        var hostView = (<NativeScriptViewRef>location.renderView).resolveView();
-        var parentNode = hostView.getBoundNode(location.boundElementIndex);
-
-        var childView = (<NativeScriptViewRef>viewRef).resolveView();
-        childView.rootChildElements.forEach((child) => {
-            console.log('(attachViewInContainer) Inserting child in ' + parentNode.viewName + ' at index: ' + (atIndex) + ' child ' + child.viewName);
-            parentNode.insertChildAt(atIndex, child);
-            child.attachToView(atIndex);
-        });
-    }
-
-    detachViewInContainer(location: RenderElementRef, atIndex: number, viewRef: RenderViewRef) {
-        console.log("NativeScriptRenderer.detachViewInContainer ");
-
-        var hostView = (<NativeScriptViewRef>location.renderView).resolveView();
-        var parentNode = hostView.getBoundNode(location.boundElementIndex);
-        var childView = (<NativeScriptViewRef>viewRef).resolveView();
-
-        childView.rootChildElements.forEach((child, index) => {
-            console.log('Removing child at index: ' + (atIndex + index) + ' child ' + child.viewName);
-            parentNode.removeChild(child);
+    detachFragment(fragmentRef: RenderFragmentRef) {
+        //TODO: implement...
+        console.log('NativeScriptRenderer.detachFragment');
+        var fragmentNodes = (<NativeScriptFragmentRef>fragmentRef).resolveNodes();
+        fragmentNodes.forEach((node) => {
+            console.log('detaching fragment child: ' + node.viewName);
+            if (node.parentNode)
+                node.parentNode.removeChild(node);
         });
     }
 
@@ -123,7 +137,7 @@ export class NativeScriptRenderer extends Renderer {
         console.log("NativeScriptRenderer.setElementProperty " + propertyName + " = " + propertyValue);
 
         var view = (<NativeScriptViewRef>location.renderView).resolveView();
-        var node = view.getBoundNode(location.boundElementIndex);
+        var node = view.getBoundNode(location.renderBoundElementIndex);
         node.setProperty(propertyName, propertyValue);
     }
 
@@ -135,7 +149,7 @@ export class NativeScriptRenderer extends Renderer {
         console.log("NativeScriptRenderer.getNativeElementSync");
 
         var view = (<NativeScriptViewRef>location.renderView).resolveView();
-        var node = view.getBoundNode(location.boundElementIndex);
+        var node = view.getBoundNode(location.renderBoundElementIndex);
         return node.nativeView;
     }
 
@@ -150,21 +164,23 @@ export class NativeScriptRenderer extends Renderer {
         console.log("NativeScriptRenderer.setText ");
     }
 
-    setEventDispatcher(viewRef: RenderViewRef, dispatcher: EventDispatcher) {
+    setEventDispatcher(viewRef: RenderViewRef, dispatcher: RenderEventDispatcher) {
         console.log("NativeScriptRenderer.setEventDispatcher ");
         var view = (<NativeScriptViewRef>viewRef).resolveView();
         view.eventDispatcher = dispatcher;
     }
 
-    _createView(proto: DomProtoView, isRoot = false): NativeScriptView {
+    _createView(proto: DomProtoView, inplaceElement: HTMLElement, isRoot = false): RenderViewWithFragments {
         console.log("NativeScriptRenderer._createView ");
+
+        var clonedProtoView = cloneAndQueryProtoView(proto, true);
 
         var nativeElements: Array<ViewNode>;
         var boundElements: Array<ViewNode> = [];
-        if (proto.rootBindingOffset == 0) {
-            nativeElements = this._createNodes(null, proto.element.children[0].children, boundElements);
+        if (proto.rootElement.tagName === 'template') {
+            nativeElements = this._createNodes(null, proto.rootElement.childNodes[0].childNodes, boundElements);
         } else {
-            nativeElements = this._createNodes(null, [proto.element], boundElements);
+            nativeElements = this._createNodes(null, [proto.rootElement], boundElements);
         }
 
         if (isRoot) {
@@ -186,7 +202,12 @@ export class NativeScriptRenderer extends Renderer {
             }
         }
 
-        return view;
+        let fragments = clonedProtoView.fragments.map(nodes => {
+            console.log('Fragment with nodes: ' + nodes.length + ' first: ' + (<any>nodes[0]).name);
+            return new NativeScriptFragmentRef(nativeElements)
+        })
+        return new RenderViewWithFragments(
+            new NativeScriptViewRef(view), fragments);
     }
 
     _createNodes(parent: ViewNode, parsedChildren, boundElements: Array<ViewNode>): Array<ViewNode> {

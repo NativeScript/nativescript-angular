@@ -17,9 +17,8 @@ import {bootstrap as angularBootstrap} from 'angular2/src/core/application';
 
 export type BindingList = List<Type | Binding | List<any>>;
 
-export function nativeScriptBootstrap(appComponentType: Type,
-                          componentInjectableBindings: BindingList = null,
-                          errorReporter: Function = null): Promise<ApplicationRef> {
+export function nativeScriptBootstrap(appComponentType: any,
+                          componentInjectableBindings: BindingList = null): Promise<ApplicationRef> {
   NativeScriptDomAdapter.makeCurrent();
 
   let nativeScriptBindings: BindingList = [
@@ -28,5 +27,5 @@ export function nativeScriptBootstrap(appComponentType: Type,
   ];
   let augmentedBindings = nativeScriptBindings.concat(componentInjectableBindings);
 
-  return angularBootstrap(appComponentType, augmentedBindings, errorReporter)
+  return angularBootstrap(appComponentType, augmentedBindings)
 }

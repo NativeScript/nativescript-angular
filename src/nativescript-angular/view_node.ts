@@ -49,7 +49,7 @@ export class ViewNode {
         for (let i = 0; i < depth; i++)
             line += "    "
 
-        console.log(line + this.viewName + '(' + this._attachedToView + ') ' + (this.nativeView != null ? (<any>this.nativeView).__id : 'NULL'));
+        console.log(line + this.viewName + '(' + this._attachedToView + ') ');
 
         this.children.forEach(child => {
             child.print(depth + 1);
@@ -122,16 +122,13 @@ export class ViewNode {
                 let indexOffset = 0;
                 if (this.parentNode.viewName === "template") {
                     indexOffset = parentLayout.getChildIndex(this.parentNode.nativeView);
-                    console.log("attaching inside a template. index offset is: " + indexOffset);
                 }
                 parentLayout.insertChild(indexOffset + attachAtIndex, this.nativeView);
             } else {
-                console.log('Layout.addChild');
                 parentLayout.addChild(this.nativeView);
             }
             this.attachUIEvents();
         } else if ((<any>this.parentNativeView)._addChildFromBuilder) {
-            console.log('_addChildFromBuilder ' + (<any>this.parentNativeView)._addChildFromBuilder);
             (<any>this.parentNativeView)._addChildFromBuilder(this.viewName, this.nativeView);
             this.attachUIEvents();
         } else {
@@ -157,16 +154,36 @@ export class ViewNode {
                 propertyName = propMap[attribute];
             }
 
-            console.log('Set attribute: ' + propertyName + ' = ' + propertyValue);
             this.nativeView[propertyName] = propertyValue;
         }
     }
 
     private attachUIEvents() {
+        console.log('ViewNode.attachUIEvents: ' + this.viewName + ' ' + this.eventListeners.size);
         this.eventListeners.forEach((callback, eventName) => {
-            console.log('Attaching event listener for: ' + eventName);
-            this.nativeView.addEventListener(eventName, callback);
+            this.attachNativeEvent(eventName, callback);
         });
+    }
+
+    private attachNativeEvent(eventName, callback) {
+        this.nativeView.addEventListener(eventName, callback);
+    }
+
+    createEventListener(view: NativeScriptView, bindingIndex: number, eventName: string, eventLocals: AST) {
+        console.log('createEventListener ' + this.viewName + ' ' + eventName + ' ' + eventLocals);
+
+        let handler = (args: EventData) => {
+            var locals = new Map<string, any>();
+            locals.set('$event', args);
+            //TODO: remove -- used for debug prints triggered from outside the renderer code.
+            locals.set('$el', this);
+            view.eventDispatcher.dispatchRenderEvent(bindingIndex, eventName, locals);
+        }
+        let zonedHandler = global.zone.bind(handler);
+        this.eventListeners.set(eventName, zonedHandler);
+        if (this._attachedToView) {
+            this.attachNativeEvent(eventName, zonedHandler);
+        }
     }
 
     public insertChildAt(index: number, childNode: ViewNode) {
@@ -185,15 +202,18 @@ export class ViewNode {
         childNode._attachedToView = false;
         this.children = this.children.filter((item) => item !== childNode);
 
-        if (childNode.nativeView && this.parentNativeView) {
-            if (this.parentNativeView instanceof Layout) {
-                console.log('native removeChild ' + childNode.viewName);
-                (<Layout>this.parentNativeView).removeChild(childNode.nativeView);
+        if (childNode.nativeView) {
+            let nativeParent = childNode.nativeView.parent;
+            if (nativeParent instanceof Layout) {
+                (<Layout>nativeParent).removeChild(childNode.nativeView);
             } else {
-                console.log('native _removeView ' + childNode.viewName);
-                this.parentNativeView._removeView(childNode.nativeView);
+                nativeParent._removeView(childNode.nativeView);
             }
         }
+    }
+
+    public getChildIndex(childNode: ViewNode) {
+        return this.children.indexOf(childNode);
     }
 
     setProperty(name: string, value: any) {
@@ -203,19 +223,5 @@ export class ViewNode {
         } else {
             console.log('setProperty called without a nativeView');
         }
-    }
-
-    createEventListener(view: NativeScriptView, bindingIndex: number, eventName: string, eventLocals: AST) {
-        console.log('createEventListener ' + this.viewName + ' ' + eventName + ' ' + eventLocals);
-
-        let handler = (args: EventData) => {
-            var locals = new Map<string, any>();
-            locals.set('$event', args);
-            //TODO: remove -- used for debug prints triggered from outside the renderer code.
-            locals.set('$el', this);
-            view.eventDispatcher.dispatchEvent(bindingIndex, eventName, locals);
-        }
-        let zonedHandler = global.zone.bind(handler);
-        this.eventListeners.set(eventName, zonedHandler);
     }
 }
