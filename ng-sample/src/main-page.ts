@@ -15,9 +15,6 @@ var lifeCycle: LifeCycle = null;
 })
 @View({
     directives: [NgIf, NgFor],
-    //TODO: investigate why having a *ng-if on a non-bound element (no prop or var binding)
-    //breaks the NG bootstrap. It doesn't finish, and probably swallows an exception somewhere.
-    //Reproduce by removing the #more binding on the StackLayout below.
 	template: `
 <StackLayout orientation='vertical'>
     <Label text='Name' fontSize='32' verticalAlignment='center' padding='20'></Label>
@@ -25,6 +22,7 @@ var lifeCycle: LifeCycle = null;
     <Button [text]='buttonText' (tap)='onSave($event, name.text, $el)'></Button>
     <Button text='Toggle details' (tap)='onToggleDetails()'></Button>
     <TextView *ng-if='showDetails' [text]='detailsText'></TextView>
+    <Label text='-----=MID=-----' fontSize='32' verticalAlignment='center' padding='20'></Label>
     <StackLayout #more *ng-if='showDetails' orientation='vertical'>
         <TextField *ng-for='#detailLine of detailLines' [text]='detailLine'></TextField>
     </StackLayout>
@@ -54,7 +52,7 @@ class MainPage {
 
     onSave($event, name, $el) {
         console.log('onSave event ' + $event + ' name ' + name);
-        //alert(name);
+        alert(name);
         $el.printTree();
     }
 
