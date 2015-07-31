@@ -2,7 +2,6 @@ Integrating NativeScript with Angular 2.
 
 # Running locally
 
-
 ## Get submodule code
 
 The project bundles the NativeScript modules and Angular as source code dependencies set up as git submodules. You need to get them by running:
@@ -13,7 +12,15 @@ $ git submodule update --init
 
 ## Install dependencies
 
-You will need the [Android SDK](https://developer.android.com/sdk/) to build this project. Install it manually.
+```
+$ npm install -g grunt-cli
+$ npm install -g tsd
+$ npm install -g nativescript
+```
+
+You may need to configure your `tsd` GitHub access token to avoid rate-limit-related download errors. See the token installation instructions in the `.tsdrc` section [here](https://github.com/DefinitelyTyped/tsd#tsdrc).
+
+You will also need the [Android SDK](https://developer.android.com/sdk/) to build this project. Install it manually before continuing with the next steps.
 
 Then install the NativeScript tools according to: [this article](http://docs.nativescript.org/setup/quick-setup).
 
