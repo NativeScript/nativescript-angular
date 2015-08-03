@@ -17,16 +17,16 @@ var lifeCycle: LifeCycle = null;
     directives: [NgIf, NgFor],
 	template: `
 <StackLayout orientation='vertical'>
-    <Label text='Name' fontSize='32' verticalAlignment='center' padding='20'></Label>
-    <TextField #name text='John' fontSize='32' padding='20'></TextField>
+    <Label text='Name' fontSize='20' verticalAlignment='center' padding='20'></Label>
+    <TextField #name text='John' fontSize='20' padding='20'></TextField>
     <Button [text]='buttonText' (tap)='onSave($event, name.text, $el)'></Button>
     <Button text='Toggle details' (tap)='onToggleDetails()'></Button>
     <TextView *ng-if='showDetails' [text]='detailsText'></TextView>
-    <Label text='-----=MID=-----' fontSize='32' verticalAlignment='center' padding='20'></Label>
+    <Label text='==============================' fontSize='20'></Label>
     <StackLayout #more *ng-if='showDetails' orientation='vertical'>
         <TextField *ng-for='#detailLine of detailLines' [text]='detailLine'></TextField>
     </StackLayout>
-    <Label text='-----=END=-----' fontSize='32' verticalAlignment='center' padding='20'></Label>
+    <Label text='==============================' fontSize='20'></Label>
 </StackLayout>
 `,
 })
