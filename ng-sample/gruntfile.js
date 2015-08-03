@@ -31,6 +31,7 @@ module.exports = function(grunt) {
                     target: "es5",
                     sourceMap: true,
                     removeComments: false,
+                    experimentalDecorators: true,
                     emitDecoratorMetadata: true,
                     compiler: "node_modules/typescript/bin/tsc",
                     noEmitOnError: true
