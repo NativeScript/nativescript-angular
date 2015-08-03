@@ -4,6 +4,7 @@ var fs = require("fs");
 module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-ts');
     grunt.loadNpmTasks('grunt-contrib-copy');
+    grunt.loadNpmTasks('grunt-contrib-clean');
 
     var nsDistPath = process.env.NSDIST || '../deps/NativeScript/bin/dist';
 
@@ -98,6 +99,19 @@ module.exports = function(grunt) {
                 dest: 'app/tns_modules',
             },
         },
+        clean: {
+            appBeforeDeploy: {
+                expand: true,
+                cwd: './app',
+                src: [
+                    'angular2',
+                    'nativescript-angular',
+                    'typings',
+                    'tns_modules/angular2/**/*.dart',
+                    '**/*.js.map',
+                ]
+            },
+        }
     });
 
     grunt.registerTask("removeAppDir", function() {
@@ -136,7 +150,7 @@ module.exports = function(grunt) {
     ]);
 
     grunt.registerTask("app-full", [
-        "clean",
+        "full-clean",
         "updateTypings",
         "updateModules",
         "updateAngular",
@@ -172,9 +186,10 @@ module.exports = function(grunt) {
     grunt.registerTask("prepareTnsModules", [
         "copy:tnsifyAngular",
         "prepareQuerystringPackage",
+        "clean:appBeforeDeploy",
     ]);
 
-    grunt.registerTask("clean", [
+    grunt.registerTask("full-clean", [
         "removeAppDir",
         "removeNSFiles",
     ]);

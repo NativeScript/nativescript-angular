@@ -36,6 +36,7 @@
 		"grunt": "0.4.5",
 		"grunt-ts": "git+https://github.com/hdeshev/grunt-ts#emitDecoratorMetadata",
 		"grunt-contrib-copy": "0.8.0",
+        "grunt-contrib-clean": "0.6.0",
 		"typescript": "1.5.0-beta"
 	},
 	"nativescript": {
