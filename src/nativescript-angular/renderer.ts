@@ -10,6 +10,7 @@ import {
     RenderFragmentRef,
     RenderViewWithFragments
 } from 'angular2/src/render/api';
+import {TemplateCloner} from 'angular2/src/render/dom/template_cloner';
 import {NG_BINDING_CLASS, cloneAndQueryProtoView} from 'angular2/src/render/dom/util';
 import {DOM} from 'angular2/src/dom/dom_adapter';
 
@@ -53,9 +54,9 @@ export class NativeScriptFragmentRef extends RenderFragmentRef {
 
 @Injectable()
 export class NativeScriptRenderer extends Renderer {
-    constructor() {
-        console.log('NativeScriptRenderer created');
+    constructor(private _templateCloner: TemplateCloner) {
         super();
+        console.log('NativeScriptRenderer created');
     }
 
     createRootHostView(hostProtoViewRef: RenderProtoViewRef,
@@ -173,15 +174,13 @@ export class NativeScriptRenderer extends Renderer {
     _createView(proto: DomProtoView, inplaceElement: HTMLElement, isRoot = false): RenderViewWithFragments {
         console.log("NativeScriptRenderer._createView ");
 
-        var clonedProtoView = cloneAndQueryProtoView(proto, true);
+        var clonedProtoView = cloneAndQueryProtoView(this._templateCloner, proto, true);
 
         var nativeElements: Array<ViewNode>;
         var boundElements: Array<ViewNode> = [];
-        if (proto.rootElement.tagName === 'template') {
-            nativeElements = this._createNodes(null, proto.rootElement.childNodes[0].childNodes, boundElements);
-        } else {
-            nativeElements = this._createNodes(null, [proto.rootElement], boundElements);
-        }
+
+        var templateRoot = clonedProtoView.fragments[0][0];
+        nativeElements = this._createNodes(null, [templateRoot], boundElements);
 
         if (isRoot) {
             nativeElements[0].attachToView();
