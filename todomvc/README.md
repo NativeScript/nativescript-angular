@@ -1,32 +1,42 @@
-# NativeScript + TypeScript
+# NativeScript + AngularJS TodoMVC example
 
-This is a sample project wrapping the `tns` commands in a Grunt script that compiles the TypeScript code and assembles the correct `app` folder structure.
+This is a sample project implementing the famous TodoMVC example using NativeScript and AngularJS
 
-# How it works?
+# Set up prerequisites
 
-* We keep everything below `./src`. **DO NOT PUT ANYTHING IMPORTANT IN `./app`**
-* The TypeScript compiler puts transpiled `.js` files in `./app'
-* A Grunt task updates all app assets and the `tns_modules` folder too.
+You need to prepare the NativeScript distribution in the parent folder by executing all steps in the parent README:
 
-# Setting it up
+(All run from the parent folder once.)
+
+1. Update git submodules.
+2. Install dependencies.
+3. `npm install`
+4. Install angular2 tsd typings.
+5. `grunt prepare`
+
+# Set up the project
+
+0. `cd todomvc`
+1. `npm install`
+2. `tsd reinstall`
+3. `tns platform add android`
+
+# Compile
 
 ```sh
-$ npm install
-$ tns platform add android
-$ tns platform add ios
-$ grunt app-full.
+grunt app-full
 ```
 
-When done, run the emulator (see below).
+# Run in the emulator
 
-# Development workflow
+Android SDK emulated device:
 
-* Edit some files.
-* Start the emulator using: `grunt run-android --avd <YOUR AVD>` or `grunt run-ios --device <YOUR DEVICE>`
-    * Hit Ctrl-C when done.
+```sh
+tns emulate android --avd my-nexus7-device
+```
 
-# Upgrading to a newer NativeScript version
+or Genymotion
 
-* Update your platforms.
-* Update your `src/tns_modules` folder with the latest version of the module code.
-* Remove the 1.2 `*.d.ts` files below `src/typings/nativescript/1.2` and add the new type declarations in a similarly named folder.
+```sh
+tns emulate android --geny my-nexus7-device
+```
