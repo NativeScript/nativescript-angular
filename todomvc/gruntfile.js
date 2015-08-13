@@ -24,6 +24,9 @@ module.exports = function(grunt) {
             build: {
                 src: [
                     'src/**/*.ts',
+                    '!src/**/*ios.ts',
+                    '!src/**/*ios.d.ts',
+                    '!src/ios.d.ts',
                 ],
                 dest: 'app',
                 options: {
@@ -80,6 +83,14 @@ module.exports = function(grunt) {
                 ],
                 dest: path.join(modulesDestPath, 'nativescript-angular')
             },
+            iosStub: {
+                expand: true,
+                cwd: path.join(nsDistPath, '..', '..'),
+                src: [
+                    'ios-stub.ts',
+                ],
+                dest: typingsDestPath
+            },
         },
         shell: {
             emulateGeny: {
@@ -125,6 +136,7 @@ module.exports = function(grunt) {
     grunt.registerTask("updateTypings", [
         "checkTypings",
         "copy:typingsFiles",
+        "copy:iosStub",
     ]);
 
     grunt.registerTask("removeAppDir", function() {
