@@ -17,7 +17,7 @@ var lifeCycle: LifeCycle = null;
     directives: [NgIf, NgFor],
 	template: `
 <StackLayout orientation='vertical'>
-    <Label text='Name' fontSize='20' verticalAlignment='center' padding='20'></Label>
+    <Label [class]="isValid ? 'valid' : 'invalid'" text='Name' fontSize='20' verticalAlignment='center' padding='20'></Label>
     <TextField #name text='John' fontSize='20' padding='20'></TextField>
     <Button [text]='buttonText' (tap)='onSave($event, name.text, $el)'></Button>
     <Button text='Toggle details' (tap)='onToggleDetails()'></Button>
@@ -36,6 +36,7 @@ class MainPage {
     public detailsText: string = "";
     public moreDetailsText: string = "";
     public detailLines: Array<string> = [];
+    public isValid: boolean = true;
 
     constructor() {
         this.buttonText = 'Save...'
