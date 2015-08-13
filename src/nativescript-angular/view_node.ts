@@ -33,6 +33,8 @@ export class ViewNode {
     public nativeView: View;
     private _parentView: View;
     private _attachedToView: boolean = false;
+    private cssClasses: Map<string, boolean> = new Map<string, boolean>();
+    private static whiteSpaceSplitter = /\s+/;
 
     public children:Array<ViewNode> = [];
 
@@ -136,25 +138,50 @@ export class ViewNode {
         }
     }
 
+    private static propertyMaps: Map<Function, Map<string, string>> = new Map<Function, Map<string, string>>();
+
+    private static getProperties(instance: any): Map<string, string> {
+        let type = instance && instance.constructor;
+        if (!type) {
+            return new Map<string, string>();
+        }
+
+        if (!ViewNode.propertyMaps.has(type)) {
+            var propMap = new Map<string, string>();
+            for (var propName in instance) {
+                propMap.set(propName.toLowerCase(), propName);
+            }
+            ViewNode.propertyMaps.set(type, propMap);
+        }
+        return ViewNode.propertyMaps.get(type);
+    }
+
     private configureUI() {
+        this.syncClasses();
+
         if (!this.attributes)
             return;
 
-        //parse5 lowercases attribute names, so we need to find the actual property name
-        var propMap = {};
-        for (var propName in this.nativeView) {
-            propMap[propName.toLowerCase()] = propName;
-        }
-
         for (var attribute in this.attributes) {
-            let propertyName = attribute;
             let propertyValue = this.attributes[attribute];
+            this.setAttribute(attribute, propertyValue);
+        }
+    }
 
-            if (propMap[attribute]) {
-                propertyName = propMap[attribute];
-            }
+    public setAttribute(attributeName: string, value: any): void {
+        console.log('Setting attribute: ' + attributeName);
 
-            this.nativeView[propertyName] = propertyValue;
+        var propMap = ViewNode.getProperties(this.nativeView);
+
+        if (attributeName === "class") {
+            this.setClasses(value);
+        } else if (propMap.has(attributeName)) {
+            // We have a lower-upper case mapped property.
+            let propertyName = propMap.get(attributeName);
+            this.nativeView[propertyName] = value;
+        } else {
+            // Unknown attribute value -- just set it to our object as is.
+            this.nativeView[attributeName] = value;
         }
     }
 
@@ -219,9 +246,34 @@ export class ViewNode {
     setProperty(name: string, value: any) {
         console.log('ViewNode.setProperty ' + this.viewName + ' setProperty ' + name + ' ' + value);
         if (this.nativeView) {
-            this.nativeView[name] = value;
+            this.setAttribute(name, value);
         } else {
             console.log('setProperty called without a nativeView');
         }
     }
+
+    public addClass(className: string): void {
+        this.cssClasses.set(className, true);
+        this.syncClasses();
+    }
+
+    public removeClass(className: string): void {
+        this.cssClasses.delete(className);
+        this.syncClasses();
+    }
+
+    public setClasses(classesValue: string): void {
+        console.log('ViewNode.setClasses ' + classesValue);
+        let classes = classesValue.split(ViewNode.whiteSpaceSplitter)
+        classes.forEach((className) => this.cssClasses.set(className, true));
+        this.syncClasses();
+    }
+
+    private syncClasses(): void {
+        let classValue = (<any>Array).from(this.cssClasses.keys()).join(' ');
+        if (this.nativeView && classValue) {
+            this.nativeView.cssClass = classValue;
+        }
+    }
+
 }

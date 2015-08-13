@@ -144,6 +144,19 @@ export class NativeScriptRenderer extends Renderer {
 
     setElementAttribute(location: RenderElementRef, attributeName: string, attributeValue: string) {
         console.log("NativeScriptRenderer.setElementAttribute " + attributeName + " = " + attributeValue);
+        return this.setElementProperty(location, attributeName, attributeValue);
+    }
+
+    setElementClass(location: RenderElementRef, className: string, isAdd: boolean): void {
+        console.log("NativeScriptRenderer.setElementClass " + className + " - " + isAdd);
+
+        var view = (<NativeScriptViewRef>location.renderView).resolveView();
+        var node = view.getBoundNode(location.renderBoundElementIndex);
+        if (isAdd) {
+            node.addClass(className);
+        } else {
+            node.removeClass(className);
+        }
     }
 
     getNativeElementSync(location: RenderElementRef): any {
