@@ -9,8 +9,24 @@ button {
     horizontal-align: center;
 }
 
+switch {
+    margin: 10;
+}
+
 .message {
     font-size: 20;
     color: #284848;
     horizontal-align: center;
+}
+
+.editing {
+    color: pink;
+}
+
+.complete {
+    color: green;
+}
+
+.incomplete {
+    color: red;
 }
