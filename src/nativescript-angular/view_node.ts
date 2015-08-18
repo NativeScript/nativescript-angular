@@ -7,7 +7,9 @@ import {StackLayout} from 'ui/layouts/stack-layout';
 import {Label} from 'ui/label';
 import {TextField} from 'ui/text-field';
 import {TextView} from 'ui/text-view';
+import {Switch} from 'ui/switch';
 import {Layout} from 'ui/layouts/layout';
+import gestures = require("ui/gestures");
 import {NativeScriptView} from 'nativescript-angular/renderer';
 import {AST} from 'angular2/src/change_detection/parser/ast';
 
@@ -25,6 +27,7 @@ export class ViewNode {
         ["textfield", TextField],
         ["textview", TextView],
         ["label", Label],
+        ["switch", Switch],
         ["template", ContentView],
     ]);
 
@@ -99,6 +102,10 @@ export class ViewNode {
         });
     }
 
+    private getViewClass(): ViewClass {
+        return ViewNode.allowedElements.get(this.viewName);
+    }
+
     private createUI(attachAtIndex: number) {
         if (!ViewNode.allowedElements.has(this.viewName))
             return;
@@ -108,7 +115,7 @@ export class ViewNode {
             ', parent: ' + this.parentNode.viewName +
             ', parent UI ' + (<any>this.parentNativeView.constructor).name);
 
-        let viewClass = ViewNode.allowedElements.get(this.viewName);
+        let viewClass = this.getViewClass();
         if (!this.nativeView) {
             this.nativeView = new viewClass();
         } else {
@@ -171,6 +178,9 @@ export class ViewNode {
     public setAttribute(attributeName: string, value: any): void {
         console.log('Setting attribute: ' + attributeName);
 
+        if (attributeName === "checked") {
+            console.log('New value: ' + value + ' old value: ' + (<any>this.nativeView).checked);
+        }
         var propMap = ViewNode.getProperties(this.nativeView);
 
         if (attributeName === "class") {
@@ -192,8 +202,26 @@ export class ViewNode {
         });
     }
 
+    private resolveNativeEvent(parsedEventName: string): string {
+        //TODO: actually resolve the event...
+        return parsedEventName;
+    }
+
+    private isGesture(eventName: string): boolean {
+        return gestures.fromString(name.toLowerCase()) !== undefined;
+    }
+
     private attachNativeEvent(eventName, callback) {
-        this.nativeView.addEventListener(eventName, callback);
+        console.log('attachNativeEvent ' + eventName);
+        // Try to resolve the event as a gesture name first.
+        // Attach as event otherwise.
+        let gestureName = gestures.fromString(eventName.toLowerCase());
+        if (gestureName) {
+            this.nativeView.observe(gestureName, callback);
+        } else {
+            let resolvedEvent = this.resolveNativeEvent(eventName);
+            this.nativeView.addEventListener(resolvedEvent, callback);
+        }
     }
 
     createEventListener(view: NativeScriptView, bindingIndex: number, eventName: string, eventLocals: AST) {
