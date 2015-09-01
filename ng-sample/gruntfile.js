@@ -20,9 +20,6 @@ module.exports = function(grunt) {
             build: {
                 src: [
                     'src/**/*.ts',
-                    '!src/**/*ios.ts',
-                    '!src/**/*ios.d.ts',
-                    '!src/ios.d.ts',
                 ],
                 dest: 'app',
                 options: {
@@ -45,10 +42,7 @@ module.exports = function(grunt) {
                 src: [
                     '**/*',
                     '!**/*.ts',
-                    '!typings/**/*',
-                    '!**/*ios.ts',
-                    '!**/*ios.d.ts',
-                    '!ios.d.ts',
+                    '!typings/**/*'
                 ],
                 dest: 'app'
             },
@@ -67,17 +61,8 @@ module.exports = function(grunt) {
                 cwd: typingsPath,
                 src: [
                     '**/*',
-                    '!node-tests/**/*',
                     '!es6-promise.d.ts',
                     '!es-collections.d.ts',
-                ],
-                dest: typingsDestPath
-            },
-            iosStub: {
-                expand: true,
-                cwd: path.join(nsDistPath, '..', '..'),
-                src: [
-                    'ios-stub.ts',
                 ],
                 dest: typingsDestPath
             },
@@ -166,7 +151,6 @@ module.exports = function(grunt) {
     grunt.registerTask("updateTypings", [
         "checkTypings",
         "copy:typingsFiles",
-        "copy:iosStub",
     ]);
 
     grunt.registerTask("updateAngular", [

@@ -31,9 +31,6 @@ module.exports = function(grunt) {
             build: {
                 src: [
                     'src/**/*.ts',
-                    '!src/**/*ios.ts',
-                    '!src/**/*ios.d.ts',
-                    '!src/ios.d.ts',
                 ],
                 outDir: 'bin/dist/modules',
                 options: {
@@ -74,13 +71,12 @@ module.exports = function(grunt) {
                     '!angular2/docs/**/*',
                     '!angular2/test*',
                     '!angular2/src/test_lib/**/*',
-                    //'!angular2/typings/angular-protractor/**/*',
-                    '!angular2/typings/tsd.d.ts',
+                    '!angular2/typings/angular-protractor/**/*',
                     '!angular2/typings/node/**/*',
                     //'!angular2/typings/es6-promise/**/*',
-                    //'!angular2/typings/jasmine/**/*',
+                    '!angular2/typings/jasmine/**/*',
                     //'!angular2/typings/hammerjs/**/*',
-                    //'!angular2/typings/selenium-webdriver/**/*',
+                    '!angular2/typings/selenium-webdriver/**/*',
                 ],
                 dest: angularDest
             },
@@ -105,7 +101,6 @@ module.exports = function(grunt) {
                 cwd: './deps/NativeScript',
                 src: [
                     '**/*.ts',
-                    '!node-tests/**/*',
                     '!es6-promise.d.ts',
                     '!es-collections.d.ts',
                     '!node_modules/**/*',
@@ -123,7 +118,6 @@ module.exports = function(grunt) {
                     'angular2',
                     'reflect-metadata',
                     'bin',
-                    'css',
                     'node_modules',
                     'image-source',
                     'xml',
@@ -148,13 +142,6 @@ module.exports = function(grunt) {
                     'globals',
                     'node-tests',
                     'ui',
-                    'xhr',
-                ]
-            },
-            ts: {
-                expand: true,
-                src: [
-                    '**/tscommand-*.tmp.txt',
                 ]
             }
         },
@@ -197,7 +184,7 @@ module.exports = function(grunt) {
         "prepareAngular",
         "shell:depNSInit",
         "copy:nativeScriptSource",
-        "ts:build",
+        //"ts:build",
     ]);
 
     grunt.registerTask("ng-sample", [
