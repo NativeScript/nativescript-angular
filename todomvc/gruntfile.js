@@ -24,9 +24,9 @@ module.exports = function(grunt) {
             build: {
                 src: [
                     'src/**/*.ts',
-                    '!src/**/*ios.ts',
-                    '!src/**/*ios.d.ts',
-                    '!src/ios.d.ts',
+                    //'!src/**/*ios.ts',
+                    //'!src/**/*ios.d.ts',
+                    //'!src/ios.d.ts',
                 ],
                 dest: 'app',
                 options: {
@@ -136,7 +136,7 @@ module.exports = function(grunt) {
     grunt.registerTask("updateTypings", [
         "checkTypings",
         "copy:typingsFiles",
-        "copy:iosStub",
+        //"copy:iosStub",
     ]);
 
     grunt.registerTask("removeAppDir", function() {
