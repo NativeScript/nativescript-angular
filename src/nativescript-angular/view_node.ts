@@ -132,7 +132,7 @@ export class ViewNode {
                 if (this.parentNode.viewName === "template") {
                     indexOffset = parentLayout.getChildIndex(this.parentNode.nativeView);
                 }
-                parentLayout.insertChild(indexOffset + attachAtIndex, this.nativeView);
+                parentLayout.insertChild(this.nativeView, indexOffset + attachAtIndex);
             } else {
                 parentLayout.addChild(this.nativeView);
             }
