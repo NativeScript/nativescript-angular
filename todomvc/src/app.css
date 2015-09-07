@@ -4,13 +4,9 @@
     margin:20;
 }
 
-button {
+.add-button {
     font-size: 42;
     horizontal-align: center;
-}
-
-switch {
-    margin: 10;
 }
 
 .message {
@@ -29,4 +25,10 @@ switch {
 
 .incomplete {
     color: red;
+}
+
+.todo-item {
+}
+
+.todo-text {
 }

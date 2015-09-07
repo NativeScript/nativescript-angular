@@ -4,6 +4,7 @@ var store = new Map<string, Array<Todo>>();
 var todoId = 0;
 
 export class Todo {
+	selected: Boolean = false;
 	completed: Boolean = false;
 	editing: Boolean = false;
 	title: String;
@@ -22,14 +23,7 @@ export class Todo {
 export class TodoStore {
 	todos: Array<Todo>;
 	constructor() {
-		let persistedTodos = store.get('angular2-todos') || [];
-		// Normalize back into classes
-		this.todos = persistedTodos.map( (todo: {title: String, completed: Boolean, uid: String}) => {
-			let ret = new Todo(todo.title);
-			ret.completed = todo.completed;
-			ret.uid = todo.uid;
-			return ret;
-		});
+		this.todos = store.get('angular2-todos') || [];
 	}
 	_updateStore() {
 		store.set('angular2-todos', this.todos);
@@ -37,41 +31,42 @@ export class TodoStore {
 	get(state: {completed: Boolean}) {
 		return this.todos.filter((todo: Todo) => todo.completed === state.completed);
 	}
-	allCompleted() {
-		return this.todos.length === this.getCompleted().length;
-	}
-	setAllTo(toggler) {
-		this.todos.forEach((t: Todo) => t.completed = toggler.checked);
+    private resetAll() {
+        this.todos.forEach((t) => {
+            t.selected = false
+            t.editing = false
+        });
+    }
+    select(todo: Todo, selected: Boolean) {
+        this.resetAll();
+
+        todo.selected = selected;
+		this._updateStore();
+    }
+	toggleCompletion(todo: Todo) {
+        todo.completed = !todo.completed;
 		this._updateStore();
 	}
-	removeCompleted() {
-		this.todos = this.get({completed: false});
-	}
-	getRemaining() {
-		return this.get({completed: false});
-	}
-	getCompleted() {
-		return this.get({completed: true});
-	}
-	toggleCompletion(uid: String) {
-		for (let todo of this.todos) {
-			if (todo.uid === uid) {
-				todo.completed = !todo.completed;
-				break;
-			}
-		};
+	remove(todo: Todo) {
+        this.resetAll();
+
+        this.todos.splice(this.todos.indexOf(todo), 1);
 		this._updateStore();
 	}
-	remove(uid: String) {
-		for (let todo of this.todos) {
-			if (todo.uid === uid) {
-				this.todos.splice(this.todos.indexOf(todo), 1);
-				break;
-			}
-		}
-		this._updateStore();
-	}
+    startEditing(todo: Todo) {
+        this.resetAll();
+
+        todo.editing = true;
+    }
+    finishEditing(todo: Todo, newTitle: string) {
+        this.resetAll();
+
+        todo.title = newTitle;
+        todo.editing = false;
+    }
 	add(title: String, completed: boolean = false) {
+        this.resetAll();
+
 		this.todos.push(new Todo(title, completed));
 		this._updateStore();
 	}
