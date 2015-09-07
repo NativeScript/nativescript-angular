@@ -1,9 +1,11 @@
 import {View} from 'ui/core/view';
 import {ContentView} from 'ui/content-view';
 import {Observable, EventData} from 'data/observable';
+import {specialProperties, setSpecialPropertyValue} from "ui/builder/component-builder";
 import {topmost} from 'ui/frame';
 import {Button} from 'ui/button';
 import {StackLayout} from 'ui/layouts/stack-layout';
+import {DockLayout} from 'ui/layouts/dock-layout';
 import {Label} from 'ui/label';
 import {TextField} from 'ui/text-field';
 import {TextView} from 'ui/text-view';
@@ -17,6 +19,12 @@ interface ViewClass {
     new(): View
 }
 
+var specialPropertyMap: Map<string, string> = new Map<string, string>();
+specialProperties.forEach((propertyName) => {
+    specialPropertyMap.set(propertyName, propertyName);
+    specialPropertyMap.set(propertyName.toLowerCase(), propertyName);
+});
+
 type EventHandler = (args: EventData) => void;
 
 export class ViewNode {
@@ -24,12 +32,14 @@ export class ViewNode {
     private static allowedElements: Map<string, ViewClass> = new Map<string, ViewClass>([
         ["button", Button],
         ["stacklayout", StackLayout],
+        ["docklayout", DockLayout],
         ["textfield", TextField],
         ["textview", TextView],
         ["label", Label],
         ["switch", Switch],
         ["template", ContentView],
     ]);
+
 
     private eventListeners: Map<string, EventHandler> = new Map<string, EventHandler>();
 
@@ -164,8 +174,6 @@ export class ViewNode {
     }
 
     private configureUI() {
-        this.syncClasses();
-
         if (!this.attributes)
             return;
 
@@ -173,14 +181,12 @@ export class ViewNode {
             let propertyValue = this.attributes[attribute];
             this.setAttribute(attribute, propertyValue);
         }
+        this.syncClasses();
     }
 
     public setAttribute(attributeName: string, value: any): void {
         console.log('Setting attribute: ' + attributeName);
 
-        if (attributeName === "checked") {
-            console.log('New value: ' + value + ' old value: ' + (<any>this.nativeView).checked);
-        }
         var propMap = ViewNode.getProperties(this.nativeView);
 
         if (attributeName === "class") {
@@ -189,6 +195,9 @@ export class ViewNode {
             // We have a lower-upper case mapped property.
             let propertyName = propMap.get(attributeName);
             this.nativeView[propertyName] = value;
+        } else if (specialPropertyMap.has(attributeName)) {
+            let propertyName = specialPropertyMap.get(attributeName);
+            setSpecialPropertyValue(this.nativeView, propertyName, value);
         } else {
             // Unknown attribute value -- just set it to our object as is.
             this.nativeView[attributeName] = value;
@@ -291,7 +300,6 @@ export class ViewNode {
     }
 
     public setClasses(classesValue: string): void {
-        console.log('ViewNode.setClasses ' + classesValue);
         let classes = classesValue.split(ViewNode.whiteSpaceSplitter)
         classes.forEach((className) => this.cssClasses.set(className, true));
         this.syncClasses();
