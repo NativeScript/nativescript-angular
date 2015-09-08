@@ -88,18 +88,6 @@ module.exports = function(grunt) {
                 ],
                 dest: angularDest
             },
-            nativeScriptSource: {
-                expand: true,
-                cwd: './deps/NativeScript',
-                src: [
-                    '**/*.ts',
-                    '!es6-promise.d.ts',
-                    '!es-collections.d.ts',
-                    '!node_modules/**/*',
-                    '!bin/**/*',
-                ],
-                dest: 'src/'
-            },
         },
         clean: {
             src: {
@@ -109,35 +97,6 @@ module.exports = function(grunt) {
                     '*.ts',
                     '!dependencies.d.ts',
                     'angular2',
-                    'bin',
-                    'node_modules',
-                    'image-source',
-                    'xml',
-                    'text',
-                    'data',
-                    'platform',
-                    'trace',
-                    'fps-meter',
-                    'color',
-                    'application-settings',
-                    'http',
-                    'camera',
-                    'console',
-                    'timer',
-                    'utils',
-                    'location',
-                    'build',
-                    'apps',
-                    'file-system',
-                    'application',
-                    'js-libs',
-                    'globals',
-                    'node-tests',
-                    'ui',
-                    'connectivity',
-                    'css',
-                    'css-value',
-                    'xhr',
                 ]
             }
         },
@@ -178,7 +137,6 @@ module.exports = function(grunt) {
     grunt.registerTask("prepare", [
         "prepareAngular",
         "shell:depNSInit",
-        "copy:nativeScriptSource",
         "ts:build",
     ]);
 
