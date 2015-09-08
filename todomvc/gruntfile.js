@@ -13,7 +13,7 @@ module.exports = function(grunt) {
     var rendererPath = grunt.option("rendererPath") || "../bin/dist/modules/nativescript-angular";
 
     var modulesDestPath = "app/tns_modules";
-    var typingsDestPath = "src/typings/nativescript";
+    var typingsDestPath = "typings/nativescript";
 
     var androidAvd = grunt.option('avd') || "nexus"
     var genyDevice = grunt.option('geny') || "nexus7"
@@ -24,9 +24,7 @@ module.exports = function(grunt) {
             build: {
                 src: [
                     'src/**/*.ts',
-                    //'!src/**/*ios.ts',
-                    //'!src/**/*ios.d.ts',
-                    //'!src/ios.d.ts',
+                    'typings/tsd.d.ts',
                 ],
                 dest: 'app',
                 options: {
@@ -49,7 +47,6 @@ module.exports = function(grunt) {
                 src: [
                     '**/*',
                     '!**/*.ts',
-                    '!typings',
                 ],
                 dest: 'app'
             },
