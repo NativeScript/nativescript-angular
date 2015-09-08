@@ -4,6 +4,7 @@ tags
 typings
 /src/*
 !/src/nativescript-angular/
+!/src/dependencies.d.ts
 .baseDir.ts
 .tscache
 

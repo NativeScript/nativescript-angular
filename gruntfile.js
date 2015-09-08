@@ -80,14 +80,6 @@ module.exports = function(grunt) {
                 ],
                 dest: angularDest
             },
-            reflect: {
-                expand: true,
-                cwd: './node_modules',
-                src: [
-                    'reflect-metadata/reflect-metadata.d.ts',
-                ],
-                dest: path.join(angularDest, 'typings')
-            },
             ngSampleSrc: {
                 expand: true,
                 cwd: 'src/',
@@ -115,8 +107,8 @@ module.exports = function(grunt) {
                 cwd: './src',
                 src: [
                     '*.ts',
+                    '!dependencies.d.ts',
                     'angular2',
-                    'reflect-metadata',
                     'bin',
                     'node_modules',
                     'image-source',
@@ -142,6 +134,10 @@ module.exports = function(grunt) {
                     'globals',
                     'node-tests',
                     'ui',
+                    'connectivity',
+                    'css',
+                    'css-value',
+                    'xhr',
                 ]
             }
         },
@@ -176,7 +172,6 @@ module.exports = function(grunt) {
 
     grunt.registerTask("prepareAngular", [
         'clean:src',
-        'copy:reflect',
         'copy:angularSource',
     ]);
 
@@ -189,7 +184,6 @@ module.exports = function(grunt) {
 
     grunt.registerTask("ng-sample", [
         "env:ngSample",
-        "copy:reflect",
         "copy:angularSource",
         "copy:ngSampleSrc",
         "shell:ngSampleFull"
