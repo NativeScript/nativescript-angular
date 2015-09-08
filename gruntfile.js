@@ -7,6 +7,9 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-contrib-clean');
     grunt.loadNpmTasks('grunt-env');
 
+    var outDir = "bin/dist/modules";
+    var moduleOutDir = path.join(outDir, "nativescript-angular");
+
     var runEnv = JSON.parse(JSON.stringify(process.env));
     runEnv['NODE_PATH'] = 'bin/dist/modules';
 
@@ -31,8 +34,10 @@ module.exports = function(grunt) {
             build: {
                 src: [
                     'src/**/*.ts',
+                    //public API d.ts using the official angular package structure
+                    '!src/nativescript-angular/application.d.ts',
                 ],
-                outDir: 'bin/dist/modules',
+                outDir: outDir,
                 options: {
                     fast: 'never',
                     module: "commonjs",
@@ -80,6 +85,17 @@ module.exports = function(grunt) {
                 ],
                 dest: angularDest
             },
+            packageJson: {
+                expand: true,
+                src: 'package.json',
+                dest: moduleOutDir
+            },
+            handCodedDefinitions: {
+                src: '**/*.d.ts',
+                cwd: 'src/nativescript-angular',
+                expand: true,
+                dest: moduleOutDir
+            },
             ngSampleSrc: {
                 expand: true,
                 cwd: 'src/',
@@ -98,6 +114,12 @@ module.exports = function(grunt) {
                     '!dependencies.d.ts',
                     'angular2',
                 ]
+            },
+            package: {
+                src: 'nativescript-angular*.tgz'
+            },
+            packageDefinitions: {
+                src: moduleOutDir + '/**/*.d.ts'
             }
         },
         shell: {
@@ -118,6 +140,9 @@ module.exports = function(grunt) {
                     'grunt --no-runtslint',
                 ].join('&&'),
                 options: nsSubDir
+            },
+            package: {
+                command: "npm pack '" + moduleOutDir + "'"
             }
         },
         env: {
@@ -130,14 +155,27 @@ module.exports = function(grunt) {
     grunt.registerTask("run", ['ts', 'shell:runApp']);
 
     grunt.registerTask("prepareAngular", [
-        'clean:src',
         'copy:angularSource',
     ]);
 
+    grunt.registerTask("cleanAll", [
+        'clean:src',
+        'clean:package',
+    ]);
+
+    grunt.registerTask("package", [
+        "clean:packageDefinitions",
+        "copy:handCodedDefinitions",
+        "shell:package",
+    ]);
+
     grunt.registerTask("prepare", [
+        "cleanAll",
         "prepareAngular",
         "shell:depNSInit",
         "ts:build",
+        "copy:packageJson",
+        "package"
     ]);
 
     grunt.registerTask("ng-sample", [
@@ -146,4 +184,6 @@ module.exports = function(grunt) {
         "copy:ngSampleSrc",
         "shell:ngSampleFull"
     ]);
+
+    grunt.registerTask("default", ["prepare"]);
 }

@@ -10,7 +10,7 @@
   "license": "Apache-2.0",
   "repository": {
     "type": "git",
-    "url": "https://github.com/hdeshev/nativescript-angular.git"
+    "url": "https://github.com/NativeScript/nativescript-angular.git"
   },
   "scripts": {},
   "dependencies": {
@@ -32,5 +32,10 @@
     "grunt-env": "0.4.4",
     "grunt-ts": "4.2.0",
     "typescript": "1.5.3"
+  },
+  "typescript": {
+      "definitions": [
+          "application.d.ts"
+      ]
   }
 }
