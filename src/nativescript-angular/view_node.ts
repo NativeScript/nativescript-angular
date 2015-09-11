@@ -1,7 +1,7 @@
 import {View} from 'ui/core/view';
 import {ContentView} from 'ui/content-view';
 import {Observable, EventData} from 'data/observable';
-import {specialProperties, setSpecialPropertyValue} from "ui/builder/component-builder";
+import {getSpecialPropertySetter} from "ui/builder/special-properties";
 import {topmost} from 'ui/frame';
 import {Button} from 'ui/button';
 import {StackLayout} from 'ui/layouts/stack-layout';
@@ -18,12 +18,6 @@ import {AST} from 'angular2/src/change_detection/parser/ast';
 interface ViewClass {
     new(): View
 }
-
-var specialPropertyMap: Map<string, string> = new Map<string, string>();
-specialProperties.forEach((propertyName) => {
-    specialPropertyMap.set(propertyName, propertyName);
-    specialPropertyMap.set(propertyName.toLowerCase(), propertyName);
-});
 
 type EventHandler = (args: EventData) => void;
 
@@ -187,17 +181,17 @@ export class ViewNode {
     public setAttribute(attributeName: string, value: any): void {
         console.log('Setting attribute: ' + attributeName);
 
-        var propMap = ViewNode.getProperties(this.nativeView);
+        let specialSetter = getSpecialPropertySetter(attributeName);
+        let propMap = ViewNode.getProperties(this.nativeView);
 
         if (attributeName === "class") {
             this.setClasses(value);
+        } else if (specialSetter) {
+            specialSetter(this.nativeView, value);
         } else if (propMap.has(attributeName)) {
             // We have a lower-upper case mapped property.
             let propertyName = propMap.get(attributeName);
             this.nativeView[propertyName] = value;
-        } else if (specialPropertyMap.has(attributeName)) {
-            let propertyName = specialPropertyMap.get(attributeName);
-            setSpecialPropertyValue(this.nativeView, propertyName, value);
         } else {
             // Unknown attribute value -- just set it to our object as is.
             this.nativeView[attributeName] = value;
