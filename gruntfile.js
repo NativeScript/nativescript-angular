@@ -90,6 +90,12 @@ module.exports = function(grunt) {
                 src: 'package.json',
                 dest: moduleOutDir
             },
+            npmReadme: {
+                expand: true,
+                src: 'README.md',
+                cwd: 'doc',
+                dest: moduleOutDir
+            },
             handCodedDefinitions: {
                 src: '**/*.d.ts',
                 cwd: 'src/nativescript-angular',
@@ -166,6 +172,7 @@ module.exports = function(grunt) {
     grunt.registerTask("package", [
         "clean:packageDefinitions",
         "copy:handCodedDefinitions",
+        "copy:npmReadme",
         "shell:package",
     ]);
 
