@@ -84,9 +84,7 @@ In the example above `MainPage` is an Angular component that looks roughly like 
 
 ```typescript
 @Component({
-	selector: 'main',
-	hostAttributes: {
-	}
+	selector: 'main'
 })
 @View({
 	template: `
