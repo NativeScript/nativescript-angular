@@ -40,6 +40,12 @@ module.exports = function(grunt) {
                 outDir: outDir,
                 options: {
                     fast: 'never',
+
+                    // Resolve non-relative modules like "ui/styling/style"
+                    // based on the project root (not on node_modules which
+                    // is the typescript 1.6+ default)
+                    additionalFlags: '--moduleResolution classic',
+
                     module: "commonjs",
                     target: "es5",
                     sourceMap: true,
