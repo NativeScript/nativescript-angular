@@ -10,7 +10,7 @@ import {Label} from 'ui/label';
 import {TextField} from 'ui/text-field';
 import {TextView} from 'ui/text-view';
 import {Switch} from 'ui/switch';
-import {Layout} from 'ui/layouts/layout';
+import {LayoutBase} from 'ui/layouts/layout-base';
 import gestures = require("ui/gestures");
 import {NativeScriptView} from 'nativescript-angular/renderer';
 import {AST} from 'angular2/src/change_detection/parser/ast';
@@ -128,8 +128,8 @@ export class ViewNode {
 
         this.configureUI();
 
-        if (this.parentNativeView instanceof Layout) {
-            let parentLayout = <Layout>this.parentNativeView;
+        if (this.parentNativeView instanceof LayoutBase) {
+            let parentLayout = <LayoutBase>this.parentNativeView;
             if (attachAtIndex != -1) {
                 console.log('Layout.insertChild');
                 let indexOffset = 0;
@@ -262,8 +262,8 @@ export class ViewNode {
 
         if (childNode.nativeView) {
             let nativeParent = childNode.nativeView.parent;
-            if (nativeParent instanceof Layout) {
-                (<Layout>nativeParent).removeChild(childNode.nativeView);
+            if (nativeParent instanceof LayoutBase) {
+                (<LayoutBase>nativeParent).removeChild(childNode.nativeView);
             } else {
                 nativeParent._removeView(childNode.nativeView);
             }
