@@ -30,5 +30,5 @@
 /// <reference path="../deps/NativeScript/bin/dist/definitions/ui/label/label.d.ts" />
 /// <reference path="../deps/NativeScript/bin/dist/definitions/ui/switch/switch.d.ts" />
 
-/// <reference path="../deps/NativeScript/bin/dist/definitions/android17.d.ts" />
-/// <reference path="../deps/NativeScript/bin/dist/definitions/ios.d.ts" />
+/// <reference path="../typings/android17-dummy.d.ts" />
+/// <reference path="../typings/ios-dummy.d.ts" />
