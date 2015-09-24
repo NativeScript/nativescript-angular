@@ -14,27 +14,11 @@ import {LayoutBase} from 'ui/layouts/layout-base';
 import gestures = require("ui/gestures");
 import {NativeScriptView} from 'nativescript-angular/renderer';
 import {AST} from 'angular2/src/change_detection/parser/ast';
-
-interface ViewClass {
-    new(): View
-}
+import {ViewClass, getViewClass, isKnownView} from 'nativescript-angular/element-registry';
 
 type EventHandler = (args: EventData) => void;
 
 export class ViewNode {
-    //TODO: move element registration and imports to a new module
-    private static allowedElements: Map<string, ViewClass> = new Map<string, ViewClass>([
-        ["button", Button],
-        ["stacklayout", StackLayout],
-        ["docklayout", DockLayout],
-        ["textfield", TextField],
-        ["textview", TextView],
-        ["label", Label],
-        ["switch", Switch],
-        ["template", ContentView],
-    ]);
-
-
     private eventListeners: Map<string, EventHandler> = new Map<string, EventHandler>();
 
     public nativeView: View;
@@ -106,12 +90,8 @@ export class ViewNode {
         });
     }
 
-    private getViewClass(): ViewClass {
-        return ViewNode.allowedElements.get(this.viewName);
-    }
-
     private createUI(attachAtIndex: number) {
-        if (!ViewNode.allowedElements.has(this.viewName))
+        if (!isKnownView(this.viewName))
             return;
 
         console.log('createUI: ' + this.viewName +
@@ -119,7 +99,7 @@ export class ViewNode {
             ', parent: ' + this.parentNode.viewName +
             ', parent UI ' + (<any>this.parentNativeView.constructor).name);
 
-        let viewClass = this.getViewClass();
+        let viewClass = getViewClass(this.viewName);
         if (!this.nativeView) {
             this.nativeView = new viewClass();
         } else {
