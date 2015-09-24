@@ -186,6 +186,10 @@ module.exports = function(grunt) {
         "cleanAll",
         "prepareAngular",
         "shell:depNSInit",
+        "build"
+    ]);
+
+    grunt.registerTask("build", [
         "ts:build",
         "copy:packageJson",
         "package"
