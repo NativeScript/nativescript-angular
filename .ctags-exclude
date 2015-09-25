@@ -9,4 +9,11 @@ ng-sample/src/nativescript-angular
 ng-sample/platforms
 ng-sample/lib
 ng-sample/src/typings
+todomvc/app
+todomvc/src/angular2
+todomvc/src/nativescript-angular
+todomvc/platforms
+todomvc/lib
+todomvc/src/typings
+todomvc/typings
 src/angular2
