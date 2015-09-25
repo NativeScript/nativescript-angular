@@ -36,7 +36,8 @@
   },
   "typescript": {
       "definitions": [
-          "application.d.ts"
+          "application.d.ts",
+          "element-registry.d.ts"
       ]
   }
 }
