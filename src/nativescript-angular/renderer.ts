@@ -14,7 +14,7 @@ import {TemplateCloner} from 'angular2/src/render/dom/template_cloner';
 import {NG_BINDING_CLASS, cloneAndQueryProtoView} from 'angular2/src/render/dom/util';
 import {DOM} from 'angular2/src/dom/dom_adapter';
 
-import {ViewNode} from 'nativescript-angular/view_node';
+import {ViewNode, DummyViewNode} from 'nativescript-angular/view_node';
 
 export class NativeScriptView {
     public eventDispatcher: RenderEventDispatcher;
@@ -228,7 +228,18 @@ export class NativeScriptRenderer extends Renderer {
         parsedChildren.forEach(node => {
             var viewNode: ViewNode;
             if (node.type == "tag") {
-                viewNode = new ViewNode(parent, node.name, node.attribs);
+                if (node.name.indexOf('itemtemplate') >= 0) {
+                    // all lowercased. the only thing that can work here
+                    // is kebab-cased tags and attributes.
+                    let templateString = DOM.getInnerHTML(node);
+                    parent.setAttribute('itemTemplate', templateString);
+                    // return a view node even if we do nothing with it so that
+                    // index-based binding configuration doesn't break for bound
+                    // nodes coming after.
+                    viewNode = new DummyViewNode(parent);
+                } else {
+                    viewNode = new ViewNode(parent, node.name, node.attribs);
+                }
             } else if (node.type == "text") {
                 //viewNode = new ViewNode(parent, "rawtext", {text: node.data});
                 //Ignore text nodes

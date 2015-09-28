@@ -125,7 +125,8 @@ export class ViewNode {
             (<any>this.parentNativeView)._addChildFromBuilder(this.viewName, this.nativeView);
             this.attachUIEvents();
         } else {
-            throw new Error("Parent view can't have children! " + this._parentView);
+            console.log('parentNativeView: ' + this.parentNativeView);
+            throw new Error("Parent view can't have children! " + this.parentNativeView);
         }
     }
 
@@ -159,6 +160,12 @@ export class ViewNode {
     }
 
     public setAttribute(attributeName: string, value: any): void {
+        if (!this.nativeView) {
+            console.log('Native view not created. Delaying attribute set: ' + attributeName);
+            this.attributes[attributeName] = value;
+            return;
+        }
+
         console.log('Setting attribute: ' + attributeName);
 
         let specialSetter = getSpecialPropertySetter(attributeName);
@@ -254,7 +261,7 @@ export class ViewNode {
         return this.children.indexOf(childNode);
     }
 
-    setProperty(name: string, value: any) {
+    public setProperty(name: string, value: any) {
         console.log('ViewNode.setProperty ' + this.viewName + ' setProperty ' + name + ' ' + value);
         if (this.nativeView) {
             this.setAttribute(name, value);
@@ -286,4 +293,18 @@ export class ViewNode {
         }
     }
 
+}
+
+export class DummyViewNode extends ViewNode {
+    constructor(public parentNode: ViewNode) {
+        super(parentNode, null, {});
+    }
+    public attachToView(atIndex: number = -1) {
+    }
+    public insertChildAt(index: number, childNode: ViewNode) {
+    }
+    public removeChild(childNode: ViewNode) {
+    }
+    setProperty(name: string, value: any) {
+    }
 }
