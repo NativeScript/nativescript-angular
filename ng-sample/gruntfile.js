@@ -5,14 +5,12 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-ts');
     grunt.loadNpmTasks('grunt-contrib-copy');
     grunt.loadNpmTasks('grunt-contrib-clean');
+    grunt.loadNpmTasks('grunt-shell');
 
     var nsDistPath = process.env.NSDIST || '../deps/NativeScript/bin/dist';
 
     var modulesPath = grunt.option("modulesPath", path.join(nsDistPath, 'modules'));
-    var typingsPath = grunt.option("typingsPath", path.join(nsDistPath, 'definitions'));
 
-    var modulesDestPath = "app/tns_modules";
-    var typingsDestPath = "src/typings/nativescript";
     var angularSrcPath = grunt.option("angularSrcPath") || "../src"
 
     grunt.initConfig({
@@ -42,29 +40,8 @@ module.exports = function(grunt) {
                 src: [
                     '**/*',
                     '!**/*.ts',
-                    '!typings/**/*'
                 ],
                 dest: 'app'
-            },
-            modulesFiles: {
-                expand: true,
-                cwd: modulesPath,
-                src: [
-                    '**/*',
-                    '!node_modules',
-                    '!node_modules/**/*',
-                ],
-                dest: modulesDestPath
-            },
-            typingsFiles: {
-                expand: true,
-                cwd: typingsPath,
-                src: [
-                    '**/*',
-                    '!es6-promise.d.ts',
-                    '!es-collections.d.ts',
-                ],
-                dest: typingsDestPath
             },
             angularFiles: {
                 expand: true,
@@ -75,14 +52,19 @@ module.exports = function(grunt) {
                 ],
                 dest: 'src/'
             },
-            tnsifyAngular: {
+            tnsifyAngularAndroid: {
                 expand: true,
                 cwd: 'app/',
                 src: [
                     "angular2/**/*",
                     "nativescript-angular/**/*",
                 ],
-                dest: 'app/tns_modules',
+                dest: 'platforms/android/src/main/assets/app/tns_modules',
+            },
+        },
+        shell: {
+            localInstallModules: {
+                command: "npm install \"<%= nsPackagePath %>\""
             },
         },
         clean: {
@@ -92,8 +74,6 @@ module.exports = function(grunt) {
                 src: [
                     'angular2',
                     'nativescript-angular',
-                    'typings',
-                    'tns_modules/angular2/**/*.dart',
                     '**/*.js.map',
                 ]
             },
@@ -104,19 +84,9 @@ module.exports = function(grunt) {
         grunt.file.delete("app");
     });
 
-    grunt.registerTask("removeNSFiles", function() {
-        grunt.file.delete(typingsDestPath);
-    });
-
     grunt.registerTask("checkModules", function() {
         if (!grunt.file.exists(modulesPath)) {
             grunt.fail.fatal("Modules path does not exist.");
-        }
-    });
-
-    grunt.registerTask("checkTypings", function() {
-        if (!grunt.file.exists(typingsPath)) {
-            grunt.fail.fatal("Typings path does not exist.");
         }
     });
 
@@ -132,25 +102,27 @@ module.exports = function(grunt) {
     grunt.registerTask("app", [
         "copy:appFiles",
         "ts:build",
-        "prepareTnsModules",
+        "preDeploy",
     ]);
 
     grunt.registerTask("app-full", [
         "full-clean",
-        "updateTypings",
-        "updateModules",
-        "updateAngular",
         "app",
     ]);
 
-    grunt.registerTask("updateModules", [
-        "checkModules",
-        "copy:modulesFiles",
-    ]);
+    grunt.registerTask("getNSPackage", function() {
+        var packageFiles = grunt.file.expand({
+            cwd: nsDistPath
+        },[
+            'tns-core-modules*.tgz'
+        ]);
+        var nsPackagePath = path.join(nsDistPath, packageFiles[0]);
+        grunt.config('nsPackagePath', nsPackagePath);
+    });
 
-    grunt.registerTask("updateTypings", [
-        "checkTypings",
-        "copy:typingsFiles",
+    grunt.registerTask("updateModules", [
+        "getNSPackage",
+        "shell:localInstallModules",
     ]);
 
     grunt.registerTask("updateAngular", [
@@ -168,14 +140,18 @@ module.exports = function(grunt) {
         grunt.file.write(packagePath, JSON.stringify(packageData, null, 4));
     });
 
-    grunt.registerTask("prepareTnsModules", [
-        "copy:tnsifyAngular",
+    grunt.registerTask("prepare", [
+        "updateModules",
+        "updateAngular",
         "prepareQuerystringPackage",
+    ]);
+
+    grunt.registerTask("preDeploy", [
+        "copy:tnsifyAngularAndroid",
         "clean:appBeforeDeploy",
     ]);
 
     grunt.registerTask("full-clean", [
         "removeAppDir",
-        "removeNSFiles",
     ]);
 }

@@ -37,6 +37,7 @@
         "grunt-ts": "4.2.0",
 		"grunt-contrib-copy": "0.8.0",
         "grunt-contrib-clean": "0.6.0",
+        "grunt-shell": "1.1.2",
         "typescript": "1.5.3"
 	},
 	"nativescript": {
