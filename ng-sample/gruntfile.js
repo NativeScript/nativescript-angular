@@ -63,6 +63,14 @@ module.exports = function(grunt) {
             },
         },
         shell: {
+            updateAngular: {
+                command: "grunt copy:angularSource --angularDest ng-sample/src",
+                options: {
+                    execOptions: {
+                        cwd: '..',
+                    }
+                }
+            },
             localInstallModules: {
                 command: "npm install \"<%= nsPackagePath %>\""
             },
@@ -87,15 +95,6 @@ module.exports = function(grunt) {
     grunt.registerTask("checkModules", function() {
         if (!grunt.file.exists(modulesPath)) {
             grunt.fail.fatal("Modules path does not exist.");
-        }
-    });
-
-    grunt.registerTask("checkAngular", function() {
-        if (!grunt.file.exists(path.join(angularSrcPath, 'angular2'))) {
-            grunt.fail.fatal("angular2 path does not exist.");
-        }
-        if (!grunt.file.exists(path.join(angularSrcPath, 'nativescript-angular'))) {
-            grunt.fail.fatal("nativescript-angular path does not exist.");
         }
     });
 
@@ -125,11 +124,6 @@ module.exports = function(grunt) {
         "shell:localInstallModules",
     ]);
 
-    grunt.registerTask("updateAngular", [
-        "checkAngular",
-        "copy:angularFiles",
-    ]);
-
     grunt.registerTask("prepareQuerystringPackage", function() {
         //The {N} require doesn't look for index.js automatically
         //so we need to declare it as main
@@ -142,7 +136,7 @@ module.exports = function(grunt) {
 
     grunt.registerTask("prepare", [
         "updateModules",
-        "updateAngular",
+        "shell:updateAngular",
         "prepareQuerystringPackage",
     ]);
 

@@ -61,18 +61,10 @@ module.exports = function(grunt) {
         copy: {
             angularSource: {
                 expand: true,
-                rename: function(dest, src) {
-                    if (/\.js$/i.test(src)) {
-                        return dest + src.substring(0, src.length - 3) + '.ts';
-                    }
-                    if (/\.es6$/i.test(src)) {
-                        return dest + src.substring(0, src.length - 4) + '.ts';
-                    }
-                    return dest + src;
-                },
                 cwd: './deps/angular/modules',
                 src: [
                     'angular2/**/*',
+                    '!angular2/**/*.dart',
                     '!angular2/test/**/*',
                     '!angular2/angular2_sfx*',
                     '!angular2/router*',
