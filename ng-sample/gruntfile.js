@@ -43,14 +43,13 @@ module.exports = function(grunt) {
                 ],
                 dest: 'app'
             },
-            angularFiles: {
+            rendererFiles: {
                 expand: true,
-                cwd: angularSrcPath,
+                cwd: '../src',
                 src: [
-                    'angular2/**/*',
                     'nativescript-angular/**/*',
                 ],
-                dest: 'src/'
+                dest: 'src'
             },
             tnsifyAngularAndroid: {
                 expand: true,
@@ -99,8 +98,9 @@ module.exports = function(grunt) {
     });
 
     grunt.registerTask("app", [
-        "copy:appFiles",
+        "copy:rendererFiles",
         "ts:build",
+        "copy:appFiles",
         "preDeploy",
     ]);
 
