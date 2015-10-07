@@ -47,6 +47,8 @@ registerElement("DockLayout", {className: "DockLayout", moduleName: "ui/layouts/
 registerElement("GridLayout", {className: "GridLayout", moduleName: "ui/layouts/grid-layout"});
 registerElement("HtmlView", {className: "HtmlView", moduleName: "ui/html-view"});
 registerElement("Image", {className: "Image", moduleName: "ui/image"});
+// Parse5 changes <Image> tags to <img>. WTF!
+registerElement("img", {className: "Image", moduleName: "ui/image"});
 registerElement("Label", {className: "Label", moduleName: "ui/label"});
 registerElement("ListPicker", {className: "ListPicker", moduleName: "ui/list-picker"});
 registerElement("ListView", {className: "ListView", moduleName: "ui/list-view"});
