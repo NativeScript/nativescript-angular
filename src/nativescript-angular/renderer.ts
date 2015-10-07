@@ -1,5 +1,5 @@
 import {Injectable} from 'angular2/angular2';
-import {MapWrapper} from 'angular2/src/facade/collection';
+import {MapWrapper} from 'angular2/src/core/facade/collection';
 import {DomProtoView, resolveInternalDomProtoView} from 'angular2/src/render/dom/view/proto_view';
 import {
     Renderer,
@@ -9,10 +9,10 @@ import {
     RenderViewRef,
     RenderFragmentRef,
     RenderViewWithFragments
-} from 'angular2/src/render/api';
-import {TemplateCloner} from 'angular2/src/render/dom/template_cloner';
-import {NG_BINDING_CLASS, cloneAndQueryProtoView} from 'angular2/src/render/dom/util';
-import {DOM} from 'angular2/src/dom/dom_adapter';
+} from 'angular2/src/core/render/api';
+import {DefaultProtoViewRef} from 'angular2/src/core/render/view';
+import {NG_BINDING_CLASS, cloneAndQueryProtoView} from 'angular2/src/core/render/dom/util';
+import {DOM} from 'angular2/src/core/dom/dom_adapter';
 
 import {ViewNode, DummyViewNode} from 'nativescript-angular/view_node';
 
@@ -54,7 +54,7 @@ export class NativeScriptFragmentRef extends RenderFragmentRef {
 
 @Injectable()
 export class NativeScriptRenderer extends Renderer {
-    constructor(private _templateCloner: TemplateCloner) {
+    constructor() {
         super();
         console.log('NativeScriptRenderer created');
     }
@@ -170,7 +170,7 @@ export class NativeScriptRenderer extends Renderer {
     /**
     * Calls a method on an element.
     */
-    invokeElementMethod(location: RenderElementRef, methodName: string, args: List<any>) {
+    invokeElementMethod(location: RenderElementRef, methodName: string, args: Array<any>) {
         console.log("NativeScriptRenderer.invokeElementMethod " + methodName + " " + args);
     }
 

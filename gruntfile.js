@@ -74,7 +74,7 @@ module.exports = function(grunt) {
                     '!angular2/docs/**/*',
                     '!angular2/test*',
                     '!angular2/src/test_lib/**/*',
-                    '!angular2/typings/tsd.d.ts',
+                    //'!angular2/typings/tsd.d.ts',
                     '!angular2/typings/angular-protractor/**/*',
                     '!angular2/typings/node/**/*',
                     //'!angular2/typings/es6-promise/**/*',

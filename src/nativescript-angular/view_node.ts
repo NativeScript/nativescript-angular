@@ -13,7 +13,7 @@ import {Switch} from 'ui/switch';
 import {LayoutBase} from 'ui/layouts/layout-base';
 import gestures = require("ui/gestures");
 import {NativeScriptView} from 'nativescript-angular/renderer';
-import {AST} from 'angular2/src/change_detection/parser/ast';
+import {AST} from 'angular2/src/core/change_detection/parser/ast';
 import {ViewClass, getViewClass, isKnownView} from 'nativescript-angular/element-registry';
 
 type EventHandler = (args: EventData) => void;
