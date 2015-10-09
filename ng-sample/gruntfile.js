@@ -1,5 +1,6 @@
 var path = require("path");
 var fs = require("fs");
+var shelljs = require("shelljs");
 
 module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-ts');
@@ -18,10 +19,19 @@ module.exports = function(grunt) {
             build: {
                 src: [
                     'src/**/*.ts',
+                    // This one refers to the Angular package structure from npm
+                    // and doesn't compile against the dev source.
+                    '!src/nativescript-angular/application.d.ts',
                 ],
                 dest: 'app',
                 options: {
                     fast: "never",
+
+                    // Resolve non-relative modules like "ui/styling/style"
+                    // based on the project root (not on node_modules which
+                    // is the typescript 1.6+ default)
+                    additionalFlags: '--moduleResolution classic',
+
                     module: "commonjs",
                     target: "es5",
                     sourceMap: true,
@@ -47,23 +57,41 @@ module.exports = function(grunt) {
                 expand: true,
                 cwd: '../src',
                 src: [
+                    'css/**/*',
                     'nativescript-angular/**/*',
                 ],
                 dest: 'src'
             },
-            tnsifyAngularAndroid: {
+            tnsifyAngular: {
                 expand: true,
                 cwd: 'app/',
                 src: [
                     "angular2/**/*",
+                    "css/**/*",
                     "nativescript-angular/**/*",
+                ],
+                dest: 'node_modules',
+            },
+            tnsifyCssStub: {
+                expand: true,
+                cwd: 'app/',
+                src: [
+                    "css/**/*",
+                ],
+                dest: 'node_modules/tns-core-modules',
+            },
+            tnsifyRxJsAngular: {
+                expand: true,
+                cwd: 'node_modules/',
+                src: [
+                    "@reactivex/**/*",
                 ],
                 dest: 'platforms/android/src/main/assets/app/tns_modules',
             },
         },
         shell: {
             updateAngular: {
-                command: "grunt copy:angularSource --angularDest ng-sample/src",
+                command: "grunt prepareAngular --angularDest ng-sample/src",
                 options: {
                     execOptions: {
                         cwd: '..',
@@ -81,6 +109,7 @@ module.exports = function(grunt) {
                 src: [
                     'angular2',
                     'nativescript-angular',
+                    'css',
                     '**/*.js.map',
                 ]
             },
@@ -140,8 +169,16 @@ module.exports = function(grunt) {
         "prepareQuerystringPackage",
     ]);
 
+    grunt.registerTask("fixAngularPackageJson", function() {
+        //remove lines containing invalid chars
+        shelljs.sed('-i', /.*<%.*\n/g, '', 'node_modules/angular2/package.json');
+    });
+
     grunt.registerTask("preDeploy", [
-        "copy:tnsifyAngularAndroid",
+        "copy:tnsifyAngular",
+        "fixAngularPackageJson",
+        "copy:tnsifyCssStub",
+        "copy:tnsifyRxJsAngular",
         "clean:appBeforeDeploy",
     ]);
 
