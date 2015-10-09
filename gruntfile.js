@@ -166,7 +166,7 @@ module.exports = function(grunt) {
     ]);
 
     grunt.registerTask("fixAngularTsdDts", function() {
-        var tsdFile = 'src/angular2/typings/tsd.d.ts'
+        var tsdFile = path.join(angularDest, 'angular2/typings/tsd.d.ts');
         shelljs.sed('-i', /.*protractor.*\n/g, '', tsdFile);
         shelljs.sed('-i', /.*jasmine.*\n/g, '', tsdFile);
         shelljs.sed('-i', /.*selenium.*\n/g, '', tsdFile);
