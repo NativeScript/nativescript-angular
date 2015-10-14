@@ -12,8 +12,7 @@ import {TextView} from 'ui/text-view';
 import {Switch} from 'ui/switch';
 import {LayoutBase} from 'ui/layouts/layout-base';
 import gestures = require("ui/gestures");
-import {NativeScriptView} from 'nativescript-angular/renderer';
-import {AST} from 'angular2/src/change_detection/parser/ast';
+import {AST} from 'angular2/src/core/change_detection/parser/ast';
 import {ViewClass, getViewClass, isKnownView} from 'nativescript-angular/element-registry';
 
 type EventHandler = (args: EventData) => void;
@@ -24,6 +23,7 @@ export class ViewNode {
     public nativeView: View;
     private _parentView: View;
     private _attachedToView: boolean = false;
+    private attributes: Map<string, any> = new Map<string, any>();
     private cssClasses: Map<string, boolean> = new Map<string, boolean>();
     private static whiteSpaceSplitter = /\s+/;
 
@@ -31,7 +31,9 @@ export class ViewNode {
 
     constructor(public parentNode: ViewNode,
                 public viewName: string,
-                public attributes: Object = {}) {
+                attrNameAndValues: string[]) {
+        this.setAttributeValues(attrNameAndValues);
+
         if (this.parentNode)
             this.parentNode.children.push(this);
     }
@@ -149,20 +151,29 @@ export class ViewNode {
     }
 
     private configureUI() {
-        if (!this.attributes)
+        if (this.attributes.size == 0)
             return;
 
-        for (var attribute in this.attributes) {
-            let propertyValue = this.attributes[attribute];
-            this.setAttribute(attribute, propertyValue);
-        }
+        this.attributes.forEach((value, name) => {
+            this.setAttribute(name, value);
+        });
         this.syncClasses();
+    }
+
+    public setAttributeValues(attrNameAndValues: string[]) {
+        if (attrNameAndValues) {
+            for (let i = 0; i < attrNameAndValues.length; i += 2) {
+                let name = attrNameAndValues[i];
+                let value = attrNameAndValues[i + 1];
+                this.setAttribute(name, value);
+            }
+        }
     }
 
     public setAttribute(attributeName: string, value: any): void {
         if (!this.nativeView) {
             console.log('Native view not created. Delaying attribute set: ' + attributeName);
-            this.attributes[attributeName] = value;
+            this.attributes.set(attributeName, value);
             return;
         }
 
@@ -201,6 +212,15 @@ export class ViewNode {
         return gestures.fromString(name.toLowerCase()) !== undefined;
     }
 
+    public on(eventName, callback) {
+        console.log('ViewNode.on: ' + this.viewName + ' -> ' + eventName);
+        if (!this.nativeView) {
+            this.eventListeners.set(eventName, callback);
+        } else {
+            this.attachNativeEvent(eventName, callback);
+        }
+    }
+
     private attachNativeEvent(eventName, callback) {
         console.log('attachNativeEvent ' + eventName);
         // Try to resolve the event as a gesture name first.
@@ -214,24 +234,11 @@ export class ViewNode {
         }
     }
 
-    createEventListener(view: NativeScriptView, bindingIndex: number, eventName: string, eventLocals: AST) {
-        console.log('createEventListener ' + this.viewName + ' ' + eventName + ' ' + eventLocals);
-
-        let handler = (args: EventData) => {
-            var locals = new Map<string, any>();
-            locals.set('$event', args);
-            //TODO: remove -- used for debug prints triggered from outside the renderer code.
-            locals.set('$el', this);
-            view.eventDispatcher.dispatchRenderEvent(bindingIndex, eventName, locals);
-        }
-        let zonedHandler = global.zone.bind(handler);
-        this.eventListeners.set(eventName, zonedHandler);
-        if (this._attachedToView) {
-            this.attachNativeEvent(eventName, zonedHandler);
-        }
+    public appendChild(childNode: ViewNode) {
+        this.insertChildAt(this.children.length, childNode);
     }
 
-    public insertChildAt(index: number, childNode: ViewNode) {
+    public insertChildAt(index: number, childNode: ViewNode): void {
         console.log('ViewNode.insertChildAt: ' + this.viewName + ' ' + index + ' ' + childNode.viewName);
         if (childNode.parentNode) {
             console.log('Moving child to new parent');
@@ -241,7 +248,7 @@ export class ViewNode {
         childNode.parentNode = this;
     }
 
-    public removeChild(childNode: ViewNode) {
+    public removeChild(childNode: ViewNode): void {
         childNode.parentNode = null;
         childNode._parentView = null;
         childNode._attachedToView = false;
@@ -254,6 +261,12 @@ export class ViewNode {
             } else {
                 nativeParent._removeView(childNode.nativeView);
             }
+        }
+    }
+
+    public clearChildren() {
+        while (this.children.length > 0) {
+            this.removeChild(this.children[0]);
         }
     }
 
@@ -297,7 +310,7 @@ export class ViewNode {
 
 export class DummyViewNode extends ViewNode {
     constructor(public parentNode: ViewNode) {
-        super(parentNode, null, {});
+        super(parentNode, null, []);
     }
     public attachToView(atIndex: number = -1) {
     }

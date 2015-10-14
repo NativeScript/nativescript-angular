@@ -1,4 +1,5 @@
 var path = require("path");
+var shelljs = require("shelljs");
 
 module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-ts');
@@ -74,7 +75,7 @@ module.exports = function(grunt) {
                     '!angular2/docs/**/*',
                     '!angular2/test*',
                     '!angular2/src/test_lib/**/*',
-                    '!angular2/typings/tsd.d.ts',
+                    //'!angular2/typings/tsd.d.ts',
                     '!angular2/typings/angular-protractor/**/*',
                     '!angular2/typings/node/**/*',
                     //'!angular2/typings/es6-promise/**/*',
@@ -161,7 +162,16 @@ module.exports = function(grunt) {
 
     grunt.registerTask("prepareAngular", [
         'copy:angularSource',
+        'fixAngularTsdDts'
     ]);
+
+    grunt.registerTask("fixAngularTsdDts", function() {
+        var tsdFile = path.join(angularDest, 'angular2/typings/tsd.d.ts');
+        shelljs.sed('-i', /.*protractor.*\n/g, '', tsdFile);
+        shelljs.sed('-i', /.*jasmine.*\n/g, '', tsdFile);
+        shelljs.sed('-i', /.*selenium.*\n/g, '', tsdFile);
+        shelljs.sed('-i', /.*node\.d\.ts.*\n/g, '', tsdFile);
+    });
 
     grunt.registerTask("cleanAll", [
         'clean:src',

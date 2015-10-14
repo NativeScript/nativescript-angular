@@ -9,9 +9,7 @@ import {LifeCycle} from 'angular2/src/core/life_cycle/life_cycle';
 var lifeCycle: LifeCycle = null;
 
 @Component({
-	selector: 'main-page',
-	hostAttributes: {
-	}
+	selector: 'main-page'
 })
 @View({
     directives: [NgIf, NgFor],
@@ -54,7 +52,6 @@ class MainPage {
     onSave($event, name, $el) {
         console.log('onSave event ' + $event + ' name ' + name);
         alert(name);
-        $el.printTree();
     }
 
     onToggleDetails() {
