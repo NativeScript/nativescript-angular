@@ -184,6 +184,8 @@ export class ViewNode {
 
         if (attributeName === "class") {
             this.setClasses(value);
+        } else if (attributeName === "style") {
+            this.nativeView._applyXmlAttribute("style", value);
         } else if (specialSetter) {
             specialSetter(this.nativeView, value);
         } else if (propMap.has(attributeName)) {
