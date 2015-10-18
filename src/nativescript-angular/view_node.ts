@@ -170,6 +170,16 @@ export class ViewNode {
         }
     }
 
+    private isXMLAttribute(name: string): boolean {
+        switch (name) {
+            case "style": return true;
+            case "rows": return true;
+            case "columns": return true;
+            case "fontAttributes": return true;
+            default: return false;
+        }
+    }
+
     public setAttribute(attributeName: string, value: any): void {
         if (!this.nativeView) {
             console.log('Native view not created. Delaying attribute set: ' + attributeName);
@@ -184,8 +194,8 @@ export class ViewNode {
 
         if (attributeName === "class") {
             this.setClasses(value);
-        } else if (attributeName === "style") {
-            this.nativeView._applyXmlAttribute("style", value);
+        } else if (this.isXMLAttribute(attributeName)) {
+            this.nativeView._applyXmlAttribute(attributeName, value);
         } else if (specialSetter) {
             specialSetter(this.nativeView, value);
         } else if (propMap.has(attributeName)) {
