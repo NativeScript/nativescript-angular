@@ -109,6 +109,7 @@ export class ViewNode {
         }
 
         this.configureUI();
+        this.attachUIEvents();
 
         if (this.parentNativeView instanceof LayoutBase) {
             let parentLayout = <LayoutBase>this.parentNativeView;
@@ -122,10 +123,8 @@ export class ViewNode {
             } else {
                 parentLayout.addChild(this.nativeView);
             }
-            this.attachUIEvents();
         } else if ((<any>this.parentNativeView)._addChildFromBuilder) {
             (<any>this.parentNativeView)._addChildFromBuilder(this.viewName, this.nativeView);
-            this.attachUIEvents();
         } else {
             console.log('parentNativeView: ' + this.parentNativeView);
             throw new Error("Parent view can't have children! " + this.parentNativeView);
