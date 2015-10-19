@@ -262,17 +262,25 @@ export class ViewNode {
     public removeChild(childNode: ViewNode): void {
         childNode.parentNode = null;
         childNode._parentView = null;
-        childNode._attachedToView = false;
         this.children = this.children.filter((item) => item !== childNode);
 
-        if (childNode.nativeView) {
-            let nativeParent = childNode.nativeView.parent;
+        childNode.detachFromView();
+    }
+
+    public detachFromView(): void {
+        this._attachedToView = false;
+        if (this.nativeView) {
+            let nativeParent = this.nativeView.parent;
             if (nativeParent instanceof LayoutBase) {
-                (<LayoutBase>nativeParent).removeChild(childNode.nativeView);
+                (<LayoutBase>nativeParent).removeChild(this.nativeView);
             } else {
-                nativeParent._removeView(childNode.nativeView);
+                nativeParent._removeView(this.nativeView);
             }
         }
+
+        this.children.forEach((childNode) => {
+            childNode.detachFromView();
+        });
     }
 
     public clearChildren() {
