@@ -78,6 +78,9 @@ On Windows, you can wrap those commands in a BAT file.
 1. Use the Angular Parse5DomAdapter to parse component markup.
 2. Provide a custom renderer (`NativeScriptRenderer`) that works with the parsed DOM and creates NativeScript UI elements. Only limited number of visual elements supported so far.
 
+# Watch the video explaining Angular 2 and NativeScript
+[NativeScript session on AngularConnect conference](https://www.youtube.com/watch?v=4SbiiyRSIwo)
+
 # Known issues
 
 1. The renderer code needs to be cleaned up and made extensible, so that people can register new visual elements.
