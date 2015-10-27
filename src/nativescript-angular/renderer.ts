@@ -147,6 +147,12 @@ export class NativeScriptRenderer extends Renderer implements NodeFactory<ViewNo
         }
     }
 
+    setElementStyle(location: RenderElementRef, styleName: string, styleValue: string): void {
+        var view = resolveInternalDomView(location.renderView);
+        var node = view.boundElements[location.boundElementIndex];
+        node.setStyleProperty(styleName, styleValue);
+    }
+
     getNativeElementSync(location: RenderElementRef): any {
         console.log("NativeScriptRenderer.getNativeElementSync");
 
@@ -187,6 +193,10 @@ export class NativeScriptRenderer extends Renderer implements NodeFactory<ViewNo
     public resolveComponentTemplate(templateId: number): RenderTemplateCmd[] {
         console.log('NativeScriptRenderer.resolveComponentTemplate: ' + templateId);
         return this._componentCmds.get(templateId);
+    }
+
+    public createRootContentInsertionPoint(): ViewNode {
+        return this.createTemplateAnchor([]);
     }
 
     public createTemplateAnchor(attrNameAndValues: string[]): ViewNode {

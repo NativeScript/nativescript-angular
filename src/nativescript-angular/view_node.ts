@@ -207,6 +207,10 @@ export class ViewNode {
         }
     }
 
+    public setStyleProperty(styleName: string, styleValue: string): void {
+        throw new Error("Not implemented: setStyleProperty");
+    }
+
     private attachUIEvents() {
         console.log('ViewNode.attachUIEvents: ' + this.viewName + ' ' + this.eventListeners.size);
         this.eventListeners.forEach((callback, eventName) => {
