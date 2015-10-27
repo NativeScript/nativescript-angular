@@ -14,8 +14,8 @@
   },
   "scripts": {},
   "dependencies": {
-      "angular2": "2.0.0-alpha.39",
-      "@reactivex/rxjs": "0.0.0-prealpha.3",
+      "angular2": "2.0.0-alpha.44",
+      "@reactivex/rxjs": "5.0.0-alpha.4",
       "parse5": "1.4.2",
       "punycode": "1.3.2",
       "querystring": "0.2.0",
