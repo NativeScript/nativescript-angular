@@ -1,5 +1,5 @@
-if (![].fill)  {
-  Array.prototype.fill = function(value) {
+if (!(<any>Array.prototype).fill)  {
+  (<any>Array.prototype).fill = function(value) {
  
     var O = Object(this);
     var len = parseInt(O.length, 10);

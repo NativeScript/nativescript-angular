@@ -1,6 +1,8 @@
 /// <reference path="../node_modules/reflect-metadata/reflect-metadata.d.ts" />
 
 /// <reference path="../deps/NativeScript/bin/dist/definitions/declarations.d.ts" />
+/// <reference path="../deps/NativeScript/bin/dist/definitions/es-collections.d.ts" />
+/// <reference path="../deps/NativeScript/bin/dist/definitions/es6-promise.d.ts" />
 /// <reference path="../deps/NativeScript/bin/dist/definitions/data/observable/observable.d.ts" />
 /// <reference path="../deps/NativeScript/bin/dist/definitions/data/observable-array/observable-array.d.ts" />
 /// <reference path="../deps/NativeScript/bin/dist/definitions/ui/core/view.d.ts" />

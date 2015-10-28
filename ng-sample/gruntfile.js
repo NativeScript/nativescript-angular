@@ -59,10 +59,11 @@ module.exports = function(grunt) {
                 src: [
                     'css/**/*',
                     'nativescript-angular/**/*',
+                    'global.d.ts',
                 ],
                 dest: 'src'
             },
-            tnsifyAngularAndroid: {
+            tnsifyAngular: {
                 expand: true,
                 cwd: 'app/',
                 src: [
@@ -70,25 +71,8 @@ module.exports = function(grunt) {
                     "css/**/*",
                     "nativescript-angular/**/*",
                 ],
-                dest: 'platforms/android/src/main/assets/app/tns_modules',
-                //dest: 'node_modules',
-            },
-            tnsifyCssStubAndroid: {
-                expand: true,
-                cwd: 'app/',
-                src: [
-                    "css/**/*",
-                ],
-                dest: 'platforms/android/src/main/assets/app/tns_modules',
-                //dest: 'node_modules',
-            },
-            tnsifyRxJsAndroid: {
-                expand: true,
-                cwd: 'node_modules/',
-                src: [
-                    "@reactivex/**/*",
-                ],
-                dest: 'platforms/android/src/main/assets/app/tns_modules',
+                //dest: 'platforms/android/src/main/assets/app/tns_modules',
+                dest: 'node_modules',
             },
         },
         shell: {
@@ -177,10 +161,8 @@ module.exports = function(grunt) {
     });
 
     grunt.registerTask("preDeploy", [
-        "copy:tnsifyAngularAndroid",
+        "copy:tnsifyAngular",
         "fixAngularPackageJson",
-        "copy:tnsifyCssStubAndroid",
-        "copy:tnsifyRxJsAndroid",
         //"clean:appBeforeDeploy",
     ]);
 
