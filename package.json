@@ -1,6 +1,6 @@
 {
   "name": "nativescript-angular",
-  "version": "0.0.13",
+  "version": "0.0.14",
   "description": "",
   "homepage": "http://www.telerik.com",
   "bugs": "http://www.telerik.com",
@@ -33,11 +33,5 @@
     "grunt-ts": "5.0.0-beta.5",
     "shelljs": "^0.5.3",
     "typescript": "1.6.2"
-  },
-  "typescript": {
-      "definitions": [
-          "application.d.ts",
-          "element-registry.d.ts"
-      ]
   }
 }

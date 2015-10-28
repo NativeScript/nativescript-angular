@@ -1,5 +1,13 @@
 import {View} from 'ui/core/view';
-import {TypeId, ViewClass} from 'nativescript-angular/element-registry';
+
+export interface TypeId {
+    moduleName: string;
+    className: string;
+}
+
+export interface ViewClass {
+    new(): View
+}
 
 var elementMap: Map<string, TypeId> = new Map<string, TypeId>();
 
