@@ -76,13 +76,17 @@ module.exports = function(grunt) {
                     '!angular2/test*',
                     '!angular2/src/test_lib/**/*',
                     '!angular2/src/testing/**/*',
-                    //'!angular2/typings/tsd.d.ts',
-                    '!angular2/typings/angular-protractor/**/*',
-                    '!angular2/typings/node/**/*',
-                    //'!angular2/typings/es6-promise/**/*',
+
+                    '!angular2/typings/*protractor*/**/*',
+                    '!angular2/typings/es6-shim/**/*',
                     '!angular2/typings/jasmine/**/*',
-                    //'!angular2/typings/hammerjs/**/*',
-                    '!angular2/typings/selenium-webdriver/**/*',
+                    '!angular2/typings/node/**/*',
+                    '!angular2/typings/*selenium*/**/*',
+                    '!angular2/typings/tsd.d.ts',
+
+                    '!angular2/manual_typings/**/*',
+                    '!angular2/examples/**/*',
+                    '!angular2/web_worker/**/*',
                 ],
                 dest: angularDest
             },
@@ -119,6 +123,7 @@ module.exports = function(grunt) {
                 src: [
                     '*.ts',
                     '!dependencies.d.ts',
+                    '!global.d.ts',
                     'angular2',
                 ]
             },
@@ -176,8 +181,8 @@ module.exports = function(grunt) {
     }
 
     grunt.registerTask("fixAngularTsdDts", function() {
-        removeUnneededTypings('angular2/typings/tsd.d.ts');
-        removeUnneededTypings('angular2/manual_typings/globals-es6.d.ts');
+        //removeUnneededTypings('angular2/typings/tsd.d.ts');
+        //removeUnneededTypings('angular2/manual_typings/globals-es6.d.ts');
     });
 
     grunt.registerTask("cleanAll", [
