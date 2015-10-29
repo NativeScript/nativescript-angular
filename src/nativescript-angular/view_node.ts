@@ -86,6 +86,7 @@ export class ViewNode {
         this._attachedToView = true;
 
         this.createUI(atIndex);
+        this.attachUIEvents();
 
         this.children.forEach(child => {
             child.attachToView();
@@ -109,7 +110,6 @@ export class ViewNode {
         }
 
         this.configureUI();
-        this.attachUIEvents();
 
         if (this.parentNativeView instanceof LayoutBase) {
             let parentLayout = <LayoutBase>this.parentNativeView;
@@ -212,9 +212,24 @@ export class ViewNode {
     }
 
     private attachUIEvents() {
+        if (!this.nativeView) {
+            return;
+        }
+
         console.log('ViewNode.attachUIEvents: ' + this.viewName + ' ' + this.eventListeners.size);
         this.eventListeners.forEach((callback, eventName) => {
             this.attachNativeEvent(eventName, callback);
+        });
+    }
+
+    private detachUIEvents() {
+        if (!this.nativeView) {
+            return;
+        }
+
+        console.log('ViewNode.detachUIEvents: ' + this.viewName + ' ' + this.eventListeners.size);
+        this.eventListeners.forEach((callback, eventName) => {
+            this.detachNativeEvent(eventName, callback);
         });
     }
 
@@ -238,15 +253,14 @@ export class ViewNode {
 
     private attachNativeEvent(eventName, callback) {
         console.log('attachNativeEvent ' + eventName);
-        // Try to resolve the event as a gesture name first.
-        // Attach as event otherwise.
-        let gestureName = gestures.fromString(eventName.toLowerCase());
-        if (gestureName) {
-            this.nativeView.observe(gestureName, callback);
-        } else {
-            let resolvedEvent = this.resolveNativeEvent(eventName);
-            this.nativeView.addEventListener(resolvedEvent, callback);
-        }
+        let resolvedEvent = this.resolveNativeEvent(eventName);
+        this.nativeView.addEventListener(resolvedEvent, callback);
+    }
+
+    private detachNativeEvent(eventName, callback) {
+        console.log('detachNativeEvent ' + eventName);
+        let resolvedEvent = this.resolveNativeEvent(eventName);
+        this.nativeView.removeEventListener(resolvedEvent, callback);
     }
 
     public appendChild(childNode: ViewNode) {
@@ -273,6 +287,8 @@ export class ViewNode {
 
     public detachFromView(): void {
         this._attachedToView = false;
+
+        this.detachUIEvents();
         if (this.nativeView) {
             let nativeParent = this.nativeView.parent;
             if (nativeParent instanceof LayoutBase) {
