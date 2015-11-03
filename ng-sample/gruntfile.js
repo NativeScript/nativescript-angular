@@ -72,7 +72,7 @@ module.exports = function(grunt) {
                     "nativescript-angular/**/*",
                 ],
                 //dest: 'platforms/android/src/main/assets/app/tns_modules',
-                dest: 'node_modules',
+                dest: 'app/tns_modules',
             },
         },
         shell: {
@@ -155,15 +155,8 @@ module.exports = function(grunt) {
         "prepareQuerystringPackage",
     ]);
 
-    grunt.registerTask("fixAngularPackageJson", function() {
-        //remove lines containing invalid chars
-        shelljs.sed('-i', /.*<%.*\n/g, '', 'node_modules/angular2/package.json');
-    });
-
     grunt.registerTask("preDeploy", [
         "copy:tnsifyAngular",
-        "fixAngularPackageJson",
-        //"clean:appBeforeDeploy",
     ]);
 
     grunt.registerTask("full-clean", [
