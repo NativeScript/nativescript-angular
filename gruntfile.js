@@ -10,13 +10,6 @@ module.exports = function(grunt) {
 
     var outDir = "bin/dist/modules";
     var moduleOutDir = path.join(outDir, "nativescript-angular");
-    
-    var shellPackageCommand = ''
-    if (process.platform === 'win32') {
-        shellPackageCommand = "npm pack " + moduleOutDir;
-    } else {
-        shellPackageCommand = "npm pack '" + moduleOutDir + "'";
-    }
 
     var runEnv = JSON.parse(JSON.stringify(process.env));
     runEnv['NODE_PATH'] = 'bin/dist/modules';
@@ -161,7 +154,7 @@ module.exports = function(grunt) {
                 options: nsSubDir
             },
             package: {
-                command: shellPackageCommand
+                command: "npm pack \"" + moduleOutDir + "\""
             }
         },
         env: {
