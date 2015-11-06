@@ -154,7 +154,7 @@ module.exports = function(grunt) {
                 options: nsSubDir
             },
             package: {
-                command: "npm pack '" + moduleOutDir + "'"
+                command: "npm pack \"" + moduleOutDir + "\""
             }
         },
         env: {
