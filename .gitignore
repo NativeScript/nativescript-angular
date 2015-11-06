@@ -5,6 +5,7 @@ todomvc/typings
 /src/*
 !/src/nativescript-angular/
 !/src/dependencies.d.ts
+!/src/global.d.ts
 .baseDir.ts
 .tscache
 nativescript-angular*.tgz
