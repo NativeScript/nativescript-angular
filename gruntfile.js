@@ -168,7 +168,18 @@ module.exports = function(grunt) {
 
     grunt.registerTask("prepareAngular", [
         'copy:angularSource',
+        'fixAngularTsdDts'
     ]);
+
+    function removeUnneededTypings(relativePath) {
+        var tsdFile = path.join(angularDest, relativePath);
+
+        shelljs.sed('-i', /.*es6-shim.*\n/g, '', tsdFile);
+    }
+
+    grunt.registerTask("fixAngularTsdDts", function() {
+        removeUnneededTypings('angular2/typings/zone/zone.d.ts');
+    })
 
     grunt.registerTask("cleanAll", [
         'clean:src',
