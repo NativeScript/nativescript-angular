@@ -168,22 +168,7 @@ module.exports = function(grunt) {
 
     grunt.registerTask("prepareAngular", [
         'copy:angularSource',
-        'fixAngularTsdDts'
     ]);
-
-    function removeUnneededTypings(relativePath) {
-        var tsdFile = path.join(angularDest, relativePath);
-
-        shelljs.sed('-i', /.*protractor.*\n/g, '', tsdFile);
-        shelljs.sed('-i', /.*jasmine.*\n/g, '', tsdFile);
-        shelljs.sed('-i', /.*selenium.*\n/g, '', tsdFile);
-        shelljs.sed('-i', /.*node\.d\.ts.*\n/g, '', tsdFile);
-    }
-
-    grunt.registerTask("fixAngularTsdDts", function() {
-        //removeUnneededTypings('angular2/typings/tsd.d.ts');
-        //removeUnneededTypings('angular2/manual_typings/globals-es6.d.ts');
-    });
 
     grunt.registerTask("cleanAll", [
         'clean:src',
