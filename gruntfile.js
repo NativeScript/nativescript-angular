@@ -136,7 +136,7 @@ module.exports = function(grunt) {
         },
         shell: {
             ngSampleFull: {
-                command: 'grunt app-full',
+                command: 'grunt prepare app-full',
                 options: ngSampleSubDir
             },
             ngSampleInit: {
