@@ -1,0 +1,20 @@
+<html>
+  <head>
+    <title>Angular 2 QuickStart</title>
+    <script src="system.js"></script>
+    <script src="typescript.js"></script>
+    <script src="angular2.dev.alpha-44.js"></script>
+    <script>
+      System.config({
+        transpiler: 'typescript',
+        typescriptOptions: { emitDecoratorMetadata: true }
+      });
+      System.import('./app.ts').catch(console.error.bind(console));;
+    </script>
+  </head>
+  <body>
+    <div id="log">
+    </div>
+    <benchmark>loading...</benchmark>
+  </body>
+</html>
