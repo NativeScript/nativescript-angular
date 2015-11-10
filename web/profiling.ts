@@ -1,12 +1,10 @@
 export var ENABLE_PROFILING = true;
 
-var console = {
-    log: function(text) {
-        var line = document.createElement('p');
-        line.innerHTML = text;
-        var logContainer = document.getElementById('log');
-        logContainer.appendChild(line);
-    }
+var log = function(text) {
+    var line = document.createElement('p');
+    line.innerHTML = text;
+    var logContainer = document.getElementById('log');
+    logContainer.appendChild(line);
 }
 
 export function time(): number {
@@ -29,6 +27,7 @@ export function start(name: string): void {
     if (!ENABLE_PROFILING) {
         return;
     }
+    console.time(name);
 
     var info: TimerInfo;
     if (timers.has(name)) {
@@ -54,16 +53,17 @@ export function pause(name: string) {
     }
 
     var info = pauseInternal(name);
-    console.log(`---- [${name}] PAUSE last: ${info.lastTime} total: ${info.totalTime} count: ${info.count}`);
+    log(`---- [${name}] PAUSE last: ${info.lastTime} total: ${info.totalTime} count: ${info.count}`);
 }
 
 export function stop(name: string) {
     if (!ENABLE_PROFILING) {
         return;
     }
+    console.timeEnd(name);
 
     var info = pauseInternal(name);
-    console.log(`---- [${name}] STOP total: ${info.totalTime} count:${info.count}`);
+    log(`---- [${name}] STOP total: ${info.totalTime} count:${info.count}`);
 
     timers.delete(name);
 }
