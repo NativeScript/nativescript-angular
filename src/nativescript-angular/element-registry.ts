@@ -21,7 +21,6 @@ export function registerElement(elementName: string, typeId: TypeId): void {
 }
 
 export function getViewClass(elementName: string): ViewClass {
-    console.log('getViewClass: ' + elementName);
     let typeId = elementMap.get(elementName) ||
                     elementMap.get(elementName.toLowerCase());
     if (!typeId) {
