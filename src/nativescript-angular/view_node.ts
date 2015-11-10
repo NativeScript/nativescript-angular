@@ -17,6 +17,8 @@ import {ViewClass, getViewClass, isKnownView} from 'nativescript-angular/element
 
 type EventHandler = (args: EventData) => void;
 
+//var console = {log: function(msg) {}}
+
 export class ViewNode {
     private eventListeners: Map<string, EventHandler> = new Map<string, EventHandler>();
 

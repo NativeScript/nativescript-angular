@@ -20,6 +20,8 @@ import {
 import {DOM} from 'angular2/src/core/dom/dom_adapter';
 import {ViewNode, DummyViewNode} from 'nativescript-angular/view_node';
 
+//var console = {log: function(msg) {}}
+
 @Injectable()
 export class NativeScriptRenderer extends Renderer implements NodeFactory<ViewNode> {
     private _document;
@@ -211,7 +213,6 @@ export class NativeScriptRenderer extends Renderer implements NodeFactory<ViewNo
 
     public mergeElement(existing: ViewNode, attrNameAndValues: string[]){
         console.log('NativeScriptRenderer.mergeElement: ' + existing.viewName);
-        console.dump(existing);
         existing.clearChildren();
         existing.setAttributeValues(attrNameAndValues);
     }
