@@ -1,12 +1,20 @@
 import {Inject, Component, View, NgIf, NgFor} from 'angular2/angular2';
 
 @Component({
+    selector: 'templated-component',
+    templateUrl: 'title.html'
+})
+export class TemplatedComponent {
+}
+
+@Component({
 	selector: 'renderer-test'
 })
 @View({
-    directives: [NgIf, NgFor],
+    directives: [NgIf, NgFor, TemplatedComponent],
 	template: `
 <StackLayout orientation='vertical'>
+    <templated-component></templated-component>
     <Label [class.valid]="isValid" [class.invalid]="!isValid" text='Name' fontSize='20' verticalAlignment='center' padding='20'></Label>
     <TextField #name text='John' fontSize='20' padding='20'></TextField>
     <Button [text]='buttonText' (tap)='onSave($event, name.text, $el)'></Button>
