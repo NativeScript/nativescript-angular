@@ -1,0 +1,11 @@
+{
+	"nativescript": {
+		"id": "org.nativescript.startuptest",
+		"tns-android": {
+			"version": "1.4.0"
+		}
+	},
+	"dependencies": {
+		"tns-core-modules": "1.4.0"
+	}
+}
