@@ -20,11 +20,6 @@ ng-sample/src/typings
 ng-sample/src/angular2
 ng-sample/src/nativescript-angular
 
-todomvc/app
-todomvc/platforms
-todomvc/lib
-todomvc/node_modules
-todomvc/src/tns_modules
-todomvc/src/typings
-todomvc/src/angular2
-todomvc/src/nativescript-angular
+startup-test/platforms
+startup-test/lib
+startup-test/node_modules
