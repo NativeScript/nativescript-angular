@@ -90,17 +90,6 @@ module.exports = function(grunt) {
             }
         },
         shell: {
-            ngSampleFull: {
-                command: 'grunt prepare app-full',
-                options: ngSampleSubDir
-            },
-            ngSampleInit: {
-                command: [
-                    'npm install',
-                    'tns platform add android',
-                ].join('&&'),
-                options: ngSampleSubDir
-            },
             depNSInit: {
                 command: [
                     'npm install',
@@ -126,11 +115,6 @@ module.exports = function(grunt) {
                 command: 'npm install angular2-*.tgz',
             }
         },
-        env: {
-            ngSample: {
-                NSDIST: '../deps/NativeScript/bin/dist',
-            }
-        }
     });
 
     grunt.registerTask("run", ['ts', 'shell:runApp']);
@@ -165,12 +149,6 @@ module.exports = function(grunt) {
         "ts:build",
         "copy:packageJson",
         "package"
-    ]);
-
-    grunt.registerTask("ng-sample", [
-        "env:ngSample",
-        "copy:ngSampleSrc",
-        "shell:ngSampleFull"
     ]);
 
     grunt.registerTask("default", ["prepare"]);
