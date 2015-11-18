@@ -1,10 +1,10 @@
-import {isPresent} from 'angular2/src/core/facade/lang';
-import {Promise, PromiseWrapper} from 'angular2/src/core/facade/async';
-import {TemplateNormalizer} from 'angular2/src/core/compiler/template_normalizer';
-import {XHR} from 'angular2/src/core/compiler/xhr';
-import {HtmlParser} from 'angular2/src/core/compiler/html_parser';
-import {UrlResolver} from 'angular2/src/core/compiler/url_resolver';
-import {CompileTypeMetadata, CompileTemplateMetadata} from 'angular2/src/core/compiler/directive_metadata';
+import {isPresent} from 'angular2/src/facade/lang';
+import {Promise, PromiseWrapper} from 'angular2/src/facade/async';
+import {TemplateNormalizer} from 'angular2/src/compiler/template_normalizer';
+import {XHR} from 'angular2/src/compiler/xhr';
+import {HtmlParser} from 'angular2/src/compiler/html_parser';
+import {UrlResolver} from 'angular2/src/compiler/url_resolver';
+import {CompileTypeMetadata, CompileTemplateMetadata} from 'angular2/src/compiler/directive_metadata';
 import {path, knownFolders, File} from "file-system";
 
 export class FileSystemTemplateNormalizer extends TemplateNormalizer {
@@ -20,7 +20,7 @@ export class FileSystemTemplateNormalizer extends TemplateNormalizer {
 
         let sourceAbsUrl = this.urlResolver.resolve(directiveType.moduleUrl, template.templateUrl);
         return this.loadTemplate(sourceAbsUrl).then(templateContent =>
-            this.normalizeLoadedTemplate(directiveType, template, templateContent, sourceAbsUrl));
+            super.normalizeLoadedTemplate(directiveType, template, templateContent, sourceAbsUrl));
     }
 
     public loadTemplate(url: string): Promise<string> {

@@ -12,8 +12,7 @@ import {TextView} from 'ui/text-view';
 import {Switch} from 'ui/switch';
 import {LayoutBase} from 'ui/layouts/layout-base';
 import gestures = require("ui/gestures");
-import {AST} from 'angular2/src/core/change_detection/parser/ast';
-import {ViewClass, getViewClass, isKnownView} from 'nativescript-angular/element-registry';
+import {ViewClass, getViewClass, isKnownView} from './element-registry';
 
 type EventHandler = (args: EventData) => void;
 

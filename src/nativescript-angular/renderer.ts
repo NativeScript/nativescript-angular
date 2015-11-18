@@ -1,4 +1,5 @@
 import {Inject, Injectable} from 'angular2/src/core/di';
+import {RenderComponentTemplate} from 'angular2/src/core/render/api';
 import {DOCUMENT} from 'angular2/src/core/render/dom/dom_tokens';
 import {createRenderView, NodeFactory} from 'angular2/src/core/render/view_factory';
 import {
@@ -11,14 +12,14 @@ import {
     RenderViewWithFragments,
     RenderTemplateCmd
 } from 'angular2/src/core/render/api';
-import {isBlank} from 'angular2/src/core/facade/lang';
+import {isBlank} from 'angular2/src/facade/lang';
 import {
     DefaultProtoViewRef,
     DefaultRenderView,
     DefaultRenderFragmentRef
 } from 'angular2/src/core/render/view';
 import {DOM} from 'angular2/src/core/dom/dom_adapter';
-import {ViewNode, DummyViewNode} from 'nativescript-angular/view_node';
+import {ViewNode, DummyViewNode} from './view_node';
 
 //var console = {log: function(msg) {}}
 
@@ -32,9 +33,9 @@ export class NativeScriptRenderer extends Renderer implements NodeFactory<ViewNo
         this._document = document;
     }
 
-    public createProtoView(cmds: RenderTemplateCmd[]): RenderProtoViewRef {
+    public createProtoView(componentTemplateId: string, cmds: RenderTemplateCmd[]): RenderProtoViewRef {
         console.log('NativeScriptRenderer.createProtoView: ' + cmds);
-        return new DefaultProtoViewRef(cmds);
+        return new DefaultProtoViewRef(this._componentTemplates.get(componentTemplateId), cmds);
     }
 
     public createRootHostView(
@@ -59,7 +60,8 @@ export class NativeScriptRenderer extends Renderer implements NodeFactory<ViewNo
     }
 
     private _createView(protoViewRef: RenderProtoViewRef, inplaceElement: HTMLElement): RenderViewWithFragments {
-        var view = createRenderView((<DefaultProtoViewRef>protoViewRef).cmds, inplaceElement, this);
+        var dpvr = <DefaultProtoViewRef>protoViewRef;
+        var view = createRenderView(dpvr.template, dpvr.cmds, inplaceElement, this);
         return new RenderViewWithFragments(view, view.fragments);
     }
 
@@ -87,9 +89,8 @@ export class NativeScriptRenderer extends Renderer implements NodeFactory<ViewNo
     public attachFragmentAfterElement(location: RenderElementRef, fragmentRef: RenderFragmentRef) {
         console.log("NativeScriptRenderer.attachFragmentAfterElement");
 
-        var parentView = resolveInternalDomView(location.renderView);
-        var element = parentView.boundElements[location.boundElementIndex];
-        var nodes = resolveInternalDomFragment(fragmentRef);
+        let element = resolveBoundNode(location);
+        let nodes = resolveInternalDomFragment(fragmentRef);
         this.attachFragmentAfter(element, nodes);
     }
 
@@ -127,8 +128,7 @@ export class NativeScriptRenderer extends Renderer implements NodeFactory<ViewNo
     setElementProperty(location: RenderElementRef, propertyName: string, propertyValue: any) {
         console.log("NativeScriptRenderer.setElementProperty " + propertyName + " = " + propertyValue);
 
-        var view = resolveInternalDomView(location.renderView);
-        var node = view.boundElements[location.boundElementIndex];
+        let node = resolveBoundNode(location);
         node.setProperty(propertyName, propertyValue);
     }
 
@@ -140,8 +140,7 @@ export class NativeScriptRenderer extends Renderer implements NodeFactory<ViewNo
     setElementClass(location: RenderElementRef, className: string, isAdd: boolean): void {
         console.log("NativeScriptRenderer.setElementClass " + className + " - " + isAdd);
 
-        var view = resolveInternalDomView(location.renderView);
-        var node = view.boundElements[location.boundElementIndex];
+        let node = resolveBoundNode(location);
         if (isAdd) {
             node.addClass(className);
         } else {
@@ -150,16 +149,14 @@ export class NativeScriptRenderer extends Renderer implements NodeFactory<ViewNo
     }
 
     setElementStyle(location: RenderElementRef, styleName: string, styleValue: string): void {
-        var view = resolveInternalDomView(location.renderView);
-        var node = view.boundElements[location.boundElementIndex];
+        let node = resolveBoundNode(location);
         node.setStyleProperty(styleName, styleValue);
     }
 
     getNativeElementSync(location: RenderElementRef): any {
         console.log("NativeScriptRenderer.getNativeElementSync");
 
-        var view = resolveInternalDomView(location.renderView);
-        var node = view.boundElements[location.boundElementIndex];
+        let node = resolveBoundNode(location);
         return node.nativeView;
     }
 
@@ -180,21 +177,16 @@ export class NativeScriptRenderer extends Renderer implements NodeFactory<ViewNo
         view.eventDispatcher = dispatcher;
     }
 
-    private _componentCmds: Map<number, RenderTemplateCmd[]> = new Map<number, RenderTemplateCmd[]>();
+    private _componentTemplates: Map<string, RenderComponentTemplate> = new Map<string, RenderComponentTemplate>();
 
-    public registerComponentTemplate(
-        templateId: number,
-        commands: RenderTemplateCmd[],
-        styles: string[],
-        nativeShadow: boolean
-    ) {
-        console.log('NativeScriptRenderer.registerComponentTemplate: ' + templateId);
-        this._componentCmds.set(templateId, commands);
+    public registerComponentTemplate(template: RenderComponentTemplate) {
+        console.log('NativeScriptRenderer.registerComponentTemplate: ' + template.id);
+        this._componentTemplates.set(template.id, template);
     }
 
-    public resolveComponentTemplate(templateId: number): RenderTemplateCmd[] {
+    public resolveComponentTemplate(templateId: string): RenderComponentTemplate {
         console.log('NativeScriptRenderer.resolveComponentTemplate: ' + templateId);
-        return this._componentCmds.get(templateId);
+        return this._componentTemplates.get(templateId);
     }
 
     public createRootContentInsertionPoint(): ViewNode {
@@ -217,7 +209,7 @@ export class NativeScriptRenderer extends Renderer implements NodeFactory<ViewNo
         existing.setAttributeValues(attrNameAndValues);
     }
 
-    public createShadowRoot(host: ViewNode, templateId: number): ViewNode {
+    public createShadowRoot(host: ViewNode, templateId: string): ViewNode {
         throw new Error('Not implemented.');
     }
 
@@ -244,6 +236,13 @@ export class NativeScriptRenderer extends Renderer implements NodeFactory<ViewNo
 
 function resolveInternalDomView(viewRef: RenderViewRef): DefaultRenderView<ViewNode> {
   return <DefaultRenderView<ViewNode>>viewRef;
+}
+
+function resolveBoundNode(elementRef: RenderElementRef): ViewNode {
+    let view = resolveInternalDomView(elementRef.renderView);
+    //Using an Angular internal API to get the index of the bound element.
+    let internalBoundIndex = (<any>elementRef).boundElementIndex;
+    return view.boundElements[internalBoundIndex]
 }
 
 function resolveInternalDomFragment(fragmentRef: RenderFragmentRef): ViewNode[] {
