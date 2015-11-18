@@ -17,3 +17,4 @@ todomvc/lib
 todomvc/src/typings
 todomvc/typings
 src/angular2
+web/*.js
