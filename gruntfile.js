@@ -11,24 +11,23 @@ module.exports = function(grunt) {
     var outDir = "bin/dist/modules";
     var moduleOutDir = path.join(outDir, "nativescript-angular");
 
-    var runEnv = JSON.parse(JSON.stringify(process.env));
-    runEnv['NODE_PATH'] = 'bin/dist/modules';
-
-    var angularDest = grunt.option('angularDest') || 'src/';
-    console.log(angularDest);
-
     var ngSampleSubDir = {
         execOptions: {
             cwd: 'ng-sample',
         }
-    }
+    };
 
     var nsSubDir = {
         execOptions: {
             cwd: 'deps/NativeScript',
         }
-    }
+    };
 
+    var angularSubDir = {
+        execOptions: {
+            cwd: 'deps/angular',
+        }
+    };
 
     grunt.initConfig({
         ts: {
@@ -41,12 +40,6 @@ module.exports = function(grunt) {
                 outDir: outDir,
                 options: {
                     fast: 'never',
-
-                    // Resolve non-relative modules like "ui/styling/style"
-                    // based on the project root (not on node_modules which
-                    // is the typescript 1.6+ default)
-                    additionalFlags: '--moduleResolution classic',
-
                     module: "commonjs",
                     target: "es5",
                     sourceMap: true,
@@ -60,36 +53,6 @@ module.exports = function(grunt) {
             },
         },
         copy: {
-            angularSource: {
-                expand: true,
-                cwd: './deps/angular/modules',
-                src: [
-                    'angular2/**/*',
-                    '!angular2/**/*.dart',
-                    '!angular2/test/**/*',
-                    '!angular2/angular2_sfx*',
-                    '!angular2/router*',
-                    '!angular2/src/router/**/*',
-                    '!angular2/src/mock/**/*',
-                    '!angular2/mock.ts',
-                    '!angular2/docs/**/*',
-                    '!angular2/test*',
-                    '!angular2/src/test_lib/**/*',
-                    '!angular2/src/testing/**/*',
-
-                    '!angular2/typings/*protractor*/**/*',
-                    '!angular2/typings/es6-shim/**/*',
-                    '!angular2/typings/jasmine/**/*',
-                    '!angular2/typings/node/**/*',
-                    '!angular2/typings/*selenium*/**/*',
-                    '!angular2/typings/tsd.d.ts',
-
-                    '!angular2/manual_typings/**/*',
-                    '!angular2/examples/**/*',
-                    '!angular2/web_worker/**/*',
-                ],
-                dest: angularDest
-            },
             packageJson: {
                 expand: true,
                 src: 'package.json',
@@ -106,14 +69,6 @@ module.exports = function(grunt) {
                 cwd: 'src/nativescript-angular',
                 expand: true,
                 dest: moduleOutDir
-            },
-            ngSampleSrc: {
-                expand: true,
-                cwd: 'src/',
-                src: [
-                    'nativescript-angular/**/*.ts',
-                ],
-                dest: angularDest
             },
         },
         clean: {
@@ -155,6 +110,20 @@ module.exports = function(grunt) {
             },
             package: {
                 command: "npm pack \"" + moduleOutDir + "\""
+            },
+            installAngularDependencies: {
+                command: 'npm install',
+                options: angularSubDir
+            },
+            compileAngular: {
+                command: 'gulp build.js.cjs',
+                options: angularSubDir
+            },
+            buildAngularPackage: {
+                command: 'npm pack deps/angular/dist/js/cjs/angular2',
+            },
+            installAngularPackage: {
+                command: 'npm install angular2-*.tgz',
             }
         },
         env: {
@@ -165,21 +134,6 @@ module.exports = function(grunt) {
     });
 
     grunt.registerTask("run", ['ts', 'shell:runApp']);
-
-    grunt.registerTask("prepareAngular", [
-        'copy:angularSource',
-        'fixAngularTsdDts'
-    ]);
-
-    function removeUnneededTypings(relativePath) {
-        var tsdFile = path.join(angularDest, relativePath);
-
-        shelljs.sed('-i', /.*es6-shim.*\n/g, '', tsdFile);
-    }
-
-    grunt.registerTask("fixAngularTsdDts", function() {
-        removeUnneededTypings('angular2/typings/zone/zone.d.ts');
-    })
 
     grunt.registerTask("cleanAll", [
         'clean:src',
@@ -193,9 +147,16 @@ module.exports = function(grunt) {
         "shell:package",
     ]);
 
+    grunt.registerTask("installAngular", [
+        "shell:installAngularDependencies",
+        "shell:compileAngular",
+        "shell:buildAngularPackage",
+        "shell:installAngularPackage",
+    ]);
+
     grunt.registerTask("prepare", [
         "cleanAll",
-        "prepareAngular",
+        "installAngular",
         "shell:depNSInit",
         "build"
     ]);
@@ -208,10 +169,9 @@ module.exports = function(grunt) {
 
     grunt.registerTask("ng-sample", [
         "env:ngSample",
-        "copy:angularSource",
         "copy:ngSampleSrc",
         "shell:ngSampleFull"
     ]);
 
     grunt.registerTask("default", ["prepare"]);
-}
+};
