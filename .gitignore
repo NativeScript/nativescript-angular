@@ -9,6 +9,7 @@ todomvc/typings
 .baseDir.ts
 .tscache
 nativescript-angular*.tgz
+angular2-*.tgz
 
 
 ng-sample/app
