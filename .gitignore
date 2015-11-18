@@ -2,7 +2,6 @@ bin/dist
 node_modules
 tags
 todomvc/typings
-/src/*
 !/src/nativescript-angular/
 !/src/dependencies.d.ts
 !/src/global.d.ts
