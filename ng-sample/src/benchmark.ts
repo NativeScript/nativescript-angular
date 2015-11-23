@@ -3,7 +3,6 @@ import {Button} from 'ui/button';
 import {Label} from 'ui/label';
 import {Inject, Component, View, NgIf, NgFor} from 'angular2/angular2';
 import {ApplicationRef} from 'angular2/src/core/application_ref';
-import {LifeCycle} from 'angular2/src/core/life_cycle/life_cycle';
 import * as profiling from './profiling';
 
 @Component({selector: 'tree', inputs: ['data']})
@@ -48,7 +47,7 @@ export class Benchmark {
     public initDataNg = new TreeNode('', null, null);
     public initDataBaseline = new TreeNode('', null, null);
 
-    constructor(private appRef: ApplicationRef, private lifeCycle: LifeCycle) {
+    constructor(private appRef: ApplicationRef) {
     }
 
     public baselineTest(container: StackLayout) {
@@ -63,7 +62,7 @@ export class Benchmark {
 
     public componentTest() {
         this.initDataNg = new TreeNode('', null, null);
-        this.lifeCycle.tick();
+        this.appRef.tick();
 
         profiling.start('angular');
         this.createNgDom();
@@ -91,14 +90,14 @@ export class Benchmark {
         var values = this.count++ % 2 == 0 ? ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '*'] :
         ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', '-'];
         this.initDataBaseline = buildTree(this.maxDepth, values, 0);
-        this.lifeCycle.tick();
+        this.appRef.tick();
     }
 
     private createNgDom() {
         var values = this.count++ % 2 == 0 ? ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '*'] :
         ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', '-'];
         this.initDataNg = buildTree(this.maxDepth, values, 0);
-        this.lifeCycle.tick();
+        this.appRef.tick();
     }
 }
 

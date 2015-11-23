@@ -1,29 +1,14 @@
 declare var assert: any;
 
-interface BrowserNodeGlobal {
-  Object: typeof Object;
-  Array: typeof Array;
-  Map: typeof Map;
-  Set: typeof Set;
-  Date: typeof Date;
-  RegExp: typeof RegExp;
-  JSON: typeof JSON;
-  Math: typeof Math;
-  assert(condition: any): void;
-  Reflect: any;
-  zone: Zone;
-  getAngularTestability: Function;
-  getAllAngularTestabilities: Function;
-  setTimeout: Function;
-  clearTimeout: Function;
-  setInterval: Function;
-  clearInterval: Function;
-}
+declare type BrowserNodeGlobal = any;
 
 interface Map<K, V> {
     keys(): Array<K>;
     values(): Array<V>;
 }
+
+declare type MapConstructor = typeof Map;
+declare type SetConstructor = typeof Set;
 
 interface NumberConstructor {
     isInteger(number: number): boolean;

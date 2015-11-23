@@ -9,6 +9,7 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-shell');
 
     var nsDistPath = process.env.NSDIST || '../deps/NativeScript/bin/dist';
+    var angularDistPath = process.env.ANGULARDIST || '../';
 
     var modulesPath = grunt.option("modulesPath", path.join(nsDistPath, 'modules'));
 
@@ -26,12 +27,6 @@ module.exports = function(grunt) {
                 dest: 'app',
                 options: {
                     fast: "never",
-
-                    // Resolve non-relative modules like "ui/styling/style"
-                    // based on the project root (not on node_modules which
-                    // is the typescript 1.6+ default)
-                    additionalFlags: '--moduleResolution classic',
-
                     module: "commonjs",
                     target: "es5",
                     sourceMap: true,
@@ -57,32 +52,15 @@ module.exports = function(grunt) {
                 expand: true,
                 cwd: '../src',
                 src: [
-                    'css/**/*',
                     'nativescript-angular/**/*',
                     'global.d.ts',
                 ],
                 dest: 'src'
             },
-            tnsifyAngular: {
-                expand: true,
-                cwd: 'app/',
-                src: [
-                    "angular2/**/*",
-                    "css/**/*",
-                    "nativescript-angular/**/*",
-                ],
-                //dest: 'platforms/android/src/main/assets/app/tns_modules',
-                dest: 'app/tns_modules',
-            },
         },
         shell: {
-            updateAngular: {
-                command: "grunt prepareAngular --angularDest ng-sample/src",
-                options: {
-                    execOptions: {
-                        cwd: '..',
-                    }
-                }
+            localInstallAngular: {
+                command: "npm install \"<%= angularPackagePath %>\""
             },
             localInstallModules: {
                 command: "npm install \"<%= nsPackagePath %>\""
@@ -134,9 +112,24 @@ module.exports = function(grunt) {
         grunt.config('nsPackagePath', nsPackagePath);
     });
 
+    grunt.registerTask("getAngularPackage", function() {
+        var packageFiles = grunt.file.expand({
+            cwd: angularDistPath
+        },[
+            'angular2-*.tgz'
+        ]);
+        var angularPackagePath = path.join(angularDistPath, packageFiles[0]);
+        grunt.config('angularPackagePath', angularPackagePath);
+    });
+
     grunt.registerTask("updateModules", [
         "getNSPackage",
         "shell:localInstallModules",
+    ]);
+
+    grunt.registerTask("updateAngular", [
+        "getAngularPackage",
+        "shell:localInstallAngular",
     ]);
 
     grunt.registerTask("prepareQuerystringPackage", function() {
@@ -151,12 +144,11 @@ module.exports = function(grunt) {
 
     grunt.registerTask("prepare", [
         "updateModules",
-        "shell:updateAngular",
+        "updateAngular",
         "prepareQuerystringPackage",
     ]);
 
     grunt.registerTask("preDeploy", [
-        "copy:tnsifyAngular",
     ]);
 
     grunt.registerTask("full-clean", [

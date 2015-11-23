@@ -2,7 +2,7 @@ import * as profiling from "./profiling";
 import {topmost} from 'ui/frame';
 import {TextView} from 'ui/text-view';
 
-import {nativeScriptBootstrap} from 'nativescript-angular/application';
+import {nativeScriptBootstrap} from './nativescript-angular/application';
 import {RendererTest} from './renderer-test';
 import {Benchmark} from './benchmark';
 
@@ -16,7 +16,8 @@ export function pageLoaded(args) {
 
     profiling.start('ng-bootstrap');
     console.log('BOOTSTRAPPING...');
-    nativeScriptBootstrap(Benchmark, []).then((appRef) => {
+    //nativeScriptBootstrap(Benchmark, []).then((appRef) => {
+    nativeScriptBootstrap(RendererTest, []).then((appRef) => {
         profiling.stop('ng-bootstrap');
         console.log('ANGULAR BOOTSTRAP DONE.');
     }, (err) =>{
