@@ -10,6 +10,7 @@ module.exports = function(grunt) {
 
     var outDir = "bin/dist/modules";
     var moduleOutDir = path.join(outDir, "nativescript-angular");
+    var nsDistPath = process.env.NSDIST || './deps/NativeScript/bin/dist';
 
     var ngSampleSubDir = {
         execOptions: {
@@ -34,8 +35,7 @@ module.exports = function(grunt) {
             build: {
                 src: [
                     'src/**/*.ts',
-                    //public API d.ts using the official angular package structure
-                    '!src/nativescript-angular/application.d.ts',
+                    'node_modules/tns-core-modules/tns-core-modules.d.ts',
                 ],
                 outDir: outDir,
                 options: {
@@ -93,9 +93,12 @@ module.exports = function(grunt) {
             depNSInit: {
                 command: [
                     'npm install',
-                    'grunt --no-runtslint',
+                    'grunt --test-app-only=true --no-runtslint',
                 ].join('&&'),
                 options: nsSubDir
+            },
+            localInstallModules: {
+                command: "npm install \"<%= nsPackagePath %>\""
             },
             package: {
                 command: "npm pack \"" + moduleOutDir + "\""
@@ -138,10 +141,26 @@ module.exports = function(grunt) {
         "shell:installAngularPackage",
     ]);
 
+    grunt.registerTask("getNSPackage", function() {
+        var packageFiles = grunt.file.expand({
+            cwd: nsDistPath
+        },[
+            'tns-core-modules*.tgz'
+        ]);
+        var nsPackagePath = path.join(nsDistPath, packageFiles[0]);
+        grunt.config('nsPackagePath', nsPackagePath);
+    });
+
+    grunt.registerTask("installModules", [
+        "shell:depNSInit",
+        "getNSPackage",
+        "shell:localInstallModules",
+    ]);
+
     grunt.registerTask("prepare", [
         "cleanAll",
         "installAngular",
-        "shell:depNSInit",
+        "installModules",
         "build"
     ]);
 
