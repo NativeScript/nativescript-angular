@@ -1,7 +1,7 @@
 import 'reflect-metadata';
 import './polyfills/array';
 import './zone';
-import {Type} from 'angular2/src/facade/lang';
+import {isPresent, Type} from 'angular2/src/facade/lang';
 import {Promise, PromiseWrapper} from 'angular2/src/facade/async';
 import {ComponentRef} from 'angular2/src/core/linker/dynamic_component_loader';
 import {bind, provide, Provider} from 'angular2/src/core/di';
@@ -10,11 +10,12 @@ import {DOM} from 'angular2/src/core/dom/dom_adapter';
 import {Renderer} from 'angular2/src/core/render/api';
 import {NativeScriptRenderer} from './renderer';
 import {NativeScriptDomAdapter} from './dom_adapter';
-import {TemplateNormalizer} from 'angular2/src/compiler/template_normalizer';
-import {FileSystemTemplateNormalizer} from './template_normalizer';
+import {XHR} from 'angular2/src/compiler/xhr';
+import {FileSystemXHR} from './xhr';
 import {Parse5DomAdapter} from 'angular2/src/core/dom/parse5_adapter';
 
 import {bootstrap as angularBootstrap} from 'angular2/src/core/application';
+import {commonBootstrap} from 'angular2/src/core/application_common';
 
 
 export type BindingArray = Array<Type | Provider | any[]>;
@@ -26,9 +27,12 @@ export function nativeScriptBootstrap(appComponentType: any,
   let nativeScriptBindings: BindingArray = [
       NativeScriptRenderer,
       provide(Renderer, {useClass: NativeScriptRenderer}),
-      provide(TemplateNormalizer, {useClass: FileSystemTemplateNormalizer}),
+      provide(XHR, {useClass: FileSystemXHR}),
   ];
-  let augmentedBindings = nativeScriptBindings.concat(componentInjectableBindings);
+  var bindings = [nativeScriptBindings];
+  if (isPresent(componentInjectableBindings)) {
+      bindings.push(componentInjectableBindings);
+  }
 
-  return angularBootstrap(appComponentType, augmentedBindings)
+  return angularBootstrap(appComponentType, bindings)
 }
