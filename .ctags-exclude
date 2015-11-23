@@ -18,3 +18,4 @@ todomvc/src/typings
 todomvc/typings
 src/angular2
 web/*.js
+deps/angular/dist
