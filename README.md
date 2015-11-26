@@ -81,13 +81,14 @@ On Windows, you can wrap those commands in a BAT file.
 # Watch the video explaining Angular 2 and NativeScript
 [NativeScript session on AngularConnect conference](https://www.youtube.com/watch?v=4SbiiyRSIwo)
 
-# Explore the TodoMVC sample using NativeScript and Angular 2
-[TodoMVC sample](https://github.com/NativeScript/sample-ng-todomvc)
+# Explore the examples
+
+* [Hello world starter](https://github.com/NativeScript/template-hello-world-ng)
+* [TodoMVC sample implementation](https://github.com/NativeScript/sample-ng-todomvc)
 
 # Known issues
 
-1. The renderer code needs to be cleaned up and made extensible, so that people can register new visual elements.
-2. There are certain issues with the Parse5DomAdapter and we'll likely need to provide our own later on:
+1. There are certain issues with the Parse5DomAdapter and we'll likely need to provide our own later on:
   * Element and attribute names always get lowercased.
   * Self-closing elements (`<Label text="Name" /><Button text="Save" />`) get parsed wrong (in this case Button gets parsed as a Label child.
-3. The renderer implementation is by no means complete: we are still need to support view (de)hydration, DOM text updates, event dispatching, actions, etc.
+2. The renderer implementation is by no means complete: we are still need to support view (de)hydration, DOM text updates, event dispatching, actions, etc.
