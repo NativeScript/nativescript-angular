@@ -11,6 +11,7 @@ module.exports = function(grunt) {
     var outDir = "bin/dist/modules";
     var moduleOutDir = path.join(outDir, "nativescript-angular");
     var nsDistPath = process.env.NSDIST || './deps/NativeScript/bin/dist';
+    var angularDistPath = process.env.ANGULARDIST || '.';
 
     var ngSampleSubDir = {
         execOptions: {
@@ -115,7 +116,7 @@ module.exports = function(grunt) {
                 command: 'npm pack deps/angular/dist/js/cjs/angular2',
             },
             installAngularPackage: {
-                command: 'npm install angular2-*.tgz',
+                command: "npm install \"<%= angularPackagePath %>\""
             }
         },
     });
@@ -134,10 +135,21 @@ module.exports = function(grunt) {
         "shell:package",
     ]);
 
+    grunt.registerTask("getAngularPackage", function() {
+        var packageFiles = grunt.file.expand({
+            cwd: angularDistPath
+        },[
+            'angular2-*.tgz'
+        ]);
+        var angularPackagePath = path.join(angularDistPath, packageFiles[0]);
+        grunt.config('angularPackagePath', angularPackagePath);
+    });
+
     grunt.registerTask("installAngular", [
         "shell:installAngularDependencies",
         "shell:compileAngular",
         "shell:buildAngularPackage",
+        "getAngularPackage",
         "shell:installAngularPackage",
     ]);
 
