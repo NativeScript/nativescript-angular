@@ -12,15 +12,12 @@ nativescript-angular*.tgz
 angular2-*.tgz
 
 
-ng-sample/app
+ng-sample/app/**/*.js
+ng-sample/app/nativescript-angular
+ng-sample/app/global.d.ts
 ng-sample/platforms
 ng-sample/lib
 ng-sample/node_modules
-ng-sample/src/tns_modules
-ng-sample/src/typings
-ng-sample/src/global.d.ts
-ng-sample/src/angular2
-ng-sample/src/nativescript-angular
 
 startup-test/platforms
 startup-test/lib
