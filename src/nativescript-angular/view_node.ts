@@ -52,14 +52,6 @@ export class ViewNode {
         });
     }
 
-    printTree() {
-        let root = this;
-        while (root.parentNode !== null) {
-            root = root.parentNode;
-        }
-        root.print();
-    }
-
     get parentNativeView(): View {
         if (this._parentView)
             return this._parentView
