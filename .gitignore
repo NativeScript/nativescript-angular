@@ -2,10 +2,8 @@ bin/dist
 node_modules
 tags
 todomvc/typings
-!/src/nativescript-angular/
-!/src/dependencies.d.ts
-!/src/global.d.ts
 deps/angular/dist
+src/nativescript-angular/**/*.js
 .baseDir.ts
 .tscache
 nativescript-angular*.tgz
