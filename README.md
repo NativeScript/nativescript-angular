@@ -20,7 +20,7 @@ https://docs.nativescript.org/setup/quick-setup
 ## Install dependencies
 
 ```
-$ npm install -g grunt-cli
+$ npm install -g grunt-cli gulp
 ```
 
 Then install the needed NPM packages:
