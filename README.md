@@ -39,6 +39,7 @@ $ grunt prepare
 
 ```
 $ cd ng-sample
+$ npm install
 $ grunt prepare
 ```
 
