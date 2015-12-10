@@ -83,3 +83,4 @@ The `ng-sample` app is meant for testing stuff while developing the renderer cod
 1. There are certain issues with the Parse5DomAdapter and we'll likely need to provide our own later on:
   * Element and attribute names always get lowercased.
   * Self-closing elements (`<Label text="Name" /><Button text="Save" />`) get parsed wrong (in this case Button gets parsed as a Label child.
+![](https://ga-beacon.appspot.com/UA-111455-24/nativescript/nativescript-angular?pixel) 
