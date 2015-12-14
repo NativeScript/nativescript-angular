@@ -159,7 +159,6 @@ export class ViewNode {
         }
     }
 
-
     private static propertyMaps: Map<Function, Map<string, string>> = new Map<Function, Map<string, string>>();
 
     private static getProperties(instance: any): Map<string, string> {
