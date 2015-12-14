@@ -1,8 +1,19 @@
 var profiling = require('./profiling');
-var vmModule = require("./main-view-model");
-function pageLoaded(args) {
-    profiling.stop('application-start');
-    var page = args.object;
-    page.bindingContext = vmModule.mainViewModel;
-}
-exports.pageLoaded = pageLoaded;
+console.log('import main-page');
+
+exports.createPage = function() {
+    console.dump(page);
+    var pageModule = require('ui/page');
+    var textView = require('ui/text-view');
+    var page = new pageModule.Page();
+    page.on('loaded', function() {
+        profiling.stop('application-start');
+        console.log('Page loaded');
+
+        var box = new textView.TextView();
+        box.text = "Хуяк хуяк!";
+
+        page.content = box;
+    });
+    return page;
+};
