@@ -11,14 +11,16 @@ function time() {
     }
 }
 exports.time = time;
-var timers = new Map();
+if (!global.timers) {
+    global.timers = new Map();
+}
 function start(name) {
     if (!exports.ENABLE_PROFILING) {
         return;
     }
     var info;
-    if (timers.has(name)) {
-        info = timers.get(name);
+    if (global.timers.has(name)) {
+        info = global.timers.get(name);
         if (info.currentStart != 0) {
             throw new Error("Timer already started: " + name);
         }
@@ -30,7 +32,7 @@ function start(name) {
             count: 0,
             currentStart: time()
         };
-        timers.set(name, info);
+        global.timers.set(name, info);
     }
 }
 exports.start = start;
@@ -48,14 +50,15 @@ function stop(name) {
     }
     var info = pauseInternal(name);
     console.log("---- [" + name + "] STOP total: " + info.totalTime + " count:" + info.count);
-    timers.delete(name);
+    global.timers.delete(name);
 }
 exports.stop = stop;
 function pauseInternal(name) {
-    var info = timers.get(name);
+    var info = global.timers.get(name);
     if (!info) {
         throw new Error("No timer started: " + name);
     }
+    console.dump(info);
     info.lastTime = Math.round(time() - info.currentStart);
     info.totalTime += info.lastTime;
     info.count++;

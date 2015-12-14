@@ -1,5 +1,6 @@
 {
 	"name": "tns-template-hello-world",
+    "main": "starter.js",
 	"jsoptions": "--expose_gc",
 	"version": "1.4.0",
 	"author": "Telerik <support@telerik.com>",

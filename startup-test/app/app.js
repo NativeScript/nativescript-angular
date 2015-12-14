@@ -1,6 +1,6 @@
 require("globals");
 var profiling = require('./profiling');
-profiling.start('application-start');
+//profiling.start('application-start');
 
 var reflectMetadata = require("reflect-metadata");
 
