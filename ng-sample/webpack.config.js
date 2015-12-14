@@ -1,4 +1,6 @@
 var path = require("path");
+var webpack = require("webpack");
+
 
 module.exports = {
     context: "./platforms/android/src/main/assets/app",
@@ -11,20 +13,13 @@ module.exports = {
         libraryTarget: "commonjs2",
         filename: "bundle.js"
     },
-    //externals: {
-    //"crypto": "crypto",
-    //"process/browser.js": "process",
-    //"module.js": "module"
-    //},
     externals: [
         function(context, request, callback) {
-            if (/\/module\.js$/.test(request))
-                return callback(null, "var module");
-            else if (/browserify/.test(request)) {
+            if (/browserify|crypto/.test(request)) {
                 return callback(null, "var {}");
-            }
-            else
+            } else {
                 callback();
+            }
         }
     ],
     resolve: {
@@ -37,5 +32,11 @@ module.exports = {
     module: {
         loaders: [
         ]
-    }
-}
+    },
+    plugins: [
+        new webpack.DefinePlugin({
+            global: 'global',
+            __dirname: '__dirname'
+        }),
+    ]
+};
