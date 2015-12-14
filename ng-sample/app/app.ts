@@ -1,6 +1,5 @@
 import "globals";
-import "./modules";
-
+// import "./modules";
 global.registerModule("./main-page", function () { return require("./main-page"); });
 
 import * as profiling from "./profiling";

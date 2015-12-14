@@ -66,6 +66,7 @@ registerElement("Slider",  () => require("ui/slider").Slider);
 registerElement("StackLayout",  () => require("ui/layouts/stack-layout").StackLayout);
 registerElement("Switch",  () => require("ui/switch").Switch);
 registerElement("TabView",  () => require("ui/tab-view").TabView);
+registerElement("TabViewItem",  () => require("ui/tab-view").TabViewItem);
 registerElement("TextField",  () => require("ui/text-field").TextField);
 registerElement("TextView",  () => require("ui/text-view").TextView);
 registerElement("TimePicker",  () => require("ui/time-picker").TimePicker);

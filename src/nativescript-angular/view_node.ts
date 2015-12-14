@@ -13,6 +13,7 @@ import {Switch} from 'ui/switch';
 import {LayoutBase} from 'ui/layouts/layout-base';
 import gestures = require("ui/gestures");
 import {ViewClass, getViewClass, isKnownView} from './element-registry';
+import {isString} from "utils/types";
 
 type EventHandler = (args: EventData) => void;
 
@@ -28,11 +29,11 @@ export class ViewNode {
     private cssClasses: Map<string, boolean> = new Map<string, boolean>();
     private static whiteSpaceSplitter = /\s+/;
 
-    public children:Array<ViewNode> = [];
+    public children: Array<ViewNode> = [];
 
     constructor(public parentNode: ViewNode,
-                public viewName: string,
-                attrNameAndValues: string[]) {
+        public viewName: string,
+        attrNameAndValues: string[]) {
         this.setAttributeValues(attrNameAndValues);
 
         if (this.parentNode)
@@ -57,7 +58,7 @@ export class ViewNode {
             return this._parentView
 
         if (this.parentNode) {
-            if(this.parentNode.viewName !== "template" && this.parentNode.nativeView) {
+            if (this.parentNode.viewName !== "template" && this.parentNode.nativeView) {
                 this._parentView = this.parentNode.nativeView;
             } else {
                 this._parentView = this.parentNode.parentNativeView;
@@ -67,6 +68,10 @@ export class ViewNode {
             this._parentView = topmost().currentPage;
         }
         return this._parentView;
+    }
+
+    get isComplexProperty(): boolean {
+        return ViewNode.isComplexProperty(this.viewName);
     }
 
     public attachToView(atIndex: number = -1) {
@@ -84,9 +89,11 @@ export class ViewNode {
         this.children.forEach(child => {
             child.attachToView();
         });
+
+        this.postAttachUI();
     }
 
-    private createUI(attachAtIndex: number) {
+    private createUI(attachAtIndex: number): boolean {
         if (!isKnownView(this.viewName))
             return;
 
@@ -118,9 +125,37 @@ export class ViewNode {
             }
         } else if ((<any>this.parentNativeView)._addChildFromBuilder) {
             (<any>this.parentNativeView)._addChildFromBuilder(this.viewName, this.nativeView);
-        } else {
+        } else if (this.parentNode.isComplexProperty) {
+            // complex property - we will deal with this in postAttachUI()            
+        }
+        else {
             console.log('parentNativeView: ' + this.parentNativeView);
             throw new Error("Parent view can't have children! " + this.parentNativeView);
+        }
+    }
+
+    private postAttachUI() {
+        if (this.isComplexProperty) {
+            let nativeParent = <any>this.parentNativeView;
+            if (!nativeParent) {
+                return;
+            }
+
+            let propertyName = ViewNode.getComplexPropertyName(this.viewName);
+            let realChildren = [];
+            for (let child of this.children) {
+                if (child.nativeView) {
+                    realChildren.push(child.nativeView);
+                }
+            }
+            if (realChildren.length > 0) {
+                if (nativeParent._addArrayFromBuilder) {
+                    nativeParent._addArrayFromBuilder(propertyName, realChildren);
+                }
+                else {
+                    this.parentNode.setAttribute(propertyName, realChildren[0]);
+                }
+            }
         }
     }
 
@@ -140,6 +175,21 @@ export class ViewNode {
             ViewNode.propertyMaps.set(type, propMap);
         }
         return ViewNode.propertyMaps.get(type);
+    }
+
+    private static isComplexProperty(name: string): boolean {
+        return isString(name) && name.indexOf(".") !== -1;
+    }
+
+    private static getComplexPropertyName(fullName: string): string {
+        var name: string;
+
+        if (isString(fullName)) {
+            var names = fullName.split(".");
+            name = names[names.length - 1];
+        }
+
+        return name;
     }
 
     private configureUI() {
@@ -337,7 +387,6 @@ export class ViewNode {
             this.nativeView.cssClass = classValue;
         }
     }
-
 }
 
 export class DummyViewNode extends ViewNode {
