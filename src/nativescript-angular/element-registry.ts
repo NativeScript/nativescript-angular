@@ -1,36 +1,32 @@
 import {View} from 'ui/core/view';
 
-export interface TypeId {
-    moduleName: string;
-    className: string;
-}
-
 export interface ViewClass {
     new(): View
 }
 
-var elementMap: Map<string, TypeId> = new Map<string, TypeId>();
+export type ViewResolver = () => ViewClass;
 
-export function registerElement(elementName: string, typeId: TypeId): void {
+var elementMap: Map<string, ViewResolver> = new Map<string, ViewResolver>();
+
+export function registerElement(elementName: string, resolver: ViewResolver): void {
     if (elementMap.has(elementName)) {
         throw new Error(`Element for ${elementName} already registered.`);
     } else {
-        elementMap.set(elementName, typeId);
-        elementMap.set(elementName.toLowerCase(), typeId);
+        elementMap.set(elementName, resolver);
+        elementMap.set(elementName.toLowerCase(), resolver);
     }
 }
 
 export function getViewClass(elementName: string): ViewClass {
-    let typeId = elementMap.get(elementName) ||
+    const resolver = elementMap.get(elementName) ||
                     elementMap.get(elementName.toLowerCase());
-    if (!typeId) {
+    if (!resolver) {
         throw new TypeError(`No known component for element ${elementName}.`);
     }
     try {
-        let module = require(typeId.moduleName);
-        return module[typeId.className];
+        return resolver();
     } catch (e) {
-        throw new TypeError(`Could not load type: ${typeId.moduleName}.${typeId.className}.
+        throw new TypeError(`Could not load view for: ${elementName}.
 
 ${e}`);
     }
@@ -42,36 +38,36 @@ export function isKnownView(elementName: string): boolean {
 }
 
 //Register default NativeScript components
-registerElement("AbsoluteLayout", {className: "AbsoluteLayout", moduleName: "ui/layouts/absolute-layout"});
-registerElement("ActionBar", {className: "ActionBar", moduleName: "ui/action-bar"});
-registerElement("ActionItem", {className: "ActionItem", moduleName: "ui/action-bar"});
-registerElement("ActivityIndicator", {className: "ActivityIndicator", moduleName: "ui/activity-indicator"});
-registerElement("Border", {className: "Border", moduleName: "ui/border"});
-registerElement("Button", {className: "Button", moduleName: "ui/button"});
-registerElement("ContentView", {className: "ContentView", moduleName: "ui/content-view"});
-registerElement("DatePicker", {className: "DatePicker", moduleName: "ui/date-picker"});
-registerElement("DockLayout", {className: "DockLayout", moduleName: "ui/layouts/dock-layout"});
-registerElement("GridLayout", {className: "GridLayout", moduleName: "ui/layouts/grid-layout"});
-registerElement("HtmlView", {className: "HtmlView", moduleName: "ui/html-view"});
-registerElement("Image", {className: "Image", moduleName: "ui/image"});
+registerElement("AbsoluteLayout", () => require("ui/layouts/absolute-layout").AbsoluteLayout);
+registerElement("ActionBar",  () => require("ui/action-bar").ActionBar);
+registerElement("ActionItem",  () => require("ui/action-bar").ActionItem);
+registerElement("ActivityIndicator",  () => require("ui/activity-indicator").ActivityIndicator);
+registerElement("Border",  () => require("ui/border").Border);
+registerElement("Button",  () => require("ui/button").Button);
+registerElement("ContentView",  () => require("ui/content-view").ContentView);
+registerElement("DatePicker",  () => require("ui/date-picker").DatePicker);
+registerElement("DockLayout",  () => require("ui/layouts/dock-layout").DockLayout);
+registerElement("GridLayout",  () => require("ui/layouts/grid-layout").GridLayout);
+registerElement("HtmlView",  () => require("ui/html-view").HtmlView);
+registerElement("Image",  () => require("ui/image").Image);
 // Parse5 changes <Image> tags to <img>. WTF!
-registerElement("img", {className: "Image", moduleName: "ui/image"});
-registerElement("Label", {className: "Label", moduleName: "ui/label"});
-registerElement("ListPicker", {className: "ListPicker", moduleName: "ui/list-picker"});
-registerElement("ListView", {className: "ListView", moduleName: "ui/list-view"});
-registerElement("Page", {className: "Page", moduleName: "ui/page"});
-registerElement("Placeholder", {className: "Placeholder", moduleName: "ui/placeholder"});
-registerElement("Progress", {className: "Progress", moduleName: "ui/progress"});
-registerElement("Repeater", {className: "Repeater", moduleName: "ui/repeater"});
-registerElement("ScrollView", {className: "ScrollView", moduleName: "ui/scroll-view"});
-registerElement("SearchBar", {className: "SearchBar", moduleName: "ui/search-bar"});
-registerElement("SegmentedBar", {className: "SegmentedBar", moduleName: "ui/segmented-bar"});
-registerElement("Slider", {className: "Slider", moduleName: "ui/slider"});
-registerElement("StackLayout", {className: "StackLayout", moduleName: "ui/layouts/stack-layout"});
-registerElement("Switch", {className: "Switch", moduleName: "ui/switch"});
-registerElement("TabView", {className: "TabView", moduleName: "ui/tab-view"});
-registerElement("TextField", {className: "TextField", moduleName: "ui/text-field"});
-registerElement("TextView", {className: "TextView", moduleName: "ui/text-view"});
-registerElement("TimePicker", {className: "TimePicker", moduleName: "ui/time-picker"});
-registerElement("WebView", {className: "WebView", moduleName: "ui/web-view"});
-registerElement("WrapLayout", {className: "WrapLayout", moduleName: "ui/layouts/wrap-layout"});
+registerElement("img",  () => require("ui/image").Image);
+registerElement("Label",  () => require("ui/label").Label);
+registerElement("ListPicker",  () => require("ui/list-picker").ListPicker);
+registerElement("ListView",  () => require("ui/list-view").ListView);
+registerElement("Page",  () => require("ui/page").Page);
+registerElement("Placeholder",  () => require("ui/placeholder").Placeholder);
+registerElement("Progress",  () => require("ui/progress").Progress);
+registerElement("Repeater",  () => require("ui/repeater").Repeater);
+registerElement("ScrollView",  () => require("ui/scroll-view").ScrollView);
+registerElement("SearchBar",  () => require("ui/search-bar").SearchBar);
+registerElement("SegmentedBar",  () => require("ui/segmented-bar").SegmentedBar);
+registerElement("Slider",  () => require("ui/slider").Slider);
+registerElement("StackLayout",  () => require("ui/layouts/stack-layout").StackLayout);
+registerElement("Switch",  () => require("ui/switch").Switch);
+registerElement("TabView",  () => require("ui/tab-view").TabView);
+registerElement("TextField",  () => require("ui/text-field").TextField);
+registerElement("TextView",  () => require("ui/text-view").TextView);
+registerElement("TimePicker",  () => require("ui/time-picker").TimePicker);
+registerElement("WebView",  () => require("ui/web-view").WebView);
+registerElement("WrapLayout",  () => require("ui/layouts/wrap-layout").WrapLayout);
