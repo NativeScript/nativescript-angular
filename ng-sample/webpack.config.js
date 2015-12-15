@@ -2,8 +2,11 @@ var path = require("path");
 var webpack = require("webpack");
 
 
+console.log('PROJECT_DIR: ' + process.env.PROJECT_DIR);
+
 module.exports = {
-    context: "./platforms/android/src/main/assets/app",
+    //context: "./platforms/android/src/main/assets/app",
+    context: process.env.PROJECT_DIR,
     entry: {
         app: "./app",
     },
@@ -38,5 +41,10 @@ module.exports = {
             global: 'global',
             __dirname: '__dirname'
         }),
+        new webpack.optimize.UglifyJsPlugin({
+            compress: {
+                warnings: true
+            }
+        })
     ]
 };

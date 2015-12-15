@@ -4,6 +4,7 @@ var shelljs = require("shelljs");
 module.exports = function (logger, platformsData, projectData, hookArgs) {
     var platformData = platformsData.getPlatformData(hookArgs.platform.toLowerCase());
     var outDir = platformData.appDestinationDirectoryPath;
+    process.env.PROJECT_DIR = outDir;
 
     var gradleScript = path.join(outDir, "../../../", "build.gradle");
     shelljs.sed("-i", /aaptOptions.*\{[^\}]+\}/, "", gradleScript);
