@@ -2,8 +2,8 @@ import "globals";
 // import "./modules";
 global.registerModule("./main-page", function () { return require("./main-page"); });
 
-import * as profiling from "./profiling";
-profiling.start('application-start');
+//import * as profiling from "./profiling";
+//profiling.start('application-start');
 import application = require("application");
 
 //TODO: hide this in a separate module e.g. "angular-application"

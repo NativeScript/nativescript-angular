@@ -25,15 +25,17 @@ interface TimerInfo {
     currentStart: number;
 }
 
-var timers = new Map<string, TimerInfo>();
+if (!global.timers) {
+    global.timers = new Map<string, TimerInfo>();
+}
 export function start(name: string): void {
     if (!ENABLE_PROFILING) {
         return;
     }
 
     var info: TimerInfo;
-    if (timers.has(name)) {
-        info = timers.get(name);
+    if (global.timers.has(name)) {
+        info = global.timers.get(name);
         if (info.currentStart != 0) {
             throw new Error(`Timer already started: ${name}`);
         }
@@ -45,7 +47,7 @@ export function start(name: string): void {
             count: 0,
             currentStart: time()
         };
-        timers.set(name, info);
+        global.timers.set(name, info);
     }
 }
 
@@ -66,11 +68,11 @@ export function stop(name: string) {
     var info = pauseInternal(name);
     console.log(`---- [${name}] STOP total: ${info.totalTime} count:${info.count}`);
 
-    timers.delete(name);
+    global.timers.delete(name);
 }
 
 function pauseInternal(name: string): TimerInfo {
-    var info = timers.get(name);
+    var info = global.timers.get(name);
     if (!info) {
         throw new Error(`No timer started: ${name}`);
     }
