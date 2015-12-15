@@ -7,7 +7,12 @@ module.exports = function (logger, platformsData, projectData, hookArgs) {
     process.env.PROJECT_DIR = outDir;
 
     var gradleScript = path.join(outDir, "../../../", "build.gradle");
-    shelljs.sed("-i", /aaptOptions.*\{[^\}]+\}/, "", gradleScript);
+    var hasGradle = shelljs.test("-e", gradleScript);
+
+    if (hasGradle) {
+        //clean up any previous settings
+        shelljs.sed("-i", /aaptOptions.*\{[^\}]+\}/, "", gradleScript);
+    }
 
     if (!process.env.WEBPACK_BUILD) {
         console.log('Not webpacking...');
@@ -24,7 +29,9 @@ module.exports = function (logger, platformsData, projectData, hookArgs) {
                 var packageJson = path.join(outDir, "app", "starter.js");
                 shelljs.sed("-i", /require.*app\.js.*;/, "require('./index.js');", packageJson);
 
-                shelljs.sed("-i", /^android\s+\{/m, 'android {\n\taaptOptions { ignoreAssetsPattern "<dir>tns_modules" }', gradleScript);
+                if (hasGradle) {
+                    shelljs.sed("-i", /^android\s+\{/m, 'android {\n\taaptOptions { ignoreAssetsPattern "<dir>tns_modules" }', gradleScript);
+                }
 
                 resolve();
             } else {
