@@ -29,6 +29,7 @@
     "app/nativescript-angular/zone_patch.ts",
     "app/profiling.ts",
     "app/renderer-test.ts",
+    "app/starter.ts",
     "node_modules/tns-core-modules/tns-core-modules.d.ts"
   ],
   "filesGlob": [
