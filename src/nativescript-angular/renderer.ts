@@ -1,6 +1,5 @@
 import {Inject, Injectable} from 'angular2/src/core/di';
 import {RenderComponentTemplate} from 'angular2/src/core/render/api';
-import {DOCUMENT} from 'angular2/src/core/render/dom/dom_tokens';
 import {createRenderView, NodeFactory} from 'angular2/src/core/render/view_factory';
 import {
     Renderer,
@@ -18,19 +17,16 @@ import {
     DefaultRenderView,
     DefaultRenderFragmentRef
 } from 'angular2/src/core/render/view';
-import {DOM} from 'angular2/src/core/dom/dom_adapter';
+import {DOM} from 'angular2/src/platform/dom/dom_adapter';
 import {ViewNode, DummyViewNode} from './view_node';
 
 //var console = {log: function(msg) {}}
 
 @Injectable()
 export class NativeScriptRenderer extends Renderer implements NodeFactory<ViewNode> {
-    private _document;
-
-    constructor(@Inject(DOCUMENT) document) {
+    constructor() {
         super();
         console.log('NativeScriptRenderer created');
-        this._document = document;
     }
 
     public createProtoView(componentTemplateId: string, cmds: RenderTemplateCmd[]): RenderProtoViewRef {
@@ -152,6 +148,16 @@ export class NativeScriptRenderer extends Renderer implements NodeFactory<ViewNo
         let node = resolveBoundNode(location);
         node.setStyleProperty(styleName, styleValue);
     }
+
+    /**
+    * Used only in debug mode to serialize property changes to comment nodes,
+    * such as <template> placeholders.
+    */
+    setBindingDebugInfo(location: RenderElementRef, propertyName: string, propertyValue: string): void {
+        let node = resolveBoundNode(location);
+        console.log('NativeScriptRenderer.setBindingDebugInfo: ' + node.viewName + ', ' + propertyName + ' = ' + propertyValue);
+    }
+
 
     getNativeElementSync(location: RenderElementRef): any {
         console.log("NativeScriptRenderer.getNativeElementSync");
