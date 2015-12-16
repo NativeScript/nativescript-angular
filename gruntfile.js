@@ -36,7 +36,6 @@ module.exports = function(grunt) {
             build: {
                 src: [
                     'src/**/*.ts',
-                    'node_modules/tns-core-modules/tns-core-modules.d.ts',
                 ],
                 outDir: outDir,
                 options: {
