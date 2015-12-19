@@ -4,7 +4,7 @@ import NativeScriptPatch from "./zone_patch"
 
 var core = require('zone.js/lib/core.js');
 
-var zone = global.zone = new core.Zone()
-console.log('Created zone.');
+global.Zone = core.Zone;
+global.zone = new core.Zone();
 
 NativeScriptPatch.apply();

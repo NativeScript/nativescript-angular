@@ -1,4 +1,4 @@
-import {Inject, Component, View, NgIf, NgFor} from 'angular2/angular2';
+import {Inject, Component, View} from 'angular2/core';
 
 @Component({
     selector: 'templated-component',
@@ -8,10 +8,8 @@ export class TemplatedComponent {
 }
 
 @Component({
-	selector: 'renderer-test'
-})
-@View({
-    directives: [NgIf, NgFor, TemplatedComponent],
+	selector: 'renderer-test',
+    directives: [TemplatedComponent],
 	template: `    
 <TabView>
   <TabView.items>
@@ -23,10 +21,10 @@ export class TemplatedComponent {
             <TextField #name text='John' fontSize='20' padding='20'></TextField>
             <Button [text]='buttonText' (tap)='onSave($event, name.text, $el)'></Button>
             <Button text='Toggle details' (tap)='onToggleDetails()'></Button>
-            <TextView *ng-if='showDetails' [text]='detailsText'></TextView>
+            <TextView *ngIf='showDetails' [text]='detailsText'></TextView>
             <Label text='==============================' fontSize='20'></Label>
-            <StackLayout #more *ng-if='showDetails' orientation='vertical'>
-                <TextField *ng-for='#detailLine of detailLines' [text]='detailLine'></TextField>
+            <StackLayout #more *ngIf='showDetails' orientation='vertical'>
+                <TextField *ngFor='#detailLine of detailLines' [text]='detailLine'></TextField>
             </StackLayout>
             <Label text='==============================' fontSize='20'></Label>
         </StackLayout>
@@ -56,7 +54,7 @@ export class RendererTest {
         this.moreDetailsText = 'More details:';
 
         this.detailLines = [
-            "ng-for inside a ng-if",
+            "ngFor inside a ngIf",
             "Street address",
             "Country, city",
         ];

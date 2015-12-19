@@ -1,20 +1,20 @@
 import {StackLayout} from 'ui/layouts/stack-layout';
 import {Button} from 'ui/button';
 import {Label} from 'ui/label';
-import {Inject, Component, View, NgIf, NgFor} from 'angular2/angular2';
+import {Inject, Component, View} from 'angular2/core';
 import {ApplicationRef} from 'angular2/src/core/application_ref';
 import * as profiling from './profiling';
 
 @Component({selector: 'tree', inputs: ['data']})
 @View({
-  directives: [TreeComponent, NgIf],
+  directives: [TreeComponent],
   template:
       `<StackLayout>
           <Label [text]="data.value"></Label>
-          <StackLayout *ng-if="data.right != null">
+          <StackLayout *ngIf="data.right != null">
             <tree [data]='data.right'></tree>
           </StackLayout>
-          <StackLayout *ng-if="data.left != null">
+          <StackLayout *ngIf="data.left != null">
             <tree [data]='data.left'></tree>
           </StackLayout>
       </StackLayout>
@@ -28,7 +28,7 @@ class TreeComponent {
 	selector: 'benchmark',
 })
 @View({
-    directives: [NgIf, NgFor, TreeComponent],
+    directives: [TreeComponent],
 	template: `
     <StackLayout>
         <Label text='Benchmark!' fontSize='20' verticalAlignment='center' padding='20'></Label>
