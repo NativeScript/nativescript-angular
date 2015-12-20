@@ -1,5 +1,11 @@
 import 'reflect-metadata';
 import './polyfills/array';
+import 'globals';
+//HACK: Unhack our global lazy loaded functions hack to make zone monkey patching work.
+var __dummy_setTimeout = global.setTimeout;
+var __dummy_clearTimeout = global.clearTimeout;
+var __dummy_setInterval = global.setInterval;
+var __dummy_clearInterval = global.clearInterval;
 import './zone';
 import {isPresent, Type} from 'angular2/src/facade/lang';
 import {Promise, PromiseWrapper} from 'angular2/src/facade/async';
