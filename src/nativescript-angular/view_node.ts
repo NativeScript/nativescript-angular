@@ -123,6 +123,8 @@ export class ViewNode {
             } else {
                 parentLayout.addChild(this.nativeView);
             }
+        } else if (this.parentNativeView instanceof ContentView) {
+            (<ContentView>this.parentNativeView).content = this.nativeView;
         } else if ((<any>this.parentNativeView)._addChildFromBuilder) {
             (<any>this.parentNativeView)._addChildFromBuilder(this.viewName, this.nativeView);
         } else if (this.parentNode.isComplexProperty) {
@@ -334,10 +336,15 @@ export class ViewNode {
         this.detachUIEvents();
         if (this.nativeView) {
             let nativeParent = this.nativeView.parent;
-            if (nativeParent instanceof LayoutBase) {
-                (<LayoutBase>nativeParent).removeChild(this.nativeView);
-            } else {
-                nativeParent._removeView(this.nativeView);
+            if (nativeParent) {
+                if (nativeParent instanceof LayoutBase) {
+                    (<LayoutBase>nativeParent).removeChild(this.nativeView);
+                } else if (nativeParent instanceof ContentView) {
+                    (<ContentView>nativeParent).content = undefined;
+                }
+                else {
+                    nativeParent._removeView(this.nativeView);
+                }
             }
         }
 
