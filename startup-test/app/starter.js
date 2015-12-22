@@ -19,4 +19,4 @@ var timerEntry = {
 
 global.timers.set("application-start", timerEntry);
 
-require("./index.js");
+require("./app.js");
