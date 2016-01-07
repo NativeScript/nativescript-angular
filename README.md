@@ -45,10 +45,25 @@ $ grunt prepare
 
 The latter installs the `angular2` and `tns-core-modules` packages that you just built by running `grunt prepare` step in the project root.
 
-## Compile the ng-sample app
+## Run the ng-sample app
 
 ```
-$ grunt app
+$ tns run android
+$ tns run ios
+```
+
+## (Optional) Webpack bundling
+
+Install the webpack tool:
+
+```
+$ npm install -g webpack
+```
+
+Enable the webpack hook by setting the `WEBPACK_BUILD` environment variable. You can do it with a single command on OSX/Linux using:
+
+```
+$ env WEBPACK_BUILD=1 tns run android
 ```
 
 # Developer workflow:
