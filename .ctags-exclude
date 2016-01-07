@@ -16,6 +16,13 @@ todomvc/platforms
 todomvc/lib
 todomvc/src/typings
 todomvc/typings
+startup-test/app
+startup-test/src/angular2
+startup-test/src/nativescript-angular
+startup-test/platforms
+startup-test/lib
+startup-test/src/typings
 src/angular2
 web/*.js
+src/*.js
 deps/angular/dist
