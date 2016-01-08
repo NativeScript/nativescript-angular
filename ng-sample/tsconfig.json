@@ -10,30 +10,12 @@
         "emitDecoratorMetadata": true,
         "noEmitOnError": true
     },
-    "files": [
-        "app/app.ts",
-        "app/benchmark.ts",
-        "app/global.d.ts",
-        "app/main-page.ts",
-        "app/main-view-model.ts",
-        "app/nativescript-angular/application.d.ts",
-        "app/nativescript-angular/application.ts",
-        "app/nativescript-angular/dom_adapter.ts",
-        "app/nativescript-angular/element-registry.d.ts",
-        "app/nativescript-angular/element-registry.ts",
-        "app/nativescript-angular/polyfills/array.ts",
-        "app/nativescript-angular/renderer.ts",
-        "app/nativescript-angular/view_node.ts",
-        "app/nativescript-angular/xhr.ts",
-        "app/nativescript-angular/zone.ts",
-        "app/nativescript-angular/zone_patch.ts",
-        "app/profiling.ts",
-        "app/renderer-test.ts",
-        "app/starter.ts",
-        "node_modules/tns-core-modules/tns-core-modules.d.ts"
-    ],
     "filesGlob": [
         "node_modules/tns-core-modules/tns-core-modules.d.ts",
         "app/**/*.ts"
+    ],
+    "exclude": [
+        "node_modules",
+        "platforms"
     ]
 }

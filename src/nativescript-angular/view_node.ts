@@ -131,8 +131,8 @@ export class ViewNode {
             // complex property - we will deal with this in postAttachUI()            
         }
         else {
-            console.log('parentNativeView: ' + this.parentNativeView);
-            throw new Error("Parent view can't have children! " + this.parentNativeView);
+            // Child adding will be handled elsewhere. For example ListView
+            console.log('Child not added for parent. child: ' + this.viewName + ', parent: ' + this.parentNativeView);
         }
     }
 
