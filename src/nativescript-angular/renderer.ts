@@ -30,7 +30,7 @@ export class NativeScriptRenderer extends Renderer implements NodeFactory<ViewNo
     }
 
     public createProtoView(componentTemplateId: string, cmds: RenderTemplateCmd[]): RenderProtoViewRef {
-        console.log('NativeScriptRenderer.createProtoView: ' + cmds);
+        console.log('NativeScriptRenderer.createProtoView: ' + componentTemplateId + ' -> ' + cmds);
         return new DefaultProtoViewRef(this._componentTemplates.get(componentTemplateId), cmds);
     }
 
@@ -94,7 +94,7 @@ export class NativeScriptRenderer extends Renderer implements NodeFactory<ViewNo
         var startIndex = anchorNode.parentNode.getChildIndex(anchorNode) + 1;
 
         fragmentNodes.forEach((node, index) => {
-            console.log('attachFragmentAfterElement: child: ' + node.viewName + ' after: ' + anchorNode.viewName + ' startIndex: ' + startIndex + ' index: ' + index);
+            console.log('attachFragmentAfter: child: ' + node.viewName + ' after: ' + anchorNode.viewName + ' startIndex: ' + startIndex + ' index: ' + index);
             anchorNode.parentNode.insertChildAt(startIndex + index, node);
             node.attachToView(startIndex + index);
         });
@@ -164,6 +164,11 @@ export class NativeScriptRenderer extends Renderer implements NodeFactory<ViewNo
 
         let node = resolveBoundNode(location);
         return node.nativeView;
+    }
+
+    getViewNode(location: RenderElementRef): ViewNode {
+        console.log("NativeScriptRenderer.getViewNode");
+        return resolveBoundNode(location);
     }
 
     /**
