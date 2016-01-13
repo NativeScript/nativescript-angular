@@ -140,6 +140,9 @@ module.exports = function(grunt) {
         },[
             'angular2-*.tgz'
         ]);
+        if (packageFiles.length > 1) {
+            throw new Error('Multiple packages found!. Delete all but one: ' + packageFiles);
+        }
         var angularPackagePath = path.join(angularDistPath, packageFiles[0]);
         grunt.config('angularPackagePath', angularPackagePath);
     });
@@ -158,6 +161,9 @@ module.exports = function(grunt) {
         },[
             'tns-core-modules*.tgz'
         ]);
+        if (packageFiles.length > 1) {
+            throw new Error('Multiple packages found!. Delete all but one: ' + packageFiles);
+        }
         var nsPackagePath = path.join(nsDistPath, packageFiles[0]);
         grunt.config('nsPackagePath', nsPackagePath);
     });
