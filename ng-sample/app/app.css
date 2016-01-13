@@ -17,3 +17,11 @@ button {
     font-size: 42;
     horizontal-align: center;
 }
+
+.odd {
+    background-color: hotpink
+}
+
+.even {
+    background-color: lightseagreen;
+}

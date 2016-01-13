@@ -4,8 +4,9 @@ import {TextView} from 'ui/text-view';
 import {Page} from 'ui/page';
 
 import {nativeScriptBootstrap} from './nativescript-angular/application';
-import {RendererTest} from './renderer-test';
+// import {RendererTest} from './renderer-test';
 //import {Benchmark} from './benchmark';
+import {ListTest} from './list-test';
 
 export function createPage() {
     var page = new Page();
@@ -17,7 +18,8 @@ export function createPage() {
         profiling.start('ng-bootstrap');
         console.log('BOOTSTRAPPING...');
         //nativeScriptBootstrap(Benchmark, []).then((appRef) => {
-        nativeScriptBootstrap(RendererTest, []).then((appRef) => {
+        // nativeScriptBootstrap(RendererTest, []).then((appRef) => {
+        nativeScriptBootstrap(ListTest, []).then((appRef) => {
             profiling.stop('ng-bootstrap');
             console.log('ANGULAR BOOTSTRAP DONE.');
         }, (err) =>{
