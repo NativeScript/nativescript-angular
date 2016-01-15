@@ -11,32 +11,19 @@ export class TemplatedComponent {
 	selector: 'renderer-test',
     directives: [TemplatedComponent],
 	template: `    
-<TabView>
-  <TabView.items>
-    <TabViewItem title="First Tab">
-      <TabViewItem.view>
-        <StackLayout orientation='vertical'>
-            <templated-component></templated-component>
-            <Label [class.valid]="isValid" [class.invalid]="!isValid" text='Name' fontSize='20' verticalAlignment='center' padding='20'></Label>
-            <TextField #name text='John' fontSize='20' padding='20'></TextField>
-            <Button [text]='buttonText' (tap)='onSave($event, name.text, $el)'></Button>
-            <Button text='Toggle details' (tap)='onToggleDetails()'></Button>
-            <TextView *ngIf='showDetails' [text]='detailsText'></TextView>
-            <Label text='==============================' fontSize='20'></Label>
-            <StackLayout #more *ngIf='showDetails' orientation='vertical'>
-                <TextField *ngFor='#detailLine of detailLines' [text]='detailLine'></TextField>
-            </StackLayout>
-            <Label text='==============================' fontSize='20'></Label>
+    <StackLayout orientation='vertical'>
+        <templated-component *ngIf='showDetails'></templated-component>
+        <Label [class.valid]="isValid" [class.invalid]="!isValid" text='Name' fontSize='20' verticalAlignment='center' padding='20'></Label>
+        <TextField #name text='John' fontSize='20' padding='20'></TextField>
+        <Button [text]='buttonText' (tap)='onSave($event, name.text, $el)'></Button>
+        <Button text='Toggle details' (tap)='onToggleDetails()'></Button>
+        <TextView *ngIf='showDetails' [text]='detailsText'></TextView>
+        <Label text='==============================' fontSize='20'></Label>
+        <StackLayout #more *ngIf='showDetails' orientation='vertical'>
+            <TextField *ngFor='#detailLine of detailLines' [text]='detailLine'></TextField>
         </StackLayout>
-      </TabViewItem.view>
-    </TabViewItem>
-    <TabViewItem title="Second Tab">
-      <TabViewItem.view>
-        <Label text="Completely different tab!"></Label>
-      </TabViewItem.view>
-    </TabViewItem>
-  </TabView.items>
-</TabView>
+        <Label text='==============================' fontSize='20'></Label>
+    </StackLayout>
 `,
 })
 export class RendererTest {

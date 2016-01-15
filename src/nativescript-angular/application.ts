@@ -13,8 +13,8 @@ import {platform, ComponentRef, PLATFORM_DIRECTIVES, PLATFORM_PIPES} from 'angul
 import {bind, provide, Provider} from 'angular2/src/core/di';
 import {DOM} from 'angular2/src/platform/dom/dom_adapter';
 
-import {Renderer} from 'angular2/src/core/render/api';
-import {NativeScriptRenderer} from './renderer';
+import {RootRenderer, Renderer} from 'angular2/src/core/render/api';
+import {NativeScriptRootRenderer, NativeScriptRenderer} from './renderer';
 import {NativeScriptDomAdapter} from './dom_adapter';
 import {XHR} from 'angular2/src/compiler/xhr';
 import {FileSystemXHR} from './xhr';
@@ -34,6 +34,8 @@ export function nativeScriptBootstrap(appComponentType: any,
   NativeScriptDomAdapter.makeCurrent();
 
   let nativeScriptProviders: ProviderArray = [
+      NativeScriptRootRenderer,
+      provide(RootRenderer, {useClass: NativeScriptRootRenderer}),
       NativeScriptRenderer,
       provide(Renderer, {useClass: NativeScriptRenderer}),
       provide(XHR, {useClass: FileSystemXHR}),
