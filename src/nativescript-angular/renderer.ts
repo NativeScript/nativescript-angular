@@ -1,261 +1,160 @@
 import {Inject, Injectable} from 'angular2/src/core/di';
-import {RenderComponentTemplate} from 'angular2/src/core/render/api';
-import {createRenderView, NodeFactory} from 'angular2/src/core/render/view_factory';
 import {
     Renderer,
-    RenderEventDispatcher,
-    RenderElementRef,
-    RenderProtoViewRef,
-    RenderViewRef,
-    RenderFragmentRef,
-    RenderViewWithFragments,
-    RenderTemplateCmd
+    RootRenderer,
+    RenderComponentType
 } from 'angular2/src/core/render/api';
 import {isBlank} from 'angular2/src/facade/lang';
-import {
-    DefaultProtoViewRef,
-    DefaultRenderView,
-    DefaultRenderFragmentRef
-} from 'angular2/src/core/render/view';
 import {DOM} from 'angular2/src/platform/dom/dom_adapter';
-import {ViewNode, DummyViewNode} from './view_node';
+import {View} from "ui/core/view";
+import {topmost} from 'ui/frame';
+import * as util from "./view-util";
 
 //var console = {log: function(msg) {}}
 
 @Injectable()
-export class NativeScriptRenderer extends Renderer implements NodeFactory<ViewNode> {
-    constructor() {
+export class NativeScriptRootRenderer extends RootRenderer {
+    private _registeredComponents: Map<string, NativeScriptRenderer> = new Map<string, NativeScriptRenderer>();
+
+    renderComponent(componentProto: RenderComponentType): Renderer {
+        var renderer = this._registeredComponents.get(componentProto.id);
+        if (isBlank(renderer)) {
+            renderer = new NativeScriptRenderer(this, componentProto);
+            this._registeredComponents.set(componentProto.id, renderer);
+        }
+        return renderer;
+    }
+}
+
+@Injectable()
+export class NativeScriptRenderer extends Renderer {
+    constructor(private _rootRenderer: NativeScriptRootRenderer, private componentProto: RenderComponentType) {
         super();
         console.log('NativeScriptRenderer created');
     }
 
-    public createProtoView(componentTemplateId: string, cmds: RenderTemplateCmd[]): RenderProtoViewRef {
-        console.log('NativeScriptRenderer.createProtoView: ' + componentTemplateId + ' -> ' + cmds);
-        return new DefaultProtoViewRef(this._componentTemplates.get(componentTemplateId), cmds);
+    renderComponent(componentProto: RenderComponentType): Renderer {
+        return this._rootRenderer.renderComponent(componentProto);
     }
 
-    public createRootHostView(
-        hostProtoViewRef: RenderProtoViewRef,
-        fragmentCount: number,
-        hostElementSelector: string
-    ): RenderViewWithFragments {
-        console.log("NativeScriptRenderer.createRootHostView");
-
-        let rootViewWithFragments = this._createView(hostProtoViewRef, null);
-
-        let rootView = resolveInternalDomView(rootViewWithFragments.viewRef);
-        let rootNode = rootView.boundElements[0];
-        rootNode.attachToView();
-
-        return rootViewWithFragments;
+    selectRootElement(selector: string): util.NgView {
+        console.log('ROOT');
+        const page = <util.NgView><any>topmost().currentPage;
+        page.nodeName = 'Page';
+        return page;
     }
 
-    public createView(protoViewRef: RenderProtoViewRef, fragmentCount: number): RenderViewWithFragments {
-        console.log("NativeScriptRenderer.createView");
-        return this._createView(protoViewRef, null);
+    createViewRoot(hostElement: util.NgView): util.NgView {
+        console.log('CREATE VIEW ROOT: ' + hostElement.nodeName);
+        return hostElement;
     }
 
-    private _createView(protoViewRef: RenderProtoViewRef, inplaceElement: HTMLElement): RenderViewWithFragments {
-        var dpvr = <DefaultProtoViewRef>protoViewRef;
-        var view = createRenderView(dpvr.template, dpvr.cmds, inplaceElement, this);
-        return new RenderViewWithFragments(view, view.fragments);
+    projectNodes(parentElement: util.NgView, nodes: util.NgView[]): void {
+        console.log('NativeScriptRenderer.projectNodes');
+        nodes.forEach((node) => {
+            util.insertChild(parentElement, node);
+        });
     }
 
-    public destroyView(viewRef: RenderViewRef) {
+    attachViewAfter(anchorNode: util.NgView, viewRootNodes: util.NgView[]) {
+        console.log('NativeScriptRenderer.attachViewAfter: ' + anchorNode.nodeName + ' ' + anchorNode);
+        const parent = <util.NgView>anchorNode.parent;
+        const insertPosition = util.getChildIndex(parent, anchorNode);
+
+        viewRootNodes.forEach((node, index) => {
+            const childIndex = insertPosition + index + 1;
+            util.insertChild(parent, node, childIndex);
+            this.animateNodeEnter(node);
+        });
+    }
+
+    detachView(viewRootNodes: util.NgView[]) {
+        console.log('NativeScriptRenderer.detachView');
+        for (var i = 0; i < viewRootNodes.length; i++) {
+            var node = viewRootNodes[i];
+            util.removeChild(<util.NgView>node.parent, node);
+            this.animateNodeLeave(node);
+        }
+    }
+
+    animateNodeEnter(node: util.NgView) {
+    }
+
+    animateNodeLeave(node: util.NgView) {
+    }
+
+    public destroyView(hostElement: util.NgView, viewAllNodes: util.NgView[]) {
         console.log("NativeScriptRenderer.destroyView");
         // Seems to be called on component dispose only (router outlet)
         //TODO: handle this when we resolve routing and navigation.
     }
 
-    public getRootNodes(fragment: RenderFragmentRef): ViewNode[] {
-        return resolveInternalDomFragment(fragment);
+    setElementProperty(renderElement: util.NgView, propertyName: string, propertyValue: any) {
+        console.log("NativeScriptRenderer.setElementProperty " + renderElement.nodeName + ': ' + propertyName + " = " + propertyValue);
+        util.setProperty(renderElement, propertyName, propertyValue);
     }
 
-    public attachFragmentAfterFragment(previousFragmentRef: RenderFragmentRef, fragmentRef: RenderFragmentRef) {
-        console.log("NativeScriptRenderer.attachFragmentAfterFragment");
-
-        var previousFragmentNodes = resolveInternalDomFragment(previousFragmentRef);
-        if (previousFragmentNodes.length > 0) {
-            var sibling = previousFragmentNodes[previousFragmentNodes.length - 1];
-            let nodes = resolveInternalDomFragment(fragmentRef);
-            this.attachFragmentAfter(sibling, nodes);
-        }
+    setElementAttribute(renderElement: util.NgView, attributeName: string, attributeValue: string) {
+        console.log("NativeScriptRenderer.setElementAttribute " + renderElement.nodeName + ': ' + attributeName + " = " + attributeValue);
+        return this.setElementProperty(renderElement, attributeName, attributeValue);
     }
 
-    public attachFragmentAfterElement(location: RenderElementRef, fragmentRef: RenderFragmentRef) {
-        console.log("NativeScriptRenderer.attachFragmentAfterElement");
-
-        let element = resolveBoundNode(location);
-        let nodes = resolveInternalDomFragment(fragmentRef);
-        this.attachFragmentAfter(element, nodes);
-    }
-
-    private attachFragmentAfter(anchorNode: ViewNode, fragmentNodes: ViewNode[]) {
-        var startIndex = anchorNode.parentNode.getChildIndex(anchorNode) + 1;
-
-        fragmentNodes.forEach((node, index) => {
-            console.log('attachFragmentAfter: child: ' + node.viewName + ' after: ' + anchorNode.viewName + ' startIndex: ' + startIndex + ' index: ' + index);
-            anchorNode.parentNode.insertChildAt(startIndex + index, node);
-            node.attachToView(startIndex + index);
-        });
-    }
-
-    detachFragment(fragmentRef: RenderFragmentRef) {
-        console.log('NativeScriptRenderer.detachFragment');
-
-        var fragmentNodes = resolveInternalDomFragment(fragmentRef);
-        fragmentNodes.forEach((node) => {
-            console.log('detaching fragment child: ' + node.viewName);
-            if (node.parentNode)
-                node.parentNode.removeChild(node);
-        });
-    }
-
-    hydrateView(viewRef: RenderViewRef) {
-        console.log("NativeScriptRenderer.hydrateView ");
-        //DOING nothing -- the view init code happens on attach: ViewNode#createUI
-    }
-
-    dehydrateView(viewRef: RenderViewRef) {
-        console.log("NativeScriptRenderer.dehydrateView");
-        //TODO: detach events
-    }
-
-    setElementProperty(location: RenderElementRef, propertyName: string, propertyValue: any) {
-        console.log("NativeScriptRenderer.setElementProperty " + propertyName + " = " + propertyValue);
-
-        let node = resolveBoundNode(location);
-        node.setProperty(propertyName, propertyValue);
-    }
-
-    setElementAttribute(location: RenderElementRef, attributeName: string, attributeValue: string) {
-        console.log("NativeScriptRenderer.setElementAttribute " + attributeName + " = " + attributeValue);
-        return this.setElementProperty(location, attributeName, attributeValue);
-    }
-
-    setElementClass(location: RenderElementRef, className: string, isAdd: boolean): void {
+    setElementClass(renderElement: util.NgView, className: string, isAdd: boolean): void {
         console.log("NativeScriptRenderer.setElementClass " + className + " - " + isAdd);
 
-        let node = resolveBoundNode(location);
         if (isAdd) {
-            node.addClass(className);
+            util.addClass(renderElement, className);
         } else {
-            node.removeClass(className);
+            util.removeClass(renderElement, className);
         }
     }
 
-    setElementStyle(location: RenderElementRef, styleName: string, styleValue: string): void {
-        let node = resolveBoundNode(location);
-        node.setStyleProperty(styleName, styleValue);
+    setElementStyle(renderElement: util.NgView, styleName: string, styleValue: string): void {
+        util.setStyleProperty(renderElement, styleName, styleValue);
     }
 
     /**
     * Used only in debug mode to serialize property changes to comment nodes,
     * such as <template> placeholders.
     */
-    setBindingDebugInfo(location: RenderElementRef, propertyName: string, propertyValue: string): void {
-        let node = resolveBoundNode(location);
-        console.log('NativeScriptRenderer.setBindingDebugInfo: ' + node.viewName + ', ' + propertyName + ' = ' + propertyValue);
-    }
-
-
-    getNativeElementSync(location: RenderElementRef): any {
-        console.log("NativeScriptRenderer.getNativeElementSync");
-
-        let node = resolveBoundNode(location);
-        return node.nativeView;
-    }
-
-    getViewNode(location: RenderElementRef): ViewNode {
-        console.log("NativeScriptRenderer.getViewNode");
-        return resolveBoundNode(location);
+    setBindingDebugInfo(renderElement: util.NgView, propertyName: string, propertyValue: string): void {
+        console.log('NativeScriptRenderer.setBindingDebugInfo: ' + renderElement.nodeName + ', ' + propertyName + ' = ' + propertyValue);
     }
 
     /**
     * Calls a method on an element.
     */
-    invokeElementMethod(location: RenderElementRef, methodName: string, args: Array<any>) {
+    invokeElementMethod(renderElement: util.NgView, methodName: string, args: Array<any>) {
         console.log("NativeScriptRenderer.invokeElementMethod " + methodName + " " + args);
     }
 
-    setText(viewRef: RenderViewRef, textNodeIndex: number, text: string) {
-        console.log("NativeScriptRenderer.setText ");
+    setText(renderNode: any, text: string) {
+        console.log("NativeScriptRenderer.setText");
     }
 
-    setEventDispatcher(viewRef: RenderViewRef, dispatcher: RenderEventDispatcher) {
-        console.log("NativeScriptRenderer.setEventDispatcher ");
-        var view = resolveInternalDomView(viewRef);
-        view.eventDispatcher = dispatcher;
-    }
-
-    private _componentTemplates: Map<string, RenderComponentTemplate> = new Map<string, RenderComponentTemplate>();
-
-    public registerComponentTemplate(template: RenderComponentTemplate) {
-        console.log('NativeScriptRenderer.registerComponentTemplate: ' + template.id);
-        this._componentTemplates.set(template.id, template);
-    }
-
-    public resolveComponentTemplate(templateId: string): RenderComponentTemplate {
-        console.log('NativeScriptRenderer.resolveComponentTemplate: ' + templateId);
-        return this._componentTemplates.get(templateId);
-    }
-
-    public createRootContentInsertionPoint(): ViewNode {
-        return this.createTemplateAnchor([]);
-    }
-
-    public createTemplateAnchor(attrNameAndValues: string[]): ViewNode {
+    public createTemplateAnchor(parentElement: util.NgView): util.NgView {
         console.log('NativeScriptRenderer.createTemplateAnchor');
-        return new ViewNode(null, 'template', attrNameAndValues);
+        return util.createTemplateAnchor(parentElement);
     }
 
-    public createElement(name: string, attrNameAndValues: string[]): ViewNode {
-        console.log('NativeScriptRenderer.createElement: ' + name);
-        return new ViewNode(null, name, attrNameAndValues);
+    public createElement(parentElement: util.NgView, name: string): util.NgView {
+        console.log('NativeScriptRenderer.createElement: ' + name + ' parent: ' + parentElement + ', ' + (parentElement ? parentElement.nodeName : 'null'));
+        return util.createView(name, parentElement);
     }
 
-    public mergeElement(existing: ViewNode, attrNameAndValues: string[]){
-        console.log('NativeScriptRenderer.mergeElement: ' + existing.viewName);
-        existing.clearChildren();
-        existing.setAttributeValues(attrNameAndValues);
-    }
-
-    public createShadowRoot(host: ViewNode, templateId: string): ViewNode {
-        throw new Error('Not implemented.');
-    }
-
-    public createText(value: string): ViewNode {
+    public createText(value: string): util.NgView {
         console.log('NativeScriptRenderer.createText');
-        return new DummyViewNode(null);
+        //No text nodes in NativeScript
+        return null;
     }
 
-    public appendChild(parent: ViewNode, child: ViewNode) {
-        console.log('NativeScriptRenderer.appendChild: ' + parent.viewName + ' -> ' + child.viewName);
-        parent.appendChild(child);
-    }
-
-    public on(element: ViewNode, eventName: string, callback: Function) {
-        console.log('NativeScriptRenderer.on: ' + eventName);
+    public listen(renderElement: util.NgView, eventName: string, callback: Function) {
+        console.log('NativeScriptRenderer.listen: ' + eventName);
         let zonedCallback = global.zone.bind(callback);
-        element.on(eventName, zonedCallback);
+        renderElement.on(eventName, zonedCallback);
     }
 
-    public globalOn(target: string, eventName: string, callback: Function): Function {
+    public listenGlobal(target: string, eventName: string, callback: Function): Function {
         throw new Error('Not implemented.');
     }
-}
-
-function resolveInternalDomView(viewRef: RenderViewRef): DefaultRenderView<ViewNode> {
-  return <DefaultRenderView<ViewNode>>viewRef;
-}
-
-function resolveBoundNode(elementRef: RenderElementRef): ViewNode {
-    let view = resolveInternalDomView(elementRef.renderView);
-    //Using an Angular internal API to get the index of the bound element.
-    let internalBoundIndex = (<any>elementRef).boundElementIndex;
-    return view.boundElements[internalBoundIndex]
-}
-
-function resolveInternalDomFragment(fragmentRef: RenderFragmentRef): ViewNode[] {
-  return (<DefaultRenderFragmentRef<ViewNode>>fragmentRef).nodes;
 }

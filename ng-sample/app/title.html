@@ -1,1 +1,2 @@
-<Label text="Hello, external templates"></Label>
+<Label [text]="text + ' -> ' + renderChild"></Label>
+<templated-component *ngIf="renderChild"></templated-component>

@@ -26,3 +26,4 @@ src/angular2
 web/*.js
 src/*.js
 deps/angular/dist
+deps/angular/tmp
