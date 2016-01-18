@@ -1,18 +1,33 @@
-import {Inject, Component, View} from 'angular2/core';
+import {Component, Directive, Host, ElementRef, Input} from 'angular2/core';
 
 @Component({
     selector: 'templated-component',
+    directives: [TemplatedComponent],
     templateUrl: 'title.html'
 })
 export class TemplatedComponent {
+    @Input() public renderChild: boolean = false;
+    @Input() public text: string = "Hello, external templates";
+}
+
+@Directive({
+    selector: 'Progress',
+})
+export class ProgressComponent {
+    constructor(private element: ElementRef) {
+    }
+
+    ngOnInit() {
+        this.element.nativeElement.value = 90;
+    }
 }
 
 @Component({
 	selector: 'renderer-test',
-    directives: [TemplatedComponent],
+    directives: [TemplatedComponent, ProgressComponent],
 	template: `    
     <StackLayout orientation='vertical'>
-        <templated-component *ngIf='showDetails'></templated-component>
+        <Progress value="50" style="color: red"></Progress>
         <Label [class.valid]="isValid" [class.invalid]="!isValid" text='Name' fontSize='20' verticalAlignment='center' padding='20'></Label>
         <TextField #name text='John' fontSize='20' padding='20'></TextField>
         <Button [text]='buttonText' (tap)='onSave($event, name.text, $el)'></Button>
@@ -23,6 +38,7 @@ export class TemplatedComponent {
             <TextField *ngFor='#detailLine of detailLines' [text]='detailLine'></TextField>
         </StackLayout>
         <Label text='==============================' fontSize='20'></Label>
+        <templated-component [renderChild]="true"></templated-component>
     </StackLayout>
 `,
 })
@@ -41,9 +57,8 @@ export class RendererTest {
         this.moreDetailsText = 'More details:';
 
         this.detailLines = [
-            "ngFor inside a ngIf",
-            "Street address",
-            "Country, city",
+            "ngFor inside a ngIf 1",
+            "ngFor inside a ngIf 2",
         ];
     }
 

@@ -35,5 +35,9 @@
     "filesGlob": [
         "node_modules/tns-core-modules/tns-core-modules.d.ts",
         "app/**/*.ts"
+    ],
+    "exclude": [
+        "node_modules",
+        "platforms"
     ]
 }
