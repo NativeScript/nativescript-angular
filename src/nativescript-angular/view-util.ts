@@ -20,23 +20,23 @@ export type NgLayoutBase = LayoutBase & ViewExtensions;
 export type NgContentView = ContentView & ViewExtensions;
 export type NgAddChildFromBuilder = View & AddChildFromBuilder & ViewExtensions;
 
-function isView(view: any): view is NgView {
+export function isView(view: any): view is NgView {
     return view instanceof View;
 }
 
-function isLayout(view: any): view is NgLayoutBase {
+export function isLayout(view: any): view is NgLayoutBase {
     return view instanceof LayoutBase;
 }
 
-function isContentView(view: any): view is NgContentView {
+export function isContentView(view: any): view is NgContentView {
     return view instanceof ContentView;
 }
 
-function hasBuilderHooks(view: any): view is NgAddChildFromBuilder {
+export function hasBuilderHooks(view: any): view is NgAddChildFromBuilder {
     return view._addChildFromBuilder !== undefined;
 }
 
-function isViewContainer(view: any): view is ViewContainer {
+export function isViewContainer(view: any): view is ViewContainer {
     return view instanceof ViewContainer;
 }
 
@@ -46,10 +46,6 @@ function isComplexProperty(view: NgView) {
 }
 
 export function insertChild(parent: any, child: NgView, atIndex = -1) {
-    if (child.nodeName === 'Switch') {
-        console.log('inserting switch into: ' + parent);
-    }
-
     if (isLayout(parent)) {
         if (atIndex !== -1) {
             parent.insertChild(child, atIndex);
@@ -94,7 +90,7 @@ export function getChildIndex(parent: any, child: NgView) {
     } else if (isContentView(parent)) {
         return child === parent.content ? 0 : -1;
     } else {
-        throw new Error("Parent can't contain children: " + parent.nodeName + ', ' + parent);
+        throw new Error("Parent can't contain children: " + parent);
     }
 }
 
@@ -112,7 +108,7 @@ export function createView(name: string, parent: NgView): NgView {
         const viewClass = getViewClass(name);
         return createAndAttach(name, viewClass, parent);
    } else {
-        return createViewContainer(parent);
+        return createViewContainer(name, parent);
     }
 }
 
@@ -130,12 +126,14 @@ export function createTemplateContainer(parsedNode: NgView) {
     return templateContainer;
 }
 
-export function createViewContainer(parentElement: NgView) {
+export function createViewContainer(name: string, parentElement: NgView) {
     //HACK: Using a ContentView here, so that it creates a native View object
     console.log('Creating view container in:' + parentElement);
-    const anchor = createAndAttach('ViewContainer', ViewContainer, parentElement);
-    anchor.visibility = "collapse";
-    return anchor;
+
+    const container = createAndAttach('ViewContainer', ViewContainer, parentElement);
+    (<ViewContainer>container).componentName = name;
+    container.visibility = "collapse";
+    return container;
 }
 
 export function createTemplateAnchor(parentElement: NgView) {
@@ -162,7 +160,7 @@ export function setProperty(view: NgView, attributeName: string, value: any): vo
     let propMap = getProperties(view);
 
     if (attributeName === "class") {
-        this.setClasses(value);
+        setClasses(view, value);
     } else if (isXMLAttribute(attributeName)) {
         view._applyXmlAttribute(attributeName, value);
     } else if (specialSetter) {

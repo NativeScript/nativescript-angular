@@ -5,12 +5,14 @@ import {
     insertChild,
     removeChild
 } from "./view-util";
+import {View} from "ui/core/view";
 import {ContentView} from "ui/content-view";
 
 //var console = {log: function(msg) {}}
 
 export class ViewContainer extends ContentView implements ViewExtensions {
     public nodeName = "ViewContainer";
+    public componentName = "";
     public templateParent: NgView = null;
     public cssClasses = new Map<string, boolean>();
 
@@ -37,17 +39,6 @@ export class ViewContainer extends ContentView implements ViewExtensions {
             console.log('Got anchorIndex: ' + this._anchorIndex + ' - ' + this.parent + ' - ' + this + ' --- ' + (<any>this.parent)._subViews);
         }
         return this._anchorIndex;
-    }
-
-    private get visualParent(): NgView {
-        if (this._visualParent === null) {
-            if (this.parent instanceof ViewContainer) {
-                this._visualParent = (<ViewContainer>this.parent).visualParent;
-            } else {
-                this._visualParent = <NgView>this.parent;
-            }
-        }
-        return this._visualParent;
     }
 
     private getParentIndex(childIndex: number): number {
