@@ -1,4 +1,6 @@
 import {Component, Directive, Host, ElementRef, Input} from 'angular2/core';
+import { Observable } from 'data/observable';
+import { TextValueAccessor } from './nativescript-angular/text-value-accessor';
 
 @Component({
     selector: 'templated-component',
@@ -24,10 +26,12 @@ export class ProgressComponent {
 
 @Component({
 	selector: 'renderer-test',
-    directives: [TemplatedComponent, ProgressComponent],
+    directives: [TemplatedComponent, ProgressComponent, TextValueAccessor],
 	template: `    
     <StackLayout orientation='vertical'>
         <Progress value="50" style="color: red"></Progress>
+        <Label [text]='model.test'></Label>
+        <TextField #name [ngModel]='model.test' (ngModelChange)="model.test=setUpperCase($event)" fontSize='20' padding='20'></TextField>
         <Label [class.valid]="isValid" [class.invalid]="!isValid" text='Name' fontSize='20' verticalAlignment='center' padding='20'></Label>
         <TextField #name text='John' fontSize='20' padding='20'></TextField>
         <Button [text]='buttonText' (tap)='onSave($event, name.text, $el)'></Button>
@@ -49,12 +53,14 @@ export class RendererTest {
     public moreDetailsText: string = "";
     public detailLines: Array<string> = [];
     public isValid: boolean = true;
+    public model: Observable;
 
     constructor() {
         this.buttonText = 'Save...'
         this.showDetails = true;
         this.detailsText = 'plain ng-if directive \ndetail 1-2-3...';
         this.moreDetailsText = 'More details:';
+        this.model = new Observable({'test': 'Jack'});
 
         this.detailLines = [
             "ngFor inside a ngIf 1",
@@ -67,8 +73,22 @@ export class RendererTest {
         alert(name);
     }
 
+    testLoaded($event) {
+        console.log("testLoaded called with event args: " + $event);
+    }
+
     onToggleDetails() {
         console.log('onToggleDetails current: ' + this.showDetails);
         this.showDetails = !this.showDetails;
+    }
+
+    setUpperCase($event) {
+        if ($event.value && $event.value.toUpperCase) {
+            return $event.value.toUpperCase();
+        }
+        if (typeof $event === "string") {
+            return $event.toUpperCase();
+        }
+        return $event;
     }
 }
