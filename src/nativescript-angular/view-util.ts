@@ -4,7 +4,6 @@ import {Placeholder} from "ui/placeholder";
 import {ContentView} from 'ui/content-view';
 import {LayoutBase} from 'ui/layouts/layout-base';
 import {ViewClass, getViewClass, isKnownView} from './element-registry';
-import {ViewContainer} from './view-container';
 import {getSpecialPropertySetter} from "ui/builder/special-properties";
 
 //var console = {log: function(msg) {}}
@@ -36,10 +35,6 @@ export function hasBuilderHooks(view: any): view is NgAddChildFromBuilder {
     return view._addChildFromBuilder !== undefined;
 }
 
-export function isViewContainer(view: any): view is ViewContainer {
-    return view instanceof ViewContainer;
-}
-
 function isComplexProperty(view: NgView) {
     const name = view.nodeName
     return isString(name) && name.indexOf(".") !== -1;
@@ -52,8 +47,6 @@ export function insertChild(parent: any, child: NgView, atIndex = -1) {
         } else {
             parent.addChild(child);
         }
-    } else if (isViewContainer(parent)) {
-        parent.insertChild(child, atIndex);
     } else if (isContentView(parent)) {
         parent.content = child;
     } else if (hasBuilderHooks(parent)) {
@@ -61,15 +54,10 @@ export function insertChild(parent: any, child: NgView, atIndex = -1) {
     } else {
         throw new Error("Parent can't contain children: " + parent.nodeName + ', ' + parent);
     }
-    if (child instanceof ViewContainer) {
-        (<ViewContainer>child).addedToView();
-    }
 }
 
 export function removeChild(parent: any, child: NgView) {
     if (isLayout(parent)) {
-        parent.removeChild(child);
-    } else if (isViewContainer(parent)) {
         parent.removeChild(child);
     } else if (isContentView(parent)) {
         if (parent.content === child) {
@@ -84,8 +72,6 @@ export function removeChild(parent: any, child: NgView) {
 
 export function getChildIndex(parent: any, child: NgView) {
     if (isLayout(parent)) {
-        return parent.getChildIndex(child);
-    } else if (isViewContainer(parent)) {
         return parent.getChildIndex(child);
     } else if (isContentView(parent)) {
         return child === parent.content ? 0 : -1;
@@ -119,21 +105,13 @@ export function createText(value: string): NgView {
     return text;
 }
 
-export function createTemplateContainer(parsedNode: NgView) {
-    const parent = <NgView> parsedNode.parent;
-    const templateContainer = createView('StackLayout', parent);
-    //templateContainer.visibility = "collapse";
-    return templateContainer;
-}
-
 export function createViewContainer(name: string, parentElement: NgView) {
     //HACK: Using a ContentView here, so that it creates a native View object
     console.log('Creating view container in:' + parentElement);
 
-    const container = createAndAttach('ViewContainer', ViewContainer, parentElement);
-    (<ViewContainer>container).componentName = name;
-    container.visibility = "collapse";
-    return container;
+    const layout = createView('StackLayout', parentElement);
+    layout.nodeName = 'ViewContainer';
+    return layout;
 }
 
 export function createTemplateAnchor(parentElement: NgView) {
