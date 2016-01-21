@@ -1,5 +1,5 @@
 import {isString} from "utils/types";
-import {View, AddChildFromBuilder} from "ui/core/view";
+import {View} from "ui/core/view";
 import {Placeholder} from "ui/placeholder";
 import {ContentView} from 'ui/content-view';
 import {LayoutBase} from 'ui/layouts/layout-base';
@@ -17,7 +17,6 @@ export interface ViewExtensions {
 export type NgView = View & ViewExtensions;
 export type NgLayoutBase = LayoutBase & ViewExtensions;
 export type NgContentView = ContentView & ViewExtensions;
-export type NgAddChildFromBuilder = View & AddChildFromBuilder & ViewExtensions;
 
 export function isView(view: any): view is NgView {
     return view instanceof View;
@@ -29,10 +28,6 @@ export function isLayout(view: any): view is NgLayoutBase {
 
 export function isContentView(view: any): view is NgContentView {
     return view instanceof ContentView;
-}
-
-export function hasBuilderHooks(view: any): view is NgAddChildFromBuilder {
-    return view._addChildFromBuilder !== undefined;
 }
 
 function isComplexProperty(view: NgView) {
@@ -49,10 +44,8 @@ export function insertChild(parent: any, child: NgView, atIndex = -1) {
         }
     } else if (isContentView(parent)) {
         parent.content = child;
-    } else if (hasBuilderHooks(parent)) {
-        parent._addChildFromBuilder(this.viewName, this.nativeView);
     } else {
-        throw new Error("Parent can't contain children: " + parent.nodeName + ', ' + parent);
+        //throw new Error("Parent can't contain children: " + parent.nodeName + ', ' + parent);
     }
 }
 
@@ -66,7 +59,7 @@ export function removeChild(parent: any, child: NgView) {
     } else if (isView(parent)) {
         parent._removeView(child);
     } else {
-        throw new Error('Unknown parent type: ' + parent);
+        //throw new Error('Unknown parent type: ' + parent);
     }
 }
 
@@ -76,7 +69,7 @@ export function getChildIndex(parent: any, child: NgView) {
     } else if (isContentView(parent)) {
         return child === parent.content ? 0 : -1;
     } else {
-        throw new Error("Parent can't contain children: " + parent);
+        //throw new Error("Parent can't contain children: " + parent);
     }
 }
 
@@ -109,8 +102,8 @@ export function createViewContainer(name: string, parentElement: NgView) {
     //HACK: Using a ContentView here, so that it creates a native View object
     console.log('Creating view container in:' + parentElement);
 
-    const layout = createView('StackLayout', parentElement);
-    layout.nodeName = 'ViewContainer';
+    const layout = createView('ProxyViewContainer', parentElement);
+    layout.nodeName = 'ProxyViewContainer';
     return layout;
 }
 
@@ -118,6 +111,7 @@ export function createTemplateAnchor(parentElement: NgView) {
     //HACK: Using a ContentView here, so that it creates a native View object
     const anchor = createAndAttach('ContentView', ContentView, parentElement);
     anchor.visibility = "collapse";
+    anchor.templateParent = parentElement;
     return anchor;
 }
 
