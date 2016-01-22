@@ -70,10 +70,10 @@ $ env WEBPACK_BUILD=1 tns run android
 
 1. Make changes to `src/nativescript-angular`, and rebuild with `grunt build`. If succesful, you should get a npm package in the project root.
 2. Navigate to the ng-sample subdir: `$ cd ng-sample`. Make some changes to the app or `../src/nativescript-angular`.
-2. Compile app: `$ grunt app`
-3. Run with `$ tns run android` or `$ tns run ios`
+3. Compile app: `$ grunt app`
+4. Run with `$ tns run android` or `$ tns run ios`
 
-Protip: combine #2 and #3 above in a single command run from the project root directory (works only on Unixy shells):
+Protip: combine #3 and #4 above in a single command run from the project root directory (works only on Unixy shells):
 
 ```
 $ grunt app && tns run android
