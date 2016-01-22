@@ -58,7 +58,7 @@ export class NativeScriptRenderer extends Renderer {
 
     attachViewAfter(anchorNode: util.NgView, viewRootNodes: util.NgView[]) {
         console.log('NativeScriptRenderer.attachViewAfter: ' + anchorNode.nodeName + ' ' + anchorNode);
-        const parent = <util.NgView>anchorNode.parent;
+        const parent = (<util.NgView>anchorNode.parent || anchorNode.templateParent);
         const insertPosition = util.getChildIndex(parent, anchorNode);
 
         viewRootNodes.forEach((node, index) => {
@@ -90,12 +90,12 @@ export class NativeScriptRenderer extends Renderer {
     }
 
     setElementProperty(renderElement: util.NgView, propertyName: string, propertyValue: any) {
-        console.log("NativeScriptRenderer.setElementProperty " + renderElement.nodeName + ': ' + propertyName + " = " + propertyValue);
+        console.log("NativeScriptRenderer.setElementProperty " + renderElement + ': ' + propertyName + " = " + propertyValue);
         util.setProperty(renderElement, propertyName, propertyValue);
     }
 
     setElementAttribute(renderElement: util.NgView, attributeName: string, attributeValue: string) {
-        console.log("NativeScriptRenderer.setElementAttribute " + renderElement.nodeName + ': ' + attributeName + " = " + attributeValue);
+        console.log("NativeScriptRenderer.setElementAttribute " + renderElement + ': ' + attributeName + " = " + attributeValue);
         return this.setElementProperty(renderElement, attributeName, attributeValue);
     }
 
@@ -118,7 +118,7 @@ export class NativeScriptRenderer extends Renderer {
     * such as <template> placeholders.
     */
     setBindingDebugInfo(renderElement: util.NgView, propertyName: string, propertyValue: string): void {
-        console.log('NativeScriptRenderer.setBindingDebugInfo: ' + renderElement.nodeName + ', ' + propertyName + ' = ' + propertyValue);
+        console.log('NativeScriptRenderer.setBindingDebugInfo: ' + renderElement + ', ' + propertyName + ' = ' + propertyValue);
     }
 
     /**
@@ -144,8 +144,7 @@ export class NativeScriptRenderer extends Renderer {
 
     public createText(value: string): util.NgView {
         console.log('NativeScriptRenderer.createText');
-        //No text nodes in NativeScript
-        return null;
+        return util.createText(value);;
     }
 
     public listen(renderElement: util.NgView, eventName: string, callback: Function) {
