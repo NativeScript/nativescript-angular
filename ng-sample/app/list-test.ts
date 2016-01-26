@@ -26,22 +26,18 @@ export class ItemComponent {
     template: `
             <GridLayout rows="auto, *, auto">
             <Label row="0" text="-==START==-" fontSize="20"></Label>
-            
             <GridLayout row="1">
-            
                 <ListView [items]="myItems" (itemTap)="onItemTap($event)">
                     <item-template>
                         <template #item="item" #i="index" #odd="odd" #even="even">
                             <StackLayout [class.odd]="odd" [class.even]="even">
-                                <Label [text]='"index: " + index'></Label>                        
-                                <Label [text]='"[" + item.id +"]" + item.name'></Label>
+                                <Label [text]='"index: " + i'></Label>
+                                <Label [text]='"[" + item.id +"] " + item.name'></Label>
                             </StackLayout>
                         </template>
                     </item-template>
-                </ListView>   
-                         
+                </ListView>
             </GridLayout>
-            
             <Label row="2" text="-==END==-" fontSize="20"></Label>
         </GridLayout>
     `
