@@ -6,7 +6,8 @@ import {Page} from 'ui/page';
 import {nativeScriptBootstrap} from './nativescript-angular/application';
 // import {RendererTest} from './renderer-test';
 //import {Benchmark} from './benchmark';
-import {ListTest} from './list-test';
+//import {ListTest} from './list-test';
+import {ListTestAsync} from './list-test-async';
 
 export function createPage() {
     var page = new Page();
@@ -19,7 +20,8 @@ export function createPage() {
         console.log('BOOTSTRAPPING...');
         //nativeScriptBootstrap(Benchmark, []).then((appRef) => {
         // nativeScriptBootstrap(RendererTest, []).then((appRef) => {
-        nativeScriptBootstrap(ListTest, []).then((appRef) => {
+        //nativeScriptBootstrap(ListTest, []).then((appRef) => {
+        nativeScriptBootstrap(ListTestAsync, []).then((appRef) => {
             profiling.stop('ng-bootstrap');
             console.log('ANGULAR BOOTSTRAP DONE.');
         }, (err) =>{
