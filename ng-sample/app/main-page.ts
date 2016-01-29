@@ -3,7 +3,7 @@ import {topmost} from 'ui/frame';
 import {TextView} from 'ui/text-view';
 import {Page} from 'ui/page';
 
-import {nativeScriptBootstrap} from './nativescript-angular/application';
+import {bootstrap} from './nativescript-angular/application';
 // import {Benchmark} from './performance/benchmark';
 // import {RendererTest} from './examples/renderer-test';
 // import {ListTest} from './examples/list/list-test';
@@ -19,11 +19,11 @@ export function createPage() {
 
         profiling.start('ng-bootstrap');
         console.log('BOOTSTRAPPING...');
-        // nativeScriptBootstrap(Benchmark, []).then((appRef) => {
-        // nativeScriptBootstrap(RendererTest, []).then((appRef) => {
-        // nativeScriptBootstrap(ListTest, []).then((appRef) => {
-        // nativeScriptBootstrap(ListTestAsync, []).then((appRef) => {
-        nativeScriptBootstrap(ImageTest, []).then((appRef) => {
+        //bootstrap(Benchmark, []).then((appRef) => {
+        // bootstrap(RendererTest, []).then((appRef) => {
+        //bootstrap(ListTest, []).then((appRef) => {
+        //bootstrap(ListTestAsync, []).then((appRef) => {
+        bootstrap(ImageTest, []).then((appRef) => {
             profiling.stop('ng-bootstrap');
             console.log('ANGULAR BOOTSTRAP DONE.');
         }, (err) =>{

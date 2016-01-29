@@ -28,34 +28,72 @@ import {NS_DIRECTIVES} from './directives/ns-directives';
 
 import {bootstrap as angularBootstrap} from 'angular2/bootstrap';
 
+import { Page } from 'ui/page';
+import {topmost} from 'ui/frame';
+import {TextView} from 'ui/text-view';
+import application = require('application');
+
 export type ProviderArray = Array<Type | Provider | any[]>;
 
-export function nativeScriptBootstrap(appComponentType: any,
-                          customProviders: ProviderArray = null): Promise<ComponentRef> {
-  NativeScriptDomAdapter.makeCurrent();
+export function bootstrap(appComponentType: any,
+                          customProviders: ProviderArray = null, appOptions: any = null) : Promise<ComponentRef> {
+    NativeScriptDomAdapter.makeCurrent();
 
-  let nativeScriptProviders: ProviderArray = [
-      NativeScriptRootRenderer,
-      provide(RootRenderer, {useClass: NativeScriptRootRenderer}),
-      NativeScriptRenderer,
-      provide(Renderer, {useClass: NativeScriptRenderer}),
-      provide(XHR, {useClass: FileSystemXHR}),
-      provide(ExceptionHandler, {useFactory: () => new ExceptionHandler(DOM, true), deps: []}),
+    let nativeScriptProviders: ProviderArray = [
+        NativeScriptRootRenderer,
+        provide(RootRenderer, {useClass: NativeScriptRootRenderer}),
+        NativeScriptRenderer,
+        provide(Renderer, {useClass: NativeScriptRenderer}),
+        provide(XHR, {useClass: FileSystemXHR}),
+        provide(ExceptionHandler, {useFactory: () => new ExceptionHandler(DOM, true), deps: []}),
 
-      provide(PLATFORM_PIPES, {useValue: COMMON_PIPES, multi: true}),
-      provide(PLATFORM_DIRECTIVES, {useValue: COMMON_DIRECTIVES, multi: true}),
-      provide(PLATFORM_DIRECTIVES, {useValue: NS_DIRECTIVES, multi: true}),
+        provide(PLATFORM_PIPES, {useValue: COMMON_PIPES, multi: true}),
+        provide(PLATFORM_DIRECTIVES, {useValue: COMMON_DIRECTIVES, multi: true}),
+        provide(PLATFORM_DIRECTIVES, {useValue: NS_DIRECTIVES, multi: true}),
 
-      APPLICATION_COMMON_PROVIDERS,
-      COMPILER_PROVIDERS,
-      PLATFORM_COMMON_PROVIDERS,
-      FORM_PROVIDERS,
-  ];
+        APPLICATION_COMMON_PROVIDERS,
+        COMPILER_PROVIDERS,
+        PLATFORM_COMMON_PROVIDERS,
+        FORM_PROVIDERS,
+    ];
 
-  var appProviders = [];
-  if (isPresent(customProviders)) {
-      appProviders.push(customProviders);
-  }
+    var appProviders = [];
+    if (isPresent(customProviders)) {
+        appProviders.push(customProviders);
+    }
+  
+    return platform(nativeScriptProviders).application(appProviders).bootstrap(appComponentType);
+}
 
-  return platform(nativeScriptProviders).application(appProviders).bootstrap(appComponentType);
+export function nativeScriptBootstrap(appComponentType: any, customProviders?: ProviderArray, appOptions?: any) {
+    if (appOptions && appOptions.cssFile) {
+        application.cssFile = appOptions.cssFile;
+    }
+    application.start({
+        create: (): Page => {
+            let page = new Page();
+            
+            page.on('loaded', (args) => {
+                //profiling.stop('application-start');
+                console.log('Page loaded');
+
+                //profiling.start('ng-bootstrap');
+                console.log('BOOTSTRAPPING...');
+                bootstrap(appComponentType).then((appRef) => {
+                    //profiling.stop('ng-bootstrap');
+                    console.log('ANGULAR BOOTSTRAP DONE.');
+                }, (err) =>{
+                    console.log('ERROR BOOTSTRAPPING ANGULAR');
+                    let errorMessage = err.message + "\n\n" + err.stack;
+                    console.log(errorMessage);
+
+                    let view = new TextView();
+                    view.text = errorMessage;
+                    topmost().currentPage.content = view;
+                });
+            });
+            
+            return page;
+        }
+    });
 }
