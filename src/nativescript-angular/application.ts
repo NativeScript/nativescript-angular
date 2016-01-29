@@ -36,7 +36,7 @@ import application = require('application');
 export type ProviderArray = Array<Type | Provider | any[]>;
 
 export function bootstrap(appComponentType: any,
-                          customProviders: ProviderArray = null, appOptions: any = null) : Promise<ComponentRef> {
+                          customProviders: ProviderArray = null) : Promise<ComponentRef> {
     NativeScriptDomAdapter.makeCurrent();
 
     let nativeScriptProviders: ProviderArray = [
@@ -80,7 +80,7 @@ export function nativeScriptBootstrap(appComponentType: any, customProviders?: P
 
                 //profiling.start('ng-bootstrap');
                 console.log('BOOTSTRAPPING...');
-                bootstrap(appComponentType).then((appRef) => {
+                bootstrap(appComponentType, customProviders).then((appRef) => {
                     //profiling.stop('ng-bootstrap');
                     console.log('ANGULAR BOOTSTRAP DONE.');
                 }, (err) =>{
