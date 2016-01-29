@@ -25,3 +25,20 @@ button {
 .even {
     background-color: lightseagreen;
 }
+
+.btn {
+    horizontal-align: stretch;
+    text-align: center;
+    color:#3F60F9;
+}
+
+.btn-primary {
+  background-color: #3F60F9;
+  color: #fff;
+  padding: 10px 20px;
+}
+
+.input {
+  margin: 30px;
+  color:#444;
+}
