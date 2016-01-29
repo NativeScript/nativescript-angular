@@ -32,9 +32,9 @@ class TreeComponent {
 	template: `
     <StackLayout>
         <Label text='Benchmark!' fontSize='20' verticalAlignment='center' padding='20'></Label>
-        <Button Text="Baseline test" (tap)="baselineTest(baseline)"></Button>
+        <Button text="Baseline test" (tap)="baselineTest(baseline)"></Button>
         <StackLayout #baseline></StackLayout>
-        <Button Text="Component test" (tap)="componentTest()"></Button>
+        <Button text="Component test" (tap)="componentTest()"></Button>
         <StackLayout #component>
             <tree [data]='initDataNg'></tree>
         </StackLayout>

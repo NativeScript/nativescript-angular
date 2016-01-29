@@ -66,4 +66,6 @@ module.exports = function(grunt) {
         "updateModules",
         "updateAngular",
     ]);
+
+    grunt.registerTask("default", ["prepare"]);
 }
