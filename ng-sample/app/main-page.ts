@@ -20,7 +20,7 @@ export function createPage() {
         profiling.start('ng-bootstrap');
         console.log('BOOTSTRAPPING...');
         //bootstrap(Benchmark, []).then((appRef) => {
-        // bootstrap(RendererTest, []).then((appRef) => {
+        //bootstrap(RendererTest, []).then((appRef) => {
         //bootstrap(ListTest, []).then((appRef) => {
         //bootstrap(ListTestAsync, []).then((appRef) => {
         bootstrap(ImageTest, []).then((appRef) => {
