@@ -1,6 +1,6 @@
 import {Component, Directive, Host, ElementRef, Input} from 'angular2/core';
 import { Observable } from 'data/observable';
-import { TextValueAccessor } from './nativescript-angular/text-value-accessor';
+import { TextValueAccessor } from '../nativescript-angular/text-value-accessor';
 
 @Component({
     selector: 'templated-component',

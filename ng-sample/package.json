@@ -46,6 +46,9 @@
     "id": "org.nativescript.ngsample",
     "tns-android": {
       "version": "1.5.1"
+    },
+    "tns-ios": {
+      "version": "1.5.2"
     }
   }
 }
