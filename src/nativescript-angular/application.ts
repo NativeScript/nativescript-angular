@@ -73,7 +73,8 @@ export function nativeScriptBootstrap(appComponentType: any, customProviders?: P
         create: (): Page => {
             let page = new Page();
             
-            page.on('loaded', (args) => {
+            let onLoadedHandler = function(args) {
+                page.off('loaded', onLoadedHandler);
                 //profiling.stop('application-start');
                 console.log('Page loaded');
 
@@ -91,7 +92,9 @@ export function nativeScriptBootstrap(appComponentType: any, customProviders?: P
                     view.text = errorMessage;
                     topmost().currentPage.content = view;
                 });
-            });
+            }
+            
+            page.on('loaded', onLoadedHandler);
             
             return page;
         }
