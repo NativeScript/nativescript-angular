@@ -7,7 +7,8 @@ import {nativeScriptBootstrap} from './nativescript-angular/application';
 // import {Benchmark} from './performance/benchmark';
 // import {RendererTest} from './examples/renderer-test';
 // import {ListTest} from './examples/list/list-test';
-import {ListTestAsync} from './examples/list/list-test-async';
+// import {ListTestAsync} from './examples/list/list-test-async';
+import {ImageTest} from './examples/image/image-test';
 
 export function createPage() {
     var page = new Page();
@@ -21,7 +22,8 @@ export function createPage() {
         // nativeScriptBootstrap(Benchmark, []).then((appRef) => {
         // nativeScriptBootstrap(RendererTest, []).then((appRef) => {
         // nativeScriptBootstrap(ListTest, []).then((appRef) => {
-        nativeScriptBootstrap(ListTestAsync, []).then((appRef) => {
+        // nativeScriptBootstrap(ListTestAsync, []).then((appRef) => {
+        nativeScriptBootstrap(ImageTest, []).then((appRef) => {
             profiling.stop('ng-bootstrap');
             console.log('ANGULAR BOOTSTRAP DONE.');
         }, (err) =>{
