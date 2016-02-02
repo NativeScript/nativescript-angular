@@ -31,6 +31,9 @@ module.exports = function(grunt) {
         }
     };
 
+    var angularSubDirIgnoreError = JSON.parse(JSON.stringify(angularSubDir));
+    angularSubDirIgnoreError.failOnError = false;
+
     grunt.initConfig({
         ts: {
             build: {
@@ -105,7 +108,7 @@ module.exports = function(grunt) {
             },
             installAngularDependencies: {
                 command: 'npm install',
-                options: angularSubDir
+                options: angularSubDirIgnoreError
             },
             compileAngular: {
                 command: 'gulp build.js.cjs',
