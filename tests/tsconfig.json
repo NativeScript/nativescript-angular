@@ -1,0 +1,27 @@
+{
+    "compilerOptions": {
+        "outDir": "app",
+        "rootDir": "app",
+        "module": "commonjs",
+        "target": "es5",
+        "inlineSourceMap": true,
+        "experimentalDecorators": true,
+        "removeComments": false,
+        "emitDecoratorMetadata": true,
+        "noEmitOnError": true
+    },
+    "files": [
+        "app/main.ts",
+        "app/global.d.ts",
+        "app/app.component.ts",
+        "node_modules/tns-core-modules/tns-core-modules.d.ts"
+    ],
+    "filesGlob": [
+        "node_modules/tns-core-modules/tns-core-modules.d.ts",
+        "app/**/*.ts"
+    ],
+    "exclude": [
+        "node_modules",
+        "platforms"
+    ]
+}

@@ -1,0 +1,48 @@
+{
+  "nativescript": {
+    "id": "org.nativescript.helloworldng",
+    "tns-ios": {
+      "version": "1.5.2"
+    },
+    "tns-android": {
+      "version": "1.5.1"
+    }
+  },
+  "name": "nativescript-hello-world-ng",
+  "main": "app.js",
+  "version": "1.0.0",
+  "author": "Telerik <support@telerik.com>",
+  "description": "Nativescript Angular Hello World template",
+  "license": "BSD",
+  "keywords": [
+    "telerik",
+    "mobile",
+    "angular",
+    "nativescript",
+    "{N}",
+    "tns",
+    "appbuilder",
+    "template"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/NativeScript/template-hello-world-ng"
+  },
+  "homepage": "http://nativescript.org",
+  "dependencies": {
+    "tns-core-modules": "1.6.0-angular-2",
+    "angular2": "2.0.0-beta.2",
+    "parse5": "1.4.2",
+    "punycode": "1.3.2",
+    "querystring": "0.2.0",
+    "url": "0.10.3",
+    "reflect-metadata": "0.1.2",
+    "rxjs": "5.0.0-beta.0",
+    "zone.js": "0.5.10"
+  },
+  "devDependencies": {
+    "nativescript-dev-typescript": "^0.2.2",
+    "shelljs": "^0.5.3",
+    "typescript": "^1.7.5"
+  }
+}

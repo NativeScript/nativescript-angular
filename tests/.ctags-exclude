@@ -1,0 +1,8 @@
+node_modules
+bin
+platforms
+app/*.js
+built
+
+deps/NativeScript/node_modules
+deps/NativeScript/bin
