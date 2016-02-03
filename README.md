@@ -32,7 +32,7 @@ $ npm install
 ## Compile and prepare NativeScript and Angular
 
 ```
-$ grunt prepare
+$ grunt
 ```
 
 ## Initialize the test NativeScript app (ng-sample)
@@ -40,7 +40,6 @@ $ grunt prepare
 ```
 $ cd ng-sample
 $ npm install
-$ grunt prepare
 ```
 
 The latter installs the `angular2` and `tns-core-modules` packages that you just built by running `grunt prepare` step in the project root.
@@ -87,6 +86,5 @@ The `ng-sample` app is meant for testing stuff while developing the renderer cod
 # Known issues
 
 1. There are certain issues with the Parse5DomAdapter and we'll likely need to provide our own later on:
-  * Element and attribute names always get lowercased.
   * Self-closing elements (`<Label text="Name" /><Button text="Save" />`) get parsed wrong (in this case Button gets parsed as a Label child.
 ![](https://ga-beacon.appspot.com/UA-111455-24/nativescript/nativescript-angular?pixel) 
