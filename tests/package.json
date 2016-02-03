@@ -30,17 +30,24 @@
   },
   "homepage": "http://nativescript.org",
   "dependencies": {
-    "tns-core-modules": "1.6.0-angular-2",
     "angular2": "2.0.0-beta.2",
+    "nativescript-unit-test-runner": "^0.2.8",
     "parse5": "1.4.2",
     "punycode": "1.3.2",
     "querystring": "0.2.0",
-    "url": "0.10.3",
     "reflect-metadata": "0.1.2",
     "rxjs": "5.0.0-beta.0",
+    "tns-core-modules": "1.6.0-angular-2",
+    "url": "0.10.3",
     "zone.js": "0.5.10"
   },
   "devDependencies": {
+    "chai": "^3.5.0",
+    "karma": "^0.13.19",
+    "karma-chai": "^0.1.0",
+    "karma-mocha": "^0.2.1",
+    "karma-nativescript-launcher": "^0.3.1",
+    "mocha": "^2.4.5",
     "nativescript-dev-typescript": "^0.2.2",
     "shelljs": "^0.5.3",
     "typescript": "^1.7.5"
