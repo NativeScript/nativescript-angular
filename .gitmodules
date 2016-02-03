@@ -1,6 +1,0 @@
-[submodule "deps/angular"]
-	path = deps/angular
-	url = git@github.com:hdeshev/angular.git
-[submodule "deps/NativeScript"]
-	path = deps/NativeScript
-	url = git@github.com:NativeScript/NativeScript.git
