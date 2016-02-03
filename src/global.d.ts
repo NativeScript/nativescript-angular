@@ -1,8 +1,6 @@
 /// <reference path="../node_modules/tns-core-modules/tns-core-modules.d.ts" />
 declare var assert: any;
 
-declare type BrowserNodeGlobal = any;
-
 interface Map<K, V> {
     keys(): Array<K>;
     values(): Array<V>;

@@ -10,29 +10,6 @@ module.exports = function(grunt) {
 
     var outDir = "bin/dist/modules";
     var moduleOutDir = path.join(outDir, "nativescript-angular");
-    var nsDistPath = process.env.NSDIST || './deps/NativeScript/bin/dist';
-    var angularDistPath = process.env.ANGULARDIST || '.';
-
-    var ngSampleSubDir = {
-        execOptions: {
-            cwd: 'ng-sample',
-        }
-    };
-
-    var nsSubDir = {
-        execOptions: {
-            cwd: 'deps/NativeScript',
-        }
-    };
-
-    var angularSubDir = {
-        execOptions: {
-            cwd: 'deps/angular',
-        }
-    };
-
-    var angularSubDirIgnoreError = JSON.parse(JSON.stringify(angularSubDir));
-    angularSubDirIgnoreError.failOnError = false;
 
     grunt.initConfig({
         ts: {
@@ -93,33 +70,9 @@ module.exports = function(grunt) {
             }
         },
         shell: {
-            depNSInit: {
-                command: [
-                    'npm install',
-                    'grunt --test-app-only=true --no-runtslint',
-                ].join('&&'),
-                options: nsSubDir
-            },
-            localInstallModules: {
-                command: "npm install \"<%= nsPackagePath %>\""
-            },
             package: {
                 command: "npm pack \"" + moduleOutDir + "\""
             },
-            installAngularDependencies: {
-                command: 'npm install',
-                options: angularSubDirIgnoreError
-            },
-            compileAngular: {
-                command: 'gulp build.js.cjs',
-                options: angularSubDir
-            },
-            buildAngularPackage: {
-                command: 'npm pack deps/angular/dist/js/cjs/angular2',
-            },
-            installAngularPackage: {
-                command: "npm install \"<%= angularPackagePath %>\""
-            }
         },
     });
 
@@ -127,8 +80,17 @@ module.exports = function(grunt) {
 
     grunt.registerTask("cleanAll", [
         'clean:src',
+        'fix-unsupported-typings',
         'clean:package',
     ]);
+
+    grunt.registerTask("fix-unsupported-typings", function() {
+        var zoneDts = path.join('node_modules', 'angular2', 'typings', 'zone', 'zone.d.ts');
+        shelljs.sed('-i', /.*reference.*path.*es6-shim.*\n/g, '', zoneDts);
+
+        var globalsEs6Dts = path.join('node_modules', 'angular2', 'manual_typings', 'globals-es6.d.ts');
+        shelljs.sed('-i', /.*reference.*path.*node\.d\.ts.*\n/g, '', globalsEs6Dts);
+    });
 
     grunt.registerTask("package", [
         "clean:packageDefinitions",
@@ -137,50 +99,8 @@ module.exports = function(grunt) {
         "shell:package",
     ]);
 
-    grunt.registerTask("getAngularPackage", function() {
-        var packageFiles = grunt.file.expand({
-            cwd: angularDistPath
-        },[
-            'angular2-*.tgz'
-        ]);
-        if (packageFiles.length > 1) {
-            throw new Error('Multiple packages found!. Delete all but one: ' + packageFiles);
-        }
-        var angularPackagePath = path.join(angularDistPath, packageFiles[0]);
-        grunt.config('angularPackagePath', angularPackagePath);
-    });
-
-    grunt.registerTask("installAngular", [
-        "shell:installAngularDependencies",
-        "shell:compileAngular",
-        "shell:buildAngularPackage",
-        "getAngularPackage",
-        "shell:installAngularPackage",
-    ]);
-
-    grunt.registerTask("getNSPackage", function() {
-        var packageFiles = grunt.file.expand({
-            cwd: nsDistPath
-        },[
-            'tns-core-modules*.tgz'
-        ]);
-        if (packageFiles.length > 1) {
-            throw new Error('Multiple packages found!. Delete all but one: ' + packageFiles);
-        }
-        var nsPackagePath = path.join(nsDistPath, packageFiles[0]);
-        grunt.config('nsPackagePath', nsPackagePath);
-    });
-
-    grunt.registerTask("installModules", [
-        "shell:depNSInit",
-        "getNSPackage",
-        "shell:localInstallModules",
-    ]);
-
-    grunt.registerTask("prepare", [
+    grunt.registerTask("all", [
         "cleanAll",
-        "installAngular",
-        "installModules",
         "build"
     ]);
 
@@ -190,5 +110,5 @@ module.exports = function(grunt) {
         "package"
     ]);
 
-    grunt.registerTask("default", ["prepare"]);
+    grunt.registerTask("default", ["all"]);
 };
