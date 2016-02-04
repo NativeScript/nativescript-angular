@@ -1,13 +1,9 @@
 bin/dist
 node_modules
 tags
-todomvc/typings
-deps/angular/dist
 src/nativescript-angular/**/*.js
 .baseDir.ts
 .tscache
-nativescript-angular*.tgz
-angular2-*.tgz
 
 tests/app/**/*.js
 tests/app/nativescript-angular

@@ -8,12 +8,16 @@
         "experimentalDecorators": true,
         "removeComments": false,
         "emitDecoratorMetadata": true,
+        "sourceMap": false,
+        "noEmitHelpers": false,
         "noEmitOnError": true
     },
     "files": [
         "app/main.ts",
         "app/global.d.ts",
         "app/app.component.ts",
+        "app/tests/bootstrap.ts",
+        "typings/mocha.d.ts",
         "node_modules/tns-core-modules/tns-core-modules.d.ts"
     ],
     "filesGlob": [
