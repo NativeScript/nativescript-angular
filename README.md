@@ -65,6 +65,14 @@ Enable the webpack hook by setting the `WEBPACK_BUILD` environment variable. You
 $ env WEBPACK_BUILD=1 tns run android
 ```
 
+# Running the tests
+
+```
+$ cd tests
+$ npm install
+$ tns test ios --emulator
+```
+
 # Developer workflow:
 
 1. Make changes to `src/nativescript-angular`, and rebuild with `grunt build`. If succesful, you should get a npm package in the project root.
