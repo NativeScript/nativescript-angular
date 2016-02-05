@@ -31,7 +31,7 @@ install_latest_tns() {
     if installed_under_nvm tns ; then
         echo "tns already installed."
     else
-        echo "n" | npm install -g nativescript
+        npm install -g nativescript --ignore-scripts
     fi
 }
 
