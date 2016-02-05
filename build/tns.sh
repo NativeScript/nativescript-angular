@@ -7,7 +7,7 @@ export NODE_VER="v5.5.0"
 
 install_nvm() {
     if [ ! -d "$NVM_DIR" ] ; then
-        git clone --depth=1 $NVM_REPO $NVM_DIR
+        git clone --depth=1 $NVM_REPO "$NVM_DIR"
     else
         echo "NVM detected at $NVM_DIR"
     fi
@@ -18,7 +18,7 @@ activate_nvm() {
 }
 
 installed_under_nvm() {
-    which $1 | grep -q "$NVM_DIR"
+    which "$1" | grep -q "$NVM_DIR"
 }
 
 install_node() {

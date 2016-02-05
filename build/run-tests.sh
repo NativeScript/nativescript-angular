@@ -2,13 +2,13 @@
 set -e
 
 SCRIPT=$(readlink -f "$0")
-BUILD_DIR=$(dirname $SCRIPT)
-PROJECT_DIR=$(dirname $BUILD_DIR)
+BUILD_DIR=$(dirname "$SCRIPT")
+PROJECT_DIR=$(dirname "$BUILD_DIR")
 
-$PROJECT_DIR/build/start-android-emulator.sh  &
+"$PROJECT_DIR/build/start-android-emulator.sh"  &
 EMULATOR_STARTER_PID=$!
 
-. $PROJECT_DIR/build/tns.sh
+. "$PROJECT_DIR/build/tns.sh"
 
 activate_node_env
 
@@ -18,7 +18,7 @@ npm install
 rm -rf platforms/android
 tns platform add android
 
-wait $EMULATOR_STARTER_PID
+wait "$EMULATOR_STARTER_PID"
 tns test android | tee test-output.txt
 
 if grep -q -E 'Executed[[:space:]][[:digit:]]+.*FAILED' test-output.txt ; then
