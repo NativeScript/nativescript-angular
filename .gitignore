@@ -4,8 +4,10 @@ tags
 src/nativescript-angular/**/*.js
 .baseDir.ts
 .tscache
+.nvm
 
 tests/app/**/*.js
+tests/test-output.txt
 tests/app/nativescript-angular
 tests/app/global.d.ts
 tests/platforms
