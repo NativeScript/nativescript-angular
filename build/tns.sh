@@ -33,6 +33,8 @@ install_latest_tns() {
         echo "tns already installed."
     else
         npm install -g nativescript --ignore-scripts
+        tns usage-reporting disable
+        tns error-reporting disable
     fi
 }
 
