@@ -21,6 +21,11 @@ tns platform add android
 wait "$EMULATOR_STARTER_PID"
 tns test android | tee test-output.txt
 
+if grep -q -E 'BUILD FAILED' test-output.txt ; then
+    echo "TEST BUILD FAILED!"
+    exit 1
+fi
+
 if grep -q -E 'Executed[[:space:]][[:digit:]]+.*FAILED' test-output.txt ; then
     echo "TESTS FAILED!"
     exit 1
