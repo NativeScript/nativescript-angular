@@ -1,6 +1,5 @@
 #!/bin/sh
 set -e
-set -v
 
 SCRIPT=$(readlink -f "$0")
 BUILD_DIR=$(dirname "$SCRIPT")
