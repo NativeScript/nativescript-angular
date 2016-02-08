@@ -23,8 +23,6 @@ install_node() {
     if ! nvm use $NODE_VER ; then
         nvm install $NODE_VER
         nvm use $NODE_VER
-        # upgrade npm to latest version
-        npm install -g npm
     fi
 }
 
