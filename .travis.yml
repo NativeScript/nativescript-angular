@@ -6,14 +6,9 @@ jdk:
 android:
     components:
         - platform-tools
-        - tools
-
-        - build-tools-22.0.1
-        - android-19
-
-        - extra-android-support
+        - build-tools-23.0.1
+        - android-23
         - extra-android-m2repository
-
         - sys-img-armeabi-v7a-android-19
 script:
     - ./build/run-tests.sh
