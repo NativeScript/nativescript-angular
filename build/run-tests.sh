@@ -17,6 +17,8 @@ cd "$PROJECT_DIR/tests"
 npm install
 rm -rf platforms/android
 tns platform add android
+# works around an android build bug with multiple semver*.gz files in node_modules
+find node_modules/ -iname '*.gz' -delete
 
 wait "$EMULATOR_STARTER_PID"
 tns test android | tee test-output.txt
