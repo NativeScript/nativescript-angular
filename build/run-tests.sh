@@ -21,8 +21,12 @@ tns platform add android
 find node_modules/ -iname '*.gz' -delete
 
 wait "$EMULATOR_STARTER_PID"
-tns test android | tee test-output.txt
 
+# generate some output while running tests to prevent Travis from killing the build
+"$PROJECT_DIR/build/test-output-generator.sh"  &
+OUTPUT_GENERATOR_PID=$!
+tns test android | tee test-output.txt
+kill $OUTPUT_GENERATOR_PID
 if grep -q -E 'BUILD FAILED' test-output.txt ; then
     echo "TEST BUILD FAILED!"
     exit 1
