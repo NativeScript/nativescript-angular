@@ -12,12 +12,10 @@ export class SimpleApp {
 }
 
 describe('bootstrap', () => {
-    describe('start app', () => {
-        it('SimpleApp bootstrapped', (done) => {
-            return bootstrap(SimpleApp).then((componentRef) => {
-                assert.isTrue(SimpleApp === componentRef.componentType);
-                done();
-            });
+    it('SimpleApp bootstrapped', (done) => {
+        return bootstrap(SimpleApp).then((componentRef) => {
+            assert.isTrue(SimpleApp === componentRef.componentType);
+            done();
         });
     });
 });
