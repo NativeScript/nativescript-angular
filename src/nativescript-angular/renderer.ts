@@ -149,7 +149,7 @@ export class NativeScriptRenderer extends Renderer {
 
     public listen(renderElement: util.NgView, eventName: string, callback: Function): Function {
         console.log('NativeScriptRenderer.listen: ' + eventName);
-        let zonedCallback = global.zone.bind(callback);
+        let zonedCallback = (<any>global).zone.bind(callback);
         renderElement.on(eventName, zonedCallback);
         return () => renderElement.off(eventName, zonedCallback);
     }

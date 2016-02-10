@@ -6,8 +6,11 @@ interface Map<K, V> {
     values(): Array<V>;
 }
 
-declare type MapConstructor = typeof Map;
-declare type SetConstructor = typeof Set;
+declare type NativeScriptModule = NodeModule
+declare type NativeScriptRequire = NodeRequire
+
+//declare type MapConstructor = typeof Map;
+//declare type SetConstructor = typeof Set;
 
 interface NumberConstructor {
     isInteger(number: number): boolean;

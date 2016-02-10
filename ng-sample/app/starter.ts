@@ -1,12 +1,14 @@
 declare var java: any;
 declare var CACurrentMediaTime: any;
 
-if (!global.timers) {
-    global.timers = new Map();
+var anyGlobal = <any>global;
+
+if (!anyGlobal.timers) {
+    anyGlobal.timers = new Map();
 }
 
 function time() {
-    if (global.android) {
+    if (anyGlobal.android) {
         return java.lang.System.nanoTime() / 1000000; // 1 ms = 1000000 ns
     }
     else {
@@ -20,6 +22,6 @@ var timerEntry = {
     currentStart: time()
 };
 
-global.timers.set("application-start", timerEntry);
+anyGlobal.timers.set("application-start", timerEntry);
 
 import "./app.js"

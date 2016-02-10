@@ -5,12 +5,14 @@ declare var __stopCPUProfiler: any;
 
 export var ENABLE_PROFILING = true;
 
+var anyGlobal = <any>global;
+
 export function time(): number {
     if (!ENABLE_PROFILING) {
         return;
     }
 
-    if (global.android) {
+    if (anyGlobal.android) {
         return java.lang.System.nanoTime() / 1000000; // 1 ms = 1000000 ns
     }
     else {
@@ -25,8 +27,8 @@ interface TimerInfo {
     currentStart: number;
 }
 
-if (!global.timers) {
-    global.timers = new Map<string, TimerInfo>();
+if (!anyGlobal.timers) {
+    anyGlobal.timers = new Map<string, TimerInfo>();
 }
 export function start(name: string): void {
     if (!ENABLE_PROFILING) {
@@ -34,8 +36,8 @@ export function start(name: string): void {
     }
 
     var info: TimerInfo;
-    if (global.timers.has(name)) {
-        info = global.timers.get(name);
+    if (anyGlobal.timers.has(name)) {
+        info = anyGlobal.timers.get(name);
         if (info.currentStart != 0) {
             throw new Error(`Timer already started: ${name}`);
         }
@@ -47,7 +49,7 @@ export function start(name: string): void {
             count: 0,
             currentStart: time()
         };
-        global.timers.set(name, info);
+        anyGlobal.timers.set(name, info);
     }
 }
 
@@ -68,11 +70,11 @@ export function stop(name: string) {
     var info = pauseInternal(name);
     console.log(`---- [${name}] STOP total: ${info.totalTime} count:${info.count}`);
 
-    global.timers.delete(name);
+    anyGlobal.timers.delete(name);
 }
 
 function pauseInternal(name: string): TimerInfo {
-    var info = global.timers.get(name);
+    var info = anyGlobal.timers.get(name);
     if (!info) {
         throw new Error(`No timer started: ${name}`);
     }
@@ -90,7 +92,7 @@ export function startCPUProfile(name: string) {
         return;
     }
 
-    if (global.android) {
+    if (anyGlobal.android) {
         __startCPUProfiler(name);
     }
 }
@@ -100,7 +102,7 @@ export function stopCPUProfile(name: string) {
         return;
     }
 
-    if (global.android) {
+    if (anyGlobal.android) {
         __stopCPUProfiler(name);
     }
 }
