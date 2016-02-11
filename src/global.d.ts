@@ -1,4 +1,3 @@
-/// <reference path="../node_modules/tns-core-modules/tns-core-modules.d.ts" />
 declare var assert: any;
 
 interface Map<K, V> {
