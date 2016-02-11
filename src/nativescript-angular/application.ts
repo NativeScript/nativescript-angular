@@ -1,3 +1,4 @@
+import "zone.js/dist/zone.js"
 import 'reflect-metadata';
 import './polyfills/array';
 import 'globals';
