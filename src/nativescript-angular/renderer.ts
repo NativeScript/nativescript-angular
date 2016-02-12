@@ -2,7 +2,8 @@ import {Inject, Injectable} from 'angular2/src/core/di';
 import {
     Renderer,
     RootRenderer,
-    RenderComponentType
+    RenderComponentType,
+    RenderDebugInfo
 } from 'angular2/src/core/render/api';
 import {isBlank} from 'angular2/src/facade/lang';
 import {DOM} from 'angular2/src/platform/dom/dom_adapter';
@@ -120,6 +121,11 @@ export class NativeScriptRenderer extends Renderer {
     setBindingDebugInfo(renderElement: util.NgView, propertyName: string, propertyValue: string): void {
         console.log('NativeScriptRenderer.setBindingDebugInfo: ' + renderElement + ', ' + propertyName + ' = ' + propertyValue);
     }
+
+    setElementDebugInfo(renderElement: any, info: RenderDebugInfo): void {
+        console.log('NativeScriptRenderer.setElementDebugInfo: ' + renderElement);
+    }
+
 
     /**
     * Calls a method on an element.
