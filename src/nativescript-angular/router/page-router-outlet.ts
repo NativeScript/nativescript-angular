@@ -279,7 +279,7 @@ class PageShim implements OnActivate, OnDeactivate {
                                     resolve()
                                 });
 
-                                page.on('navigatingFrom', global.zone.bind((args: NavigatedData) => {
+                                page.on('navigatingFrom', (<any>global).zone.bind((args: NavigatedData) => {
                                     if (args.isBackNavigation) {
                                         startGoBack();
                                         this.locationStrategy.back();
