@@ -31,6 +31,8 @@ import application = require('application');
 
 export type ProviderArray = Array<Type | Provider | any[]>;
 
+let _platform = null;
+
 export function bootstrap(appComponentType: any,
                           customProviders: ProviderArray = null) : Promise<ComponentRef> {
     NativeScriptDomAdapter.makeCurrent();
@@ -58,7 +60,10 @@ export function bootstrap(appComponentType: any,
         appProviders.push(customProviders);
     }
   
-    return platform(nativeScriptProviders).application(appProviders).bootstrap(appComponentType);
+    if (!_platform) {
+        _platform = platform(nativeScriptProviders);
+    }
+    return _platform.application(appProviders).bootstrap(appComponentType);
 }
 
 export function nativeScriptBootstrap(appComponentType: any, customProviders?: ProviderArray, appOptions?: any) {
