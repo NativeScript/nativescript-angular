@@ -24,7 +24,7 @@ import {NS_DIRECTIVES} from './directives/ns-directives';
 
 import {bootstrap as angularBootstrap} from 'angular2/bootstrap';
 
-import { Page } from 'ui/page';
+import {Page} from 'ui/page';
 import {topmost} from 'ui/frame';
 import {TextView} from 'ui/text-view';
 import application = require('application');
@@ -34,7 +34,7 @@ export type ProviderArray = Array<Type | Provider | any[]>;
 let _platform = null;
 
 export function bootstrap(appComponentType: any,
-                          customProviders: ProviderArray = null) : Promise<ComponentRef> {
+                          customProviders: ProviderArray = null, page?: Page) : Promise<ComponentRef> {
     NativeScriptDomAdapter.makeCurrent();
 
     let nativeScriptProviders: ProviderArray = [
@@ -59,11 +59,23 @@ export function bootstrap(appComponentType: any,
     if (isPresent(customProviders)) {
         appProviders.push(customProviders);
     }
+
+    const pageProvider = provide(Page, {useFactory: () => page || getDefaultPage()});
+    appProviders.push(pageProvider);
   
     if (!_platform) {
         _platform = platform(nativeScriptProviders);
     }
     return _platform.application(appProviders).bootstrap(appComponentType);
+}
+
+function getDefaultPage() {
+    const frame = topmost();
+    if (frame) {
+        return frame.currentPage;
+    } else {
+        return null;
+    }
 }
 
 export function nativeScriptBootstrap(appComponentType: any, customProviders?: ProviderArray, appOptions?: any) {
@@ -81,7 +93,7 @@ export function nativeScriptBootstrap(appComponentType: any, customProviders?: P
 
                 //profiling.start('ng-bootstrap');
                 console.log('BOOTSTRAPPING...');
-                bootstrap(appComponentType, customProviders).then((appRef) => {
+                bootstrap(appComponentType, customProviders, page).then((appRef) => {
                     //profiling.stop('ng-bootstrap');
                     console.log('ANGULAR BOOTSTRAP DONE.');
                 }, (err) =>{
@@ -91,7 +103,7 @@ export function nativeScriptBootstrap(appComponentType: any, customProviders?: P
 
                     let view = new TextView();
                     view.text = errorMessage;
-                    topmost().currentPage.content = view;
+                    page.content = view;
                 });
             }
             
