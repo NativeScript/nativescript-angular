@@ -8,12 +8,13 @@ class DataItem {
 
 @Component({
     selector: 'list-test-async',
+    styleUrls: ['examples/list/list-test-async.css'],
     template: `
             <ListView [items]="myItems | async" (itemTap)="onItemTap($event)">
                 <item-template>
                     <template #item="item" #i="index" #odd="odd" #even="even">
                         <StackLayout [class.odd]="odd" [class.even]="even">
-                            <Label [text]='"index: " + item.name'></Label>
+                            <Label class="test" [text]='"index: " + item.name'></Label>
                         </StackLayout>
                     </template>
                 </item-template>
