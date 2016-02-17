@@ -34,7 +34,7 @@ export type ProviderArray = Array<Type | Provider | any[]>;
 let _platform = null;
 
 export function bootstrap(appComponentType: any,
-                          customProviders: ProviderArray = null, page?: Page) : Promise<ComponentRef> {
+                          customProviders: ProviderArray = null) : Promise<ComponentRef> {
     NativeScriptDomAdapter.makeCurrent();
 
     let nativeScriptProviders: ProviderArray = [
@@ -60,7 +60,7 @@ export function bootstrap(appComponentType: any,
         appProviders.push(customProviders);
     }
 
-    const pageProvider = provide(Page, {useFactory: () => page || getDefaultPage()});
+    const pageProvider = provide(Page, {useFactory: getDefaultPage});
     appProviders.push(pageProvider);
   
     if (!_platform) {
@@ -93,7 +93,7 @@ export function nativeScriptBootstrap(appComponentType: any, customProviders?: P
 
                 //profiling.start('ng-bootstrap');
                 console.log('BOOTSTRAPPING...');
-                bootstrap(appComponentType, customProviders, page).then((appRef) => {
+                bootstrap(appComponentType, customProviders).then((appRef) => {
                     //profiling.stop('ng-bootstrap');
                     console.log('ANGULAR BOOTSTRAP DONE.');
                 }, (err) =>{
