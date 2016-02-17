@@ -13,17 +13,17 @@ import trace = require("trace");
 trace.setCategories(routerTraceCategory);
 trace.enable();
 
-//import {RendererTest} from './examples/renderer-test';
-//import {Benchmark} from './performance/benchmark';
-//import {ListTest} from './examples/list/list-test';
-// import {ListTestAsync} from "./examples/list/list-test-async";
-// import {ImageTest} from "./examples/image/image-test";
+import {RendererTest} from './examples/renderer-test';
+import {Benchmark} from './performance/benchmark';
+import {ListTest} from './examples/list/list-test';
+import {ListTestAsync} from "./examples/list/list-test-async";
+import {ImageTest} from "./examples/image/image-test";
 import {NavigationTest} from "./examples/navigation/navigation-test";
 
 
-//nativeScriptBootstrap(RendererTest);
+nativeScriptBootstrap(RendererTest);
 //nativeScriptBootstrap(Benchmark);
 //nativeScriptBootstrap(ListTest);
 // nativeScriptBootstrap(ListTestAsync);
 // nativeScriptBootstrap(ImageTest);
-nativeScriptBootstrap(NavigationTest, [NS_ROUTER_PROVIDERS]);
+//nativeScriptBootstrap(NavigationTest, [NS_ROUTER_PROVIDERS]);
