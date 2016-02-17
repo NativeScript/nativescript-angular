@@ -10,36 +10,6 @@
         "emitDecoratorMetadata": true,
         "noEmitOnError": true
     },
-    "filesGlob": [
-        "app/**/*.ts"
-    ],
-    "files": [
-        "node_modules/tns-core-modules/tns-core-modules.base.d.ts",
-        "app/nativescript-angular/application.ts",
-        "app/nativescript-angular/dom_adapter.ts",
-        "app/nativescript-angular/text-value-accessor.ts",
-        "app/nativescript-angular/element-registry.d.ts",
-        "app/nativescript-angular/application.d.ts",
-        "app/nativescript-angular/renderer.ts",
-        "app/nativescript-angular/element-registry.ts",
-        "app/nativescript-angular/xhr.ts",
-        "app/nativescript-angular/directives/ns-directives.ts",
-        "app/nativescript-angular/directives/tab-view.ts",
-        "app/nativescript-angular/directives/list-view.ts",
-        "app/nativescript-angular/polyfills/array.ts",
-        "app/nativescript-angular/view-util.ts",
-        "app/examples/list/list-test.ts",
-        "app/examples/list/list-test-async.ts",
-        "app/examples/image/image-test.ts",
-        "app/examples/renderer-test.ts",
-        "app/main-page.ts",
-        "app/performance/benchmark.ts",
-        "app/performance/profiling.ts",
-        "app/main-view-model.ts",
-        "app/app.ts",
-        "app/global.d.ts",
-        "app/starter.ts"
-    ],
     "exclude": [
         "node_modules",
         "platforms"
