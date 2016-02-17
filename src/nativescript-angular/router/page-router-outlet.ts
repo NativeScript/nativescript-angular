@@ -1,63 +1,50 @@
 import {PromiseWrapper} from 'angular2/src/facade/async';
 import {isBlank, isPresent} from 'angular2/src/facade/lang';
+import {StringMapWrapper} from 'angular2/src/facade/collection';
 
 import {Directive, Attribute, DynamicComponentLoader, ComponentRef, ElementRef,
-    Injector, provide, Type, Component, OpaqueToken, Inject} from 'angular2/core';
+Injector, provide, Type, Component, OpaqueToken, Inject} from 'angular2/core';
 
 import * as routerHooks from 'angular2/src/router/lifecycle_annotations';
 import { hasLifecycleHook} from 'angular2/src/router/route_lifecycle_reflector';
 
 import { ComponentInstruction, RouteParams, RouteData, RouterOutlet, LocationStrategy, Router,
-    OnActivate, OnDeactivate } from 'angular2/router';
-    
+OnActivate, OnDeactivate, CanReuse, OnReuse } from 'angular2/router';
+
 import { topmost } from "ui";
 import { Page, NavigatedData } from "ui/page";
 import { log } from "./common";
+import { NSLocationStrategy } from "./ns-location-strategy";
+
 
 let COMPONENT = new OpaqueToken("COMPONENT");
 let _resolveToTrue = PromiseWrapper.resolve(true);
 let _resolveToFalse = PromiseWrapper.resolve(false);
 
+
+interface CacheItem {
+    componentRef: ComponentRef;
+    router: Router;
+}
+
 /**
  * Reference Cache
  */
 class RefCache {
-    private cache: Array<ComponentRef> = new Array<ComponentRef>();
+    private cache: Array<CacheItem> = new Array<CacheItem>();
 
-    public push(comp: ComponentRef) {
-        this.cache.push(comp);
+    public push(comp: ComponentRef, router: Router) {
+        this.cache.push({ componentRef: comp, router: router });
     }
 
-    public pop(): ComponentRef {
+    public pop(): CacheItem {
         return this.cache.pop();
     }
 
-    public peek(): ComponentRef {
+    public peek(): CacheItem {
         return this.cache[this.cache.length - 1];
     }
 }
-
-var _isGoingBack = false;
-function startGoBack() {
-    log("startGoBack()");
-    if (_isGoingBack) {
-        throw new Error("Calling startGoBack while going back.")
-    }
-    _isGoingBack = true;
-}
-
-function endGoBack() {
-    log("endGoBack()");
-    if (!_isGoingBack) {
-        throw new Error("Calling endGoBack while not going back.")
-    }
-    _isGoingBack = false;
-}
-
-function isGoingBack() {
-    return _isGoingBack;
-}
-
 
 /**
  * A router outlet that does page navigation in NativeScript
@@ -80,7 +67,8 @@ export class PageRouterOutlet extends RouterOutlet {
     constructor(private elementRef: ElementRef,
         private loader: DynamicComponentLoader,
         private parentRouter: Router,
-        @Attribute('name') nameAttr: string) {
+        @Attribute('name') nameAttr: string,
+        private location: NSLocationStrategy) {
         super(elementRef, loader, parentRouter, nameAttr)
     }
 
@@ -95,13 +83,16 @@ export class PageRouterOutlet extends RouterOutlet {
         let componentType = nextInstruction.componentType;
         this.currentInstruction = nextInstruction;
 
-        if (isGoingBack()) {
+        if (this.location.isPageNavigatingBack()) {
             log("PageRouterOutlet.activate() - Back naviation, so load from cache: " + componentType.name);
 
-            endGoBack();
+            this.location.finishBackPageNavigation();
             
             // Get Component form ref and just call the activate hook
-            this.componentRef = this.refCache.peek();
+            let cacheItem = this.refCache.peek();
+            this.componentRef = cacheItem.componentRef;
+            this.replaceChildRouter(cacheItem.router);
+
             this.currentComponentType = componentType;
             this.checkComponentRef(this.componentRef, nextInstruction);
 
@@ -109,8 +100,7 @@ export class PageRouterOutlet extends RouterOutlet {
                 return (<OnActivate>this.componentRef.instance)
                     .routerOnActivate(nextInstruction, previousInstruction);
             }
-        }
-        else {
+        } else {
             let childRouter = this.parentRouter.childRouter(componentType);
             let providers = Injector.resolve([
                 provide(RouteData, { useValue: nextInstruction.routeData }),
@@ -123,8 +113,7 @@ export class PageRouterOutlet extends RouterOutlet {
             if (this.isInitalPage) {
                 log("PageRouterOutlet.activate() inital page - just load component: " + componentType.name);
                 this.isInitalPage = false;
-            }
-            else {
+            } else {
                 log("PageRouterOutlet.activate() forward navigation - wrap component in page: " + componentType.name);
                 componentType = PageShim;
             }
@@ -133,7 +122,7 @@ export class PageRouterOutlet extends RouterOutlet {
                 .then((componentRef) => {
                     this.componentRef = componentRef;
                     this.currentComponentType = componentType;
-                    this.refCache.push(componentRef);
+                    this.refCache.push(componentRef, childRouter);
 
                     if (hasLifecycleHook(routerHooks.routerOnActivate, componentType)) {
                         return (<OnActivate>this.componentRef.instance)
@@ -161,10 +150,10 @@ export class PageRouterOutlet extends RouterOutlet {
                 (<OnDeactivate>this.componentRef.instance).routerOnDeactivate(nextInstruction, this.currentInstruction));
         }
 
-        if (isGoingBack()) {
+        if (this.location.isPageNavigatingBack()) {
             log("PageRouterOutlet.deactivate() while going back - should dispose: " + instruction.componentType.name)
             return next.then((_) => {
-                let popedRef = this.refCache.pop();
+                let popedRef = this.refCache.pop().componentRef;
 
                 if (this.componentRef !== popedRef) {
                     throw new Error("Current componentRef is different for cached componentRef");
@@ -176,8 +165,7 @@ export class PageRouterOutlet extends RouterOutlet {
                     this.componentRef = null;
                 }
             });
-        }
-        else {
+        } else {
             return next;
         }
     }
@@ -188,27 +176,61 @@ export class PageRouterOutlet extends RouterOutlet {
      * is currently not supported in NativeScript.
      */
     routerCanDeactivate(nextInstruction: ComponentInstruction): Promise<boolean> {
+        this.log("routerCanDeactivate", nextInstruction);
+
         return _resolveToTrue;
     }
 
     /**
      * Called by the {@link Router} during recognition phase of a navigation.
-     * For PageRouterOutlet it always reurns false, as there is no way to reuse 
-     * the same componenet between two pages.
+     *
+     * If the new child component has a different Type than the existing child component,
+     * this will resolve to `false`. You can't reuse an old component when the new component
+     * is of a different Type.
+     *
+     * Otherwise, this method delegates to the child component's `routerCanReuse` hook if it exists,
+     * or resolves to true if the hook is not present and params are equal.
      */
     routerCanReuse(nextInstruction: ComponentInstruction): Promise<boolean> {
-        return _resolveToFalse;
+        this.log("routerCanReuse", nextInstruction);
+
+        var result;
+
+        if (isBlank(this.currentInstruction) || this.currentInstruction.componentType != nextInstruction.componentType) {
+            result = false;
+        } else if (hasLifecycleHook(routerHooks.routerCanReuse, this.currentInstruction.componentType)) {
+            result = (<CanReuse>this.componentRef.instance)
+                .routerCanReuse(nextInstruction, this.currentInstruction);
+        } else {
+            result = nextInstruction == this.currentInstruction ||
+                (isPresent(nextInstruction.params) && isPresent(this.currentInstruction.params) &&
+                    StringMapWrapper.equals(nextInstruction.params, this.currentInstruction.params));
+        }
+
+        log("PageRouterOutlet.routerCanReuse(): " + result);
+        return PromiseWrapper.resolve(result);
+
     }
 
     /**
-     * Called by the {@link Router} during the commit phase of a navigation when an outlet
-     * reuses a component between different routes.
-     * For PageRouterOutlet this method should never be called,
-     * because routerCanReuse always returns false.
+     * Called by the {@link Router} during recognition phase of a navigation.
+     *
+     * If this resolves to `false`, the given navigation is cancelled.
+     *
+     * This method delegates to the child component's `routerCanDeactivate` hook if it exists,
+     * and otherwise resolves to true.
      */
     reuse(nextInstruction: ComponentInstruction): Promise<any> {
-        throw new Error("reuse() method should never be called for PageRouterOutlet.")
-        return _resolveToFalse;
+        var previousInstruction = this.currentInstruction;
+        this.currentInstruction = nextInstruction;
+
+        if (isBlank(this.componentRef)) {
+            throw new Error(`Cannot reuse an outlet that does not contain a component.`);
+        }
+
+        return PromiseWrapper.resolve(
+            hasLifecycleHook(routerHooks.routerOnReuse, this.currentComponentType) ?
+                (<OnReuse>this.componentRef.instance).routerOnReuse(nextInstruction, previousInstruction) : true);
     }
 
     private checkComponentRef(popedRef: ComponentRef, instruction: ComponentInstruction) {
@@ -220,8 +242,18 @@ export class PageRouterOutlet extends RouterOutlet {
         }
     }
 
+    private replaceChildRouter(childRouter: Router) {
+        // HACKY HACKY HACKY
+        // When navigationg back - we need to set the child router of
+        // our router - with the one we have created for the previosus page.
+        // Otherwise router-outlets inside that page wont't work.
+        // Curretly there is no other way to do that (parentRouter.childRouter() will create ne router).
+        
+        this.parentRouter["_childRouter"] = childRouter;
+    }
+
     private log(method: string, nextInstruction: ComponentInstruction) {
-        log("PageRouterOutlet." + method + " isBack: " + isGoingBack() + " nextUrl: " + nextInstruction.urlPath);
+        log("PageRouterOutlet." + method + " isBack: " + this.location.isPageNavigatingBack() + " nextUrl: " + nextInstruction.urlPath);
     }
 }
 
@@ -233,7 +265,7 @@ export class PageRouterOutlet extends RouterOutlet {
         <StackLayout>
         `
 })
-class PageShim implements OnActivate, OnDeactivate {
+class PageShim implements OnActivate, OnDeactivate, CanReuse, OnReuse {
     private static pageShimCount: number = 0;
     private id: number;
     private isInitialized: boolean;
@@ -242,7 +274,7 @@ class PageShim implements OnActivate, OnDeactivate {
     constructor(
         private element: ElementRef,
         private loader: DynamicComponentLoader,
-        private locationStrategy: LocationStrategy,
+        private locationStrategy: NSLocationStrategy,
         @Inject(COMPONENT) public componentType: Type
     ) {
         this.id = PageShim.pageShimCount++;
@@ -270,6 +302,7 @@ class PageShim implements OnActivate, OnDeactivate {
                         //TODO: assuming it's a Layout.
                         (<any>viewContainer.parent).removeChild(viewContainer);
 
+                        this.locationStrategy.navigateToNewPage();
                         topmost().navigate({
                             animated: true,
                             create: () => {
@@ -281,7 +314,7 @@ class PageShim implements OnActivate, OnDeactivate {
 
                                 page.on('navigatingFrom', (<any>global).zone.bind((args: NavigatedData) => {
                                     if (args.isBackNavigation) {
-                                        startGoBack();
+                                        this.locationStrategy.beginBackPageNavigation();
                                         this.locationStrategy.back();
                                     }
                                 }));
@@ -307,6 +340,20 @@ class PageShim implements OnActivate, OnDeactivate {
         this.log("routerOnDeactivate");
         if (hasLifecycleHook(routerHooks.routerOnDeactivate, this.componentType)) {
             return (<OnDeactivate>this.componentRef.instance).routerOnDeactivate(nextInstruction, prevInstruction);
+        }
+    }
+
+    routerCanReuse(nextInstruction: ComponentInstruction, prevInstruction: ComponentInstruction): any {
+        this.log("routerCanReuse");
+        if (hasLifecycleHook(routerHooks.routerCanReuse, this.componentType)) {
+            return (<CanReuse>this.componentRef.instance).routerCanReuse(nextInstruction, prevInstruction);
+        }
+    }
+
+    routerOnReuse(nextInstruction: ComponentInstruction, prevInstruction: ComponentInstruction): any {
+        this.log("routerOnReuse");
+        if (hasLifecycleHook(routerHooks.routerOnReuse, this.componentType)) {
+            return (<OnReuse>this.componentRef.instance).routerOnReuse(nextInstruction, prevInstruction);
         }
     }
 

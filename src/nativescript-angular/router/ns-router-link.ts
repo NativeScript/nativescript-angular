@@ -32,11 +32,11 @@ import { log } from "./common";
  * current component's parent.
  */
 @Directive({
-  selector: '[nsRouterLink]',
-  inputs: ['params: nsRouterLink'],
-  host: {
-    '(tap)': 'onTap()'
-  }
+    selector: '[nsRouterLink]',
+    inputs: ['params: nsRouterLink'],
+    host: {
+        '(tap)': 'onTap()'
+    }
 })
 export class NSRouterLink {
     private _routeParams: any[];
