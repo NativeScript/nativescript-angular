@@ -3,6 +3,8 @@ import {View} from 'ui';
 import {NgView} from '../view-util'
 const NG_VIEW = "_ngViewRef";
 
+var console = {log: function(msg) {}}
+
 @Directive({
     selector: 'ListView',
 })

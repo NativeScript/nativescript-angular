@@ -5,8 +5,12 @@ import {ContentView} from 'ui/content-view';
 import {LayoutBase} from 'ui/layouts/layout-base';
 import {ViewClass, getViewClass, isKnownView} from './element-registry';
 import {getSpecialPropertySetter} from "ui/builder/special-properties";
+import trace = require("trace");
 
-var console = {log: function(msg) {}}
+export const rendererTraceCategory = "ns-renderer";
+export function traceLog(msg) {
+    trace.write(msg, rendererTraceCategory);
+}
 
 export interface ViewExtensions {
     nodeName: string;
@@ -86,7 +90,7 @@ export function createView(name: string, parent: NgView): NgView {
     if (isKnownView(name)) {
         const viewClass = getViewClass(name);
         return createAndAttach(name, viewClass, parent);
-   } else {
+    } else {
         return createViewContainer(name, parent);
     }
 }
@@ -100,7 +104,7 @@ export function createText(value: string): NgView {
 
 export function createViewContainer(name: string, parentElement: NgView) {
     //HACK: Using a ContentView here, so that it creates a native View object
-    console.log('Creating view container in:' + parentElement);
+    traceLog('Creating view container in:' + parentElement);
 
     const layout = createView('ProxyViewContainer', parentElement);
     layout.nodeName = 'ProxyViewContainer';
@@ -126,7 +130,7 @@ function isXMLAttribute(name: string): boolean {
 }
 
 export function setProperty(view: NgView, attributeName: string, value: any): void {
-    console.log('Setting attribute: ' + attributeName);
+    traceLog('Setting attribute: ' + attributeName);
 
     let specialSetter = getSpecialPropertySetter(attributeName);
     let propMap = getProperties(view);

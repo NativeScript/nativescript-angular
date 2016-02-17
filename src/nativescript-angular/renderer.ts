@@ -13,7 +13,7 @@ import {topmost} from 'ui/frame';
 import {Page} from 'ui/page';
 import * as util from "./view-util";
 
-var console = {log: function(msg) {}}
+export { rendererTraceCategory } from "./view-util";
 
 @Injectable()
 export class NativeScriptRootRenderer extends RootRenderer {
@@ -52,7 +52,7 @@ export class NativeScriptRenderer extends Renderer {
             let cssString = componentProto.styles[i] + "";
             page.addCss(cssString.replace(COMPONENT_VARIABLE, componentProto.id));
         }
-        console.log('NativeScriptRenderer created');
+        util.traceLog('NativeScriptRenderer created');
     }
 
     renderComponent(componentProto: RenderComponentType): Renderer {
@@ -60,26 +60,26 @@ export class NativeScriptRenderer extends Renderer {
     }
 
     selectRootElement(selector: string): util.NgView {
-        console.log('ROOT');
+        util.traceLog('ROOT');
         const page = <util.NgView><any>this.rootRenderer.page;
         page.nodeName = 'Page';
         return page;
     }
 
     createViewRoot(hostElement: util.NgView): util.NgView {
-        console.log('CREATE VIEW ROOT: ' + hostElement.nodeName);
+        util.traceLog('CREATE VIEW ROOT: ' + hostElement.nodeName);
         return hostElement;
     }
 
     projectNodes(parentElement: util.NgView, nodes: util.NgView[]): void {
-        console.log('NativeScriptRenderer.projectNodes');
+        util.traceLog('NativeScriptRenderer.projectNodes');
         nodes.forEach((node) => {
             util.insertChild(parentElement, node);
         });
     }
 
     attachViewAfter(anchorNode: util.NgView, viewRootNodes: util.NgView[]) {
-        console.log('NativeScriptRenderer.attachViewAfter: ' + anchorNode.nodeName + ' ' + anchorNode);
+        util.traceLog('NativeScriptRenderer.attachViewAfter: ' + anchorNode.nodeName + ' ' + anchorNode);
         const parent = (<util.NgView>anchorNode.parent || anchorNode.templateParent);
         const insertPosition = util.getChildIndex(parent, anchorNode);
 
@@ -91,7 +91,7 @@ export class NativeScriptRenderer extends Renderer {
     }
 
     detachView(viewRootNodes: util.NgView[]) {
-        console.log('NativeScriptRenderer.detachView');
+        util.traceLog('NativeScriptRenderer.detachView');
         for (var i = 0; i < viewRootNodes.length; i++) {
             var node = viewRootNodes[i];
             util.removeChild(<util.NgView>node.parent, node);
@@ -106,23 +106,23 @@ export class NativeScriptRenderer extends Renderer {
     }
 
     public destroyView(hostElement: util.NgView, viewAllNodes: util.NgView[]) {
-        console.log("NativeScriptRenderer.destroyView");
+        util.traceLog("NativeScriptRenderer.destroyView");
         // Seems to be called on component dispose only (router outlet)
         //TODO: handle this when we resolve routing and navigation.
     }
 
     setElementProperty(renderElement: util.NgView, propertyName: string, propertyValue: any) {
-        console.log("NativeScriptRenderer.setElementProperty " + renderElement + ': ' + propertyName + " = " + propertyValue);
+        util.traceLog("NativeScriptRenderer.setElementProperty " + renderElement + ': ' + propertyName + " = " + propertyValue);
         util.setProperty(renderElement, propertyName, propertyValue);
     }
 
     setElementAttribute(renderElement: util.NgView, attributeName: string, attributeValue: string) {
-        console.log("NativeScriptRenderer.setElementAttribute " + renderElement + ': ' + attributeName + " = " + attributeValue);
+        util.traceLog("NativeScriptRenderer.setElementAttribute " + renderElement + ': ' + attributeName + " = " + attributeValue);
         return this.setElementProperty(renderElement, attributeName, attributeValue);
     }
 
     setElementClass(renderElement: util.NgView, className: string, isAdd: boolean): void {
-        console.log("NativeScriptRenderer.setElementClass " + className + " - " + isAdd);
+        util.traceLog("NativeScriptRenderer.setElementClass " + className + " - " + isAdd);
 
         if (isAdd) {
             util.addClass(renderElement, className);
@@ -140,31 +140,31 @@ export class NativeScriptRenderer extends Renderer {
     * such as <template> placeholders.
     */
     setBindingDebugInfo(renderElement: util.NgView, propertyName: string, propertyValue: string): void {
-        console.log('NativeScriptRenderer.setBindingDebugInfo: ' + renderElement + ', ' + propertyName + ' = ' + propertyValue);
+        util.traceLog('NativeScriptRenderer.setBindingDebugInfo: ' + renderElement + ', ' + propertyName + ' = ' + propertyValue);
     }
 
     setElementDebugInfo(renderElement: any, info: RenderDebugInfo): void {
-        console.log('NativeScriptRenderer.setElementDebugInfo: ' + renderElement);
+        util.traceLog('NativeScriptRenderer.setElementDebugInfo: ' + renderElement);
     }
 
     /**
     * Calls a method on an element.
     */
     invokeElementMethod(renderElement: util.NgView, methodName: string, args: Array<any>) {
-        console.log("NativeScriptRenderer.invokeElementMethod " + methodName + " " + args);
+        util.traceLog("NativeScriptRenderer.invokeElementMethod " + methodName + " " + args);
     }
 
     setText(renderNode: any, text: string) {
-        console.log("NativeScriptRenderer.setText");
+        util.traceLog("NativeScriptRenderer.setText");
     }
 
     public createTemplateAnchor(parentElement: util.NgView): util.NgView {
-        console.log('NativeScriptRenderer.createTemplateAnchor');
+        util.traceLog('NativeScriptRenderer.createTemplateAnchor');
         return util.createTemplateAnchor(parentElement);
     }
 
     public createElement(parentElement: util.NgView, name: string): util.NgView {
-        console.log('NativeScriptRenderer.createElement: ' + name + ' parent: ' + parentElement + ', ' + (parentElement ? parentElement.nodeName : 'null'));
+        util.traceLog('NativeScriptRenderer.createElement: ' + name + ' parent: ' + parentElement + ', ' + (parentElement ? parentElement.nodeName : 'null'));
         let result = util.createView(name, parentElement);
         // adding an attribute (property) to {N} view for applying component specific css. 
         // The property value is generated by angular2 infrastructure on conponent creation. 
@@ -175,12 +175,12 @@ export class NativeScriptRenderer extends Renderer {
     }
 
     public createText(value: string): util.NgView {
-        console.log('NativeScriptRenderer.createText');
+        util.traceLog('NativeScriptRenderer.createText');
         return util.createText(value);;
     }
 
     public listen(renderElement: util.NgView, eventName: string, callback: Function): Function {
-        console.log('NativeScriptRenderer.listen: ' + eventName);
+        util.traceLog('NativeScriptRenderer.listen: ' + eventName);
         let zonedCallback = (<any>global).zone.bind(callback);
         renderElement.on(eventName, zonedCallback);
         return () => renderElement.off(eventName, zonedCallback);
