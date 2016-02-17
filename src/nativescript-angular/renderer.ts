@@ -18,11 +18,12 @@ import * as util from "./view-util";
 @Injectable()
 export class NativeScriptRootRenderer extends RootRenderer {
     private _registeredComponents: Map<string, NativeScriptRenderer> = new Map<string, NativeScriptRenderer>();
-    public page: Page;
-    
-    constructor() {
-        super();
-        this.page = <Page>(<any>topmost()).currentPage;
+    private _page: Page;
+    public get page(): Page {
+        if (!this._page) {
+            this._page = <Page>(<any>topmost()).currentPage; 
+        }
+        return this._page;
     }
 
     renderComponent(componentProto: RenderComponentType): Renderer {
