@@ -13,7 +13,7 @@ import {topmost} from 'ui/frame';
 import {Page} from 'ui/page';
 import * as util from "./view-util";
 
-//var console = {log: function(msg) {}}
+var console = {log: function(msg) {}}
 
 @Injectable()
 export class NativeScriptRootRenderer extends RootRenderer {

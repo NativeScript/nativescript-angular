@@ -6,7 +6,7 @@ import {LayoutBase} from 'ui/layouts/layout-base';
 import {ViewClass, getViewClass, isKnownView} from './element-registry';
 import {getSpecialPropertySetter} from "ui/builder/special-properties";
 
-//var console = {log: function(msg) {}}
+var console = {log: function(msg) {}}
 
 export interface ViewExtensions {
     nodeName: string;

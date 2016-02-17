@@ -8,7 +8,8 @@ import { CATEGORY } from "./common";
 
 export const NS_ROUTER_PROVIDERS: any[] = [
     ROUTER_PROVIDERS,
-    provide(LocationStrategy, {useClass: NSLocationStrategy})
+    NSLocationStrategy,
+    provide(LocationStrategy, {useExisting: NSLocationStrategy}),
 ];
 
 export const NS_ROUTER_DIRECTIVES: Type[] = [
