@@ -12,18 +12,6 @@
         "noEmitHelpers": false,
         "noEmitOnError": true
     },
-    "files": [
-        "app/main.ts",
-        "app/global.d.ts",
-        "app/app.component.ts",
-        "app/tests/bootstrap.ts",
-        "typings/mocha.d.ts",
-        "node_modules/tns-core-modules/tns-core-modules.d.ts"
-    ],
-    "filesGlob": [
-        "node_modules/tns-core-modules/tns-core-modules.d.ts",
-        "app/**/*.ts"
-    ],
     "exclude": [
         "node_modules",
         "platforms"
