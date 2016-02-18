@@ -1,6 +1,7 @@
 import {Component, Directive, Host, ElementRef, Input} from 'angular2/core';
 import { Observable } from 'data/observable';
-import { TextValueAccessor } from '../nativescript-angular/text-value-accessor';
+import {TextValueAccessor} from '../nativescript-angular/value-accessors/text-value-accessor';
+import {CheckedValueAccessor} from '../nativescript-angular/value-accessors/checked-value-accessor';
 
 @Component({
     selector: 'templated-component',
@@ -26,12 +27,14 @@ export class ProgressComponent {
 
 @Component({
 	selector: 'renderer-test',
-    directives: [TemplatedComponent, ProgressComponent, TextValueAccessor],
+    directives: [TemplatedComponent, ProgressComponent, TextValueAccessor, CheckedValueAccessor],
 	template: `    
     <StackLayout orientation='vertical'>
         <Progress value="50" style="color: red"></Progress>
+        <Switch [(ngModel)]='model.testBoolean'></Switch>
+        <Label [text]='model.testBoolean'></Label>
         <Label [text]='model.test'></Label>
-        <TextField #name [ngModel]='model.test' (ngModelChange)="model.test=setUpperCase($event)" fontSize='20' padding='20'></TextField>
+        <TextView #name [ngModel]='model.test' (ngModelChange)="model.test=setUpperCase($event)" fontSize='20' padding='20'></TextView>
         <Label [class.valid]="isValid" [class.invalid]="!isValid" text='Name' fontSize='20' verticalAlignment='center' padding='20'></Label>
         <TextField #name text='John' fontSize='20' padding='20'></TextField>
         <Button [text]='buttonText' (tap)='onSave($event, name.text, $el)'></Button>
@@ -60,7 +63,7 @@ export class RendererTest {
         this.showDetails = true;
         this.detailsText = 'plain ng-if directive \ndetail 1-2-3...';
         this.moreDetailsText = 'More details:';
-        this.model = new Observable({'test': 'Jack'});
+        this.model = new Observable({'test': 'Jack', 'testBoolean': false});
 
         this.detailLines = [
             "ngFor inside a ngIf 1",
