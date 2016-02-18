@@ -80,17 +80,8 @@ module.exports = function(grunt) {
 
     grunt.registerTask("cleanAll", [
         'clean:src',
-        'fix-unsupported-typings',
         'clean:package',
     ]);
-
-    grunt.registerTask("fix-unsupported-typings", function() {
-        var zoneDts = path.join('node_modules', 'angular2', 'typings', 'zone', 'zone.d.ts');
-        shelljs.sed('-i', /.*reference.*path.*es6-shim.*\n/g, '', zoneDts);
-
-        var globalsEs6Dts = path.join('node_modules', 'angular2', 'manual_typings', 'globals-es6.d.ts');
-        shelljs.sed('-i', /.*reference.*path.*node\.d\.ts.*\n/g, '', globalsEs6Dts);
-    });
 
     grunt.registerTask("package", [
         "clean:packageDefinitions",
