@@ -7,6 +7,7 @@ src/nativescript-angular/**/*.js
 .nvm
 
 tests/app/**/*.js
+tests/app/global.d.ts
 tests/test-output.txt
 tests/app/nativescript-angular
 tests/app/global.d.ts
