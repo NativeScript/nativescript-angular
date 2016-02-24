@@ -1,10 +1,16 @@
 //Import globals before the zone, so the latter can patch the global functions
 import 'globals';
+
+//prevent a crash in zone patches
+global.HTMLElement = function() {}
+global.document = {};
 import "zone.js/dist/zone.js"
+global.HTMLElement = undefined;
+global.document = undefined;
+
 import 'reflect-metadata';
 import './polyfills/array';
 import {isPresent, Type} from 'angular2/src/facade/lang';
-import {Promise, PromiseWrapper} from 'angular2/src/facade/async';
 import {platform, ComponentRef, PLATFORM_DIRECTIVES, PLATFORM_PIPES} from 'angular2/core';
 import {bind, provide, Provider} from 'angular2/src/core/di';
 import {DOM} from 'angular2/src/platform/dom/dom_adapter';
