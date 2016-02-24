@@ -3,22 +3,20 @@ import {View} from "ui/core/view";
 import {Placeholder} from "ui/placeholder";
 import {ContentView} from 'ui/content-view';
 import {LayoutBase} from 'ui/layouts/layout-base';
-import {ViewClass, getViewClass, isKnownView} from './element-registry';
+import {ViewClass, getViewClass, getViewMeta, isKnownView, ViewExtensions, NgView, ViewClassMeta} from './element-registry';
 import {getSpecialPropertySetter} from "ui/builder/special-properties";
+import { ActionBar, ActionItem, NavigationButton } from "ui/action-bar";
 import trace = require("trace");
+
 
 export const rendererTraceCategory = "ns-renderer";
 export function traceLog(msg) {
     trace.write(msg, rendererTraceCategory);
 }
 
-export interface ViewExtensions {
-    nodeName: string;
-    templateParent: NgView;
-    cssClasses: Map<string, boolean>;
-}
+export type ViewExtensions = ViewExtensions;
+export type NgView = NgView;
 
-export type NgView = View & ViewExtensions;
 export type NgLayoutBase = LayoutBase & ViewExtensions;
 export type NgContentView = ContentView & ViewExtensions;
 
@@ -34,13 +32,14 @@ export function isContentView(view: any): view is NgContentView {
     return view instanceof ContentView;
 }
 
-function isComplexProperty(view: NgView) {
-    const name = view.nodeName
-    return isString(name) && name.indexOf(".") !== -1;
-}
-
 export function insertChild(parent: any, child: NgView, atIndex = -1) {
-    if (isLayout(parent)) {
+    if (!parent || child.meta.skipAddToDom) {
+        return;
+    }
+
+    if (parent.meta && parent.meta.insertChild) {
+        parent.meta.insertChild(parent, child, atIndex);
+    } else if (isLayout(parent)) {
         if (atIndex !== -1) {
             parent.insertChild(child, atIndex);
         } else {
@@ -48,13 +47,21 @@ export function insertChild(parent: any, child: NgView, atIndex = -1) {
         }
     } else if (isContentView(parent)) {
         parent.content = child;
+    } else if (parent && parent._addChildFromBuilder) {
+        parent._addChildFromBuilder(child.nodeName, child);
     } else {
         //throw new Error("Parent can't contain children: " + parent.nodeName + ', ' + parent);
     }
 }
 
 export function removeChild(parent: any, child: NgView) {
-    if (isLayout(parent)) {
+    if (!parent || child.meta.skipAddToDom) {
+        return;
+    }
+
+    if (parent.meta && parent.meta.removeChild) {
+        parent.meta.removeChild(parent, child);
+    } else if (isLayout(parent)) {
         parent.removeChild(child);
     } else if (isContentView(parent)) {
         if (parent.content === child) {
@@ -80,6 +87,7 @@ export function getChildIndex(parent: any, child: NgView) {
 function createAndAttach(name: string, viewClass: ViewClass, parent: NgView): NgView {
     const view = <NgView>new viewClass();
     view.nodeName = name;
+    view.meta = getViewMeta(name);
     if (parent) {
         insertChild(parent, view);
     }
@@ -99,6 +107,7 @@ export function createText(value: string): NgView {
     const text = <NgView>new Placeholder();
     text.nodeName = "#text";
     text.visibility = "collapse";
+    text.meta = getViewMeta("Placeholder");
     return text;
 }
 
@@ -113,7 +122,7 @@ export function createViewContainer(name: string, parentElement: NgView) {
 
 export function createTemplateAnchor(parentElement: NgView) {
     //HACK: Using a ContentView here, so that it creates a native View object
-    const anchor = createAndAttach('ContentView', ContentView, parentElement);
+    const anchor = createAndAttach('template', ContentView, parentElement);
     anchor.visibility = "collapse";
     anchor.templateParent = parentElement;
     return anchor;

@@ -11,7 +11,9 @@ import { NS_ROUTER_PROVIDERS, routerTraceCategory } from "./nativescript-angular
 import { rendererTraceCategory } from "./nativescript-angular/renderer";
 
 import trace = require("trace");
-trace.setCategories(routerTraceCategory + ", " + rendererTraceCategory);
+// trace.setCategories(routerTraceCategory + ", " + rendererTraceCategory);
+// trace.setCategories(rendererTraceCategory);
+// trace.setCategories(routerTraceCategory);
 trace.enable();
 
 import {RendererTest} from './examples/renderer-test';
@@ -20,11 +22,16 @@ import {ListTest} from './examples/list/list-test';
 import {ListTestAsync} from "./examples/list/list-test-async";
 import {ImageTest} from "./examples/image/image-test";
 import {NavigationTest} from "./examples/navigation/navigation-test";
+import {ActionBarTest} from "./examples/action-bar/action-bar-test";
 
 
-//nativeScriptBootstrap(RendererTest);
-//nativeScriptBootstrap(Benchmark);
-//nativeScriptBootstrap(ListTest);
-nativeScriptBootstrap(ListTestAsync);
+// nativeScriptBootstrap(RendererTest);
+// nativeScriptBootstrap(Benchmark);
+// nativeScriptBootstrap(ListTest);
+// nativeScriptBootstrap(ListTestAsync);
+// nativeScriptBootstrap(Benchmark);
+// nativeScriptBootstrap(ListTest);
+// nativeScriptBootstrap(ListTestAsync);
 // nativeScriptBootstrap(ImageTest);
-//nativeScriptBootstrap(NavigationTest, [NS_ROUTER_PROVIDERS]);
+// nativeScriptBootstrap(NavigationTest, [NS_ROUTER_PROVIDERS]);
+nativeScriptBootstrap(ActionBarTest, [NS_ROUTER_PROVIDERS], { startPageActionBarHidden: false });

@@ -43,8 +43,13 @@ import {defaultPageProvider} from "./platform-providers";
 
 let _platform = null;
 
+export interface AppOptions {
+    cssFile?: string;
+    startPageActionBarHidden?: boolean;
+}
+
 export function bootstrap(appComponentType: any,
-                          customProviders: ProviderArray = null) : Promise<ComponentRef> {
+    customProviders: ProviderArray = null): Promise<ComponentRef> {
     NativeScriptDomAdapter.makeCurrent();
 
     let platformProviders: ProviderArray = [
@@ -72,21 +77,24 @@ export function bootstrap(appComponentType: any,
     if (isPresent(customProviders)) {
         appProviders.push(customProviders);
     }
-  
+
     if (!_platform) {
         _platform = platform(platformProviders);
     }
     return _platform.application(appProviders).bootstrap(appComponentType);
 }
 
-export function nativeScriptBootstrap(appComponentType: any, customProviders?: ProviderArray, appOptions?: any) {
+export function nativeScriptBootstrap(appComponentType: any, customProviders?: ProviderArray, appOptions?: AppOptions) {
     if (appOptions && appOptions.cssFile) {
         application.cssFile = appOptions.cssFile;
     }
     application.start({
         create: (): Page => {
             let page = new Page();
-            
+            if (appOptions) {
+                page.actionBarHidden = appOptions.startPageActionBarHidden;
+            }
+
             let onLoadedHandler = function(args) {
                 page.off('loaded', onLoadedHandler);
                 //profiling.stop('application-start');
@@ -97,7 +105,7 @@ export function nativeScriptBootstrap(appComponentType: any, customProviders?: P
                 bootstrap(appComponentType, customProviders).then((appRef) => {
                     //profiling.stop('ng-bootstrap');
                     console.log('ANGULAR BOOTSTRAP DONE.');
-                }, (err) =>{
+                }, (err) => {
                     console.log('ERROR BOOTSTRAPPING ANGULAR');
                     let errorMessage = err.message + "\n\n" + err.stack;
                     console.log(errorMessage);
@@ -107,9 +115,9 @@ export function nativeScriptBootstrap(appComponentType: any, customProviders?: P
                     page.content = view;
                 });
             }
-            
+
             page.on('loaded', onLoadedHandler);
-            
+
             return page;
         }
     });
