@@ -3,18 +3,21 @@ import {isBlank, isPresent} from 'angular2/src/facade/lang';
 import {StringMapWrapper} from 'angular2/src/facade/collection';
 
 import {Directive, Attribute, DynamicComponentLoader, ComponentRef, ElementRef,
-Injector, provide, Type, Component, OpaqueToken, Inject} from 'angular2/core';
+    Injector, provide, Type, Component, OpaqueToken, Inject} from 'angular2/core';
 
 import * as routerHooks from 'angular2/src/router/lifecycle_annotations';
-import { hasLifecycleHook} from 'angular2/src/router/route_lifecycle_reflector';
+import {hasLifecycleHook} from 'angular2/src/router/route_lifecycle_reflector';
 
-import { ComponentInstruction, RouteParams, RouteData, RouterOutlet, LocationStrategy, Router,
-OnActivate, OnDeactivate, CanReuse, OnReuse } from 'angular2/router';
+import {
+    ComponentInstruction, RouteParams, RouteData,
+    RouterOutlet, LocationStrategy, Router,
+    OnActivate, OnDeactivate, CanReuse, OnReuse
+} from 'angular2/router';
 
-import { topmost } from "ui";
-import { Page, NavigatedData } from "ui/page";
-import { log } from "./common";
-import { NSLocationStrategy } from "./ns-location-strategy";
+import {topmost} from "ui/frame";
+import {Page, NavigatedData} from "ui/page";
+import {log} from "./common";
+import {NSLocationStrategy} from "./ns-location-strategy";
 
 
 let COMPONENT = new OpaqueToken("COMPONENT");

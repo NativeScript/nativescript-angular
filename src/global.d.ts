@@ -1,9 +1,14 @@
 /// <reference path="../node_modules/tns-core-modules/tns-core-modules.d.ts" />
 
-interface Map<K, V> {
-    keys(): Array<K>;
-    values(): Array<V>;
+//Compatibility interfaces for rxjs
+
+interface IteratorResult<T> {
+    done: boolean;
+    value?: T;
 }
 
-declare type MapConstructor = typeof Map;
-declare type SetConstructor = typeof Set;
+interface Iterator<T> {
+    next(value?: any): IteratorResult<T>;
+    return?(value?: any): IteratorResult<T>;
+    throw?(e?: any): IteratorResult<T>;
+}

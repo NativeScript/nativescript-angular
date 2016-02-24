@@ -1,5 +1,9 @@
-import {HostListener, Host, Directive, Component, ContentChild, EmbeddedViewRef, TemplateRef, ViewContainerRef} from 'angular2/core';
-import {View} from 'ui';
+import {
+    HostListener, Host, Directive,
+    Component, ContentChild, EmbeddedViewRef,
+    TemplateRef, ViewContainerRef
+} from 'angular2/core';
+import {View} from 'ui/core/view';
 import {NgView} from '../view-util'
 const NG_VIEW = "_ngViewRef";
 
