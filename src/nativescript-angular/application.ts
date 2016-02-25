@@ -1,12 +1,15 @@
 //Import globals before the zone, so the latter can patch the global functions
 import 'globals';
 
-//prevent a crash in zone patches
-global.HTMLElement = function() {}
-global.document = {};
+//prevent a crash in zone patches. pretend we're node.js
+global.process = {};
+const oldToString = Object.prototype.toString;
+Object.prototype.toString = function() {
+    return "[object process]";
+}
 import "zone.js/dist/zone.js"
-global.HTMLElement = undefined;
-global.document = undefined;
+Object.prototype.toString = oldToString;
+delete global.process;
 
 import 'reflect-metadata';
 import './polyfills/array';
