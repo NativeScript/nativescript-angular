@@ -14,10 +14,9 @@ export class SimpleApp {
 }
 
 describe('bootstrap', () => {
-    it('SimpleApp bootstrapped', (done) => {
+    it('SimpleApp bootstrapped', () => {
         return bootstrap(SimpleApp).then((componentRef) => {
             assert.isTrue(SimpleApp === componentRef.componentType);
-            done();
         });
     });
 });
