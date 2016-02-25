@@ -45,6 +45,7 @@
 		"karma-mocha": "^0.2.1",
 		"karma-nativescript-launcher": "^0.3.1",
 		"mocha": "^2.4.5",
+		"karma-mocha-reporter": "^1.2.0",
 		"nativescript-dev-typescript": "^0.3.1",
 		"shelljs": "^0.5.3",
 		"typescript": "1.8.2"
