@@ -31,4 +31,5 @@ script:
     - cd ./tests
     - npm install
     - tns platform add android
+    - tns run android --justlaunch
     - tns test android --emulator
