@@ -21,6 +21,7 @@ install:
     - nvm install 4
     - npm install -g nativescript --ignore-scripts
     - tns usage-reporting disable
+    - tns error-reporting disable
 
 before_script:
     - echo no | android create avd --force -n test -t android-19 -b armeabi-v7a
