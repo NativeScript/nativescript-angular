@@ -22,9 +22,9 @@ import {ImageTest} from "./examples/image/image-test";
 import {NavigationTest} from "./examples/navigation/navigation-test";
 
 
-nativeScriptBootstrap(RendererTest);
+//nativeScriptBootstrap(RendererTest);
 //nativeScriptBootstrap(Benchmark);
 //nativeScriptBootstrap(ListTest);
-// nativeScriptBootstrap(ListTestAsync);
+nativeScriptBootstrap(ListTestAsync);
 // nativeScriptBootstrap(ImageTest);
 //nativeScriptBootstrap(NavigationTest, [NS_ROUTER_PROVIDERS]);

@@ -1,6 +1,5 @@
 import { Component, Input, ChangeDetectionStrategy } from 'angular2/core';
 import { Observable as RxObservable } from 'rxjs/Observable';
-import { Observable, WrappedValue } from 'data/observable';
 
 class DataItem {
     constructor(public id: number, public name: string) { }
@@ -10,15 +9,15 @@ class DataItem {
     selector: 'list-test-async',
     styleUrls: ['examples/list/list-test-async.css'],
     template: `
-            <ListView [items]="myItems | async" (itemTap)="onItemTap($event)">
-                <item-template>
-                    <template #item="item" #i="index" #odd="odd" #even="even">
-                        <StackLayout [class.odd]="odd" [class.even]="even">
-                            <Label class="test" [text]='"index: " + item.name'></Label>
-                        </StackLayout>
-                    </template>
-                </item-template>
-            </ListView>
+    <GridLayout>
+        <ListView [items]="myItems | async" (itemTap)="onItemTap($event)">
+            <template #item="item" #i="index" #odd="odd" #even="even">
+                <StackLayout [class.odd]="odd" [class.even]="even">
+                    <Label class="test" [text]='"index: " + item.name'></Label>
+                </StackLayout>
+            </template>
+        </ListView>
+    </GridLayout>
     `,
     changeDetection: ChangeDetectionStrategy.OnPush
 })
@@ -34,7 +33,7 @@ export class ListTestAsync {
         var subscr;
         this.myItems = RxObservable.create(subscriber => {
             subscr = subscriber;
-            subscriber.next(WrappedValue.wrap(items));
+            subscriber.next(items);
             return function () {
                 console.log("Unsubscribe called!!!");
             }
@@ -45,7 +44,7 @@ export class ListTestAsync {
             counter++;
             console.log("Adding " + counter + "-th item");
             items.push(new DataItem(counter, "data item " + counter));
-            subscr.next(WrappedValue.wrap(items));
+            subscr.next(items);
         }, 1000);
         
         setTimeout(() => {
