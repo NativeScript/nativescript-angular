@@ -5,6 +5,7 @@ src/nativescript-angular/**/*.js
 .baseDir.ts
 .tscache
 .nvm
+.vscode
 
 tests/app/**/*.js
 tests/app/global.d.ts
