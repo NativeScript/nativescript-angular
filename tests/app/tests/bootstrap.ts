@@ -6,6 +6,7 @@ import {Component} from "angular2/core";
 global.assert = realAssert;
 import * as chai from "chai"
 declare var assert: typeof chai.assert;
+import "./mocha-config";
 
 @Component({
     template: "<Button text='OHAI'></Button>"

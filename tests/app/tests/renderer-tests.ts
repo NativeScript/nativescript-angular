@@ -16,6 +16,7 @@ import {StackLayout} from "ui/layouts/stack-layout";
 import {ProxyViewContainer} from "ui/proxy-view-container";
 import * as chai from "chai"
 declare var assert: typeof chai.assert;
+import "./mocha-config";
 
 @Component({
     template: `<StackLayout #loadSite></StackLayout>`
