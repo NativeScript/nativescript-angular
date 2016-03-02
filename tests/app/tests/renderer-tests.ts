@@ -42,7 +42,6 @@ export class LayoutWithLabel {
 })
 export class LabelCmp {
     constructor(public elementRef: ElementRef){
-        console.log('LABELCMP');
     }
 }
 
@@ -51,6 +50,24 @@ export class LabelCmp {
     template: `<GridLayout><label-cmp></label-cmp></GridLayout>`
 })
 export class LabelContainer {
+    constructor(public elementRef: ElementRef){}
+}
+
+@Component({
+    selector: "projectable-cmp",
+    template: `<StackLayout><ng-content></ng-content></StackLayout>`
+})
+export class ProjectableCmp {
+    constructor(public elementRef: ElementRef){
+    }
+}
+@Component({
+    directives: [ProjectableCmp],
+    template: `<GridLayout>
+        <projectable-cmp><Button text="projected"></Button></projectable-cmp>
+    </GridLayout>`
+})
+export class ProjectionContainer {
     constructor(public elementRef: ElementRef){}
 }
 
@@ -91,6 +108,14 @@ describe('bootstrap', () => {
             assert.equal("(ProxyViewContainer (GridLayout (ProxyViewContainer (Label))))", dumpView(componentRoot));
         });
     });
+
+    it("projects content into components", () => {
+        return loadComponent(ProjectionContainer).then((componentRef) => {
+            const componentRoot = componentRef.instance.elementRef.nativeElement;
+            assert.equal("(ProxyViewContainer (GridLayout (ProxyViewContainer (StackLayout (Button)))))", dumpView(componentRoot));
+        });
+    });
+
 });
 
 function dumpView(view: View): string {
