@@ -2,7 +2,7 @@
 	"nativescript": {
 		"id": "org.nativescript.helloworldng",
 		"tns-android": {
-			"version": "1.6.2"
+			"version": "1.6.3"
 		}
 	},
 	"name": "nativescript-hello-world-ng",
