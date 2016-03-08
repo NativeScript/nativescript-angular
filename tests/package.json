@@ -3,6 +3,9 @@
 		"id": "org.nativescript.helloworldng",
 		"tns-android": {
 			"version": "1.6.3"
+		},
+		"tns-ios": {
+			"version": "1.6.0"
 		}
 	},
 	"name": "nativescript-hello-world-ng",
