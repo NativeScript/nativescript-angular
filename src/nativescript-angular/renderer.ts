@@ -1,10 +1,11 @@
-import {Inject, Injectable} from 'angular2/src/core/di';
+import {Inject, Injectable, Optional} from 'angular2/src/core/di';
 import {
     Renderer,
     RootRenderer,
     RenderComponentType,
     RenderDebugInfo
 } from 'angular2/src/core/render/api';
+import {APP_ROOT_VIEW} from "./platform-providers";
 import {isBlank} from 'angular2/src/facade/lang';
 import {DOM} from 'angular2/src/platform/dom/dom_adapter';
 import {COMPONENT_VARIABLE, CONTENT_ATTR} from 'angular2/src/platform/dom/dom_renderer';
@@ -16,14 +17,25 @@ import * as util from "./view-util";
 export { rendererTraceCategory } from "./view-util";
 
 @Injectable()
-export class NativeScriptRootRenderer extends RootRenderer {
+export class NativeScriptRootRenderer implements RootRenderer {
+    private _rootView: View = null;
+    constructor(@Optional() @Inject(APP_ROOT_VIEW) rootView: View) {
+        console.log('root view: ' + rootView);
+        this._rootView = rootView;
+    }
+
     private _registeredComponents: Map<string, NativeScriptRenderer> = new Map<string, NativeScriptRenderer>();
-    private _page: Page;
-    public get page(): Page {
-        if (!this._page) {
-            this._page = <Page>(<any>topmost()).currentPage; 
+
+    public get rootView(): View {
+        if (!this._rootView) {
+            const page = topmost().currentPage;
+            this._rootView = page.content;
         }
-        return this._page;
+        return this._rootView;
+    }
+
+    public get page(): Page {
+        return <Page>this.rootView.page;
     }
 
     renderComponent(componentProto: RenderComponentType): Renderer {
@@ -60,10 +72,11 @@ export class NativeScriptRenderer extends Renderer {
     }
 
     selectRootElement(selector: string): util.NgView {
+        console.log('selectRootElement: ' + selector);
         util.traceLog('ROOT');
-        const page = <util.NgView><any>this.rootRenderer.page;
-        page.nodeName = 'Page';
-        return page;
+        const rootView = <util.NgView><any>this.rootRenderer.rootView;
+        rootView.nodeName = 'ROOT';
+        return rootView;
     }
 
     createViewRoot(hostElement: util.NgView): util.NgView {

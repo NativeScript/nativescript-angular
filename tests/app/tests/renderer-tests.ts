@@ -1,6 +1,5 @@
-//stash it here before Angular runs it over...
-const realAssert = global.assert;
-import "reflect-metadata";
+//make sure you import mocha-config before angular2/core
+import {assert} from "./test-config";
 import {bootstrap} from "../nativescript-angular/application";
 import {
     Type,
@@ -8,17 +7,21 @@ import {
     ComponentRef,
     DynamicComponentLoader,
     ViewChild,
-    ElementRef
+    ElementRef,
+    provide
 } from "angular2/core";
-global.assert = realAssert;
 import {View} from "ui/core/view";
+import * as background from "ui/styling/background";
 import {StackLayout} from "ui/layouts/stack-layout";
+import {GridLayout} from "ui/layouts/grid-layout";
+import {LayoutBase} from "ui/layouts/layout-base";
 import {ProxyViewContainer} from "ui/proxy-view-container";
-import * as chai from "chai"
-declare var assert: typeof chai.assert;
-import "./mocha-config";
+import {topmost} from 'ui/frame';
+import {APP_ROOT_VIEW} from "../nativescript-angular/platform-providers";
+import {Red} from "color/known-colors";
 
 @Component({
+    selector: 'my-app',
     template: `<StackLayout #loadSite></StackLayout>`
 })
 export class App {
@@ -71,6 +74,18 @@ export class ProjectionContainer {
     constructor(public elementRef: ElementRef){}
 }
 
+@Component({
+    selector: "styled-label-cmp",
+    styles: [
+        "Label { color: red; }",
+    ],
+    template: `<Label text="Styled!"></Label>`
+})
+export class StyledLabelCmp {
+    constructor(public elementRef: ElementRef){
+    }
+}
+
 describe('bootstrap', () => {
     let appComponent: App = null;
     let _pendingDispose: ComponentRef[] = [];
@@ -90,7 +105,14 @@ describe('bootstrap', () => {
     });
 
     before(() => {
-        return bootstrap(App).then((componentRef) => {
+        //bootstrap the app in a custom location
+        const page = topmost().currentPage;
+        const rootLayout = <LayoutBase>page.content;
+        const viewRoot = new StackLayout();
+        rootLayout.addChild(viewRoot);
+        GridLayout.setRow(rootLayout, 50);
+        const rootViewProvider = provide(APP_ROOT_VIEW, {useFactory: () => viewRoot});
+        return bootstrap(App, [rootViewProvider]).then((componentRef) => {
             appComponent = componentRef.instance;
         });
     });
@@ -116,10 +138,22 @@ describe('bootstrap', () => {
         });
     });
 
+    it("applies component styles", () => {
+        return loadComponent(StyledLabelCmp).then((componentRef) => {
+            const componentRoot = componentRef.instance.elementRef.nativeElement;
+            const label = (<ProxyViewContainer>componentRoot).getChildAt(0);
+            assert.equal(Red, label.style.color.hex);
+        });
+    });
+
 });
 
 function dumpView(view: View): string {
-    let output = ["(", (<any>view).nodeName, " "];
+    let nodeName = (<any>view).nodeName
+    if (!nodeName) {
+        nodeName = (<any>view.constructor).name + '!';
+    }
+    let output = ["(", nodeName, " "];
     (<any>view)._eachChildView((child) => {
         const childDump = dumpView(child);
         output.push(childDump);

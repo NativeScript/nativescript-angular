@@ -1,12 +1,7 @@
-//stash it here before Angular runs it over...
-const realAssert = global.assert;
-import "reflect-metadata";
+//make sure you import mocha-config before angular2/core
+import {assert} from "./test-config";
 import {bootstrap} from "../nativescript-angular/application";
 import {Component} from "angular2/core";
-global.assert = realAssert;
-import * as chai from "chai"
-declare var assert: typeof chai.assert;
-import "./mocha-config";
 
 @Component({
     template: "<Button text='OHAI'></Button>"
