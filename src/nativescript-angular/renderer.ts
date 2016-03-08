@@ -28,8 +28,7 @@ export class NativeScriptRootRenderer implements RootRenderer {
 
     public get rootView(): View {
         if (!this._rootView) {
-            const page = topmost().currentPage;
-            this._rootView = page.content;
+            this._rootView = topmost().currentPage;
         }
         return this._rootView;
     }
