@@ -2,7 +2,7 @@
 	"nativescript": {
 		"id": "org.nativescript.helloworldng",
 		"tns-android": {
-			"version": "1.6.2"
+			"version": "1.6.3"
 		}
 	},
 	"name": "nativescript-hello-world-ng",
@@ -29,7 +29,7 @@
 	"dependencies": {
 		"tns-core-modules": "^1.7.0-angular-0",
 		"angular2": "2.0.0-beta.7",
-		"nativescript-unit-test-runner": "^0.2.8",
+		"nativescript-unit-test-runner": "^0.3.1",
 		"parse5": "1.4.2",
 		"punycode": "1.3.2",
 		"querystring": "0.2.0",
@@ -43,7 +43,7 @@
 		"karma": "^0.13.19",
 		"karma-chai": "^0.1.0",
 		"karma-mocha": "^0.2.1",
-		"karma-nativescript-launcher": "^0.3.1",
+		"karma-nativescript-launcher": "^0.4.0",
 		"mocha": "^2.4.5",
 		"karma-mocha-reporter": "^1.2.0",
 		"nativescript-dev-typescript": "^0.3.1",
