@@ -3,6 +3,7 @@ import {ListViewComponent} from './list-view-comp';
 import {TextValueAccessor} from '../value-accessors/text-value-accessor';
 import {CheckedValueAccessor} from '../value-accessors/checked-value-accessor';
 import {TabViewDirective, TabViewItemDirective} from './tab-view';
+import {ActionBarComponent, ActionBarScope, ActionItemDirective, NavigationButtonDirective} from './action-bar';
 
 export const NS_DIRECTIVES: Type[] = [
     ListViewComponent,
@@ -11,5 +12,10 @@ export const NS_DIRECTIVES: Type[] = [
     TabViewItemDirective,
 
     TextValueAccessor,
-    CheckedValueAccessor
+    CheckedValueAccessor,
+    
+    ActionBarComponent, 
+    ActionBarScope, 
+    ActionItemDirective, 
+    NavigationButtonDirective
 ];

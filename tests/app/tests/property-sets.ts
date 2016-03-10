@@ -3,12 +3,14 @@ import {assert} from "./test-config";
 import {bootstrap} from "../nativescript-angular/application";
 import {Component} from "angular2/core";
 import {View} from "ui/core/view";
-import {NgView, ViewExtensions, setProperty} from "../nativescript-angular/view-util";
+import {setProperty} from "../nativescript-angular/view-util";
+import {NgView, ViewExtensions, ViewClassMeta} from "../nativescript-angular/element-registry";
 import {Red} from "color/known-colors";
 
 class TestView extends View implements ViewExtensions {
     public nodeName: string = "TestView";
     public templateParent: NgView = null;
+    public meta: ViewClassMeta = { skipAddToDom: false };
     public cssClasses: Map<string, boolean> = new Map<string, boolean>();
 
     public stringValue: string = "";

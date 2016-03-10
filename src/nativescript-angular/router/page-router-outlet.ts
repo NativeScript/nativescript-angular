@@ -273,6 +273,7 @@ class PageShim implements OnActivate, OnDeactivate, CanReuse, OnReuse {
     private id: number;
     private isInitialized: boolean;
     private componentRef: ComponentRef;
+    private page: Page;
 
     constructor(
         private element: ElementRef,
@@ -282,6 +283,7 @@ class PageShim implements OnActivate, OnDeactivate, CanReuse, OnReuse {
     ) {
         this.id = PageShim.pageShimCount++;
         this.log("constructor");
+        this.page = new Page();
     }
 
     routerOnActivate(nextInstruction: ComponentInstruction, prevInstruction: ComponentInstruction): any {
@@ -295,7 +297,12 @@ class PageShim implements OnActivate, OnDeactivate, CanReuse, OnReuse {
         if (!this.isInitialized) {
             result = new Promise((resolve, reject) => {
                 this.isInitialized = true;
-                this.loader.loadIntoLocation(this.componentType, this.element, 'content')
+                
+                let providers = Injector.resolve([
+                    provide(Page, { useValue: this.page }),
+                ]);
+                
+                this.loader.loadIntoLocation(this.componentType, this.element, 'content', providers)
                     .then((componentRef) => {
                         this.componentRef = componentRef;
                     
@@ -309,7 +316,7 @@ class PageShim implements OnActivate, OnDeactivate, CanReuse, OnReuse {
                         topmost().navigate({
                             animated: true,
                             create: () => {
-                                const page = new Page();
+                                const page = this.page;
                                 page.on('loaded', () => {
                                     // Finish activation when page is fully loaded.
                                     resolve()
