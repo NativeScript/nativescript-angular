@@ -25,13 +25,13 @@ import {NavigationTest} from "./examples/navigation/navigation-test";
 import {ActionBarTest} from "./examples/action-bar/action-bar-test";
 
 
-// nativeScriptBootstrap(RendererTest);
-// nativeScriptBootstrap(Benchmark);
-// nativeScriptBootstrap(ListTest);
-// nativeScriptBootstrap(ListTestAsync);
-// nativeScriptBootstrap(Benchmark);
-// nativeScriptBootstrap(ListTest);
-// nativeScriptBootstrap(ListTestAsync);
-// nativeScriptBootstrap(ImageTest);
-// nativeScriptBootstrap(NavigationTest, [NS_ROUTER_PROVIDERS]);
-nativeScriptBootstrap(ActionBarTest, [NS_ROUTER_PROVIDERS], { startPageActionBarHidden: false });
+nativeScriptBootstrap(RendererTest);
+//nativeScriptBootstrap(Benchmark);
+//nativeScriptBootstrap(ListTest);
+//nativeScriptBootstrap(ListTestAsync);
+//nativeScriptBootstrap(Benchmark);
+//nativeScriptBootstrap(ListTest);
+//nativeScriptBootstrap(ListTestAsync);
+//nativeScriptBootstrap(ImageTest);
+//nativeScriptBootstrap(NavigationTest, [NS_ROUTER_PROVIDERS]);
+//nativeScriptBootstrap(ActionBarTest, [NS_ROUTER_PROVIDERS], { startPageActionBarHidden: false });
