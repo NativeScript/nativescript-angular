@@ -31,9 +31,11 @@ class FirstComponent {
     directives: [NS_ROUTER_DIRECTIVES, NS_DIRECTIVES],
     template: `
 
-    <action-bar-scope>
-        <ActionItem *ngIf="show" text="action" (tap)="onTap()"></ActionItem>
-    </action-bar-scope>
+    <ActionBarExtension>
+        <ActionItem *ngIf="show" (tap)="onTap()">
+            <Button text="CUSTOM"></Button>
+        </ActionItem>
+    </ActionBarExtension>
 
     <StackLayout verticalAlignment="center">
         <Button [text]="show ? 'hide' : 'show'" (tap)="show = !show"></Button>

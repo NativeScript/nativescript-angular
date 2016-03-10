@@ -1,5 +1,6 @@
 import {Directive, Component, ContentChildren, ElementRef, Optional} from 'angular2/core';
 import {ActionItem, ActionBar, NavigationButton} from "ui/action-bar";
+import {isBlank} from "angular2/src/facade/lang";
 import {Page} from "ui/page";
 import {View} from 'ui/core/view';
 import {registerElement, ViewClassMeta, NgView } from '../element-registry';
@@ -47,25 +48,21 @@ registerElement("NavigationButton", () => require("ui/action-bar").NavigationBut
     selector: "ActionBar",
     template: "<ng-content></ng-content>"
 })
-export class ActionBarDirective {
+export class ActionBarComponent {
     constructor(public element: ElementRef, private page: Page) {
-        console.log("ActionBarDirective.constructor: " + element.nativeElement)
-        console.log("ActionBarDirective.constructor.parent: " + element.nativeElement.parent)
     }
 
     ngOnInit() {
-        console.log('ActionBarDirective.ngOnInit');
-        this.page.actionBarHidden = false;
+        if (isBlank(this.page.actionBarHidden)) {
+            this.page.actionBarHidden = false;
+        }
         this.page.actionBar = this.element.nativeElement;
         this.page.actionBar.update();
-    }
-    ngOnDestroy() {
-        console.log('ActionBarDirective.ngOnDestroy');
     }
 }
 
 @Component({
-    selector: "action-bar-scope",
+    selector: "ActionBarExtension",
     template: ""
 })
 export class ActionBarScope {
@@ -97,17 +94,14 @@ export class ActionBarScope {
 })
 export class ActionItemDirective {
     constructor(public element: ElementRef, @Optional() private ownerScope: ActionBarScope) {
-        console.log("ActionItemDirective.constructor: " + element)
     }
 
     ngOnInit() {
-        console.log('ActionItemDirective.ngOnInit owner: ' + this.ownerScope);
         if (this.ownerScope) {
             this.ownerScope.onActionInit(this);
         }
     }
     ngOnDestroy() {
-        console.log('ActionItemDirective.ngOnDestroy' + this.ownerScope);
         if (this.ownerScope) {
             this.ownerScope.onActionDestroy(this);
         }
@@ -119,17 +113,14 @@ export class ActionItemDirective {
 })
 export class NavigationButtonDirective {
     constructor(public element: ElementRef, @Optional() private ownerScope: ActionBarScope) {
-        console.log("NavigationButtonDirective.constructor: " + element)
     }
 
     ngOnInit() {
-        console.log('NavigationButtonDirective.ngOnInit owner: ' + this.ownerScope);
         if (this.ownerScope) {
             this.ownerScope.onNavButtonInit(this);
         }
     }
     ngOnDestroy() {
-        console.log('NavigationButtonDirective.ngOnDestroy' + this.ownerScope);
         if (this.ownerScope) {
             this.ownerScope.onNavButtonDestroy(this);
         }
