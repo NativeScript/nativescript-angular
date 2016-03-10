@@ -144,10 +144,21 @@ export function setProperty(view: NgView, attributeName: string, value: any): vo
     } else if (propMap.has(attributeName)) {
         // We have a lower-upper case mapped property.
         let propertyName = propMap.get(attributeName);
-        view[propertyName] = value;
+        view[propertyName] = convertValue(value);
     } else {
         // Unknown attribute value -- just set it to our object as is.
-        view[attributeName] = value;
+        view[attributeName] = convertValue(value);
+    }
+}
+
+function convertValue(value: any): any {
+    var valueAsNumber = +value;
+    if (!isNaN(valueAsNumber)) {
+        return valueAsNumber;
+    } else if (value && (value.toLowerCase() === "true" || value.toLowerCase() === "false")) {
+        return value.toLowerCase() === "true" ? true : false;
+    } else {
+        return value;
     }
 }
 

@@ -9,7 +9,7 @@ import {Component} from "angular2/core";
 export class SimpleApp {
 }
 
-describe('bootstrap', () => {
+describe('Bootstrap E2E', () => {
     it('SimpleApp bootstrapped', () => {
         return bootstrap(SimpleApp).then((componentRef) => {
             assert.isTrue(SimpleApp === componentRef.componentType);

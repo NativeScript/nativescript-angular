@@ -86,7 +86,7 @@ export class StyledLabelCmp {
     }
 }
 
-describe('bootstrap', () => {
+describe('Renderer E2E', () => {
     let appComponent: App = null;
     let _pendingDispose: ComponentRef[] = [];
 
