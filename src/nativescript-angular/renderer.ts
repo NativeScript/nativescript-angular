@@ -20,7 +20,6 @@ export { rendererTraceCategory } from "./view-util";
 export class NativeScriptRootRenderer implements RootRenderer {
     private _rootView: View = null;
     constructor(@Optional() @Inject(APP_ROOT_VIEW) rootView: View) {
-        console.log('root view: ' + rootView);
         this._rootView = rootView;
     }
 
@@ -71,8 +70,7 @@ export class NativeScriptRenderer extends Renderer {
     }
 
     selectRootElement(selector: string): util.NgView {
-        console.log('selectRootElement: ' + selector);
-        util.traceLog('ROOT');
+        util.traceLog('selectRootElement: ' + selector);
         const rootView = <util.NgView><any>this.rootRenderer.rootView;
         rootView.nodeName = 'ROOT';
         return rootView;
