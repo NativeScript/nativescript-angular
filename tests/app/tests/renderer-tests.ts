@@ -8,7 +8,8 @@ import {
     DynamicComponentLoader,
     ViewChild,
     ElementRef,
-    provide
+    provide,
+    ApplicationRef
 } from "angular2/core";
 import {View} from "ui/core/view";
 import * as background from "ui/styling/background";
@@ -28,7 +29,8 @@ export class App {
     @ViewChild("loadSite") public loadSiteRef: ElementRef;
 
     constructor(public loader: DynamicComponentLoader,
-        public elementRef: ElementRef) {
+        public elementRef: ElementRef,
+        public appRef: ApplicationRef) {
     }
 }
 
@@ -36,7 +38,7 @@ export class App {
     template: `<StackLayout><Label text="Layout"></Label></StackLayout>`
 })
 export class LayoutWithLabel {
-    constructor(public elementRef: ElementRef){}
+    constructor(public elementRef: ElementRef) { }
 }
 
 @Component({
@@ -44,7 +46,7 @@ export class LayoutWithLabel {
     template: `<Label text="Layout"></Label>`
 })
 export class LabelCmp {
-    constructor(public elementRef: ElementRef){
+    constructor(public elementRef: ElementRef) {
     }
 }
 
@@ -53,7 +55,7 @@ export class LabelCmp {
     template: `<GridLayout><label-cmp></label-cmp></GridLayout>`
 })
 export class LabelContainer {
-    constructor(public elementRef: ElementRef){}
+    constructor(public elementRef: ElementRef) { }
 }
 
 @Component({
@@ -61,7 +63,7 @@ export class LabelContainer {
     template: `<StackLayout><ng-content></ng-content></StackLayout>`
 })
 export class ProjectableCmp {
-    constructor(public elementRef: ElementRef){
+    constructor(public elementRef: ElementRef) {
     }
 }
 @Component({
@@ -71,7 +73,7 @@ export class ProjectableCmp {
     </GridLayout>`
 })
 export class ProjectionContainer {
-    constructor(public elementRef: ElementRef){}
+    constructor(public elementRef: ElementRef) { }
 }
 
 @Component({
@@ -82,13 +84,25 @@ export class ProjectionContainer {
     template: `<Label text="Styled!"></Label>`
 })
 export class StyledLabelCmp {
-    constructor(public elementRef: ElementRef){
+    constructor(public elementRef: ElementRef) {
     }
 }
+
+@Component({
+    selector: "conditional-label",
+    template: `<Label *ngIf="show" text="iffed"></Label>`
+})
+export class ConditionalLabel {
+    public show: boolean = false;
+    constructor(public elementRef: ElementRef) {
+    }
+}
+
 
 describe('Renderer E2E', () => {
     let appComponent: App = null;
     let _pendingDispose: ComponentRef[] = [];
+    let appRef: ApplicationRef = null;
 
     function loadComponent(type: Type): Promise<ComponentRef> {
         return appComponent.loader.loadIntoLocation(type, appComponent.elementRef, "loadSite").then((componentRef) => {
@@ -111,9 +125,10 @@ describe('Renderer E2E', () => {
         const viewRoot = new StackLayout();
         rootLayout.addChild(viewRoot);
         GridLayout.setRow(rootLayout, 50);
-        const rootViewProvider = provide(APP_ROOT_VIEW, {useFactory: () => viewRoot});
+        const rootViewProvider = provide(APP_ROOT_VIEW, { useFactory: () => viewRoot });
         return bootstrap(App, [rootViewProvider]).then((componentRef) => {
             appComponent = componentRef.instance;
+            appRef = appComponent.appRef;
         });
     });
 
@@ -145,6 +160,26 @@ describe('Renderer E2E', () => {
             assert.equal(Red, label.style.color.hex);
         });
     });
+
+    describe("Structural directives", () => {
+        it("ngIf hides component when false", () => {
+            return loadComponent(ConditionalLabel).then((componentRef) => {
+                const componentRoot = componentRef.instance.elementRef.nativeElement;
+                assert.equal("(ProxyViewContainer (template))", dumpView(componentRoot));
+            });
+        });
+
+        it("ngIf show component when true", () => {
+            return loadComponent(ConditionalLabel).then((componentRef) => {
+                const component = <ConditionalLabel>componentRef.instance;
+                const componentRoot = component.elementRef.nativeElement;
+
+                component.show = true;
+                appRef.tick();
+                assert.equal("(ProxyViewContainer (template), (Label))", dumpView(componentRoot));
+            });
+        })
+    })
 
 });
 
