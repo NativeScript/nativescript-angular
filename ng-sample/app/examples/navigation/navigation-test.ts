@@ -1,5 +1,5 @@
 import {Component} from 'angular2/core';
-import {RouteConfig, ROUTER_PROVIDERS, ROUTER_DIRECTIVES} from 'angular2/router';
+import {RouteConfig, ROUTER_PROVIDERS, ROUTER_DIRECTIVES, ComponentInstruction} from 'angular2/router';
 
 import {NavComponent} from "./nav-component";
 import {NS_ROUTER_DIRECTIVES, NS_ROUTER_PROVIDERS} from "../../nativescript-angular/router/ns-router";
@@ -15,7 +15,17 @@ import {NS_ROUTER_DIRECTIVES, NS_ROUTER_PROVIDERS} from "../../nativescript-angu
     `
 })
 class StartComponent {
+    constructor() {
+        console.log("StartComponent.constructor()")
+    }
 
+    routerOnActivate(nextInstruction: ComponentInstruction, prevInstruction: ComponentInstruction): any {
+        console.log("StartComponent.routerOnActivate()")
+    }
+
+    routerOnDeactivate(nextInstruction: ComponentInstruction, prevInstruction: ComponentInstruction): any {
+        console.log("StartComponent.routerOnDeactivate()")
+    }
 }
 
 @Component({

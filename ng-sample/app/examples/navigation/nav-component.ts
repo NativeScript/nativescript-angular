@@ -2,11 +2,12 @@ import {Component} from 'angular2/core';
 import {ROUTER_DIRECTIVES, Router, OnActivate, OnDeactivate, CanReuse, OnReuse,
 LocationStrategy, RouteParams, ComponentInstruction, RouteConfig, Location } from 'angular2/router';
 import {topmost} from "ui/frame";
+import {Page} from "ui/page";
 import {NS_ROUTER_DIRECTIVES} from "../../nativescript-angular/router/ns-router";
 
 
 @Component({
-    selector: 'main',
+    selector: 'master',
     template: `
     <StackLayout>
         <Label text="Master View" style="font-size: 20; horizontal-align: center; margin: 10"></Label>
@@ -15,10 +16,11 @@ import {NS_ROUTER_DIRECTIVES} from "../../nativescript-angular/router/ns-router"
     </StackLayout>
     `
 })
-class MainComp {
+class MasterComponent {
     public details: Array<number> = [1, 2, 3];
 
     constructor(private _router: Router) {
+        console.log("MasterComponent.constructor()");
     }
 
     onSelect(val: number) {
@@ -26,11 +28,11 @@ class MainComp {
     }
 
     routerOnActivate(nextInstruction: ComponentInstruction, prevInstruction: ComponentInstruction): any {
-        console.log("MainComp.routerOnActivate()")
+        console.log("MasterComponent.routerOnActivate()")
     }
 
     routerOnDeactivate(nextInstruction: ComponentInstruction, prevInstruction: ComponentInstruction): any {
-        console.log("MainComp.routerOnDeactivate()")
+        console.log("MasterComponent.routerOnDeactivate()")
     }
 }
 
@@ -45,9 +47,10 @@ class MainComp {
     </StackLayout>
     `
 })
-class DetailComp {
+class DetailComponent {
     public id: number;
     constructor(params: RouteParams, private _router: Router) {
+        console.log("DetailComponent.constructor()");
         this.id = parseInt(params.get("id"));
     }
 
@@ -56,11 +59,11 @@ class DetailComp {
     }
 
     routerOnActivate(nextInstruction: ComponentInstruction, prevInstruction: ComponentInstruction): any {
-        console.log("DetailComp.routerOnActivate() id: " + this.id)
+        console.log("DetailComponent.routerOnActivate() id: " + this.id)
     }
 
     routerOnDeactivate(nextInstruction: ComponentInstruction, prevInstruction: ComponentInstruction): any {
-        console.log("DetailComp.routerOnDeactivate() id: " + this.id)
+        console.log("DetailComponent.routerOnDeactivate() id: " + this.id)
     }
 }
 
@@ -89,8 +92,8 @@ class DetailComp {
 `
 })
 @RouteConfig([
-    { path: '/', name: 'Main', component: MainComp, useAsDefault: true },
-    { path: '/:id', name: 'Detail', component: DetailComp }
+    { path: '/', name: 'Main', component: MasterComponent, useAsDefault: true },
+    { path: '/:id', name: 'Detail', component: DetailComponent }
 ])
 export class NavComponent implements OnActivate, OnDeactivate {
     static counter: number = 0;
@@ -99,6 +102,7 @@ export class NavComponent implements OnActivate, OnDeactivate {
     public depth: number;
 
     constructor(params: RouteParams, private location: Location) {
+        console.log("NavComponent.constructor()");
         NavComponent.counter++;
 
         this.compId = NavComponent.counter;
