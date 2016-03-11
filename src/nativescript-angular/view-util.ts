@@ -161,6 +161,10 @@ export function setProperty(view: NgView, attributeName: string, value: any): vo
 }
 
 function convertValue(value: any): any {
+    if (typeof(value) !== "string" || value === "") {
+        return value;
+    }
+
     var valueAsNumber = +value;
     if (!isNaN(valueAsNumber)) {
         return valueAsNumber;

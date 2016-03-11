@@ -16,6 +16,7 @@ class TestView extends View implements ViewExtensions {
     public stringValue: string = "";
     public numValue: number = 0;
     public boolValue: boolean = undefined;
+    public anyValue: any = undefined;
 }
 
 describe('setting View properties', () => {
@@ -29,6 +30,8 @@ describe('setting View properties', () => {
         let view = new TestView();
         setProperty(view, "numValue", "42")
         assert.strictEqual(42, view.numValue);
+        setProperty(view, "numValue", 0)
+        assert.strictEqual(0, view.numValue);
     });
 
     it('converts boolean values', () => {
@@ -43,5 +46,26 @@ describe('setting View properties', () => {
         let view = new TestView();
         setProperty(view, "style", "color: red")
         assert.equal(Red, view.style.color.hex);
+    });
+
+    it('doesn\'t convert blank strings', () => {
+        let view = new TestView();
+        setProperty(view, "stringValue", "")
+        assert.strictEqual("", view.stringValue);
+    });
+
+    it('doesn\'t convert booleans', () => {
+        let view = new TestView();
+        setProperty(view, "boolValue", true)
+        assert.strictEqual(true, view.boolValue);
+        setProperty(view, "boolValue", false)
+        assert.strictEqual(false, view.boolValue);
+    });
+
+    it('preserves objects', () => {
+        let value = {name: "Jim", age: 23};
+        let view = new TestView();
+        setProperty(view, "anyValue", value)
+        assert.deepEqual(value, view.anyValue);
     });
 });
