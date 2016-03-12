@@ -1,42 +1,19 @@
 //make sure you import mocha-config before angular2/core
 import {assert} from "./test-config";
-import {bootstrap} from "../nativescript-angular/application";
 import {
-    Type,
     Component,
-    ComponentRef,
-    DynamicComponentLoader,
-    ViewChild,
     ElementRef,
-    provide
 } from "angular2/core";
-import {View} from "ui/core/view";
-import * as background from "ui/styling/background";
-import {StackLayout} from "ui/layouts/stack-layout";
-import {GridLayout} from "ui/layouts/grid-layout";
-import {LayoutBase} from "ui/layouts/layout-base";
 import {ProxyViewContainer} from "ui/proxy-view-container";
-import {topmost} from 'ui/frame';
-import {APP_ROOT_VIEW} from "../nativescript-angular/platform-providers";
 import {Red} from "color/known-colors";
-
-@Component({
-    selector: 'my-app',
-    template: `<StackLayout #loadSite></StackLayout>`
-})
-export class App {
-    @ViewChild("loadSite") public loadSiteRef: ElementRef;
-
-    constructor(public loader: DynamicComponentLoader,
-        public elementRef: ElementRef) {
-    }
-}
+import {dumpView} from "./test-utils";
+import {TestApp} from "./test-app";
 
 @Component({
     template: `<StackLayout><Label text="Layout"></Label></StackLayout>`
 })
 export class LayoutWithLabel {
-    constructor(public elementRef: ElementRef){}
+    constructor(public elementRef: ElementRef) { }
 }
 
 @Component({
@@ -44,7 +21,7 @@ export class LayoutWithLabel {
     template: `<Label text="Layout"></Label>`
 })
 export class LabelCmp {
-    constructor(public elementRef: ElementRef){
+    constructor(public elementRef: ElementRef) {
     }
 }
 
@@ -53,7 +30,7 @@ export class LabelCmp {
     template: `<GridLayout><label-cmp></label-cmp></GridLayout>`
 })
 export class LabelContainer {
-    constructor(public elementRef: ElementRef){}
+    constructor(public elementRef: ElementRef) { }
 }
 
 @Component({
@@ -61,7 +38,7 @@ export class LabelContainer {
     template: `<StackLayout><ng-content></ng-content></StackLayout>`
 })
 export class ProjectableCmp {
-    constructor(public elementRef: ElementRef){
+    constructor(public elementRef: ElementRef) {
     }
 }
 @Component({
@@ -71,7 +48,7 @@ export class ProjectableCmp {
     </GridLayout>`
 })
 export class ProjectionContainer {
-    constructor(public elementRef: ElementRef){}
+    constructor(public elementRef: ElementRef) { }
 }
 
 @Component({
@@ -82,90 +59,125 @@ export class ProjectionContainer {
     template: `<Label text="Styled!"></Label>`
 })
 export class StyledLabelCmp {
-    constructor(public elementRef: ElementRef){
+    constructor(public elementRef: ElementRef) {
     }
 }
 
-describe('Renderer E2E', () => {
-    let appComponent: App = null;
-    let _pendingDispose: ComponentRef[] = [];
-
-    function loadComponent(type: Type): Promise<ComponentRef> {
-        return appComponent.loader.loadIntoLocation(type, appComponent.elementRef, "loadSite").then((componentRef) => {
-            _pendingDispose.push(componentRef);
-            return componentRef;
-        });
+@Component({
+    selector: "ng-if-label",
+    template: `<Label *ngIf="show" text="iffed"></Label>`
+})
+export class NgIfLabel {
+    public show: boolean = false;
+    constructor(public elementRef: ElementRef) {
     }
+}
 
-    afterEach(() => {
-        while (_pendingDispose.length > 0) {
-            const componentRef = _pendingDispose.pop()
-            componentRef.dispose();
-        }
-    });
+@Component({
+    selector: "ng-for-label",
+    template: `<Label *ngFor="#item of items" [text]="item"></Label>`
+})
+export class NgForLabel {
+    public items: Array<string> = ["one", "two", "three"];
+    constructor(public elementRef: ElementRef) {
+    }
+}
+
+
+describe('Renderer E2E', () => {
+    let testApp: TestApp = null;
 
     before(() => {
-        //bootstrap the app in a custom location
-        const page = topmost().currentPage;
-        const rootLayout = <LayoutBase>page.content;
-        const viewRoot = new StackLayout();
-        rootLayout.addChild(viewRoot);
-        GridLayout.setRow(rootLayout, 50);
-        const rootViewProvider = provide(APP_ROOT_VIEW, {useFactory: () => viewRoot});
-        return bootstrap(App, [rootViewProvider]).then((componentRef) => {
-            appComponent = componentRef.instance;
-        });
+        return TestApp.create().then((app) => {
+            testApp = app;
+        })
+    });
+
+    after(() => {
+        testApp.dispose();
+    });
+
+    afterEach(() => {
+        testApp.disposeComponenets();
     });
 
     it("component with a layout", () => {
-        return loadComponent(LayoutWithLabel).then((componentRef) => {
+        return testApp.loadComponent(LayoutWithLabel).then((componentRef) => {
             const componentRoot = componentRef.instance.elementRef.nativeElement;
             assert.equal("(ProxyViewContainer (StackLayout (Label)))", dumpView(componentRoot));
         });
     });
 
     it("component without a layout", () => {
-        return loadComponent(LabelContainer).then((componentRef) => {
+        return testApp.loadComponent(LabelContainer).then((componentRef) => {
             const componentRoot = componentRef.instance.elementRef.nativeElement;
             assert.equal("(ProxyViewContainer (GridLayout (ProxyViewContainer (Label))))", dumpView(componentRoot));
         });
     });
 
     it("projects content into components", () => {
-        return loadComponent(ProjectionContainer).then((componentRef) => {
+        return testApp.loadComponent(ProjectionContainer).then((componentRef) => {
             const componentRoot = componentRef.instance.elementRef.nativeElement;
             assert.equal("(ProxyViewContainer (GridLayout (ProxyViewContainer (StackLayout (Button)))))", dumpView(componentRoot));
         });
     });
 
     it("applies component styles", () => {
-        return loadComponent(StyledLabelCmp).then((componentRef) => {
+        return testApp.loadComponent(StyledLabelCmp).then((componentRef) => {
             const componentRoot = componentRef.instance.elementRef.nativeElement;
             const label = (<ProxyViewContainer>componentRoot).getChildAt(0);
             assert.equal(Red, label.style.color.hex);
         });
     });
 
-});
+    describe("Structural directives", () => {
+        it("ngIf hides component when false", () => {
+            return testApp.loadComponent(NgIfLabel).then((componentRef) => {
+                const componentRoot = componentRef.instance.elementRef.nativeElement;
+                assert.equal("(ProxyViewContainer (template))", dumpView(componentRoot));
+            });
+        });
 
-function dumpView(view: View): string {
-    let nodeName = (<any>view).nodeName
-    if (!nodeName) {
-        nodeName = (<any>view.constructor).name + '!';
-    }
-    let output = ["(", nodeName, " "];
-    (<any>view)._eachChildView((child) => {
-        const childDump = dumpView(child);
-        output.push(childDump);
-        output.push(", ");
-        return true;
-    });
-    if (output[output.length - 1] == ", ") {
-        output.pop();
-    }
-    if (output[output.length - 1] == " ") {
-        output.pop();
-    }
-    output.push(")");
-    return output.join("");
-}
+        it("ngIf show component when true", () => {
+            return testApp.loadComponent(NgIfLabel).then((componentRef) => {
+                const component = <NgIfLabel>componentRef.instance;
+                const componentRoot = component.elementRef.nativeElement;
+
+                component.show = true;
+                testApp.appRef.tick();
+                assert.equal("(ProxyViewContainer (template), (Label))", dumpView(componentRoot));
+            });
+        })
+
+        it("ngFor creates element for each item", () => {
+            return testApp.loadComponent(NgForLabel).then((componentRef) => {
+                const componentRoot = componentRef.instance.elementRef.nativeElement;
+                assert.equal("(ProxyViewContainer (template), (Label[text=one]), (Label[text=two]), (Label[text=three]))", dumpView(componentRoot, true));
+            });
+        });
+
+        it("ngFor updates when item is removed", () => {
+            return testApp.loadComponent(NgForLabel).then((componentRef) => {
+                const component = <NgForLabel>componentRef.instance;
+                const componentRoot = component.elementRef.nativeElement;
+
+                component.items.splice(1, 1);
+                testApp.appRef.tick();
+
+                assert.equal("(ProxyViewContainer (template), (Label[text=one]), (Label[text=three]))", dumpView(componentRoot, true));
+            });
+        });
+
+        it("ngFor updates when item is inserted", () => {
+            return testApp.loadComponent(NgForLabel).then((componentRef) => {
+                const component = <NgForLabel>componentRef.instance;
+                const componentRoot = component.elementRef.nativeElement;
+
+                component.items.splice(1, 0, "new");
+                testApp.appRef.tick();
+
+                assert.equal("(ProxyViewContainer (template), (Label[text=one]), (Label[text=new]), (Label[text=two]), (Label[text=three]))", dumpView(componentRoot, true));
+            });
+        });
+    })
+})
