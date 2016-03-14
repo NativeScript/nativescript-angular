@@ -2,6 +2,7 @@ import {Directive, ElementRef, Renderer, Self, forwardRef, provide} from 'angula
 import {NG_VALUE_ACCESSOR} from 'angular2/src/common/forms/directives/control_value_accessor';
 import {isBlank} from 'angular2/src/facade/lang';
 import {BaseValueAccessor} from './base-value-accessor';
+import {Switch} from "ui/switch";
 
 const CHECKED_VALUE_ACCESSOR = provide(NG_VALUE_ACCESSOR, { useExisting: forwardRef(() => CheckedValueAccessor), multi: true });
 
@@ -19,11 +20,11 @@ const CHECKED_VALUE_ACCESSOR = provide(NG_VALUE_ACCESSOR, { useExisting: forward
     host: { '(checkedChange)': 'onChange($event.value)' },
     bindings: [CHECKED_VALUE_ACCESSOR]
 })
-export class CheckedValueAccessor extends BaseValueAccessor {
+export class CheckedValueAccessor extends BaseValueAccessor<Switch> {
     onTouched = () => { };
 
-    constructor(private _renderer: Renderer, private _elementRef: ElementRef) { 
-        super();
+    constructor(elementRef: ElementRef) {
+        super(elementRef.nativeElement);
     }
 
     writeValue(value: any): void {
@@ -31,12 +32,11 @@ export class CheckedValueAccessor extends BaseValueAccessor {
         if (!isBlank(value)) {
             if (typeof value === 'string') {
                 normalizedValue = value.toLowerCase() === 'true' ? true : false;
-            }
-            else {
+            } else {
                 normalizedValue = !!value;
             }
         }
-        this._elementRef.nativeElement.checked = normalizedValue;
+        this.view.checked = normalizedValue;
     }
 
     registerOnTouched(fn: () => void): void { this.onTouched = fn; }

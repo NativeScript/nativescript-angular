@@ -2,6 +2,7 @@ import {Directive, ElementRef, Renderer, Self, forwardRef, provide} from 'angula
 import {NG_VALUE_ACCESSOR} from 'angular2/src/common/forms/directives/control_value_accessor';
 import {isBlank, isDate} from 'angular2/src/facade/lang';
 import {BaseValueAccessor} from './base-value-accessor';
+import {DatePicker} from "ui/date-picker";
 
 const DATE_VALUE_ACCESSOR = provide(NG_VALUE_ACCESSOR, { useExisting: forwardRef(() => DateValueAccessor), multi: true });
 
@@ -19,11 +20,11 @@ const DATE_VALUE_ACCESSOR = provide(NG_VALUE_ACCESSOR, { useExisting: forwardRef
     host: { '(dateChange)': 'onChange($event.value)' },
     bindings: [DATE_VALUE_ACCESSOR]
 })
-export class DateValueAccessor extends BaseValueAccessor {
+export class DateValueAccessor extends BaseValueAccessor<DatePicker> {
     onTouched = () => { };
 
-    constructor(private _renderer: Renderer, private _elementRef: ElementRef) { 
-        super();
+    constructor(elementRef: ElementRef) {
+        super(elementRef.nativeElement);
     }
 
     writeValue(value: any): void {
@@ -36,7 +37,7 @@ export class DateValueAccessor extends BaseValueAccessor {
                 normalizedValue = new Date();
             }
         }
-        this._elementRef.nativeElement.date = normalizedValue;
+        this.view.date = normalizedValue;
     }
 
     registerOnTouched(fn: () => void): void { this.onTouched = fn; }

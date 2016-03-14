@@ -2,6 +2,7 @@ import {Directive, ElementRef, Renderer, Self, forwardRef, provide} from 'angula
 import {NG_VALUE_ACCESSOR} from 'angular2/src/common/forms/directives/control_value_accessor';
 import {isBlank, isDate} from 'angular2/src/facade/lang';
 import {BaseValueAccessor} from './base-value-accessor';
+import {TimePicker} from "ui/time-picker";
 
 const TIME_VALUE_ACCESSOR = provide(NG_VALUE_ACCESSOR, { useExisting: forwardRef(() => TimeValueAccessor), multi: true });
 
@@ -19,11 +20,11 @@ const TIME_VALUE_ACCESSOR = provide(NG_VALUE_ACCESSOR, { useExisting: forwardRef
     host: { '(timeChange)': 'onChange($event.value)' },
     bindings: [TIME_VALUE_ACCESSOR]
 })
-export class TimeValueAccessor extends BaseValueAccessor {
+export class TimeValueAccessor extends BaseValueAccessor<TimePicker> {
     onTouched = () => { };
 
-    constructor(private _renderer: Renderer, private _elementRef: ElementRef) { 
-        super();
+    constructor(elementRef: ElementRef) {
+        super(elementRef.nativeElement);
     }
 
     writeValue(value: any): void {
@@ -36,7 +37,7 @@ export class TimeValueAccessor extends BaseValueAccessor {
                 normalizedValue = new Date();
             }
         }
-        this._elementRef.nativeElement.time = normalizedValue;
+        this.view.time = normalizedValue;
     }
 
     registerOnTouched(fn: () => void): void { this.onTouched = fn; }
