@@ -5,8 +5,8 @@ import {StringMapWrapper} from 'angular2/src/facade/collection';
 import {Directive, Attribute, DynamicComponentLoader, ComponentRef, ElementRef,
     Injector, provide, Type, Component, OpaqueToken, Inject} from 'angular2/core';
 
-import * as routerHooks from 'angular2/src/router/lifecycle_annotations';
-import {hasLifecycleHook} from 'angular2/src/router/route_lifecycle_reflector';
+import * as routerHooks from 'angular2/src/router/lifecycle/lifecycle_annotations';
+import {hasLifecycleHook} from 'angular2/src/router/lifecycle/route_lifecycle_reflector';
 
 import {
     ComponentInstruction, RouteParams, RouteData,

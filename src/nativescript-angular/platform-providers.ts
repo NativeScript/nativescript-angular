@@ -7,8 +7,6 @@ export const APP_ROOT_VIEW = new OpaqueToken('App Root View');
 export const defaultPageProvider = provide(Page, {useFactory: getDefaultPage});
 
 export function getDefaultPage(): Page {
-    console.log('getDefaultPage');
-    console.trace();
     const frame = topmost();
     if (frame) {
         return frame.currentPage;
