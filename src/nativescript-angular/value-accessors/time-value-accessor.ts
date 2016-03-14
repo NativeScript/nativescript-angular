@@ -20,7 +20,8 @@ const TIME_VALUE_ACCESSOR = provide(NG_VALUE_ACCESSOR, { useExisting: forwardRef
     host: { '(timeChange)': 'onChange($event.value)' },
     bindings: [TIME_VALUE_ACCESSOR]
 })
-export class TimeValueAccessor extends BaseValueAccessor<TimePicker> {
+export class TimeValueAccessor extends BaseValueAccessor<any> {
+    //TODO: change <any> above to TimePicker
     onTouched = () => { };
 
     constructor(elementRef: ElementRef) {
