@@ -1,0 +1,30 @@
+<StackLayout orientation='vertical'>
+    <Progress value="50" style="color: red"></Progress>
+    <!--<TimePicker [(ngModel)]='model.deliveryTime' ></TimePicker>
+        <Label [text]='model.deliveryTime' ></Label>
+        <DatePicker [(ngModel)]='model.deliveryDate' ></DatePicker>
+        <Label [text]='model.deliveryDate' ></Label>-->
+    <SearchBar [(ngModel)]='model.search'></SearchBar>
+    <Label [text]='model.search'></Label>
+    <Slider [(ngModel)]='model.sliderTest'></Slider>
+    <Label [text]='model.sliderTest'></Label>
+    <ListPicker [items]='model.listPickerItems' [(ngModel)]='model.selectedIndex'></ListPicker>
+    <TextField [(ngModel)]='model.selectedIndex'></TextField>
+    <SegmentedBar [items]='model.segmentedBarItems' [(ngModel)]='model.selectedIndex'></SegmentedBar>
+    <Label [text]='model.selectedIndex'></Label>
+    <Switch [(ngModel)]='model.testBoolean'></Switch>
+    <Label [text]='model.testBoolean'></Label>
+    <Label [text]='model.test'></Label>
+    <TextView #name [ngModel]='model.test' (ngModelChange)="model.test=setUpperCase($event)" fontSize='20' padding='20'></TextView>
+    <Label [class.valid]="isValid" [class.invalid]="!isValid" text='Name' fontSize='20' verticalAlignment='center' padding='20'></Label>
+    <TextField #name text='John' fontSize='20' padding='20'></TextField>
+    <Button [text]='buttonText' (tap)='onSave($event, name.text, $el)'></Button>
+    <Button text='Toggle details' (tap)='onToggleDetails()'></Button>
+    <TextView *ngIf='showDetails' [text]='detailsText'></TextView>
+    <Label text='==============================' fontSize='20'></Label>
+    <StackLayout #more *ngIf='showDetails' orientation='vertical'>
+        <TextField *ngFor='#detailLine of detailLines' [text]='detailLine'></TextField>
+    </StackLayout>
+    <Label text='==============================' fontSize='20'></Label>
+    <templated-component [renderChild]="true"></templated-component>
+</StackLayout>

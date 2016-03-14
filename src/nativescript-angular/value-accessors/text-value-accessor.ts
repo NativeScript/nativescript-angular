@@ -1,13 +1,16 @@
-import {Directive, ElementRef, Renderer, Self, forwardRef, Provider} from 'angular2/core';
-import {NG_VALUE_ACCESSOR, ControlValueAccessor} from 'angular2/src/common/forms/directives/control_value_accessor';
-import {isBlank, CONST_EXPR} from 'angular2/src/facade/lang';
+import {Directive, ElementRef, Renderer, Self, forwardRef, provide} from 'angular2/core';
+import {NG_VALUE_ACCESSOR} from 'angular2/src/common/forms/directives/control_value_accessor';
+import {isBlank} from 'angular2/src/facade/lang';
+import {BaseValueAccessor} from './base-value-accessor'
+import {View} from "ui/core/view";
 
-const TEXT_VALUE_ACCESSOR = CONST_EXPR(new Provider(
-    NG_VALUE_ACCESSOR, { useExisting: forwardRef(() => TextValueAccessor), multi: true }));
+const TEXT_VALUE_ACCESSOR = provide(NG_VALUE_ACCESSOR, { useExisting: forwardRef(() => TextValueAccessor), multi: true });
+
+type TextView = {text: string} & View;
 
 /**
  * The accessor for writing a text and listening to changes that is used by the
- * {@link NgModel}, {@link NgFormControl}, and {@link NgControlName} directives.
+ * {@link NgModel} directives.
  *
  *  ### Example
  *  ```
@@ -15,24 +18,21 @@ const TEXT_VALUE_ACCESSOR = CONST_EXPR(new Provider(
  *  ```
  */
 @Directive({
-    selector: 'TextField[ngModel], TextView[ngModel]',
-    // TODO: vsavkin replace the above selector with the one below it once
-    // https://github.com/angular/angular/issues/3011 is implemented
-    // selector: '[ngControl],[ngModel],[ngFormControl]',
+    selector: 'TextField[ngModel], TextView[ngModel], SearchBar[ngModel]',
     host: { '(textChange)': 'onChange($event.value)' },
     bindings: [TEXT_VALUE_ACCESSOR]
 })
-export class TextValueAccessor implements ControlValueAccessor {
-    onChange = (_) => { };
+export class TextValueAccessor extends BaseValueAccessor<TextView> {
     onTouched = () => { };
 
-    constructor(private _renderer: Renderer, private _elementRef: ElementRef) { }
-
-    writeValue(value: any): void {
-        var normalizedValue = isBlank(value) ? '' : value;
-        this._renderer.setElementProperty(this._elementRef.nativeElement, 'text', normalizedValue);
+    constructor(elementRef: ElementRef) {
+        super(elementRef.nativeElement);
     }
 
-    registerOnChange(fn: (_: any) => void): void { this.onChange = fn; }
+    writeValue(value: any): void {
+        var normalizedValue = isBlank(value) ? '' : value.toString();
+        this.view.text = normalizedValue;
+    }
+
     registerOnTouched(fn: () => void): void { this.onTouched = fn; }
 }
