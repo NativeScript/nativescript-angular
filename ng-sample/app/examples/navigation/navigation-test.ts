@@ -31,11 +31,7 @@ class StartComponent {
 @Component({
     selector: 'navigation-test',
     directives: [NS_ROUTER_DIRECTIVES],
-    template: `
-    <GridLayout>
-        <page-router-outlet></page-router-outlet>
-    </GridLayout>
-    `
+    template: `<page-router-outlet></page-router-outlet>`
 })
 @RouteConfig([
     { path: '/', component: StartComponent, as: 'Start' },
@@ -44,4 +40,3 @@ class StartComponent {
 export class NavigationTest {
 
 }
-

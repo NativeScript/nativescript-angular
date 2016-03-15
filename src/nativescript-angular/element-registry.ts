@@ -99,3 +99,5 @@ registerElement("TextView", () => require("ui/text-view").TextView);
 registerElement("TimePicker", () => require("ui/time-picker").TimePicker);
 registerElement("WebView", () => require("ui/web-view").WebView);
 registerElement("WrapLayout", () => require("ui/layouts/wrap-layout").WrapLayout);
+
+registerElement("DetachedContainer", () =>  require("ui/proxy-view-container").ProxyViewContainer, { skipAddToDom: true });
