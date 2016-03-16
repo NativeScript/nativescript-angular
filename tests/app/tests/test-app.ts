@@ -1,18 +1,10 @@
 //make sure you import mocha-config before angular2/core
-import {bootstrap} from "../nativescript-angular/application";
-import {
-    Type,
-    Component,
-    ComponentRef,
-    DynamicComponentLoader,
-    ViewChild,
-    ElementRef,
-    provide,
-    ApplicationRef
+import {bootstrap, ProviderArray} from "../nativescript-angular/application";
+import {Type, Component, ComponentRef, DynamicComponentLoader,
+    ViewChild, ElementRef, provide, ApplicationRef
 } from "angular2/core";
 
 import {View} from "ui/core/view";
-import {StackLayout} from "ui/layouts/stack-layout";
 import {GridLayout} from "ui/layouts/grid-layout";
 import {LayoutBase} from "ui/layouts/layout-base";
 import {topmost} from 'ui/frame';
@@ -24,8 +16,6 @@ import {APP_ROOT_VIEW} from "../nativescript-angular/platform-providers";
 })
 export class TestApp {
     @ViewChild("loadSite") public loadSiteRef: ElementRef;
-    private _pageRoot: LayoutBase;
-    private _appRoot: StackLayout;
     private _pendingDispose: ComponentRef[] = [];
 
     constructor(public loader: DynamicComponentLoader,
@@ -49,27 +39,45 @@ export class TestApp {
     }
 
     public static create(): Promise<TestApp> {
-        const page = topmost().currentPage;
-        const rootLayout = <LayoutBase>page.content;
-        const viewRoot = new StackLayout();
-        rootLayout.addChild(viewRoot);
-        GridLayout.setRow(rootLayout, 50);
-        const rootViewProvider = provide(APP_ROOT_VIEW, { useFactory: () => viewRoot });
-        return bootstrap(TestApp, [rootViewProvider]).then((componentRef) => {
-            const testApp = <TestApp>componentRef.instance;
-            testApp._pageRoot = rootLayout;
-            testApp._appRoot = viewRoot;
-            return testApp;
-        });
+        return bootstrapTestApp(TestApp);
     }
 
     public dispose() {
-        if (!this._appRoot) {
-            throw new Error("Test app already disposed or not initalized.");
-        }
         this.disposeComponenets();
-        this._pageRoot.removeChild(this._appRoot);
-        this._appRoot = null;
-        this._pageRoot = null;
+        destroyTestApp(this);
     }
+}
+
+var runningApps = new Map<any, { hostView: LayoutBase, appRoot: GridLayout, appRef: ApplicationRef }>();
+
+export function bootstrapTestApp(appComponentType: any, providers: ProviderArray = []): Promise<any> {
+    const page = topmost().currentPage;
+    const rootLayout = <LayoutBase>page.content;
+    const viewRoot = new GridLayout();
+    rootLayout.addChild(viewRoot);
+    GridLayout.setRow(rootLayout, 50);
+    
+    const rootViewProvider = provide(APP_ROOT_VIEW, { useValue: viewRoot });
+    return bootstrap(appComponentType, providers.concat(rootViewProvider)).then((componentRef) => {
+        componentRef.injector.get(ApplicationRef)
+        const testApp = componentRef.instance;
+        
+        runningApps.set(testApp, { 
+            hostView: rootLayout, 
+            appRoot: viewRoot, 
+            appRef: componentRef.injector.get(ApplicationRef) });
+            
+        return testApp;
+    });
+}
+
+export function destroyTestApp(app: any) {
+    if (!runningApps.has(app)) {
+        throw new Error("Unable to cleanup app: " + app);
+    }
+
+    var entry = runningApps.get(app);
+    entry.hostView.removeChild(entry.appRoot);
+    entry.appRef.dispose();
+    runningApps.delete(app);
 }
