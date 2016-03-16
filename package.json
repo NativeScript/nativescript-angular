@@ -14,7 +14,7 @@
   },
   "scripts": {},
   "dependencies": {
-      "tns-core-modules": "^1.7.0-angular-0",
+      "tns-core-modules": "^1.7.0",
       "angular2": "2.0.0-beta.9",
       "es6-shim": "^0.33.3",
       "parse5": "1.4.2",
