@@ -6,7 +6,7 @@ import {View} from "ui/core/view";
 
 const SELECTED_INDEX_VALUE_ACCESSOR = provide(NG_VALUE_ACCESSOR, { useExisting: forwardRef(() => SelectedIndexValueAccessor), multi: true });
 
-type SelectableView = {selectedIndex: number} & View;
+export type SelectableView = {selectedIndex: number} & View;
 
 /**
  * The accessor for setting a selectedIndex and listening to changes that is used by the

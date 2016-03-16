@@ -6,7 +6,7 @@ import {View} from "ui/core/view";
 
 const TEXT_VALUE_ACCESSOR = provide(NG_VALUE_ACCESSOR, { useExisting: forwardRef(() => TextValueAccessor), multi: true });
 
-type TextView = {text: string} & View;
+export type TextView = {text: string} & View;
 
 /**
  * The accessor for writing a text and listening to changes that is used by the

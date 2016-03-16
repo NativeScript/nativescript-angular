@@ -20,8 +20,7 @@ const DATE_VALUE_ACCESSOR = provide(NG_VALUE_ACCESSOR, { useExisting: forwardRef
     host: { '(dateChange)': 'onChange($event.value)' },
     bindings: [DATE_VALUE_ACCESSOR]
 })
-export class DateValueAccessor extends BaseValueAccessor<any> {
-    //TODO: change <any> above to DatePicker
+export class DateValueAccessor extends BaseValueAccessor<DatePicker> {
     onTouched = () => { };
 
     constructor(elementRef: ElementRef) {
