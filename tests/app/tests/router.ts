@@ -154,9 +154,14 @@ describe('page-router-outlet', () => {
     var initialBackstackLength: number;
     var initalPage: Page;
 
-    before(() => {
-        initialBackstackLength = topmost().backStack.length;
-        initalPage = topmost().currentPage;
+    before((done) => {
+        // HACK: Wait for the navigations from the test runner app
+        // Remove the setTimeout when test runner start tests on page.navigatedTo
+        setTimeout(() => {
+            initialBackstackLength = topmost().backStack.length;
+            initalPage = topmost().currentPage;
+            done();
+        }, 1000); 
     })
 
     beforeEach((done) => {

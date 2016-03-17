@@ -188,8 +188,8 @@ export class PageRouterOutlet extends RouterOutlet {
 
         this.location.navigateToNewPage();
         return new Promise((resolve, reject) => {
-            page.on('loaded', () => {
-                // Finish activation when page is fully loaded.
+            page.on('navigatedTo', () => {
+                // Finish activation when page is fully navigated to.
                 resolve(componentRef)
             });
 
