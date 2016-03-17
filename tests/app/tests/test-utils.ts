@@ -11,7 +11,7 @@ function getChildren(view: View): Array<View> {
 }
 
 export function dumpView(view: View, verbose: boolean = false): string {
-    let nodeName = (<any>view).nodeName
+    let nodeName = (<any>view).nodeName || view;
     let output = ["(", nodeName];
     if (verbose) {
         if (view instanceof TextBase) {
