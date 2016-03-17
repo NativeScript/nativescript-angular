@@ -83,8 +83,8 @@ class SecondComponent {
     `
 })
 @RouteConfig([
-    { path: '/', component: FirstComponent, as: 'First' },
-    { path: '/second', component: SecondComponent, as: 'Second' },
+    { path: '/', component: FirstComponent, name: 'First' },
+    { path: '/second', component: SecondComponent, name: 'Second' },
 ])
 export class ActionBarTest {
 }

@@ -34,8 +34,8 @@ class StartComponent {
     template: `<page-router-outlet></page-router-outlet>`
 })
 @RouteConfig([
-    { path: '/', component: StartComponent, as: 'Start' },
-    { path: '/nav/:depth/...', component: NavComponent, as: 'Nav' },
+    { path: '/', component: StartComponent, name: 'Start' },
+    { path: '/nav/:depth/...', component: NavComponent, name: 'Nav' },
 ])
 export class NavigationTest {
 
