@@ -55,7 +55,11 @@ export function bootstrapTestApp(appComponentType: any, providers: ProviderArray
     const rootLayout = <LayoutBase>page.content;
     const viewRoot = new GridLayout();
     rootLayout.addChild(viewRoot);
-    GridLayout.setRow(rootLayout, 50);
+    (<any>viewRoot.style).backgroundColor = "white";
+    viewRoot.margin = "20";
+    viewRoot.opacity = 0.7;
+    GridLayout.setRowSpan(rootLayout, 50);
+    GridLayout.setColumnSpan(rootLayout, 50);
     
     const rootViewProvider = provide(APP_ROOT_VIEW, { useValue: viewRoot });
     return bootstrap(appComponentType, providers.concat(rootViewProvider)).then((componentRef) => {
