@@ -116,7 +116,7 @@ describe("two-way binding via ng-model", () => {
         accessor.writeValue(null);
         assert.equal(formatTime(now), formatTime(accessor.view.time), "default to now on empty")
 
-        accessor.writeValue("2010-03-17 12:54");
+        accessor.writeValue("2010/03/17 12:54");
         assert.equal(formatTime(new Date(2010, 2, 17, 12, 54)), formatTime(accessor.view.time))
 
         accessor.writeValue("three hours from now");
