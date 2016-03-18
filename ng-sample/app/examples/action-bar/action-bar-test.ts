@@ -10,6 +10,7 @@ import {NS_DIRECTIVES} from "../../nativescript-angular/directives/ns-directives
     template: `    
     <ActionBar title="Custom Title"> 
         <ActionItem *ngIf="show" text="action" (tap)="onTap()"></ActionItem>
+        <ActionItem ios.systemIcon="9" android.systemIcon="ic_menu_share_holo_light" (tap)="onShare()"></ActionItem>
     </ActionBar>
 
     <StackLayout verticalAlignment="center">
@@ -22,6 +23,9 @@ class FirstComponent {
     public show: boolean = true;
     onTap() {
         console.log("FirstComponent.Tapped!");
+    }
+    onShare() {
+        console.log("Share button tapped!");
     }
 }
 
