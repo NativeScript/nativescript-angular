@@ -8,6 +8,7 @@ import {ProxyViewContainer} from "ui/proxy-view-container";
 import {Red} from "color/known-colors";
 import {dumpView} from "./test-utils";
 import {TestApp} from "./test-app";
+import {LayoutBase} from "ui/layouts/layout-base"
 
 @Component({
     template: `<StackLayout><Label text="Layout"></Label></StackLayout>`
@@ -59,6 +60,27 @@ export class ProjectionContainer {
     template: `<Label text="Styled!"></Label>`
 })
 export class StyledLabelCmp {
+    constructor(public elementRef: ElementRef) {
+    }
+}
+
+@Component({
+    selector: "styled-label-cmp2",
+    styles: [
+        `Label { color: red; }`,
+        `
+        StackLayout { color: brick; }
+        TextField { color: red; background-color: lime; }
+        `,
+    ],
+    template: `
+    <StackLayout orientation="horizontal">
+        <Label text="Styled!"></Label>
+        <TextField text="Styled too!"></TextField>
+    </StackLayout>
+    `
+})
+export class StyledLabelCmp2 {
     constructor(public elementRef: ElementRef) {
     }
 }
@@ -122,11 +144,25 @@ describe('Renderer E2E', () => {
         });
     });
 
-    it("applies component styles", () => {
+    it("applies component styles from single source", () => {
         return testApp.loadComponent(StyledLabelCmp).then((componentRef) => {
             const componentRoot = componentRef.instance.elementRef.nativeElement;
             const label = (<ProxyViewContainer>componentRoot).getChildAt(0);
             assert.equal(Red, label.style.color.hex);
+        });
+    });
+
+    it("applies component styles from multiple sources", () => {
+        return testApp.loadComponent(StyledLabelCmp2).then((componentRef) => {
+            const componentRoot = componentRef.instance.elementRef.nativeElement;
+            const layout = (<ProxyViewContainer>componentRoot).getChildAt(0);
+
+            const label = (<LayoutBase>layout).getChildAt(0);
+            assert.equal(Red, label.style.color.hex);
+
+            const textField = (<LayoutBase>layout).getChildAt(1);
+            console.log("TEXT style.color: " + textField.style.color);
+            assert.equal(Red, textField.style.color.hex);
         });
     });
 
