@@ -1,4 +1,4 @@
-import {isString} from "utils/types";
+import {isString, isDefined} from "utils/types";
 import {View} from "ui/core/view";
 import {Placeholder} from "ui/placeholder";
 import {ContentView} from 'ui/content-view';
@@ -139,6 +139,31 @@ function isXMLAttribute(name: string): boolean {
 }
 
 export function setProperty(view: NgView, attributeName: string, value: any): void {
+    if (attributeName.indexOf(".") !== -1) {
+        // Handle nested properties
+        const properties = attributeName.split(".");
+        attributeName = properties[properties.length - 1];
+
+        let propMap = getProperties(view);
+        let i = 0;
+        while (i < properties.length - 1 && isDefined(view)) {
+            var prop = properties[i];
+            if (propMap.has(prop)) {
+                prop = propMap.get(prop);
+            }
+
+            view = view[prop];
+            propMap = getProperties(view);
+            i++;
+        }
+    }
+
+    if (isDefined(view)) {
+        setPropertyInternal(view, attributeName, value);
+    }
+}
+
+function setPropertyInternal(view: NgView, attributeName: string, value: any): void {
     traceLog('Setting attribute: ' + attributeName);
 
     let specialSetter = getSpecialPropertySetter(attributeName);
@@ -161,7 +186,7 @@ export function setProperty(view: NgView, attributeName: string, value: any): vo
 }
 
 function convertValue(value: any): any {
-    if (typeof(value) !== "string" || value === "") {
+    if (typeof (value) !== "string" || value === "") {
         return value;
     }
 

@@ -17,6 +17,7 @@ class TestView extends View implements ViewExtensions {
     public numValue: number = 0;
     public boolValue: boolean = undefined;
     public anyValue: any = undefined;
+    public nested: { property: string } = { property: "untouched" };
 }
 
 describe('setting View properties', () => {
@@ -63,9 +64,16 @@ describe('setting View properties', () => {
     });
 
     it('preserves objects', () => {
-        let value = {name: "Jim", age: 23};
+        let value = { name: "Jim", age: 23 };
         let view = new TestView();
         setProperty(view, "anyValue", value)
         assert.deepEqual(value, view.anyValue);
     });
+
+    it('sets nested properties', () => {
+        let view = new TestView();
+        setProperty(view, "nested.property", "blah")
+        assert.strictEqual("blah", view.nested.property);
+    });
+   
 });
