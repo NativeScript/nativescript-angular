@@ -84,22 +84,27 @@ export function getChildIndex(parent: any, child: NgView) {
     }
 }
 
-function createAndAttach(name: string, viewClass: ViewClass, parent: NgView): NgView {
+function createAndAttach(name: string, viewClass: ViewClass, parent: NgView, beforeAttach?: BeforeAttachAction): NgView {
     const view = <NgView>new viewClass();
     view.nodeName = name;
     view.meta = getViewMeta(name);
+    if (beforeAttach) {
+        beforeAttach(view);
+    }
     if (parent) {
         insertChild(parent, view);
     }
     return view;
 }
 
-export function createView(name: string, parent: NgView): NgView {
+export type BeforeAttachAction = (view: View) => void;
+
+export function createView(name: string, parent: NgView, beforeAttach?: BeforeAttachAction): NgView {
     if (isKnownView(name)) {
         const viewClass = getViewClass(name);
-        return createAndAttach(name, viewClass, parent);
+        return createAndAttach(name, viewClass, parent, beforeAttach);
     } else {
-        return createViewContainer(name, parent);
+        return createViewContainer(name, parent, beforeAttach);
     }
 }
 
@@ -111,11 +116,11 @@ export function createText(value: string): NgView {
     return text;
 }
 
-export function createViewContainer(name: string, parentElement: NgView) {
+export function createViewContainer(name: string, parentElement: NgView, beforeAttach: BeforeAttachAction) {
     //HACK: Using a ContentView here, so that it creates a native View object
     traceLog('Creating view container in:' + parentElement);
 
-    const layout = createView('ProxyViewContainer', parentElement);
+    const layout = createView('ProxyViewContainer', parentElement, beforeAttach);
     layout.nodeName = 'ProxyViewContainer';
     return layout;
 }
