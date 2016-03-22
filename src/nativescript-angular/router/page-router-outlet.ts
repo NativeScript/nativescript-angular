@@ -2,8 +2,8 @@ import {PromiseWrapper} from 'angular2/src/facade/async';
 import {isBlank, isPresent} from 'angular2/src/facade/lang';
 import {StringMapWrapper} from 'angular2/src/facade/collection';
 
-import {Attribute, DynamicComponentLoader, ComponentRef, ElementRef,
-    Injector, provide, Type, Component, OpaqueToken, Inject} from 'angular2/core';
+import {Attribute, DynamicComponentLoader, ComponentRef,
+    ElementRef, Injector, provide, Type, Component} from 'angular2/core';
 
 import * as routerHooks from 'angular2/src/router/lifecycle/lifecycle_annotations';
 import {hasLifecycleHook} from 'angular2/src/router/lifecycle/route_lifecycle_reflector';
@@ -18,12 +18,13 @@ import {topmost} from "ui/frame";
 import {Page, NavigatedData} from "ui/page";
 import {log} from "./common";
 import {NSLocationStrategy} from "./ns-location-strategy";
+import {DetachedLoader} from "../common/detached-loader";
 
 let _resolveToTrue = PromiseWrapper.resolve(true);
 
 interface CacheItem {
     componentRef: ComponentRef;
-    pageShimRef?: ComponentRef;
+    loaderRef?: ComponentRef;
     router: Router;
 }
 
@@ -33,8 +34,8 @@ interface CacheItem {
 class RefCache {
     private cache: Array<CacheItem> = new Array<CacheItem>();
 
-    public push(comp: ComponentRef, router: Router, pageShimRef?: ComponentRef) {
-        this.cache.push({ componentRef: comp, router: router, pageShimRef: pageShimRef });
+    public push(comp: ComponentRef, router: Router, loaderRef?: ComponentRef) {
+        this.cache.push({ componentRef: comp, router: router, loaderRef: loaderRef });
     }
 
     public pop(): CacheItem {
@@ -45,30 +46,6 @@ class RefCache {
         return this.cache[this.cache.length - 1];
     }
 }
-
-/**
- * Page shim used for loadin compnenets when navigating
- */
-@Component({
-    selector: 'nativescript-page-shim',
-    template: `
-        <DetachedContainer>
-            <Placeholder #loader></Placeholder>
-        </DetachedContainer>
-        `
-})
-class PageShim {
-    constructor(
-        private element: ElementRef,
-        private loader: DynamicComponentLoader
-    ) {
-    }
-
-    public loadComponent(componentType: Type): Promise<ComponentRef> {
-        return this.loader.loadIntoLocation(componentType, this.element, 'loader');
-    }
-}
-
 
 /**
  * A router outlet that does page navigation in NativeScript
@@ -136,7 +113,7 @@ export class PageRouterOutlet extends RouterOutlet {
     private activateOnGoForward(nextInstruction: ComponentInstruction, previousInstruction: ComponentInstruction): Promise<any> {
         let componentType = nextInstruction.componentType;
         let resultPromise: Promise<any>;
-        let pageShimRef: ComponentRef = undefined;
+        let loaderRef: ComponentRef = undefined;
         const childRouter = this.parentRouter.childRouter(componentType);
 
         const providersArray = [
@@ -150,14 +127,14 @@ export class PageRouterOutlet extends RouterOutlet {
             this.isInitalPage = false;
             resultPromise = this.loader.loadNextToLocation(componentType, this.elementRef, Injector.resolve(providersArray));
         } else {
-            log("PageRouterOutlet.activate() forward navigation - create page shim in the loader container: " + componentType.name);
+            log("PageRouterOutlet.activate() forward navigation - create detached loader in the loader container: " + componentType.name);
 
             const page = new Page();
             providersArray.push(provide(Page, { useValue: page }));
-            resultPromise = this.loader.loadIntoLocation(PageShim, this.elementRef, "loader", Injector.resolve(providersArray))
+            resultPromise = this.loader.loadIntoLocation(DetachedLoader, this.elementRef, "loader", Injector.resolve(providersArray))
                 .then((pageComponentRef) => {
-                    pageShimRef = pageComponentRef;
-                    return (<PageShim>pageShimRef.instance).loadComponent(componentType);
+                    loaderRef = pageComponentRef;
+                    return (<DetachedLoader>loaderRef.instance).loadComponent(componentType);
                 })
                 .then((actualCoponenetRef) => {
                     return this.loadComponentInPage(page, actualCoponenetRef);
@@ -166,7 +143,7 @@ export class PageRouterOutlet extends RouterOutlet {
 
         return resultPromise.then((componentRef) => {
             this.componentRef = componentRef;
-            this.refCache.push(componentRef, childRouter, pageShimRef);
+            this.refCache.push(componentRef, childRouter, loaderRef);
 
             if (hasLifecycleHook(routerHooks.routerOnActivate, componentType)) {
                 return (<OnActivate>this.componentRef.instance)
@@ -238,8 +215,8 @@ export class PageRouterOutlet extends RouterOutlet {
                     this.componentRef = null;
                 }
 
-                if (isPresent(popedItem.pageShimRef)) {
-                    popedItem.pageShimRef.dispose();
+                if (isPresent(popedItem.loaderRef)) {
+                    popedItem.loaderRef.dispose();
                 }
             });
         } else {
