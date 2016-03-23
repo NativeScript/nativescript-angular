@@ -31,7 +31,7 @@ class FirstComponent {
 
 
 @Component({
-    selector: "nested-componenet",
+    selector: "nested-component",
     directives: [NS_ROUTER_DIRECTIVES, NS_DIRECTIVES],
     template: `
 
@@ -65,7 +65,7 @@ class NestedComponent {
 
     <StackLayout verticalAlignment="center">
         <Label text="Second Page is Here" class="title"></Label>
-        <nested-componenet></nested-componenet>
+        <nested-component></nested-component>
     </StackLayout>
     `,
 })

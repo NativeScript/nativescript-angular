@@ -120,7 +120,7 @@ describe('Renderer E2E', () => {
     });
 
     afterEach(() => {
-        testApp.disposeComponenets();
+        testApp.disposeComponents();
     });
 
     it("component with a layout", () => {

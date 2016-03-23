@@ -155,13 +155,13 @@ export class PageRouterOutlet extends RouterOutlet {
 
     private loadComponentInPage(page: Page, componentRef: ComponentRef): Promise<ComponentRef> {
         //Component loaded. Find its root native view.
-        const componenetView = componentRef.location.nativeElement;
+        const componentView = componentRef.location.nativeElement;
         //Remove it from original native parent.
-        if (<any>componenetView.parent) {
-            (<any>componenetView.parent).removeChild(componenetView);
+        if (<any>componentView.parent) {
+            (<any>componentView.parent).removeChild(componentView);
         }
         //Add it to the new page
-        page.content = componenetView;
+        page.content = componentView;
 
         this.location.navigateToNewPage();
         return new Promise((resolve, reject) => {

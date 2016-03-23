@@ -55,12 +55,12 @@ export class ModalDialogService {
                 })
                 .then((compRef) => {
                     //Component loaded. Find its root native view.
-                    const componenetView = <View>compRef.location.nativeElement;
-                    if (componenetView.parent) {
-                        (<any>componenetView.parent).removeChild(componenetView);
+                    const componentView = <View>compRef.location.nativeElement;
+                    if (componentView.parent) {
+                        (<any>componentView.parent).removeChild(componentView);
                     }
-                    page.content = componenetView;
-                    (<any>page)._showNativeModalView(this.page, options.context, closeCallback, options.fullscreen);
+                    page.content = componentView;
+                    this.page.showModal(page, options.context, closeCallback, options.fullscreen);
                 });
         })
     }
