@@ -24,6 +24,7 @@
 	"homepage": "https://github.com/NativeScript/template-hello-world",
 	"dependencies": {
 		"tns-core-modules": "^2.0.0-angular-1",
+		"nativescript-intl": "^0.0.2",
 		"angular2": "2.0.0-beta.9",
 		"parse5": "1.4.2",
 		"punycode": "1.3.2",
@@ -47,7 +48,7 @@
 	"nativescript": {
 		"id": "org.nativescript.ngsample",
 		"tns-android": {
-			"version": "1.7.0"
+			"version": "1.7.1"
 		}
 	}
 }
