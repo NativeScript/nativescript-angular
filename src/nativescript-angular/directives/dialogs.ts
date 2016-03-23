@@ -1,13 +1,11 @@
-import {DynamicComponentLoader, ElementRef, Injector, provide, Type, Injectable, ComponentRef} from 'angular2/core';
+import {DynamicComponentLoader, ElementRef, Injector, provide, Type, Injectable, ComponentRef, Directive} from 'angular2/core';
 import {Page} from 'ui/page';
 import {View} from 'ui/core/view';
 import {DetachedLoader} from '../common/detached-loader';
 
-export class ModalDialogOptions {
-    constructor(
-        public context: any = {},
-        public fullscreen: boolean = true) {
-    }
+export interface ModalDialogOptions {
+    context?: any;
+    fullscreen?: boolean;
 }
 
 export class ModalDialogParams {
@@ -19,12 +17,21 @@ export class ModalDialogParams {
 
 @Injectable()
 export class ModalDialogService {
+    private elementRef: ElementRef;
+
     constructor(
         private page: Page,
         private loader: DynamicComponentLoader) {
     }
 
-    public showModal(type: Type, elementRef: ElementRef, options: ModalDialogOptions): Promise<any> {
+    public registerElementRef(ref: ElementRef) {
+        this.elementRef = ref;
+    }
+
+    public showModal(type: Type, options: ModalDialogOptions): Promise<any> {
+        if (!this.elementRef) {
+            throw new Error("No elementRef: Make sure you have the modal-dialog-host directive inside your component.");
+        }
         return new Promise((resove, reject) => {
             const page = new Page();
 
@@ -40,8 +47,8 @@ export class ModalDialogService {
                 provide(Page, { useValue: page }),
                 provide(ModalDialogParams, { useValue: modalParams }),
             ]);
-            
-            this.loader.loadNextToLocation(DetachedLoader, elementRef, providers)
+
+            this.loader.loadNextToLocation(DetachedLoader, this.elementRef, providers)
                 .then((loaderRef) => {
                     detachedLoaderRef = loaderRef;
                     return (<DetachedLoader>loaderRef.instance).loadComponent(type)
@@ -58,3 +65,13 @@ export class ModalDialogService {
         })
     }
 }
+
+
+@Directive({
+    selector: "[modal-dialog-host]"
+})
+export class ModalDialogHost {
+    constructor(elementRef: ElementRef, modalService: ModalDialogService) {
+        modalService.registerElementRef(elementRef);
+    }
+} 

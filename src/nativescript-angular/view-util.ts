@@ -117,7 +117,6 @@ export function createText(value: string): NgView {
 }
 
 export function createViewContainer(name: string, parentElement: NgView, beforeAttach: BeforeAttachAction) {
-    //HACK: Using a ContentView here, so that it creates a native View object
     traceLog('Creating view container in:' + parentElement);
 
     const layout = createView('ProxyViewContainer', parentElement, beforeAttach);

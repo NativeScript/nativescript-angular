@@ -1,48 +1,14 @@
-import {Component, DynamicComponentLoader, ElementRef, Injector, provide, Type, Injectable, Host, ComponentRef} from 'angular2/core';
-import {Page, ShownModallyData} from 'ui/page';
-import {View} from 'ui/core/view';
+import {Component} from 'angular2/core';
 import * as dialogs from "ui/dialogs";
-import {ModalDialogService, ModalDialogOptions, ModalDialogParams} from "../../nativescript-angular/services/dialogs";
-
-@Component({
-    selector: 'modal-content',
-    template: `
-    <StackLayout margin="24" horizontalAlignment="center" verticalAlignment="center">
-        <Label [text]="prompt"></Label>
-        <StackLayout orientation="horizontal" marginTop="12">
-            <Button text="ok" (tap)="close('OK')"></Button>
-            <Button text="cancel" (tap)="close('Cancel')"></Button>
-        </StackLayout>
-    </StackLayout>
-    `
-})
-export class ModalContent {
-    public prompt: string;
-    constructor(private params: ModalDialogParams) {
-        console.log("ModalContent.constructor: " + JSON.stringify(params))
-        this.prompt = params.context.promptMsg;
-    }
-
-    public close(res: string) {
-        this.params.closeCallback(res);
-    }
-
-    ngOnInit() {
-        console.log("ModalContent.ngOnInit");
-
-    }
-
-    ngOnDestroy() {
-        console.log("ModalContent.ngOnDestroy");
-    }
-}
+import {ModalDialogService, ModalDialogOptions, ModalDialogHost} from "../../nativescript-angular/directives/dialogs";
+import {ModalContent} from "./modal-content";
 
 @Component({
     selector: 'modal-test',
-    directives: [],
+    directives: [ModalDialogHost],
     providers: [ModalDialogService],
     template: `
-    <GridLayout rows="*, auto">
+    <GridLayout rows="*, auto" modal-dialog-host>
         <StackLayout verticalAlignment="top" margin="12">
             <Button text="show component" (tap)="showModal(false)"></Button>
             <Button text="show component fullscreen" (tap)="showModal(true)"></Button>
@@ -62,19 +28,16 @@ export class ModalContent {
 export class ModalTest {
     public result: string = "result";
 
-    constructor(
-        private elementRef: ElementRef,
-        private modal: ModalDialogService) {
-    }
-
-    public dialog() {
-        dialogs.alert({ title: "alert title", message: "alert message", okButtonText: "KO, NE!" });
+    constructor(private modal: ModalDialogService) {
     }
 
     public showModal(fullscreen: boolean) {
-        var options = new ModalDialogOptions({ promptMsg: "This is the prompt message!" }, fullscreen);
+        var options: ModalDialogOptions = {
+            context: { promptMsg: "This is the prompt message!" },
+            fullscreen: fullscreen
+        };
 
-        this.modal.showModal(ModalContent, this.elementRef, options).then((res: string) => {
+        this.modal.showModal(ModalContent, options).then((res: string) => {
             this.result = res || "empty result";
         })
     }
