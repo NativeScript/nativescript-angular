@@ -4,14 +4,6 @@ Integrating NativeScript with Angular 2.
 
 # Running locally
 
-## Get submodule code
-
-The project bundles the NativeScript modules and Angular as source code dependencies set up as git submodules. You need to get them by running:
-
-```
-$ git submodule update --init
-```
-
 # Prerequisites
 
 Install your native toolchain and NativeScript as described in the docs:
