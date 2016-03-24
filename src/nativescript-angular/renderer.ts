@@ -10,6 +10,7 @@ import {isBlank} from 'angular2/src/facade/lang';
 import {DOM} from 'angular2/src/platform/dom/dom_adapter';
 import {COMPONENT_VARIABLE, CONTENT_ATTR} from 'angular2/src/platform/dom/dom_renderer';
 import {View} from "ui/core/view";
+import * as application from "application";
 import {topmost} from 'ui/frame';
 import {Page} from 'ui/page';
 import * as util from "./view-util";
@@ -62,7 +63,7 @@ export class NativeScriptRenderer extends Renderer {
             this.hasComponentStyles = true;
             let cssString = componentProto.styles[i] + "";
             const realCSS = this.replaceNgAttribute(cssString, this.componentProtoId);
-            page.addCss(realCSS);
+            application.addCss(realCSS);
         }
         util.traceLog('NativeScriptRenderer created');
     }
