@@ -11,12 +11,11 @@ import {ModalDialogHost, ModalDialogOptions, ModalDialogParams, ModalDialogServi
     template: `<Label text="this is modal component"></Label>`
 })
 export class ModalComponent {
-    constructor(public params: ModalDialogParams) {
-        // Close after a while
-        setTimeout(() => {
+    constructor(public params: ModalDialogParams, private page: Page) {
+        page.on("shownModally", () => {
             var result = this.params.context;
             this.params.closeCallback(result);
-        }, 200);
+        });
     }
 }
 
@@ -63,7 +62,6 @@ describe('modal-dialog', () => {
         if (page && page.modal) {
             console.log("Warning: closing a leftover modal page!");
             page.modal.closeModal();
-
         }
         testApp.disposeComponents();
     });
