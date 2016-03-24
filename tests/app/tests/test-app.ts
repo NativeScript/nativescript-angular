@@ -31,7 +31,7 @@ export class TestApp {
         });
     }
 
-    public disposeComponenets() {
+    public disposeComponents() {
         while (this._pendingDispose.length > 0) {
             const componentRef = this._pendingDispose.pop()
             componentRef.dispose();
@@ -43,7 +43,7 @@ export class TestApp {
     }
 
     public dispose() {
-        this.disposeComponenets();
+        this.disposeComponents();
         destroyTestApp(this);
     }
 }

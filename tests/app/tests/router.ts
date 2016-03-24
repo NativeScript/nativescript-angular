@@ -203,7 +203,7 @@ describe('page-router-outlet', () => {
     }
 
     it("loads default path", () => {
-        //             App-Root   app-componenet       first-componenet        
+        //             App-Root   app-component       first-component        
         //                |           |                     | 
         var expected = "(ROOT (ProxyViewContainer), (ProxyViewContainer (Label[text=First])))";
         assert.equal(expected, dumpView(testApp.elementRef.nativeElement, true));

@@ -23,7 +23,7 @@ import {ListTestAsync} from "./examples/list/list-test-async";
 import {ImageTest} from "./examples/image/image-test";
 import {NavigationTest} from "./examples/navigation/navigation-test";
 import {ActionBarTest} from "./examples/action-bar/action-bar-test";
-
+import {ModalTest} from "./examples/modal/modal-test";
 
 nativeScriptBootstrap(RendererTest);
 //nativeScriptBootstrap(Benchmark);
@@ -35,3 +35,4 @@ nativeScriptBootstrap(RendererTest);
 //nativeScriptBootstrap(ImageTest);
 //nativeScriptBootstrap(NavigationTest, [NS_ROUTER_PROVIDERS]);
 //nativeScriptBootstrap(ActionBarTest, [NS_ROUTER_PROVIDERS], { startPageActionBarHidden: false });
+// nativeScriptBootstrap(ModalTest);

@@ -73,7 +73,7 @@ class DetailComponent {
     directives: [ROUTER_DIRECTIVES, NS_ROUTER_DIRECTIVES],
     template: `
 <GridLayout rows="auto, auto, auto, *" columns="*, *" margin="10" backgroundColor="lightgreen">
-    <Label [text]="'Componenet ID: ' + compId" colSpan="2" row="0"
+    <Label [text]="'Component ID: ' + compId" colSpan="2" row="0"
         style="font-size: 30; horizontal-align: center"></Label>
         
     <Label [text]="'Depth: ' + depth" colSpan="2" row="1"
@@ -108,7 +108,7 @@ export class NavComponent implements OnActivate, OnDeactivate {
         this.compId = NavComponent.counter;
         this.depth = parseInt(params.get("depth"));
 
-        console.log("NavComponent.constructor() componenetID: " + this.compId)
+        console.log("NavComponent.constructor() componentID: " + this.compId)
     }
 
     public goBack() {
@@ -116,21 +116,21 @@ export class NavComponent implements OnActivate, OnDeactivate {
     }
 
     routerOnActivate(nextInstruction: ComponentInstruction, prevInstruction: ComponentInstruction): any {
-        console.log("NavComponent.routerOnActivate() componenetID: " + this.compId)
+        console.log("NavComponent.routerOnActivate() componentID: " + this.compId)
     }
 
     routerOnDeactivate(nextInstruction: ComponentInstruction, prevInstruction: ComponentInstruction): any {
-        console.log("NavComponent.routerOnDeactivate() componenetID: " + this.compId)
+        console.log("NavComponent.routerOnDeactivate() componentID: " + this.compId)
     }
 
     routerCanReuse(nextInstruction: ComponentInstruction, prevInstruction: ComponentInstruction): any {
         // Reuse if depth is the same.
         var reuse = (prevInstruction.params["depth"] === nextInstruction.params["depth"]);
-        console.log("NavComponent.routerCanReuse() componenetID: " + this.compId + " return: " + reuse);
+        console.log("NavComponent.routerCanReuse() componentID: " + this.compId + " return: " + reuse);
         return reuse;
     }
 
     routerOnReuse(nextInstruction: ComponentInstruction, prevInstruction: ComponentInstruction): any {
-        console.log("NavComponent.routerOnReuse() componenetID: " + this.compId);
+        console.log("NavComponent.routerOnReuse() componentID: " + this.compId);
     }
 }
