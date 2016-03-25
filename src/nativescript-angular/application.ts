@@ -41,6 +41,9 @@ export type ProviderArray = Array<Type | Provider | any[]>;
 
 import {defaultPageProvider} from "./platform-providers";
 
+import * as nativescriptIntl from "nativescript-intl";
+global.Intl = nativescriptIntl;
+
 let _platform = null;
 
 export interface AppOptions {

@@ -49,6 +49,7 @@ export class RendererTest {
             'testBoolean': false,
             'deliveryDate': new Date(),
             'deliveryTime': new Date(),
+            'mydate': new Date(),
             'sliderTest': 0,
             'search': null,
             'selectedIndex': 0,

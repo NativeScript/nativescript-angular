@@ -31,6 +31,7 @@
 	"homepage": "http://nativescript.org",
 	"dependencies": {
 		"tns-core-modules": "2.0.0-angular-1",
+		"nativescript-intl": "^0.0.2",
 		"angular2": "2.0.0-beta.9",
 		"nativescript-unit-test-runner": "^0.3.3",
 		"parse5": "1.4.2",

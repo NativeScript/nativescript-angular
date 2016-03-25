@@ -6,7 +6,7 @@
   "bugs": "http://www.telerik.com",
   "contributors": [
     "Hristo Deshev <hristo.deshev@telerik.com>"
-  ],
+    ],
   "license": "Apache-2.0",
   "repository": {
     "type": "git",
@@ -14,16 +14,17 @@
   },
   "scripts": {},
   "dependencies": {
-      "tns-core-modules": "^2.0.0-angular-1",
-      "angular2": "2.0.0-beta.9",
-      "es6-shim": "^0.33.3",
-      "parse5": "1.4.2",
-      "punycode": "1.3.2",
-      "querystring": "0.2.0",
-      "url": "0.10.3",
-      "reflect-metadata": "0.1.2",
-      "rxjs": "5.0.0-beta.2",
-      "zone.js": "0.5.15"
+    "tns-core-modules": "^2.0.0-angular-1",
+    "nativescript-intl": "^0.0.2",
+    "angular2": "2.0.0-beta.9",
+    "es6-shim": "^0.33.3",
+    "parse5": "1.4.2",
+    "punycode": "1.3.2",
+    "querystring": "0.2.0",
+    "url": "0.10.3",
+    "reflect-metadata": "0.1.2",
+    "rxjs": "5.0.0-beta.2",
+    "zone.js": "0.5.15"
   },
   "devDependencies": {
     "grunt": "0.4.5",
