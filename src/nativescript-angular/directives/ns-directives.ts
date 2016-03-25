@@ -8,6 +8,7 @@ import {NumberValueAccessor} from '../value-accessors/number-value-accessor';
 import {SelectedIndexValueAccessor} from '../value-accessors/selectedIndex-value-accessor';
 import {TabViewDirective, TabViewItemDirective} from './tab-view';
 import {ActionBarComponent, ActionBarScope, ActionItemDirective, NavigationButtonDirective} from './action-bar';
+import {AndroidFilterComponent, IosFilterComponent} from './platform-filters';
 
 export const NS_DIRECTIVES: Type[] = [
     ListViewComponent,
@@ -22,5 +23,7 @@ export const NS_DIRECTIVES: Type[] = [
     ActionBarComponent,
     ActionBarScope,
     ActionItemDirective,
-    NavigationButtonDirective
+    NavigationButtonDirective,
+    AndroidFilterComponent,
+    IosFilterComponent
 ];
