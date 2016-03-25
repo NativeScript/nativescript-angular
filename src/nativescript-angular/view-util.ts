@@ -7,7 +7,12 @@ import {ViewClass, getViewClass, getViewMeta, isKnownView, ViewExtensions, NgVie
 import {getSpecialPropertySetter} from "ui/builder/special-properties";
 import { ActionBar, ActionItem, NavigationButton } from "ui/action-bar";
 import trace = require("trace");
+import {device, platformNames} from "platform";
 
+const isIos: boolean = device.os === platformNames.ios;
+const isAndroid: boolean = device.os === platformNames.android;
+const IOS_PREFX: string = "@ios:";
+const ANDROID_PREFX: string = "@android:";
 
 export const rendererTraceCategory = "ns-renderer";
 export function traceLog(msg) {
@@ -142,7 +147,33 @@ function isXMLAttribute(name: string): boolean {
     }
 }
 
+function platformFilter(attribute: string): string {
+    var lowered = attribute.toLowerCase();
+    if (lowered.indexOf(IOS_PREFX) === 0) {
+        if (isIos) {
+            return attribute.substr(IOS_PREFX.length);
+        } else {
+            return null;
+        }
+    }
+
+    if (lowered.indexOf(ANDROID_PREFX) === 0) {
+        if (isAndroid) {
+            return attribute.substr(ANDROID_PREFX.length);
+        } else {
+            return null;
+        }
+    }
+    
+    return attribute;
+}
+
 export function setProperty(view: NgView, attributeName: string, value: any): void {
+    attributeName = platformFilter(attributeName);
+    if (!attributeName) {
+        return;
+    }
+
     if (attributeName.indexOf(".") !== -1) {
         // Handle nested properties
         const properties = attributeName.split(".");

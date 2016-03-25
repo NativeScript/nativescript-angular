@@ -1,15 +1,14 @@
-import {Component, View} from 'angular2/core';
-import {RouteConfig} from 'angular2/router';
-import { Page} from "ui/page";
-import {NS_ROUTER_DIRECTIVES, NS_ROUTER_PROVIDERS} from "../../nativescript-angular/router/ns-router";
-import {NS_DIRECTIVES} from "../../nativescript-angular/directives/ns-directives";
+import {Component} from 'angular2/core';
 
 @Component({
     selector: 'action-bar-test',
     template: `
     <StackLayout>
-        <android><Label text="This is android specific content"></Label></android>
-        <ios><Label text="This is android specific content"></Label></ios>
+        <android><Label text="This is Android specific content"></Label></android>
+        <ios><Label text="This is IOS specific content"></Label></ios>
+        <Label 
+            android:text="Android specific attribute"
+            ios:text="Ios specific attribute"></Label>
     </StackLayout>
     `
 })
