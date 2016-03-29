@@ -38,8 +38,8 @@ export class TestApp {
         }
     }
 
-    public static create(): Promise<TestApp> {
-        return bootstrapTestApp(TestApp);
+    public static create(providers?: ProviderArray): Promise<TestApp> {
+        return bootstrapTestApp(TestApp, providers);
     }
 
     public dispose() {
