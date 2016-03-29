@@ -1,5 +1,6 @@
 import {View} from "ui/core/view";
 import {TextBase} from "ui/text-base";
+import {Device} from "platform";
 
 function getChildren(view: View): Array<View> {
     var children: Array<View> = [];
@@ -26,4 +27,18 @@ export function dumpView(view: View, verbose: boolean = false): string {
 
     output.push(")");
     return output.join("");
+}
+
+export function createDevice(os: string): Device {
+    return {
+        os: os,
+        osVersion: "0",
+        deviceType: "phone",
+        language: "en",
+        uuid: "0000",
+        sdkVersion: "0",
+        region: "US",
+        manufacturer: "tester",
+        model: "test device"
+    }
 }

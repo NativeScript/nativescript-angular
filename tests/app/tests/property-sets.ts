@@ -3,9 +3,11 @@ import {assert} from "./test-config";
 import {bootstrap} from "../nativescript-angular/application";
 import {Component} from "angular2/core";
 import {View} from "ui/core/view";
-import {setProperty} from "../nativescript-angular/view-util";
+import {ViewUtil} from "../nativescript-angular/view-util";
 import {NgView, ViewExtensions, ViewClassMeta} from "../nativescript-angular/element-registry";
 import {Red} from "color/known-colors";
+import {device, Device, platformNames} from "platform";
+import {createDevice} from "./test-utils";
 
 class TestView extends View implements ViewExtensions {
     public nodeName: string = "TestView";
@@ -20,60 +22,95 @@ class TestView extends View implements ViewExtensions {
     public nested: { property: string } = { property: "untouched" };
 }
 
+const iosDevice = createDevice(platformNames.ios);
+const androidDevice = createDevice(platformNames.android);
+
 describe('setting View properties', () => {
+    var viewUtil: ViewUtil;
+    before(() => {
+        viewUtil = new ViewUtil(device);
+    })
+
     it('preserves string values', () => {
         let view = new TestView();
-        setProperty(view, "stringValue", "blah")
+        viewUtil.setProperty(view, "stringValue", "blah")
         assert.equal("blah", view.stringValue);
     });
 
     it('converts number values', () => {
         let view = new TestView();
-        setProperty(view, "numValue", "42")
+        viewUtil.setProperty(view, "numValue", "42")
         assert.strictEqual(42, view.numValue);
-        setProperty(view, "numValue", 0)
+        viewUtil.setProperty(view, "numValue", 0)
         assert.strictEqual(0, view.numValue);
     });
 
     it('converts boolean values', () => {
         let view = new TestView();
-        setProperty(view, "boolValue", "true")
+        viewUtil.setProperty(view, "boolValue", "true")
         assert.strictEqual(true, view.boolValue);
-        setProperty(view, "boolValue", "false")
+        viewUtil.setProperty(view, "boolValue", "false")
         assert.strictEqual(false, view.boolValue);
     });
 
     it('sets style values', () => {
         let view = new TestView();
-        setProperty(view, "style", "color: red")
+        viewUtil.setProperty(view, "style", "color: red")
         assert.equal(Red, view.style.color.hex);
     });
 
     it('doesn\'t convert blank strings', () => {
         let view = new TestView();
-        setProperty(view, "stringValue", "")
+        viewUtil.setProperty(view, "stringValue", "")
         assert.strictEqual("", view.stringValue);
     });
 
     it('doesn\'t convert booleans', () => {
         let view = new TestView();
-        setProperty(view, "boolValue", true)
+        viewUtil.setProperty(view, "boolValue", true)
         assert.strictEqual(true, view.boolValue);
-        setProperty(view, "boolValue", false)
+        viewUtil.setProperty(view, "boolValue", false)
         assert.strictEqual(false, view.boolValue);
     });
 
     it('preserves objects', () => {
         let value = { name: "Jim", age: 23 };
         let view = new TestView();
-        setProperty(view, "anyValue", value)
+        viewUtil.setProperty(view, "anyValue", value)
         assert.deepEqual(value, view.anyValue);
     });
 
     it('sets nested properties', () => {
         let view = new TestView();
-        setProperty(view, "nested.property", "blah")
+        viewUtil.setProperty(view, "nested.property", "blah")
         assert.strictEqual("blah", view.nested.property);
     });
-   
+
+    it('sets ios property in ios', () => {
+        let view = new TestView();
+        let testUtil = new ViewUtil(iosDevice);
+        testUtil.setProperty(view, "@ios:anyValue", "blah")
+        assert.strictEqual("blah", view.anyValue);
+    });
+
+    it('doesn\'t set android property in ios', () => {
+        let view = new TestView();
+        let testUtil = new ViewUtil(iosDevice);
+        testUtil.setProperty(view, "@android:anyValue", "blah")
+        assert.isUndefined(view.anyValue);
+    });
+
+    it('sets android property in android', () => {
+        let view = new TestView();
+        let testUtil = new ViewUtil(androidDevice);
+        testUtil.setProperty(view, "@android:anyValue", "blah")
+        assert.strictEqual("blah", view.anyValue);
+    });
+
+    it('doesn\'t set ios property in android', () => {
+        let view = new TestView();
+        let testUtil = new ViewUtil(androidDevice);
+        testUtil.setProperty(view, "@ios:anyValue", "blah")
+        assert.isUndefined(view.anyValue);
+    });
 });
