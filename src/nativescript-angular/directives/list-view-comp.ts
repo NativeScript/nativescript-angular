@@ -21,7 +21,7 @@ import {ObservableArray} from 'data/observable-array';
 import {LayoutBase} from 'ui/layouts/layout-base';
 const NG_VIEW = "_ngViewRef";
 
-interface SetupItemViewArgs {
+export interface SetupItemViewArgs {
     view: EmbeddedViewRef;
     data: any;
     index: number;
@@ -36,11 +36,11 @@ export class ListViewComponent {
     private listView: ListView;
     private _items: any;
     private _differ: IterableDiffer;
-    
+
     @Output() public setupItemView: EventEmitter<SetupItemViewArgs> = new EventEmitter<SetupItemViewArgs>();
-    
+
     @ContentChild(TemplateRef) itemTemplate: TemplateRef;
-    
+
     set items(value: any) {
         this._items = value;
         var needDiffer = true;
@@ -52,23 +52,23 @@ export class ListViewComponent {
         }
         this.listView.items = this._items;
     }
-    
+
     private timerId: number;
     private doCheckDelay = 5;
-    
+
     constructor(private _elementRef: ElementRef,
                 private _iterableDiffers: IterableDiffers,
                 private _cdr: ChangeDetectorRef,
                 private _appViewManager: AppViewManager) {
         this.listView = _elementRef.nativeElement;
     }
-    
+
     @HostListener("itemLoading", ['$event'])
     public onItemLoading(args) {
         if (!this.itemTemplate) {
             return;
         }
-        
+
         let index = args.index;
         let items = args.object.items;
         let currentItem = typeof (items.getItem) === "function" ? items.getItem(index) : items[index];
@@ -95,12 +95,12 @@ export class ListViewComponent {
         viewRef.setLocal('odd', (index % 2 == 1));
         this.setupItemView.next({'view': viewRef, 'data': data, 'index': index});
     }
-    
+
     ngDoCheck() {
         if (this.timerId) {
             clearTimeout(this.timerId);
         }
-            
+
         this.timerId = setTimeout(() => {
             clearTimeout(this.timerId);
             if (this._differ) {
