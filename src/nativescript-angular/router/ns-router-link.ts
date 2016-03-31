@@ -35,7 +35,8 @@ import { log } from "./common";
     selector: '[nsRouterLink]',
     inputs: ['params: nsRouterLink'],
     host: {
-        '(tap)': 'onTap()'
+        '(tap)': 'onTap()',
+        '[class.router-link-active]': 'isRouteActive'
     }
 })
 export class NSRouterLink {
@@ -46,7 +47,7 @@ export class NSRouterLink {
 
     constructor(private _router: Router, private _location: Location) { }
 
-    // get isRouteActive(): boolean { return this._router.isRouteActive(this._navigationInstruction); }
+    get isRouteActive(): boolean { return this._router.isRouteActive(this._navigationInstruction); }
 
     set params(changes: any[]) {
         this._routeParams = changes;
