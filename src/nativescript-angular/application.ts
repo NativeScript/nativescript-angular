@@ -5,9 +5,9 @@ import 'globals';
 global.process = {};
 const oldToString = Object.prototype.toString;
 Object.prototype.toString = function() {
-    return "[object process]";
+    return '[object process]';
 }
-import "zone.js/dist/zone.js"
+import 'zone.js/dist/zone';
 Object.prototype.toString = oldToString;
 delete global.process;
 
@@ -35,7 +35,7 @@ import {bootstrap as angularBootstrap} from 'angular2/bootstrap';
 
 import {Page} from 'ui/page';
 import {TextView} from 'ui/text-view';
-import application = require('application');
+import * as application from 'application';
 
 export type ProviderArray = Array<Type | Provider | any[]>;
 

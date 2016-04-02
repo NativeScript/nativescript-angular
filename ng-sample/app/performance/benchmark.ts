@@ -1,12 +1,13 @@
 import {StackLayout} from 'ui/layouts/stack-layout';
 import {Button} from 'ui/button';
 import {Label} from 'ui/label';
-import {Inject, Component, View} from 'angular2/core';
+import {Inject, Component} from 'angular2/core';
 import {ApplicationRef} from 'angular2/src/core/application_ref';
 import * as profiling from './profiling';
 
-@Component({selector: 'tree', inputs: ['data']})
-@View({
+@Component({
+  selector: 'tree',
+  inputs: ['data'],
   directives: [TreeComponent],
   template:
       `<StackLayout>
@@ -26,9 +27,7 @@ class TreeComponent {
 
 @Component({
 	selector: 'benchmark',
-})
-@View({
-    directives: [TreeComponent],
+  directives: [TreeComponent],
 	template: `
     <StackLayout>
         <Label text='Benchmark!' fontSize='20' verticalAlignment='center' padding='20'></Label>

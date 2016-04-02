@@ -1,4 +1,4 @@
-import application = require("application");
+import * as application from 'application';
 import { LocationStrategy } from 'angular2/router';
 import { NgZone, ApplicationRef, Inject, forwardRef } from 'angular2/core';
 import { log } from "./common";

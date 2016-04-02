@@ -1,4 +1,4 @@
-import {Inject, Injectable, Optional} from 'angular2/src/core/di';
+import {Inject, Injectable, Optional} from 'angular2/core';
 import {
     Renderer,
     RootRenderer,
@@ -216,7 +216,14 @@ export class NativeScriptRenderer extends Renderer {
 
     public listen(renderElement: NgView, eventName: string, callback: Function): Function {
         traceLog('NativeScriptRenderer.listen: ' + eventName);
-        let zonedCallback = (<any>global).zone.bind(callback);
+
+        // Another Option?
+        // let callZone = (<any>global).Zone.current.fork({name: 'NativeScriptRenderer'});
+        // let zonedCallback = function(args) {
+        //   return callZone.run(callback, args);
+        // };
+
+        let zonedCallback = (<any>global).Zone.current.run(callback);
         renderElement.on(eventName, zonedCallback);
         return () => renderElement.off(eventName, zonedCallback);
     }

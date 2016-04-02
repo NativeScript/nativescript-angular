@@ -1,4 +1,4 @@
-import trace = require("trace");
+import * as trace from "trace";
 
 export const CATEGORY = "ns-router";
 
