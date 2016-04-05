@@ -10,6 +10,7 @@ module.exports = function(grunt) {
 
     var outDir = "bin/dist/modules";
     var moduleOutDir = path.join(outDir, "nativescript-angular");
+    var packageName = "nativescript-angular-" +  require("./package.json").version + ".tgz";
 
     grunt.initConfig({
         ts: {
@@ -65,14 +66,27 @@ module.exports = function(grunt) {
             package: {
                 src: 'nativescript-angular*.tgz'
             },
-            packageDefinitions: {
-                src: moduleOutDir + '/**/*.d.ts'
-            }
         },
         shell: {
             package: {
                 command: "npm pack \"" + moduleOutDir + "\""
             },
+            updateTests: {
+                command: "npm install ../" + packageName,
+                options: {
+                    execOptions: {
+                        cwd: "./tests"
+                    }
+                }
+            },
+            updateSamples: {
+                command: "npm install ../" + packageName,
+                options: {
+                    execOptions: {
+                        cwd: "./ng-sample"
+                    }
+                }
+            }
         },
     });
 
@@ -84,7 +98,6 @@ module.exports = function(grunt) {
     ]);
 
     grunt.registerTask("package", [
-        "clean:packageDefinitions",
         "copy:handCodedDefinitions",
         "copy:npmReadme",
         "shell:package",
@@ -100,6 +113,10 @@ module.exports = function(grunt) {
         "copy:packageJson",
         "package"
     ]);
+
+    grunt.registerTask("updateTests", ["all", "shell:updateTests"]);
+    
+    grunt.registerTask("updateSamples", ["all", "shell:updateSamples"]);
 
     grunt.registerTask("default", ["all"]);
 };

@@ -7,12 +7,10 @@ src/nativescript-angular/**/*.js
 .tscache
 .nvm
 .vscode
+nativescript-angular*.tgz
 
 tests/app/**/*.js
-tests/app/global.d.ts
 tests/test-output.txt
-tests/app/nativescript-angular
-tests/app/global.d.ts
 tests/platforms
 tests/lib
 tests/node_modules

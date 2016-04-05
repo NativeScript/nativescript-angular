@@ -4,7 +4,7 @@ import {Component, ComponentRef} from "angular2/core";
 import {TestApp} from "./test-app";
 import {Page} from "ui/page";
 import {topmost} from "ui/frame";
-import {ModalDialogHost, ModalDialogOptions, ModalDialogParams, ModalDialogService} from "../nativescript-angular/directives/dialogs";
+import {ModalDialogHost, ModalDialogOptions, ModalDialogParams, ModalDialogService} from "nativescript-angular/directives/dialogs";
 
 @Component({
     selector: "modal-comp",
