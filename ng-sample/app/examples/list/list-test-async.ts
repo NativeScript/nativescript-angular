@@ -1,7 +1,7 @@
 import { Component, Input, ChangeDetectionStrategy } from 'angular2/core';
 import { Observable as RxObservable } from 'rxjs/Observable';
 
-class DataItem {
+export class DataItem {
     constructor(public id: number, public name: string) { }
 }
 
