@@ -4,6 +4,8 @@ import {
     Component
 } from 'angular2/core';
 import {TestApp} from "./test-app";
+import {device, platformNames} from "platform";
+const IS_IOS = (device.os === platformNames.ios);
 
 class DataItem {
     constructor(public id: number, public name: string) { }
@@ -35,13 +37,14 @@ export class TestListViewComponent {
             this.myItems.push(new DataItem(i, "data item " + i));
         }
     }
-    
+
     onSetupItemView(args) {
         this.counter++;
     }
 }
 
-describe('ListView-tests', () => {
+// TODO: Skip list-view trest until 
+(IS_IOS ? describe.skip : describe)('ListView-tests', () => {
     let testApp: TestApp = null;
 
     before(() => {
@@ -57,7 +60,7 @@ describe('ListView-tests', () => {
     afterEach(() => {
         testApp.disposeComponents();
     });
-    
+
     it('setupItemView is called for every item', (done) => {
         return testApp.loadComponent(TestListViewComponent).then((componentRef) => {
             const component = componentRef.instance;
@@ -65,6 +68,7 @@ describe('ListView-tests', () => {
                 assert.equal(component.counter, 2);
                 done();
             }, 1000);
-        });
+        })
+        .catch(done);
     });
 });

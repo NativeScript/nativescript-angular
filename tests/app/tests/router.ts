@@ -20,7 +20,7 @@ import {ROUTER_DIRECTIVES, Router, OnActivate, OnDeactivate, CanReuse, OnReuse,
     LocationStrategy, RouteParams, ComponentInstruction, RouteConfig, Location } from 'angular2/router';
 import {topmost, BackstackEntry} from "ui/frame";
 import {Page} from "ui/page";
-import {NS_ROUTER_DIRECTIVES, NS_ROUTER_PROVIDERS} from "../nativescript-angular/router/ns-router";
+import {NS_ROUTER_DIRECTIVES, NS_ROUTER_PROVIDERS} from "nativescript-angular/router/ns-router";
 
 @Component({
     template: `<StackLayout><Label text="Layout"></Label></StackLayout>`

@@ -4,7 +4,7 @@ import {Component, ElementRef, provide} from "angular2/core";
 import {ProxyViewContainer} from "ui/proxy-view-container";
 import {dumpView, createDevice} from "./test-utils";
 import {TestApp} from "./test-app";
-import {DEVICE} from "../nativescript-angular/platform-providers";
+import {DEVICE} from "nativescript-angular/platform-providers";
 import {platformNames} from "platform";
 
 @Component({

@@ -4,7 +4,10 @@ import {Component, ComponentRef} from "angular2/core";
 import {TestApp} from "./test-app";
 import {Page} from "ui/page";
 import {topmost} from "ui/frame";
-import {ModalDialogHost, ModalDialogOptions, ModalDialogParams, ModalDialogService} from "../nativescript-angular/directives/dialogs";
+import {ModalDialogHost, ModalDialogOptions, ModalDialogParams, ModalDialogService} from "nativescript-angular/directives/dialogs";
+
+import {device, platformNames} from "platform";
+const CLOSE_WAIT = (device.os === platformNames.ios) ? 1000 : 0;
 
 @Component({
     selector: "modal-comp",
@@ -47,9 +50,13 @@ export class SuccessComponent {
 describe('modal-dialog', () => {
     let testApp: TestApp = null;
 
-    before(() => {
+    before((done) => {
         return TestApp.create().then((app) => {
             testApp = app;
+
+            // HACK: Wait for the navigations from the test runner app
+            // Remove the setTimeout when test runner start tests on page.navigatedTo
+            setTimeout(done, 1000);
         })
     });
 
@@ -83,7 +90,7 @@ describe('modal-dialog', () => {
                 var service = <ModalDialogService>ref.instance.service;
                 return service.showModal(ModalComponent, {});
             })
-            .then((res) => done())
+            .then((res) => setTimeout(done, CLOSE_WAIT)) // wait for the dialog to close in IOS
             .catch(done)
     });
 
@@ -97,7 +104,7 @@ describe('modal-dialog', () => {
             })
             .then((res) => {
                 assert.strictEqual(res, context);
-                done();
+                setTimeout(done, CLOSE_WAIT) // wait for the dialog to close in IOS
             })
             .catch(done);
     })

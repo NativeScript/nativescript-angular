@@ -15,7 +15,7 @@ import 'globals';
 import 'reflect-metadata';
 import './polyfills/array';
 import {isPresent, Type} from 'angular2/src/facade/lang';
-import {platform, ComponentRef, PLATFORM_DIRECTIVES, PLATFORM_PIPES} from 'angular2/core';
+import {platform, ComponentRef, PlatformRef, PLATFORM_DIRECTIVES, PLATFORM_PIPES} from 'angular2/core';
 import {bind, provide, Provider} from 'angular2/src/core/di';
 import {DOM} from 'angular2/src/platform/dom/dom_adapter';
 
@@ -45,7 +45,7 @@ import {defaultPageProvider, defaultDeviceProvider} from "./platform-providers";
 import * as nativescriptIntl from "nativescript-intl";
 global.Intl = nativescriptIntl;
 
-let _platform = null;
+let _platform: PlatformRef = null;
 
 export interface AppOptions {
     cssFile?: string;
@@ -63,19 +63,19 @@ export function bootstrap(appComponentType: any,
     let defaultAppProviders: ProviderArray = [
         APPLICATION_COMMON_PROVIDERS,
         FORM_PROVIDERS,
-        provide(PLATFORM_PIPES, {useValue: COMMON_PIPES, multi: true}),
-        provide(PLATFORM_DIRECTIVES, {useValue: COMMON_DIRECTIVES, multi: true}),
-        provide(PLATFORM_DIRECTIVES, {useValue: NS_DIRECTIVES, multi: true}),
-        provide(ExceptionHandler, {useFactory: () => new ExceptionHandler(DOM, true), deps: []}),
+        provide(PLATFORM_PIPES, { useValue: COMMON_PIPES, multi: true }),
+        provide(PLATFORM_DIRECTIVES, { useValue: COMMON_DIRECTIVES, multi: true }),
+        provide(PLATFORM_DIRECTIVES, { useValue: NS_DIRECTIVES, multi: true }),
+        provide(ExceptionHandler, { useFactory: () => new ExceptionHandler(DOM, true), deps: [] }),
 
         defaultPageProvider,
         defaultDeviceProvider,
         NativeScriptRootRenderer,
-        provide(RootRenderer, {useClass: NativeScriptRootRenderer}),
+        provide(RootRenderer, { useClass: NativeScriptRootRenderer }),
         NativeScriptRenderer,
-        provide(Renderer, {useClass: NativeScriptRenderer}),
+        provide(Renderer, { useClass: NativeScriptRenderer }),
         COMPILER_PROVIDERS,
-        provide(XHR, {useClass: FileSystemXHR}),
+        provide(XHR, { useClass: FileSystemXHR }),
     ]
 
     var appProviders = [defaultAppProviders];

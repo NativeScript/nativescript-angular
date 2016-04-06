@@ -29,6 +29,7 @@ before_script:
     - android-wait-for-emulator
 
 script:
+    - npm install
     - cd ./tests
     - npm install
     - tns platform add android

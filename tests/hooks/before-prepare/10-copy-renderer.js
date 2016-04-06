@@ -1,12 +1,7 @@
-var path = require('path');
-var shelljs = require('shelljs');
+var execSync = require('child_process').execSync;
 
-module.exports = function ($logger, $projectData, $usbLiveSyncService) {
-    var projectDir = path.join(__dirname, '..', '..');
-    var appDir = path.join(projectDir, 'app');
-    var srcDir = path.join(projectDir, '..', 'src');
+module.exports = function($logger, $projectData, $usbLiveSyncService) {
     if (!$usbLiveSyncService.isInitialized) {
-        shelljs.cp('-Rf', path.join(srcDir, 'nativescript-angular'), appDir);
-        shelljs.cp('-Rf', path.join(srcDir, 'global.d.ts'), appDir);
+        execSync("npm run updateTests", { stdio: [0, 1, 2]});
     }
 }
