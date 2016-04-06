@@ -1,6 +1,6 @@
 {
   "name": "nativescript-angular",
-  "version": "0.0.39",
+  "version": "0.0.40",
   "description": "",
   "homepage": "http://www.telerik.com",
   "bugs": "http://www.telerik.com",
@@ -37,7 +37,7 @@
     "typescript": "1.8.2"
   },
   "peerDependencies": {
-    "tns-core-modules": ">=2.0.0 || >=2.0.0-2016 || >=2.0.0-angular-2"
+    "tns-core-modules": ">=2.0.0 || >=2.0.0-2016 || >=2.0.0-angular-3"
   },
   "nativescript": {}
 }
