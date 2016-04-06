@@ -29,7 +29,7 @@ import {APPLICATION_COMMON_PROVIDERS} from 'angular2/src/core/application_common
 import {COMPILER_PROVIDERS} from 'angular2/src/compiler/compiler';
 import {PLATFORM_COMMON_PROVIDERS} from 'angular2/src/core/platform_common_providers';
 import {COMMON_DIRECTIVES, COMMON_PIPES, FORM_PROVIDERS} from "angular2/common";
-import {NS_DIRECTIVES} from './directives/ns-directives';
+import {NS_DIRECTIVES} from './directives';
 
 import {bootstrap as angularBootstrap} from 'angular2/bootstrap';
 

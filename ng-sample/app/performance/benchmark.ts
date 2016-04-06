@@ -102,7 +102,7 @@ export class Benchmark {
 }
 
 
-class TreeNode {
+export class TreeNode {
   value: string;
   left: TreeNode;
   right: TreeNode;
