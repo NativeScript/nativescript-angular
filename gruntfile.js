@@ -78,14 +78,6 @@ module.exports = function(grunt) {
                         cwd: "./tests"
                     }
                 }
-            },
-            updateSamples: {
-                command: "npm install ../" + packageName,
-                options: {
-                    execOptions: {
-                        cwd: "./ng-sample"
-                    }
-                }
             }
         },
     });
@@ -116,7 +108,5 @@ module.exports = function(grunt) {
 
     grunt.registerTask("updateTests", ["all", "shell:updateTests"]);
     
-    grunt.registerTask("updateSamples", ["all", "shell:updateSamples"]);
-
     grunt.registerTask("default", ["all"]);
 };
