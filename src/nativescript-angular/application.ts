@@ -78,41 +78,46 @@ export function bootstrap(appComponentType: any,
     return _platform.application(appProviders).bootstrap(appComponentType);
 }
 
-export function nativeScriptBootstrap(appComponentType: any, customProviders?: ProviderArray, appOptions?: AppOptions) {
+export function nativeScriptBootstrap(appComponentType: any, customProviders?: ProviderArray, appOptions?: AppOptions): Promise<ComponentRef> {
     if (appOptions && appOptions.cssFile) {
         application.cssFile = appOptions.cssFile;
     }
-    application.start({
-        create: (): Page => {
-            let page = new Page();
-            if (appOptions) {
-                page.actionBarHidden = appOptions.startPageActionBarHidden;
+
+    return new Promise((resolve, reject) => {
+        application.start({
+            create: (): Page => {
+                let page = new Page();
+                if (appOptions) {
+                    page.actionBarHidden = appOptions.startPageActionBarHidden;
+                }
+
+                let onLoadedHandler = function(args) {
+                    page.off('loaded', onLoadedHandler);
+                    //profiling.stop('application-start');
+                    console.log('Page loaded');
+
+                    //profiling.start('ng-bootstrap');
+                    console.log('BOOTSTRAPPING...');
+                    bootstrap(appComponentType, customProviders).then((appRef) => {
+                        //profiling.stop('ng-bootstrap');
+                        console.log('ANGULAR BOOTSTRAP DONE.');
+                        resolve(appRef);
+                    }, (err) => {
+                        console.log('ERROR BOOTSTRAPPING ANGULAR');
+                        let errorMessage = err.message + "\n\n" + err.stack;
+                        console.log(errorMessage);
+
+                        let view = new TextView();
+                        view.text = errorMessage;
+                        page.content = view;
+                        reject(err);
+                    });
+                }
+
+                page.on('loaded', onLoadedHandler);
+
+                return page;
             }
-
-            let onLoadedHandler = function(args) {
-                page.off('loaded', onLoadedHandler);
-                //profiling.stop('application-start');
-                console.log('Page loaded');
-
-                //profiling.start('ng-bootstrap');
-                console.log('BOOTSTRAPPING...');
-                bootstrap(appComponentType, customProviders).then((appRef) => {
-                    //profiling.stop('ng-bootstrap');
-                    console.log('ANGULAR BOOTSTRAP DONE.');
-                }, (err) => {
-                    console.log('ERROR BOOTSTRAPPING ANGULAR');
-                    let errorMessage = err.message + "\n\n" + err.stack;
-                    console.log(errorMessage);
-
-                    let view = new TextView();
-                    view.text = errorMessage;
-                    page.content = view;
-                });
-            }
-
-            page.on('loaded', onLoadedHandler);
-
-            return page;
-        }
-    });
+        });
+    })
 }

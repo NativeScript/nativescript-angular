@@ -7,4 +7,4 @@ export interface AppOptions {
 
 export type ProviderArray = Array<Type | Provider | Array<any>>;
 export function bootstrap(appComponentType: any, componentInjectableBindings?: ProviderArray): Promise<ComponentRef>;
-export function nativeScriptBootstrap(appComponentType: any, customProviders?: ProviderArray, appOptions?: any): void;
+export function nativeScriptBootstrap(appComponentType: any, customProviders?: ProviderArray, appOptions?: any):  Promise<ComponentRef>;
