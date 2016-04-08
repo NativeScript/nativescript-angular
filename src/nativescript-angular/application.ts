@@ -1,16 +1,5 @@
-//prevent a crash in zone patches. pretend we're node.js
-global.process = {};
-const oldToString = Object.prototype.toString;
-Object.prototype.toString = function() {
-    return "[object process]";
-}
-import "zone.js/dist/zone.js"
-Object.prototype.toString = oldToString;
-delete global.process;
-//
-//Import globals after the zone, so the latter can't patch everything there.
-//The patchables should already be zone-aware already.
 import 'globals';
+import "zone.js/dist/zone-node"
 
 import 'reflect-metadata';
 import './polyfills/array';

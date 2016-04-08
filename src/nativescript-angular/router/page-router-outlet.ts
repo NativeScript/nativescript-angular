@@ -170,7 +170,7 @@ export class PageRouterOutlet extends RouterOutlet {
                 resolve(componentRef)
             });
 
-            page.on('navigatingFrom', (<any>global).zone.bind((args: NavigatedData) => {
+            page.on('navigatingFrom', (<any>global).Zone.current.wrap((args: NavigatedData) => {
                 if (args.isBackNavigation) {
                     this.location.beginBackPageNavigation();
                     this.location.back();
