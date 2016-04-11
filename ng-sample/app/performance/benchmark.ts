@@ -1,15 +1,16 @@
 import {StackLayout} from 'ui/layouts/stack-layout';
 import {Button} from 'ui/button';
 import {Label} from 'ui/label';
-import {Inject, Component, View} from 'angular2/core';
+import {Inject, Component} from 'angular2/core';
 import {ApplicationRef} from 'angular2/src/core/application_ref';
 import * as profiling from './profiling';
 
-@Component({selector: 'tree', inputs: ['data']})
-@View({
-  directives: [TreeComponent],
-  template:
-      `<StackLayout>
+@Component({
+    selector: 'tree',
+    inputs: ['data'],
+    directives: [TreeComponent],
+    template:
+    `<StackLayout>
           <Label [text]="data.value"></Label>
           <StackLayout *ngIf="data.right != null">
             <tree [data]='data.right'></tree>
@@ -21,15 +22,13 @@ import * as profiling from './profiling';
       `
 })
 class TreeComponent {
-  data: TreeNode;
+    data: TreeNode;
 }
 
 @Component({
-	selector: 'benchmark',
-})
-@View({
+    selector: 'benchmark',
     directives: [TreeComponent],
-	template: `
+    template: `
     <StackLayout>
         <Label text='Benchmark!' fontSize='20' verticalAlignment='center' padding='20'></Label>
         <Button text="Baseline test" (tap)="baselineTest(baseline)"></Button>
@@ -88,14 +87,14 @@ export class Benchmark {
 
     private createBaselineDom() {
         var values = this.count++ % 2 == 0 ? ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '*'] :
-        ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', '-'];
+            ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', '-'];
         this.initDataBaseline = buildTree(this.maxDepth, values, 0);
         this.appRef.tick();
     }
 
     private createNgDom() {
         var values = this.count++ % 2 == 0 ? ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '*'] :
-        ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', '-'];
+            ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', '-'];
         this.initDataNg = buildTree(this.maxDepth, values, 0);
         this.appRef.tick();
     }
@@ -103,14 +102,14 @@ export class Benchmark {
 
 
 export class TreeNode {
-  value: string;
-  left: TreeNode;
-  right: TreeNode;
-  constructor(value, left, right) {
-    this.value = value;
-    this.left = left;
-    this.right = right;
-  }
+    value: string;
+    left: TreeNode;
+    right: TreeNode;
+    constructor(value, left, right) {
+        this.value = value;
+        this.left = left;
+        this.right = right;
+    }
 }
 
 var nodes = 0;

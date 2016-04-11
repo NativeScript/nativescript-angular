@@ -216,7 +216,7 @@ export class NativeScriptRenderer extends Renderer {
 
     public listen(renderElement: NgView, eventName: string, callback: Function): Function {
         traceLog('NativeScriptRenderer.listen: ' + eventName);
-        let zonedCallback = (<any>global).zone.bind(callback);
+        let zonedCallback = (<any>global).Zone.current.wrap(callback);
         renderElement.on(eventName, zonedCallback);
         return () => renderElement.off(eventName, zonedCallback);
     }

@@ -2,7 +2,7 @@ import {Component} from 'angular2/core';
 import {RouteConfig} from 'angular2/router';
 import { Page} from "ui/page";
 import {NS_ROUTER_DIRECTIVES, NS_ROUTER_PROVIDERS} from "../../nativescript-angular/router/ns-router";
-import {NS_DIRECTIVES} from "../../nativescript-angular/directives/ns-directives";
+import {NS_DIRECTIVES} from "../../nativescript-angular/directives";
 
 @Component({
     selector: "first",

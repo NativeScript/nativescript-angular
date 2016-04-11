@@ -15,15 +15,15 @@
   "scripts": {},
   "dependencies": {
     "nativescript-intl": "^0.0.2",
-    "angular2": "2.0.0-beta.9",
-    "es6-shim": "^0.33.3",
+    "angular2": "2.0.0-beta.14",
+    "es6-shim": "^0.35.0",
     "parse5": "1.4.2",
     "punycode": "1.3.2",
     "querystring": "0.2.0",
     "url": "0.10.3",
     "reflect-metadata": "0.1.2",
     "rxjs": "5.0.0-beta.2",
-    "zone.js": "0.5.15"
+    "zone.js": "^0.6.6"
   },
   "devDependencies": {
     "grunt": "0.4.5",
@@ -37,7 +37,7 @@
     "typescript": "1.8.2"
   },
   "peerDependencies": {
-    "tns-core-modules": ">=2.0.0 || >=2.0.0-2016 || >=2.0.0-angular-3"
+    "tns-core-modules": ">=2.0.0 || >=2.0.0-2016 || >=2.0.0-angular-4"
   },
   "nativescript": {}
 }
