@@ -88,7 +88,7 @@ export class ListViewComponent {
     }
 
     public setupViewRef(viewRef: EmbeddedViewRef, data: any, index: number): void {
-        viewRef.setLocal('\$implicit', data.item);
+        viewRef.setLocal('\$implicit', data);
         viewRef.setLocal("item", data);
         viewRef.setLocal("index", index);
         viewRef.setLocal('even', (index % 2 == 0));
