@@ -1,14 +1,12 @@
 //make sure you import mocha-config before angular2/core
 import {assert} from "./test-config";
-import {
-    Component,
-    ElementRef,
-} from "angular2/core";
+import { Component, ElementRef, Renderer } from "angular2/core";
 import {ProxyViewContainer} from "ui/proxy-view-container";
 import {Red} from "color/known-colors";
 import {dumpView} from "./test-utils";
 import {TestApp} from "./test-app";
-import {LayoutBase} from "ui/layouts/layout-base"
+import {LayoutBase} from "ui/layouts/layout-base";
+import {StackLayout} from "ui/layouts/stack-layout";
 
 @Component({
     template: `<StackLayout><Label text="Layout"></Label></StackLayout>`
@@ -104,7 +102,6 @@ export class NgForLabel {
     constructor(public elementRef: ElementRef) {
     }
 }
-
 
 describe('Renderer E2E', () => {
     let testApp: TestApp = null;
@@ -216,4 +213,40 @@ describe('Renderer E2E', () => {
             });
         });
     })
+})
+
+describe('Renderer createElement', () => {
+    let testApp: TestApp = null;
+    let renderer: Renderer = null;
+
+    before(() => {
+        return TestApp.create().then((app) => {
+            testApp = app;
+            renderer = testApp.renderer;
+        })
+    });
+
+    after(() => {
+        testApp.dispose();
+    });
+
+    it("creates element from CamelCase", () => {
+        const result = renderer.createElement(null, "StackLayout");
+        assert.instanceOf(result, StackLayout, "Renderer should create StackLayout form 'StackLayout'")
+    });
+
+    it("creates element from lowercase", () => {
+        const result = renderer.createElement(null, "stacklayout");
+        assert.instanceOf(result, StackLayout, "Renderer should create StackLayout form 'stacklayout'")
+    });
+
+    it("creates element from kebab-case", () => {
+        const result = renderer.createElement(null, "stack-layout");
+        assert.instanceOf(result, StackLayout, "Renderer should create StackLayout form 'stack-layout'")
+    });
+
+    it("creates ProxyViewContainer for unknownTag", () => {
+        const result = renderer.createElement(null, "unknown-tag");
+        assert.instanceOf(result, ProxyViewContainer, "Renderer should create ProxyViewContainer form 'unknown-tag'")
+    });
 })

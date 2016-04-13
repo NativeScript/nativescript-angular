@@ -20,11 +20,12 @@ export interface ViewClass {
     new (): View
 }
 
-var defaultViewMeta: ViewClassMeta = {
+const defaultViewMeta: ViewClassMeta = {
     skipAddToDom: false,
 }
 
-var elementMap: Map<string, { resolver: ViewResolver, meta?: ViewClassMeta }> = new Map<string, { resolver: ViewResolver, meta?: ViewClassMeta }>();
+const elementMap: Map<string, { resolver: ViewResolver, meta?: ViewClassMeta }> = new Map<string, { resolver: ViewResolver, meta?: ViewClassMeta }>();
+const camelCaseSplit = /([a-z0-9])([A-Z])/g;
 
 export function registerElement(elementName: string, resolver: ViewResolver, meta?: ViewClassMeta): void {
     if (elementMap.has(elementName)) {
@@ -33,6 +34,7 @@ export function registerElement(elementName: string, resolver: ViewResolver, met
         const entry = { resolver: resolver, meta: meta };
         elementMap.set(elementName, entry);
         elementMap.set(elementName.toLowerCase(), entry);
+        elementMap.set(elementName.replace(camelCaseSplit, "$1-$2").toLowerCase(), entry);
     }
 }
 
@@ -102,4 +104,4 @@ registerElement("WrapLayout", () => require("ui/layouts/wrap-layout").WrapLayout
 registerElement("FormattedString", () => require("text/formatted-string").FormattedString);
 registerElement("Span", () => require("text/span").Span);
 
-registerElement("DetachedContainer", () =>  require("ui/proxy-view-container").ProxyViewContainer, { skipAddToDom: true });
+registerElement("DetachedContainer", () => require("ui/proxy-view-container").ProxyViewContainer, { skipAddToDom: true });

@@ -1,7 +1,7 @@
 //make sure you import mocha-config before angular2/core
 import {bootstrap, ProviderArray} from "nativescript-angular/application";
 import {Type, Component, ComponentRef, DynamicComponentLoader,
-    ViewChild, ElementRef, provide, ApplicationRef
+    ViewChild, ElementRef, provide, ApplicationRef, Renderer
 } from "angular2/core";
 
 import {View} from "ui/core/view";
@@ -20,7 +20,8 @@ export class TestApp {
 
     constructor(public loader: DynamicComponentLoader,
         public elementRef: ElementRef,
-        public appRef: ApplicationRef) {
+        public appRef: ApplicationRef,
+        public renderer: Renderer) {
     }
 
     public loadComponent(type: Type): Promise<ComponentRef> {
