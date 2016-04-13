@@ -1,0 +1,12 @@
+<!-- >> icon-font-sample -->
+<GridLayout>
+    <ListView [items]="glyphs">
+        <template #item="item">
+            <StackLayout orientation="horizontal">
+                <Label [text]="item.icon" class="icon"></Label>
+                <Label [text]="item.code"></Label>
+            </StackLayout>
+        </template>
+    </ListView>
+</GridLayout>
+<!-- << icon-font-sample -->

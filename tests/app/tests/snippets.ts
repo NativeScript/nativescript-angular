@@ -5,6 +5,10 @@ import {TestApp} from "./test-app";
 
 import {GestureComponent} from "../snippets/gestures.component";
 import {LayoutsComponent} from "../snippets/layouts.component";
+import {IconFontComponent} from "../snippets/icon-font.component";
+
+import {device, platformNames} from "platform";
+const IS_IOS = (device.os === platformNames.ios);
 
 describe('Snippets', () => {
     let testApp: TestApp = null;
@@ -30,6 +34,14 @@ describe('Snippets', () => {
         return testApp.loadComponent(LayoutsComponent).then((componentRef) => {
             const componentInstance = componentRef.instance;
             assert.instanceOf(componentInstance, LayoutsComponent);
+        });
+    });
+
+    // TODO: Skip list-view test until karma test launcher double navigate bug is fixed
+    (IS_IOS ? it.skip : it)("Icon-font snippets can be loaded", () => {
+        return testApp.loadComponent(IconFontComponent).then((componentRef) => {
+            const componentInstance = componentRef.instance;
+            assert.instanceOf(componentInstance, IconFontComponent);
         });
     });
 })
