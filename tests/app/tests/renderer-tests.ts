@@ -1,6 +1,6 @@
 //make sure you import mocha-config before angular2/core
 import {assert} from "./test-config";
-import { Component, ElementRef, Renderer } from "angular2/core";
+import {Component, ElementRef, Renderer} from "angular2/core";
 import {ProxyViewContainer} from "ui/proxy-view-container";
 import {Red} from "color/known-colors";
 import {dumpView} from "./test-utils";
