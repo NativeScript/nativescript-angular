@@ -43,7 +43,7 @@ export class TestListViewComponent {
     }
 }
 
-// TODO: Skip list-view trest until 
+// TODO: Skip list-view test until karma test launcher double navigate bug is fixed
 (IS_IOS ? describe.skip : describe)('ListView-tests', () => {
     let testApp: TestApp = null;
 
