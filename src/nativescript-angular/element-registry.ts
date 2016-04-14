@@ -92,6 +92,7 @@ registerElement("Repeater", () => require("ui/repeater").Repeater);
 registerElement("ScrollView", () => require("ui/scroll-view").ScrollView);
 registerElement("SearchBar", () => require("ui/search-bar").SearchBar);
 registerElement("SegmentedBar", () => require("ui/segmented-bar").SegmentedBar);
+registerElement("SegmentedBarItem", () => require("ui/segmented-bar").SegmentedBarItem);
 registerElement("Slider", () => require("ui/slider").Slider);
 registerElement("StackLayout", () => require("ui/layouts/stack-layout").StackLayout);
 registerElement("Switch", () => require("ui/switch").Switch);
