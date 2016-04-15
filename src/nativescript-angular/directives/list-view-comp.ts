@@ -5,12 +5,14 @@ import {
     TemplateRef, 
     ContentChild, 
     AppViewManager,
-    EmbeddedViewRef, 
+    EmbeddedViewRef,
+    ViewContainerRef,
     HostListener, 
     IterableDiffers, 
     IterableDiffer,
     ChangeDetectorRef,
     EventEmitter,
+    ViewChild,
     Output} from 'angular2/core';
 import {isListLikeIterable} from 'angular2/src/facade/collection';
 import {Observable as RxObservable} from 'rxjs'
@@ -29,13 +31,18 @@ export interface SetupItemViewArgs {
 
 @Component({
     selector: 'ListView',
-    template: ``,
+    template: `
+        <DetachedContainer>
+            <Placeholder #loader></Placeholder>
+        </DetachedContainer>`,
     inputs: ['items']
 })
 export class ListViewComponent {
     private listView: ListView;
     private _items: any;
     private _differ: IterableDiffer;
+    
+    @ViewChild('loader') public loader: ElementRef;
 
     @Output() public setupItemView: EventEmitter<SetupItemViewArgs> = new EventEmitter<SetupItemViewArgs>();
 
@@ -80,7 +87,7 @@ export class ListViewComponent {
         }
         else {
             console.log("ListView.onItemLoading: " + index + " - Creating view from template");
-            viewRef = this._appViewManager.createEmbeddedViewInContainer(this._elementRef, index, this.itemTemplate);
+            viewRef = this._appViewManager.createEmbeddedViewInContainer(this.loader, 0, this.itemTemplate);
             args.view = getSingleViewFromViewRef(viewRef);
             args.view[NG_VIEW] = viewRef;
         }
