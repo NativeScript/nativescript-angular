@@ -3,6 +3,8 @@ bin/dist
 node_modules
 tags
 src/nativescript-angular/**/*.js
+!src/nativescript-angular/postinstall.js
+!src/nativescript-angular/hooks/**/*.js
 .baseDir.ts
 .tscache
 .nvm
