@@ -41,6 +41,7 @@ nativeScriptBootstrap(RendererTest).then((compRef) => {
 //nativeScriptBootstrap(ImageTest);
 //nativeScriptBootstrap(NavigationTest, [NS_ROUTER_PROVIDERS]);
 // nativeScriptBootstrap(ActionBarTest, [NS_ROUTER_PROVIDERS], { startPageActionBarHidden: false });
+// nativeScriptBootstrap(ActionBarTest, [NS_ROUTER_PROVIDERS]);
 // nativeScriptBootstrap(ModalTest);
 // nativeScriptBootstrap(PlatfromDirectivesTest);
 // nativeScriptBootstrap(RouterOutletTest, [NS_ROUTER_PROVIDERS]);
