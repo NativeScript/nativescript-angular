@@ -38,10 +38,12 @@ describe('Snippets', () => {
     });
 
     // TODO: Skip list-view test until karma test launcher double navigate bug is fixed
-    (IS_IOS ? it.skip : it)("Icon-font snippets can be loaded", () => {
-        return testApp.loadComponent(IconFontComponent).then((componentRef) => {
+    (IS_IOS ? it.skip : it)("Icon-font snippets can be loaded", (done) => {
+        testApp.loadComponent(IconFontComponent).then((componentRef) => {
             const componentInstance = componentRef.instance;
             assert.instanceOf(componentInstance, IconFontComponent);
+            //Works around a "dehydrated change detector" exception.
+            setTimeout(done, 10);
         });
     });
 })
