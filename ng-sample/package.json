@@ -26,7 +26,7 @@
 		"tns-core-modules": "^2.0.0-angular-4",
 		"nativescript-intl": "^0.0.2",
 		"angular2": "2.0.0-beta.14",
-        "es6-shim": "^0.35.0",
+		"es6-shim": "^0.35.0",
 		"parse5": "1.4.2",
 		"punycode": "1.3.2",
 		"querystring": "0.2.0",
@@ -49,6 +49,9 @@
 		"id": "org.nativescript.ngsample",
 		"tns-android": {
 			"version": "1.7.1"
+		},
+		"tns-ios": {
+			"version": "1.7.0"
 		}
 	}
 }

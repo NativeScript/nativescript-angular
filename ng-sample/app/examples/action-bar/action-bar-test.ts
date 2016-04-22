@@ -75,8 +75,6 @@ class SecondComponent {
     }
 }
 
-
-
 @Component({
     selector: 'action-bar-test',
     directives: [NS_ROUTER_DIRECTIVES],
