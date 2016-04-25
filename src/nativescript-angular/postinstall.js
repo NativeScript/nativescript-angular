@@ -2,10 +2,11 @@ var fs = require("fs");
 var os = require("os");
 var hookHelper = require("./hooks/hook-helper");
 var projectDir = hookHelper.findProjectDir();
+
 if (projectDir) {
     var hooksDir = hookHelper.getHooksDir(),
-		beforeLivesyncHookDir = hookHelper.gerBeforeLivesyncHookDir(),
-		content = 'module.exports = require("nativescript-restart-on-sync-plugin/hooks/before-livesync");';
+        beforeLivesyncHookDir = hookHelper.getBeforeLivesyncHookDir(),
+        content = 'module.exports = require("nativescript-angular/hooks/before-livesync");';
     if (!fs.existsSync(hooksDir)) {
         fs.mkdirSync(hooksDir);
     }

@@ -1,7 +1,8 @@
 "use strict";
 var fs = require("fs");
 var path = require("path");
-function findProjectDir() {
+
+exports.findProjectDir = function findProjectDir() {
     var candidateDir = path.join(__dirname, "..");
     while (true) {
         var oldCandidateDir = candidateDir;
@@ -17,17 +18,16 @@ function findProjectDir() {
             return;
         }
     }
-}
-exports.findProjectDir = findProjectDir;
-function getHooksDir() {
-    return path.join(findProjectDir(), 'hooks');
-}
-exports.getHooksDir = getHooksDir;
-function gerBeforeLivesyncHookDir() {
-    return path.join(getHooksDir(), "before-livesync");
-}
-exports.gerBeforeLivesyncHookDir = gerBeforeLivesyncHookDir;
-function getHookFilePath() {
-    return path.join(gerBeforeLivesyncHookDir(), "nativescript-restart-on-sync-plugin.js");
-}
-exports.getHookFilePath = getHookFilePath;
+};
+
+exports.getHooksDir = function getHooksDir() {
+    return path.join(exports.findProjectDir(), 'hooks');
+};
+
+exports.getBeforeLivesyncHookDir = function getBeforeLivesyncHookDir() {
+    return path.join(exports.getHooksDir(), "before-livesync");
+};
+
+exports.getHookFilePath = function getHookFilePath() {
+    return path.join(exports.getBeforeLivesyncHookDir(), "nativescript-angular-sync .js");
+};
