@@ -209,7 +209,7 @@ export class NativeScriptRenderer extends Renderer {
         });
     }
 
-    public createText(value: string): NgView {
+    public createText(parentElement: NgView, value: string): NgView {
         traceLog('NativeScriptRenderer.createText');
         return this.viewUtil.createText(value);;
     }
