@@ -2,18 +2,15 @@ import {PromiseWrapper} from 'angular2/src/facade/async';
 import {isBlank, isPresent} from 'angular2/src/facade/lang';
 import {StringMapWrapper} from 'angular2/src/facade/collection';
 
-import {Attribute, DynamicComponentLoader, ComponentRef,
-    ElementRef, Injector, provide, Type, Component} from 'angular2/core';
+import {Attribute, DynamicComponentLoader, ComponentRef, ViewContainerRef,
+    ElementRef, ReflectiveInjector, provide, Type, Component} from 'angular2/core';
 
 import * as routerHooks from 'angular2/src/router/lifecycle/lifecycle_annotations';
 import {hasLifecycleHook} from 'angular2/src/router/lifecycle/route_lifecycle_reflector';
 
-import {
-    ComponentInstruction, RouteParams, RouteData,
-    RouterOutlet, LocationStrategy, Router,
-    OnActivate, OnDeactivate, CanReuse, OnReuse
-} from 'angular2/router';
-
+import {Router, RouterOutlet, RouteData, RouteParams, ComponentInstruction, 
+    OnActivate, OnDeactivate, OnReuse, CanReuse} from 'angular2/router';
+import {LocationStrategy} from 'angular2/platform/common';
 import {topmost} from "ui/frame";
 import {Page, NavigatedData} from "ui/page";
 import {log} from "./common";
@@ -70,12 +67,12 @@ export class PageRouterOutlet extends RouterOutlet {
     private componentRef: ComponentRef = null;
     private currentInstruction: ComponentInstruction = null;
 
-    constructor(private elementRef: ElementRef,
+    constructor(private containerRef: ViewContainerRef,
         private loader: DynamicComponentLoader,
         private parentRouter: Router,
         @Attribute('name') nameAttr: string,
         private location: NSLocationStrategy) {
-        super(elementRef, loader, parentRouter, nameAttr)
+        super(containerRef, loader, parentRouter, nameAttr);
     }
 
     /**
@@ -125,13 +122,13 @@ export class PageRouterOutlet extends RouterOutlet {
         if (this.isInitalPage) {
             log("PageRouterOutlet.activate() inital page - just load component: " + componentType.name);
             this.isInitalPage = false;
-            resultPromise = this.loader.loadNextToLocation(componentType, this.elementRef, Injector.resolve(providersArray));
+            resultPromise = this.loader.loadNextToLocation(componentType, this.containerRef, ReflectiveInjector.resolve(providersArray));
         } else {
             log("PageRouterOutlet.activate() forward navigation - create detached loader in the loader container: " + componentType.name);
 
             const page = new Page();
             providersArray.push(provide(Page, { useValue: page }));
-            resultPromise = this.loader.loadIntoLocation(DetachedLoader, this.elementRef, "loader", Injector.resolve(providersArray))
+            resultPromise = this.loader.loadNextToLocation(DetachedLoader, this.containerRef, ReflectiveInjector.resolve(providersArray))
                 .then((pageComponentRef) => {
                     loaderRef = pageComponentRef;
                     return (<DetachedLoader>loaderRef.instance).loadComponent(componentType);
@@ -201,7 +198,7 @@ export class PageRouterOutlet extends RouterOutlet {
         }
 
         if (this.location.isPageNavigatingBack()) {
-            log("PageRouterOutlet.deactivate() while going back - should dispose: " + instruction.componentType.name)
+            log("PageRouterOutlet.deactivate() while going back - should destroy: " + instruction.componentType.name)
             return next.then((_) => {
                 const popedItem = this.refCache.pop();
                 const popedRef = popedItem.componentRef;
@@ -211,12 +208,12 @@ export class PageRouterOutlet extends RouterOutlet {
                 }
 
                 if (isPresent(this.componentRef)) {
-                    this.componentRef.dispose();
+                    this.componentRef.destroy();
                     this.componentRef = null;
                 }
 
                 if (isPresent(popedItem.loaderRef)) {
-                    popedItem.loaderRef.dispose();
+                    popedItem.loaderRef.destroy();
                 }
             });
         } else {
@@ -263,7 +260,6 @@ export class PageRouterOutlet extends RouterOutlet {
 
         log("PageRouterOutlet.routerCanReuse(): " + result);
         return PromiseWrapper.resolve(result);
-
     }
 
     /**

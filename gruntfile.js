@@ -18,7 +18,7 @@ module.exports = function(grunt) {
         ts: {
             build: {
                 src: [
-                    'src/**/*.ts',
+                     'src/**/*.ts',
                 ],
                 outDir: outDir,
                 options: {

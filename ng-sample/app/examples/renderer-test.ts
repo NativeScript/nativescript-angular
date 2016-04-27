@@ -54,12 +54,13 @@ export class RendererTest {
             'search': null,
             'selectedIndex': 0,
             'listPickerItems': [
-                1,2,3,4,5
+                1,2,3,4
             ],
             'segmentedBarItems': [
                 {'title': 'first'},
                 {'title': 'second'},
-                {'title': 'third'}
+                {'title': 'third'},
+                {'title': 'fourth'}
             ]
         });
 

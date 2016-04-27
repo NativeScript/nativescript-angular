@@ -17,7 +17,9 @@ import {dumpView} from "./test-utils";
 import {bootstrapTestApp, destroyTestApp} from "./test-app";
 
 import {ROUTER_DIRECTIVES, Router, OnActivate, OnDeactivate, CanReuse, OnReuse,
-    LocationStrategy, RouteParams, ComponentInstruction, RouteConfig, Location } from 'angular2/router';
+    RouteParams, ComponentInstruction, RouteConfig } from 'angular2/router';
+import {LocationStrategy} from 'angular2/src/platform/location';
+import {Location} from 'angular2/platform/common';
 import {topmost, BackstackEntry} from "ui/frame";
 import {Page} from "ui/page";
 import {NS_ROUTER_DIRECTIVES, NS_ROUTER_PROVIDERS} from "nativescript-angular/router/ns-router";

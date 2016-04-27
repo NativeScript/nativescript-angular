@@ -65,6 +65,7 @@ export class TestListViewComponent {
         return testApp.loadComponent(TestListViewComponent).then((componentRef) => {
             const component = componentRef.instance;
             setTimeout(() => {
+                console.log("component: " + component);
                 assert.equal(component.counter, 2);
                 done();
             }, 1000);

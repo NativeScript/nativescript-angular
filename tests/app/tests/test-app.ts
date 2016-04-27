@@ -1,7 +1,7 @@
 //make sure you import mocha-config before angular2/core
 import {bootstrap, ProviderArray} from "nativescript-angular/application";
 import {Type, Component, ComponentRef, DynamicComponentLoader,
-    ViewChild, ElementRef, provide, ApplicationRef, Renderer
+    ViewChild, ElementRef, provide, ApplicationRef, Renderer, ViewContainerRef
 } from "angular2/core";
 
 import {View} from "ui/core/view";
@@ -19,13 +19,13 @@ export class TestApp {
     private _pendingDispose: ComponentRef[] = [];
 
     constructor(public loader: DynamicComponentLoader,
-        public elementRef: ElementRef,
+        public elementRef: ViewContainerRef,
         public appRef: ApplicationRef,
         public renderer: Renderer) {
     }
 
     public loadComponent(type: Type): Promise<ComponentRef> {
-        return this.loader.loadIntoLocation(type, this.elementRef, "loadSite").then((componentRef) => {
+        return this.loader.loadNextToLocation(type, this.elementRef).then((componentRef) => {
             this._pendingDispose.push(componentRef);
             this.appRef.tick();
             return componentRef;
@@ -35,7 +35,7 @@ export class TestApp {
     public disposeComponents() {
         while (this._pendingDispose.length > 0) {
             const componentRef = this._pendingDispose.pop()
-            componentRef.dispose();
+            componentRef.destroy();
         }
     }
 

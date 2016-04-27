@@ -80,7 +80,7 @@ class SecondComponent {
     directives: [NS_ROUTER_DIRECTIVES],
     template: `
     <GridLayout>
-        <page-router-outlet></page-router-outlet>
+       <page-router-outlet></page-router-outlet>
     </GridLayout>
     `
 })

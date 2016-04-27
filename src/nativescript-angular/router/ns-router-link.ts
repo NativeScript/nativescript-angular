@@ -1,6 +1,7 @@
 import {Directive, Input} from 'angular2/core';
 import {isString} from 'angular2/src/facade/lang';
-import {Router, Location, Instruction} from 'angular2/router';
+import {Router, Instruction} from 'angular2/router';
+import {Location} from 'angular2/platform/common';
 import { log } from "./common";
 
 /**
