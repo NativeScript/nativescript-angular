@@ -1,15 +1,33 @@
 import {ElementRef, Directive, Input, TemplateRef, ViewContainerRef} from "angular2/core";
 import {TabView, TabViewItem} from "ui/tab-view";
-import {isView} from "../view-util";
 
 @Directive({
-    selector: 'TabView'
+    selector: 'TabView',
+    inputs: ['selectedIndex']
 })
 export class TabViewDirective {
     public tabView: TabView;
+    private _selectedIndex: number;
+    private viewInitialized: boolean;
+    
+    get selectedIndex(): number {
+        return this._selectedIndex;
+    }
+    
+    set selectedIndex(value: number) {
+        this._selectedIndex = value;
+        if (this.viewInitialized) {
+            this.tabView.selectedIndex = this._selectedIndex;
+        }
+    }
 
     constructor(private element: ElementRef) {
         this.tabView = element.nativeElement;
+    }
+    
+    ngAfterViewInit() {
+        this.viewInitialized = true;
+        this.tabView.selectedIndex = this._selectedIndex;
     }
 }
 

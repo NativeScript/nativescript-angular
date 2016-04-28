@@ -98,14 +98,17 @@ describe("two-way binding via ng-model", () => {
 
     it("converts strings to int selection", () => {
         const accessor = new TestSelectedIndexValueAccessor()
-
+        
         accessor.writeValue(null);
+        accessor.ngAfterViewInit();
         assert.strictEqual(0, accessor.view.selectedIndex, "default to 0 on empty")
 
         accessor.writeValue("3");
+        accessor.ngAfterViewInit();
         assert.strictEqual(3, accessor.view.selectedIndex)
 
         accessor.writeValue("blah");
+        accessor.ngAfterViewInit();
         assert.strictEqual(0, accessor.view.selectedIndex, "default to 0 on parse errors")
     });
 
