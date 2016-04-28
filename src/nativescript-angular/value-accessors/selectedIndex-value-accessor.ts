@@ -18,7 +18,7 @@ export type SelectableView = {selectedIndex: number} & View;
  *  ```
  */
 @Directive({
-    selector: 'SegmentedBar[ngModel], ListPicker[ngModel]',
+    selector: 'SegmentedBar[ngModel], ListPicker[ngModel], TabView[ngModel]',
     host: { '(selectedIndexChange)': 'onChange($event.value)' },
     bindings: [SELECTED_INDEX_VALUE_ACCESSOR]
 })
@@ -28,6 +28,9 @@ export class SelectedIndexValueAccessor extends BaseValueAccessor<SelectableView
     constructor(elementRef: ElementRef) {
         super(elementRef.nativeElement);
     }
+    
+    private _normalizedValue: number;
+    private viewInitialized: boolean;
 
     writeValue(value: any): void {
         let normalizedValue;
@@ -41,7 +44,15 @@ export class SelectedIndexValueAccessor extends BaseValueAccessor<SelectableView
                 normalizedValue = isNaN(parsedValue) ? 0 : parsedValue;
             }
         }
-        this.view.selectedIndex = Math.round(normalizedValue);
+        this._normalizedValue = Math.round(normalizedValue);
+        if (this.viewInitialized) {
+            this.view.selectedIndex = this._normalizedValue;
+        }
+    }
+    
+    ngAfterViewInit() {
+        this.viewInitialized = true;
+        this.view.selectedIndex = this._normalizedValue;
     }
 
     registerOnTouched(fn: () => void): void { this.onTouched = fn; }

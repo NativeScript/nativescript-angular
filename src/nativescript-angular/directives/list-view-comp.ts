@@ -6,7 +6,6 @@ import {
     ContentChild, 
     AppViewManager,
     EmbeddedViewRef,
-    ViewContainerRef,
     HostListener, 
     IterableDiffers, 
     IterableDiffer,
