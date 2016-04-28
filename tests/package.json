@@ -30,7 +30,7 @@
 	},
 	"homepage": "http://nativescript.org",
 	"dependencies": {
-		"tns-core-modules": "^2.0.0-angular-4",
+		"tns-core-modules": "^2.0.0",
 		"nativescript-intl": "^0.0.2",
 		"angular2": "2.0.0-beta.16",
 		"es6-shim": "^0.35.0",
