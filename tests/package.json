@@ -32,8 +32,8 @@
 	"dependencies": {
 		"tns-core-modules": "^2.0.0-angular-4",
 		"nativescript-intl": "^0.0.2",
-		"angular2": "2.0.0-beta.14",
-        "es6-shim": "^0.35.0",
+		"angular2": "2.0.0-beta.16",
+		"es6-shim": "^0.35.0",
 		"nativescript-unit-test-runner": "^0.3.3",
 		"parse5": "1.4.2",
 		"punycode": "1.3.2",
@@ -56,7 +56,7 @@
 		"shelljs": "^0.5.3",
 		"typescript": "1.8.2"
 	},
-	"scripts" :{
-			"updateTests" : "grunt updateTests"
+	"scripts": {
+		"updateTests": "grunt updateTests"
 	}
 }

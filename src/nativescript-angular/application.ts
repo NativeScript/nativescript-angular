@@ -4,7 +4,8 @@ import "zone.js/dist/zone-node"
 import 'reflect-metadata';
 import './polyfills/array';
 import {isPresent, Type} from 'angular2/src/facade/lang';
-import {platform, ComponentRef, PlatformRef, PLATFORM_DIRECTIVES, PLATFORM_PIPES} from 'angular2/core';
+import{ReflectiveInjector, reflector, coreLoadAndBootstrap, createPlatform, 
+    getPlatform, assertPlatform, ComponentRef, PlatformRef, PLATFORM_DIRECTIVES, PLATFORM_PIPES} from 'angular2/core';
 import {bind, provide, Provider} from 'angular2/src/core/di';
 import {DOM} from 'angular2/src/platform/dom/dom_adapter';
 
@@ -20,8 +21,8 @@ import {COMPILER_PROVIDERS} from 'angular2/src/compiler/compiler';
 import {PLATFORM_COMMON_PROVIDERS} from 'angular2/src/core/platform_common_providers';
 import {COMMON_DIRECTIVES, COMMON_PIPES, FORM_PROVIDERS} from "angular2/common";
 import {NS_DIRECTIVES} from './directives';
-
-import {bootstrap as angularBootstrap} from 'angular2/bootstrap';
+import {ReflectionCapabilities} from 'angular2/src/core/reflection/reflection_capabilities';
+import {bootstrap as angularBootstrap} from 'angular2/platform/browser';
 
 import {Page} from 'ui/page';
 import {TextView} from 'ui/text-view';
@@ -33,8 +34,6 @@ import {defaultPageProvider, defaultDeviceProvider} from "./platform-providers";
 
 import * as nativescriptIntl from "nativescript-intl";
 global.Intl = nativescriptIntl;
-
-let _platform: PlatformRef = null;
 
 export interface AppOptions {
     cssFile?: string;
@@ -72,10 +71,14 @@ export function bootstrap(appComponentType: any,
         appProviders.push(customProviders);
     }
 
-    if (!_platform) {
-        _platform = platform(platformProviders);
+    var platform = getPlatform();    
+    if (!isPresent(platform)) {
+        platform = createPlatform(ReflectiveInjector.resolveAndCreate(platformProviders));
     }
-    return _platform.application(appProviders).bootstrap(appComponentType);
+    
+    reflector.reflectionCapabilities = new ReflectionCapabilities();
+    var appInjector = ReflectiveInjector.resolveAndCreate(appProviders, platform.injector);
+    return coreLoadAndBootstrap(appInjector, appComponentType);
 }
 
 export function nativeScriptBootstrap(appComponentType: any, customProviders?: ProviderArray, appOptions?: AppOptions): Promise<ComponentRef> {

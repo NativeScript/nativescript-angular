@@ -4,7 +4,6 @@ import {
     ElementRef, 
     TemplateRef, 
     ContentChild, 
-    AppViewManager,
     EmbeddedViewRef,
     ViewContainerRef,
     HostListener, 
@@ -42,7 +41,7 @@ export class ListViewComponent {
     private _items: any;
     private _differ: IterableDiffer;
     
-    @ViewChild('loader') public loader: ElementRef;
+    @ViewChild('loader', { read: ViewContainerRef }) loader: ViewContainerRef;
 
     @Output() public setupItemView: EventEmitter<SetupItemViewArgs> = new EventEmitter<SetupItemViewArgs>();
 
@@ -62,11 +61,11 @@ export class ListViewComponent {
 
     private timerId: number;
     private doCheckDelay = 5;
-
+                
     constructor(private _elementRef: ElementRef,
                 private _iterableDiffers: IterableDiffers,
                 private _cdr: ChangeDetectorRef,
-                private _appViewManager: AppViewManager) {
+                private viewContainer: ViewContainerRef) {
         this.listView = _elementRef.nativeElement;
     }
 
@@ -87,7 +86,7 @@ export class ListViewComponent {
         }
         else {
             console.log("ListView.onItemLoading: " + index + " - Creating view from template");
-            viewRef = this._appViewManager.createEmbeddedViewInContainer(this.loader, 0, this.itemTemplate);
+            viewRef = this.viewContainer.createEmbeddedView(this.itemTemplate, 0);
             args.view = getSingleViewFromViewRef(viewRef);
             args.view[NG_VIEW] = viewRef;
         }

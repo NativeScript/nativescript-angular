@@ -1,4 +1,4 @@
-import {DynamicComponentLoader, ElementRef, Injector, provide, Type, Injectable, ComponentRef, Directive} from 'angular2/core';
+import {ReflectiveInjector, DynamicComponentLoader, ViewContainerRef, provide, Type, Injectable, ComponentRef, Directive} from 'angular2/core';
 import {Page} from 'ui/page';
 import {View} from 'ui/core/view';
 import {DetachedLoader} from '../common/detached-loader';
@@ -17,20 +17,20 @@ export class ModalDialogParams {
 
 @Injectable()
 export class ModalDialogService {
-    private elementRef: ElementRef;
+    private containerRef: ViewContainerRef;
 
     constructor(
         private page: Page,
         private loader: DynamicComponentLoader) {
     }
-
-    public registerElementRef(ref: ElementRef) {
-        this.elementRef = ref;
+    
+    public registerViewContainerRef(ref: ViewContainerRef) {
+        this.containerRef = ref;
     }
-
+  
     public showModal(type: Type, options: ModalDialogOptions): Promise<any> {
-        if (!this.elementRef) {
-            throw new Error("No elementRef: Make sure you have the modal-dialog-host directive inside your component.");
+        if (!this.containerRef) {
+            throw new Error("No viewContainerRef: Make sure you have the modal-dialog-host directive inside your component.");
         }
         return new Promise((resove, reject) => {
             const page = new Page();
@@ -39,16 +39,16 @@ export class ModalDialogService {
             const closeCallback = (...args) => {
                 resove.apply(undefined, args);
                 page.closeModal();
-                detachedLoaderRef.dispose();
+                detachedLoaderRef.destroy();
             }
             const modalParams = new ModalDialogParams(options.context, closeCallback);
 
-            const providers = Injector.resolve([
+            const providers = ReflectiveInjector.resolve([
                 provide(Page, { useValue: page }),
                 provide(ModalDialogParams, { useValue: modalParams }),
             ]);
 
-            this.loader.loadNextToLocation(DetachedLoader, this.elementRef, providers)
+            this.loader.loadNextToLocation(DetachedLoader, this.containerRef, providers)
                 .then((loaderRef) => {
                     detachedLoaderRef = loaderRef;
                     return (<DetachedLoader>loaderRef.instance).loadComponent(type)
@@ -71,7 +71,8 @@ export class ModalDialogService {
     selector: "[modal-dialog-host]"
 })
 export class ModalDialogHost {
-    constructor(elementRef: ElementRef, modalService: ModalDialogService) {
-        modalService.registerElementRef(elementRef);
+
+    constructor(containerRef: ViewContainerRef, modalService: ModalDialogService) {
+        modalService.registerViewContainerRef(containerRef);
     }
 } 
