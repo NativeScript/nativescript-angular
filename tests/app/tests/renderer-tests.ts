@@ -231,22 +231,22 @@ describe('Renderer createElement', () => {
     });
 
     it("creates element from CamelCase", () => {
-        const result = renderer.createElement(null, "StackLayout");
+        const result = renderer.createElement(null, "StackLayout", null);
         assert.instanceOf(result, StackLayout, "Renderer should create StackLayout form 'StackLayout'")
     });
 
     it("creates element from lowercase", () => {
-        const result = renderer.createElement(null, "stacklayout");
+        const result = renderer.createElement(null, "stacklayout", null);
         assert.instanceOf(result, StackLayout, "Renderer should create StackLayout form 'stacklayout'")
     });
 
     it("creates element from kebab-case", () => {
-        const result = renderer.createElement(null, "stack-layout");
+        const result = renderer.createElement(null, "stack-layout", null);
         assert.instanceOf(result, StackLayout, "Renderer should create StackLayout form 'stack-layout'")
     });
 
     it("creates ProxyViewContainer for unknownTag", () => {
-        const result = renderer.createElement(null, "unknown-tag");
+        const result = renderer.createElement(null, "unknown-tag", null);
         assert.instanceOf(result, ProxyViewContainer, "Renderer should create ProxyViewContainer form 'unknown-tag'")
     });
 })
