@@ -2,6 +2,7 @@ import {
     Component, 
     DoCheck, 
     ElementRef, 
+    ViewContainerRef,
     TemplateRef, 
     ContentChild, 
     EmbeddedViewRef,
