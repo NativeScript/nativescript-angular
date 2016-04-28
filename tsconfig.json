@@ -1,0 +1,14 @@
+{
+    "compilerOptions": {
+        "emitDecoratorMetadata": true,
+        "experimentalDecorators": true,
+        "target": "es5",
+        "module": "commonjs",
+        "declaration": false,
+        "noImplicitAny": false
+    },
+    "fileGlobs": [
+        "./node_modules/tns-core-modules/tns-core-modules.d.ts",
+        "./src/**/*.ts"
+    ]
+}
