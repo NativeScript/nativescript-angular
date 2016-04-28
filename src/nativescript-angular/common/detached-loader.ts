@@ -9,10 +9,9 @@ import {DynamicComponentLoader, ComponentRef, ViewContainerRef, Component, Type,
     template: `<Placeholder #loader></Placeholder>`
 })
 export class DetachedLoader {
-    
-    @ViewChild('loader', { read: ViewContainerRef }) containerRef: ViewContainerRef;
-    
+        
     constructor(
+        private containerRef: ViewContainerRef,
         private loader: DynamicComponentLoader
     ) {
     }
