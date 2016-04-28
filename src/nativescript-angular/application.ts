@@ -4,7 +4,7 @@ import "zone.js/dist/zone-node"
 import 'reflect-metadata';
 import './polyfills/array';
 import {isPresent, Type} from 'angular2/src/facade/lang';
-import {platform, ComponentRef, PlatformRef, PLATFORM_DIRECTIVES, PLATFORM_PIPES} from 'angular2/core';
+import {createPlatform, coreLoadAndBootstrap, ComponentRef, ApplicationRef, PlatformRef, PLATFORM_DIRECTIVES, PLATFORM_PIPES, ReflectiveInjector} from 'angular2/core';
 import {bind, provide, Provider} from 'angular2/src/core/di';
 import {DOM} from 'angular2/src/platform/dom/dom_adapter';
 
@@ -21,7 +21,7 @@ import {PLATFORM_COMMON_PROVIDERS} from 'angular2/src/core/platform_common_provi
 import {COMMON_DIRECTIVES, COMMON_PIPES, FORM_PROVIDERS} from "angular2/common";
 import {NS_DIRECTIVES} from './directives';
 
-import {bootstrap as angularBootstrap} from 'angular2/bootstrap';
+import {bootstrap as angularBootstrap} from 'angular2/platform/browser';
 
 import {Page} from 'ui/page';
 import {TextView} from 'ui/text-view';
@@ -73,9 +73,10 @@ export function bootstrap(appComponentType: any,
     }
 
     if (!_platform) {
-        _platform = platform(platformProviders);
+        _platform = createPlatform(ReflectiveInjector.resolveAndCreate(platformProviders));
     }
-    return _platform.application(appProviders).bootstrap(appComponentType);
+    var app = ReflectiveInjector.resolveAndCreate([appProviders], _platform.injector).get(ApplicationRef);
+    return coreLoadAndBootstrap(app.injector, appComponentType);
 }
 
 export function nativeScriptBootstrap(appComponentType: any, customProviders?: ProviderArray, appOptions?: AppOptions): Promise<ComponentRef> {

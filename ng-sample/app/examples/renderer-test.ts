@@ -59,7 +59,9 @@ export class RendererTest {
             'segmentedBarItems': [
                 {'title': 'first'},
                 {'title': 'second'},
-                {'title': 'third'}
+                {'title': 'third'},
+                {'title': 'fourth'},
+                {'title': 'fifth'}
             ]
         });
 
