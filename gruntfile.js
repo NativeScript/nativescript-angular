@@ -116,6 +116,7 @@ module.exports = function(grunt) {
         "copy:packageJson",
         "copy:hookScripts",
         "add-post-install-script",
+        "remove-tns-core-modules-dependency",
         "package"
     ]);
 
@@ -123,6 +124,12 @@ module.exports = function(grunt) {
         var packageJson = JSON.parse(fs.readFileSync(moduleOutPackageJson, "utf-8"));
         packageJson.scripts = packageJson.scripts || {};
         packageJson.scripts.postinstall = "node postinstall.js";
+        fs.writeFileSync(moduleOutPackageJson, JSON.stringify(packageJson, null, "    "));
+    });
+
+    grunt.registerTask("remove-tns-core-modules-dependency", function() {
+        var packageJson = JSON.parse(fs.readFileSync(moduleOutPackageJson, "utf-8"));
+        delete packageJson.dependencies["tns-core-modules"];
         fs.writeFileSync(moduleOutPackageJson, JSON.stringify(packageJson, null, "    "));
     });
 
