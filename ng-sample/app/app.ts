@@ -27,7 +27,7 @@ import {ModalTest} from "./examples/modal/modal-test";
 import {PlatfromDirectivesTest} from "./examples/platform-directives/platform-directives-test";
 import {RouterOutletTest} from "./examples/navigation/router-outlet-test";
 
-nativeScriptBootstrap(RendererTest).then((compRef) => {
+nativeScriptBootstrap(NavigationTest, [NS_ROUTER_PROVIDERS]).then((compRef) => {
     console.log("nativeScriptBootstrap resloved: " + compRef);
 }).catch((e) => {
     console.log("nativeScriptBootstrap error: " + e);
