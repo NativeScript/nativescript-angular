@@ -1,6 +1,6 @@
 import application = require("application");
-import { LocationStrategy } from 'angular2/platform/common';
-import { NgZone, ApplicationRef, Inject, forwardRef } from 'angular2/core';
+import { LocationStrategy } from '@angular/common';
+import { NgZone, ApplicationRef, Inject, forwardRef } from '@angular/core';
 import { log } from "./common";
 import { topmost } from "ui/frame";
 

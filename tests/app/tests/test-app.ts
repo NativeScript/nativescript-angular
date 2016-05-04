@@ -1,8 +1,8 @@
-//make sure you import mocha-config before angular2/core
+//make sure you import mocha-config before @angular/core
 import {bootstrap, ProviderArray} from "nativescript-angular/application";
 import {Type, Component, ComponentRef, DynamicComponentLoader,
     ViewChild, ElementRef, provide, ApplicationRef, Renderer, ViewContainerRef
-} from "angular2/core";
+} from "@angular/core";
 
 import {View} from "ui/core/view";
 import {GridLayout} from "ui/layouts/grid-layout";

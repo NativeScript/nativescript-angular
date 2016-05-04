@@ -12,8 +12,8 @@ import {
     ChangeDetectorRef,
     EventEmitter,
     ViewChild,
-    Output} from 'angular2/core';
-import {isListLikeIterable} from 'angular2/src/facade/collection';
+    Output} from '@angular/core';
+import {isListLikeIterable} from '@angular/core/src/facade/collection';
 import {Observable as RxObservable} from 'rxjs'
 import {ListView} from 'ui/list-view';
 import {View} from 'ui/core/view';

@@ -1,4 +1,4 @@
-import { Component, Input, ChangeDetectionStrategy } from 'angular2/core';
+import { Component, Input, ChangeDetectionStrategy } from '@angular/core';
 import { Observable as RxObservable } from 'rxjs/Observable';
 
 export class DataItem {

@@ -1,4 +1,4 @@
-import {Component, Input, WrappedValue, ChangeDetectionStrategy} from 'angular2/core';
+import {Component, Input, WrappedValue, ChangeDetectionStrategy} from '@angular/core';
 import {Label} from 'ui/label';
 import {ObservableArray} from 'data/observable-array';
 

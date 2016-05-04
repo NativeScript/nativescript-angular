@@ -1,7 +1,7 @@
-import {Component} from 'angular2/core';
+import {Component} from '@angular/core';
 import {ROUTER_DIRECTIVES, Router, OnActivate, OnDeactivate, CanReuse, OnReuse,
- RouteParams, ComponentInstruction, RouteConfig } from 'angular2/router';
-import {Location, LocationStrategy} from 'angular2/platform/common';
+ RouteParams, ComponentInstruction, RouteConfig } from '@angular/router';
+import {Location, LocationStrategy} from '@angular/common';
 import {topmost} from "ui/frame";
 import {Page} from "ui/page";
 import {NS_ROUTER_DIRECTIVES} from "../../nativescript-angular/router/ns-router";

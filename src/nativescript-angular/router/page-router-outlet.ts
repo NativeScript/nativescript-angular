@@ -1,21 +1,28 @@
-import {PromiseWrapper} from 'angular2/src/facade/async';
-import {isBlank, isPresent} from 'angular2/src/facade/lang';
-import {StringMapWrapper} from 'angular2/src/facade/collection';
+import {PromiseWrapper} from '@angular/core/src/facade/async';
+import {isBlank, isPresent} from '@angular/core/src/facade/lang';
+import {StringMapWrapper} from '@angular/core/src/facade/collection';
 
-import {Attribute, DynamicComponentLoader, ComponentRef, ViewContainerRef,
-    ElementRef, ReflectiveInjector, provide, Type, Component} from 'angular2/core';
+import {
+    Attribute, DynamicComponentLoader, ComponentRef,
+    ViewContainerRef, ViewChild, ElementRef,
+    ReflectiveInjector, provide, Type,
+    Component, Inject
+} from '@angular/core';
 
-import * as routerHooks from 'angular2/src/router/lifecycle/lifecycle_annotations';
-import {hasLifecycleHook} from 'angular2/src/router/lifecycle/route_lifecycle_reflector';
+import * as routerHooks from '@angular/router/src/lifecycle/lifecycle_annotations';
+import {hasLifecycleHook} from '@angular/router/src/lifecycle/route_lifecycle_reflector';
 
 import {Router, RouterOutlet, RouteData, RouteParams, ComponentInstruction, 
-    OnActivate, OnDeactivate, OnReuse, CanReuse} from 'angular2/router';
-import {LocationStrategy} from 'angular2/platform/common';
+    OnActivate, OnDeactivate, OnReuse, CanReuse} from '@angular/router';
+import {LocationStrategy} from '@angular/common';
 import {topmost} from "ui/frame";
 import {Page, NavigatedData} from "ui/page";
+import {DEVICE} from "../platform-providers";
+import {Device} from "platform";
 import {log} from "./common";
 import {NSLocationStrategy} from "./ns-location-strategy";
 import {DetachedLoader} from "../common/detached-loader";
+import {ViewUtil} from "../view-util";
 
 let _resolveToTrue = PromiseWrapper.resolve(true);
 
@@ -66,13 +73,19 @@ export class PageRouterOutlet extends RouterOutlet {
 
     private componentRef: ComponentRef = null;
     private currentInstruction: ComponentInstruction = null;
+    private viewUtil: ViewUtil;
+    @ViewChild('loader', { read: ViewContainerRef }) childContainerRef: ViewContainerRef;
 
-    constructor(private containerRef: ViewContainerRef,
+    constructor(
+        private containerRef: ViewContainerRef,
         private loader: DynamicComponentLoader,
         private parentRouter: Router,
         @Attribute('name') nameAttr: string,
-        private location: NSLocationStrategy) {
+        private location: NSLocationStrategy,
+        @Inject(DEVICE) device: Device
+        ) {
         super(containerRef, loader, parentRouter, nameAttr);
+        this.viewUtil = new ViewUtil(device);
     }
 
     /**
@@ -128,7 +141,7 @@ export class PageRouterOutlet extends RouterOutlet {
 
             const page = new Page();
             providersArray.push(provide(Page, { useValue: page }));
-            resultPromise = this.loader.loadNextToLocation(DetachedLoader, this.containerRef, ReflectiveInjector.resolve(providersArray))
+            resultPromise = this.loader.loadNextToLocation(DetachedLoader, this.childContainerRef, ReflectiveInjector.resolve(providersArray))
                 .then((pageComponentRef) => {
                     loaderRef = pageComponentRef;
                     return (<DetachedLoader>loaderRef.instance).loadComponent(componentType);
@@ -154,9 +167,7 @@ export class PageRouterOutlet extends RouterOutlet {
         //Component loaded. Find its root native view.
         const componentView = componentRef.location.nativeElement;
         //Remove it from original native parent.
-        if (<any>componentView.parent) {
-            (<any>componentView.parent).removeChild(componentView);
-        }
+        this.viewUtil.removeChild(componentView.parent, componentView);
         //Add it to the new page
         page.content = componentView;
 

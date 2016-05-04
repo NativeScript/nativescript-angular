@@ -1,6 +1,6 @@
-//make sure you import mocha-config before angular2/core
+//make sure you import mocha-config before @angular/core
 import {assert} from "./test-config";
-import {Component, ElementRef, provide} from "angular2/core";
+import {Component, ElementRef, provide} from "@angular/core";
 import {ProxyViewContainer} from "ui/proxy-view-container";
 import {dumpView, createDevice} from "./test-utils";
 import {TestApp} from "./test-app";

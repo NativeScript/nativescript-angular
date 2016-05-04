@@ -1,4 +1,4 @@
-import {Component} from 'angular2/core';
+import {Component} from '@angular/core';
 
 /* IMPORTANT
 In order to test out the full image example, to fix the App Transport Security error in iOS 9, you will need to follow this after adding the iOS platform:

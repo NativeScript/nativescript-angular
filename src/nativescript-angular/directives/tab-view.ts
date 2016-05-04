@@ -1,4 +1,4 @@
-import {ElementRef, Directive, Input, TemplateRef, ViewContainerRef} from "angular2/core";
+import {ElementRef, Directive, Input, TemplateRef, ViewContainerRef} from "@angular/core";
 import {TabView, TabViewItem} from "ui/tab-view";
 
 @Directive({
