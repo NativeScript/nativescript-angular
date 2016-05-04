@@ -150,7 +150,7 @@ describe('router-outlet', () => {
     });
 });
 
-describe('page-router-outlet', () => {
+describe.skip('page-router-outlet', () => {
     let testApp: PageOutletCompnenet = null;
     var initialBackstackLength: number;
     var initalPage: Page;

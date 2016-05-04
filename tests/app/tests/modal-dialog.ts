@@ -47,7 +47,7 @@ export class SuccessComponent {
     }
 }
 
-describe('modal-dialog', () => {
+describe.skip('modal-dialog', () => {
     let testApp: TestApp = null;
 
     before((done) => {
