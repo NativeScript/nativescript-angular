@@ -1,4 +1,4 @@
-import {ReflectiveInjector, DynamicComponentLoader, ViewContainerRef, Injector, provide, Type, Injectable, ComponentRef, Directive} from 'angular2/core';
+import {ReflectiveInjector, DynamicComponentLoader, ViewContainerRef, Injector, provide, Type, Injectable, ComponentRef, Directive} from '@angular/core';
 import {Page} from 'ui/page';
 import {View} from 'ui/core/view';
 import {DetachedLoader} from '../common/detached-loader';

@@ -1,16 +1,16 @@
-import {PromiseWrapper} from 'angular2/src/facade/async';
-import {isBlank, isPresent} from 'angular2/src/facade/lang';
-import {StringMapWrapper} from 'angular2/src/facade/collection';
+import {PromiseWrapper} from '@angular/core/src/facade/async';
+import {isBlank, isPresent} from '@angular/core/src/facade/lang';
+import {StringMapWrapper} from '@angular/core/src/facade/collection';
 
 import {Attribute, DynamicComponentLoader, ComponentRef, ViewContainerRef,
-    ElementRef, ReflectiveInjector, provide, Type, Component} from 'angular2/core';
+    ElementRef, ReflectiveInjector, provide, Type, Component} from '@angular/core';
 
-import * as routerHooks from 'angular2/src/router/lifecycle/lifecycle_annotations';
-import {hasLifecycleHook} from 'angular2/src/router/lifecycle/route_lifecycle_reflector';
+import * as routerHooks from '@angular/router/src/lifecycle/lifecycle_annotations';
+import {hasLifecycleHook} from '@angular/router/src/lifecycle/route_lifecycle_reflector';
 
 import {Router, RouterOutlet, RouteData, RouteParams, ComponentInstruction, 
-    OnActivate, OnDeactivate, OnReuse, CanReuse} from 'angular2/router';
-import {LocationStrategy} from 'angular2/platform/common';
+    OnActivate, OnDeactivate, OnReuse, CanReuse} from '@angular/router';
+import {LocationStrategy} from '@angular/common';
 import {topmost} from "ui/frame";
 import {Page, NavigatedData} from "ui/page";
 import {log} from "./common";

@@ -1,4 +1,4 @@
-import {Component} from 'angular2/core';
+import {Component} from '@angular/core';
 import * as dialogs from "ui/dialogs";
 import {ModalDialogService, ModalDialogOptions, ModalDialogHost} from "../../nativescript-angular/directives/dialogs";
 import {ModalContent} from "./modal-content";

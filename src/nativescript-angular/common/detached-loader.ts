@@ -1,4 +1,4 @@
-import {DynamicComponentLoader, ComponentRef, ViewContainerRef, Component, Type, ViewChild} from 'angular2/core';
+import {DynamicComponentLoader, ComponentRef, ViewContainerRef, Component, Type, ViewChild} from '@angular/core';
 
 /**
  * Wrapper component used for loading components when navigating

@@ -1,4 +1,4 @@
-//make sure you import mocha-config before angular2/core
+//make sure you import mocha-config before @angular/core
 import {assert} from "./test-config";
 import {View} from "ui/core/view";
 import {Slider} from "ui/slider";
@@ -13,7 +13,7 @@ import {DateValueAccessor} from "nativescript-angular/value-accessors/date-value
 import {TimeValueAccessor} from "nativescript-angular/value-accessors/time-value-accessor";
 import {SelectedIndexValueAccessor} from "nativescript-angular/value-accessors/selectedIndex-value-accessor";
 import {TextValueAccessor} from "nativescript-angular/value-accessors/text-value-accessor";
-import {ElementRef} from 'angular2/core';
+import {ElementRef} from '@angular/core';
 
 class TestElementRef implements ElementRef {
     constructor(public nativeElement: View) {};

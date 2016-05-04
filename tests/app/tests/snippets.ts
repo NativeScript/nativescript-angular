@@ -1,6 +1,6 @@
-//make sure you import mocha-config before angular2/core
+//make sure you import mocha-config before @angular/core
 import {assert} from "./test-config";
-import {Component, ElementRef, Renderer} from "angular2/core";
+import {Component, ElementRef, Renderer} from "@angular/core";
 import {TestApp} from "./test-app";
 
 import {GestureComponent} from "../snippets/gestures.component";

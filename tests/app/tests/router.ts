@@ -1,4 +1,4 @@
-//make sure you import mocha-config before angular2/core
+//make sure you import mocha-config before @angular/core
 import {assert} from "./test-config";
 import {
     Type,
@@ -10,16 +10,15 @@ import {
     provide,
     ApplicationRef,
     ChangeDetectorRef
-} from "angular2/core";
+} from "@angular/core";
 
 import {ProxyViewContainer} from "ui/proxy-view-container";
 import {dumpView} from "./test-utils";
 import {bootstrapTestApp, destroyTestApp} from "./test-app";
 
 import {ROUTER_DIRECTIVES, Router, OnActivate, OnDeactivate, CanReuse, OnReuse,
-    RouteParams, ComponentInstruction, RouteConfig } from 'angular2/router';
-import {LocationStrategy} from 'angular2/src/platform/location';
-import {Location} from 'angular2/platform/common';
+    RouteParams, ComponentInstruction, RouteConfig } from '@angular/router';
+import {Location, LocationStrategy} from '@angular/common';
 import {topmost, BackstackEntry} from "ui/frame";
 import {Page} from "ui/page";
 import {NS_ROUTER_DIRECTIVES, NS_ROUTER_PROVIDERS} from "nativescript-angular/router/ns-router";

@@ -1,6 +1,6 @@
 import {topmost} from 'ui/frame';
 import {Page} from 'ui/page';
-import {provide, Provider, OpaqueToken} from 'angular2/src/core/di';
+import {provide, Provider, OpaqueToken} from '@angular/core/src/di';
 import {Device, ScreenMetrics, device, screen} from "platform";
 
 export const APP_ROOT_VIEW = new OpaqueToken('App Root View');

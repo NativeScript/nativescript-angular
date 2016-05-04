@@ -1,8 +1,7 @@
 import {StackLayout} from 'ui/layouts/stack-layout';
 import {Button} from 'ui/button';
 import {Label} from 'ui/label';
-import {Inject, Component} from 'angular2/core';
-import {ApplicationRef} from 'angular2/src/core/application_ref';
+import {Inject, Component, ApplicationRef} from '@angular/core';
 import * as profiling from './profiling';
 
 @Component({

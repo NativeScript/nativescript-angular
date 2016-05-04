@@ -1,7 +1,7 @@
-//make sure you import mocha-config before angular2/core
+//make sure you import mocha-config before @angular/core
 import {assert} from "./test-config";
 import {bootstrap} from "nativescript-angular/application";
-import {Component} from "angular2/core";
+import {Component} from "@angular/core";
 import {View} from "ui/core/view";
 import {ViewUtil} from "nativescript-angular/view-util";
 import {NgView, ViewExtensions, ViewClassMeta} from "nativescript-angular/element-registry";

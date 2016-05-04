@@ -1,5 +1,5 @@
 import {View} from "ui/core/view";
-import {ControlValueAccessor} from 'angular2/src/common/forms/directives/control_value_accessor';
+import {ControlValueAccessor} from '@angular/common/src/forms/directives/control_value_accessor';
 
 export class BaseValueAccessor<TView> implements ControlValueAccessor {
     constructor(public view: TView) { }

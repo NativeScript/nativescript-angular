@@ -1,28 +1,26 @@
 import 'globals';
+global.window = global;
 import "zone.js/dist/zone-node"
 
 import 'reflect-metadata';
 import './polyfills/array';
-import {isPresent, Type} from 'angular2/src/facade/lang';
+import {isPresent, Type, print} from '@angular/core/src/facade/lang';
 import {ReflectiveInjector, reflector, coreLoadAndBootstrap, createPlatform, 
-        getPlatform, assertPlatform, ComponentRef, PlatformRef, PLATFORM_DIRECTIVES, PLATFORM_PIPES} from 'angular2/core';
-import {bind, provide, Provider} from 'angular2/src/core/di';
-import {DOM} from 'angular2/src/platform/dom/dom_adapter';
+        getPlatform, assertPlatform, ComponentRef, PlatformRef, PLATFORM_DIRECTIVES, PLATFORM_PIPES} from '@angular/core';
+import {bind, provide, Provider} from '@angular/core/src/di';
 
-import {RootRenderer, Renderer} from 'angular2/src/core/render/api';
+import {RootRenderer, Renderer} from '@angular/core/src/render/api';
 import {NativeScriptRootRenderer, NativeScriptRenderer} from './renderer';
-import {NativeScriptDomAdapter} from './dom_adapter';
-import {XHR} from 'angular2/src/compiler/xhr';
+import {NativeScriptDomAdapter, NativeScriptElementSchemaRegistry} from './dom_adapter';
+import {ElementSchemaRegistry, XHR, COMPILER_PROVIDERS} from '@angular/compiler';
 import {FileSystemXHR} from './xhr';
-import {Parse5DomAdapter} from 'angular2/src/platform/server/parse5_adapter';
-import {ExceptionHandler} from 'angular2/src/facade/exception_handler';
-import {APPLICATION_COMMON_PROVIDERS} from 'angular2/src/core/application_common_providers';
-import {COMPILER_PROVIDERS} from 'angular2/src/compiler/compiler';
-import {PLATFORM_COMMON_PROVIDERS} from 'angular2/src/core/platform_common_providers';
-import {COMMON_DIRECTIVES, COMMON_PIPES, FORM_PROVIDERS} from "angular2/common";
+import {Parse5DomAdapter} from '@angular/platform-server/src/parse5_adapter';
+import {ExceptionHandler} from '@angular/core/src/facade/exception_handler';
+import {APPLICATION_COMMON_PROVIDERS} from '@angular/core/src/application_common_providers';
+import {PLATFORM_COMMON_PROVIDERS} from '@angular/core/src/platform_common_providers';
+import {COMMON_DIRECTIVES, COMMON_PIPES, FORM_PROVIDERS} from "@angular/common";
 import {NS_DIRECTIVES} from './directives';
-import {ReflectionCapabilities} from 'angular2/src/core/reflection/reflection_capabilities';
-import {bootstrap as angularBootstrap} from 'angular2/platform/browser';
+import {ReflectionCapabilities} from '@angular/core/src/reflection/reflection_capabilities';
 
 import {Page} from 'ui/page';
 import {TextView} from 'ui/text-view';
@@ -40,6 +38,13 @@ export interface AppOptions {
     startPageActionBarHidden?: boolean;
 }
 
+class ConsoleLogger {
+  log = print;
+  logError = print;
+  logGroup = print;
+  logGroupEnd() {}
+}
+
 export function bootstrap(appComponentType: any,
     customProviders: ProviderArray = null): Promise<ComponentRef> {
     NativeScriptDomAdapter.makeCurrent();
@@ -54,7 +59,9 @@ export function bootstrap(appComponentType: any,
         provide(PLATFORM_PIPES, { useValue: COMMON_PIPES, multi: true }),
         provide(PLATFORM_DIRECTIVES, { useValue: COMMON_DIRECTIVES, multi: true }),
         provide(PLATFORM_DIRECTIVES, { useValue: NS_DIRECTIVES, multi: true }),
-        provide(ExceptionHandler, { useFactory: () => new ExceptionHandler(DOM, true), deps: [] }),
+        provide(ExceptionHandler, { useFactory: () => {
+            return new ExceptionHandler(new ConsoleLogger(), true)
+        }, deps: [] }),
 
         defaultPageProvider,
         defaultDeviceProvider,
@@ -62,7 +69,9 @@ export function bootstrap(appComponentType: any,
         provide(RootRenderer, { useClass: NativeScriptRootRenderer }),
         NativeScriptRenderer,
         provide(Renderer, { useClass: NativeScriptRenderer }),
+        provide(ElementSchemaRegistry, { useClass: NativeScriptElementSchemaRegistry }),
         COMPILER_PROVIDERS,
+        provide(ElementSchemaRegistry, { useClass: NativeScriptElementSchemaRegistry }),
         provide(XHR, { useClass: FileSystemXHR }),
     ]
 

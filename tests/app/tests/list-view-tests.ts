@@ -2,7 +2,7 @@ import {assert} from "./test-config";
 import {
     ElementRef,
     Component
-} from 'angular2/core';
+} from '@angular/core';
 import {TestApp} from "./test-app";
 import {device, platformNames} from "platform";
 const IS_IOS = (device.os === platformNames.ios);
