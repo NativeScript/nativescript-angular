@@ -1,7 +1,7 @@
 <!-- >> icon-font-sample -->
 <GridLayout>
     <ListView [items]="glyphs">
-        <template #item="item">
+        <template let-item="item">
             <StackLayout orientation="horizontal">
                 <Label [text]="item.icon" class="icon"></Label>
                 <Label [text]="item.code"></Label>

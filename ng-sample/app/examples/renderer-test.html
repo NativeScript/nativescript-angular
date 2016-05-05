@@ -24,7 +24,7 @@
     <TextView *ngIf='showDetails' [text]='detailsText'></TextView>
     <Label text='==============================' fontSize='20'></Label>
     <StackLayout #more *ngIf='showDetails' orientation='vertical'>
-        <TextField *ngFor='#detailLine of detailLines' [text]='detailLine'></TextField>
+        <TextField *ngFor='let detailLine of detailLines' [text]='detailLine'></TextField>
     </StackLayout>
     <Label text='==============================' fontSize='20'></Label>
     <templated-component [renderChild]="true"></templated-component>

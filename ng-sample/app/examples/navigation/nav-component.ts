@@ -1,6 +1,6 @@
 import {Component} from '@angular/core';
 import {ROUTER_DIRECTIVES, Router, OnActivate, OnDeactivate, CanReuse, OnReuse,
- RouteParams, ComponentInstruction, RouteConfig } from '@angular/router';
+ RouteParams, ComponentInstruction, RouteConfig } from '@angular/router-deprecated';
 import {Location, LocationStrategy} from '@angular/common';
 import {topmost} from "ui/frame";
 import {Page} from "ui/page";

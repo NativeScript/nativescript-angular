@@ -35,7 +35,7 @@ export class ModalDialogService {
         return new Promise((resove, reject) => {
             const page = new Page();
 
-            var detachedLoaderRef: ComponentRef;
+            var detachedLoaderRef: ComponentRef<DetachedLoader>;
             const closeCallback = (...args) => {
                 resove.apply(undefined, args);
                 page.closeModal();

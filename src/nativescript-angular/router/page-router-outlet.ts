@@ -9,11 +9,11 @@ import {
     Component, Inject
 } from '@angular/core';
 
-import * as routerHooks from '@angular/router/src/lifecycle/lifecycle_annotations';
-import {hasLifecycleHook} from '@angular/router/src/lifecycle/route_lifecycle_reflector';
+import * as routerHooks from '@angular/router-deprecated/src/lifecycle/lifecycle_annotations';
+import {hasLifecycleHook} from '@angular/router-deprecated/src/lifecycle/route_lifecycle_reflector';
 
 import {Router, RouterOutlet, RouteData, RouteParams, ComponentInstruction, 
-    OnActivate, OnDeactivate, OnReuse, CanReuse} from '@angular/router';
+    OnActivate, OnDeactivate, OnReuse, CanReuse} from '@angular/router-deprecated';
 import {LocationStrategy} from '@angular/common';
 import {topmost} from "ui/frame";
 import {Page, NavigatedData} from "ui/page";
@@ -27,8 +27,8 @@ import {ViewUtil} from "../view-util";
 let _resolveToTrue = PromiseWrapper.resolve(true);
 
 interface CacheItem {
-    componentRef: ComponentRef;
-    loaderRef?: ComponentRef;
+    componentRef: ComponentRef<any>;
+    loaderRef?: ComponentRef<any>;
     router: Router;
 }
 
@@ -38,7 +38,7 @@ interface CacheItem {
 class RefCache {
     private cache: Array<CacheItem> = new Array<CacheItem>();
 
-    public push(comp: ComponentRef, router: Router, loaderRef?: ComponentRef) {
+    public push(comp: ComponentRef<any>, router: Router, loaderRef?: ComponentRef<any>) {
         this.cache.push({ componentRef: comp, router: router, loaderRef: loaderRef });
     }
 
@@ -71,7 +71,7 @@ export class PageRouterOutlet extends RouterOutlet {
     private isInitalPage: boolean = true;
     private refCache: RefCache = new RefCache();
 
-    private componentRef: ComponentRef = null;
+    private componentRef: ComponentRef<any> = null;
     private currentInstruction: ComponentInstruction = null;
     private viewUtil: ViewUtil;
     @ViewChild('loader', { read: ViewContainerRef }) childContainerRef: ViewContainerRef;
@@ -123,7 +123,7 @@ export class PageRouterOutlet extends RouterOutlet {
     private activateOnGoForward(nextInstruction: ComponentInstruction, previousInstruction: ComponentInstruction): Promise<any> {
         let componentType = nextInstruction.componentType;
         let resultPromise: Promise<any>;
-        let loaderRef: ComponentRef = undefined;
+        let loaderRef: ComponentRef<any> = undefined;
         const childRouter = this.parentRouter.childRouter(componentType);
 
         const providersArray = [
@@ -163,7 +163,7 @@ export class PageRouterOutlet extends RouterOutlet {
     }
 
 
-    private loadComponentInPage(page: Page, componentRef: ComponentRef): Promise<ComponentRef> {
+    private loadComponentInPage(page: Page, componentRef: ComponentRef<any>): Promise<ComponentRef<any>> {
         //Component loaded. Find its root native view.
         const componentView = componentRef.location.nativeElement;
         //Remove it from original native parent.

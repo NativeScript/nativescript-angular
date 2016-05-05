@@ -52,7 +52,7 @@ export class DocumentTitleDirective {
     constructor(
         private ownerForm: DocumentFormComponent,
         private viewContainer: ViewContainerRef,
-        private template: TemplateRef
+        private template: TemplateRef<any>
     ) {
     }
 

@@ -39,7 +39,7 @@ export class TabViewItemDirective {
 
     constructor(
         private owner: TabViewDirective,
-        private templateRef: TemplateRef,
+        private templateRef: TemplateRef<any>,
         private viewContainer: ViewContainerRef
     ) {
     }
