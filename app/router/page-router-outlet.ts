@@ -1,5 +1,5 @@
-import {Component} from "angular2/core";
-import {RouteConfig} from 'angular2/router';
+import {Component} from "@angular/core";
+import {RouteConfig} from '@angular/router-deprecated';
 import {NS_ROUTER_DIRECTIVES} from "nativescript-angular/router";
 import {FirstComponent} from "../components/first.component";
 import {SecondComponent} from "../components/second.component";

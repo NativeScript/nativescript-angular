@@ -1,4 +1,4 @@
-import {Component} from "angular2/core";
+import {Component} from "@angular/core";
 import {NS_ROUTER_DIRECTIVES} from "nativescript-angular/router/ns-router";
 
 @Component({
