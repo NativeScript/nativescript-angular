@@ -1,8 +1,9 @@
 import {DynamicComponentLoader, ComponentRef, ViewContainerRef, Component, Type, ViewChild} from '@angular/core';
 
+type AnyComponentRef = ComponentRef<any>;
 interface PendingLoadEntry {
     componentType: Type;
-    resolveCallback: (ComponentRef) => void;
+    resolveCallback: (AnyComponentRef) => void;
 }
 
 /**
@@ -34,11 +35,11 @@ export class DetachedLoader {
         });
     }
 
-    private loadInLocation(componentType: Type): Promise<ComponentRef> {
+    private loadInLocation(componentType: Type): Promise<ComponentRef<any>> {
         return this.loader.loadNextToLocation(componentType, this.containerRef);
     }
 
-    public loadComponent(componentType: Type): Promise<ComponentRef> {
+    public loadComponent(componentType: Type): Promise<ComponentRef<any>> {
         // Check if called before placeholder is initialized.
         // Delay load if so.
         if (this.viewLoaded) {

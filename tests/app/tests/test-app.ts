@@ -16,7 +16,7 @@ import {APP_ROOT_VIEW} from "nativescript-angular/platform-providers";
 })
 export class TestApp {
     @ViewChild("loadSite") public loadSiteRef: ElementRef;
-    private _pendingDispose: ComponentRef[] = [];
+    private _pendingDispose: ComponentRef<any>[] = [];
 
     constructor(public loader: DynamicComponentLoader,
         public elementRef: ViewContainerRef,
@@ -24,7 +24,7 @@ export class TestApp {
         public renderer: Renderer) {
     }
 
-    public loadComponent(type: Type): Promise<ComponentRef> {
+    public loadComponent(type: Type): Promise<ComponentRef<any>> {
         return this.loader.loadNextToLocation(type, this.elementRef).then((componentRef) => {
             this._pendingDispose.push(componentRef);
             this.appRef.tick();

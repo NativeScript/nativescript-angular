@@ -2,7 +2,7 @@ import {Type} from '@angular/core/src/facade/lang';
 import {NSRouterLink} from './ns-router-link';
 import {PageRouterOutlet} from './page-router-outlet';
 import {NSLocationStrategy} from './ns-location-strategy';
-import {ROUTER_PROVIDERS} from '@angular/router';
+import {ROUTER_PROVIDERS} from '@angular/router-deprecated';
 import {LocationStrategy} from '@angular/common';
 import {provide} from '@angular/core';
 import { CATEGORY } from "./common";
