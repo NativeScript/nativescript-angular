@@ -1,0 +1,29 @@
+{
+	"description": "NativeScript Application",
+	"license": "SEE LICENSE IN <your-license-filename>",
+	"readme": "NativeScript Application",
+	"repository": "<fill-your-repository-here>",
+	"nativescript": {
+		"id": "org.nativescript.testsappng",
+		"tns-ios": {
+			"version": "2.0.0"
+		},
+		"tns-android": {
+			"version": "2.0.0"
+		}
+	},
+	"dependencies": {
+		"angular2": "2.0.0-beta.14",
+		"nativescript-angular": "0.0.45",
+		"tns-core-modules": "^2.0.0 || 2.0.0-angular-6"
+	},
+	"devDependencies": {
+		"babel-traverse": "6.8.0",
+		"babel-types": "6.8.1",
+		"babylon": "6.7.0",
+		"filewalker": "0.1.2",
+		"lazy": "1.0.11",
+		"nativescript-dev-typescript": "^0.3.2",
+		"typescript": "^1.8.10"
+	}
+}

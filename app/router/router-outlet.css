@@ -1,0 +1,15 @@
+.title {
+    font-size: 30;
+    margin: 16;
+}
+
+.nav {
+    orientation: horizontal;
+    horizontal-align: stretch;
+    padding: 4;
+    background-color: lightblue;
+}
+
+.link {
+    margin: 10 30;
+}
