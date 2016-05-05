@@ -22,8 +22,19 @@ import {ObservableArray} from 'data/observable-array';
 import {LayoutBase} from 'ui/layouts/layout-base';
 const NG_VIEW = "_ngViewRef";
 
+export class ListItemContext {
+    constructor(
+        public $implicit?: any,
+        public item?: any,
+        public index?: number,
+        public even?: boolean,
+        public odd?: boolean
+    ) {
+    }
+}
+
 export interface SetupItemViewArgs {
-    view: EmbeddedViewRef;
+    view: EmbeddedViewRef<any>;
     data: any;
     index: number;
 }
@@ -45,7 +56,7 @@ export class ListViewComponent {
 
     @Output() public setupItemView: EventEmitter<SetupItemViewArgs> = new EventEmitter<SetupItemViewArgs>();
 
-    @ContentChild(TemplateRef) itemTemplate: TemplateRef;
+    @ContentChild(TemplateRef) itemTemplate: TemplateRef<ListItemContext>;
 
     set items(value: any) {
         this._items = value;
@@ -77,7 +88,7 @@ export class ListViewComponent {
         let index = args.index;
         let items = args.object.items;
         let currentItem = typeof (items.getItem) === "function" ? items.getItem(index) : items[index];
-        let viewRef: EmbeddedViewRef;
+        let viewRef: EmbeddedViewRef<ListItemContext>;
 
         if (args.view) {
             console.log("ListView.onItemLoading: " + index + " - Reusing exisiting view");
@@ -85,20 +96,22 @@ export class ListViewComponent {
         }
         else {
             console.log("ListView.onItemLoading: " + index + " - Creating view from template");
-            viewRef = this.loader.createEmbeddedView(this.itemTemplate, 0);
+            viewRef = this.loader.createEmbeddedView(this.itemTemplate, new ListItemContext(), 0);
             args.view = getSingleViewFromViewRef(viewRef);
             args.view[NG_VIEW] = viewRef;
         }
         this.setupViewRef(viewRef, currentItem, index);
     }
 
-    public setupViewRef(viewRef: EmbeddedViewRef, data: any, index: number): void {
-        viewRef.setLocal('\$implicit', data);
-        viewRef.setLocal("item", data);
-        viewRef.setLocal("index", index);
-        viewRef.setLocal('even', (index % 2 == 0));
-        viewRef.setLocal('odd', (index % 2 == 1));
-        this.setupItemView.next({'view': viewRef, 'data': data, 'index': index});
+    public setupViewRef(viewRef: EmbeddedViewRef<ListItemContext>, data: any, index: number): void {
+        const context = viewRef.context;
+        context.$implicit = data;
+        context.item = data;
+        context.index = index;
+        context.even = (index % 2 == 0);
+        context.odd = !context.even;
+
+        this.setupItemView.next({view: viewRef, data: data, index: index, context: context});
     }
 
     ngDoCheck() {
@@ -118,7 +131,7 @@ export class ListViewComponent {
     }
 }
 
-function getSingleViewFromViewRef(viewRef: EmbeddedViewRef): View {
+function getSingleViewFromViewRef(viewRef: EmbeddedViewRef<any>): View {
     var getSingleViewRecursive = (nodes: Array<any>, nestLevel: number) => {
         var actualNodes = nodes.filter((n) => !!n && n.nodeName !== "#text");
 

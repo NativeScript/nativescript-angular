@@ -11,7 +11,7 @@ export class DataItem {
     template: `
     <GridLayout>
         <ListView [items]="myItems | async" (itemTap)="onItemTap($event)">
-            <template #item="item" #i="index" #odd="odd" #even="even">
+            <template let-item="item" let-i="index" let-odd="odd" let-even="even">
                 <StackLayout [class.odd]="odd" [class.even]="even">
                     <Label class="test" [text]='"index: " + item.name'></Label>
                 </StackLayout>

@@ -30,7 +30,7 @@ class DataItem {
             <Label row="0" text="-==START==-" fontSize="20"></Label>
             <GridLayout row="1">
                 <ListView [items]="myItems" (itemTap)="onItemTap($event)">
-                    <template #item="item" #i="index" #odd="odd" #even="even">
+                    <template let-item="item" let-i="index" let-odd="odd" let-even="even">
                         <StackLayout [class.odd]="odd" [class.even]="even">
                             <Label [text]='"index: " + i'></Label>
                             <Label [text]='"[" + item.id +"] " + item.name'></Label>
