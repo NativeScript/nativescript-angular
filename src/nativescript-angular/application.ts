@@ -1,9 +1,9 @@
 import 'globals';
-global.window = global;
 import "zone.js/dist/zone-node"
 
 import 'reflect-metadata';
 import './polyfills/array';
+import {SanitizationService} from '@angular/core/src/security';
 import {isPresent, Type, print} from '@angular/core/src/facade/lang';
 import {ReflectiveInjector, reflector, coreLoadAndBootstrap, createPlatform, 
         getPlatform, assertPlatform, ComponentRef, PlatformRef, PLATFORM_DIRECTIVES, PLATFORM_PIPES} from '@angular/core';
@@ -11,7 +11,7 @@ import {bind, provide, Provider} from '@angular/core/src/di';
 
 import {RootRenderer, Renderer} from '@angular/core/src/render/api';
 import {NativeScriptRootRenderer, NativeScriptRenderer} from './renderer';
-import {NativeScriptDomAdapter, NativeScriptElementSchemaRegistry} from './dom_adapter';
+import {NativeScriptDomAdapter, NativeScriptElementSchemaRegistry, NativeScriptSanitizationService} from './dom_adapter';
 import {ElementSchemaRegistry, XHR, COMPILER_PROVIDERS} from '@angular/compiler';
 import {FileSystemXHR} from './xhr';
 import {Parse5DomAdapter} from '@angular/platform-server/src/parse5_adapter';
@@ -46,7 +46,7 @@ class ConsoleLogger {
 }
 
 export function bootstrap(appComponentType: any,
-    customProviders: ProviderArray = null): Promise<ComponentRef> {
+    customProviders: ProviderArray = null): Promise<ComponentRef<any>> {
     NativeScriptDomAdapter.makeCurrent();
 
     let platformProviders: ProviderArray = [
@@ -69,6 +69,7 @@ export function bootstrap(appComponentType: any,
         provide(RootRenderer, { useClass: NativeScriptRootRenderer }),
         NativeScriptRenderer,
         provide(Renderer, { useClass: NativeScriptRenderer }),
+        provide(SanitizationService, { useClass: NativeScriptSanitizationService }),
         provide(ElementSchemaRegistry, { useClass: NativeScriptElementSchemaRegistry }),
         COMPILER_PROVIDERS,
         provide(ElementSchemaRegistry, { useClass: NativeScriptElementSchemaRegistry }),
@@ -90,7 +91,7 @@ export function bootstrap(appComponentType: any,
     return coreLoadAndBootstrap(appInjector, appComponentType);
 }
 
-export function nativeScriptBootstrap(appComponentType: any, customProviders?: ProviderArray, appOptions?: AppOptions): Promise<ComponentRef> {
+export function nativeScriptBootstrap(appComponentType: any, customProviders?: ProviderArray, appOptions?: AppOptions): Promise<ComponentRef<any>> {
     if (appOptions && appOptions.cssFile) {
         application.cssFile = appOptions.cssFile;
     }
