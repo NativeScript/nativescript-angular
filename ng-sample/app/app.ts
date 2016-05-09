@@ -17,6 +17,7 @@ import trace = require("trace");
 trace.enable();
 
 import {RendererTest} from './examples/renderer-test';
+import {TabViewTest} from './examples/tab-view/tab-view-test';
 import {Benchmark} from './performance/benchmark';
 import {ListTest} from './examples/list/list-test';
 import {ListTestAsync} from "./examples/list/list-test-async";
@@ -27,7 +28,8 @@ import {ModalTest} from "./examples/modal/modal-test";
 import {PlatfromDirectivesTest} from "./examples/platform-directives/platform-directives-test";
 import {RouterOutletTest} from "./examples/navigation/router-outlet-test";
 
-nativeScriptBootstrap(RendererTest);
+//nativeScriptBootstrap(RendererTest);
+nativeScriptBootstrap(TabViewTest);
 //nativeScriptBootstrap(Benchmark);
 //nativeScriptBootstrap(ListTest);
 //nativeScriptBootstrap(ListTestAsync);
