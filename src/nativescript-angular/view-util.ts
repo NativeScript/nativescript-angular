@@ -288,6 +288,6 @@ export class ViewUtil {
     }
 
     public setStyleProperty(view: NgView, styleName: string, styleValue: string): void {
-        throw new Error("Not implemented: setStyleProperty");
+        view.setInlineStyle(styleName + ": " + styleValue);
     }
 }
