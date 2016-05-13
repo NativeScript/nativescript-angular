@@ -1,5 +1,7 @@
 import {ElementRef, Directive, Input, TemplateRef, ViewContainerRef} from "@angular/core";
 import {TabView, TabViewItem} from "ui/tab-view";
+import * as utils from '../common/utils';
+import {isBlank} from '@angular/core/src/facade/lang';
 
 @Directive({
     selector: 'TabView',
@@ -14,8 +16,9 @@ export class TabViewDirective {
         return this._selectedIndex;
     }
     
-    set selectedIndex(value: number) {
-        this._selectedIndex = value;
+    set selectedIndex(value) {
+        debugger;
+        this._selectedIndex = utils.convertToInt(value);
         if (this.viewInitialized) {
             this.tabView.selectedIndex = this._selectedIndex;
         }
@@ -27,7 +30,11 @@ export class TabViewDirective {
     
     ngAfterViewInit() {
         this.viewInitialized = true;
-        this.tabView.selectedIndex = this._selectedIndex;
+        debugger;
+        console.log("this._selectedIndex: " + this._selectedIndex);
+        if (!isBlank(this._selectedIndex)) {
+            this.tabView.selectedIndex = this._selectedIndex;
+        }
     }
 }
 
@@ -49,6 +56,8 @@ export class TabViewItemDirective {
     ngOnInit() {
         this.item = new TabViewItem();
         this.item.title = this.config.title;
+        
+        this.item.iconSource = this.config.iconSource;
 
         const viewRef = this.viewContainer.createEmbeddedView(this.templateRef);
         //Filter out text nodes, etc

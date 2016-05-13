@@ -3,6 +3,7 @@ import {NG_VALUE_ACCESSOR} from '@angular/common/src/forms/directives/control_va
 import {isBlank, isNumber} from '@angular/core/src/facade/lang';
 import {BaseValueAccessor} from './base-value-accessor';
 import {View} from "ui/core/view";
+import * as utils from '../common/utils';
 
 const SELECTED_INDEX_VALUE_ACCESSOR = provide(NG_VALUE_ACCESSOR, { useExisting: forwardRef(() => SelectedIndexValueAccessor), multi: true });
 
@@ -33,18 +34,7 @@ export class SelectedIndexValueAccessor extends BaseValueAccessor<SelectableView
     private viewInitialized: boolean;
 
     writeValue(value: any): void {
-        let normalizedValue;
-        if (isBlank(value)) {
-            normalizedValue = 0;
-        } else {
-            if (isNumber(value)) {
-                normalizedValue = value;
-            } else {
-                let parsedValue = parseInt(value);
-                normalizedValue = isNaN(parsedValue) ? 0 : parsedValue;
-            }
-        }
-        this._normalizedValue = Math.round(normalizedValue);
+        this._normalizedValue = utils.convertToInt(value);
         if (this.viewInitialized) {
             this.view.selectedIndex = this._normalizedValue;
         }
