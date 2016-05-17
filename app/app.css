@@ -1,3 +1,7 @@
 ﻿button {
     font-size: 13;
 }
+
+label {
+    text-align: center;   
+}
