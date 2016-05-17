@@ -4,7 +4,7 @@ import {XHR} from "@angular/compiler/src/xhr";
 export class FileSystemXHR extends XHR {
     resolve(url: string, baseUrl: string): string {
         //Angular assembles absolute URL's and prefixes them with //
-        if (url.indexOf("//") !== 0) {
+        if (url.indexOf("/") !== 0) {
             //Resolve relative URL's based on the app root.
             return path.join(baseUrl, url);
         } else {
