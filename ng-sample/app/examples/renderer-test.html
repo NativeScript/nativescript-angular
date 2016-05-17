@@ -5,8 +5,8 @@
         <DatePicker [(ngModel)]='model.deliveryDate' ></DatePicker>
         <Label [text]='model.deliveryDate' ></Label>-->
     <SearchBar [(ngModel)]='model.search'></SearchBar>
-    <Label [text]='model.search'></Label>
-    <Label [text]='model.mydate | date:"fullDate"'></Label>
+    <Label [text]='model.search' [style.backgroundColor]="'hotpink'"></Label>
+    <Label [text]='model.mydate | date:"fullDate"' [ngStyle]="{'background-color': 'lime'}"></Label>
     <Slider [(ngModel)]='model.sliderTest'></Slider>
     <Label [text]='model.sliderTest'></Label>
     <ListPicker [items]='model.listPickerItems' [(ngModel)]='model.selectedIndex'></ListPicker>

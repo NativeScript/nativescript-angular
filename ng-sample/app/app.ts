@@ -28,8 +28,8 @@ import {ModalTest} from "./examples/modal/modal-test";
 import {PlatfromDirectivesTest} from "./examples/platform-directives/platform-directives-test";
 import {RouterOutletTest} from "./examples/navigation/router-outlet-test";
 
-//nativeScriptBootstrap(RendererTest);
-nativeScriptBootstrap(TabViewTest);
+nativeScriptBootstrap(RendererTest);
+//nativeScriptBootstrap(TabViewTest);
 //nativeScriptBootstrap(Benchmark);
 //nativeScriptBootstrap(ListTest);
 //nativeScriptBootstrap(ListTestAsync);
