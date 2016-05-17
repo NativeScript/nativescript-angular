@@ -12,9 +12,9 @@ import {SecondComponent} from "../components/second.component";
         <StackLayout>
             <StackLayout class="nav">
                 <Button text="First" 
-                    [nsRouterLink]="['First']"></Button>
+                    [nsRouterLink]="['./First']"></Button>
                 <Button text="Second"
-                    [nsRouterLink]="['Second']"></Button>
+                    [nsRouterLink]="['./Second']"></Button>
             </StackLayout>
 
             <router-outlet></router-outlet>
