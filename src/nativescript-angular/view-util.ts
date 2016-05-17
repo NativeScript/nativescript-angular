@@ -5,6 +5,9 @@ import {ContentView} from 'ui/content-view';
 import {LayoutBase} from 'ui/layouts/layout-base';
 import {ViewClass, getViewClass, getViewMeta, isKnownView, ViewExtensions, NgView, ViewClassMeta} from './element-registry';
 import {getSpecialPropertySetter} from "ui/builder/special-properties";
+import * as styleProperty from "ui/styling/style-property";
+import {StyleProperty, getPropertyByName, withStyleProperty} from "ui/styling/style-property";
+import {ValueSource} from "ui/core/dependency-observable";
 import { ActionBar, ActionItem, NavigationButton } from "ui/action-bar";
 import trace = require("trace");
 import {device, platformNames, Device} from "platform";
@@ -287,7 +290,38 @@ export class ViewUtil {
         view.cssClass = classValue;
     }
 
+    private resolveCssValue(styleValue: string): string {
+        return styleValue;
+    }
+
+    private setStyleValue(view: NgView, property: StyleProperty, value: any) {
+        try {
+            view.style._setValue(property, value, ValueSource.Local);
+        } catch (ex) {
+            trace.write("Error setting property: " + property.name + " view: " + view + " value: " + value + " " + ex, trace.categories.Style, trace.messageType.error);
+        }
+    }
+
     public setStyleProperty(view: NgView, styleName: string, styleValue: string): void {
-        throw new Error("Not implemented: setStyleProperty");
+        traceLog("setStyleProperty: " + styleName + " = " + styleValue);
+
+        let name = styleName;
+        let resolvedValue = this.resolveCssValue(styleValue);
+        withStyleProperty(name, resolvedValue, (property, value) => {
+            if (isString(property)) {
+                //Fall back to resolving property by name.
+                const propertyName = <string>property;
+                const resolvedProperty = getPropertyByName(name);
+                if (resolvedProperty) {
+                    this.setStyleValue(view, resolvedProperty, resolvedValue);
+                } else {
+                    traceLog("Unknown style property: " + styleName);
+                }
+            } else {
+                const resolvedProperty = <StyleProperty>property;
+                this.setStyleValue(view, resolvedProperty, resolvedValue);
+            }
+
+        });
     }
 }
