@@ -15,4 +15,4 @@ tests/lib
 tests/src/typings
 tests/typings
 web
-src/*.js
+*.js
