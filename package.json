@@ -43,7 +43,7 @@
     "typescript": "^1.8.10"
   },
   "peerDependencies": {
-    "tns-core-modules": ">=2.0.0 || >=2.0.0-2016 || >=2.0.0-angular-7"
+    "tns-core-modules": ">=2.0.0 || >=2.1.0-2016 || >=2.0.0-angular-7"
   },
   "nativescript": {}
 }
