@@ -48,6 +48,10 @@ export interface SetupItemViewArgs {
     inputs: ['items']
 })
 export class ListViewComponent {
+    public get nativeElement(): ListView {
+        return this.listView;
+    }
+    
     private listView: ListView;
     private _items: any;
     private _differ: IterableDiffer;
