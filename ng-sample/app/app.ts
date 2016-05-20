@@ -11,9 +11,9 @@ import { NS_ROUTER_PROVIDERS, routerTraceCategory } from "./nativescript-angular
 import { rendererTraceCategory } from "./nativescript-angular/renderer";
 
 import trace = require("trace");
-// trace.setCategories(routerTraceCategory + ", " + rendererTraceCategory);
+//trace.setCategories(routerTraceCategory + ", " + rendererTraceCategory);
 // trace.setCategories(rendererTraceCategory);
-// trace.setCategories(routerTraceCategory);
+trace.setCategories(routerTraceCategory);
 trace.enable();
 
 import {RendererTest} from './examples/renderer-test';
@@ -27,8 +27,9 @@ import {ActionBarTest} from "./examples/action-bar/action-bar-test";
 import {ModalTest} from "./examples/modal/modal-test";
 import {PlatfromDirectivesTest} from "./examples/platform-directives/platform-directives-test";
 import {RouterOutletTest} from "./examples/navigation/router-outlet-test";
+import {LoginTest} from "./examples/navigation/login-test";
 
-nativeScriptBootstrap(RendererTest);
+//nativeScriptBootstrap(RendererTest);
 //nativeScriptBootstrap(TabViewTest);
 //nativeScriptBootstrap(Benchmark);
 //nativeScriptBootstrap(ListTest);
@@ -40,3 +41,4 @@ nativeScriptBootstrap(RendererTest);
 //nativeScriptBootstrap(ModalTest);
 //nativeScriptBootstrap(PlatfromDirectivesTest);
 //nativeScriptBootstrap(RouterOutletTest, [NS_ROUTER_PROVIDERS]);
+nativeScriptBootstrap(LoginTest, [NS_ROUTER_PROVIDERS]);

@@ -1,7 +1,6 @@
 import {Directive, Input} from '@angular/core';
 import {isString} from '@angular/core/src/facade/lang';
 import {Router, Instruction} from '@angular/router-deprecated';
-import {Location} from '@angular/common';
 import { log } from "./common";
 
 /**
@@ -46,7 +45,7 @@ export class NSRouterLink {
     // the instruction passed to the router to navigate
     private _navigationInstruction: Instruction;
 
-    constructor(private _router: Router, private _location: Location) { }
+    constructor(private _router: Router) { }
 
     get isRouteActive(): boolean { return this._router.isRouteActive(this._navigationInstruction); }
 
