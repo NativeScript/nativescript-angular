@@ -18,7 +18,7 @@ class FirstComponent { }
     directives: [ROUTER_DIRECTIVES, NS_ROUTER_DIRECTIVES],
     styleUrls: ["examples/navigation/router-outlet-test.css"],
     template: `
-    <StackLayout>
+    <StackLayout #secondStack (loaded)="onLoaded(secondStack)">
         <Label [text]="'Second component - ' + id" class="title"></Label>
     </StackLayout>`
 })
@@ -26,6 +26,10 @@ class SecondComponent {
     public id: string;
     constructor(routeParams: RouteParams) {
         this.id = routeParams.get("id");
+    }
+    
+    onLoaded(args) {
+        console.log("==========>>>>>>>>>>>>>SecondComponent loaded event with args: " + args);
     }
 }
 
@@ -35,7 +39,7 @@ class SecondComponent {
     styleUrls: ["examples/navigation/router-outlet-test.css"],
     template: `
         <StackLayout>
-            <StackLayout class="nav">
+            <StackLayout #stack class="nav" (loaded)="onLoaded(stack)">
                 <Button text="First" [nsRouterLink]="['First']"></Button>
                 <Button text="GO(1)" [nsRouterLink]="['Second', { id: 1 }]"></Button>
                 <Button text="GO(2)" [nsRouterLink]="['Second', { id: 2 }]"></Button>
@@ -50,4 +54,8 @@ class SecondComponent {
     { path: '/first', component: FirstComponent, name: 'First', useAsDefault: true },
     { path: '/second/:id', component: SecondComponent, name: 'Second' },
 ])
-export class RouterOutletTest { }
+export class RouterOutletTest { 
+    onLoaded(args) {
+        console.log("==========>>>>>>>>>>>>>RouterOutletTest loaded event with args: " + args);
+    }
+}
