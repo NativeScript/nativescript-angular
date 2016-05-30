@@ -1,4 +1,4 @@
-import {DynamicComponentLoader, ComponentRef, ViewContainerRef, Component, Type, ViewChild} from '@angular/core';
+import {ComponentRef, ViewContainerRef, Component, Type, ViewChild, ComponentResolver} from '@angular/core';
 
 type AnyComponentRef = ComponentRef<any>;
 interface PendingLoadEntry {
@@ -11,23 +11,20 @@ interface PendingLoadEntry {
  * It uses DetachedContainer as selector so that it is containerRef is not attached to the visual tree.
  */
 @Component({
-    selector: 'DetachedContainer', 
+    selector: 'DetachedContainer',
     template: `<Placeholder #loader></Placeholder>`
 })
 export class DetachedLoader {
     @ViewChild('loader', { read: ViewContainerRef }) containerRef: ViewContainerRef;
-    private viewLoaded = false;
 
+    private viewLoaded = false;
     private pendingLoads: PendingLoadEntry[] = [];
 
-    constructor(
-        private loader: DynamicComponentLoader
-    ) {
+    constructor(private compiler: ComponentResolver) {
     }
 
     public ngAfterViewInit() {
         this.viewLoaded = true;
-
         this.pendingLoads.forEach(loadEntry => {
             this.loadInLocation(loadEntry.componentType).then(loadedRef => {
                 loadEntry.resolveCallback(loadedRef);
@@ -36,7 +33,9 @@ export class DetachedLoader {
     }
 
     private loadInLocation(componentType: Type): Promise<ComponentRef<any>> {
-        return this.loader.loadNextToLocation(componentType, this.containerRef);
+        return this.compiler.resolveComponent(componentType).then((componentFactory) => {
+            return this.containerRef.createComponent(componentFactory, this.containerRef.length, this.containerRef.parentInjector, null);
+        });
     }
 
     public loadComponent(componentType: Type): Promise<ComponentRef<any>> {

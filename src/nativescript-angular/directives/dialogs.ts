@@ -1,4 +1,4 @@
-import {ReflectiveInjector, DynamicComponentLoader, ViewContainerRef, Injector, provide, Type, Injectable, ComponentRef, Directive} from '@angular/core';
+import {ReflectiveInjector, ComponentResolver, ViewContainerRef, Injector, provide, Type, Injectable, ComponentRef, Directive} from '@angular/core';
 import {Page} from 'ui/page';
 import {View} from 'ui/core/view';
 import {DetachedLoader} from '../common/detached-loader';
@@ -21,7 +21,7 @@ export class ModalDialogService {
 
     constructor(
         private page: Page,
-        private loader: DynamicComponentLoader) {
+        private compiler: ComponentResolver) {
     }
 
     public registerViewContainerRef(ref: ViewContainerRef) {
@@ -48,21 +48,22 @@ export class ModalDialogService {
                 provide(ModalDialogParams, { useValue: modalParams }),
             ]);
 
-            this.loader.loadNextToLocation(DetachedLoader, this.containerRef, providers)
-                .then((loaderRef) => {
-                    detachedLoaderRef = loaderRef;
-                    return (<DetachedLoader>loaderRef.instance).loadComponent(type)
-                })
-                .then((compRef) => {
-                    //Component loaded. Find its root native view.
+            this.compiler.resolveComponent(DetachedLoader).then((detachedFactory) => {
+                const childInjector = ReflectiveInjector.fromResolvedProviders(providers, this.containerRef.parentInjector);
+                detachedLoaderRef = this.containerRef.createComponent(detachedFactory, -1, childInjector, null)
+                
+                detachedLoaderRef.instance.loadComponent(type).then((compRef) => {
                     const componentView = <View>compRef.location.nativeElement;
+                    
                     if (componentView.parent) {
                         (<any>componentView.parent).removeChild(componentView);
                     }
+                    
                     page.content = componentView;
                     this.page.showModal(page, options.context, closeCallback, options.fullscreen);
                 });
-        })
+            });
+        });
     }
 }
 
