@@ -5,17 +5,21 @@ import {NS_ROUTER_DIRECTIVES} from "nativescript-angular/router/ns-router";
     selector: "first-action-bar",
     directives: [NS_ROUTER_DIRECTIVES],
     template: `
-    <ActionBar title="Title 1"> 
-        <ActionItem *ngIf="show" text="action" (tap)="onTap()" [nsRouterLink]="['Second']"></ActionItem>
-        <ActionItem  (tap)="onShare()" ios.systemIcon="9" ios.position="left" 
-            android.systemIcon="ic_menu_share_holo_light" android.position="actionBar"></ActionItem>
-        <ActionItem (tap)="onDelete()" ios.systemIcon="16" ios.position="right"
-            android.position="popup" text="delete"></ActionItem>
+    <ActionBar title="Title 1" automationText="title"> 
+        <ActionItem *ngIf="show" text="action" (tap)="onTap()" [nsRouterLink]="['Second']" 
+            automationText="action"></ActionItem>
+        <ActionItem (tap)="onShare()" ios.systemIcon="9" ios.position="left" 
+            android.systemIcon="ic_menu_share_holo_light" android.position="actionBar"
+            automationText="share"></ActionItem>
+        <ActionItem text="delete" (tap)="onDelete()"
+            ios.systemIcon="16" ios.position="right"
+            android.position="popup" 
+            automationText="delete"></ActionItem>
     </ActionBar>
 
     <StackLayout verticalAlignment="center">
-        <Label [text]="messageShare"></Label>
-        <Label [text]="messageDelete"></Label>
+        <Label [text]="messageShare" automationText="lblShare"></Label>
+        <Label [text]="messageDelete" automationText="lblDelete"></Label>
     </StackLayout>
     `,
 })

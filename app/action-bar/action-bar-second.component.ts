@@ -6,10 +6,10 @@ import {NS_ROUTER_DIRECTIVES} from "nativescript-angular/router/ns-router";
     selector: "second-action-bar",
     directives: [NS_ROUTER_DIRECTIVES, NestedComponent],
     template: `
-    <ActionBar title="Title 2">
-        <NavigationButton text="First" android.systemIcon="ic_menu_back"></NavigationButton>
-        <ActionItem [text]="message"></ActionItem>      
-        <ActionItem text="TAP" (tap)="onTap()"></ActionItem>
+    <ActionBar title="Title 2" automationText="title">
+        <NavigationButton text="First" android.systemIcon="ic_menu_back" automationText="back"></NavigationButton>
+        <ActionItem [text]="message" automationText="msg"></ActionItem>      
+        <ActionItem text="TAP" (tap)="onTap()" automationText="tap"></ActionItem>
     </ActionBar>
 
     <StackLayout verticalAlignment="center">

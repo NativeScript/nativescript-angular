@@ -7,13 +7,13 @@ import {NS_ROUTER_DIRECTIVES} from "nativescript-angular/router/ns-router";
     template: `
     <ActionBarExtension>
         <ActionItem *ngIf="show" (tap)="onTap()">
-            <Button text="CUSTOM"></Button>
+            <Button text="CUSTOM" automationText="btnCustom"></Button>
         </ActionItem>
     </ActionBarExtension>
 
     <StackLayout orientation="horizontal" horizontalAlignment="center">
-        <Button [text]="show ? 'hide' : 'show'" (tap)="show = !show"></Button>
-        <Label [text]="message"></Label>
+        <Button [text]="show ? 'hide' : 'show'" (tap)="show = !show" automationText="btnShowHide"></Button>
+        <Label [text]="message" automationText="lblCustom"></Label>
     </StackLayout>
     `,
 })
