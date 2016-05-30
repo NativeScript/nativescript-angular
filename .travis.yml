@@ -25,6 +25,11 @@ install:
     - npm install -g nativescript --ignore-scripts
     - tns usage-reporting disable
     - tns error-reporting disable
+    - cd nativescript-angular
+    - npm install
+    - cd ../tests
+    - npm install
+    - npm install ../nativescript-angular
 
 before_script:
     - echo no | android create avd --force -n test -t android-19 -b armeabi-v7a
@@ -32,9 +37,5 @@ before_script:
     - android-wait-for-emulator
 
 script:
-    - npm install
-    - cd ./tests
-    - npm install
-    - npm install ../nativescript-angular
     - tns platform add android
     - tns test android --emulator --justlaunch

@@ -10,6 +10,7 @@ nativescript-angular/**/*.d.ts
 nativescript-angular/**/*.js
 !nativescript-angular/postinstall.js
 !nativescript-angular/hooks/**/*.js
+!nativescript-angular/gulpfile.js
 
 .tscache
 .nvm
