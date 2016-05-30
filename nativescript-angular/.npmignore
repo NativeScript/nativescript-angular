@@ -1,0 +1,8 @@
+*.tgz
+
+*.ts
+!*.d.ts
+
+tsconfig.json
+global.d.ts
+.npmignore
