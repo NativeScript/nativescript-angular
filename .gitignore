@@ -3,6 +3,8 @@ node_modules
 tags
 **/*.js.map
 
+/hooks
+
 nativescript-angular/**/*.d.ts
 !nativescript-angular/global.d.ts
 nativescript-angular/**/*.js
@@ -22,7 +24,6 @@ tests/lib
 tests/node_modules
 
 ng-sample/app/**/*.js
-ng-sample/app/nativescript-angular
 ng-sample/app/global.d.ts
 ng-sample/platforms
 ng-sample/lib

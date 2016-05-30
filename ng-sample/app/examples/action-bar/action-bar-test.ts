@@ -1,8 +1,8 @@
 import {Component} from '@angular/core';
 import {RouteConfig} from '@angular/router-deprecated';
 import { Page} from "ui/page";
-import {NS_ROUTER_DIRECTIVES, NS_ROUTER_PROVIDERS} from "../../nativescript-angular/router/ns-router";
-import {NS_DIRECTIVES} from "../../nativescript-angular/directives";
+import {NS_ROUTER_DIRECTIVES, NS_ROUTER_PROVIDERS} from "nativescript-angular/router/ns-router";
+import {NS_DIRECTIVES} from "nativescript-angular/directives";
 
 @Component({
     selector: "first",
