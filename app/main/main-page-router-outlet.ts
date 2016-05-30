@@ -1,7 +1,9 @@
 import {Component} from "@angular/core";
 import {RouteConfig} from '@angular/router-deprecated';
 import {NS_ROUTER_DIRECTIVES} from "nativescript-angular/router";
-import {ActionBarTest} from "../action-bar/action-bar-test"
+import {ActionBarTest} from "../action-bar/action-bar-test";
+import {FirstComponentActionBar} from "../action-bar/action-bar-first.component";
+import {SecondComponentActionBar} from "../action-bar/action-bar-second.component";
 import {AppComponent} from "../template/app.component";
 import {FirstComponent} from "../components/first.component";
 import {SecondComponent} from "../components/second.component";
@@ -17,14 +19,15 @@ import {NavigationTestRouter} from "../router/router-outlet";
         <Button text="First" [nsRouterLink]="['First']"></Button>      
         <Button text="Second" [nsRouterLink]="['Second']"></Button>
         <Button text="Router" [nsRouterLink]="['Router']"></Button>
+        <Button text="ActionBar" [nsRouterLink]="['ActionBar']"></Button>
         <StackLayout orientation="horizontal" horizontalAlignment="center">
-            <Button text="ActionBar" [nsRouterLink]="['ActionBar']"></Button>
-            <Button text="Hidden" [nsRouterLink]="['ActionBar']"></Button>
+            <Button text="ActionBar1" [nsRouterLink]="['FirstActionBar']"></Button>
+            <Button text="ActionBar2" [nsRouterLink]="['SecondActionBar']"></Button>
         </StackLayout>
     </StackLayout>
     `,
 })
-class MainComponent {}
+class MainComponent { }
 
 @Component({
     selector: 'navigation-main',
@@ -38,5 +41,7 @@ class MainComponent {}
     { path: '/second', component: SecondComponent, name: 'Second' },
     { path: '/router/...', component: NavigationTestRouter, name: 'Router' },
     { path: '/action-bar-test/...', component: ActionBarTest, name: 'ActionBar' },
+    { path: '/first-action-bar', component: FirstComponentActionBar, name: 'FirstActionBar' },
+    { path: '/second-action-bar', component: SecondComponentActionBar, name: 'SecondActionBar' },
 ])
-export class NavigationMainPageRouter {}
+export class NavigationMainPageRouter { }

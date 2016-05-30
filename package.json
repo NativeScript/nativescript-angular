@@ -9,7 +9,7 @@
 			"version": "2.0.0"
 		},
 		"tns-android": {
-			"version": "2.0.0"
+			"version": "2.1.0-2016-05-20-601"
 		}
 	},
 	"dependencies": {
