@@ -4,7 +4,7 @@ import {ROUTER_DIRECTIVES, Router, OnActivate, OnDeactivate, CanReuse, OnReuse,
 import {Location, LocationStrategy} from '@angular/common';
 import {topmost} from "ui/frame";
 import {Page} from "ui/page";
-import {NS_ROUTER_DIRECTIVES} from "../../nativescript-angular/router/ns-router";
+import {NS_ROUTER_DIRECTIVES} from "nativescript-angular/router/ns-router";
 
 
 @Component({

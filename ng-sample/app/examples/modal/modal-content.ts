@@ -1,5 +1,5 @@
 import {Component} from '@angular/core';
-import {ModalDialogParams} from "../../nativescript-angular/directives/dialogs";
+import {ModalDialogParams} from "nativescript-angular/directives/dialogs";
 
 @Component({
     selector: 'modal-content',

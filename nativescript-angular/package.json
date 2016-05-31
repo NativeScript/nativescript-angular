@@ -6,15 +6,18 @@
   "bugs": "http://www.telerik.com",
   "contributors": [
     "Hristo Deshev <hristo.deshev@telerik.com>"
-    ],
+  ],
   "license": "Apache-2.0",
   "repository": {
     "type": "git",
     "url": "https://github.com/NativeScript/nativescript-angular.git"
   },
-  "scripts": {},
+  "scripts": {
+    "postinstall": "node postinstall.js",
+    "prepublish": "tsc",
+    "postpublish": "gulp clean-defs"
+  },
   "dependencies": {
-    "tns-core-modules": "2.0.0-angular-7",
     "nativescript-intl": "^0.0.2",
     "@angular/common": "2.0.0-rc.1",
     "@angular/compiler": "2.0.0-rc.1",
@@ -29,17 +32,14 @@
     "parse5": "1.4.2",
     "punycode": "1.3.2",
     "querystring": "0.2.0",
-    "url": "0.10.3"
+    "url": "0.10.3",
+    "shelljs": "^0.7.0"
   },
   "devDependencies": {
-    "grunt": "0.4.5",
-    "grunt-contrib-copy": "0.8.0",
-    "grunt-contrib-clean": "0.6.0",
-    "grunt-shell": "1.1.2",
-    "grunt-file": "1.0.2",
-    "grunt-env": "0.4.4",
-    "grunt-ts": "5.0.0-beta.5",
-    "shelljs": "^0.5.3",
+    "del": "^2.2.0",
+    "glob": "^7.0.3",
+    "gulp": "^3.9.1",
+    "tns-core-modules": ">=2.0.0 || >=2.1.0-2016 || >=2.0.0-angular-7",
     "typescript": "^1.8.10"
   },
   "peerDependencies": {

@@ -1,11 +1,17 @@
-nativescript-angular*.tgz
 bin/dist
 node_modules
 tags
-src/nativescript-angular/**/*.js
-!src/nativescript-angular/postinstall.js
-!src/nativescript-angular/hooks/**/*.js
-.baseDir.ts
+**/*.js.map
+
+/hooks
+
+nativescript-angular/**/*.d.ts
+!nativescript-angular/global.d.ts
+nativescript-angular/**/*.js
+!nativescript-angular/postinstall.js
+!nativescript-angular/hooks/**/*.js
+!nativescript-angular/gulpfile.js
+
 .tscache
 .nvm
 .vscode
@@ -19,7 +25,6 @@ tests/lib
 tests/node_modules
 
 ng-sample/app/**/*.js
-ng-sample/app/nativescript-angular
 ng-sample/app/global.d.ts
 ng-sample/platforms
 ng-sample/lib

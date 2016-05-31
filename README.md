@@ -4,7 +4,7 @@ Integrating NativeScript with Angular 2.
 
 # Running locally
 
-# Prerequisites
+## Prerequisites
 
 Install your native toolchain and NativeScript as described in the docs:
 
@@ -14,31 +14,26 @@ https://docs.nativescript.org/setup/quick-setup
 ## Install dependencies
 
 ```
-$ npm install -g grunt-cli gulp
+$ npm install -g gulp
 ```
 
 Then install the needed NPM packages:
 
 ```
+$ cd nativescript-angular
 $ npm install
 ```
 
-## Compile and prepare NativeScript and Angular
+## Run the sample application (ng-sample)
 
-```
-$ grunt
-```
-
-## Initialize the test NativeScript app (ng-sample)
-
+Intall NPM packages (use the local copy of `nativescript-angular`):
 ```
 $ cd ng-sample
 $ npm install
+$ npm install ../nativescript-angular
 ```
 
-The latter installs the `angular2` and `tns-core-modules` packages that you just built by running `grunt prepare` step in the project root.
-
-## Run the ng-sample app
+Start the app:
 
 ```
 $ tns run android
@@ -61,19 +56,37 @@ $ env WEBPACK_BUILD=1 tns run android
 
 # Running the tests
 
+Intall NPM packages (use the local copy of `nativescript-angular`):
 ```
 $ cd tests
 $ npm install
+$ npm install ../nativescript-angular
+```
+
+Start test run:
+
+```
 $ tns test ios --emulator
+$ tns test android --emulator
 ```
 
 # Developer workflow:
 
-1. Make changes to `src/nativescript-angular`, and rebuild with `grunt build`. If succesful, you should get a npm package in the project root.
-2. Navigate to the ng-sample subdir: `$ cd ng-sample`. Make some changes to the app or `../src/nativescript-angular`.
-3. Run with `$ tns run android` or `$ tns run ios`
+## Setup:
+Use `npm link` to link `nativescript-angular` in `tests` and `ng-sample` progects:
 
-Note that you should never change files in `ng-sample/src/nativescript-angular/` as they are overwritten with the reference sources in `src/nativescript-angular` on every `grunt app` run.
+```
+cd nativescript-angular
+npm link
+cd ../ng-sample
+npm link nativescript-angular
+cd ../tests
+npm link nativescript-angular
+```
+
+## Work
+1. Make changes to the `test`, `ng-sample` projects or in `nativescript-angular` folder.
+2. Run the `tests` or `ng-sample` using as shown above.
 
 # Watch the video explaining Angular 2 and NativeScript
 [NativeScript session on AngularConnect conference](https://www.youtube.com/watch?v=4SbiiyRSIwo)
