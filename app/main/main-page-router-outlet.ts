@@ -20,7 +20,7 @@ import {BindingComponent} from "../binding/binding-page";
         <Button text="First" [nsRouterLink]="['First']"></Button>      
         <Button text="Second" [nsRouterLink]="['Second']"></Button>
         <Button text="Router" [nsRouterLink]="['Router']"></Button>
-        <Button text="ActionBar" [nsRouterLink]="['ActionBar']"></Button>
+        <!--<Button text="ActionBar" [nsRouterLink]="['ActionBar']"></Button>-->
         <StackLayout orientation="horizontal" horizontalAlignment="center">
             <Button text="ActionBar1" [nsRouterLink]="['FirstActionBar']"></Button>
             <Button text="ActionBar2" [nsRouterLink]="['SecondActionBar']"></Button>
@@ -42,11 +42,10 @@ class MainComponent { }
     { path: '/first', component: FirstComponent, name: 'First' },
     { path: '/second', component: SecondComponent, name: 'Second' },
     { path: '/router/...', component: NavigationTestRouter, name: 'Router' },
-    { path: '/action-bar-test/...', component: ActionBarTest, name: 'ActionBar' },
+    // { path: '/action-bar-test/...', component: ActionBarTest, name: 'ActionBar' },
     { path: '/first-action-bar', component: FirstComponentActionBar, name: 'FirstActionBar' },
     { path: '/second-action-bar', component: SecondComponentActionBar, name: 'SecondActionBar' },
     { path: '/binding', component: BindingComponent, name: 'Binding' },
-    
-    
+
 ])
 export class NavigationMainPageRouter { }
