@@ -1,0 +1,11 @@
+<StackLayout>
+    <TextField hint="oneWayDataBinding" automationText="tfOneWayBinding" keyboardType="email" [text]="oneWayDataBinding" autocorrect="false" autocapitalizationType="none"></TextField>
+    <TextField hint="twoWayDataBindingBanana" automationText="tfTwoWayBinding" keyboardType="email" [(ngModel)]="twoWayDataBinding" autocorrect="false" autocapitalizationType="none"></TextField>
+    <TextField hint="" automationText="tfCurlyBracket" keyboardType="email" text="{{ curlyBracket }}" autocorrect="false" autocapitalizationType="none"></TextField>
+    <Label automationText="lbCurlyBracketBinding" text='Label with curlyBaracket binding: {{ twoWayDataBinding }}'></Label>
+    <StackLayout orientation="horizontal">
+        <Button (tap)="changeValues()" automationText="btnSaveChanges" text="update" width="80" height="40"></Button>
+        <Button (tap)="getValues()" automationText="getValues" text="get" width="80" height="40"></Button>
+    </StackLayout>
+    <TextView [text]="results" automationText="tvResults" textWrap="true"></TextView>
+</StackLayout>

@@ -8,6 +8,7 @@ import {AppComponent} from "../template/app.component";
 import {FirstComponent} from "../components/first.component";
 import {SecondComponent} from "../components/second.component";
 import {NavigationTestRouter} from "../router/router-outlet";
+import {BindingComponent} from "../binding/binding-page";
 
 @Component({
     selector: "main",
@@ -24,6 +25,7 @@ import {NavigationTestRouter} from "../router/router-outlet";
             <Button text="ActionBar1" [nsRouterLink]="['FirstActionBar']"></Button>
             <Button text="ActionBar2" [nsRouterLink]="['SecondActionBar']"></Button>
         </StackLayout>
+        <Button text="Binding" [nsRouterLink]="['Binding']"></Button>        
     </StackLayout>
     `,
 })
@@ -43,5 +45,8 @@ class MainComponent { }
     { path: '/action-bar-test/...', component: ActionBarTest, name: 'ActionBar' },
     { path: '/first-action-bar', component: FirstComponentActionBar, name: 'FirstActionBar' },
     { path: '/second-action-bar', component: SecondComponentActionBar, name: 'SecondActionBar' },
+    { path: '/binding', component: BindingComponent, name: 'Binding' },
+    
+    
 ])
 export class NavigationMainPageRouter { }
