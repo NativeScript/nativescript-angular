@@ -179,12 +179,12 @@ export class PageRouterOutlet extends RouterOutlet {
 
         this.location.navigateToNewPage();
         return new Promise((resolve, reject) => {
-            page.on('navigatedTo', () => {
-                // Finish activation when page is fully navigated to.
+            page.on('navigatingTo', () => {
+                // Finish activation when page navigation has started
                 resolve(componentRef)
             });
 
-            page.on('navigatingFrom', (<any>global).Zone.current.wrap((args: NavigatedData) => {
+            page.on('navigatedFrom', (<any>global).Zone.current.wrap((args: NavigatedData) => {
                 if (args.isBackNavigation) {
                     this.location.beginBackPageNavigation();
                     this.location.back();
