@@ -113,17 +113,11 @@ export class NativeScriptRenderer extends Renderer {
 
     attachViewAfter(anchorNode: NgView, viewRootNodes: NgView[]) {
         traceLog('NativeScriptRenderer.attachViewAfter: ' + anchorNode.nodeName + ' ' + anchorNode);
-        //HACK: The anchor.templateParent precedence and child.templateParent
-        //assignment are a workaround for RadSideDrawer.
-        //Remove it once we ship the fix in the RadSideDrawer directives.
-        const parent = (anchorNode.templateParent || <NgView>anchorNode.parent);
+        const parent = (<NgView>anchorNode.parent || anchorNode.templateParent);
         const insertPosition = this.viewUtil.getChildIndex(parent, anchorNode);
 
         viewRootNodes.forEach((node, index) => {
             const childIndex = insertPosition + index + 1;
-            //Remember the template parent in case someone moves the view element
-            //before Angular attaches the next view.
-            node.templateParent = parent;
             this.viewUtil.insertChild(parent, node, childIndex);
             this.animateNodeEnter(node);
         });
