@@ -2,7 +2,7 @@ import {Component} from "@angular/core";
 
 @Component({
     selector: "binding",
-    templateUrl: 'binding/binding-page.xml'
+    templateUrl: 'binding/binding-page.html'
 })
 
 export class BindingComponent {
