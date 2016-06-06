@@ -17,7 +17,7 @@ export class CustomTemplate {
     selector: 'list-test',
     directives: [CustomTemplate],
     template: `
-        <GridLayout rows="*"> 
+        <GridLayout rows="*" automationText="mainView"> 
             <ListView [items]="myItems">
                 <template let-item="item">
                     <custom-template [data]="item"></custom-template>

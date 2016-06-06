@@ -8,7 +8,7 @@ export class DataItem {
 @Component({
     selector: 'list-test-async',
     template: `
-    <GridLayout rows='*,60'>
+    <GridLayout rows='*,60' automationText="mainView">
         <ListView [items]="myItems | async">
             <template let-item="item" let-i="index" let-odd="odd" let-even="even">
                 <StackLayout [class.odd]="odd" [class.even]="even">

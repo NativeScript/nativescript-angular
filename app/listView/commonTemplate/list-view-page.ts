@@ -4,7 +4,7 @@ import { Component, Input, ChangeDetectionStrategy } from '@angular/core';
     selector: 'list-test',
     styleUrls: ['./listView/commonTemplate/list-view-page.css'],
     template: ` 
-                <StackLayout>
+                <StackLayout automationText="mainView">
                     <ListView [items]="myItems" (itemTap)="onItemTap($event)">
                         <template let-item="item" let-i="index" let-odd="odd" let-even="even">
                             <StackLayout [class.odd]="odd" [class.even]="even">
