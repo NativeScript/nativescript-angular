@@ -9,10 +9,12 @@ import {FirstComponent} from "../components/first.component";
 import {SecondComponent} from "../components/second.component";
 import {NavigationTestRouter} from "../router/router-outlet";
 import {BindingComponent} from "../binding/binding-page";
+import {ModalTest, ModalTestWithPushStrategy} from "../modal/modal-dialog.component";
 
 @Component({
     selector: "main",
     directives: [NS_ROUTER_DIRECTIVES],
+    styles: [ 'button { margin: 0 6 }' ],
     template: `
     <StackLayout>
         <Label text="Main Component" class="title"></Label>
@@ -29,7 +31,11 @@ import {BindingComponent} from "../binding/binding-page";
             <Button text="ActionBar1" [nsRouterLink]="['FirstActionBar']"></Button>
             <Button text="ActionBar2" [nsRouterLink]="['SecondActionBar']"></Button>
         </StackLayout>
-        <Button text="Binding" [nsRouterLink]="['Binding']"></Button>        
+        <Button text="Binding" [nsRouterLink]="['Binding']"></Button>      
+        <StackLayout orientation="horizontal" horizontalAlignment="center">
+            <Button text="modal" [nsRouterLink]="['Modal']"></Button>
+            <Button text="modal(onPush)" [nsRouterLink]="['ModalWithPushStrategy']"></Button>
+        </StackLayout>  
     </StackLayout>
     `,
 })
@@ -50,6 +56,8 @@ class MainComponent { }
     { path: '/first-action-bar', component: FirstComponentActionBar, name: 'FirstActionBar' },
     { path: '/second-action-bar', component: SecondComponentActionBar, name: 'SecondActionBar' },
     { path: '/binding', component: BindingComponent, name: 'Binding' },
+    { path: '/modal', component: ModalTest, name: 'Modal' },
+    { path: '/modal-on-push', component: ModalTestWithPushStrategy, name: 'ModalWithPushStrategy' },
 
 ])
 export class NavigationMainPageRouter { }
