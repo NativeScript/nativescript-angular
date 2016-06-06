@@ -1,6 +1,6 @@
-import {Component, ChangeDetectionStrategy} from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import * as dialogs from "ui/dialogs";
-import {ModalDialogService, ModalDialogOptions, ModalDialogHost, ModalDialogParams} from "nativescript-angular/directives/dialogs";
+import { ModalDialogService, ModalDialogOptions, ModalDialogHost, ModalDialogParams } from "nativescript-angular/directives/dialogs";
 
 
 @Component({

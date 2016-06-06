@@ -13,6 +13,7 @@ import { ListViewComponent } from "../listView/commonTemplate/list-view-page";
 import { ListViewControlComponent } from "../listView/customTemplate/list-view-item-template";
 import { ListViewAsyncPipeComponent } from "../listView/asyncPipeTemplate/async-pipe-template"
 import { ListViewMainPageComponent } from "../listView/listViewMainPage/list-view-main-page"
+import { ModalTest, ModalTestWithPushStrategy } from "../modal/modal-dialog.component";
 
 @Component({
     selector: "main",
@@ -35,6 +36,10 @@ import { ListViewMainPageComponent } from "../listView/listViewMainPage/list-vie
         </StackLayout>
         <Button text="Binding" [nsRouterLink]="['Binding']"></Button>        
         <Button text="ListViewExamples" [nsRouterLink]="['ListViewMainPage']"></Button>        
+         <StackLayout orientation="horizontal" horizontalAlignment="center">
+            <Button text="modal" [nsRouterLink]="['Modal']"></Button>
+            <Button text="modal(onPush)" [nsRouterLink]="['ModalWithPushStrategy']"></Button>
+        </StackLayout>  
     </StackLayout>
     `,
 })
@@ -59,6 +64,8 @@ class MainComponent { }
     { path: '/listView/listViewMainPage', component: ListViewMainPageComponent, name: 'ListViewMainPage' },
     { path: '/listView/customTemplate', component: ListViewControlComponent, name: 'ListViewCustomTemplate' },
     { path: '/listView/asyncPipeTemplate', component: ListViewAsyncPipeComponent, name: 'ListViewAsyncPipe' },
+    { path: '/modal', component: ModalTest, name: 'Modal' },
+    { path: '/modal-on-push', component: ModalTestWithPushStrategy, name: 'ModalWithPushStrategy' },
 
 ])
 export class NavigationMainPageRouter { }
