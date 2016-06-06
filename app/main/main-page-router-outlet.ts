@@ -20,16 +20,21 @@ import { ListViewMainPageComponent } from "../listView/listViewMainPage/list-vie
     template: `
     <StackLayout>
         <Label text="Main Component" class="title"></Label>
-        <Button text="Template" [nsRouterLink]="['Template']"></Button>
-        <Button text="First" [nsRouterLink]="['First']"></Button>      
-        <Button text="Second" [nsRouterLink]="['Second']"></Button>
-        <Button text="Router" [nsRouterLink]="['Router']"></Button>
+        <StackLayout orientation="horizontal" horizontalAlignment="center">
+            <Button text="Template" [nsRouterLink]="['Template']"></Button>
+            <Button text="Router" [nsRouterLink]="['Router']"></Button>
+        </StackLayout>
+        <StackLayout orientation="horizontal" horizontalAlignment="center">
+            <Button text="First" [nsRouterLink]="['First']"></Button>      
+            <Button text="Second" [nsRouterLink]="['Second']"></Button>
+        </StackLayout>
+        <!--<Button text="ActionBar" [nsRouterLink]="['ActionBar']"></Button>-->
         <StackLayout orientation="horizontal" horizontalAlignment="center">
             <Button text="ActionBar1" [nsRouterLink]="['FirstActionBar']"></Button>
             <Button text="ActionBar2" [nsRouterLink]="['SecondActionBar']"></Button>
         </StackLayout>
-        <Button text="Binding" [nsRouterLink]="['Binding']"></Button>
-        <Button text="ListViewTests" [nsRouterLink]="['ListViewMainPage']"></Button>        
+        <Button text="Binding" [nsRouterLink]="['Binding']"></Button>        
+        <Button text="ListViewExamples" [nsRouterLink]="['ListViewMainPage']"></Button>        
     </StackLayout>
     `,
 })
