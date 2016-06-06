@@ -1,14 +1,18 @@
-import {Component} from "@angular/core";
-import {RouteConfig} from '@angular/router-deprecated';
-import {NS_ROUTER_DIRECTIVES} from "nativescript-angular/router";
-import {ActionBarTest} from "../action-bar/action-bar-test";
-import {FirstComponentActionBar} from "../action-bar/action-bar-first.component";
-import {SecondComponentActionBar} from "../action-bar/action-bar-second.component";
-import {AppComponent} from "../template/app.component";
-import {FirstComponent} from "../components/first.component";
-import {SecondComponent} from "../components/second.component";
-import {NavigationTestRouter} from "../router/router-outlet";
-import {BindingComponent} from "../binding/binding-page";
+import { Component } from "@angular/core";
+import { RouteConfig } from '@angular/router-deprecated';
+import { NS_ROUTER_DIRECTIVES } from "nativescript-angular/router";
+import { ActionBarTest } from "../action-bar/action-bar-test";
+import { FirstComponentActionBar } from "../action-bar/action-bar-first.component";
+import { SecondComponentActionBar } from "../action-bar/action-bar-second.component";
+import { AppComponent } from "../template/app.component";
+import { FirstComponent } from "../components/first.component";
+import { SecondComponent } from "../components/second.component";
+import { NavigationTestRouter } from "../router/router-outlet";
+import { BindingComponent } from "../binding/binding-page";
+import { ListViewComponent } from "../listView/commonTemplate/list-view-page";
+import { ListViewControlComponent } from "../listView/customTemplate/list-view-item-template";
+import { ListViewAsyncPipeComponent } from "../listView/asyncPipeTemplate/async-pipe-template"
+import { ListViewMainPageComponent } from "../listView/listViewMainPage/list-view-main-page"
 
 @Component({
     selector: "main",
@@ -20,12 +24,12 @@ import {BindingComponent} from "../binding/binding-page";
         <Button text="First" [nsRouterLink]="['First']"></Button>      
         <Button text="Second" [nsRouterLink]="['Second']"></Button>
         <Button text="Router" [nsRouterLink]="['Router']"></Button>
-        <!--<Button text="ActionBar" [nsRouterLink]="['ActionBar']"></Button>-->
         <StackLayout orientation="horizontal" horizontalAlignment="center">
             <Button text="ActionBar1" [nsRouterLink]="['FirstActionBar']"></Button>
             <Button text="ActionBar2" [nsRouterLink]="['SecondActionBar']"></Button>
         </StackLayout>
-        <Button text="Binding" [nsRouterLink]="['Binding']"></Button>        
+        <Button text="Binding" [nsRouterLink]="['Binding']"></Button>
+        <Button text="ListViewTests" [nsRouterLink]="['ListViewMainPage']"></Button>        
     </StackLayout>
     `,
 })
@@ -46,6 +50,10 @@ class MainComponent { }
     { path: '/first-action-bar', component: FirstComponentActionBar, name: 'FirstActionBar' },
     { path: '/second-action-bar', component: SecondComponentActionBar, name: 'SecondActionBar' },
     { path: '/binding', component: BindingComponent, name: 'Binding' },
+    { path: '/listView/commonTemplate', component: ListViewComponent, name: 'ListView' },
+    { path: '/listView/listViewMainPage', component: ListViewMainPageComponent, name: 'ListViewMainPage' },
+    { path: '/listView/customTemplate', component: ListViewControlComponent, name: 'ListViewCustomTemplate' },
+    { path: '/listView/asyncPipeTemplate', component: ListViewAsyncPipeComponent, name: 'ListViewAsyncPipe' },
 
 ])
 export class NavigationMainPageRouter { }

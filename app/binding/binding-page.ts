@@ -1,8 +1,21 @@
-import {Component} from "@angular/core";
+import { Component } from "@angular/core";
 
 @Component({
     selector: "binding",
-    templateUrl: 'binding/binding-page.xml'
+    template: `
+    <StackLayout>
+        <TextField hint="oneWayDataBinding" automationText="tfOneWayBinding" keyboardType="email" [text]="oneWayDataBinding" autocorrect="false" autocapitalizationType="none"></TextField>
+        <TextField hint="twoWayDataBindingBanana" automationText="tfTwoWayBinding" keyboardType="email" [(ngModel)]="twoWayDataBinding" autocorrect="false" autocapitalizationType="none"></TextField>
+        <TextField hint="" automationText="tfCurlyBracket" keyboardType="email" text="{{ curlyBracket }}" autocorrect="false" autocapitalizationType="none"></TextField>
+        <Label automationText="lbCurlyBracketBinding" text='Label with curlyBaracket binding: {{ twoWayDataBinding }}'></Label>
+        <Label automationText="lbDate" [text]='completedDate | date:"fullDate"' ></Label>
+        <StackLayout orientation="horizontal">
+            <Button (tap)="changeValues()" automationText="changeValues" text="update from code" ></Button>
+            <Button (tap)="getValues()" automationText="getValues" text="get" width="80" height="40"></Button>
+        </StackLayout>
+        <TextView [text]="results" automationText="tvResults" textWrap="true"></TextView>
+    </StackLayout>
+    `
 })
 
 export class BindingComponent {
@@ -10,6 +23,7 @@ export class BindingComponent {
     private _twoWayDataBinding: string;
     private _curlyBracket: string;
     private _result: string;
+    public completedDate: Date = new Date("2016-06-03");
 
     constructor() {
         this.refresh();
@@ -53,9 +67,9 @@ export class BindingComponent {
     }
 
     private refresh() {
-        this._oneWayDataBinding = "one-way";
-        this._twoWayDataBinding = "two-way";
-        this._curlyBracket = "curly-bracket";
+        this._oneWayDataBinding = "1";
+        this._twoWayDataBinding = "2";
+        this._curlyBracket = "3";
         this._result = ""
     }
 }
