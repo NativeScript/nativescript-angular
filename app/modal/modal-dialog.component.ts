@@ -27,10 +27,11 @@ class ModalContent {
 }
 
 const TEMPLATE = `
-<GridLayout rows="*, auto" modal-dialog-host>
+<GridLayout rows="auto, auto, *" modal-dialog-host>
     <Button text="show component" (tap)="showModal()"></Button>
+    <Button text="show component (async)" (tap)="showModalAsync()" row="1"></Button>
     
-    <Label [text]="'RESULT: ' + result" row="1" margin="12"></Label>
+    <Label [text]="'RESULT: ' + result" row="2" margin="12"></Label>
 </GridLayout>
 `;
 
@@ -55,6 +56,12 @@ export class ModalTest {
             this.result = res || "empty result";
         })
     }
+
+    public showModalAsync() {
+        setTimeout(() => {
+            this.showModal()
+        }, 10);
+    }
 }
 
 @Component({
@@ -78,5 +85,11 @@ export class ModalTestWithPushStrategy {
         this.modal.showModal(ModalContent, options).then((res: string) => {
             this.result = res || "empty result";
         })
+    }
+
+    public showModalAsync() {
+        setTimeout(() => {
+            this.showModal()
+        }, 10);
     }
 }
