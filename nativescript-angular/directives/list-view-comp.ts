@@ -12,7 +12,9 @@ import {
     ChangeDetectorRef,
     EventEmitter,
     ViewChild,
-    Output} from '@angular/core';
+    Output,
+    ChangeDetectionStrategy} from '@angular/core';
+import {isBlank} from '@angular/core/src/facade/lang';
 import {isListLikeIterable} from '@angular/core/src/facade/collection';
 import {Observable as RxObservable} from 'rxjs'
 import {ListView} from 'ui/list-view';
@@ -45,7 +47,8 @@ export interface SetupItemViewArgs {
         <DetachedContainer>
             <Placeholder #loader></Placeholder>
         </DetachedContainer>`,
-    inputs: ['items']
+    inputs: ['items'],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ListViewComponent {
     public get nativeElement(): ListView {
@@ -97,6 +100,10 @@ export class ListViewComponent {
         if (args.view) {
             console.log("ListView.onItemLoading: " + index + " - Reusing existing view");
             viewRef = args.view[NG_VIEW];
+            // getting angular view from original element (in cases when ProxyViewContainer is used NativeScript internally wraps it in a StackLayout)
+            if (!viewRef) {
+                viewRef = (args.view._subViews && args.view._subViews.length > 0) ? args.view._subViews[0][NG_VIEW] : undefined;
+            }
         }
         else {
             console.log("ListView.onItemLoading: " + index + " - Creating view from template");
@@ -108,6 +115,9 @@ export class ListViewComponent {
     }
 
     public setupViewRef(viewRef: EmbeddedViewRef<ListItemContext>, data: any, index: number): void {
+        if (isBlank(viewRef)) {
+            return;
+        }
         const context = viewRef.context;
         context.$implicit = data;
         context.item = data;
