@@ -3,6 +3,7 @@ import "zone.js/dist/zone-node"
 
 import 'reflect-metadata';
 import './polyfills/array';
+import {rendererLog, rendererError} from "./trace";
 import {SanitizationService} from '@angular/core/src/security';
 import {isPresent, Type, print} from '@angular/core/src/facade/lang';
 import {ReflectiveInjector, reflector, coreLoadAndBootstrap, createPlatform, 
@@ -107,18 +108,18 @@ export function nativeScriptBootstrap(appComponentType: any, customProviders?: P
                 let onLoadedHandler = function(args) {
                     page.off('loaded', onLoadedHandler);
                     //profiling.stop('application-start');
-                    console.log('Page loaded');
+                    rendererLog('Page loaded');
 
                     //profiling.start('ng-bootstrap');
-                    console.log('BOOTSTRAPPING...');
+                    rendererLog('BOOTSTRAPPING...');
                     bootstrap(appComponentType, customProviders).then((appRef) => {
                         //profiling.stop('ng-bootstrap');
-                        console.log('ANGULAR BOOTSTRAP DONE.');
+                        rendererLog('ANGULAR BOOTSTRAP DONE.');
                         resolve(appRef);
                     }, (err) => {
-                        console.log('ERROR BOOTSTRAPPING ANGULAR');
+                        rendererError('ERROR BOOTSTRAPPING ANGULAR');
                         let errorMessage = err.message + "\n\n" + err.stack;
-                        console.log(errorMessage);
+                        rendererError(errorMessage);
 
                         let view = new TextView();
                         view.text = errorMessage;

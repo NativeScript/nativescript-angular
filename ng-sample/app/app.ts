@@ -7,12 +7,10 @@
 
 // this import should be first in order to load some required settings (like globals and reflect-metadata)
 import { nativeScriptBootstrap } from "nativescript-angular/application";
-import { NS_ROUTER_PROVIDERS, routerTraceCategory } from "nativescript-angular/router";
-import { rendererTraceCategory } from "nativescript-angular/renderer";
+import { NS_ROUTER_PROVIDERS } from "nativescript-angular/router";
+import { rendererTraceCategory, routerTraceCategory } from "nativescript-angular/trace";
 
 import trace = require("trace");
-//trace.setCategories(routerTraceCategory + ", " + rendererTraceCategory);
-// trace.setCategories(rendererTraceCategory);
 trace.setCategories(routerTraceCategory);
 trace.enable();
 

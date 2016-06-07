@@ -22,6 +22,7 @@ import {View} from 'ui/core/view';
 import {NgView} from '../view-util';
 import {ObservableArray} from 'data/observable-array';
 import {LayoutBase} from 'ui/layouts/layout-base';
+import {rendererLog, rendererError} from "../trace";
 const NG_VIEW = "_ngViewRef";
 
 export class ListItemContext {
@@ -98,7 +99,7 @@ export class ListViewComponent {
         let viewRef: EmbeddedViewRef<ListItemContext>;
 
         if (args.view) {
-            console.log("ListView.onItemLoading: " + index + " - Reusing existing view");
+            rendererLog("ListView.onItemLoading: " + index + " - Reusing existing view");
             viewRef = args.view[NG_VIEW];
             // getting angular view from original element (in cases when ProxyViewContainer is used NativeScript internally wraps it in a StackLayout)
             if (!viewRef) {
@@ -106,7 +107,7 @@ export class ListViewComponent {
             }
         }
         else {
-            console.log("ListView.onItemLoading: " + index + " - Creating view from template");
+            rendererLog("ListView.onItemLoading: " + index + " - Creating view from template");
             viewRef = this.loader.createEmbeddedView(this.itemTemplate, new ListItemContext(), 0);
             args.view = getSingleViewFromViewRef(viewRef);
             args.view[NG_VIEW] = viewRef;

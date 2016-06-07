@@ -1,6 +1,7 @@
 import {ElementRef, Directive, Input, TemplateRef, ViewContainerRef} from "@angular/core";
 import {TabView, TabViewItem} from "ui/tab-view";
 import * as utils from '../common/utils';
+import {rendererLog, rendererError} from "../trace";
 import {isBlank} from '@angular/core/src/facade/lang';
 
 @Directive({
@@ -31,7 +32,7 @@ export class TabViewDirective {
     ngAfterViewInit() {
         this.viewInitialized = true;
         debugger;
-        console.log("this._selectedIndex: " + this._selectedIndex);
+        rendererLog("this._selectedIndex: " + this._selectedIndex);
         if (!isBlank(this._selectedIndex)) {
             this.tabView.selectedIndex = this._selectedIndex;
         }
