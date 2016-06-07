@@ -69,7 +69,7 @@ export class BindingComponent {
     private refresh() {
         this._oneWayDataBinding = "1";
         this._twoWayDataBinding = "2";
-        this._curlyBracket = "3";
+        this._curlyBracket = "5";
         this._result = ""
     }
 }
