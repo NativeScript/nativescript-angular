@@ -1,7 +1,7 @@
 import {ROUTER_DIRECTIVES, Router, OnActivate, OnDeactivate, CanReuse, OnReuse,
     RouteParams, RouteData, ComponentInstruction, RouteConfig } from '@angular/router-deprecated';
-import {Component} from "@angular/core";
-import {BaseComponent} from "./base.component";
+import {Component, Inject} from "@angular/core";
+import {HOOKS_LOG, BaseComponent} from "./base.component";
 
 @Component({
     selector: "second-comp",
@@ -9,12 +9,14 @@ import {BaseComponent} from "./base.component";
 <StackLayout>
     <Label [automationText]="'second-' + id" [text]="'Second: ' + id"></Label>
     <Button [automationText]="'second-navigate-' + id" text="Go to first" (tap)="gotoFirst()"></Button>
+    <TextView [automationText]="'hooks-log-' + id" [text]="hooksLog"></TextView>
+    <TextView [text]="'hooks-log-' + id"></TextView>
 </StackLayout>
     `
 })
 export class SecondComponent extends BaseComponent {
-    constructor(private router: Router, private routeData: RouteData) {
-        super();
+    constructor(private router: Router, private routeData: RouteData, @Inject(HOOKS_LOG) hooksLog: string[]) {
+        super(hooksLog);
     }
 
     ngOnInit() {
@@ -22,6 +24,7 @@ export class SecondComponent extends BaseComponent {
     }
 
     public id: string = ""
+    name = "second";
 
     gotoFirst() {
         this.router.navigateByUrl("/first");

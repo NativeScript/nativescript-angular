@@ -11,9 +11,10 @@ import {Label} from "ui/label";
 import {StackLayout} from "ui/layouts/stack-layout";
 import * as application from "application";
 //nativeScriptBootstrap(AppComponent, [NS_ROUTER_PROVIDERS]);
+import {HOOKS_LOG} from "./base.component";
 import {MultiPageMain} from "./multi-page-main.component";
 import {SinglePageMain} from "./single-page-main.component";
-import {provide} from "@angular/core";
+import {provide, OpaqueToken} from "@angular/core";
 
 import { rendererTraceCategory, routerTraceCategory } from "nativescript-angular/trace";
 
@@ -40,8 +41,12 @@ application.start({
             console.log('BOOTSTRAPPING TEST APPS...');
             //bootstrap(MultiPageMain, [NS_ROUTER_PROVIDERS]);
             const rootViewProvider = provide(APP_ROOT_VIEW, { useValue: root });
-            bootstrap(SinglePageMain, [rootViewProvider, NS_ROUTER_PROVIDERS]);
-            bootstrap(MultiPageMain, [rootViewProvider, NS_ROUTER_PROVIDERS]);
+            let singlePageHooksLog = []
+            const singlePageHooksLogProvider = provide(HOOKS_LOG, { useValue: singlePageHooksLog });
+            bootstrap(SinglePageMain, [rootViewProvider, singlePageHooksLogProvider, NS_ROUTER_PROVIDERS]);
+            let multiPageHooksLog = []
+            const multiPageHooksLogProvider = provide(HOOKS_LOG, { useValue: multiPageHooksLog });
+            bootstrap(MultiPageMain, [rootViewProvider, multiPageHooksLogProvider, NS_ROUTER_PROVIDERS]);
         }
 
         page.on('loaded', onLoadedHandler);

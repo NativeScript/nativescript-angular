@@ -25,6 +25,12 @@ describe("multi page routing", function () {
     });
 
     it("navigates and returns", function () {
+        var expectedHookLog = [
+            "first.activate first null",
+            "first.deactivate second first",
+            "second.activate second first",
+            "second.deactivate first second",
+            "first.activate first second"].join(",");
         return driver
             .elementByAccessibilityId("first-navigate-multi-page")
                 .should.eventually.exist
@@ -37,6 +43,8 @@ describe("multi page routing", function () {
             .tap()
             .elementByAccessibilityId("first-multi-page")
                 .should.eventually.exist
-            .text().should.eventually.equal("First: multi-page")
+                .text().should.eventually.equal("First: multi-page")
+            .elementByAccessibilityId("hooks-log-multi-page")
+                .text().should.eventually.equal(expectedHookLog)
     });
 });

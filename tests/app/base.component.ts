@@ -1,12 +1,13 @@
 import {ROUTER_DIRECTIVES, Router, OnActivate, OnDeactivate, CanReuse, OnReuse,
     RouteParams, ComponentInstruction, RouteConfig } from '@angular/router-deprecated';
-import {Component} from "@angular/core";
-
-
-export const hooksLog = [];
+import {Component, OpaqueToken} from "@angular/core";
+export const HOOKS_LOG = new OpaqueToken("Hooks log");
 
 export class BaseComponent implements OnActivate, OnDeactivate {
     protected name: string = "";
+
+    constructor(protected hooksLog: string[]) {
+    }
 
     routerOnActivate(nextInstruction: ComponentInstruction, prevInstruction: ComponentInstruction): any {
         this.log("activate", nextInstruction, prevInstruction);
@@ -17,6 +18,6 @@ export class BaseComponent implements OnActivate, OnDeactivate {
     }
 
     private log(method: string, nextInstruction: ComponentInstruction, prevInstruction: ComponentInstruction) {
-        hooksLog.push(this.name + "." + method + " " + nextInstruction.urlPath + " " + (prevInstruction ? prevInstruction.urlPath : null));
+        this.hooksLog.push(this.name + "." + method + " " + nextInstruction.urlPath + " " + (prevInstruction ? prevInstruction.urlPath : null));
     }
 }
