@@ -1,3 +1,16 @@
-.test { 
+button {
+    margin: 0 10;
+}
+
+.odd {
     background-color: cornflowerblue; 
+}
+
+.even {
+    background-color: lightgreen;
+}
+
+.list-title {
+    font-size: 20;
+    text-align: center;
 }
