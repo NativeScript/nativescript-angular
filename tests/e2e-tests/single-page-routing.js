@@ -2,7 +2,7 @@
 var nsAppium = require("nativescript-dev-appium");
 
 describe("single page routing", function () {
-    this.timeout(40000);
+    this.timeout(120000);
     var driver;
 
     before(function () {
