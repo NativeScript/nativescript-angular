@@ -8,10 +8,10 @@ class DataItem {
 
 @Component({
     selector: 'item-component',
+    styleUrls: ['examples/list/styles.css'],    
     template: `
         <StackLayout [class.odd]="odd" [class.even]="even">
-            <Label [text]='"id: " + data.id'></Label>
-            <Label [text]='"name: " + data.name'></Label>
+            <Label [text]='"[" + data.id + "]name: " + data.name'></Label>
         </StackLayout>
     `
 })
@@ -24,20 +24,28 @@ export class ItemComponent {
 
 @Component({
     selector: 'list-test',
+    styleUrls: ['examples/list/styles.css'],
     directives: [ItemComponent],
     template: `
-            <GridLayout rows="auto, *, auto, auto">
-            <Label row="0" text="-==START==-" fontSize="20"></Label>
-            <GridLayout row="1">
-                <ListView [items]="myItems" (itemTap)="onItemTap($event)">
-                    <template let-item="item" let-i="index" let-odd="odd" let-even="even">
-                        <item-component [data]="item" [odd]="odd" [even]="even"></item-component>
-                    </template>
-                </ListView>
-            </GridLayout>
-            <Label row="2" id="testLabel" text="-==END==-" fontSize="20"></Label>
-            <StackLayout row="3">
-                <Button text="test" (tap)="onButtonTap()" ></Button>
+        <GridLayout rows="auto * auto" columns="* *">
+            <Label text="ListView" class="list-title"></Label>
+            <Label text="*ngFor" class="list-title" col="1"></Label>
+
+            <ListView [items]="myItems" (itemTap)="onItemTap($event)" row="1" margin="10">
+                <template let-item="item" let-i="index" let-odd="odd" let-even="even">
+                    <item-component [data]="item" [odd]="odd" [even]="even"></item-component>
+                </template>
+            </ListView>
+
+            <StackLayout row="1" col="1" margin="10">
+                <StackLayout *ngFor="let item of myItems; let odd = odd; let even = even" 
+                    [class.odd]="odd" [class.even]="even" marginBottom="1">
+                    <item-component [data]="item" [odd]="odd" [even]="even"></item-component>
+                </StackLayout>
+            </StackLayout>
+
+            <StackLayout row="2" colspan="2" orientation="horizontal">
+                <Button text="add item" (tap)="addItem()" ></Button>
                 <Button text="second test" (tap)="onSecondButtonTap($event)" ></Button>
             </StackLayout>
         </GridLayout>
@@ -65,17 +73,17 @@ export class ListTest {
         //this.myItems = new ObservableArray<DataItem>();
         this.myItems = [];
         this.counter = 0;
-        for (var i = 0; i < 50; i++) {
+        for (var i = 0; i < 10; i++) {
             this.myItems.push(new DataItem(i, "data item " + i));
             this.counter = i;
         }
     }
 
     public onItemTap(args) {
-        console.log("------------------------ ItemTapped: " + args.index);
+        console.log("--> ItemTapped: " + args.index);
     }
     
-    onButtonTap() {
+    addItem() {
         this.counter++;
         this.myItems.push(new DataItem(this.counter, "data item " + this.counter));
     }

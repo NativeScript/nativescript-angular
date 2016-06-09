@@ -6,7 +6,7 @@ import { DataItem, DataService } from "./data.service"
 
 @Component({
     selector: 'list-test-async',
-    styleUrls: ['examples/list/list-test-async.css'],
+    styleUrls: ['examples/list/styles.css'],
     providers: [DataService],
     changeDetection: ChangeDetectionStrategy.OnPush,
     template: `
@@ -55,7 +55,7 @@ export class ListTestAsync {
 
 @Component({
     selector: 'list-test-async-filter',
-    styleUrls: ['examples/list/list-test-async.css'],
+    styleUrls: ['examples/list/styles.css'],
     providers: [DataService],
     // changeDetection: ChangeDetectionStrategy.OnPush,
     template: `
