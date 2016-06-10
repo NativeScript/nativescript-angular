@@ -1,4 +1,4 @@
-import {Component, Input, WrappedValue, ChangeDetectionStrategy} from '@angular/core';
+import {Component, Input, WrappedValue, ChangeDetectionStrategy, AfterViewChecked, DoCheck} from '@angular/core';
 import {Label} from 'ui/label';
 import {ObservableArray} from 'data/observable-array';
 
@@ -8,24 +8,34 @@ class DataItem {
 
 @Component({
     selector: 'item-component',
-    styleUrls: ['examples/list/styles.css'],    
+    styleUrls: ['examples/list/styles.css'],   
+    // changeDetection: ChangeDetectionStrategy.OnPush,    
     template: `
         <StackLayout [class.odd]="odd" [class.even]="even">
-            <Label [text]='"[" + data.id + "]name: " + data.name'></Label>
+            <Label [text]='"[" + data.id + "]:" + data.name'></Label>
         </StackLayout>
     `
 })
-export class ItemComponent {
+export class ItemComponent  implements AfterViewChecked,DoCheck {
     @Input() data: DataItem;
     @Input() odd: boolean;
     @Input() even: boolean;
     constructor() { }
+
+    ngDoCheck(){
+        // console.log("ItemComponent.ngDoCheck: " + this.data.id);
+    }
+
+    ngAfterViewChecked(){
+        // console.log("ItemComponent.ngAfterViewChecked: " + this.data.id);
+    }
 }
 
 @Component({
     selector: 'list-test',
     styleUrls: ['examples/list/styles.css'],
     directives: [ItemComponent],
+    // changeDetection: ChangeDetectionStrategy.OnPush,
     template: `
         <GridLayout rows="auto * auto" columns="* *">
             <Label text="ListView" class="list-title"></Label>
@@ -36,7 +46,6 @@ export class ItemComponent {
                     <item-component [data]="item" [odd]="odd" [even]="even"></item-component>
                 </template>
             </ListView>
-
             <StackLayout row="1" col="1" margin="10">
                 <StackLayout *ngFor="let item of myItems; let odd = odd; let even = even" 
                     [class.odd]="odd" [class.even]="even" marginBottom="1">
@@ -46,11 +55,10 @@ export class ItemComponent {
 
             <StackLayout row="2" colspan="2" orientation="horizontal">
                 <Button text="add item" (tap)="addItem()" ></Button>
-                <Button text="second test" (tap)="onSecondButtonTap($event)" ></Button>
+                <Button text="tap" (tap)="justTap()" ></Button>
             </StackLayout>
         </GridLayout>
-    `,
-    changeDetection: ChangeDetectionStrategy.OnPush
+    `
     // TEMPLATE WITH COMPONENT
     // <template let-item="item" let-i="index" let-odd="odd" let-even="even">
     //     <item-component [data]="item" [odd]='odd' [even]='even'></item-component>
@@ -73,7 +81,7 @@ export class ListTest {
         //this.myItems = new ObservableArray<DataItem>();
         this.myItems = [];
         this.counter = 0;
-        for (var i = 0; i < 10; i++) {
+        for (var i = 0; i < 2; i++) {
             this.myItems.push(new DataItem(i, "data item " + i));
             this.counter = i;
         }
@@ -88,9 +96,7 @@ export class ListTest {
         this.myItems.push(new DataItem(this.counter, "data item " + this.counter));
     }
     
-    onSecondButtonTap(args) {
-        var page = args.object.page;
-        var label = <Label>page.getViewById("testLabel");
-        label.text = "Alabala";
+    justTap() {
+        console.log("----------------- TAP -----------------");
     }
 }

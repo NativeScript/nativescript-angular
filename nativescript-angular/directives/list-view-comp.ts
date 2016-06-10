@@ -1,18 +1,19 @@
 import {
-    Component, 
-    DoCheck, 
-    ElementRef, 
+    Component,
+    DoCheck,
+    ElementRef,
     ViewContainerRef,
-    TemplateRef, 
-    ContentChild, 
+    TemplateRef,
+    ContentChild,
     EmbeddedViewRef,
-    HostListener, 
-    IterableDiffers, 
+    HostListener,
+    IterableDiffers,
     IterableDiffer,
     ChangeDetectorRef,
     EventEmitter,
     ViewChild,
     Output,
+    NgZone,
     ChangeDetectionStrategy} from '@angular/core';
 import {isBlank} from '@angular/core/src/facade/lang';
 import {isListLikeIterable} from '@angular/core/src/facade/collection';
@@ -55,11 +56,11 @@ export class ListViewComponent {
     public get nativeElement(): ListView {
         return this.listView;
     }
-    
+
     private listView: ListView;
     private _items: any;
     private _differ: IterableDiffer;
-    
+
     @ViewChild('loader', { read: ViewContainerRef }) loader: ViewContainerRef;
 
     @Output() public setupItemView: EventEmitter<SetupItemViewArgs> = new EventEmitter<SetupItemViewArgs>();
@@ -73,17 +74,18 @@ export class ListViewComponent {
             needDiffer = false;
         }
         if (needDiffer && !this._differ && isListLikeIterable(value)) {
-            this._differ = this._iterableDiffers.find(this._items).create(this._cdr, (index, item) => { return item;});
+            this._differ = this._iterableDiffers.find(this._items).create(this._cdr, (index, item) => { return item; });
         }
         this.listView.items = this._items;
     }
 
     private timerId: number;
     private doCheckDelay = 5;
-                
+
     constructor(private _elementRef: ElementRef,
-                private _iterableDiffers: IterableDiffers,
-                private _cdr: ChangeDetectorRef) {
+        private _iterableDiffers: IterableDiffers,
+        private _cdr: ChangeDetectorRef,
+        private _zone: NgZone) {
         this.listView = _elementRef.nativeElement;
     }
 
@@ -126,7 +128,7 @@ export class ListViewComponent {
         context.even = (index % 2 == 0);
         context.odd = !context.even;
 
-        this.setupItemView.next({view: viewRef, data: data, index: index, context: context});
+        this.setupItemView.next({ view: viewRef, data: data, index: index, context: context });
     }
 
     ngDoCheck() {
@@ -134,15 +136,17 @@ export class ListViewComponent {
             clearTimeout(this.timerId);
         }
 
-        this.timerId = setTimeout(() => {
-            clearTimeout(this.timerId);
-            if (this._differ) {
-                var changes = this._differ.diff(this._items);
-                if (changes) {
-                    this.listView.refresh();
+        this._zone.runOutsideAngular(() => {
+            this.timerId = setTimeout(() => {
+                clearTimeout(this.timerId);
+                if (this._differ) {
+                    var changes = this._differ.diff(this._items);
+                    if (changes) {
+                        this.listView.refresh();
+                    }
                 }
-            }
-        }, this.doCheckDelay);
+            }, this.doCheckDelay);
+        });
     }
 }
 
