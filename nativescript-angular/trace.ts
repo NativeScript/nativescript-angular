@@ -2,6 +2,7 @@ import {write, categories, messageType} from "trace";
 
 export const rendererTraceCategory = "ns-renderer";
 export const routerTraceCategory = "ns-router";
+export const listViewTraceCategory = "ns-list-view";
 
 export function rendererLog(msg): void {
     write(msg, rendererTraceCategory);
@@ -17,4 +18,8 @@ export function routerLog(message: string): void {
 
 export function styleError(message: string): void {
     write(message, categories.Style, messageType.error);
+}
+
+export function listViewLog(message: string): void {
+    write(message, listViewTraceCategory);
 }

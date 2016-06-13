@@ -8,10 +8,12 @@
 // this import should be first in order to load some required settings (like globals and reflect-metadata)
 import { nativeScriptBootstrap } from "nativescript-angular/application";
 import { NS_ROUTER_PROVIDERS } from "nativescript-angular/router";
-import { rendererTraceCategory, routerTraceCategory } from "nativescript-angular/trace";
+import { rendererTraceCategory, routerTraceCategory, listViewTraceCategory } from "nativescript-angular/trace";
 
 import trace = require("trace");
-trace.setCategories(routerTraceCategory);
+// trace.setCategories(rendererTraceCategory);
+// trace.setCategories(routerTraceCategory);
+trace.setCategories(listViewTraceCategory);
 trace.enable();
 
 import {RendererTest} from './examples/renderer-test';
@@ -30,7 +32,7 @@ import {LoginTest} from "./examples/navigation/login-test";
 //nativeScriptBootstrap(RendererTest);
 //nativeScriptBootstrap(TabViewTest);
 //nativeScriptBootstrap(Benchmark);
-//nativeScriptBootstrap(ListTest);
+// nativeScriptBootstrap(ListTest);
 // nativeScriptBootstrap(ListTestAsync);
 nativeScriptBootstrap(ListTestFilterAsync);
 //nativeScriptBootstrap(ImageTest);

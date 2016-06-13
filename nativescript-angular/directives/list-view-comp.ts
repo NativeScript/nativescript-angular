@@ -24,12 +24,8 @@ import {View} from 'ui/core/view';
 import {NgView} from '../view-util';
 import {ObservableArray} from 'data/observable-array';
 import {LayoutBase} from 'ui/layouts/layout-base';
-<<<<<<< 2b36449d70d559d1fda6cdf4d271246b5fe0ecd2
-import {rendererLog, rendererError} from "../trace";
-=======
-import 'rxjs/add/operator/debounceTime';
+import {listViewLog} from "../trace";
 
->>>>>>> Manually trigger change detection onItemLoading for current item only
 const NG_VIEW = "_ngViewRef";
 
 export class ListItemContext {
@@ -111,8 +107,7 @@ export class ListViewComponent implements DoCheck, OnDestroy {
         let viewRef: EmbeddedViewRef<ListItemContext>;
 
         if (args.view) {
-            log("ListView.onItemLoading: " + index + " - Reusing existing view");
-
+            listViewLog("onItemLoading: " + index + " - Reusing existing view");
             viewRef = args.view[NG_VIEW];
             // getting angular view from original element (in cases when ProxyViewContainer is used NativeScript internally wraps it in a StackLayout)
             if (!viewRef) {
@@ -120,14 +115,14 @@ export class ListViewComponent implements DoCheck, OnDestroy {
             }
         }
         else {
-            log("ListView.onItemLoading: " + index + " - Creating view from template");
+            listViewLog("onItemLoading: " + index + " - Creating view from template");
             viewRef = this.loader.createEmbeddedView(this.itemTemplate, new ListItemContext(), 0);
             args.view = getSingleViewFromViewRef(viewRef);
             args.view[NG_VIEW] = viewRef;
         }
         this.setupViewRef(viewRef, currentItem, index);
 
-        this.detectChangesOnChild(viewRef);
+        this.detectChangesOnChild(viewRef, index);
     }
 
     public setupViewRef(viewRef: EmbeddedViewRef<ListItemContext>, data: any, index: number): void {
@@ -144,65 +139,60 @@ export class ListViewComponent implements DoCheck, OnDestroy {
         this.setupItemView.next({ view: viewRef, data: data, index: index, context: context });
     }
 
-    private detectChangesOnChild(viewRef: EmbeddedViewRef<ListItemContext>){
+    private detectChangesOnChild(viewRef: EmbeddedViewRef<ListItemContext>, index: number) {
         // Manually detect changes in view ref
-        var childCD = <ChangeDetectorRef>(<any>viewRef);
-        var childView = (<any>viewRef)._view;
+        // 
+        const childChangeDetector = <ChangeDetectorRef>(<any>viewRef);
 
-        log("------------ detectChanges START ----------")
-        log("CangeDetectionState child before mark " + this.logCD(childView));
-        childCD.markForCheck();
-        childCD.detectChanges();
-        log("CangeDetectionState child after detect " + this.logCD(childView));
-        log("------------ detectChanges END ----------")
-    }
-
-    private logCD(cdr: any) {
-        var modes = ["CheckOnce", "Checked", "CheckAlways", "Detached", "OnPush", "Default"];
-        var states = ["Never", "CheckedBefore", "Error"];
-        return "Mode: " + modes[parseInt(cdr.cdMode)] + " State: " + states[parseInt(cdr.cdState)];
+        listViewLog("Manually detect changes in child: " + index)
+        // listViewLog("CangeDetectionState child before mark " + getChangeDetectorState((<any>viewRef)._view));
+        childChangeDetector.markForCheck();
+        childChangeDetector.detectChanges();
+        // listViewLog("CangeDetectionState child after detect " + getChangeDetectorState((<any>viewRef)._view));
     }
 
     ngDoCheck() {
         if (this._differ) {
-            log("======> ngDoCheck() DIFFER")
-            var changes = this._differ.diff(this._items);
+            listViewLog("ngDoCheck() - execute differ")
+            const changes = this._differ.diff(this._items);
             if (changes) {
-                log("======> ngDoCheck() REFRESH")
-                // this._cdr.detach();
+                listViewLog("ngDoCheck() - refresh")
                 this.listView.refresh();
             }
         }
     }
 }
 
-function log(msg){
-    // console.log(msg);
+
+function getSingleViewRecursive(nodes: Array<any>, nestLevel: number) {
+    const actualNodes = nodes.filter((n) => !!n && n.nodeName !== "#text");
+
+    if (actualNodes.length === 0) {
+        throw new Error("No suitable views found in list template! Nesting level: " + nestLevel);
+    }
+    else if (actualNodes.length > 1) {
+        throw new Error("More than one view found in list template! Nesting level: " + nestLevel);
+    }
+    else {
+        if (actualNodes[0]) {
+            let parentLayout = actualNodes[0].parent;
+            if (parentLayout instanceof LayoutBase) {
+                parentLayout.removeChild(actualNodes[0]);
+            }
+            return actualNodes[0];
+        }
+        else {
+            return getSingleViewRecursive(actualNodes[0].children, nestLevel + 1)
+        }
+    }
 }
 
 function getSingleViewFromViewRef(viewRef: EmbeddedViewRef<any>): View {
-    var getSingleViewRecursive = (nodes: Array<any>, nestLevel: number) => {
-        var actualNodes = nodes.filter((n) => !!n && n.nodeName !== "#text");
-
-        if (actualNodes.length === 0) {
-            throw new Error("No suitable views found in list template! Nesting level: " + nestLevel);
-        }
-        else if (actualNodes.length > 1) {
-            throw new Error("More than one view found in list template! Nesting level: " + nestLevel);
-        }
-        else {
-            if (actualNodes[0]) {
-                let parentLayout = actualNodes[0].parent;
-                if (parentLayout instanceof LayoutBase) {
-                    parentLayout.removeChild(actualNodes[0]);
-                }
-                return actualNodes[0];
-            }
-            else {
-                return getSingleViewRecursive(actualNodes[0].children, nestLevel + 1)
-            }
-        }
-    }
-
     return getSingleViewRecursive(viewRef.rootNodes, 0);
+}
+
+const changeDetectorMode = ["CheckOnce", "Checked", "CheckAlways", "Detached", "OnPush", "Default"];
+const changeDetectorStates = ["Never", "CheckedBefore", "Error"];
+function getChangeDetectorState(cdr: any) {
+    return "Mode: " + changeDetectorMode[parseInt(cdr.cdMode)] + " State: " + changeDetectorStates[parseInt(cdr.cdState)];
 }

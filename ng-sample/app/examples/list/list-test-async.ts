@@ -17,7 +17,7 @@ import { DataItem, DataService } from "./data.service"
         <ListView row="1" [items]="service.items$ | async" (itemTap)="onItemTap($event)" margin="10">
             <template let-item="item" let-i="index" let-odd="odd" let-even="even">
                 <StackLayout [class.odd]="odd" [class.even]="even">
-                    <Label [text]='"index: " + item.name'></Label>
+                    <Label [text]='"name: " + item.name'></Label>
                 </StackLayout>
             </template>
         </ListView>
@@ -25,7 +25,7 @@ import { DataItem, DataService } from "./data.service"
         <StackLayout row="1" col="1" margin="10">
             <StackLayout *ngFor="let item of (service.items$ | async); let odd = odd; let even = even" 
                 [class.odd]="odd" [class.even]="even" marginBottom="1">
-                <Label [text]='"index: " + item.name'></Label>
+                <Label [text]='"name: " + item.name'></Label>
             </StackLayout>
         </StackLayout>
 
@@ -57,7 +57,7 @@ export class ListTestAsync {
     selector: 'list-test-async-filter',
     styleUrls: ['examples/list/styles.css'],
     providers: [DataService],
-    // changeDetection: ChangeDetectionStrategy.OnPush,
+    changeDetection: ChangeDetectionStrategy.OnPush,
     template: `
     <GridLayout rows="auto * auto" columns="* *">
         <Label text="ListView" class="list-title"></Label>
@@ -66,7 +66,7 @@ export class ListTestAsync {
         <ListView row="1" [items]="filteredItems$ | async" (itemTap)="onItemTap($event)" margin="10">
             <template let-item="item" let-i="index" let-odd="odd" let-even="even">
                 <StackLayout [class.odd]="odd" [class.even]="even">
-                    <Label [text]='"index: " + item.name'></Label>
+                    <Label [text]='"name: " + item.name'></Label>
                 </StackLayout>
             </template>
         </ListView>
@@ -74,7 +74,7 @@ export class ListTestAsync {
         <StackLayout row="1" col="1" margin="10">
             <StackLayout *ngFor="let item of (filteredItems$  | async); let odd = odd; let even = even" 
                 [class.odd]="odd" [class.even]="even" marginBottom="1">
-                <Label [text]='"index: " + item.name'></Label>
+                <Label [text]='"name: " + item.name'></Label>
             </StackLayout>
         </StackLayout>
 
