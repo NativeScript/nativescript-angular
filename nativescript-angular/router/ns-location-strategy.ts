@@ -19,6 +19,11 @@ export class NSLocationStrategy extends LocationStrategy {
     private _isPageNavigationgBack = false;
     private _isPageNavigatingForward: boolean = false;
 
+    constructor() {
+        super();
+        routerLog("NSLocationStrategy.constructor()");
+    }
+
     path(): string {
         routerLog("NSLocationStrategy.path()");
         let state = this.peekState();
@@ -32,16 +37,14 @@ export class NSLocationStrategy extends LocationStrategy {
 
 
     pushState(state: any, title: string, url: string, queryParams: string): void {
-        routerLog(`NSLocationStrategy.pushState state: ${state}, title: ${title}, url: ${url}, queryParams: ${queryParams}`);
+        routerLog(`NSLocationStrategy.pushState state: ${state}, title: ${title}, url: ${url}, queryParams: ${queryParams}, isPageNavigation: ${this._isPageNavigatingForward}`);
         this.pushStateInternal(state, title, url, queryParams);
     }
 
     pushStateInternal(state: any, title: string, url: string, queryParams: string): void {
-        routerLog(`NSLocationStrategy.pushState state: ${state}, title: ${title}, url: ${url}, queryParams: ${queryParams}`);
-
         let isNewPage = this._isPageNavigatingForward;
-        this._isPageNavigatingForward = false;
 
+        this._isPageNavigatingForward = false;
         this.states.push({
             state: state,
             title: title,
