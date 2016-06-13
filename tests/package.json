@@ -1,6 +1,6 @@
 {
 	"nativescript": {
-		"id": "org.nativescript.helloworldng",
+		"id": "org.nativescript.ngtests",
 		"tns-android": {
 			"version": "2.0.0"
 		},
@@ -8,11 +8,11 @@
 			"version": "2.0.0"
 		}
 	},
-	"name": "nativescript-hello-world-ng",
+	"name": "ngtests",
 	"main": "app.js",
 	"version": "1.0.0",
 	"author": "Telerik <support@telerik.com>",
-	"description": "Nativescript Angular Hello World template",
+	"description": "Angular tests",
 	"license": "BSD",
 	"keywords": [
 		"telerik",
@@ -24,10 +24,6 @@
 		"appbuilder",
 		"template"
 	],
-	"repository": {
-		"type": "git",
-		"url": "git://github.com/NativeScript/template-hello-world-ng"
-	},
 	"homepage": "http://nativescript.org",
 	"dependencies": {
 		"nativescript-unit-test-runner": "^0.3.3",
@@ -54,6 +50,7 @@
 		"babel-types": "6.8.1",
 		"babylon": "6.8.0",
 		"chai": "^3.5.0",
+		"chai-as-promised": "^5.3.0",
 		"filewalker": "0.1.2",
 		"grunt-cli": "^1.2.0",
 		"karma": "^0.13.19",
@@ -63,11 +60,15 @@
 		"karma-nativescript-launcher": "^0.4.0",
 		"lazy": "1.0.11",
 		"mocha": "^2.4.5",
+		"nativescript-dev-appium": "^0.0.10",
 		"nativescript-dev-typescript": "^0.3.1",
 		"shelljs": "^0.5.3",
-		"typescript": "1.8.2"
+		"typescript": "^1.8.10",
+		"wd": "0.4.0"
 	},
 	"scripts": {
-		"updateTests": "grunt updateTests"
+		"updateTests": "grunt updateTests",
+		"appium-android": "tns build android && nativescript-dev-appium android",
+		"appium-ios-simulator": "tns build ios && nativescript-dev-appium ios-simulator"
 	}
 }

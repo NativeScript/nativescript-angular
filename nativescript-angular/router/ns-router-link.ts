@@ -1,7 +1,7 @@
 import {Directive, Input} from '@angular/core';
 import {isString} from '@angular/core/src/facade/lang';
 import {Router, Instruction} from '@angular/router-deprecated';
-import { log } from "./common";
+import {routerLog} from "../trace";
 
 /**
  * The NSRouterLink directive lets you link to specific parts of your app.
@@ -55,7 +55,7 @@ export class NSRouterLink {
     }
 
     onTap(): void {
-        log("NSRouterLink onTap() instruction: " + JSON.stringify(this._navigationInstruction))
+        routerLog("NSRouterLink onTap() instruction: " + JSON.stringify(this._navigationInstruction))
         this._router.navigateByInstruction(this._navigationInstruction);
     }
 }

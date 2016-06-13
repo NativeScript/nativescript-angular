@@ -3,6 +3,7 @@ import {SanitizationService} from '@angular/core/src/security';
 import {Parse5DomAdapter} from '@angular/platform-server';
 import {setRootDomAdapter} from '@angular/platform-browser/src/dom/dom_adapter';
 import {Type} from '@angular/core/src/facade/lang';
+import {rendererLog, rendererError} from "./trace";
 
 export enum SecurityContext {
   NONE,
@@ -35,7 +36,7 @@ export class NativeScriptSanitizationService extends SanitizationService {
 
 export class NativeScriptDomAdapter extends Parse5DomAdapter {
   static makeCurrent() {
-      console.log("Setting DOM");
+      rendererLog("Setting DOM");
       setRootDomAdapter(new NativeScriptDomAdapter());
   }
 

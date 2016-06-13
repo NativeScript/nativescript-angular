@@ -19,7 +19,7 @@ import {topmost} from "ui/frame";
 import {Page, NavigatedData} from "ui/page";
 import {DEVICE} from "../platform-providers";
 import {Device} from "platform";
-import {log} from "./common";
+import {routerLog} from "../trace";
 import {NSLocationStrategy} from "./ns-location-strategy";
 import {DetachedLoader} from "../common/detached-loader";
 import {ViewUtil} from "../view-util";
@@ -106,7 +106,7 @@ export class PageRouterOutlet extends RouterOutlet {
     }
 
     private activateOnGoBack(nextInstruction: ComponentInstruction, previousInstruction: ComponentInstruction): Promise<any> {
-        log("PageRouterOutlet.activate() - Back naviation, so load from cache: " + nextInstruction.componentType.name);
+        routerLog("PageRouterOutlet.activate() - Back naviation, so load from cache: " + nextInstruction.componentType.name);
 
         this.location.finishBackPageNavigation();
 
@@ -134,14 +134,14 @@ export class PageRouterOutlet extends RouterOutlet {
         ];
 
         if (this.isInitalPage) {
-            log("PageRouterOutlet.activate() inital page - just load component: " + componentType.name);
+            routerLog("PageRouterOutlet.activate() inital page - just load component: " + componentType.name);
             this.isInitalPage = false;
             resultPromise = this.compiler.resolveComponent(componentType).then((componentFactory) => {
                 const childInjector = ReflectiveInjector.resolveAndCreate(providersArray, this.containerRef.parentInjector);
                 return this.containerRef.createComponent(componentFactory, this.containerRef.length, childInjector, null);
             });
         } else {
-            log("PageRouterOutlet.activate() forward navigation - create detached loader in the loader container: " + componentType.name);
+            routerLog("PageRouterOutlet.activate() forward navigation - create detached loader in the loader container: " + componentType.name);
 
             const page = new Page();
             providersArray.push(provide(Page, { useValue: page }));
@@ -215,7 +215,7 @@ export class PageRouterOutlet extends RouterOutlet {
         }
 
         if (this.location.isPageNavigatingBack()) {
-            log("PageRouterOutlet.deactivate() while going back - should destroy: " + instruction.componentType.name)
+            routerLog("PageRouterOutlet.deactivate() while going back - should destroy: " + instruction.componentType.name)
             return next.then((_) => {
                 const popedItem = this.refCache.pop();
                 const popedRef = popedItem.componentRef;
@@ -275,7 +275,7 @@ export class PageRouterOutlet extends RouterOutlet {
                     StringMapWrapper.equals(nextInstruction.params, this.currentInstruction.params));
         }
 
-        log("PageRouterOutlet.routerCanReuse(): " + result);
+        routerLog("PageRouterOutlet.routerCanReuse(): " + result);
         return PromiseWrapper.resolve(result);
     }
 
@@ -311,6 +311,6 @@ export class PageRouterOutlet extends RouterOutlet {
     }
 
     private log(method: string, nextInstruction: ComponentInstruction) {
-        log("PageRouterOutlet." + method + " isBack: " + this.location.isPageNavigatingBack() + " nextUrl: " + nextInstruction.urlPath);
+        routerLog("PageRouterOutlet." + method + " isBack: " + this.location.isPageNavigatingBack() + " nextUrl: " + nextInstruction.urlPath);
     }
 }

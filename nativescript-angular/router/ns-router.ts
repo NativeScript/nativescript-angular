@@ -5,7 +5,7 @@ import {NSLocationStrategy} from './ns-location-strategy';
 import {ROUTER_PROVIDERS} from '@angular/router-deprecated';
 import {LocationStrategy} from '@angular/common';
 import {provide} from '@angular/core';
-import { CATEGORY } from "./common";
+export {routerTraceCategory} from "../trace";
 
 export const NS_ROUTER_PROVIDERS: any[] = [
     ROUTER_PROVIDERS,
@@ -17,5 +17,3 @@ export const NS_ROUTER_DIRECTIVES: Type[] = [
     NSRouterLink,
     PageRouterOutlet
 ];
-
-export const routerTraceCategory = CATEGORY;

@@ -9,23 +9,18 @@ import * as styleProperty from "ui/styling/style-property";
 import {StyleProperty, getPropertyByName, withStyleProperty} from "ui/styling/style-property";
 import {ValueSource} from "ui/core/dependency-observable";
 import { ActionBar, ActionItem, NavigationButton } from "ui/action-bar";
-import trace = require("trace");
 import {device, platformNames, Device} from "platform";
+import {rendererLog as traceLog, styleError} from "./trace";
 
 const IOS_PREFX: string = "@ios:";
 const ANDROID_PREFX: string = "@android:";
 const whiteSpaceSplitter = /\s+/;
 
-export const rendererTraceCategory = "ns-renderer";
 export type ViewExtensions = ViewExtensions;
 export type NgView = NgView;
 export type NgLayoutBase = LayoutBase & ViewExtensions;
 export type NgContentView = ContentView & ViewExtensions;
 export type BeforeAttachAction = (view: View) => void;
-
-export function traceLog(msg) {
-    trace.write(msg, rendererTraceCategory);
-}
 
 export function isView(view: any): view is NgView {
     return view instanceof View;
@@ -298,7 +293,7 @@ export class ViewUtil {
         try {
             view.style._setValue(property, value, ValueSource.Local);
         } catch (ex) {
-            trace.write("Error setting property: " + property.name + " view: " + view + " value: " + value + " " + ex, trace.categories.Style, trace.messageType.error);
+            styleError("Error setting property: " + property.name + " view: " + view + " value: " + value + " " + ex);
         }
     }
 

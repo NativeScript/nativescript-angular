@@ -1,7 +1,7 @@
 import application = require("application");
 import { LocationStrategy } from '@angular/common';
 import { NgZone, ApplicationRef, Inject, forwardRef } from '@angular/core';
-import { log } from "./common";
+import { routerLog } from "../trace";
 import { topmost } from "ui/frame";
 
 interface LocationState {
@@ -20,18 +20,18 @@ export class NSLocationStrategy extends LocationStrategy {
     private _isPageNavigatingForward: boolean = false;
 
     path(): string {
-        log("NSLocationStrategy.path()");
+        routerLog("NSLocationStrategy.path()");
         let state = this.peekState();
         return state ? state.url : "/";
     }
 
     prepareExternalUrl(internal: string): string {
-        log("NSLocationStrategy.prepareExternalUrl() internal: " + internal);
+        routerLog("NSLocationStrategy.prepareExternalUrl() internal: " + internal);
         return internal;
     }
 
     pushState(state: any, title: string, url: string, queryParams: string): void {
-        log(`NSLocationStrategy.pushState state: ${state}, title: ${title}, url: ${url}, queryParams: ${queryParams}`);
+        routerLog(`NSLocationStrategy.pushState state: ${state}, title: ${title}, url: ${url}, queryParams: ${queryParams}`);
 
         let isNewPage = this._isPageNavigatingForward;
         this._isPageNavigatingForward = false;
@@ -46,12 +46,12 @@ export class NSLocationStrategy extends LocationStrategy {
     }
 
     replaceState(state: any, title: string, url: string, queryParams: string): void {
-        log(`NSLocationStrategy.replaceState state: ${state}, title: ${title}, url: ${url}, queryParams: ${queryParams}`);
+        routerLog(`NSLocationStrategy.replaceState state: ${state}, title: ${title}, url: ${url}, queryParams: ${queryParams}`);
         throw new Error("Not implemented");
     }
 
     forward(): void {
-        log("NSLocationStrategy.forward");
+        routerLog("NSLocationStrategy.forward");
         throw new Error("Not implemented");
     }
 
@@ -65,17 +65,17 @@ export class NSLocationStrategy extends LocationStrategy {
                 state = this.states.pop();
                 count++;
             }
-            log("NSLocationStrategy.back() while navigating back. States popped: " + count)
+            routerLog("NSLocationStrategy.back() while navigating back. States popped: " + count)
             this.callPopState(state, true);
         } else {
             let state = this.peekState();
             if (state.isPageNavigation) {
                 // This was a page navigation - so navigate through frame.
-                log("NSLocationStrategy.back() while not navigating back but top state is page - will call frame.goback()")
+                routerLog("NSLocationStrategy.back() while not navigating back but top state is page - will call frame.goback()")
                 topmost().goBack();
             } else {
                 // Nested navigation - just pop the state
-                log("NSLocationStrategy.back() while not navigating back but top state is not page - just pop")
+                routerLog("NSLocationStrategy.back() while not navigating back but top state is not page - just pop")
                 this.callPopState(this.states.pop(), true);
             }
         }
@@ -83,12 +83,12 @@ export class NSLocationStrategy extends LocationStrategy {
     }
 
     onPopState(fn: (_: any) => any): void {
-        log("NSLocationStrategy.onPopState");
+        routerLog("NSLocationStrategy.onPopState");
         this.popStateCallbacks.push(fn);
     }
 
     getBaseHref(): string {
-        log("NSLocationStrategy.getBaseHref()");
+        routerLog("NSLocationStrategy.getBaseHref()");
         return "";
     }
 
@@ -108,7 +108,7 @@ export class NSLocationStrategy extends LocationStrategy {
 
     // Methods for syncing with page navigation in PageRouterOutlet
     public beginBackPageNavigation() {
-        log("NSLocationStrategy.startGoBack()");
+        routerLog("NSLocationStrategy.startGoBack()");
         if (this._isPageNavigationgBack) {
             throw new Error("Calling startGoBack while going back.")
         }
@@ -116,7 +116,7 @@ export class NSLocationStrategy extends LocationStrategy {
     }
 
     public finishBackPageNavigation() {
-        log("NSLocationStrategy.finishBackPageNavigation()");
+        routerLog("NSLocationStrategy.finishBackPageNavigation()");
         if (!this._isPageNavigationgBack) {
             throw new Error("Calling endGoBack while not going back.")
         }
@@ -128,7 +128,7 @@ export class NSLocationStrategy extends LocationStrategy {
     }
 
     public navigateToNewPage() {
-        log("NSLocationStrategy.navigateToNewPage()");
+        routerLog("NSLocationStrategy.navigateToNewPage()");
         if (this._isPageNavigatingForward) {
             throw new Error("Calling navigateToNewPage while already navigating to new page.")
         }

@@ -12,11 +12,10 @@ import {View} from "ui/core/view";
 import * as application from "application";
 import {topmost} from 'ui/frame';
 import {Page} from 'ui/page';
-import {traceLog, ViewUtil, NgView} from "./view-util";
+import {ViewUtil, NgView} from "./view-util";
+import {rendererLog as traceLog} from "./trace";
 import {escapeRegexSymbols} from "utils/utils";
 import { Device } from "platform";
-
-export { rendererTraceCategory } from "./view-util";
 
 @Injectable()
 export class NativeScriptRootRenderer implements RootRenderer {
