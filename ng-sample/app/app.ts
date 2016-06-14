@@ -8,17 +8,19 @@
 // this import should be first in order to load some required settings (like globals and reflect-metadata)
 import { nativeScriptBootstrap } from "nativescript-angular/application";
 import { NS_ROUTER_PROVIDERS } from "nativescript-angular/router";
-import { rendererTraceCategory, routerTraceCategory } from "nativescript-angular/trace";
+import { rendererTraceCategory, routerTraceCategory, listViewTraceCategory } from "nativescript-angular/trace";
 
 import trace = require("trace");
-trace.setCategories(routerTraceCategory);
+// trace.setCategories(rendererTraceCategory);
+// trace.setCategories(routerTraceCategory);
+trace.setCategories(listViewTraceCategory);
 trace.enable();
 
 import {RendererTest} from './examples/renderer-test';
 import {TabViewTest} from './examples/tab-view/tab-view-test';
 import {Benchmark} from './performance/benchmark';
 import {ListTest} from './examples/list/list-test';
-import {ListTestAsync} from "./examples/list/list-test-async";
+import {ListTestAsync, ListTestFilterAsync} from "./examples/list/list-test-async";
 import {ImageTest} from "./examples/image/image-test";
 import {NavigationTest} from "./examples/navigation/navigation-test";
 import {ActionBarTest} from "./examples/action-bar/action-bar-test";
@@ -30,8 +32,9 @@ import {LoginTest} from "./examples/navigation/login-test";
 //nativeScriptBootstrap(RendererTest);
 //nativeScriptBootstrap(TabViewTest);
 //nativeScriptBootstrap(Benchmark);
-//nativeScriptBootstrap(ListTest);
-//nativeScriptBootstrap(ListTestAsync);
+// nativeScriptBootstrap(ListTest);
+// nativeScriptBootstrap(ListTestAsync);
+nativeScriptBootstrap(ListTestFilterAsync);
 //nativeScriptBootstrap(ImageTest);
 //nativeScriptBootstrap(NavigationTest, [NS_ROUTER_PROVIDERS]);
 //nativeScriptBootstrap(ActionBarTest, [NS_ROUTER_PROVIDERS], { startPageActionBarHidden: false });
@@ -39,4 +42,4 @@ import {LoginTest} from "./examples/navigation/login-test";
 //nativeScriptBootstrap(ModalTest);
 //nativeScriptBootstrap(PlatfromDirectivesTest);
 //nativeScriptBootstrap(RouterOutletTest, [NS_ROUTER_PROVIDERS]);
-nativeScriptBootstrap(LoginTest, [NS_ROUTER_PROVIDERS]);
+// nativeScriptBootstrap(LoginTest, [NS_ROUTER_PROVIDERS]);

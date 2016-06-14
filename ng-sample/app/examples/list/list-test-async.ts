@@ -1,58 +1,117 @@
 import { Component, Input, ChangeDetectionStrategy } from '@angular/core';
-import { Observable as RxObservable } from 'rxjs/Observable';
-
-export class DataItem {
-    constructor(public id: number, public name: string) { }
-}
+import * as Rx from 'rxjs/Observable';
+import { combineLatestStatic } from 'rxjs/operator/combineLatest';
+import { BehaviorSubject } from "rxjs/BehaviorSubject";
+import { DataItem, DataService } from "./data.service"
 
 @Component({
     selector: 'list-test-async',
-    styleUrls: ['examples/list/list-test-async.css'],
+    styleUrls: ['examples/list/styles.css'],
+    providers: [DataService],
+    changeDetection: ChangeDetectionStrategy.OnPush,
     template: `
-    <GridLayout>
-        <ListView [items]="myItems | async" (itemTap)="onItemTap($event)">
+    <GridLayout rows="auto * auto" columns="* *">
+        <Label text="ListView" class="list-title"></Label>
+        <Label text="*ngFor" class="list-title" col="1"></Label>
+
+        <ListView row="1" [items]="service.items$ | async" (itemTap)="onItemTap($event)" margin="10">
             <template let-item="item" let-i="index" let-odd="odd" let-even="even">
                 <StackLayout [class.odd]="odd" [class.even]="even">
-                    <Label class="test" [text]='"index: " + item.name'></Label>
+                    <Label [text]='"name: " + item.name'></Label>
                 </StackLayout>
             </template>
         </ListView>
+
+        <StackLayout row="1" col="1" margin="10">
+            <StackLayout *ngFor="let item of (service.items$ | async); let odd = odd; let even = even" 
+                [class.odd]="odd" [class.even]="even" marginBottom="1">
+                <Label [text]='"name: " + item.name'></Label>
+            </StackLayout>
+        </StackLayout>
+
+        <button row="2" colSpan="2" (tap)="toggleAsyncUpdates()" [text]="isUpdating ? 'stop updates' : 'start updates'"></button>
     </GridLayout>
-    `,
-    changeDetection: ChangeDetectionStrategy.OnPush
+    `
 })
 export class ListTestAsync {
-    public myItems: RxObservable<Array<DataItem>>;
-
-    constructor() {
-        var items = [];
-        for (var i = 0; i < 3; i++) {
-            items.push(new DataItem(i, "data item " + i));
-        }
-        
-        var subscr;
-        this.myItems = RxObservable.create(subscriber => {
-            subscr = subscriber;
-            subscriber.next(items);
-            return function () {
-                console.log("Unsubscribe called!!!");
-            }
-        });
-
-        let counter = 2;
-        let intervalId = setInterval(() => {
-            counter++;
-            console.log("Adding " + counter + "-th item");
-            items.push(new DataItem(counter, "data item " + counter));
-            subscr.next(items);
-        }, 1000);
-        
-        setTimeout(() => {
-            clearInterval(intervalId);   
-        }, 15000);
+    public isUpdating: boolean = false;
+    constructor(private service: DataService) {
     }
 
     public onItemTap(args) {
-        console.log("------------------------ ItemTapped: " + args.index);
+        console.log("--> ItemTapped: " + args.index);
+    }
+
+    public toggleAsyncUpdates() {
+        if (this.isUpdating) {
+            this.service.stopAsyncUpdates();
+        } else {
+            this.service.startAsyncUpdates();
+        }
+
+        this.isUpdating = !this.isUpdating;
+    }
+}
+
+@Component({
+    selector: 'list-test-async-filter',
+    styleUrls: ['examples/list/styles.css'],
+    providers: [DataService],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    template: `
+    <GridLayout rows="auto * auto" columns="* *">
+        <Label text="ListView" class="list-title"></Label>
+        <Label text="*ngFor" class="list-title" col="1"></Label>
+
+        <ListView row="1" [items]="filteredItems$ | async" (itemTap)="onItemTap($event)" margin="10">
+            <template let-item="item" let-i="index" let-odd="odd" let-even="even">
+                <StackLayout [class.odd]="odd" [class.even]="even">
+                    <Label [text]='"name: " + item.name'></Label>
+                </StackLayout>
+            </template>
+        </ListView>
+
+        <StackLayout row="1" col="1" margin="10">
+            <StackLayout *ngFor="let item of (filteredItems$  | async); let odd = odd; let even = even" 
+                [class.odd]="odd" [class.even]="even" marginBottom="1">
+                <Label [text]='"name: " + item.name'></Label>
+            </StackLayout>
+        </StackLayout>
+
+        <StackLayout row="2" colSpan="2" orientation="horizontal">
+            <button (tap)="toggleAsyncUpdates()" [text]="isUpdating ? 'stop updates' : 'start updates'"></button>
+            <button (tap)="toogleFilter()" [text]="(filter$ | async) ? 'show all' : 'show even'"></button>
+        </StackLayout>
+    </GridLayout>
+    `
+})
+export class ListTestFilterAsync {
+    public isUpdating: boolean = false;
+    public filteredItems$: Rx.Observable<Array<DataItem>>;
+    private filter$ = new BehaviorSubject(false);
+
+    constructor(private service: DataService) {
+        // Create filteredItems$ by combining the service.items$ and filter$
+        this.filteredItems$ = combineLatestStatic(this.service.items$, this.filter$, (data, filter) => {
+            return filter ? data.filter(v => v.id % 2 === 0) : data;
+        });
+    }
+
+    public onItemTap(args) {
+        console.log("--> ItemTapped: " + args.index);
+    }
+
+    public toggleAsyncUpdates() {
+        if (this.isUpdating) {
+            this.service.stopAsyncUpdates();
+        } else {
+            this.service.startAsyncUpdates();
+        }
+
+        this.isUpdating = !this.isUpdating;
+    }
+
+    public toogleFilter() {
+        this.filter$.next(!this.filter$.value);
     }
 }
