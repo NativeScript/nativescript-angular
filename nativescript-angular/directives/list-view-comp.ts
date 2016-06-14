@@ -7,21 +7,17 @@ import {
     TemplateRef,
     ContentChild,
     EmbeddedViewRef,
-    HostListener,
     IterableDiffers,
     IterableDiffer,
     ChangeDetectorRef,
     EventEmitter,
     ViewChild,
     Output,
-    NgZone,
     ChangeDetectionStrategy } from '@angular/core';
 import {isBlank} from '@angular/core/src/facade/lang';
 import {isListLikeIterable} from '@angular/core/src/facade/collection';
-import {Observable as RxObservable} from 'rxjs'
 import {ListView} from 'ui/list-view';
 import {View} from 'ui/core/view';
-import {NgView} from '../view-util';
 import {ObservableArray} from 'data/observable-array';
 import {LayoutBase} from 'ui/layouts/layout-base';
 import {listViewLog} from "../trace";
@@ -79,14 +75,12 @@ export class ListViewComponent implements DoCheck, OnDestroy {
             this._differ = this._iterableDiffers.find(this._items).create(this._cdr, (index, item) => { return item; });
         }
 
-        // this._cdr.detach();
         this.listView.items = this._items;
     }
 
     constructor(private _elementRef: ElementRef,
         private _iterableDiffers: IterableDiffers,
-        private _cdr: ChangeDetectorRef,
-        private _zone: NgZone) {
+        private _cdr: ChangeDetectorRef) {
         this.listView = _elementRef.nativeElement;
 
         this.listView.on("itemLoading", this.onItemLoading, this);
@@ -140,15 +134,13 @@ export class ListViewComponent implements DoCheck, OnDestroy {
     }
 
     private detectChangesOnChild(viewRef: EmbeddedViewRef<ListItemContext>, index: number) {
-        // Manually detect changes in view ref
-        // 
+        // Manually detect changes in child view ref
+        // TODO: Is there a better way of getting viewRef's change detector
         const childChangeDetector = <ChangeDetectorRef>(<any>viewRef);
 
         listViewLog("Manually detect changes in child: " + index)
-        // listViewLog("CangeDetectionState child before mark " + getChangeDetectorState((<any>viewRef)._view));
         childChangeDetector.markForCheck();
         childChangeDetector.detectChanges();
-        // listViewLog("CangeDetectionState child after detect " + getChangeDetectorState((<any>viewRef)._view));
     }
 
     ngDoCheck() {
