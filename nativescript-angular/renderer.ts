@@ -5,6 +5,9 @@ import {
     RenderComponentType,
     RenderDebugInfo
 } from '@angular/core/src/render/api';
+import { AnimationKeyframe } from '@angular/core/src/animation/animation_keyframe';
+import { AnimationPlayer } from '@angular/core/src/animation/animation_player';
+import { AnimationStyles } from '@angular/core/src/animation/animation_styles';
 import {APP_ROOT_VIEW, DEVICE} from "./platform-providers";
 import {isBlank} from '@angular/core/src/facade/lang';
 import {CONTENT_ATTR} from '@angular/platform-browser/src/dom/dom_renderer';
@@ -217,13 +220,17 @@ export class NativeScriptRenderer extends Renderer {
         let zonedCallback = (<any>global).Zone.current.wrap(callback);
         renderElement.on(eventName, zonedCallback);
         if (eventName === View.loadedEvent && renderElement.isLoaded) {
-            const notifyData = {eventName: View.loadedEvent, object: renderElement}; 
+            const notifyData = { eventName: View.loadedEvent, object: renderElement };
             zonedCallback(notifyData);
         }
         return () => renderElement.off(eventName, zonedCallback);
     }
 
     public listenGlobal(target: string, eventName: string, callback: Function): Function {
-        throw new Error('Not implemented.');
+        throw new Error('NativeScriptRenderer.listenGlobal() - Not implemented.');
+    }
+
+    public animate(element: any, startingStyles: AnimationStyles, keyframes: AnimationKeyframe[], duration: number, delay: number, easing: string): AnimationPlayer {
+        throw new Error("NativeScriptRenderer.animate() - Not implemented");
     }
 }

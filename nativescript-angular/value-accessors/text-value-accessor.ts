@@ -1,5 +1,5 @@
 import {Directive, ElementRef, Renderer, Self, forwardRef, provide} from '@angular/core';
-import {NG_VALUE_ACCESSOR} from '@angular/common/src/forms/directives/control_value_accessor';
+import {NG_VALUE_ACCESSOR} from '@angular/common/src/forms-deprecated/directives/control_value_accessor';
 import {isBlank} from '@angular/core/src/facade/lang';
 import {BaseValueAccessor} from './base-value-accessor'
 import {View} from "ui/core/view";
@@ -20,7 +20,7 @@ export type TextView = {text: string} & View;
 @Directive({
     selector: 'TextField[ngModel], TextView[ngModel], SearchBar[ngModel]',
     host: { '(textChange)': 'onChange($event.value)' },
-    bindings: [TEXT_VALUE_ACCESSOR]
+    providers: [TEXT_VALUE_ACCESSOR]
 })
 export class TextValueAccessor extends BaseValueAccessor<TextView> {
     onTouched = () => { };

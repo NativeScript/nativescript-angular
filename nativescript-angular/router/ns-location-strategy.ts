@@ -30,7 +30,13 @@ export class NSLocationStrategy extends LocationStrategy {
         return internal;
     }
 
+
     pushState(state: any, title: string, url: string, queryParams: string): void {
+        routerLog(`NSLocationStrategy.pushState state: ${state}, title: ${title}, url: ${url}, queryParams: ${queryParams}`);
+        this.pushStateInternal(state, title, url, queryParams);
+    }
+
+    pushStateInternal(state: any, title: string, url: string, queryParams: string): void {
         routerLog(`NSLocationStrategy.pushState state: ${state}, title: ${title}, url: ${url}, queryParams: ${queryParams}`);
 
         let isNewPage = this._isPageNavigatingForward;
@@ -47,7 +53,14 @@ export class NSLocationStrategy extends LocationStrategy {
 
     replaceState(state: any, title: string, url: string, queryParams: string): void {
         routerLog(`NSLocationStrategy.replaceState state: ${state}, title: ${title}, url: ${url}, queryParams: ${queryParams}`);
-        throw new Error("Not implemented");
+        
+        if (this.states.length > 0) {
+            let oldState = this.states.pop();
+            routerLog(`NSLocationStrategy.replaceState POP state: ${oldState.state}, title: ${oldState.title}, url: ${oldState.url}, queryParams: ${oldState.queryParams}`);
+            this.callPopState(oldState, true);
+        }
+
+        this.pushStateInternal(state, title, url, queryParams);
     }
 
     forward(): void {

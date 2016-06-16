@@ -1,5 +1,5 @@
 import {Directive, ElementRef, Renderer, Self, forwardRef, provide} from '@angular/core';
-import {NG_VALUE_ACCESSOR} from '@angular/common/src/forms/directives/control_value_accessor';
+import {NG_VALUE_ACCESSOR} from '@angular/common/src/forms-deprecated/directives/control_value_accessor';
 import {isBlank, isNumber} from '@angular/core/src/facade/lang';
 import {BaseValueAccessor} from './base-value-accessor';
 import {Slider} from "ui/slider";
@@ -18,7 +18,7 @@ const NUMBER_VALUE_ACCESSOR = provide(NG_VALUE_ACCESSOR, { useExisting: forwardR
 @Directive({
     selector: 'Slider[ngModel]',
     host: { '(valueChange)': 'onChange($event.value)' },
-    bindings: [NUMBER_VALUE_ACCESSOR]
+    providers: [NUMBER_VALUE_ACCESSOR]
 })
 export class NumberValueAccessor extends BaseValueAccessor<Slider> {
     onTouched = () => { };
