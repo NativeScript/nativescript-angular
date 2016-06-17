@@ -1,5 +1,5 @@
 import {Directive, ElementRef, Renderer, Self, forwardRef, provide} from '@angular/core';
-import {NG_VALUE_ACCESSOR} from '@angular/common/src/forms/directives/control_value_accessor';
+import {NG_VALUE_ACCESSOR} from '@angular/common/src/forms-deprecated/directives/control_value_accessor';
 import {isBlank, isDate} from '@angular/core/src/facade/lang';
 import {BaseValueAccessor} from './base-value-accessor';
 import {TimePicker} from "ui/time-picker";
@@ -18,7 +18,7 @@ const TIME_VALUE_ACCESSOR = provide(NG_VALUE_ACCESSOR, { useExisting: forwardRef
 @Directive({
     selector: 'TimePicker[ngModel]',
     host: { '(timeChange)': 'onChange($event.value)' },
-    bindings: [TIME_VALUE_ACCESSOR]
+    providers: [TIME_VALUE_ACCESSOR]
 })
 export class TimeValueAccessor extends BaseValueAccessor<TimePicker> {
     onTouched = () => { };
@@ -30,7 +30,9 @@ export class TimeValueAccessor extends BaseValueAccessor<TimePicker> {
     writeValue(value: any): void {
         var normalizedValue = isBlank(value) ? new Date() : value;
         if (!isDate(normalizedValue)) {
-            if (typeof normalizedValue === 'string' || typeof normalizedValue === 'number') {
+            if (typeof normalizedValue === 'string') {
+                normalizedValue = new Date(normalizedValue);
+            } else if (typeof normalizedValue === 'number') {
                 normalizedValue = new Date(normalizedValue);
             }
             if (!isDate(normalizedValue)) {

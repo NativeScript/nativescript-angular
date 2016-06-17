@@ -1,5 +1,5 @@
 import {Directive, ElementRef, Renderer, Self, forwardRef, provide} from '@angular/core';
-import {NG_VALUE_ACCESSOR} from '@angular/common/src/forms/directives/control_value_accessor';
+import {NG_VALUE_ACCESSOR} from '@angular/common/src/forms-deprecated/directives/control_value_accessor';
 import {isBlank} from '@angular/core/src/facade/lang';
 import {BaseValueAccessor} from './base-value-accessor';
 import {Switch} from "ui/switch";
@@ -18,7 +18,7 @@ const CHECKED_VALUE_ACCESSOR = provide(NG_VALUE_ACCESSOR, { useExisting: forward
 @Directive({
     selector: 'Switch[ngModel]',
     host: { '(checkedChange)': 'onChange($event.value)' },
-    bindings: [CHECKED_VALUE_ACCESSOR]
+    providers: [CHECKED_VALUE_ACCESSOR]
 })
 export class CheckedValueAccessor extends BaseValueAccessor<Switch> {
     onTouched = () => { };

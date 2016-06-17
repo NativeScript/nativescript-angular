@@ -1,5 +1,5 @@
 import {Directive, ElementRef, Renderer, Self, forwardRef, provide} from '@angular/core';
-import {NG_VALUE_ACCESSOR} from '@angular/common/src/forms/directives/control_value_accessor';
+import {NG_VALUE_ACCESSOR} from '@angular/common/src/forms-deprecated/directives/control_value_accessor';
 import {isBlank, isNumber} from '@angular/core/src/facade/lang';
 import {BaseValueAccessor} from './base-value-accessor';
 import {View} from "ui/core/view";
@@ -21,7 +21,7 @@ export type SelectableView = {selectedIndex: number} & View;
 @Directive({
     selector: 'SegmentedBar[ngModel], ListPicker[ngModel], TabView[ngModel]',
     host: { '(selectedIndexChange)': 'onChange($event.value)' },
-    bindings: [SELECTED_INDEX_VALUE_ACCESSOR]
+    providers: [SELECTED_INDEX_VALUE_ACCESSOR]
 })
 export class SelectedIndexValueAccessor extends BaseValueAccessor<SelectableView> {
     onTouched = () => { };
