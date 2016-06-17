@@ -275,7 +275,8 @@ export class ViewUtil {
     }
 
     private setClasses(view: NgView, classesValue: string): void {
-        let classes = classesValue.split(whiteSpaceSplitter)
+        let classes = classesValue.split(whiteSpaceSplitter);
+        this.cssClasses(view).clear();
         classes.forEach((className) => this.cssClasses(view).set(className, true));
         this.syncClasses(view);
     }
