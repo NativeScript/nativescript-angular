@@ -4,7 +4,7 @@ import {AppComponent} from "./app.component";
 import {GestureComponent} from "./snippets/gestures.component";
 import {LayoutsComponent} from "./snippets/layouts.component";
 import {IconFontComponent} from "./snippets/icon-font.component";
-import {NS_ROUTER_DIRECTIVES, NS_ROUTER_PROVIDERS} from "nativescript-angular/router/ns-router";
+import {NS_ROUTER_DIRECTIVES, NS_ROUTER_PROVIDERS} from "nativescript-angular/router-deprecated";
 import {APP_ROOT_VIEW} from "nativescript-angular/platform-providers";
 import {Page} from "ui/page";
 import {Label} from "ui/label";

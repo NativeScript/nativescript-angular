@@ -1,6 +1,6 @@
 import {ROUTER_DIRECTIVES, Router, OnActivate, OnDeactivate, CanReuse, OnReuse,
     RouteParams, ComponentInstruction, RouteConfig } from '@angular/router-deprecated';
-import {NS_ROUTER_DIRECTIVES, NS_ROUTER_PROVIDERS} from "nativescript-angular/router/ns-router";
+import {NS_ROUTER_DIRECTIVES, NS_ROUTER_PROVIDERS} from "nativescript-angular/router-deprecated";
 import {Component, ElementRef} from "@angular/core";
 import {Location, LocationStrategy} from '@angular/common';
 import {FirstComponent} from "./first.component";
