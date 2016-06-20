@@ -12,7 +12,7 @@ import {bind, provide, Provider} from '@angular/core/src/di';
 
 import {RootRenderer, Renderer} from '@angular/core/src/render/api';
 import {NativeScriptRootRenderer, NativeScriptRenderer} from './renderer';
-import {NativeScriptDomAdapter, NativeScriptElementSchemaRegistry, NativeScriptSanitizationService} from './dom_adapter';
+import {NativeScriptDomAdapter, NativeScriptElementSchemaRegistry, NativeScriptSanitizationService} from './dom-adapter';
 import {ElementSchemaRegistry, XHR, COMPILER_PROVIDERS, CompilerConfig} from '@angular/compiler';
 import {FileSystemXHR} from './xhr';
 import {Parse5DomAdapter} from '@angular/platform-server/src/parse5_adapter';
