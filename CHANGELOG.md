@@ -25,3 +25,5 @@
 - The Beta Angular Router moved to `nativescript-angular/router-deprecated` to continue using it change imports:
   - `nativescript-angular/router` -> `nativescript-angular/router-deprecated`
   - `nativescript-angular/router/ns-router` -> `nativescript-angular/router-deprecated/ns-router-deprecated`
+
+- Build requires globally installed **typings** (`npm install -g typings`)
