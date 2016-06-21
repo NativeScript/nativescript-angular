@@ -26,11 +26,10 @@ describe("multi page routing", function () {
 
     it("navigates and returns", function () {
         var expectedHookLog = [
-            "first.activate first null",
-            "first.deactivate second first",
-            "second.activate second first",
-            "second.deactivate first second",
-            "first.activate first second"].join(",");
+            "first.init", // <-- load
+            "second.init", // <-- forward (first component is not destroyed)
+            "second.destroy"] // <-- back (first component is reused)
+            .join(",");
         return driver
             .elementByAccessibilityId("first-navigate-multi-page")
                 .should.eventually.exist
@@ -38,7 +37,7 @@ describe("multi page routing", function () {
             .elementByAccessibilityId("second-multi-page")
                 .should.eventually.exist
             .text().should.eventually.equal("Second: multi-page")
-            .elementByAccessibilityId("second-navigate-multi-page")
+            .elementByAccessibilityId("second-navigate-back-multi-page")
                 .should.eventually.exist
             .tap()
             .elementByAccessibilityId("first-multi-page")

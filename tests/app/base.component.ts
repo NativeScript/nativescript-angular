@@ -1,23 +1,23 @@
-import {ROUTER_DIRECTIVES, Router, OnActivate, OnDeactivate, CanReuse, OnReuse,
-    RouteParams, ComponentInstruction, RouteConfig } from '@angular/router-deprecated';
-import {Component, OpaqueToken} from "@angular/core";
+import {ROUTER_DIRECTIVES, Router } from '@angular/router';
+import {Component, OpaqueToken, OnInit, OnDestroy} from "@angular/core";
 export const HOOKS_LOG = new OpaqueToken("Hooks log");
+import {BehaviorSubject} from "rxjs";
 
-export class BaseComponent implements OnActivate, OnDeactivate {
+export class BaseComponent implements OnInit, OnDestroy {
     protected name: string = "";
 
-    constructor(protected hooksLog: string[]) {
+    constructor(protected hooksLog: BehaviorSubject<Array<string>>) {
     }
 
-    routerOnActivate(nextInstruction: ComponentInstruction, prevInstruction: ComponentInstruction): any {
-        this.log("activate", nextInstruction, prevInstruction);
+    ngOnInit() {
+        this.log("init");
     }
 
-    routerOnDeactivate(nextInstruction: ComponentInstruction, prevInstruction: ComponentInstruction): any {
-        this.log("deactivate", nextInstruction, prevInstruction);
+    ngOnDestroy() {
+        this.log("destroy");
     }
 
-    private log(method: string, nextInstruction: ComponentInstruction, prevInstruction: ComponentInstruction) {
-        this.hooksLog.push(this.name + "." + method + " " + nextInstruction.urlPath + " " + (prevInstruction ? prevInstruction.urlPath : null));
+    private log(method: string) {
+        this.hooksLog.next([...this.hooksLog.value, this.name + "." + method]);
     }
 }

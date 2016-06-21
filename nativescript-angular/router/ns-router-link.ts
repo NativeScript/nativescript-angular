@@ -1,61 +1,54 @@
-import {Directive, Input} from '@angular/core';
-import {isString} from '@angular/core/src/facade/lang';
-import {Router, Instruction} from '@angular/router-deprecated';
-import {routerLog} from "../trace";
+import {Directive, HostBinding, HostListener, Input} from '@angular/core';
+
+import {Router, ActivatedRoute} from '@angular/router';
 
 /**
- * The NSRouterLink directive lets you link to specific parts of your app.
+ * The RouterLink directive lets you link to specific parts of your app.
  *
  * Consider the following route configuration:
+
  * ```
- * @RouteConfig([
- *   { path: '/user', component: UserCmp, as: 'User' }
- * ]);
- * class MyComp {}
+ * [{ path: '/user', component: UserCmp }]
  * ```
  *
  * When linking to this `User` route, you can write:
  *
  * ```
- * <a [nsRouterLink]="['./User']">link to user component</a>
+ * <a [nsRouterLink]="['/user']">link to user component</a>
  * ```
  *
- * RouterLink expects the value to be an array of route names, followed by the params
- * for that level of routing. For instance `['/Team', {teamId: 1}, 'User', {userId: 2}]`
- * means that we want to generate a link for the `Team` route with params `{teamId: 1}`,
- * and with a child route `User` with params `{userId: 2}`.
+ * RouterLink expects the value to be an array of path segments, followed by the params
+ * for that level of routing. For instance `['/team', {teamId: 1}, 'user', {userId: 2}]`
+ * means that we want to generate a link to `/team;teamId=1/user;userId=2`.
  *
- * The first route name should be prepended with `/`, `./`, or `../`.
- * If the route begins with `/`, the router will look up the route from the root of the app.
- * If the route begins with `./`, the router will instead look in the current component's
- * children for the route. And if the route begins with `../`, the router will look at the
- * current component's parent.
+ * The first segment name can be prepended with `/`, `./`, or `../`.
+ * If the segment begins with `/`, the router will look up the route from the root of the app.
+ * If the segment begins with `./`, or doesn't begin with a slash, the router will
+ * instead look in the current component's children for the route.
+ * And if the segment begins with `../`, the router will go up one level.
  */
-@Directive({
-    selector: '[nsRouterLink]',
-    inputs: ['params: nsRouterLink'],
-    host: {
-        '(tap)': 'onTap()',
-        '[class.router-link-active]': 'isRouteActive'
-    }
-})
+@Directive({selector: '[nsRouterLink]'})
 export class NSRouterLink {
-    private _routeParams: any[];
+  @Input() queryParams: {[k: string]: any};
+  @Input() fragment: string;
 
-    // the instruction passed to the router to navigate
-    private _navigationInstruction: Instruction;
+  private commands: any[] = [];
 
-    constructor(private _router: Router) { }
+  constructor(private router: Router, private route: ActivatedRoute) {}
 
-    get isRouteActive(): boolean { return this._router.isRouteActive(this._navigationInstruction); }
-
-    set params(changes: any[]) {
-        this._routeParams = changes;
-        this._navigationInstruction = this._router.generate(this._routeParams);
+  @Input("nsRouterLink")
+  set params(data: any[]|string) {
+    if (Array.isArray(data)) {
+      this.commands = <any>data;
+    } else {
+      this.commands = [data];
     }
+  }
 
-    onTap(): void {
-        routerLog("NSRouterLink onTap() instruction: " + JSON.stringify(this._navigationInstruction))
-        this._router.navigateByInstruction(this._navigationInstruction);
-    }
+  @HostListener("tap")
+  onTap() {
+    this.router.navigate(
+        this.commands,
+        {relativeTo: this.route, queryParams: this.queryParams, fragment: this.fragment});
+  }
 }

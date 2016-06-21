@@ -24,14 +24,13 @@ describe("single page routing", function () {
             .text().should.eventually.equal("First: single-page")
     });
 
-    it("navigates, returns and fires hooks", function () {
+    it("navigates and returns", function () {
         var expectedHookLog = [
-            "first.activate first null",
-            "first.deactivate second first",
-            "second.activate second first",
-            "second.deactivate first second",
-            "first.activate first second"].join(",");
-
+            "first.init", // <--load
+            "first.destroy", // <--forward
+            "second.init",
+            "second.destroy", // <--back
+            "first.init"].join(",");
 
         return driver
             .elementByAccessibilityId("first-navigate-single-page")
@@ -40,7 +39,7 @@ describe("single page routing", function () {
             .elementByAccessibilityId("second-single-page")
                 .should.eventually.exist
             .text().should.eventually.equal("Second: single-page")
-            .elementByAccessibilityId("second-navigate-single-page")
+            .elementByAccessibilityId("second-navigate-back-single-page")
                 .should.eventually.exist
             .tap()
             .elementByAccessibilityId("first-single-page")

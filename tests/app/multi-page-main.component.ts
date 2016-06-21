@@ -1,6 +1,5 @@
-import {ROUTER_DIRECTIVES, Router, OnActivate, OnDeactivate, CanReuse, OnReuse,
-    RouteParams, ComponentInstruction, RouteConfig } from '@angular/router-deprecated';
-import {NS_ROUTER_DIRECTIVES, NS_ROUTER_PROVIDERS} from "nativescript-angular/router/ns-router";
+import {ROUTER_DIRECTIVES, Router, RouterConfig } from '@angular/router';
+import {nsProvideRouter, NS_ROUTER_DIRECTIVES} from 'nativescript-angular/router';
 import {Component, ElementRef} from "@angular/core";
 import {Location, LocationStrategy} from '@angular/common';
 import {FirstComponent} from "./first.component";
@@ -15,10 +14,6 @@ import {SecondComponent} from "./second.component";
     `
 
 })
-@RouteConfig([
-    { path: '/first', name: 'First', component: FirstComponent, useAsDefault: true , data: {id: "multi-page"}},
-    { path: '/second', name: 'Second', component: SecondComponent, data: {id: "multi-page"} }
-])
 export class MultiPageMain {
     constructor(
         public elementRef: ElementRef,
@@ -26,3 +21,12 @@ export class MultiPageMain {
         public location: LocationStrategy) {
     }
 }
+
+const routes: RouterConfig = [
+    { path: "/first/:id", component: FirstComponent },
+    { path: "/", redirectTo: "/first/multi-page", terminal: true },
+    { path: "/second/:id", component: SecondComponent },
+];
+export const MultiPageRouterProviders = [
+    nsProvideRouter(routes, { enableTracing: false })
+];
