@@ -14,8 +14,7 @@
   },
   "scripts": {
     "postinstall": "node postinstall.js",
-    "prepublish": "tsc",
-    "postpublish": "gulp clean-defs"
+    "prepublish": "tsc"
   },
   "dependencies": {
     "nativescript-intl": "^0.0.2",
