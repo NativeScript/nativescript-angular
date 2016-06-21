@@ -1,6 +1,6 @@
 import {Component} from '@angular/core';
 import {RouteConfig, ROUTER_PROVIDERS, ROUTER_DIRECTIVES, ComponentInstruction, Router, RouteParams, RouteData} from '@angular/router-deprecated';
-import {NS_ROUTER_DIRECTIVES, NS_ROUTER_PROVIDERS} from "nativescript-angular/router/ns-router";
+import {NS_ROUTER_DIRECTIVES, NS_ROUTER_PROVIDERS} from "nativescript-angular/router-deprecated/ns-router-deprecated";
 import {isBlank} from '@angular/core/src/facade/lang';
 
 @Component({
