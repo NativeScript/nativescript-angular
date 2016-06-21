@@ -1,5 +1,5 @@
-import {ROUTER_DIRECTIVES, Router, OnActivate, OnDeactivate, CanReuse, OnReuse,
-    RouteParams, ComponentInstruction, RouteConfig } from '@angular/router-deprecated';
+import {ROUTER_DIRECTIVES, Router, RouterConfig } from '@angular/router';
+import {nsProvideRouter} from 'nativescript-angular/router';
 import {Component, ElementRef} from "@angular/core";
 import {Location, LocationStrategy} from '@angular/common';
 import {FirstComponent} from "./first.component";
@@ -14,10 +14,6 @@ import {SecondComponent} from "./second.component";
     `
 
 })
-@RouteConfig([
-    { path: '/first', name: 'First', component: FirstComponent, useAsDefault: true , data: {id: "single-page"}},
-    { path: '/second', name: 'Second', component: SecondComponent, data: {id: "single-page"} }
-])
 export class SinglePageMain {
     constructor(
         public elementRef: ElementRef,
@@ -25,3 +21,12 @@ export class SinglePageMain {
         public location: LocationStrategy) {
     }
 }
+
+const routes: RouterConfig = [
+    { path: "/first/:id", component: FirstComponent },
+    { path: "/", redirectTo: "/first/single-page", terminal: true },
+    { path: "/second/:id", component: SecondComponent },
+];
+export const SinglePageRouterProviders = [
+    nsProvideRouter(routes, { enableTracing: false })
+];

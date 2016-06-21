@@ -1,7 +1,7 @@
-import {ROUTER_DIRECTIVES, Router, OnActivate, OnDeactivate, CanReuse, OnReuse,
-    RouteParams, RouteData, ComponentInstruction, RouteConfig } from '@angular/router-deprecated';
+import {ROUTER_DIRECTIVES, Router, ActivatedRoute } from '@angular/router';
 import {Component, Inject} from "@angular/core";
 import {HOOKS_LOG, BaseComponent} from "./base.component";
+import {BehaviorSubject} from "rxjs";
 
 @Component({
     selector: "first-comp",
@@ -9,25 +9,21 @@ import {HOOKS_LOG, BaseComponent} from "./base.component";
 <StackLayout>
     <Label [automationText]="'first-' + id" [text]="'First: ' + id"></Label>
     <Button [automationText]="'first-navigate-' + id" text="Go to second" (tap)="gotoSecond()"></Button>
-    <TextView [automationText]="'hooks-log-' + id" [text]="hooksLog"></TextView>
+    <TextView [automationText]="'hooks-log-' + id" [text]="hooksLog | async"></TextView>
     <TextView [text]="'hooks-log-' + id"></TextView>
 </StackLayout>
     `
 })
 export class FirstComponent extends BaseComponent {
-    name = "first";
+    protected name = "first";
+    public id: string = "";
 
-    constructor(private router: Router, private routeData: RouteData, @Inject(HOOKS_LOG) hooksLog: string[]) {
+    constructor(private router: Router, private routeData: ActivatedRoute, @Inject(HOOKS_LOG) hooksLog: BehaviorSubject<Array<string>>) {
         super(hooksLog);
+        this.id = routeData.snapshot.params["id"];
     }
-
-    ngOnInit() {
-        this.id = this.routeData.get('id');
-    }
-
-    public id: string = ""
 
     gotoSecond() {
-        this.router.navigateByUrl("/second");
+        this.router.navigateByUrl("/second/" + this.id);
     }
 }
