@@ -3,6 +3,7 @@ import {assert} from "./test-config";
 import {TextField} from "ui/text-field";
 import {Red, Lime} from "color/known-colors";
 import {NativeScriptRenderer, NativeScriptRootRenderer} from "nativescript-angular/renderer";
+import {NativeScriptAnimationDriver} from "nativescript-angular/animation-driver";
 import {device} from "platform";
 import {RenderComponentType} from '@angular/core/src/render/api';
 import {NgView} from "nativescript-angular/view-util";
@@ -12,10 +13,11 @@ describe("Setting style properties", () => {
     let element: NgView = null;
 
     beforeEach(() => {
-        const rootRenderer = new NativeScriptRootRenderer(null, device);
+        const animationDriver = new NativeScriptAnimationDriver()
+        const rootRenderer = new NativeScriptRootRenderer(null, device, animationDriver);
         const componentType = new RenderComponentType("id", "templateUrl", 0,
                                                             null, []);
-        renderer = new NativeScriptRenderer(rootRenderer, componentType);
+        renderer = new NativeScriptRenderer(rootRenderer, componentType, animationDriver);
         element = <NgView><any>new TextField();
     });
 

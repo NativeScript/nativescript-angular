@@ -35,7 +35,7 @@ import {Observable} from "rxjs";
 
 export type ProviderArray = Array<Type | Provider | any[]>;
 
-import {defaultPageProvider, defaultDeviceProvider} from "./platform-providers";
+import {defaultPageProvider, defaultDeviceProvider, defaultAnimationDriverProvider} from "./platform-providers";
 
 import * as nativescriptIntl from "nativescript-intl";
 global.Intl = nativescriptIntl;
@@ -97,6 +97,7 @@ export function bootstrap(appComponentType: any,
 
         defaultPageProvider,
         defaultDeviceProvider,
+        defaultAnimationDriverProvider,
         NativeScriptRootRenderer,
         provide(RootRenderer, { useClass: NativeScriptRootRenderer }),
         NativeScriptRenderer,
