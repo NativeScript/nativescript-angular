@@ -1,6 +1,6 @@
 import {Component} from "@angular/core";
-import {RouteConfig, ROUTER_DIRECTIVES} from '@angular/router-deprecated';
-import {NS_ROUTER_DIRECTIVES} from "nativescript-angular/router-deprecated";
+import {RouterConfig, ROUTER_DIRECTIVES} from '@angular/router';
+import {NS_ROUTER_DIRECTIVES} from "nativescript-angular/router";
 import {FirstComponent} from "../components/first.component";
 import {SecondComponent} from "../components/second.component";
 
@@ -12,19 +12,19 @@ import {SecondComponent} from "../components/second.component";
         <StackLayout>
             <StackLayout class="nav">
                 <Button text="First" 
-                    [nsRouterLink]="['./First']"></Button>
+                    [nsRouterLink]="['/router','first']"></Button>
                 <Button text="Second"
-                    [nsRouterLink]="['./Second']"></Button>
+                    [nsRouterLink]="['/router','second']"></Button>
             </StackLayout>
 
             <router-outlet></router-outlet>
         </StackLayout>
     `
 })
-@RouteConfig([
-    { path: '/first', component: FirstComponent, name: 'First', useAsDefault: true },
-    { path: '/second', component: SecondComponent, name: 'Second' },
-])
 export class NavigationTestRouter { }
 
-// nativeScriptBootstrap(NavigationTestRouter, [NS_ROUTER_PROVIDERS]);
+export var NavigationSubRoutes: RouterConfig = [
+    { path: '', redirectTo: 'first' },
+    { path: 'first', component: FirstComponent },
+    { path: 'second', component: SecondComponent },
+];

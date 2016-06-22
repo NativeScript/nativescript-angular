@@ -1,18 +1,23 @@
 import { Component } from "@angular/core";
-import { RouteConfig } from '@angular/router-deprecated';
-import { NS_ROUTER_DIRECTIVES } from "nativescript-angular/router-deprecated";
-import { ActionBarTest } from "../action-bar/action-bar-test";
+import { RouterConfig } from '@angular/router';
+import { NS_ROUTER_DIRECTIVES, nsProvideRouter } from "nativescript-angular/router";
+
 import { FirstComponentActionBar } from "../action-bar/action-bar-first.component";
 import { SecondComponentActionBar } from "../action-bar/action-bar-second.component";
+
 import { AppComponent } from "../template/app.component";
+
 import { FirstComponent } from "../components/first.component";
 import { SecondComponent } from "../components/second.component";
-import { NavigationTestRouter } from "../router/router-outlet";
+import { NavigationTestRouter, NavigationSubRoutes } from "../router/router-outlet";
+
 import { BindingComponent } from "../binding/binding-page";
+
 import { ListViewComponent } from "../listView/commonTemplate/list-view-page";
 import { ListViewControlComponent } from "../listView/customTemplate/list-view-item-template";
 import { ListViewAsyncPipeComponent } from "../listView/asyncPipeTemplate/async-pipe-template"
 import { ListViewMainPageComponent } from "../listView/listViewMainPage/list-view-main-page"
+
 import { ModalTest, ModalTestWithPushStrategy } from "../modal/modal-dialog.component";
 
 @Component({
@@ -21,24 +26,29 @@ import { ModalTest, ModalTestWithPushStrategy } from "../modal/modal-dialog.comp
     template: `
     <StackLayout>
         <Label text="Main Component" class="title"></Label>
+
         <StackLayout orientation="horizontal" horizontalAlignment="center">
-            <Button text="Template" [nsRouterLink]="['Template']"></Button>
-            <Button text="Router" [nsRouterLink]="['Router']"></Button>
+            <Button text="Template" [nsRouterLink]="['template']"></Button>
+            <Button text="Router" [nsRouterLink]="['router']"></Button>
         </StackLayout>
+
         <StackLayout orientation="horizontal" horizontalAlignment="center">
-            <Button text="First" [nsRouterLink]="['First']"></Button>      
-            <Button text="Second" [nsRouterLink]="['Second']"></Button>
+            <Button text="First" [nsRouterLink]="['first']"></Button>      
+            <Button text="Second" [nsRouterLink]="['second']"></Button>
         </StackLayout>
-        <!--<Button text="ActionBar" [nsRouterLink]="['ActionBar']"></Button>-->
+
         <StackLayout orientation="horizontal" horizontalAlignment="center">
-            <Button text="ActionBar1" [nsRouterLink]="['FirstActionBar']"></Button>
-            <Button text="ActionBar2" [nsRouterLink]="['SecondActionBar']"></Button>
+            <Button text="ActionBar1" [nsRouterLink]="['first-action-bar']"></Button>
+            <Button text="ActionBar2" [nsRouterLink]="['second-action-bar']"></Button>
         </StackLayout>
-        <Button text="Binding" [nsRouterLink]="['Binding']"></Button>        
-        <Button text="ListViewExamples" [nsRouterLink]="['ListViewMainPage']"></Button>        
-         <StackLayout orientation="horizontal" horizontalAlignment="center">
-            <Button text="modal" [nsRouterLink]="['Modal']"></Button>
-            <Button text="modal(onPush)" [nsRouterLink]="['ModalWithPushStrategy']"></Button> 
+
+        <Button text="Binding" [nsRouterLink]="['binding']"></Button>     
+
+        <Button text="ListViewExamples" [nsRouterLink]="['listView']"></Button>  
+        
+        <StackLayout orientation="horizontal" horizontalAlignment="center">
+            <Button text="modal" [nsRouterLink]="['modal']"></Button>
+            <Button text="modal(onPush)" [nsRouterLink]="['modal-on-push']"></Button> 
         </StackLayout>  
     </StackLayout>
     `,
@@ -50,22 +60,27 @@ class MainComponent { }
     directives: [NS_ROUTER_DIRECTIVES],
     template: `<page-router-outlet></page-router-outlet>`
 })
-@RouteConfig([
-    { path: '/main', component: MainComponent, name: 'Main', useAsDefault: true },
-    { path: '/template', component: AppComponent, name: 'Template' },
-    { path: '/first', component: FirstComponent, name: 'First' },
-    { path: '/second', component: SecondComponent, name: 'Second' },
-    { path: '/router/...', component: NavigationTestRouter, name: 'Router' },
-    // { path: '/action-bar-test/...', component: ActionBarTest, name: 'ActionBar' },
-    { path: '/first-action-bar', component: FirstComponentActionBar, name: 'FirstActionBar' },
-    { path: '/second-action-bar', component: SecondComponentActionBar, name: 'SecondActionBar' },
-    { path: '/binding', component: BindingComponent, name: 'Binding' },
-    { path: '/listView/commonTemplate', component: ListViewComponent, name: 'ListView' },
-    { path: '/listView/listViewMainPage', component: ListViewMainPageComponent, name: 'ListViewMainPage' },
-    { path: '/listView/customTemplate', component: ListViewControlComponent, name: 'ListViewCustomTemplate' },
-    { path: '/listView/asyncPipeTemplate', component: ListViewAsyncPipeComponent, name: 'ListViewAsyncPipe' },
-    { path: '/modal', component: ModalTest, name: 'Modal' },
-    { path: '/modal-on-push', component: ModalTestWithPushStrategy, name: 'ModalWithPushStrategy' },
-
-])
 export class NavigationMainPageRouter { }
+
+
+var routes: RouterConfig = [
+    { path: '', component: MainComponent },
+    { path: 'template', component: AppComponent },
+    { path: 'router', component: NavigationTestRouter, children: NavigationSubRoutes },
+    { path: 'first', component: FirstComponent },
+    { path: 'second', component: SecondComponent },
+
+    { path: 'first-action-bar', component: FirstComponentActionBar },
+    { path: 'second-action-bar', component: SecondComponentActionBar },
+    { path: 'binding', component: BindingComponent },
+
+    { path: 'listView', component: ListViewMainPageComponent },
+    { path: 'listView/commonTemplate', component: ListViewComponent },
+    { path: 'listView/customTemplate', component: ListViewControlComponent },
+    { path: 'listView/asyncPipeTemplate', component: ListViewAsyncPipeComponent },
+
+    { path: 'modal', component: ModalTest },
+    { path: 'modal-on-push', component: ModalTestWithPushStrategy },
+];
+
+export var MainRouterProviders = nsProvideRouter(routes, { enableTracing: true });

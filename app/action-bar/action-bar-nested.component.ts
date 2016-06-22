@@ -1,9 +1,7 @@
 import {Component} from '@angular/core';
-import {NS_ROUTER_DIRECTIVES} from "nativescript-angular/router-deprecated/ns-router-deprecated";
 
 @Component({
     selector: "nested-component",
-    directives: [NS_ROUTER_DIRECTIVES],
     template: `
     <ActionBarExtension>
         <ActionItem *ngIf="show" (tap)="onTap()">
