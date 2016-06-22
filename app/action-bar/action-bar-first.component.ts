@@ -1,12 +1,12 @@
 import {Component} from '@angular/core';
-import {NS_ROUTER_DIRECTIVES} from "nativescript-angular/router-deprecated/ns-router-deprecated";
+import {NS_ROUTER_DIRECTIVES} from "nativescript-angular/router";
 
 @Component({
     selector: "first-action-bar",
     directives: [NS_ROUTER_DIRECTIVES],
     template: `
     <ActionBar title="Title 1" automationText="title"> 
-        <ActionItem *ngIf="show" text="action" (tap)="onTap()" [nsRouterLink]="['Second']" 
+        <ActionItem *ngIf="show" text="action" (tap)="onTap()" [nsRouterLink]="['../second']" 
             automationText="action"></ActionItem>
         <ActionItem (tap)="onShare()" ios.systemIcon="9" ios.position="left" 
             android.systemIcon="ic_menu_share_holo_light" android.position="actionBar"

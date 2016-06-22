@@ -1,10 +1,9 @@
 import {Component} from '@angular/core';
 import {NestedComponent} from "./action-bar-nested.component";
-import {NS_ROUTER_DIRECTIVES} from "nativescript-angular/router-deprecated/ns-router-deprecated";
 
 @Component({
     selector: "second-action-bar",
-    directives: [NS_ROUTER_DIRECTIVES, NestedComponent],
+    directives: [NestedComponent],
     template: `
     <ActionBar title="Title 2" automationText="title">
         <NavigationButton text="First" android.systemIcon="ic_menu_back" automationText="back"></NavigationButton>

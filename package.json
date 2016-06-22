@@ -6,21 +6,22 @@
 	"nativescript": {
 		"id": "org.nativescript.testsappng",
 		"tns-ios": {
-			"version": "2.1.0"
+			"version": "2.0.1"
 		},
 		"tns-android": {
 			"version": "2.1.0"
 		}
 	},
 	"dependencies": {
-		"@angular/common": "2.0.0-rc.1",
-		"@angular/compiler": "2.0.0-rc.1",
-		"@angular/core": "2.0.0-rc.1",
-		"@angular/platform-browser": "2.0.0-rc.1",
-		"@angular/platform-browser-dynamic": "2.0.0-rc.1",
-		"@angular/platform-server": "2.0.0-rc.1",
-		"@angular/router-deprecated": "2.0.0-rc.1",
-		"nativescript-angular": "^0.1.6",
+		"@angular/common": "2.0.0-rc.3",
+		"@angular/compiler": "2.0.0-rc.3",
+		"@angular/core": "2.0.0-rc.3",
+		"@angular/platform-browser": "2.0.0-rc.3",
+		"@angular/platform-browser-dynamic": "2.0.0-rc.3",
+		"@angular/platform-server": "2.0.0-rc.3",
+		"@angular/router-deprecated": "2.0.0-rc.2",
+		"@angular/router": "3.0.0-alpha.7",
+		"nativescript-angular": "^0.1.8",
 		"tns-core-modules": "^2.0.0 || 2.0.0-angular-7"
 	},
 	"devDependencies": {

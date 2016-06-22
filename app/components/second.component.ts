@@ -1,5 +1,5 @@
 import {Component} from "@angular/core";
-import {NS_ROUTER_DIRECTIVES} from "nativescript-angular/router-deprecated/ns-router-deprecated";
+import {NS_ROUTER_DIRECTIVES} from "nativescript-angular/router";
 
 @Component({
     selector: "second",
@@ -7,7 +7,7 @@ import {NS_ROUTER_DIRECTIVES} from "nativescript-angular/router-deprecated/ns-ro
     template: `
     <StackLayout>
         <Label text="Second component" class="title"></Label>
-        <Button text="GO TO FIRST" [nsRouterLink]="['First']" class="link"></Button>
+        <Button text="GO TO FIRST" [nsRouterLink]="['../first']" class="link"></Button>
     </StackLayout>`
 })
 export class SecondComponent {}
