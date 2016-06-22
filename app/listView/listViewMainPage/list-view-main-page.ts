@@ -1,5 +1,5 @@
 import { Component } from "@angular/core";
-import { NS_ROUTER_DIRECTIVES } from "nativescript-angular/router";
+import { NS_ROUTER_DIRECTIVES } from "nativescript-angular/router-deprecated";
 
 @Component({
     selector: "main",

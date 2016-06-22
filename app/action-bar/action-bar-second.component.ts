@@ -1,6 +1,6 @@
 import {Component} from '@angular/core';
 import {NestedComponent} from "./action-bar-nested.component";
-import {NS_ROUTER_DIRECTIVES} from "nativescript-angular/router/ns-router";
+import {NS_ROUTER_DIRECTIVES} from "nativescript-angular/router-deprecated/ns-router-deprecated";
 
 @Component({
     selector: "second-action-bar",

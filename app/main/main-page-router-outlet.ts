@@ -1,6 +1,6 @@
 import { Component } from "@angular/core";
 import { RouteConfig } from '@angular/router-deprecated';
-import { NS_ROUTER_DIRECTIVES } from "nativescript-angular/router";
+import { NS_ROUTER_DIRECTIVES } from "nativescript-angular/router-deprecated";
 import { ActionBarTest } from "../action-bar/action-bar-test";
 import { FirstComponentActionBar } from "../action-bar/action-bar-first.component";
 import { SecondComponentActionBar } from "../action-bar/action-bar-second.component";
@@ -38,7 +38,7 @@ import { ModalTest, ModalTestWithPushStrategy } from "../modal/modal-dialog.comp
         <Button text="ListViewExamples" [nsRouterLink]="['ListViewMainPage']"></Button>        
          <StackLayout orientation="horizontal" horizontalAlignment="center">
             <Button text="modal" [nsRouterLink]="['Modal']"></Button>
-            <Button text="modal(onPush)" [nsRouterLink]="['ModalWithPushStrategy']"></Button>
+            <Button text="modal(onPush)" [nsRouterLink]="['ModalWithPushStrategy']"></Button> 
         </StackLayout>  
     </StackLayout>
     `,
