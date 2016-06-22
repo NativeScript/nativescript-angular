@@ -23,9 +23,9 @@ export class SinglePageMain {
 }
 
 const routes: RouterConfig = [
-    { path: "/first/:id", component: FirstComponent },
-    { path: "/", redirectTo: "/first/single-page", terminal: true },
-    { path: "/second/:id", component: SecondComponent },
+    { path: "", redirectTo: "first/single-page", terminal: true },
+    { path: "first/:id", component: FirstComponent },
+    { path: "second/:id", component: SecondComponent },
 ];
 export const SinglePageRouterProviders = [
     nsProvideRouter(routes, { enableTracing: false })

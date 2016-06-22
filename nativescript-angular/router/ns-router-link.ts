@@ -1,6 +1,6 @@
 import {Directive, HostBinding, HostListener, Input} from '@angular/core';
-
-import {Router, ActivatedRoute} from '@angular/router';
+import {LocationStrategy} from '@angular/common';
+import {Router, ActivatedRoute, UrlTree} from '@angular/router';
 
 /**
  * The RouterLink directive lets you link to specific parts of your app.
@@ -27,17 +27,27 @@ import {Router, ActivatedRoute} from '@angular/router';
  * instead look in the current component's children for the route.
  * And if the segment begins with `../`, the router will go up one level.
  */
-@Directive({selector: '[nsRouterLink]'})
+@Directive({ selector: '[nsRouterLink]' })
 export class NSRouterLink {
-  @Input() queryParams: {[k: string]: any};
+  private commands: any[] = [];
+  @Input() target: string;
+  @Input() queryParams: { [k: string]: any };
   @Input() fragment: string;
 
-  private commands: any[] = [];
+  // the url displayed on the anchor element.
+  // @HostBinding() href: string;
 
-  constructor(private router: Router, private route: ActivatedRoute) {}
+  urlTree: UrlTree;
+
+  /**
+   * @internal
+   */
+  constructor(
+    private router: Router, private route: ActivatedRoute,
+    private locationStrategy: LocationStrategy) { }
 
   @Input("nsRouterLink")
-  set params(data: any[]|string) {
+  set params(data: any[] | string) {
     if (Array.isArray(data)) {
       this.commands = <any>data;
     } else {
@@ -45,10 +55,24 @@ export class NSRouterLink {
     }
   }
 
+  ngOnChanges(changes: {}): any { this.updateTargetUrlAndHref(); }
+
   @HostListener("tap")
   onTap() {
-    this.router.navigate(
-        this.commands,
-        {relativeTo: this.route, queryParams: this.queryParams, fragment: this.fragment});
+    console.log("NSRouterLink.onTap(): " + this.urlTree.toString())
+    if (this.urlTree) {
+      this.router.navigateByUrl(this.urlTree);
+    }
+  }
+
+  private updateTargetUrlAndHref(): void {
+    this.urlTree = this.router.createUrlTree(
+      this.commands,
+      { relativeTo: this.route, queryParams: this.queryParams, fragment: this.fragment });
+
+    console.log("URL updated: " + this.urlTree.toString())
+    // if (this.urlTree) {
+    //   this.href = this.locationStrategy.prepareExternalUrl(this.router.serializeUrl(this.urlTree));
+    // }
   }
 }

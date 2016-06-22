@@ -1,6 +1,6 @@
 import {ElementSchemaRegistry} from '@angular/compiler';
 import {SanitizationService} from '@angular/core/src/security';
-import {Parse5DomAdapter} from '@angular/platform-server';
+import {Parse5DomAdapter} from '@angular/platform-server/src/parse5_adapter';
 import {setRootDomAdapter} from '@angular/platform-browser/src/dom/dom_adapter';
 import {Type} from '@angular/core/src/facade/lang';
 import {rendererLog, rendererError} from "./trace";

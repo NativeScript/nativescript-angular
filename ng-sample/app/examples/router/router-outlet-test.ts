@@ -50,7 +50,7 @@ class SecondComponent implements OnInit, OnDestroy {
     template: `
         <StackLayout>
             <StackLayout class="nav">
-                <Button text="First" nsRouterLink="/first"></Button>
+                <Button text="First" nsRouterLink="/"></Button>
                 <Button text="Second(1)" nsRouterLink="/second/1"></Button>           <!-- Both work -->
                 <Button text="Second(2)" [nsRouterLink]="['/second', '2' ]"></Button> <!-- Both work -->
             </StackLayout>
@@ -64,9 +64,8 @@ export class RouterOutletAppComponent {
 
 
 const routes: RouterConfig = [
-    { path: "/first", component: FirstComponent},
-    { path: "/", redirectTo: "/first", terminal: true },
-    { path: "/second/:id", component: SecondComponent },
+    { path: "", component: FirstComponent},
+    { path: "second/:id", component: SecondComponent },
 ];
 
 export const RouterOutletRouterProviders = [
