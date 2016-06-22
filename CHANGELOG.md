@@ -1,3 +1,11 @@
+# 0.1.8 (2016-06-22)
+
+- Migrate to Migrate to Angular RC3 and Angular Router 3.0.0-alpha.7:
+   - [Angular RC3 Release Notes](https://github.com/angular/angular/blob/master/CHANGELOG.md#200-rc3-2016-06-21)
+   - [Router Alpha.7 Release Notes](https://github.com/angular/angular/blob/master/modules/%40angular/router/CHANGELOG.md#300-alpha7-2016-06-17)
+
+- Build no more requires globally installed **typings**
+
 # 0.1.7 (2016-06-21)
 
 ## Features
