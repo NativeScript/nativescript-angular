@@ -44,7 +44,7 @@ class FirstComponent implements OnInit, OnDestroy {
 
         <Button text="BACK" (tap)="goBack()"></Button>
         
-        <Button text="First" [nsRouterLink]="['/first']"></Button>
+        <Button text="First" [nsRouterLink]="['/']"></Button>
         <Button text="Third(1)" [nsRouterLink]="['/third', '1' ]"></Button>
         <Button text="Third(2)" [nsRouterLink]="['/third', '2' ]"></Button>
     </StackLayout>`
@@ -79,7 +79,7 @@ class SecondComponent implements OnInit, OnDestroy {
 
         <Button text="BACK" (tap)="goBack()"></Button>
         
-        <Button text="First" [nsRouterLink]="['/first']"></Button>
+        <Button text="First" [nsRouterLink]="['/']"></Button>
         <Button text="Second(1)" [nsRouterLink]="['/second', '1' ]"></Button>
         <Button text="Second(2)" [nsRouterLink]="['/second', '2' ]"></Button>
     </StackLayout>`
@@ -104,11 +104,6 @@ class ThirdComponent implements OnInit, OnDestroy {
     }
 }
 
-
-
-
-
-
 @Component({
     selector: 'navigation-test',
     directives: [ROUTER_DIRECTIVES, NS_ROUTER_DIRECTIVES],
@@ -122,12 +117,10 @@ export class PageRouterOutletAppComponent {
     }
 }
 
-
 const routes: RouterConfig = [
-    { path: "/first", component: FirstComponent },
-    { path: "/", redirectTo: "/first", terminal: true },
-    { path: "/second/:id", component: SecondComponent },
-    { path: "/third/:id", component: ThirdComponent },
+    { path: "", component: FirstComponent },
+    { path: "second/:id", component: SecondComponent },
+    { path: "third/:id", component: ThirdComponent },
 ];
 
 export const PageRouterOutletRouterProviders = [

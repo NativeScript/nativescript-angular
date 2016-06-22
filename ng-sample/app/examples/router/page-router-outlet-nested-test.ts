@@ -14,8 +14,8 @@ import { Page } from "ui/page";
     <StackLayout>
         <Label text="First component" class="title"></Label>
         <StackLayout class="nav">
-            <Button class="link" text="Start" nsRouterLink="/second/1"></Button>
-            <Button class="link" text="Detail" nsRouterLink="/second/1/detail/3"></Button>
+            <Button class="link" text="Start" [nsRouterLink]="['second','1']"></Button>
+            <Button class="link" text="Detail" [nsRouterLink]="['second','1','detail','3']"></Button>
         </StackLayout>
     </StackLayout>`
 })
@@ -43,7 +43,7 @@ class FirstComponent implements OnInit, OnDestroy {
     <StackLayout class="master">
         <Label text="Master View" class="subtitle"></Label>
             
-        <Button *ngFor="let detail of details" [text]="'Detail ' + detail" [nsRouterLink]="['../detail', detail]"></Button>
+        <Button *ngFor="let detail of details" [text]="'Detail ' + detail" [nsRouterLink]="['detail', detail]"></Button>
     </StackLayout>
     `
 })
@@ -87,7 +87,7 @@ class DetailComponent {
 
         <StackLayout class="nav">
             <Button class="link" text="< BACK" (tap)="goBack()"></Button>
-            <Button class="link" [text]="'Second ' + (nextDepth$ | async) + ' >'" [nsRouterLink]="['../', (nextDepth$ | async)]"></Button>
+            <Button class="link" [text]="'Second ' + (nextDepth$ | async) + ' >'" [nsRouterLink]="['/second', (nextDepth$ | async)]"></Button>
         </StackLayout>
 
         <router-outlet></router-outlet>
@@ -132,14 +132,12 @@ export class PageRouterOutletNestedAppComponent {
 
 
 const routes: RouterConfig = [
-    { path: "/first", component: FirstComponent },
-    { path: "/", redirectTo: "/first", terminal: true },
+    { path: "", component: FirstComponent },
     {
-        path: "/second/:depth", component: SecondComponent,
+        path: "second/:depth", component: SecondComponent,
         children: [
-            { path: "/", redirectTo: "master", terminal: true },
-            { path: "/master", component: MasterComponent },
-            { path: "/detail/:id", component: DetailComponent }
+            { path: "", component: MasterComponent },
+            { path: "detail/:id", component: DetailComponent }
         ]
     },
 ];
