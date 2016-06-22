@@ -26,7 +26,7 @@ $ npm install
 
 ## Run the sample application (ng-sample)
 
-Intall NPM packages (use the local copy of `nativescript-angular`):
+Install NPM packages (use the local copy of `nativescript-angular`):
 ```
 $ cd ng-sample
 $ npm install
@@ -56,7 +56,7 @@ $ env WEBPACK_BUILD=1 tns run android
 
 # Running the tests
 
-Intall NPM packages (use the local copy of `nativescript-angular`):
+Install NPM packages (use the local copy of `nativescript-angular`):
 ```
 $ cd tests
 $ npm install
