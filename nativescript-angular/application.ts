@@ -1,5 +1,5 @@
 import 'globals';
-import "zone.js/dist/zone-node"
+import "zone.js/dist/zone-node";
 
 import 'reflect-metadata';
 import './polyfills/array';
@@ -14,7 +14,10 @@ import {RootRenderer, Renderer} from '@angular/core/src/render/api';
 import {NativeScriptRootRenderer, NativeScriptRenderer} from './renderer';
 import {NativeScriptDomAdapter, NativeScriptElementSchemaRegistry, NativeScriptSanitizationService} from './dom-adapter';
 import {ElementSchemaRegistry, XHR, COMPILER_PROVIDERS, CompilerConfig} from '@angular/compiler';
-import {FileSystemXHR} from './xhr';
+import {Http, XHRBackend, BrowserXhr, RequestOptions, ResponseOptions, XSRFStrategy} from '@angular/http';
+import {FileSystemXHR} from './http/xhr';
+import {NSXSRFStrategy, NSHttp} from './http/ns-http';
+import {NSFileSystem} from './file-system/ns-file-system';
 import {Parse5DomAdapter} from '@angular/platform-server/src/parse5_adapter';
 import {ExceptionHandler} from '@angular/core/src/facade/exception_handler';
 import {APPLICATION_COMMON_PROVIDERS} from '@angular/core/src/application_common_providers';
@@ -87,7 +90,7 @@ export function bootstrap(appComponentType: any,
         provide(ElementSchemaRegistry, { useClass: NativeScriptElementSchemaRegistry }),
         NS_COMPILER_PROVIDERS,
         provide(ElementSchemaRegistry, { useClass: NativeScriptElementSchemaRegistry }),
-        provide(XHR, { useClass: FileSystemXHR }),
+        provide(XHR, { useClass: FileSystemXHR })
     ]
 
     var appProviders = [defaultAppProviders];
@@ -95,7 +98,19 @@ export function bootstrap(appComponentType: any,
         appProviders.push(customProviders);
     }
 
-    var platform = getPlatform();
+    // Http Setup    
+    // Since HTTP_PROVIDERS can be added with customProviders above, this must come after
+    appProviders.push([
+        provide(XSRFStrategy, { useValue: new NSXSRFStrategy()}),
+        NSFileSystem,
+        provide(Http, {
+            useFactory: (backend, options, nsFileSystem) => {
+                return new NSHttp(backend, options, nsFileSystem);
+            }, deps: [XHRBackend, RequestOptions, NSFileSystem]
+        })
+    ]);
+
+    var platform = getPlatform();    
     if (!isPresent(platform)) {
         platform = createPlatform(ReflectiveInjector.resolveAndCreate(platformProviders));
     }

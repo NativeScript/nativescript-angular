@@ -29,6 +29,7 @@ ng-sample/app/global.d.ts
 ng-sample/platforms
 ng-sample/lib
 ng-sample/node_modules
+ng-sample/app/nativescript-angular
 
 startup-test/platforms
 startup-test/lib
