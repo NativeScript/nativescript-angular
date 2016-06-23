@@ -83,4 +83,4 @@ var routes: RouterConfig = [
     { path: 'modal-on-push', component: ModalTestWithPushStrategy },
 ];
 
-export var MainRouterProviders = nsProvideRouter(routes, { enableTracing: true });
+export var MainRouterProviders = nsProvideRouter(routes, { enableTracing: false });
