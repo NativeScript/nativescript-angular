@@ -59,7 +59,6 @@ export class NSRouterLink {
 
   @HostListener("tap")
   onTap() {
-    console.log("NSRouterLink.onTap(): " + this.urlTree.toString())
     if (this.urlTree) {
       this.router.navigateByUrl(this.urlTree);
     }
@@ -70,7 +69,6 @@ export class NSRouterLink {
       this.commands,
       { relativeTo: this.route, queryParams: this.queryParams, fragment: this.fragment });
 
-    console.log("URL updated: " + this.urlTree.toString())
     // if (this.urlTree) {
     //   this.href = this.locationStrategy.prepareExternalUrl(this.router.serializeUrl(this.urlTree));
     // }
