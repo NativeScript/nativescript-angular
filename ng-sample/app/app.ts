@@ -6,7 +6,8 @@
 //profiling.start('application-start');
 
 // this import should be first in order to load some required settings (like globals and reflect-metadata)
-import { nativeScriptBootstrap } from "nativescript-angular/application";
+import { Router } from "@angular/router";
+import { nativeScriptBootstrap, onAfterLivesync, onBeforeLivesync } from "nativescript-angular/application";
 import { NS_ROUTER_PROVIDERS as NS_ROUTER_PROVIDERS_DEPRECATED } from "nativescript-angular/router-deprecated";
 import { NS_ROUTER_PROVIDERS } from "nativescript-angular/router";
 import { HTTP_PROVIDERS } from "@angular/http";
@@ -14,7 +15,7 @@ import { rendererTraceCategory, routerTraceCategory, listViewTraceCategory } fro
 
 import trace = require("trace");
 // trace.setCategories(rendererTraceCategory);
-trace.setCategories(routerTraceCategory);
+// trace.setCategories(routerTraceCategory);
 // trace.setCategories(listViewTraceCategory);
 trace.enable();
 
@@ -28,6 +29,7 @@ import {HttpTest} from "./examples/http/http-test";
 import {ActionBarTest} from "./examples/action-bar/action-bar-test";
 import {ModalTest} from "./examples/modal/modal-test";
 import {PlatfromDirectivesTest} from "./examples/platform-directives/platform-directives-test";
+import {LivesyncApp, LivesyncTestRouterProviders} from "./examples/livesync-test/livesync-test-app";
 
 // router-deprecated
 import {NavigationTest} from "./examples/router-deprecated/navigation-test";
@@ -39,13 +41,14 @@ import { RouterOutletAppComponent, RouterOutletRouterProviders} from "./examples
 import { PageRouterOutletAppComponent, PageRouterOutletRouterProviders } from "./examples/router/page-router-outlet-test"
 import { PageRouterOutletNestedAppComponent, PageRouterOutletNestedRouterProviders } from "./examples/router/page-router-outlet-nested-test"
 
-//nativeScriptBootstrap(RendererTest);
+
+nativeScriptBootstrap(RendererTest);
 //nativeScriptBootstrap(TabViewTest);
 //nativeScriptBootstrap(Benchmark);
 // nativeScriptBootstrap(ListTest);
 // nativeScriptBootstrap(ListTestAsync);
 //nativeScriptBootstrap(ImageTest);
-nativeScriptBootstrap(HttpTest, [HTTP_PROVIDERS]);
+// nativeScriptBootstrap(HttpTest, [HTTP_PROVIDERS]);
 //nativeScriptBootstrap(ActionBarTest, [NS_ROUTER_PROVIDERS_DEPRECATED], { startPageActionBarHidden: false });
 //nativeScriptBootstrap(ActionBarTest, [NS_ROUTER_PROVIDERS_DEPRECATED]);
 //nativeScriptBootstrap(ModalTest);
@@ -60,3 +63,28 @@ nativeScriptBootstrap(HttpTest, [HTTP_PROVIDERS]);
 // nativeScriptBootstrap(NavigationTest, [NS_ROUTER_PROVIDERS_DEPRECATED]);
 // nativeScriptBootstrap(RouterOutletTest, [NS_ROUTER_PROVIDERS_DEPRECATED]);
 // nativeScriptBootstrap(LoginTest, [NS_ROUTER_PROVIDERS_DEPRECATED]);
+
+
+// Livesync test
+// var cahcedUrl: string;
+// onBeforeLivesync.subscribe((compRef) => {
+//     console.log("------- onBeforeLivesync");
+//     if (compRef) {
+//         const router = <Router>compRef.injector.get(Router);
+//         cahcedUrl = router.url;
+//         console.log("------- Caching URL: " + cahcedUrl);
+//     }
+// });
+
+// onAfterLivesync.subscribe((compRef) => {
+//     console.log("------- onAfterLivesync cachedUrl:");
+//     const router = <Router>compRef.injector.get(Router);
+//     router.events.subscribe(e => console.log(e.toString()));
+//     if (router && cahcedUrl) {
+//         setTimeout(() => { router.navigateByUrl(cahcedUrl); }, 0);
+//     }
+// });
+
+// nativeScriptBootstrap(LivesyncApp, [LivesyncTestRouterProviders]);
+
+
