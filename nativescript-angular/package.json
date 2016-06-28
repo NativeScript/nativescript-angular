@@ -1,6 +1,6 @@
 {
   "name": "nativescript-angular",
-  "version": "0.1.8",
+  "version": "0.1.9",
   "description": "An Angular 2 renderer that lets you build mobile apps with NativeScript.",
   "homepage": "http://www.telerik.com",
   "bugs": "http://www.telerik.com",
