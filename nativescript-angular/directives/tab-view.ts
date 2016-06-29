@@ -18,7 +18,6 @@ export class TabViewDirective {
     }
     
     set selectedIndex(value) {
-        debugger;
         this._selectedIndex = utils.convertToInt(value);
         if (this.viewInitialized) {
             this.tabView.selectedIndex = this._selectedIndex;
@@ -31,7 +30,6 @@ export class TabViewDirective {
     
     ngAfterViewInit() {
         this.viewInitialized = true;
-        debugger;
         rendererLog("this._selectedIndex: " + this._selectedIndex);
         if (!isBlank(this._selectedIndex)) {
             this.tabView.selectedIndex = this._selectedIndex;
