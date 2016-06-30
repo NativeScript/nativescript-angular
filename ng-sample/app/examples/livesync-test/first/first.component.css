@@ -1,0 +1,14 @@
+.title {
+    font-size: 30;
+    margin: 16;
+    color: darkblue;
+}
+
+button {
+    horizontal-align: center;
+    margin: 10;
+}
+
+stack-layout {
+    background-color: lightgreen;
+}
