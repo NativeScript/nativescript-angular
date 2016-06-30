@@ -3,6 +3,8 @@ import "zone.js/dist/zone-node";
 
 import 'reflect-metadata';
 import './polyfills/array';
+import './polyfills/console';
+
 import {rendererLog, rendererError} from "./trace";
 import {SanitizationService} from '@angular/core/src/security';
 import {isPresent, Type, print} from '@angular/core/src/facade/lang';
