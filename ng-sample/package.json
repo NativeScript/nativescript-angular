@@ -23,8 +23,8 @@
 	},
 	"homepage": "https://github.com/NativeScript/template-hello-world",
 	"dependencies": {
-		"tns-core-modules": ">=2.0.0 || >=2.1.0-2016 || >=2.0.0-angular-7",
-		"nativescript-angular": "^0.1.6",
+		"tns-core-modules": ">=2.1.0 || >=2.1.0-2016",
+		"nativescript-angular": "^0.2.0",
 		"nativescript-intl": "^0.0.2",
 		"@angular/common": "2.0.0-rc.3",
 		"@angular/compiler": "2.0.0-rc.3",
@@ -56,10 +56,10 @@
 	"nativescript": {
 		"id": "org.nativescript.ngsample",
 		"tns-android": {
-			"version": "2.0.0"
+			"version": "2.1.1"
 		},
 		"tns-ios": {
-			"version": "2.0.1"
+			"version": "2.1.0"
 		}
 	}
 }

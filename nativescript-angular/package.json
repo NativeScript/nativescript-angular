@@ -36,7 +36,7 @@
     "url": "0.10.3"
   },
   "devDependencies": {
-    "tns-core-modules": ">=2.0.0 || >=2.1.0-2016 || >=2.0.0-angular-7",
+    "tns-core-modules": ">=2.1.0 || >=2.1.0-2016",
     "typescript": "^1.8.10"
   },
   "nativescript": {}
