@@ -29,8 +29,8 @@ install:
     - cd nativescript-angular
     - npm install
     - cd ../tests
-    - npm install
     - npm install ../nativescript-angular
+    - npm install
 
 before_script:
     - echo no | android create avd --force -n test -t android-19 -b armeabi-v7a
