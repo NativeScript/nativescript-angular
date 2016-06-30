@@ -1,6 +1,7 @@
 import {Directive, HostBinding, HostListener, Input} from '@angular/core';
 import {LocationStrategy} from '@angular/common';
 import {Router, ActivatedRoute, UrlTree} from '@angular/router';
+import {routerLog} from "../trace";
 
 /**
  * The RouterLink directive lets you link to specific parts of your app.
@@ -34,43 +35,25 @@ export class NSRouterLink {
   @Input() queryParams: { [k: string]: any };
   @Input() fragment: string;
 
-  // the url displayed on the anchor element.
-  // @HostBinding() href: string;
-
-  urlTree: UrlTree;
-
   /**
    * @internal
    */
-  constructor(
-    private router: Router, private route: ActivatedRoute,
-    private locationStrategy: LocationStrategy) { }
+  constructor(private router: Router, private route: ActivatedRoute) { }
 
   @Input("nsRouterLink")
   set params(data: any[] | string) {
     if (Array.isArray(data)) {
-      this.commands = <any>data;
+      this.commands = data;
     } else {
       this.commands = [data];
     }
   }
 
-  ngOnChanges(changes: {}): any { this.updateTargetUrlAndHref(); }
-
   @HostListener("tap")
   onTap() {
-    if (this.urlTree) {
-      this.router.navigateByUrl(this.urlTree);
-    }
-  }
-
-  private updateTargetUrlAndHref(): void {
-    this.urlTree = this.router.createUrlTree(
+    routerLog("nsRouterLink.tapped: " + this.commands);
+    this.router.navigate(
       this.commands,
       { relativeTo: this.route, queryParams: this.queryParams, fragment: this.fragment });
-
-    // if (this.urlTree) {
-    //   this.href = this.locationStrategy.prepareExternalUrl(this.router.serializeUrl(this.urlTree));
-    // }
   }
 }

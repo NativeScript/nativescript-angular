@@ -59,8 +59,7 @@ export class NSLocationStrategy extends LocationStrategy {
         
         if (this.states.length > 0) {
             let oldState = this.states.pop();
-            routerLog(`NSLocationStrategy.replaceState POP state: ${oldState.state}, title: ${oldState.title}, url: ${oldState.url}, queryParams: ${oldState.queryParams}`);
-            this.callPopState(oldState, true);
+            routerLog(`NSLocationStrategy.replaceState state poped: ${oldState.state}, title: ${oldState.title}, url: ${oldState.url}, queryParams: ${oldState.queryParams}`);
         }
 
         this.pushStateInternal(state, title, url, queryParams);
