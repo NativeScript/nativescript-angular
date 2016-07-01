@@ -16,9 +16,7 @@ import {RootRenderer, Renderer} from '@angular/core/src/render/api';
 import {NativeScriptRootRenderer, NativeScriptRenderer} from './renderer';
 import {NativeScriptDomAdapter, NativeScriptElementSchemaRegistry, NativeScriptSanitizationService} from './dom-adapter';
 import {ElementSchemaRegistry, XHR, COMPILER_PROVIDERS, CompilerConfig} from '@angular/compiler';
-import {Http, XHRBackend, BrowserXhr, RequestOptions, ResponseOptions, XSRFStrategy} from '@angular/http';
 import {FileSystemXHR} from './http/xhr';
-import {NSXSRFStrategy, NSHttp} from './http/ns-http';
 import {NSFileSystem} from './file-system/ns-file-system';
 import {Parse5DomAdapter} from '@angular/platform-server/src/parse5_adapter';
 import {ExceptionHandler} from '@angular/core/src/facade/exception_handler';
@@ -112,18 +110,6 @@ export function bootstrap(appComponentType: any,
     if (isPresent(customProviders)) {
         appProviders.push(customProviders);
     }
-
-    // Http Setup    
-    // Since HTTP_PROVIDERS can be added with customProviders above, this must come after
-    appProviders.push([
-        provide(XSRFStrategy, { useValue: new NSXSRFStrategy() }),
-        NSFileSystem,
-        provide(Http, {
-            useFactory: (backend, options, nsFileSystem) => {
-                return new NSHttp(backend, options, nsFileSystem);
-            }, deps: [XHRBackend, RequestOptions, NSFileSystem]
-        })
-    ]);
 
     var platform = getPlatform();
     if (!isPresent(platform)) {

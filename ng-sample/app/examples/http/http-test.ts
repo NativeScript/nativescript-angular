@@ -1,5 +1,6 @@
 import {Component} from '@angular/core';
 import {Http} from '@angular/http';
+import {NS_HTTP_PROVIDERS} from 'nativescript-angular/http';
 import 'rxjs/add/operator/map';
 
 /* IMPORTANT
@@ -22,7 +23,8 @@ https://blog.nraboy.com/2015/12/fix-ios-9-app-transport-security-issues-in-nativ
       `Button {
         margin-bottom:20;
       }`
-    ]
+    ],
+    providers: [NS_HTTP_PROVIDERS]
 })
 export class HttpTest {
   public title: string;
