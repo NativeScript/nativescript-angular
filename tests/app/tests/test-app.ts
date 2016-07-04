@@ -51,7 +51,7 @@ export class TestApp {
 
 var runningApps = new Map<any, { hostView: LayoutBase, appRoot: GridLayout, appRef: ApplicationRef }>();
 
-export function bootstrapTestApp(appComponentType: any, providers: ProviderArray = []): Promise<any> {
+export function bootstrapTestApp<T>(appComponentType: new (...args) => T, providers: ProviderArray = []): Promise<T> {
     const page = topmost().currentPage;
     const rootLayout = <LayoutBase>page.content;
     const viewRoot = new GridLayout();
