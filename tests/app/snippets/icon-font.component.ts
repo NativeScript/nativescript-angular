@@ -1,6 +1,6 @@
 import {Component} from "@angular/core";
 
-// >> icon-font-sample
+// >> icon-font-sample-ts
 @Component({ 
     // >> (hide)
     selector: "icon-font",
@@ -21,4 +21,4 @@ export class IconFontComponent {
         }
     }
 }
-// << icon-font-sample
+// << icon-font-sample-ts

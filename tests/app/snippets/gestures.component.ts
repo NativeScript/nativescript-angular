@@ -14,52 +14,52 @@ import {
 })
 export class GestureComponent {
     
-    // >> tap-gesture
+    // >> ng-tap-gesture-ts
     onTap(args: GestureEventData) {
         console.log("Tap!")
     }
-    // << tap-gesture
+    // << ng-tap-gesture-ts
     
-    // >> double-tap-gesture
+    // >> ng-double-tap-gesture
     onDoubleTap(args: GestureEventData) {
         console.log("DoubleTap!")
 
     }
-    // << double-tap-gesture
+    // << ng-double-tap-gesture-ts
     
-    // >> long-press-gesture
+    // >> ng-long-press-gesture-ts
     onLongPress(args: GestureEventData) {
         console.log("LongPress!")
     }
-    // << long-press-gesture
+    // << ng-long-press-gesture-ts
     
-    // >> swipe-gesture
+    // >> ng-swipe-gesture
     onSwipe(args: SwipeGestureEventData) {
         console.log("Swipe Direction: " + args.direction);
     }
-    // << swipe-gesture
+    // << ng-swipe-gesture-ts
     
-    // >> pan-gesture
+    // >> ng-pan-gesture-ts
     onPan(args: PanGestureEventData) {
         console.log("Pan delta: [" + args.deltaX + ", " + args.deltaY + "] state: " + args.state);
     }
-    // << pan-gesture
+    // << ng-pan-gesture-ts
     
-    // >> pinch-gesture
+    // >> ng-pinch-gesture-ts
     onPinch(args: PinchGestureEventData) {
         console.log("Pinch scale: " + args.scale + " state: " + args.state);
     }
-    // << pinch-gesture
+    // << ng-pinch-gesture-ts
     
-    // >> rotate-gesture
+    // >> ng-rotate-gesture-ts
     onRotate(args: RotationGestureEventData) {
         console.log("Rotate angle: " + args.rotation + " state: " + args.state);
     }
-    // << rotate-gesture
+    // << ng-rotate-gesture-ts
     
-    // >> touch-gesture
+    // >> ng-touch-gesture-ts
     onTouch(args: TouchGestureEventData) {
         console.log("Touch point: [" + args.getX() + ", " + args.getY() + "] activePointers: " + args.getActivePointers().length);
     } 
-    // << touch-gesture   
+    // << ng-touch-gesture-ts
 }
