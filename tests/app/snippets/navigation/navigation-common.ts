@@ -1,4 +1,4 @@
-// >> router-content-components-ts
+// >> router-content-components
 import {Component} from '@angular/core';
 import {NS_ROUTER_DIRECTIVES} from 'nativescript-angular/router';
 
@@ -23,7 +23,7 @@ export class FirstComponent { }
     </StackLayout>`
 })
 export class SecondComponent { }
-// << router-content-components-ts
+// << router-content-components
 
 
 // >> router-location-back
