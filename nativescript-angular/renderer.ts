@@ -8,7 +8,8 @@ import {
 import { AnimationKeyframe } from '@angular/core/src/animation/animation_keyframe';
 import { AnimationPlayer } from '@angular/core/src/animation/animation_player';
 import { AnimationStyles } from '@angular/core/src/animation/animation_styles';
-import {APP_ROOT_VIEW, DEVICE} from "./platform-providers";
+import { AnimationDriver } from '@angular/core/src/animation/animation_driver';
+import {APP_ROOT_VIEW, DEVICE, ANIMATION_DRIVER} from "./platform-providers";
 import {isBlank} from '@angular/core/src/facade/lang';
 import {CONTENT_ATTR} from '@angular/platform-browser/src/dom/dom_renderer';
 import {View} from "ui/core/view";
@@ -24,10 +25,12 @@ import { Device } from "platform";
 export class NativeScriptRootRenderer implements RootRenderer {
     private _rootView: View = null;
     private _viewUtil: ViewUtil;
+    private _animationDriver: AnimationDriver;
 
-    constructor( @Optional() @Inject(APP_ROOT_VIEW) rootView: View, @Inject(DEVICE) device: Device) {
+    constructor( @Optional() @Inject(APP_ROOT_VIEW) rootView: View, @Inject(DEVICE) device: Device, @Inject(ANIMATION_DRIVER) animationDriver) {
         this._rootView = rootView;
         this._viewUtil = new ViewUtil(device);
+        this._animationDriver = animationDriver;
     }
 
     private _registeredComponents: Map<string, NativeScriptRenderer> = new Map<string, NativeScriptRenderer>();
@@ -50,7 +53,7 @@ export class NativeScriptRootRenderer implements RootRenderer {
     renderComponent(componentProto: RenderComponentType): Renderer {
         var renderer = this._registeredComponents.get(componentProto.id);
         if (isBlank(renderer)) {
-            renderer = new NativeScriptRenderer(this, componentProto);
+            renderer = new NativeScriptRenderer(this, componentProto, this._animationDriver);
             this._registeredComponents.set(componentProto.id, renderer);
         }
         return renderer;
@@ -67,7 +70,7 @@ export class NativeScriptRenderer extends Renderer {
         return this.rootRenderer.viewUtil;
     }
 
-    constructor(private _rootRenderer: NativeScriptRootRenderer, private componentProto: RenderComponentType) {
+    constructor(private _rootRenderer: NativeScriptRootRenderer, private componentProto: RenderComponentType, private animationDriver: AnimationDriver) {
         super();
         this.rootRenderer = _rootRenderer;
         let page = this.rootRenderer.page;
@@ -121,7 +124,6 @@ export class NativeScriptRenderer extends Renderer {
         viewRootNodes.forEach((node, index) => {
             const childIndex = insertPosition + index + 1;
             this.viewUtil.insertChild(parent, node, childIndex);
-            this.animateNodeEnter(node);
         });
     }
 
@@ -130,14 +132,7 @@ export class NativeScriptRenderer extends Renderer {
         for (var i = 0; i < viewRootNodes.length; i++) {
             var node = viewRootNodes[i];
             this.viewUtil.removeChild(<NgView>node.parent, node);
-            this.animateNodeLeave(node);
         }
-    }
-
-    animateNodeEnter(node: NgView) {
-    }
-
-    animateNodeLeave(node: NgView) {
     }
 
     public destroyView(hostElement: NgView, viewAllNodes: NgView[]) {
@@ -231,6 +226,7 @@ export class NativeScriptRenderer extends Renderer {
     }
 
     public animate(element: any, startingStyles: AnimationStyles, keyframes: AnimationKeyframe[], duration: number, delay: number, easing: string): AnimationPlayer {
-        throw new Error("NativeScriptRenderer.animate() - Not implemented");
+        let player = this.animationDriver.animate(element, startingStyles, keyframes, duration, delay, easing);
+        return player;
     }
 }

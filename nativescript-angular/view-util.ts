@@ -53,6 +53,12 @@ export class ViewUtil {
         if (parent.meta && parent.meta.insertChild) {
             parent.meta.insertChild(parent, child, atIndex);
         } else if (isLayout(parent)) {
+            if (child.parent === parent) {
+                let index = (<LayoutBase>parent).getChildIndex(child);
+                if (index !== -1) {
+                    parent.removeChild(child);
+                }
+            }
             if (atIndex !== -1) {
                 parent.insertChild(child, atIndex);
             } else {
@@ -292,7 +298,12 @@ export class ViewUtil {
 
     private setStyleValue(view: NgView, property: StyleProperty, value: any) {
         try {
-            view.style._setValue(property, value, ValueSource.Local);
+            if (value === null) {
+                view.style._resetValue(property, ValueSource.Local);
+            }
+            else {
+                view.style._setValue(property, value, ValueSource.Local);
+            }
         } catch (ex) {
             styleError("Error setting property: " + property.name + " view: " + view + " value: " + value + " " + ex);
         }
@@ -315,7 +326,7 @@ export class ViewUtil {
                 }
             } else {
                 const resolvedProperty = <StyleProperty>property;
-                this.setStyleValue(view, resolvedProperty, resolvedValue);
+                this.setStyleValue(view, resolvedProperty, value);
             }
 
         });

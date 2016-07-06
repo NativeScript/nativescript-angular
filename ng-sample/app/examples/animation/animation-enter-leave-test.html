@@ -1,0 +1,9 @@
+<StackLayout>
+    <Button text="Add" (tap)="onAddTap()"></Button>
+    <Button text="Remove All" (tap)="onRemoveAllTap()"></Button>
+    <ScrollView>
+        <StackLayout>
+            <Button *ngFor="let item of items" @state="'in'" text="{{ item }}" class="button" (tap)="onItemTap($event)"></Button>
+        </StackLayout>
+    </ScrollView>
+</StackLayout>

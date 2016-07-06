@@ -41,6 +41,11 @@ import { RouterOutletAppComponent, RouterOutletRouterProviders} from "./examples
 import { PageRouterOutletAppComponent, PageRouterOutletRouterProviders } from "./examples/router/page-router-outlet-test"
 import { PageRouterOutletNestedAppComponent, PageRouterOutletNestedRouterProviders } from "./examples/router/page-router-outlet-nested-test"
 
+// animations
+import { AnimationEnterLeaveTest } from "./examples/animation/animation-enter-leave-test";
+import { AnimationKeyframesTest } from "./examples/animation/animation-keyframes-test";
+import { AnimationNgClassTest } from "./examples/animation/animation-ngclass-test";
+import { AnimationStatesTest } from "./examples/animation/animation-states-test";
 
 // nativeScriptBootstrap(RendererTest);
 //nativeScriptBootstrap(TabViewTest);
@@ -64,7 +69,6 @@ nativeScriptBootstrap(HttpTest);
 // nativeScriptBootstrap(RouterOutletTest, [NS_ROUTER_PROVIDERS_DEPRECATED]);
 // nativeScriptBootstrap(LoginTest, [NS_ROUTER_PROVIDERS_DEPRECATED]);
 
-
 // Livesync test
 // var cahcedUrl: string;
 // onBeforeLivesync.subscribe((compRef) => {
@@ -87,4 +91,8 @@ nativeScriptBootstrap(HttpTest);
 
 // nativeScriptBootstrap(LivesyncApp, [LivesyncTestRouterProviders]);
 
-
+// animations
+//nativeScriptBootstrap(AnimationStatesTest);
+//nativeScriptBootstrap(AnimationNgClassTest);
+//nativeScriptBootstrap(AnimationKeyframesTest);
+//nativeScriptBootstrap(AnimationEnterLeaveTest);
