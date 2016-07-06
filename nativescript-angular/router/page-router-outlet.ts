@@ -1,12 +1,12 @@
 import {
     Attribute, ComponentFactory, ComponentRef, Directive,
     ReflectiveInjector, ResolvedReflectiveProvider, ViewContainerRef,
-    Inject, ComponentResolver, provide} from '@angular/core';
+    Inject, ComponentResolver, provide, ComponentFactoryResolver,
+    NoComponentFactoryError} from '@angular/core';
 
 import {isBlank, isPresent} from '@angular/core/src/facade/lang';
 
-import {RouterOutletMap, ActivatedRoute, PRIMARY_OUTLET} from '@angular/router';
-import {RouterOutlet} from '@angular/router/directives/router_outlet';
+import {RouterOutletMap, ActivatedRoute, RouterOutlet, PRIMARY_OUTLET} from '@angular/router';
 import {NSLocationStrategy} from "./ns-location-strategy";
 import {DEVICE} from "../platform-providers";
 import {Device} from "platform";
@@ -40,10 +40,8 @@ class RefCache {
     }
 }
 
-
-
 @Directive({ selector: 'page-router-outlet' })
-export class PageRouterOutlet extends RouterOutlet {
+export class PageRouterOutlet {
     private viewUtil: ViewUtil;
     private refCache: RefCache = new RefCache();
     private isInitalPage: boolean = true;
@@ -51,6 +49,8 @@ export class PageRouterOutlet extends RouterOutlet {
 
     private currnetActivatedComp: ComponentRef<any>;
     private currentActivatedRoute: ActivatedRoute;
+
+    public outletMap: RouterOutletMap;
 
     get isActivated(): boolean {
         return !!this.currnetActivatedComp;
@@ -76,15 +76,17 @@ export class PageRouterOutlet extends RouterOutlet {
         private containerRef: ViewContainerRef,
         @Attribute('name') name: string,
         private locationStrategy: NSLocationStrategy,
+        private componentFactoryResolver: ComponentFactoryResolver,
         compiler: ComponentResolver,
         @Inject(DEVICE) device: Device) {
-        super(parentOutletMap, containerRef, name)
+
+        parentOutletMap.registerOutlet(name ? name : PRIMARY_OUTLET, <any>this);
 
         this.viewUtil = new ViewUtil(device);
         compiler.resolveComponent(DetachedLoader).then((detachedLoaderFactory) => {
             log("DetachedLoaderFactory leaded");
             this.detachedLoaderFactory = detachedLoaderFactory;
-        })
+        });
     }
 
     deactivate(): void {
@@ -115,7 +117,6 @@ export class PageRouterOutlet extends RouterOutlet {
      * This method in turn is responsible for calling the `routerOnActivate` hook of its child.
      */
     activate(
-        factory: ComponentFactory<any>,
         activatedRoute: ActivatedRoute,
         providers: ResolvedReflectiveProvider[],
         outletMap: RouterOutletMap): void {
@@ -124,16 +125,16 @@ export class PageRouterOutlet extends RouterOutlet {
         this.currentActivatedRoute = activatedRoute;
 
         if (this.locationStrategy.isPageNavigatingBack()) {
-            this.activateOnGoBack(factory, activatedRoute, providers);
+            this.activateOnGoBack(activatedRoute, providers);
         } else {
-            this.activateOnGoForward(factory, activatedRoute, providers);
+            this.activateOnGoForward(activatedRoute, providers);
         }
     }
 
     private activateOnGoForward(
-        factory: ComponentFactory<any>,
         activatedRoute: ActivatedRoute,
         providers: ResolvedReflectiveProvider[]): void {
+        const factory = this.getComponentFactory(activatedRoute);
 
         if (this.isInitalPage) {
             log("PageRouterOutlet.activate() inital page - just load component: " + activatedRoute.component);
@@ -146,7 +147,7 @@ export class PageRouterOutlet extends RouterOutlet {
             log("PageRouterOutlet.activate() forward navigation - create detached loader in the loader container: " + activatedRoute.component);
 
             const page = new Page();
-            const pageResolvedProvider = ReflectiveInjector.resolve([provide(Page, { useValue: page })])
+            const pageResolvedProvider = ReflectiveInjector.resolve([provide(Page, { useValue: page })]);
             const childInjector = ReflectiveInjector.fromResolvedProviders([...providers, ...pageResolvedProvider], this.containerRef.parentInjector);
             const loaderRef = this.containerRef.createComponent(this.detachedLoaderFactory, this.containerRef.length, childInjector, []);
 
@@ -156,7 +157,7 @@ export class PageRouterOutlet extends RouterOutlet {
         }
     }
 
-    private activateOnGoBack(factory: ComponentFactory<any>,
+    private activateOnGoBack(
         activatedRoute: ActivatedRoute,
         providers: ResolvedReflectiveProvider[]): void {
         log("PageRouterOutlet.activate() - Back naviation, so load from cache: " + activatedRoute.component);
@@ -189,11 +190,35 @@ export class PageRouterOutlet extends RouterOutlet {
             create: () => { return page; }
         });
     }
+
+    // NOTE: Using private APIs - potential break point!
+    private getComponentFactory(activatedRoute: any): ComponentFactory<any> {
+        const snapshot = activatedRoute._futureSnapshot;
+        const component: any = <any>snapshot._routeConfig.component;
+        let factory: ComponentFactory<any>;
+        try {
+            factory = typeof component === 'string' ?
+                snapshot._resolvedComponentFactory :
+                this.componentFactoryResolver.resolveComponentFactory(component);
+        } catch (e) {
+            if (!(e instanceof NoComponentFactoryError)) {
+                throw e;
+            }
+            // TODO: vsavkin uncomment this once ComponentResolver is deprecated
+            // const componentName = component ? component.name : null;
+            // console.warn(
+            //     `'${componentName}' not found in precompile array.  To ensure all components referred
+            //     to by the RouterConfig are compiled, you must add '${componentName}' to the
+            //     'precompile' array of your application component. This will be required in a future
+            //     release of the router.`);
+
+            factory = snapshot._resolvedComponentFactory;
+        }
+        return factory;
+    }
+
 }
 
 function log(msg: string) {
     routerLog(msg);
 }
-
-
-
