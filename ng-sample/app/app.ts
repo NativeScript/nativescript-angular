@@ -42,13 +42,13 @@ import { PageRouterOutletAppComponent, PageRouterOutletRouterProviders } from ".
 import { PageRouterOutletNestedAppComponent, PageRouterOutletNestedRouterProviders } from "./examples/router/page-router-outlet-nested-test"
 
 
-nativeScriptBootstrap(RendererTest);
+// nativeScriptBootstrap(RendererTest);
 //nativeScriptBootstrap(TabViewTest);
 //nativeScriptBootstrap(Benchmark);
 // nativeScriptBootstrap(ListTest);
 // nativeScriptBootstrap(ListTestAsync);
 //nativeScriptBootstrap(ImageTest);
-// nativeScriptBootstrap(HttpTest, [HTTP_PROVIDERS]);
+nativeScriptBootstrap(HttpTest);
 //nativeScriptBootstrap(ActionBarTest, [NS_ROUTER_PROVIDERS_DEPRECATED], { startPageActionBarHidden: false });
 //nativeScriptBootstrap(ActionBarTest, [NS_ROUTER_PROVIDERS_DEPRECATED]);
 //nativeScriptBootstrap(ModalTest);
