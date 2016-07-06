@@ -28,27 +28,27 @@ import { ModalTest, ModalTestWithPushStrategy } from "../modal/modal-dialog.comp
         <Label text="Main Component" class="title"></Label>
 
         <StackLayout orientation="horizontal" horizontalAlignment="center">
-            <Button text="Template" [nsRouterLink]="['template']"></Button>
-            <Button text="Router" [nsRouterLink]="['router']"></Button>
+            <Button text="Template" [nsRouterLink]="['/template']"></Button>
+            <Button text="Router" [nsRouterLink]="['/router']"></Button>
         </StackLayout>
 
         <StackLayout orientation="horizontal" horizontalAlignment="center">
-            <Button text="First" [nsRouterLink]="['first']"></Button>      
-            <Button text="Second" [nsRouterLink]="['second']"></Button>
+            <Button text="First" [nsRouterLink]="['/first']"></Button>      
+            <Button text="Second" [nsRouterLink]="['/second']"></Button>
         </StackLayout>
 
         <StackLayout orientation="horizontal" horizontalAlignment="center">
-            <Button text="ActionBar1" [nsRouterLink]="['first-action-bar']"></Button>
-            <Button text="ActionBar2" [nsRouterLink]="['second-action-bar']"></Button>
+            <Button text="ActionBar1" [nsRouterLink]="['/first-action-bar']"></Button>
+            <Button text="ActionBar2" [nsRouterLink]="['/second-action-bar']"></Button>
         </StackLayout>
 
-        <Button text="Binding" [nsRouterLink]="['binding']"></Button>     
+        <Button text="Binding" [nsRouterLink]="['/binding']"></Button>     
 
-        <Button text="ListViewExamples" [nsRouterLink]="['listView']"></Button>  
+        <Button text="ListViewExamples" [nsRouterLink]="['/listView']"></Button>  
         
         <StackLayout orientation="horizontal" horizontalAlignment="center">
-            <Button text="modal" [nsRouterLink]="['modal']"></Button>
-            <Button text="modal(onPush)" [nsRouterLink]="['modal-on-push']"></Button> 
+            <Button text="modal" [nsRouterLink]="['/modal']"></Button>
+            <Button text="modal(onPush)" [nsRouterLink]="['/modal-on-push']"></Button> 
         </StackLayout>  
     </StackLayout>
     `,

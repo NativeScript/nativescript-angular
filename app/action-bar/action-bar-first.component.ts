@@ -6,7 +6,7 @@ import {NS_ROUTER_DIRECTIVES} from "nativescript-angular/router";
     directives: [NS_ROUTER_DIRECTIVES],
     template: `
     <ActionBar title="Title 1" automationText="title"> 
-        <ActionItem *ngIf="show" text="action" (tap)="onTap()" [nsRouterLink]="['../second']" 
+        <ActionItem *ngIf="show" text="action" (tap)="onTap()" [nsRouterLink]="['/second']" 
             automationText="action"></ActionItem>
         <ActionItem (tap)="onShare()" ios.systemIcon="9" ios.position="left" 
             android.systemIcon="ic_menu_share_holo_light" android.position="actionBar"
