@@ -9,16 +9,14 @@ import {rendererLog, rendererError} from "./trace";
 import {SanitizationService} from '@angular/core/src/security';
 import {isPresent, Type, print} from '@angular/core/src/facade/lang';
 import {ReflectiveInjector, coreLoadAndBootstrap, createPlatform, EventEmitter,
-    getPlatform, assertPlatform, ComponentRef, PlatformRef, PLATFORM_DIRECTIVES, PLATFORM_PIPES} from '@angular/core';
-import {bind, provide, Provider} from '@angular/core/src/di';
+    getPlatform, ComponentRef, PLATFORM_DIRECTIVES, PLATFORM_PIPES} from '@angular/core';
+import {provide, Provider} from '@angular/core/src/di';
 
 import {RootRenderer, Renderer} from '@angular/core/src/render/api';
 import {NativeScriptRootRenderer, NativeScriptRenderer} from './renderer';
 import {NativeScriptDomAdapter, NativeScriptElementSchemaRegistry, NativeScriptSanitizationService} from './dom-adapter';
 import {ElementSchemaRegistry, XHR, COMPILER_PROVIDERS, CompilerConfig} from '@angular/compiler';
 import {FileSystemXHR} from './http/xhr';
-import {NSFileSystem} from './file-system/ns-file-system';
-import {Parse5DomAdapter} from '@angular/platform-server/src/parse5_adapter';
 import {ExceptionHandler} from '@angular/core/src/facade/exception_handler';
 import {APPLICATION_COMMON_PROVIDERS} from '@angular/core/src/application_common_providers';
 import {PLATFORM_COMMON_PROVIDERS} from '@angular/core/src/platform_common_providers';
@@ -29,7 +27,6 @@ import {Page} from 'ui/page';
 import {TextView} from 'ui/text-view';
 import application = require('application');
 import {topmost, NavigationEntry} from "ui/frame";
-import {Observable} from "rxjs";
 
 export type ProviderArray = Array<Type | Provider | any[]>;
 
@@ -55,9 +52,10 @@ interface BootstrapParams {
     customProviders?: ProviderArray,
     appOptions?: AppOptions
 }
-var bootstrapCache: BootstrapParams
 
-var lastBootstrappedApp: WeakRef<ComponentRef<any>>;
+let bootstrapCache: BootstrapParams;
+let lastBootstrappedApp: WeakRef<ComponentRef<any>>;
+
 export const onBeforeLivesync = new EventEmitter<ComponentRef<any>>();
 export const onAfterLivesync = new EventEmitter<ComponentRef<any>>();
 
@@ -104,24 +102,23 @@ export function bootstrap(appComponentType: any,
         NS_COMPILER_PROVIDERS,
         provide(ElementSchemaRegistry, { useClass: NativeScriptElementSchemaRegistry }),
         provide(XHR, { useClass: FileSystemXHR })
-    ]
+    ];
 
-    var appProviders = [defaultAppProviders];
+    let appProviders = [defaultAppProviders];
     if (isPresent(customProviders)) {
         appProviders.push(customProviders);
     }
 
-    var platform = getPlatform();
+    let platform = getPlatform();
     if (!isPresent(platform)) {
         platform = createPlatform(ReflectiveInjector.resolveAndCreate(platformProviders));
     }
 
-    // reflector.reflectionCapabilities = new ReflectionCapabilities();
-    var appInjector = ReflectiveInjector.resolveAndCreate(appProviders, platform.injector);
+    let appInjector = ReflectiveInjector.resolveAndCreate(appProviders, platform.injector);
     return coreLoadAndBootstrap(appComponentType, appInjector);
 }
 
-function createNavigationEntry(params: BootstrapParams, resolve: (comp: ComponentRef<any>) => void, reject: (e: Error) => void, isReboot: boolean) {
+function createNavigationEntry(params: BootstrapParams, resolve?: (comp: ComponentRef<any>) => void, reject?: (e: Error) => void, isReboot: boolean = false) {
     const navEntry: NavigationEntry = {
         create: (): Page => {
             let page = new Page();
@@ -140,7 +137,10 @@ function createNavigationEntry(params: BootstrapParams, resolve: (comp: Componen
                     //profiling.stop('ng-bootstrap');
                     rendererLog('ANGULAR BOOTSTRAP DONE.');
                     lastBootstrappedApp = new WeakRef(compRef);
-                    resolve(compRef);
+
+                    if (resolve) {
+                        resolve(compRef);
+                    }
                 }, (err) => {
                     rendererError('ERROR BOOTSTRAPPING ANGULAR');
                     let errorMessage = err.message + "\n\n" + err.stack;
@@ -149,9 +149,12 @@ function createNavigationEntry(params: BootstrapParams, resolve: (comp: Componen
                     let view = new TextView();
                     view.text = errorMessage;
                     page.content = view;
-                    reject(err);
+
+                    if (reject) {
+                        reject(err);
+                    }
                 });
-            }
+            };
 
             page.on('loaded', onLoadedHandler);
 
@@ -167,23 +170,21 @@ function createNavigationEntry(params: BootstrapParams, resolve: (comp: Componen
     return navEntry;
 }
 
-export function nativeScriptBootstrap(appComponentType: any, customProviders?: ProviderArray, appOptions?: AppOptions): Promise<ComponentRef<any>> {
+export function nativeScriptBootstrap(appComponentType: any, customProviders?: ProviderArray, appOptions?: AppOptions): void {
     bootstrapCache = { appComponentType, customProviders, appOptions };
 
     if (appOptions && appOptions.cssFile) {
         application.cssFile = appOptions.cssFile;
     }
 
-    return new Promise((resolve, reject) => {
-        const navEntry = createNavigationEntry(bootstrapCache, resolve, reject, false);
-        application.start(navEntry);
-    })
+    const navEntry = createNavigationEntry(bootstrapCache);
+    application.start(navEntry);
 }
 
 // Patch livesync
 const _baseLiveSync = global.__onLiveSync;
 global.__onLiveSync = function () {
-    rendererLog("LiveSync Started")
+    rendererLog("LiveSync Started");
     if (bootstrapCache) {
         onBeforeLivesync.next(lastBootstrappedApp ? lastBootstrappedApp.get() : null);
 
@@ -204,6 +205,4 @@ global.__onLiveSync = function () {
     else {
         _baseLiveSync();
     }
-}
-
-
+};
