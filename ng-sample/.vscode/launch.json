@@ -67,7 +67,7 @@
             "platform": "android",
             "request": "attach",
             "appRoot": "${workspaceRoot}",
-            "sourceMaps": false,
+            "sourceMaps": true,
             "diagnosticLogging": false,
             "emulator": false
         },
@@ -77,7 +77,7 @@
             "platform": "android",
             "request": "attach",
             "appRoot": "${workspaceRoot}",
-            "sourceMaps": false,
+            "sourceMaps": true,
             "diagnosticLogging": false,
             "emulator": true
         }

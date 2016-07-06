@@ -85,6 +85,8 @@ class DetailComponent {
     <StackLayout>
         <Label [text]="'Second component: ' + (depth$ | async)" class="title"></Label>
 
+        <Button class="link" text="Nav to First" [nsRouterLink]="['/']"></Button>
+
         <StackLayout class="nav">
             <Button class="link" text="< BACK" (tap)="goBack()"></Button>
             <Button class="link" [text]="'Second ' + (nextDepth$ | async) + ' >'" [nsRouterLink]="['/second', (nextDepth$ | async)]"></Button>

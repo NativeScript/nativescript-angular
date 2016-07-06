@@ -4,9 +4,9 @@ import {
     Inject, ComponentResolver, provide, ComponentFactoryResolver,
     NoComponentFactoryError} from '@angular/core';
 
-import {isBlank, isPresent} from '@angular/core/src/facade/lang';
+import {isPresent} from '@angular/core/src/facade/lang';
 
-import {RouterOutletMap, ActivatedRoute, RouterOutlet, PRIMARY_OUTLET} from '@angular/router';
+import {RouterOutletMap, ActivatedRoute, PRIMARY_OUTLET} from '@angular/router';
 import {NSLocationStrategy} from "./ns-location-strategy";
 import {DEVICE} from "../platform-providers";
 import {Device} from "platform";
@@ -15,11 +15,22 @@ import {DetachedLoader} from "../common/detached-loader";
 import {ViewUtil} from "../view-util";
 import {topmost} from "ui/frame";
 import {Page, NavigatedData} from "ui/page";
+import {BehaviorSubject} from "rxjs";
 
 interface CacheItem {
     componentRef: ComponentRef<any>;
+    reusedRoute: PageRoute;
+    outletMap: RouterOutletMap;
     loaderRef?: ComponentRef<any>;
 }
+
+export class PageRoute {
+    activatedRoute: BehaviorSubject<ActivatedRoute>;
+    constructor(startRoute: ActivatedRoute) {
+        this.activatedRoute = new BehaviorSubject(startRoute);
+    }
+}
+
 
 /**
  * Reference Cache
@@ -27,8 +38,12 @@ interface CacheItem {
 class RefCache {
     private cache: Array<CacheItem> = new Array<CacheItem>();
 
-    public push(comp: ComponentRef<any>, loaderRef?: ComponentRef<any>) {
-        this.cache.push({ componentRef: comp, loaderRef: loaderRef });
+    public push(
+        componentRef: ComponentRef<any>,
+        reusedRoute: PageRoute,
+        outletMap: RouterOutletMap,
+        loaderRef: ComponentRef<any>) {
+        this.cache.push({ componentRef, reusedRoute, outletMap, loaderRef });
     }
 
     public pop(): CacheItem {
@@ -125,23 +140,27 @@ export class PageRouterOutlet {
         this.currentActivatedRoute = activatedRoute;
 
         if (this.locationStrategy.isPageNavigatingBack()) {
-            this.activateOnGoBack(activatedRoute, providers);
+            this.activateOnGoBack(activatedRoute, providers, outletMap);
         } else {
-            this.activateOnGoForward(activatedRoute, providers);
+            this.activateOnGoForward(activatedRoute, providers, outletMap);
         }
     }
 
     private activateOnGoForward(
         activatedRoute: ActivatedRoute,
-        providers: ResolvedReflectiveProvider[]): void {
+        providers: ResolvedReflectiveProvider[],
+        outletMap: RouterOutletMap): void {
         const factory = this.getComponentFactory(activatedRoute);
+
+        const reusedRoute = new PageRoute(activatedRoute);
+        providers = [...providers, ...ReflectiveInjector.resolve([{ provide: PageRoute, useValue: reusedRoute }])];
 
         if (this.isInitalPage) {
             log("PageRouterOutlet.activate() inital page - just load component: " + activatedRoute.component);
             this.isInitalPage = false;
             const inj = ReflectiveInjector.fromResolvedProviders(providers, this.containerRef.parentInjector);
             this.currnetActivatedComp = this.containerRef.createComponent(factory, this.containerRef.length, inj, []);
-            this.refCache.push(this.currnetActivatedComp, null);
+            this.refCache.push(this.currnetActivatedComp, reusedRoute, outletMap, null);
 
         } else {
             log("PageRouterOutlet.activate() forward navigation - create detached loader in the loader container: " + activatedRoute.component);
@@ -153,18 +172,28 @@ export class PageRouterOutlet {
 
             this.currnetActivatedComp = loaderRef.instance.loadWithFactory(factory);
             this.loadComponentInPage(page, this.currnetActivatedComp);
-            this.refCache.push(this.currnetActivatedComp, loaderRef);
+            this.refCache.push(this.currnetActivatedComp, reusedRoute, outletMap, loaderRef);
         }
     }
 
     private activateOnGoBack(
         activatedRoute: ActivatedRoute,
-        providers: ResolvedReflectiveProvider[]): void {
+        providers: ResolvedReflectiveProvider[],
+        outletMap: RouterOutletMap): void {
         log("PageRouterOutlet.activate() - Back naviation, so load from cache: " + activatedRoute.component);
 
         this.locationStrategy.finishBackPageNavigation();
 
         let cacheItem = this.refCache.peek();
+        cacheItem.reusedRoute.activatedRoute.next(activatedRoute);
+
+        this.outletMap = cacheItem.outletMap;
+
+        // HACK: Fill the outlet map provided by the router, with the outlets that we have cached.
+        // This is needed beacuse the component is taken form the cache and not created - so it will not register
+        // its child router-outlets to the newly created outlet map.
+        Object.assign(outletMap, cacheItem.outletMap);
+
         this.currnetActivatedComp = cacheItem.componentRef;
     }
 
