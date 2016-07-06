@@ -37,9 +37,10 @@ import {RouterOutletTest} from "./examples/router-deprecated/router-outlet-test"
 import {LoginTest} from "./examples/router-deprecated/login-test";
 
 // new router
-import { RouterOutletAppComponent, RouterOutletRouterProviders} from "./examples/router/router-outlet-test"
-import { PageRouterOutletAppComponent, PageRouterOutletRouterProviders } from "./examples/router/page-router-outlet-test"
-import { PageRouterOutletNestedAppComponent, PageRouterOutletNestedRouterProviders } from "./examples/router/page-router-outlet-nested-test"
+import { RouterOutletAppComponent, RouterOutletRouterProviders} from "./examples/router/router-outlet-test";
+import { PageRouterOutletAppComponent, PageRouterOutletRouterProviders } from "./examples/router/page-router-outlet-test";
+import { PageRouterOutletNestedAppComponent, PageRouterOutletNestedRouterProviders } from "./examples/router/page-router-outlet-nested-test";
+import { ClearHistoryAppComponent, ClearHistoryRouterProviders } from "./examples/router/clear-history-test";
 
 // animations
 import { AnimationEnterLeaveTest } from "./examples/animation/animation-enter-leave-test";
@@ -62,7 +63,8 @@ import { AnimationStatesTest } from "./examples/animation/animation-states-test"
 // new router
 // nativeScriptBootstrap(RouterOutletAppComponent, [RouterOutletRouterProviders]);
 // nativeScriptBootstrap(PageRouterOutletAppComponent, [PageRouterOutletRouterProviders]);
-nativeScriptBootstrap(PageRouterOutletNestedAppComponent, [PageRouterOutletNestedRouterProviders]);
+// nativeScriptBootstrap(PageRouterOutletNestedAppComponent, [PageRouterOutletNestedRouterProviders]);
+nativeScriptBootstrap(ClearHistoryAppComponent, [ClearHistoryRouterProviders]);
 
 // router-deprecated
 // nativeScriptBootstrap(NavigationTest, [NS_ROUTER_PROVIDERS_DEPRECATED]);

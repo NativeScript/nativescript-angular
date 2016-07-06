@@ -13,7 +13,7 @@ import {Device} from "platform";
 import {routerLog} from "../trace";
 import {DetachedLoader} from "../common/detached-loader";
 import {ViewUtil} from "../view-util";
-import {topmost} from "ui/frame";
+import {Frame} from "ui/frame";
 import {Page, NavigatedData} from "ui/page";
 import {BehaviorSubject} from "rxjs";
 
@@ -30,7 +30,6 @@ export class PageRoute {
         this.activatedRoute = new BehaviorSubject(startRoute);
     }
 }
-
 
 /**
  * Reference Cache
@@ -53,6 +52,10 @@ class RefCache {
     public peek(): CacheItem {
         return this.cache[this.cache.length - 1];
     }
+
+    public get length(): number {
+        return this.cache.length;
+    }
 }
 
 @Directive({ selector: 'page-router-outlet' })
@@ -62,24 +65,24 @@ export class PageRouterOutlet {
     private isInitalPage: boolean = true;
     private detachedLoaderFactory: ComponentFactory<DetachedLoader>;
 
-    private currnetActivatedComp: ComponentRef<any>;
+    private currentActivatedComp: ComponentRef<any>;
     private currentActivatedRoute: ActivatedRoute;
 
     public outletMap: RouterOutletMap;
 
     get isActivated(): boolean {
-        return !!this.currnetActivatedComp;
+        return !!this.currentActivatedComp;
     }
 
     get component(): Object {
-        if (!this.currnetActivatedComp) {
+        if (!this.currentActivatedComp) {
             throw new Error('Outlet is not activated');
         }
 
-        return this.currnetActivatedComp.instance;
+        return this.currentActivatedComp.instance;
     }
     get activatedRoute(): ActivatedRoute {
-        if (!this.currnetActivatedComp) {
+        if (!this.currentActivatedComp) {
             throw new Error('Outlet is not activated');
         }
 
@@ -93,6 +96,7 @@ export class PageRouterOutlet {
         private locationStrategy: NSLocationStrategy,
         private componentFactoryResolver: ComponentFactoryResolver,
         compiler: ComponentResolver,
+        private frame: Frame,
         @Inject(DEVICE) device: Device) {
 
         parentOutletMap.registerOutlet(name ? name : PRIMARY_OUTLET, <any>this);
@@ -105,25 +109,35 @@ export class PageRouterOutlet {
     }
 
     deactivate(): void {
-        if (this.locationStrategy.isPageNavigatingBack()) {
+        if (this.locationStrategy._isPageNavigatingBack()) {
             log("PageRouterOutlet.deactivate() while going back - should destroy");
             const popedItem = this.refCache.pop();
             const popedRef = popedItem.componentRef;
 
-            if (this.currnetActivatedComp !== popedRef) {
+            if (this.currentActivatedComp !== popedRef) {
                 throw new Error("Current componentRef is different for cached componentRef");
             }
 
-            if (isPresent(this.currnetActivatedComp)) {
-                this.currnetActivatedComp.destroy();
-                this.currnetActivatedComp = null;
-            }
+            this.destroyCacheItem(popedItem);
+            this.currentActivatedComp = null;
 
-            if (isPresent(popedItem.loaderRef)) {
-                popedItem.loaderRef.destroy();
-            }
         } else {
             log("PageRouterOutlet.deactivate() while going foward - do nothing");
+        }
+    }
+
+    private clearRefCache() {
+        while (this.refCache.length > 0) {
+            this.destroyCacheItem(this.refCache.pop());
+        }
+    }
+    private destroyCacheItem(popedItem: CacheItem) {
+        if (isPresent(popedItem.componentRef)) {
+            popedItem.componentRef.destroy();
+        }
+
+        if (isPresent(popedItem.loaderRef)) {
+            popedItem.loaderRef.destroy();
         }
     }
 
@@ -139,7 +153,7 @@ export class PageRouterOutlet {
         this.outletMap = outletMap;
         this.currentActivatedRoute = activatedRoute;
 
-        if (this.locationStrategy.isPageNavigatingBack()) {
+        if (this.locationStrategy._isPageNavigatingBack()) {
             this.activateOnGoBack(activatedRoute, providers, outletMap);
         } else {
             this.activateOnGoForward(activatedRoute, providers, outletMap);
@@ -152,27 +166,27 @@ export class PageRouterOutlet {
         outletMap: RouterOutletMap): void {
         const factory = this.getComponentFactory(activatedRoute);
 
-        const reusedRoute = new PageRoute(activatedRoute);
-        providers = [...providers, ...ReflectiveInjector.resolve([{ provide: PageRoute, useValue: reusedRoute }])];
+        const pageRoute = new PageRoute(activatedRoute);
+        providers = [...providers, ...ReflectiveInjector.resolve([{ provide: PageRoute, useValue: pageRoute }])];
 
         if (this.isInitalPage) {
-            log("PageRouterOutlet.activate() inital page - just load component: " + activatedRoute.component);
+            log("PageRouterOutlet.activate() inital page - just load component");
             this.isInitalPage = false;
             const inj = ReflectiveInjector.fromResolvedProviders(providers, this.containerRef.parentInjector);
-            this.currnetActivatedComp = this.containerRef.createComponent(factory, this.containerRef.length, inj, []);
-            this.refCache.push(this.currnetActivatedComp, reusedRoute, outletMap, null);
+            this.currentActivatedComp = this.containerRef.createComponent(factory, this.containerRef.length, inj, []);
+            this.refCache.push(this.currentActivatedComp, pageRoute, outletMap, null);
 
         } else {
-            log("PageRouterOutlet.activate() forward navigation - create detached loader in the loader container: " + activatedRoute.component);
+            log("PageRouterOutlet.activate() forward navigation - create detached loader in the loader container");
 
             const page = new Page();
             const pageResolvedProvider = ReflectiveInjector.resolve([provide(Page, { useValue: page })]);
             const childInjector = ReflectiveInjector.fromResolvedProviders([...providers, ...pageResolvedProvider], this.containerRef.parentInjector);
             const loaderRef = this.containerRef.createComponent(this.detachedLoaderFactory, this.containerRef.length, childInjector, []);
 
-            this.currnetActivatedComp = loaderRef.instance.loadWithFactory(factory);
-            this.loadComponentInPage(page, this.currnetActivatedComp);
-            this.refCache.push(this.currnetActivatedComp, reusedRoute, outletMap, loaderRef);
+            this.currentActivatedComp = loaderRef.instance.loadWithFactory(factory);
+            this.loadComponentInPage(page, this.currentActivatedComp);
+            this.refCache.push(this.currentActivatedComp, pageRoute, outletMap, loaderRef);
         }
     }
 
@@ -180,9 +194,9 @@ export class PageRouterOutlet {
         activatedRoute: ActivatedRoute,
         providers: ResolvedReflectiveProvider[],
         outletMap: RouterOutletMap): void {
-        log("PageRouterOutlet.activate() - Back naviation, so load from cache: " + activatedRoute.component);
+        log("PageRouterOutlet.activate() - Back naviation, so load from cache");
 
-        this.locationStrategy.finishBackPageNavigation();
+        this.locationStrategy._finishBackPageNavigation();
 
         let cacheItem = this.refCache.peek();
         cacheItem.reusedRoute.activatedRoute.next(activatedRoute);
@@ -194,7 +208,7 @@ export class PageRouterOutlet {
         // its child router-outlets to the newly created outlet map.
         Object.assign(outletMap, cacheItem.outletMap);
 
-        this.currnetActivatedComp = cacheItem.componentRef;
+        this.currentActivatedComp = cacheItem.componentRef;
     }
 
     private loadComponentInPage(page: Page, componentRef: ComponentRef<any>): void {
@@ -205,25 +219,33 @@ export class PageRouterOutlet {
         //Add it to the new page
         page.content = componentView;
 
-        this.locationStrategy.navigateToNewPage();
-
         page.on('navigatedFrom', (<any>global).Zone.current.wrap((args: NavigatedData) => {
+            // console.log("page.navigatedFrom: " + page + " args.isBackNavigation:" + args.isBackNavigation);
+
             if (args.isBackNavigation) {
-                this.locationStrategy.beginBackPageNavigation();
+                this.locationStrategy._beginBackPageNavigation();
                 this.locationStrategy.back();
             }
         }));
 
-        topmost().navigate({
-            animated: true,
-            create: () => { return page; }
+        const navOptions = this.locationStrategy._beginPageNavigation();
+        this.frame.navigate({
+            create: () => { return page; },
+            clearHistory: navOptions.clearHistory,
+            animated: navOptions.animated,
+            transition: navOptions.transition
         });
+
+        // Clear refCache if navigation with clearHistory
+        if (navOptions.clearHistory) {
+            this.clearRefCache();
+        }
     }
 
     // NOTE: Using private APIs - potential break point!
     private getComponentFactory(activatedRoute: any): ComponentFactory<any> {
         const snapshot = activatedRoute._futureSnapshot;
-        const component: any = <any>snapshot._routeConfig.component;
+        const component = <any>snapshot._routeConfig.component;
         let factory: ComponentFactory<any>;
         try {
             factory = typeof component === 'string' ?

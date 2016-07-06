@@ -98,7 +98,7 @@ export class PageRouterOutlet extends RouterOutlet {
         let previousInstruction = this.currentInstruction;
         this.currentInstruction = nextInstruction;
 
-        if (this.location.isPageNavigatingBack()) {
+        if (this.location._isPageNavigatingBack()) {
             return this.activateOnGoBack(nextInstruction, previousInstruction);
         } else {
             return this.activateOnGoForward(nextInstruction, previousInstruction);
@@ -108,7 +108,7 @@ export class PageRouterOutlet extends RouterOutlet {
     private activateOnGoBack(nextInstruction: ComponentInstruction, previousInstruction: ComponentInstruction): Promise<any> {
         routerLog("PageRouterOutlet.activate() - Back naviation, so load from cache: " + nextInstruction.componentType.name);
 
-        this.location.finishBackPageNavigation();
+        this.location._finishBackPageNavigation();
 
         // Get Component form ref and just call the activate hook
         let cacheItem = this.refCache.peek();
@@ -177,7 +177,7 @@ export class PageRouterOutlet extends RouterOutlet {
         //Add it to the new page
         page.content = componentView;
 
-        this.location.navigateToNewPage();
+        this.location._beginPageNavigation();
         return new Promise((resolve, reject) => {
             page.on('navigatingTo', () => {
                 // Finish activation when page navigation has started
@@ -186,7 +186,7 @@ export class PageRouterOutlet extends RouterOutlet {
 
             page.on('navigatedFrom', (<any>global).Zone.current.wrap((args: NavigatedData) => {
                 if (args.isBackNavigation) {
-                    this.location.beginBackPageNavigation();
+                    this.location._beginBackPageNavigation();
                     this.location.back();
                 }
             }));
@@ -214,7 +214,7 @@ export class PageRouterOutlet extends RouterOutlet {
                 (<OnDeactivate>this.componentRef.instance).routerOnDeactivate(nextInstruction, this.currentInstruction));
         }
 
-        if (this.location.isPageNavigatingBack()) {
+        if (this.location._isPageNavigatingBack()) {
             routerLog("PageRouterOutlet.deactivate() while going back - should destroy: " + instruction.componentType.name)
             return next.then((_) => {
                 const popedItem = this.refCache.pop();
@@ -311,6 +311,6 @@ export class PageRouterOutlet extends RouterOutlet {
     }
 
     private log(method: string, nextInstruction: ComponentInstruction) {
-        routerLog("PageRouterOutlet." + method + " isBack: " + this.location.isPageNavigatingBack() + " nextUrl: " + nextInstruction.urlPath);
+        routerLog("PageRouterOutlet." + method + " isBack: " + this.location._isPageNavigatingBack() + " nextUrl: " + nextInstruction.urlPath);
     }
 }
