@@ -5,9 +5,9 @@
 //import * as profiling from "./profiling";
 //profiling.start('application-start');
 
-// this import should be first in order to load some required settings (like globals and reflect-metadata)
-import { Router } from "@angular/router";
+// "nativescript-angular/application" import should be first in order to load some required settings (like globals and reflect-metadata)
 import { nativeScriptBootstrap, onAfterLivesync, onBeforeLivesync } from "nativescript-angular/application";
+import { Router } from "@angular/router";
 import { NS_ROUTER_PROVIDERS as NS_ROUTER_PROVIDERS_DEPRECATED } from "nativescript-angular/router-deprecated";
 import { NS_ROUTER_PROVIDERS } from "nativescript-angular/router";
 import { HTTP_PROVIDERS } from "@angular/http";
