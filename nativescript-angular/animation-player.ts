@@ -1,7 +1,5 @@
 import { AnimationKeyframe } from '@angular/core/src/animation/animation_keyframe';
 import { AnimationPlayer } from '@angular/core/src/animation/animation_player';
-import { AnimationStyles } from '@angular/core/src/animation/animation_styles';
-import { AnimationDriver } from '@angular/core/src/animation/animation_driver';
 import { KeyframeAnimation, KeyframeAnimationInfo, KeyframeInfo, KeyframeDeclaration } from 'ui/animation/keyframe-animation';
 import { View } from "ui/core/view";
 import enums = require("ui/enums");
@@ -10,14 +8,14 @@ import observable = require('ui/core/dependency-observable');
 import types = require("utils/types");
 
 export class NativeScriptAnimationPlayer implements AnimationPlayer {
-    
+
     public parentPlayer: AnimationPlayer;
 
     private _subscriptions: Function[] = [];
     private _finished = false;
     private animation: KeyframeAnimation;
     private target: View;
-    
+
     constructor(element: Node, keyframes: AnimationKeyframe[], duration: number, delay: number, easing: string) {
 
         this.parentPlayer = null;
@@ -52,14 +50,14 @@ export class NativeScriptAnimationPlayer implements AnimationPlayer {
                         if (typeof value === "string" && property.valueConverter) {
                             value = property.valueConverter(<string>value);
                         }
-                        keyframeInfo.declarations.push({ property: property.name, value: value })
+                        keyframeInfo.declarations.push({ property: property.name, value: value });
                     }
                     else if (typeof value === "string" && substyle === "transform") {
                         NativeScriptAnimationPlayer.parseTransform(<string>value, keyframeInfo);
                     }
                 }
             }
-            keyframeAnimationInfo.keyframes.push(keyframeInfo)
+            keyframeAnimationInfo.keyframes.push(keyframeInfo);
         }
 
         this.animation = KeyframeAnimation.keyframeAnimationFromInfo(keyframeAnimationInfo, observable.ValueSource.VisualState);
@@ -79,7 +77,7 @@ export class NativeScriptAnimationPlayer implements AnimationPlayer {
         if (this.animation) {
             this.animation.play(this.target)
                 .then(() => { this._onFinish(); })
-                .catch((e) => {});
+                .catch((e) => { });
         }
     }
 
@@ -110,11 +108,11 @@ export class NativeScriptAnimationPlayer implements AnimationPlayer {
     setPosition(p: any): void {
         throw new Error("AnimationPlayer.setPosition method is not supported!");
     }
-    
+
     getPosition(): number {
         return 0;
     }
-    
+
     static animationTimingFunctionConverter(value): any {
         switch (value) {
             case "ease":
@@ -136,9 +134,9 @@ export class NativeScriptAnimationPlayer implements AnimationPlayer {
                         throw new Error("Invalid value for animation: " + value);
                     }
                     return enums.AnimationCurve.cubicBezier(
-                        NativeScriptAnimationPlayer.bezieArgumentConverter(bezierArr[0]), 
-                        NativeScriptAnimationPlayer.bezieArgumentConverter(bezierArr[1]), 
-                        NativeScriptAnimationPlayer.bezieArgumentConverter(bezierArr[2]), 
+                        NativeScriptAnimationPlayer.bezieArgumentConverter(bezierArr[0]),
+                        NativeScriptAnimationPlayer.bezieArgumentConverter(bezierArr[1]),
+                        NativeScriptAnimationPlayer.bezieArgumentConverter(bezierArr[2]),
                         NativeScriptAnimationPlayer.bezieArgumentConverter(bezierArr[3]));
                 }
                 else {
@@ -154,7 +152,7 @@ export class NativeScriptAnimationPlayer implements AnimationPlayer {
         return result;
     }
 
-     static transformConverter(value: any): Object {
+    static transformConverter(value: any): Object {
         if (value === "none") {
             let operations = {};
             operations[value] = value;
@@ -166,20 +164,20 @@ export class NativeScriptAnimationPlayer implements AnimationPlayer {
             let pos = 0;
             while (pos < value.length) {
                 if (value[pos] === " " || value[pos] === ",") {
-                    pos ++;
+                    pos++;
                 }
                 else if (value[pos] === "(") {
                     let start = pos + 1;
                     while (pos < value.length && value[pos] !== ")") {
-                        pos ++;
+                        pos++;
                     }
                     let operand = value.substring(start, pos);
                     operations[operator] = operand.trim();
                     operator = "";
-                    pos ++;
+                    pos++;
                 }
                 else {
-                    operator += value[pos ++];
+                    operator += value[pos++];
                 }
             }
             return operations;
@@ -196,29 +194,29 @@ export class NativeScriptAnimationPlayer implements AnimationPlayer {
         for (let transform in newTransform) {
             switch (transform) {
                 case "scaleX":
-                    animationInfo.declarations.push({ property: "scale", value: { x: parseFloat(newTransform[transform]), y: 1 } }); 
+                    animationInfo.declarations.push({ property: "scale", value: { x: parseFloat(newTransform[transform]), y: 1 } });
                     break;
                 case "scaleY":
-                    animationInfo.declarations.push({ property: "scale", value: { x: 1, y: parseFloat(newTransform[transform]) } }); 
+                    animationInfo.declarations.push({ property: "scale", value: { x: 1, y: parseFloat(newTransform[transform]) } });
                     break;
                 case "scale":
                 case "scale3d":
                     values = newTransform[transform].split(",");
                     if (values.length === 2 || values.length === 3) {
-                        animationInfo.declarations.push({ property: "scale", value: { x: parseFloat(values[0]), y: parseFloat(values[1]) } }); 
+                        animationInfo.declarations.push({ property: "scale", value: { x: parseFloat(values[0]), y: parseFloat(values[1]) } });
                     }
                     break;
                 case "translateX":
-                    animationInfo.declarations.push({ property: "translate", value: { x: parseFloat(newTransform[transform]), y: 0 } }); 
+                    animationInfo.declarations.push({ property: "translate", value: { x: parseFloat(newTransform[transform]), y: 0 } });
                     break;
                 case "translateY":
-                    animationInfo.declarations.push({ property: "translate", value: { x: 0, y: parseFloat(newTransform[transform]) } }); 
+                    animationInfo.declarations.push({ property: "translate", value: { x: 0, y: parseFloat(newTransform[transform]) } });
                     break;
                 case "translate":
                 case "translate3d":
                     values = newTransform[transform].split(",");
                     if (values.length === 2 || values.length === 3) {
-                        animationInfo.declarations.push({ property: "translate", value: { x: parseFloat(values[0]), y: parseFloat(values[1]) } }); 
+                        animationInfo.declarations.push({ property: "translate", value: { x: parseFloat(values[0]), y: parseFloat(values[1]) } });
                     }
                     break;
                 case "rotate":
@@ -227,11 +225,11 @@ export class NativeScriptAnimationPlayer implements AnimationPlayer {
                     if (text.slice(-3) === "rad") {
                         val = val * (180.0 / Math.PI);
                     }
-                    animationInfo.declarations.push({ property: "rotate", value: val }); 
+                    animationInfo.declarations.push({ property: "rotate", value: val });
                 case "none":
-                    animationInfo.declarations.push({ property: "scale", value: { x: 1, y: 1 } }); 
-                    animationInfo.declarations.push({ property: "translate", value: { x: 0, y: 0 } }); 
-                    animationInfo.declarations.push({ property: "rotate", value: 0 }); 
+                    animationInfo.declarations.push({ property: "scale", value: { x: 1, y: 1 } });
+                    animationInfo.declarations.push({ property: "translate", value: { x: 0, y: 0 } });
+                    animationInfo.declarations.push({ property: "rotate", value: 0 });
                     break;
             }
         }
