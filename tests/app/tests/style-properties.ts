@@ -14,10 +14,10 @@ describe("Setting style properties", () => {
 
     beforeEach(() => {
         const animationDriver = new NativeScriptAnimationDriver()
-        const rootRenderer = new NativeScriptRootRenderer(null, device, animationDriver);
+        const rootRenderer = new NativeScriptRootRenderer(null, device, animationDriver, null);
         const componentType = new RenderComponentType("id", "templateUrl", 0,
                                                             null, []);
-        renderer = new NativeScriptRenderer(rootRenderer, componentType, animationDriver);
+        renderer = new NativeScriptRenderer(rootRenderer, componentType, animationDriver, null);
         element = <NgView><any>new TextField();
     });
 

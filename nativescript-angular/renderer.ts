@@ -1,4 +1,4 @@
-import {Inject, Injectable, Optional} from '@angular/core/src/di';
+import {Inject, Injectable, Optional, NgZone} from '@angular/core';
 import {
     Renderer,
     RootRenderer,
@@ -28,7 +28,9 @@ export class NativeScriptRootRenderer implements RootRenderer {
     constructor(
         @Optional() @Inject(APP_ROOT_VIEW) private _rootView: View,
         @Inject(DEVICE) device: Device,
-        private _animationDriver: AnimationDriver) {
+        private _animationDriver: AnimationDriver,
+        private _zone: NgZone) {
+
         this._viewUtil = new ViewUtil(device);
     }
 
@@ -52,7 +54,7 @@ export class NativeScriptRootRenderer implements RootRenderer {
     renderComponent(componentProto: RenderComponentType): Renderer {
         let renderer = this._registeredComponents.get(componentProto.id);
         if (isBlank(renderer)) {
-            renderer = new NativeScriptRenderer(this, componentProto, this._animationDriver);
+            renderer = new NativeScriptRenderer(this, componentProto, this._animationDriver, this._zone);
             this._registeredComponents.set(componentProto.id, renderer);
         }
         return renderer;
@@ -63,16 +65,18 @@ export class NativeScriptRootRenderer implements RootRenderer {
 export class NativeScriptRenderer extends Renderer {
     private componentProtoId: string;
     private hasComponentStyles: boolean;
-    private rootRenderer: NativeScriptRootRenderer;
 
     private get viewUtil(): ViewUtil {
         return this.rootRenderer.viewUtil;
     }
 
-    constructor(private _rootRenderer: NativeScriptRootRenderer, private componentProto: RenderComponentType, private animationDriver: AnimationDriver) {
+    constructor(
+        private rootRenderer: NativeScriptRootRenderer,
+        private componentProto: RenderComponentType,
+        private animationDriver: AnimationDriver,
+        private zone: NgZone) {
+
         super();
-        this.rootRenderer = _rootRenderer;
-        let page = this.rootRenderer.page;
         let stylesLength = componentProto.styles.length;
         this.componentProtoId = componentProto.id;
         for (let i = 0; i < stylesLength; i++) {
@@ -93,7 +97,7 @@ export class NativeScriptRenderer extends Renderer {
     }
 
     renderComponent(componentProto: RenderComponentType): Renderer {
-        return this._rootRenderer.renderComponent(componentProto);
+        return this.rootRenderer.renderComponent(componentProto);
     }
 
     selectRootElement(selector: string): NgView {
@@ -211,7 +215,13 @@ export class NativeScriptRenderer extends Renderer {
 
     public listen(renderElement: NgView, eventName: string, callback: Function): Function {
         traceLog('NativeScriptRenderer.listen: ' + eventName);
-        let zonedCallback = (<any>global).Zone.current.wrap(callback);
+        // Explicitly wrap in zone
+        let zonedCallback = (...args) => {
+            this.zone.run(() => {
+                callback.apply(undefined, args);
+            });
+        };
+
         renderElement.on(eventName, zonedCallback);
         if (eventName === View.loadedEvent && renderElement.isLoaded) {
             const notifyData = { eventName: View.loadedEvent, object: renderElement };

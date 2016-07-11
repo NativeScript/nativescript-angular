@@ -1,10 +1,9 @@
 //make sure you import mocha-config before @angular/core
 import {bootstrap, ProviderArray} from "nativescript-angular/application";
 import {Type, Component, ComponentRef, DynamicComponentLoader,
-    ViewChild, ElementRef, provide, ApplicationRef, Renderer, ViewContainerRef
+    ViewChild, ElementRef, provide, ApplicationRef, Renderer, ViewContainerRef, NgZone
 } from "@angular/core";
 
-import {View} from "ui/core/view";
 import {GridLayout} from "ui/layouts/grid-layout";
 import {LayoutBase} from "ui/layouts/layout-base";
 import {topmost} from 'ui/frame';
@@ -21,7 +20,8 @@ export class TestApp {
     constructor(public loader: DynamicComponentLoader,
         public elementRef: ViewContainerRef,
         public appRef: ApplicationRef,
-        public renderer: Renderer) {
+        public renderer: Renderer,
+        public zone: NgZone) {
     }
 
     public loadComponent(type: Type): Promise<ComponentRef<any>> {
@@ -49,7 +49,7 @@ export class TestApp {
     }
 }
 
-var runningApps = new Map<any, { hostView: LayoutBase, appRoot: GridLayout, appRef: ApplicationRef }>();
+const runningApps = new Map<any, { hostView: LayoutBase, appRoot: GridLayout, appRef: ApplicationRef }>();
 
 export function bootstrapTestApp<T>(appComponentType: new (...args) => T, providers: ProviderArray = []): Promise<T> {
     const page = topmost().currentPage;
@@ -61,17 +61,18 @@ export function bootstrapTestApp<T>(appComponentType: new (...args) => T, provid
     viewRoot.opacity = 0.7;
     GridLayout.setRowSpan(rootLayout, 50);
     GridLayout.setColumnSpan(rootLayout, 50);
-    
+
     const rootViewProvider = provide(APP_ROOT_VIEW, { useValue: viewRoot });
     return bootstrap(appComponentType, providers.concat(rootViewProvider)).then((componentRef) => {
-        componentRef.injector.get(ApplicationRef)
+        componentRef.injector.get(ApplicationRef);
         const testApp = componentRef.instance;
-        
-        runningApps.set(testApp, { 
-            hostView: rootLayout, 
-            appRoot: viewRoot, 
-            appRef: componentRef.injector.get(ApplicationRef) });
-            
+
+        runningApps.set(testApp, {
+            hostView: rootLayout,
+            appRoot: viewRoot,
+            appRef: componentRef.injector.get(ApplicationRef)
+        });
+
         return testApp;
     });
 }

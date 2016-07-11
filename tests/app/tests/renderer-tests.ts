@@ -1,6 +1,6 @@
 //make sure you import mocha-config before @angular/core
 import {assert} from "./test-config";
-import {Component, ElementRef, Renderer} from "@angular/core";
+import {Component, ElementRef, Renderer, NgZone} from "@angular/core";
 import {ProxyViewContainer} from "ui/proxy-view-container";
 import {Red} from "color/known-colors";
 import {dumpView} from "./test-utils";
@@ -109,7 +109,8 @@ describe('Renderer E2E', () => {
     before(() => {
         return TestApp.create().then((app) => {
             testApp = app;
-        })
+
+        });
     });
 
     after(() => {
@@ -163,6 +164,44 @@ describe('Renderer E2E', () => {
         });
     });
 
+    it("executes events inside NgZone when listen is called inside NgZone", (done) => {
+        const eventName = "someEvent";
+        const view = new StackLayout();
+        const evetArg = { eventName, object: view };
+        const callback = (arg) => {
+            assert.equal(arg, evetArg);
+            assert.isTrue(NgZone.isInAngularZone(), "Event should be executed inside NgZone");
+            done();
+        };
+
+        testApp.zone.run(() => {
+            testApp.renderer.listen(view, eventName, callback);
+        });
+
+        setTimeout(() => {
+            testApp.zone.runOutsideAngular(() => {
+                view.notify(evetArg);
+            });
+        }, 10);
+    });
+
+    it("executes events inside NgZone when listen is called outside NgZone", (done) => {
+        const eventName = "someEvent";
+        const view = new StackLayout();
+        const evetArg = { eventName, object: view };
+        const callback = (arg) => {
+            assert.equal(arg, evetArg);
+            assert.isTrue(NgZone.isInAngularZone(), "Event should be executed inside NgZone");
+            done();
+        };
+
+        testApp.zone.runOutsideAngular(() => {
+            testApp.renderer.listen(view, eventName, callback);
+
+            view.notify(evetArg);
+        });
+    });
+
     describe("Structural directives", () => {
         it("ngIf hides component when false", () => {
             return testApp.loadComponent(NgIfLabel).then((componentRef) => {
@@ -180,7 +219,7 @@ describe('Renderer E2E', () => {
                 testApp.appRef.tick();
                 assert.equal("(ProxyViewContainer (template), (Label))", dumpView(componentRoot));
             });
-        })
+        });
 
         it("ngFor creates element for each item", () => {
             return testApp.loadComponent(NgForLabel).then((componentRef) => {
@@ -212,8 +251,8 @@ describe('Renderer E2E', () => {
                 assert.equal("(ProxyViewContainer (template), (Label[text=one]), (Label[text=new]), (Label[text=two]), (Label[text=three]))", dumpView(componentRoot, true));
             });
         });
-    })
-})
+    });
+});
 
 describe('Renderer createElement', () => {
     let testApp: TestApp = null;
