@@ -6,7 +6,7 @@ import {
     beforeEach,
     beforeEachProviders
 } from '@angular/core/testing';
-import {provide, ReflectiveInjector} from '@angular/core';
+import {ReflectiveInjector} from '@angular/core';
 import {BaseRequestOptions, ConnectionBackend, Http, HTTP_PROVIDERS, Response, ResponseOptions} from '@angular/http';
 import 'rxjs/add/operator/map';
 import {MockBackend} from '@angular/http/testing';
@@ -20,17 +20,17 @@ describe("Http", () => {
 
     beforeEach(() => {
         let injector = ReflectiveInjector.resolveAndCreate([
-            HTTP_PROVIDERS,
             BaseRequestOptions,
             MockBackend,
-            provide(NSFileSystem, { useClass: NSFileSystemMock }),
-            provide(Http, {
-                useFactory: function (backend: ConnectionBackend, defaultOptions: BaseRequestOptions, nsFileSystem: NSFileSystem) {
-                    //HACK: cast backend to any to work around an angular typings problem
-                    return new NSHttp(<any>backend, defaultOptions, nsFileSystem);
-                },
-                deps: [MockBackend, BaseRequestOptions, NSFileSystem]
-            })
+            { provide: NSFileSystem, useClass: NSFileSystemMock },
+            {
+              provide: Http, 
+              useFactory: function (backend: ConnectionBackend, defaultOptions: BaseRequestOptions, nsFileSystem: NSFileSystem) {
+                //HACK: cast backend to any to work around an angular typings problem
+                return new NSHttp(<any>backend, defaultOptions, nsFileSystem);
+              },
+              deps: [MockBackend, BaseRequestOptions, NSFileSystem]
+            }
         ]);
 
         backend = injector.get(MockBackend);
