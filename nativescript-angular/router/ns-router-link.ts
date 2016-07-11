@@ -4,7 +4,7 @@ import {Router, ActivatedRoute, UrlTree} from '@angular/router';
 import {routerLog} from "../trace";
 
 /**
- * The RouterLink directive lets you link to specific parts of your app.
+ * The NSRouterLink directive lets you link to specific parts of your app.
  *
  * Consider the following route configuration:
 
@@ -18,7 +18,7 @@ import {routerLog} from "../trace";
  * <a [nsRouterLink]="['/user']">link to user component</a>
  * ```
  *
- * RouterLink expects the value to be an array of path segments, followed by the params
+ * NSRouterLink expects the value to be an array of path segments, followed by the params
  * for that level of routing. For instance `['/team', {teamId: 1}, 'user', {userId: 2}]`
  * means that we want to generate a link to `/team;teamId=1/user;userId=2`.
  *
@@ -30,30 +30,41 @@ import {routerLog} from "../trace";
  */
 @Directive({ selector: '[nsRouterLink]' })
 export class NSRouterLink {
-  private commands: any[] = [];
-  @Input() target: string;
-  @Input() queryParams: { [k: string]: any };
-  @Input() fragment: string;
+    private commands: any[] = [];
+    @Input() target: string;
+    @Input() queryParams: { [k: string]: any };
+    @Input() fragment: string;
 
-  /**
-   * @internal
-   */
-  constructor(private router: Router, private route: ActivatedRoute) { }
+    urlTree: UrlTree;
+    /**
+     * @internal
+     */
+    constructor(private router: Router, private route: ActivatedRoute) { }
 
-  @Input("nsRouterLink")
-  set params(data: any[] | string) {
-    if (Array.isArray(data)) {
-      this.commands = data;
-    } else {
-      this.commands = [data];
+    @Input("nsRouterLink")
+    set params(data: any[] | string) {
+        if (Array.isArray(data)) {
+            this.commands = data;
+        } else {
+            this.commands = [data];
+        }
     }
-  }
 
-  @HostListener("tap")
-  onTap() {
-    routerLog("nsRouterLink.tapped: " + this.commands);
-    this.router.navigate(
-      this.commands,
-      { relativeTo: this.route, queryParams: this.queryParams, fragment: this.fragment });
-  }
+    ngOnChanges(changes: {}): any {
+        this.updateTargetUrl();
+    }
+
+    @HostListener("tap")
+    onTap() {
+        routerLog("nsRouterLink.tapped: " + this.commands);
+        this.router.navigate(
+            this.commands,
+            { relativeTo: this.route, queryParams: this.queryParams, fragment: this.fragment });
+    }
+
+    private updateTargetUrl(): void {
+        this.urlTree = this.router.createUrlTree(
+            this.commands,
+            { relativeTo: this.route, queryParams: this.queryParams, fragment: this.fragment });
+    }
 }

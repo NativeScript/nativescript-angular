@@ -5,6 +5,7 @@ import { RouterConfig } from '@angular/router';
 import { provideRouter, ExtraOptions } from '@angular/router/common_router_providers';
 
 import {NSRouterLink} from './ns-router-link';
+import {NSRouterLinkActive} from './ns-router-link-active';
 import {PageRouterOutlet} from './page-router-outlet';
 import {NSLocationStrategy} from './ns-location-strategy';
 import {NativescriptPlatformLocation} from './ns-platform-location';
@@ -22,6 +23,7 @@ export const NS_ROUTER_PROVIDERS: any[] = [
 
 export const NS_ROUTER_DIRECTIVES: Type[] = [
     NSRouterLink,
+    NSRouterLinkActive,
     PageRouterOutlet
 ];
 
