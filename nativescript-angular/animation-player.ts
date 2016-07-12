@@ -226,6 +226,7 @@ export class NativeScriptAnimationPlayer implements AnimationPlayer {
                         val = val * (180.0 / Math.PI);
                     }
                     animationInfo.declarations.push({ property: "rotate", value: val });
+                    break;
                 case "none":
                     animationInfo.declarations.push({ property: "scale", value: { x: 1, y: 1 } });
                     animationInfo.declarations.push({ property: "translate", value: { x: 0, y: 0 } });
