@@ -38,10 +38,13 @@ export class TabViewDirective {
 }
 
 @Directive({
-    selector: '[tabItem]'
+    selector: '[tabItem]',
+    inputs: ['title', 'iconSource']
 })
 export class TabViewItemDirective {
     private item: TabViewItem;
+    private _title: string;
+    private _iconSource: string;
 
     constructor(
         private owner: TabViewDirective,
@@ -52,11 +55,34 @@ export class TabViewItemDirective {
 
     @Input('tabItem') config: any;
 
+    set title(value: string) {
+        if (this._title !== value) {
+            this._title = value;
+            this.ensureItem();
+            this.item.title = this._title;
+        }
+    }
+
+    set iconSource(value: string) {
+        if (this._iconSource !== value) {
+            this._iconSource = value;
+            this.ensureItem();
+            this.item.iconSource = this._iconSource;
+        }
+    }
+
+    private ensureItem() {
+        if (!this.item) {
+            this.item = new TabViewItem();
+        }
+    }
+
     ngOnInit() {
-        this.item = new TabViewItem();
-        this.item.title = this.config.title;
-        
-        this.item.iconSource = this.config.iconSource;
+        this.ensureItem();
+        if (this.config) {
+            this.item.title = this._title || this.config.title;
+            this.item.iconSource = this._iconSource || this.config.iconSource;
+        }
 
         const viewRef = this.viewContainer.createEmbeddedView(this.templateRef);
         //Filter out text nodes, etc
