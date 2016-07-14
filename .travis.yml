@@ -1,43 +1,62 @@
+env:
+    global:
+        - NODE_VERSION=4.4.7
+
 language: android
 
 jdk:
-    - oraclejdk8
+- oraclejdk8
 
 android:
   components:
-    - platform-tools
-    - build-tools-23.0.1
-    - android-23
-    - extra-android-m2repository
-    - sys-img-armeabi-v7a-android-19
+  - platform-tools
+  - build-tools-23.0.1
+  - android-23
+  - extra-android-m2repository
+  - sys-img-armeabi-v7a-android-19
 
 before_cache:
-    - rm -f $HOME/.gradle/caches/modules-2/modules-2.lock
+- rm -f $HOME/.gradle/caches/modules-2/modules-2.lock
 
 cache:
-    directories:
+  directories:
         - .nvm
         - $HOME/.gradle/caches/
         - $HOME/.gradle/wrapper/
 
 install:
-    - nvm install 4
-    - npm install -g typings
-    - npm install -g nativescript --ignore-scripts
-    - tns usage-reporting disable
-    - tns error-reporting disable
-    - cd nativescript-angular
-    - npm install
-    - cd ../tests
-    - npm install ../nativescript-angular
-    - npm install
+- nvm install $NODE_VERSION
+- npm install -g typings
+- npm install -g nativescript --ignore-scripts
+- tns usage-reporting disable
+- tns error-reporting disable
+- cd nativescript-angular
+- npm install
+- npm link
+- cd ../tests
+- npm link nativescript-angular
+- npm install
 
 before_script:
-    - echo no | android create avd --force -n test -t android-19 -b armeabi-v7a
-    - emulator -avd test -no-audio -no-window &
-    - android-wait-for-emulator
+- echo no | android create avd --force -n test -t android-19 -b armeabi-v7a
+- emulator -avd test -no-audio -no-window &
+- android-wait-for-emulator
 
 script:
-    - tns platform add android
-    - tns test android --emulator --justlaunch
-    - npm run appium-android
+- tns platform add android
+- tns test android --emulator --justlaunch
+- npm run appium-android
+
+before_deploy:
+- cd ../nativescript-angular
+- node ../build/travis-scripts/add-publishConfig.js next
+
+deploy:
+  provider: npm
+  email: nativescript@telerik.com
+  api_key: 
+      secure: eUwpxI97BxbnWsszLLfQRpGmTOV7WlcuuepBx7JW0v0y0phPsKaWtiI5xcXYr8dvuys4VO+/BqA1+yyXkRLZJUjtJZEP2AVddG2LzC8AQ7hJxs5XtjelmsjX35xkT6PfEJ6M2vZiU7R7knJDrIuIsdRzngcaCY2KbdlHWckNO+QQxs2lFGRZR4DQBZE75nxmsBLOzpi3cPz5f0USrroquVJXi/HV9WEHHWYG9yAinQFJyKitBNwuvFiPTZXYJEKJ0ojG0JxpyVJ3htgplJSvoM32nrt8bFi2UOkRR3B3wo33qUvGYs9JT3aAZz7ZdCcXuW3QtlMeiHN5Sfdb4FXp1xLLupdo8BIC4gsVBYAQuEA/dGlgMxRulNtqeNe0rZnqmnxT/hCzpInWAZKremWGOAM2c7Oh0leGGRwsIOINUMmUiBe4vJiWF+Pmp2bRzNjDzlEmSFR3GFWBSfCihtQOUC0lM9y7jcXrzjl3Q57/crXpYVbasr8nbaMpltFUdx6iO0hg1Qg9MJAFvtkz/p+oOZqtPAA5rz1hZoXPu0iItJQBS4AxMrCHwwWotDoZBsEifh5AUJE81WrLdEyjXkiBwDxZeWbJDGujr4K9CJ2Q1cUW1iY8RZ7WzIg48gpEyECuxhIDUMFJWeKemlq7Qvv25Ks9cyD4TNlOoBlcqFjvMNE=
+  on:
+    branch: master
+    skip_cleanup: true
+    repo: NativeScript/nativescript-angular
