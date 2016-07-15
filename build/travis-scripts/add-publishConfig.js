@@ -21,5 +21,9 @@ if (!packageDef.publishConfig) {
 }
 packageDef.publishConfig.tag = tag;
 
+if (packageDef.private) {
+    delete packageDef.private;
+}
+
 var newContent = JSON.stringify(packageDef, null, '  ');
 fsModule.writeFileSync(path, newContent, fileOptions);
