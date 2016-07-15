@@ -27,7 +27,7 @@ describe("Http", () => {
             provide(Http, {
                 useFactory: function (backend: ConnectionBackend, defaultOptions: BaseRequestOptions, nsFileSystem: NSFileSystem) {
                     //HACK: cast backend to any to work around an angular typings problem
-                    return new NSHttp(<any>backend, defaultOptions, nsFileSystem);
+                    return new NSHttp(<any>backend, <any>defaultOptions, nsFileSystem);
                 },
                 deps: [MockBackend, BaseRequestOptions, NSFileSystem]
             })
