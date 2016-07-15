@@ -49,6 +49,7 @@ script:
 
 before_deploy:
 - cd ../nativescript-angular
+- npm install typescript -g
 - npm install
 - node ../build/travis-scripts/add-publishConfig.js next
 
