@@ -48,8 +48,8 @@ script:
 - npm run appium-android
 
 before_deploy:
-- rm -rf .git/
 - cd ../nativescript-angular
+- npm install
 - node ../build/travis-scripts/add-publishConfig.js next
 
 deploy:
