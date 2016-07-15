@@ -12,7 +12,7 @@ export class NSXSRFStrategy {
 
 @Injectable()
 export class NSHttp extends Http {
-  constructor(backend: ConnectionBackend, defaultOptions: RequestOptions, private nsFileSystem: NSFileSystem) {
+  constructor(backend: ConnectionBackend, defaultOptions: any, private nsFileSystem: NSFileSystem) {
     super(backend, defaultOptions);
   }
 
