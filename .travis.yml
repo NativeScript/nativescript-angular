@@ -1,6 +1,8 @@
 env:
     global:
         - NODE_VERSION=4.4.7
+        - DATE=$(date +%Y-%m-%d)
+        - PACKAGE_VERSION=$DATE-$TRAVIS_BUILD_NUMBER
 
 language: android
 
@@ -51,7 +53,7 @@ before_deploy:
 - cd ../nativescript-angular
 - npm install typescript -g
 - npm install
-- node ../build/travis-scripts/add-publishConfig.js next
+- node ../build/travis-scripts/add-publishConfig.js next $PACKAGE_VERSION
 
 deploy:
   provider: npm
