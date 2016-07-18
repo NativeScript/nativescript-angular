@@ -25,5 +25,9 @@ if (packageDef.private) {
     delete packageDef.private;
 }
 
+// adding date and travis build number (2016-07-18-765) to version in order to get unique version for @next build
+var package_version = process.argv[3];
+packageDef.version += '-' + package_version;
+
 var newContent = JSON.stringify(packageDef, null, '  ');
 fsModule.writeFileSync(path, newContent, fileOptions);
