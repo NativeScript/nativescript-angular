@@ -3,13 +3,11 @@ import {View} from "ui/core/view";
 import {Placeholder} from "ui/placeholder";
 import {ContentView} from 'ui/content-view';
 import {LayoutBase} from 'ui/layouts/layout-base';
-import {ViewClass, getViewClass, getViewMeta, isKnownView, ViewExtensions, NgView, ViewClassMeta} from './element-registry';
+import {ViewClass, getViewClass, getViewMeta, isKnownView, ViewExtensions, NgView} from './element-registry';
 import {getSpecialPropertySetter} from "ui/builder/special-properties";
-import * as styleProperty from "ui/styling/style-property";
 import {StyleProperty, getPropertyByName, withStyleProperty} from "ui/styling/style-property";
 import {ValueSource} from "ui/core/dependency-observable";
-import { ActionBar, ActionItem, NavigationButton } from "ui/action-bar";
-import {device, platformNames, Device} from "platform";
+import {platformNames, Device} from "platform";
 import {rendererLog as traceLog, styleError} from "./trace";
 
 const IOS_PREFX: string = "@ios:";
@@ -160,7 +158,7 @@ export class ViewUtil {
     }
 
     private platformFilter(attribute: string): string {
-        var lowered = attribute.toLowerCase();
+        let lowered = attribute.toLowerCase();
         if (lowered.indexOf(IOS_PREFX) === 0) {
             if (this.isIos) {
                 return attribute.substr(IOS_PREFX.length);
@@ -194,7 +192,7 @@ export class ViewUtil {
             let propMap = this.getProperties(view);
             let i = 0;
             while (i < properties.length - 1 && isDefined(view)) {
-                var prop = properties[i];
+                let prop = properties[i];
                 if (propMap.has(prop)) {
                     prop = propMap.get(prop);
                 }
@@ -237,7 +235,7 @@ export class ViewUtil {
             return value;
         }
 
-        var valueAsNumber = +value;
+        let valueAsNumber = +value;
         if (!isNaN(valueAsNumber)) {
             return valueAsNumber;
         } else if (value && (value.toLowerCase() === "true" || value.toLowerCase() === "false")) {
@@ -254,8 +252,8 @@ export class ViewUtil {
         }
 
         if (!propertyMaps.has(type)) {
-            var propMap = new Map<string, string>();
-            for (var propName in instance) {
+            let propMap = new Map<string, string>();
+            for (let propName in instance) {
                 propMap.set(propName.toLowerCase(), propName);
             }
             propertyMaps.set(type, propMap);
@@ -264,10 +262,10 @@ export class ViewUtil {
     }
 
     private cssClasses(view: NgView) {
-        if (!view.cssClasses) {
-            view.cssClasses = new Map<string, boolean>();
+        if (!view.ngCssClasses) {
+            view.ngCssClasses = new Map<string, boolean>();
         }
-        return view.cssClasses;
+        return view.ngCssClasses;
     }
 
     public addClass(view: NgView, className: string): void {
@@ -317,7 +315,6 @@ export class ViewUtil {
         withStyleProperty(name, resolvedValue, (property, value) => {
             if (isString(property)) {
                 //Fall back to resolving property by name.
-                const propertyName = <string>property;
                 const resolvedProperty = getPropertyByName(name);
                 if (resolvedProperty) {
                     this.setStyleValue(view, resolvedProperty, resolvedValue);
