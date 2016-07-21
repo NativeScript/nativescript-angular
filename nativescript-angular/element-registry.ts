@@ -12,7 +12,7 @@ export interface ViewClassMeta {
 export interface ViewExtensions {
     nodeName: string;
     templateParent: NgView;
-    cssClasses: Map<string, boolean>;
+    ngCssClasses: Map<string, boolean>;
     meta: ViewClassMeta;
 }
 
@@ -22,7 +22,7 @@ export interface ViewClass {
 
 const defaultViewMeta: ViewClassMeta = {
     skipAddToDom: false,
-}
+};
 
 const elementMap: Map<string, { resolver: ViewResolver, meta?: ViewClassMeta }> = new Map<string, { resolver: ViewResolver, meta?: ViewClassMeta }>();
 const camelCaseSplit = /([a-z0-9])([A-Z])/g;
