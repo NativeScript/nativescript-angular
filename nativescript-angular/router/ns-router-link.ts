@@ -65,9 +65,9 @@ export class NSRouterLink {
   @HostListener("tap")
   onTap() {
     routerLog("nsRouterLink.tapped: " + this.commands + " usePageRoute: " + this.usePageRoute + " clearHistory: " + this.clearHistory + " transition: " + JSON.stringify(this.pageTransition));
-    
+
     const currentRoute = this.usePageRoute ? this.pageRoute.activatedRoute.getValue() : this.route;
-    const transition = this.getTrasnition();
+    const transition = this.getTransition();
     let extras: NavigationExtras & NavigationOptions = {
       relativeTo: currentRoute,
       queryParams: this.queryParams,
@@ -80,7 +80,7 @@ export class NSRouterLink {
     this.navigator.navigate(this.commands, extras);
   }
 
-  private getTrasnition(): { animated: boolean, transition?: NavigationTransition } {
+  private getTransition(): { animated: boolean, transition?: NavigationTransition } {
     if (typeof this.pageTransition === "boolean") {
       return { animated: <boolean>this.pageTransition };
     } else if (isString(this.pageTransition)) {

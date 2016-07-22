@@ -184,7 +184,6 @@ export class NSLocationStrategy extends LocationStrategy {
             throw new Error("Calling navigateToNewPage while already navigating to new page.");
         }
 
-
         this._isPageNavigatingForward = true;
         return this._currentNavigationOptions || defaultNavOptions;
     }
