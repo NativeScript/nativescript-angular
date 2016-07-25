@@ -1,8 +1,7 @@
 //make sure you import mocha-config before @angular/core
 import {assert} from "./test-config";
 
-import {Component, ElementRef, Renderer} from "@angular/core";
-import {NavigationEnd, NavigationStart, NavigationError} from "@angular/router";
+import {NavigationEnd, NavigationStart} from "@angular/router";
 
 import {Subscription} from "rxjs";
 import {TestApp, bootstrapTestApp, destroyTestApp} from "./test-app";
@@ -24,7 +23,7 @@ describe('Snippets', () => {
     before(() => {
         return TestApp.create().then((app) => {
             testApp = app;
-        })
+        });
     });
 
     after(() => {
@@ -54,13 +53,13 @@ describe('Snippets', () => {
             setTimeout(done, 10);
         });
     });
-})
+});
 
 describe('Snippets Navigation', () => {
-    var runningApp: any;
-    var subscription: Subscription;
+    let runningApp: any;
+    let subscription: Subscription;
 
-    var cleanup = () => {
+    const cleanup = () => {
         if (subscription) {
             subscription.unsubscribe();
             subscription = null;
@@ -69,15 +68,14 @@ describe('Snippets Navigation', () => {
             destroyTestApp(runningApp);
             runningApp = null;
         }
-    }
+    };
 
     after(cleanup);
 
     it("router-outlet app", (done) => {
         bootstrapTestApp(NavigationApp, [APP_ROUTER_PROVIDERS]).then((app) => {
-            console.log("app bootstraped");
             runningApp = app;
-            var navStarted = false;
+            let navStarted = false;
 
             subscription = app.router.events.subscribe((e) => {
                 if (e instanceof NavigationStart) {
@@ -92,17 +90,14 @@ describe('Snippets Navigation', () => {
                     cleanup();
                     done();
                 }
-            })
-        })
+            });
+        });
     });
 
     it("page-router-outlet app", (done) => {
-        console.log("------------- PageNavigationApp: " + PageNavigationApp);
-
         bootstrapTestApp(PageNavigationApp, [APP_ROUTER_PROVIDERS]).then((app) => {
-            console.log("app bootstraped");
             runningApp = app;
-            var navStarted = false;
+            let navStarted = false;
 
             subscription = app.router.events.subscribe((e) => {
                 if (e instanceof NavigationStart) {
@@ -117,7 +112,7 @@ describe('Snippets Navigation', () => {
                     cleanup();
                     done();
                 }
-            })
-        })
+            });
+        });
     });
 });

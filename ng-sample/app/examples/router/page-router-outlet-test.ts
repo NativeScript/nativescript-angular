@@ -1,8 +1,8 @@
 import { Component, OnInit, OnDestroy } from "@angular/core";
-import { RouterConfig, ActivatedRoute, Router, ROUTER_DIRECTIVES, Event } from '@angular/router';
+import { RouterConfig, ActivatedRoute, Router, ROUTER_DIRECTIVES } from '@angular/router';
 import { Observable } from "rxjs";
-import { NS_ROUTER_DIRECTIVES, nsProvideRouter} from "nativescript-angular/router"
-import { Location, LocationStrategy} from '@angular/common';
+import { NS_ROUTER_DIRECTIVES, nsProvideRouter} from "nativescript-angular/router";
+import { Location } from '@angular/common';
 import { Page } from "ui/page";
 
 
@@ -113,7 +113,7 @@ export class PageRouterOutletAppComponent {
     constructor(router: Router, private location: Location) {
         router.events.subscribe((e) => {
             console.log("--EVENT-->: " + e.toString());
-        })
+        });
     }
 }
 

@@ -10,6 +10,7 @@ import {NSLocationStrategy} from './ns-location-strategy';
 import {NativescriptPlatformLocation} from './ns-platform-location';
 
 export {routerTraceCategory} from "../trace";
+export {PageRoute} from './page-router-outlet';
 
 export const NS_ROUTER_PROVIDERS: any[] = [
     NSLocationStrategy,

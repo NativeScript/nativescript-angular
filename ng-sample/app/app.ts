@@ -15,7 +15,7 @@ import { rendererTraceCategory, routerTraceCategory, listViewTraceCategory } fro
 
 import trace = require("trace");
 // trace.setCategories(rendererTraceCategory);
-// trace.setCategories(routerTraceCategory);
+trace.setCategories(routerTraceCategory);
 // trace.setCategories(listViewTraceCategory);
 trace.enable();
 
@@ -53,7 +53,7 @@ import { AnimationStatesTest } from "./examples/animation/animation-states-test"
 // nativeScriptBootstrap(ListTest);
 // nativeScriptBootstrap(ListTestAsync);
 //nativeScriptBootstrap(ImageTest);
-nativeScriptBootstrap(HttpTest);
+// nativeScriptBootstrap(HttpTest);
 //nativeScriptBootstrap(ActionBarTest, [NS_ROUTER_PROVIDERS_DEPRECATED], { startPageActionBarHidden: false });
 //nativeScriptBootstrap(ActionBarTest, [NS_ROUTER_PROVIDERS_DEPRECATED]);
 //nativeScriptBootstrap(ModalTest);
@@ -62,7 +62,7 @@ nativeScriptBootstrap(HttpTest);
 // new router
 // nativeScriptBootstrap(RouterOutletAppComponent, [RouterOutletRouterProviders]);
 // nativeScriptBootstrap(PageRouterOutletAppComponent, [PageRouterOutletRouterProviders]);
-// nativeScriptBootstrap(PageRouterOutletNestedAppComponent, [PageRouterOutletNestedRouterProviders]);
+nativeScriptBootstrap(PageRouterOutletNestedAppComponent, [PageRouterOutletNestedRouterProviders]);
 
 // router-deprecated
 // nativeScriptBootstrap(NavigationTest, [NS_ROUTER_PROVIDERS_DEPRECATED]);
