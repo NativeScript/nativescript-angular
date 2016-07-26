@@ -1,6 +1,6 @@
 import { Component, OnInit, OnDestroy } from "@angular/core";
 import { RouterConfig, ActivatedRoute, ROUTER_DIRECTIVES } from '@angular/router';
-import { NS_ROUTER_DIRECTIVES, nsProvideRouter} from "nativescript-angular/router"
+import { NS_ROUTER_DIRECTIVES, nsProvideRouter} from "nativescript-angular/router";
 
 @Component({
     selector: "first",
