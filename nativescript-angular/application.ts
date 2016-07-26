@@ -30,7 +30,7 @@ import {topmost, NavigationEntry} from "ui/frame";
 
 export type ProviderArray = Array<Type | Provider | any[]>;
 
-import {defaultPageProvider, defaultDeviceProvider, defaultAnimationDriverProvider} from "./platform-providers";
+import {defaultPageProvider, defaultFrameProvider, defaultDeviceProvider, defaultAnimationDriverProvider} from "./platform-providers";
 
 import * as nativescriptIntl from "nativescript-intl";
 global.Intl = nativescriptIntl;
@@ -91,6 +91,7 @@ export function bootstrap(appComponentType: any,
             }, deps: []
         }),
 
+        defaultFrameProvider,
         defaultPageProvider,
         defaultDeviceProvider,
         defaultAnimationDriverProvider,

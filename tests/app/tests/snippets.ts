@@ -78,6 +78,7 @@ describe('Snippets Navigation', () => {
             let navStarted = false;
 
             subscription = app.router.events.subscribe((e) => {
+                console.log("------>>>>>> " + e.toString());
                 if (e instanceof NavigationStart) {
                     assert.equal("/", e.url);
                     navStarted = true;

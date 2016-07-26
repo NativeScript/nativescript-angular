@@ -8,9 +8,11 @@ import {NSRouterLink} from './ns-router-link';
 import {PageRouterOutlet} from './page-router-outlet';
 import {NSLocationStrategy} from './ns-location-strategy';
 import {NativescriptPlatformLocation} from './ns-platform-location';
+import {RouterExtensions} from './router-extensions';
 
 export {routerTraceCategory} from "../trace";
 export {PageRoute} from './page-router-outlet';
+export {RouterExtensions} from './router-extensions';
 
 export const NS_ROUTER_PROVIDERS: any[] = [
     NSLocationStrategy,
@@ -18,6 +20,7 @@ export const NS_ROUTER_PROVIDERS: any[] = [
 
     NativescriptPlatformLocation,
     provide(PlatformLocation, { useClass: NativescriptPlatformLocation }),
+    RouterExtensions
 ];
 
 export const NS_ROUTER_DIRECTIVES: Type[] = [

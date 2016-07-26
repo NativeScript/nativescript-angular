@@ -1,4 +1,4 @@
-import {topmost} from 'ui/frame';
+import {topmost, Frame} from 'ui/frame';
 import {Page} from 'ui/page';
 import {provide, Provider, OpaqueToken} from '@angular/core/src/di';
 import {device} from "platform";
@@ -18,6 +18,8 @@ export function getDefaultPage(): Page {
         return null;
     }
 }
+
+export const defaultFrameProvider = provide(Frame, { useFactory: topmost });
 
 export const defaultDeviceProvider = provide(DEVICE, { useValue: device });
 

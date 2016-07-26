@@ -17,52 +17,38 @@ export class NativescriptPlatformLocation extends PlatformLocation {
     }
 
     onPopState(fn: UrlChangeListener): void {
-        routerLog("NativescriptPlatformLocation.onPopState()");
         this.locationStartegy.onPopState(fn);
     }
 
     onHashChange(fn: UrlChangeListener): void {
-        routerLog("NativescriptPlatformLocation.onHashChange()");
     }
 
     get search(): string {
-        routerLog("NativescriptPlatformLocation.get search()");
-
         return "";
     }
     get hash(): string {
-        routerLog("NativescriptPlatformLocation.get hash()");
-
         return "";
     }
     get pathname(): string {
-        routerLog("NativescriptPlatformLocation.get pathname()");
         return this.locationStartegy.path();
     }
     set pathname(newPath: string) {
-        routerLog("NativescriptPlatformLocation.set pathname(): " + newPath);
+        throw new Error("NativescriptPlatformLocation set pathname - not implemented")
     }
 
     pushState(state: any, title: string, url: string): void {
-        routerLog("NativescriptPlatformLocation.pushState()");
-
         this.locationStartegy.pushState(state, title, url, null);
     }
 
     replaceState(state: any, title: string, url: string): void {
-        routerLog("NativescriptPlatformLocation.replaceState()");
         this.locationStartegy.replaceState(state, title, url, null);
     }
 
     forward(): void {
-        routerLog("NativescriptPlatformLocation.forward()");
-
-        throw new Error("NativescriptPlatformLocation.forward() not implemend");
+        throw new Error("NativescriptPlatformLocation.forward() - not implemented");
     }
 
     back(): void {
-        routerLog("NativescriptPlatformLocation.back()");
-        
         this.locationStartegy.back();
     }
 }

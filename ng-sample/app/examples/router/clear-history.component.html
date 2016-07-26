@@ -1,0 +1,24 @@
+<GridLayout rows="auto auto auto auto auto *" columns="* * *">
+    <Label [text]="name" class="title" colSpan="3"></Label>
+
+    <Button row="1" colSpan="3" text="BACK" (tap)="nav.back()" class="stretch"></Button>
+
+    <Button col="0" row="2" [nsRouterLink]="['/first']"
+        text="P1" class="stretch"></Button>
+    <Button col="0" row="3" [nsRouterLink]="['/first']" clearHistory="true" pageTransition="false"
+        text="P1[clear]" class="stretch"></Button>
+
+    <Button col="1" row="2" [nsRouterLink]="['/second']" 
+        text="P2" class="stretch"></Button>
+    <Button col="1" row="3" [nsRouterLink]="['/second']" clearHistory="true" pageTransition="none"
+        text="P2[clear]" class="stretch"></Button>
+
+    <Button col="2" row="2" [nsRouterLink]="['/third']" 
+        text="P3" class="stretch"></Button>
+    <Button col="2" row="3" [nsRouterLink]="['/third']" clearHistory="true" pageTransition="flipRight"
+        text="P3[clear]" class="stretch"></Button>
+    
+    <GridLayout colSpan="3" row="5">
+        <location-log></location-log>
+    </GridLayout>
+</GridLayout>
