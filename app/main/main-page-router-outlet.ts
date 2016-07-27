@@ -15,10 +15,14 @@ import { BindingComponent } from "../binding/binding-page";
 
 import { ListViewComponent } from "../listView/commonTemplate/list-view-page";
 import { ListViewControlComponent } from "../listView/customTemplate/list-view-item-template";
-import { ListViewAsyncPipeComponent } from "../listView/asyncPipeTemplate/async-pipe-template"
-import { ListViewMainPageComponent } from "../listView/listViewMainPage/list-view-main-page"
+import { ListViewAsyncPipeComponent } from "../listView/asyncPipeTemplate/async-pipe-template";
+import { ListViewMainPageComponent } from "../listView/listViewMainPage/list-view-main-page";
 
 import { ModalTest, ModalTestWithPushStrategy } from "../modal/modal-dialog.component";
+
+import { NavigationOptionsComponent } from "../navigation-options/navigation-options.component";
+import { NavigationInfoComponent } from "../navigation-options/navigation-info.component";
+
 
 @Component({
     selector: "main",
@@ -49,7 +53,9 @@ import { ModalTest, ModalTestWithPushStrategy } from "../modal/modal-dialog.comp
         <StackLayout orientation="horizontal" horizontalAlignment="center">
             <Button text="modal" [nsRouterLink]="['/modal']"></Button>
             <Button text="modal(onPush)" [nsRouterLink]="['/modal-on-push']"></Button> 
-        </StackLayout>  
+        </StackLayout> 
+
+        <Button text="nav-options" [nsRouterLink]="['/nav-options']"></Button>
     </StackLayout>
     `,
 })
@@ -63,7 +69,7 @@ class MainComponent { }
 export class NavigationMainPageRouter { }
 
 
-var routes: RouterConfig = [
+const routes: RouterConfig = [
     { path: '', component: MainComponent },
     { path: 'template', component: AppComponent },
     { path: 'router', component: NavigationTestRouter, children: NavigationSubRoutes },
@@ -81,6 +87,9 @@ var routes: RouterConfig = [
 
     { path: 'modal', component: ModalTest },
     { path: 'modal-on-push', component: ModalTestWithPushStrategy },
+
+    { path: 'nav-options', component: NavigationOptionsComponent },
+    { path: 'nav-info', component: NavigationInfoComponent }
 ];
 
 export var MainRouterProviders = nsProvideRouter(routes, { enableTracing: false });
