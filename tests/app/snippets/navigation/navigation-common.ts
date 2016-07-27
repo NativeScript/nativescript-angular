@@ -24,22 +24,3 @@ export class FirstComponent { }
 })
 export class SecondComponent { }
 // << router-content-components
-
-
-// >> router-location-back
-import {Location} from '@angular/common';
-
-@Component({ 
-    // ...
-    // >> (hide)
-    template: '', selector:"go-back"
-    // << (hide)
-})
-export class MyComponent {
-    constructor(private location: Location) { }
-
-    public goBack() {
-        this.location.back();
-    }
-}
-// << router-location-back

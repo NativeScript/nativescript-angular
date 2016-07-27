@@ -1,0 +1,28 @@
+<StackLayout>
+    <Label text="Second component" class="title"></Label>
+    <!-- >> router-clear-history-link -->
+    <Button text="login" [nsRouterLink]="['/main']" clearHistory="true"></Button>
+    <!-- << router-clear-history-link -->
+
+    <!-- >> router-page-transition-link -->
+    <Button text="flip to next" [nsRouterLink]="['/main']" pageTransition="flip"></Button>
+    <Button text="no transition" [nsRouterLink]="['/main']" pageTransition="none"></Button>
+    <!-- << router-page-transition-link -->
+
+
+    <!-- >> router-clear-history-code-->
+    <Button text="login" (tap)="login()"></Button>
+    <!-- << router-clear-history-code -->
+
+    <!-- >> router-back -->
+    <Button text="< BACK" (tap)="goBack()"></Button>
+    <!-- << router-back -->
+
+    <!-- >> router-page-back -->
+    <Button text="<< BACK" (tap)="goBackPage()"></Button>
+    <!-- << router-page-back -->
+
+    <!-- >> router-page-transition-code -->
+    <Button text="flip to next" (tap)="flipToNextPage()"></Button>
+    <!-- << router-page-transition-code -->
+</StackLayout>
