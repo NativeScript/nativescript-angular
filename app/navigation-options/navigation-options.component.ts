@@ -19,7 +19,7 @@ export class NavigationOptionsComponent {
         this.routerExtensions.navigate(["/nav-info"], {
             transition: {
                 name: "flip",
-                duration: 5000,
+                duration: 17000,
                 curve: "linear"
             }
         });

@@ -9,8 +9,8 @@ import {Frame} from "ui/frame";
     directives: [NS_ROUTER_DIRECTIVES],
     template: `
     <StackLayout>
-        <Label [text]="'frameStack: ' + frameStack" ></Label>
-        <Label [text]="'locationStack: ' + locationStack" ></Label>
+        <Label automationText="lbFrameStack" [text]="'frameStack: ' + frameStack" ></Label>
+        <Label automationText="lbLocationStack" [text]="'locationStack: ' + locationStack" ></Label>
 
         <Button text="update" (tap)="update()"></Button>
         <Button text="back to main" [nsRouterLink]="['/']" [clearHistory]="true"></Button>
