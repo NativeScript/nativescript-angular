@@ -6,7 +6,7 @@
 	"nativescript": {
 		"id": "org.nativescript.testsappng",
 		"tns-ios": {
-			"version": "2.0.1"
+			"version": "2.1.1"
 		},
 		"tns-android": {
 			"version": "2.1.1"
@@ -21,8 +21,8 @@
 		"@angular/platform-server": "2.0.0-rc.3",
 		"@angular/router-deprecated": "2.0.0-rc.2",
 		"@angular/router": "3.0.0-alpha.7",
-		"nativescript-angular": "^0.2.0",
-		"tns-core-modules": "^2.0.0 || 2.0.0-angular-7"
+		"nativescript-angular": "next",
+		"tns-core-modules": "next"
 	},
 	"devDependencies": {
 		"babel-traverse": "6.8.0",
