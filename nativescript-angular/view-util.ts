@@ -10,8 +10,8 @@ import {ValueSource} from "ui/core/dependency-observable";
 import {platformNames, Device} from "platform";
 import {rendererLog as traceLog, styleError} from "./trace";
 
-const IOS_PREFX: string = "@ios:";
-const ANDROID_PREFX: string = "@android:";
+const IOS_PREFX: string = ":ios:";
+const ANDROID_PREFX: string = ":android:";
 const whiteSpaceSplitter = /\s+/;
 
 export type ViewExtensions = ViewExtensions;

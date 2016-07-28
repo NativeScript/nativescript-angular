@@ -27,15 +27,24 @@ export class AndroidSpecificComponent {
     constructor(public elementRef: ElementRef) { }
 }
 
+@Component({
+    template: `
+    <StackLayout>
+        <Label android:text="ANDROID" ios:text="IOS"></Label>
+    </StackLayout>`
+})
+export class PlatformSpecificAttributeComponent {
+    constructor(public elementRef: ElementRef) { }
+}
 
-describe('Platofrm filter components', () => {
+describe('Platofrm filter directives', () => {
     describe('on IOS device', () => {
         let testApp: TestApp = null;
 
         before(() => {
             return TestApp.create([provide(DEVICE, { useValue: createDevice(platformNames.ios) })]).then((app) => {
                 testApp = app;
-            })
+            });
         });
 
         after(() => {
@@ -59,7 +68,17 @@ describe('Platofrm filter components', () => {
                     dumpView(componentRoot, true));
             });
         });
-    })
+
+
+        it("applies iOS specific attribute", () => {
+            return testApp.loadComponent(PlatformSpecificAttributeComponent).then((componentRef) => {
+                const componentRoot = componentRef.instance.elementRef.nativeElement;
+                assert.equal(
+                    "(ProxyViewContainer (StackLayout (Label[text=IOS])))",
+                    dumpView(componentRoot, true));
+            });
+        });
+    });
 
     describe('on Android device', () => {
         let testApp: TestApp = null;
@@ -67,7 +86,7 @@ describe('Platofrm filter components', () => {
         before(() => {
             return TestApp.create([provide(DEVICE, { useValue: createDevice(platformNames.android) })]).then((app) => {
                 testApp = app;
-            })
+            });
         });
 
         after(() => {
@@ -91,5 +110,14 @@ describe('Platofrm filter components', () => {
                     dumpView(componentRoot, true));
             });
         });
-    })
-})
+
+        it("applies Android specific attribute", () => {
+            return testApp.loadComponent(PlatformSpecificAttributeComponent).then((componentRef) => {
+                const componentRoot = componentRef.instance.elementRef.nativeElement;
+                assert.equal(
+                    "(ProxyViewContainer (StackLayout (Label[text=ANDROID])))",
+                    dumpView(componentRoot, true));
+            });
+        });
+    });
+});
