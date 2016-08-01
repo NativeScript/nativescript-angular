@@ -184,9 +184,9 @@ export function nativeScriptBootstrap(appComponentType: any, customProviders?: P
 }
 
 // Patch livesync
-const _baseLiveSync = global.__onLiveSync;
-global.__onLiveSync = function () {
-    rendererLog("LiveSync Started");
+const _baseLiveSyncCore = global.__onLiveSyncCore;
+global.__onLiveSyncCore = function () {
+    rendererLog("ANGULAR LiveSync Started");
     if (bootstrapCache) {
         onBeforeLivesync.next(lastBootstrappedApp ? lastBootstrappedApp.get() : null);
 
@@ -203,8 +203,7 @@ global.__onLiveSync = function () {
             }
             frame.navigate(newEntry);
         }
-    }
-    else {
-        _baseLiveSync();
+    } else {
+        _baseLiveSyncCore();
     }
 };
