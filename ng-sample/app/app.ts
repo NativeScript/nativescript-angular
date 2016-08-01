@@ -65,8 +65,8 @@ import { AnimationStatesTest } from "./examples/animation/animation-states-test"
 // nativeScriptBootstrap(RouterOutletAppComponent, [RouterOutletRouterProviders]);
 // nativeScriptBootstrap(PageRouterOutletAppComponent, [PageRouterOutletRouterProviders]);
 // nativeScriptBootstrap(PageRouterOutletNestedAppComponent, [PageRouterOutletNestedRouterProviders]);
-// nativeScriptBootstrap(ClearHistoryAppComponent, [ClearHistoryRouterProviders]);
-nativeScriptBootstrap(LoginAppComponent, [LoginExampleProviders]);
+nativeScriptBootstrap(ClearHistoryAppComponent, [ClearHistoryRouterProviders]);
+// nativeScriptBootstrap(LoginAppComponent, [LoginExampleProviders]);
 
 // router-deprecated
 // nativeScriptBootstrap(NavigationTest, [NS_ROUTER_PROVIDERS_DEPRECATED]);

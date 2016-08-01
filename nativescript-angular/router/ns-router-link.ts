@@ -1,6 +1,6 @@
-import {Directive, HostListener, Input, Optional} from '@angular/core';
+import {Directive, HostListener, Input, Optional, OnChanges} from '@angular/core';
 import {NavigationExtras} from "@angular/router/src/router";
-import {ActivatedRoute} from '@angular/router';
+import {ActivatedRoute, Router, UrlTree} from '@angular/router';
 import {routerLog} from "../trace";
 import {PageRoute} from "./page-router-outlet";
 import {RouterExtensions} from "./router-extensions";
@@ -23,7 +23,7 @@ import {isString} from "utils/types";
  * <a [nsRouterLink]="['/user']">link to user component</a>
  * ```
  *
- * RouterLink expects the value to be an array of path segments, followed by the params
+ * NSRouterLink expects the value to be an array of path segments, followed by the params
  * for that level of routing. For instance `['/team', {teamId: 1}, 'user', {userId: 2}]`
  * means that we want to generate a link to `/team;teamId=1/user;userId=2`.
  *
@@ -34,7 +34,7 @@ import {isString} from "utils/types";
  * And if the segment begins with `../`, the router will go up one level.
  */
 @Directive({ selector: '[nsRouterLink]' })
-export class NSRouterLink {
+export class NSRouterLink implements OnChanges {
   private commands: any[] = [];
   @Input() target: string;
   @Input() queryParams: { [k: string]: any };
@@ -43,9 +43,16 @@ export class NSRouterLink {
   @Input() clearHistory: boolean;
   @Input() pageTransition: boolean | string | NavigationTransition = true;
 
+  urlTree: UrlTree;
+
   private usePageRoute: boolean;
 
+  private get currentRoute(): ActivatedRoute {
+    return this.usePageRoute ? this.pageRoute.activatedRoute.getValue() : this.route;
+  }
+
   constructor(
+    private router: Router,
     private navigator: RouterExtensions,
     private route: ActivatedRoute,
     @Optional() private pageRoute: PageRoute) {
@@ -62,14 +69,15 @@ export class NSRouterLink {
     }
   }
 
+
   @HostListener("tap")
   onTap() {
     routerLog("nsRouterLink.tapped: " + this.commands + " usePageRoute: " + this.usePageRoute + " clearHistory: " + this.clearHistory + " transition: " + JSON.stringify(this.pageTransition));
 
-    const currentRoute = this.usePageRoute ? this.pageRoute.activatedRoute.getValue() : this.route;
     const transition = this.getTransition();
+
     let extras: NavigationExtras & NavigationOptions = {
-      relativeTo: currentRoute,
+      relativeTo: this.currentRoute,
       queryParams: this.queryParams,
       fragment: this.fragment,
       clearHistory: this.clearHistory,
@@ -93,7 +101,17 @@ export class NSRouterLink {
       return {
         animated: true,
         transition: this.pageTransition
-      }
+      };
     }
+  }
+
+  ngOnChanges(changes: {}): any {
+    this.updateUrlTree();
+  }
+
+  private updateUrlTree(): void {
+    this.urlTree = this.router.createUrlTree(
+      this.commands,
+      { relativeTo: this.currentRoute, queryParams: this.queryParams, fragment: this.fragment });
   }
 }

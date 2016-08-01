@@ -16,8 +16,8 @@ class LocationLogService {
             this.routerEvents$.next([...this.routerEvents$.getValue(), e.toString()]);
 
             let states = this.strategy._getSatates()
-                .map((v, i) => { 
-                    return (i + "." + (v.isPageNavigation ? "[PAGE]" : "") + " \"" + v.url + "\""); 
+                .map((v, i) => {
+                    return (i + "." + (v.isPageNavigation ? "[PAGE]" : "") + " \"" + v.url + "\"");
                 })
                 .reverse();
 
@@ -82,7 +82,7 @@ class SecondComponent implements OnInit, OnDestroy {
 })
 class ThirdComponent implements OnInit, OnDestroy {
     name = "Third";
-    constructor(private nav: RouterExtensions) { }    
+    constructor(private nav: RouterExtensions) { }
     ngOnInit() { console.log("ThirdComponent - ngOnInit()"); }
     ngOnDestroy() { console.log("ThirdComponent - ngOnDestroy()"); }
 }
@@ -93,13 +93,13 @@ class ThirdComponent implements OnInit, OnDestroy {
     providers: [LocationLogService],
     template: `<page-router-outlet></page-router-outlet>`
 })
-export class ClearHistoryAppComponent {}
+export class ClearHistoryAppComponent { }
 
 const routes: RouterConfig = [
     { path: "", redirectTo: "/first", terminal: true },
-    { path: "first", component: FirstComponent},
-    { path: "second", component: SecondComponent},
-    { path: "third", component: ThirdComponent},
+    { path: "first", component: FirstComponent },
+    { path: "second", component: SecondComponent },
+    { path: "third", component: ThirdComponent },
 ];
 
 export const ClearHistoryRouterProviders = [
