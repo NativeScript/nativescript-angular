@@ -3,19 +3,19 @@
 
     <Button row="1" colSpan="3" text="BACK" (tap)="nav.back()" class="stretch"></Button>
 
-    <Button col="0" row="2" [nsRouterLink]="['/first']"
+    <Button col="0" row="2" [nsRouterLink]="['/first']" nsRouterLinkActive="active"
         text="P1" class="stretch"></Button>
-    <Button col="0" row="3" [nsRouterLink]="['/first']" clearHistory="true" pageTransition="false"
+    <Button col="0" row="3" [nsRouterLink]="['/first']" nsRouterLinkActive="active" clearHistory="true" pageTransition="false"
         text="P1[clear]" class="stretch"></Button>
 
-    <Button col="1" row="2" [nsRouterLink]="['/second']" 
+    <Button col="1" row="2" [nsRouterLink]="['/second']" nsRouterLinkActive="active" 
         text="P2" class="stretch"></Button>
-    <Button col="1" row="3" [nsRouterLink]="['/second']" clearHistory="true" pageTransition="none"
+    <Button col="1" row="3" [nsRouterLink]="['/second']" nsRouterLinkActive="active" clearHistory="true" pageTransition="none"
         text="P2[clear]" class="stretch"></Button>
 
-    <Button col="2" row="2" [nsRouterLink]="['/third']" 
+    <Button col="2" row="2" [nsRouterLink]="['/third']" nsRouterLinkActive="active" 
         text="P3" class="stretch"></Button>
-    <Button col="2" row="3" [nsRouterLink]="['/third']" clearHistory="true" pageTransition="flipRight"
+    <Button col="2" row="3" [nsRouterLink]="['/third']" nsRouterLinkActive="active" clearHistory="true" pageTransition="flipRight"
         text="P3[clear]" class="stretch"></Button>
     
     <GridLayout colSpan="3" row="5">

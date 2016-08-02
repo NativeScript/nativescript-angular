@@ -22,6 +22,10 @@
     horizontal-align: center;
 }
 
+.active {
+    color: orangered;
+}
+
 .router-link-active {
     background-color: lightcoral;
 }
