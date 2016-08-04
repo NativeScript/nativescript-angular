@@ -28,7 +28,7 @@
     "dependencies": {
         "nativescript-unit-test-runner": "^0.3.3",
         "tns-core-modules": ">=2.1.0",
-        "nativescript-angular": "^0.2.0",
+        "nativescript-angular": "next",
         "@angular/core": "2.0.0-rc.4",
         "@angular/common": "2.0.0-rc.4",
         "@angular/compiler": "2.0.0-rc.4",
