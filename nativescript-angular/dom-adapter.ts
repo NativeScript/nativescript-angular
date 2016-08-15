@@ -23,6 +23,10 @@ export class NativeScriptElementSchemaRegistry extends ElementSchemaRegistry {
       return propName;
   }
 
+  getDefaultComponentElementName(): string {
+      return 'ng-component';
+  }
+
   securityContext(tagName: string, propName: string): any {
       return SecurityContext.NONE;
   }
