@@ -8,7 +8,7 @@ import {
 import { AnimationKeyframe } from '@angular/core/src/animation/animation_keyframe';
 import { AnimationPlayer } from '@angular/core/src/animation/animation_player';
 import { AnimationStyles } from '@angular/core/src/animation/animation_styles';
-import { AnimationDriver } from '@angular/core/src/animation/animation_driver';
+import { AnimationDriver } from '@angular/platform-browser/src/dom/animation_driver';
 import {APP_ROOT_VIEW, DEVICE} from "./platform-providers";
 import {isBlank} from '@angular/core/src/facade/lang';
 import {CONTENT_ATTR} from '@angular/platform-browser/src/dom/dom_renderer';

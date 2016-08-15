@@ -62,12 +62,12 @@ export const onAfterLivesync = new EventEmitter<ComponentRef<any>>();
 // See: https://github.com/angular/angular/commit/1745366530266d298306b995ecd23dabd8569e28
 export const NS_COMPILER_PROVIDERS: ProviderArray = [
     COMPILER_PROVIDERS,
-    provide(CompilerConfig, {
-        useFactory: (platformDirectives: any[], platformPipes: any[]) => {
-            return new CompilerConfig({ platformDirectives, platformPipes });
-        },
-        deps: [PLATFORM_DIRECTIVES, PLATFORM_PIPES]
-    }),
+    //provide(CompilerConfig, {
+        //useFactory: (platformDirectives: any[], platformPipes: any[]) => {
+            //return new CompilerConfig({ platformDirectives, platformPipes });
+        //},
+        //deps: [PLATFORM_DIRECTIVES, PLATFORM_PIPES]
+    //}),
     provide(XHR, { useClass: FileSystemXHR }),
     provide(PLATFORM_PIPES, { useValue: COMMON_PIPES, multi: true }),
     provide(PLATFORM_DIRECTIVES, { useValue: COMMON_DIRECTIVES, multi: true }),
