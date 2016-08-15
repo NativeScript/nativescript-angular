@@ -1,7 +1,10 @@
 import {Component} from '@angular/core';
-import {RouteConfig} from '@angular/router-deprecated';
+//TODO: port to latest router
+//import {RouteConfig} from '@angular/router-deprecated';
+//import {NS_ROUTER_DIRECTIVES, NS_ROUTER_PROVIDERS} from "nativescript-angular/router-deprecated/ns-router-deprecated";
+const NS_ROUTER_DIRECTIVES = [];
+
 import { Page} from "ui/page";
-import {NS_ROUTER_DIRECTIVES, NS_ROUTER_PROVIDERS} from "nativescript-angular/router-deprecated/ns-router-deprecated";
 import {NS_DIRECTIVES} from "nativescript-angular/directives";
 
 @Component({
@@ -84,10 +87,11 @@ class SecondComponent {
     </GridLayout>
     `
 })
-@RouteConfig([
-    { path: '/', component: FirstComponent, name: 'First' },
-    { path: '/second', component: SecondComponent, name: 'Second' },
-])
+//TODO: port to latest router
+//@RouteConfig([
+    //{ path: '/', component: FirstComponent, name: 'First' },
+    //{ path: '/second', component: SecondComponent, name: 'Second' },
+//])
 export class ActionBarTest {
 }
 

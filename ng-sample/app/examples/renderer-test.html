@@ -1,12 +1,8 @@
 <StackLayout orientation='vertical'>
+    <Label [text]='model.mydate | date:"fullDate"' [ngStyle]="{'background-color': 'lime'}"></Label>
     <Progress value="50" style="color: red"></Progress>
-    <!--<TimePicker [(ngModel)]='model.deliveryTime' ></TimePicker>
-        <Label [text]='model.deliveryTime' ></Label>
-        <DatePicker [(ngModel)]='model.deliveryDate' ></DatePicker>
-        <Label [text]='model.deliveryDate' ></Label>-->
     <SearchBar [(ngModel)]='model.search'></SearchBar>
     <Label [text]='model.search' [style.backgroundColor]="'hotpink'"></Label>
-    <Label [text]='model.mydate | date:"fullDate"' [ngStyle]="{'background-color': 'lime'}"></Label>
     <Slider [(ngModel)]='model.sliderTest'></Slider>
     <Label [text]='model.sliderTest'></Label>
     <ListPicker [items]='model.listPickerItems' [(ngModel)]='model.selectedIndex'></ListPicker>

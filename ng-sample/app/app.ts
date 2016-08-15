@@ -6,9 +6,10 @@
 //profiling.start('application-start');
 
 // "nativescript-angular/application" import should be first in order to load some required settings (like globals and reflect-metadata)
-import { nativeScriptBootstrap, onAfterLivesync, onBeforeLivesync } from "nativescript-angular/application";
+//import { nativeScriptBootstrap, onAfterLivesync, onBeforeLivesync} from "nativescript-angular/application";
+import { NativeScriptModule, platformNativeScriptDynamic } from "nativescript-angular/platform";
+import { NgModule } from "@angular/core";
 import { Router } from "@angular/router";
-import { NS_ROUTER_PROVIDERS as NS_ROUTER_PROVIDERS_DEPRECATED } from "nativescript-angular/router-deprecated";
 import { NS_ROUTER_PROVIDERS } from "nativescript-angular/router";
 import { HTTP_PROVIDERS } from "@angular/http";
 import { rendererTraceCategory, routerTraceCategory, listViewTraceCategory } from "nativescript-angular/trace";
@@ -31,10 +32,6 @@ import {ModalTest} from "./examples/modal/modal-test";
 import {PlatfromDirectivesTest} from "./examples/platform-directives/platform-directives-test";
 import {LivesyncApp, LivesyncTestRouterProviders} from "./examples/livesync-test/livesync-test-app";
 
-// router-deprecated
-import {NavigationTest} from "./examples/router-deprecated/navigation-test";
-import {RouterOutletTest} from "./examples/router-deprecated/router-outlet-test";
-import {LoginTest} from "./examples/router-deprecated/login-test";
 
 // new router
 import { RouterOutletAppComponent, RouterOutletRouterProviders} from "./examples/router/router-outlet-test";
@@ -65,13 +62,24 @@ import { AnimationStatesTest } from "./examples/animation/animation-states-test"
 // nativeScriptBootstrap(RouterOutletAppComponent, [RouterOutletRouterProviders]);
 // nativeScriptBootstrap(PageRouterOutletAppComponent, [PageRouterOutletRouterProviders]);
 // nativeScriptBootstrap(PageRouterOutletNestedAppComponent, [PageRouterOutletNestedRouterProviders]);
-nativeScriptBootstrap(ClearHistoryAppComponent, [ClearHistoryRouterProviders]);
+// nativeScriptBootstrap(ClearHistoryAppComponent, [ClearHistoryRouterProviders]);
 // nativeScriptBootstrap(LoginAppComponent, [LoginExampleProviders]);
 
-// router-deprecated
-// nativeScriptBootstrap(NavigationTest, [NS_ROUTER_PROVIDERS_DEPRECATED]);
-// nativeScriptBootstrap(RouterOutletTest, [NS_ROUTER_PROVIDERS_DEPRECATED]);
-// nativeScriptBootstrap(LoginTest, [NS_ROUTER_PROVIDERS_DEPRECATED]);
+@NgModule({
+    bootstrap: [
+        RendererTest
+    ],
+    declarations: [
+        RendererTest
+    ],
+    imports: [
+        NativeScriptModule,
+    ],
+    providers: []
+})
+class RendererTestModule {}
+
+platformNativeScriptDynamic().bootstrapModule(RendererTestModule);
 
 // Livesync test
 // var cahcedUrl: string;
