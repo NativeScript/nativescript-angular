@@ -1,5 +1,5 @@
 import {Directive, ElementRef, Renderer, Self, forwardRef, provide} from '@angular/core';
-import {NG_VALUE_ACCESSOR} from '@angular/common/src/forms-deprecated/directives/control_value_accessor';
+import {NG_VALUE_ACCESSOR} from '@angular/forms';
 import {isBlank, isDate} from '@angular/core/src/facade/lang';
 import {BaseValueAccessor} from './base-value-accessor';
 import {DatePicker} from "ui/date-picker";
