@@ -63,6 +63,15 @@ export class NativeScriptAnimationPlayer implements AnimationPlayer {
         this.animation = KeyframeAnimation.keyframeAnimationFromInfo(keyframeAnimationInfo, observable.ValueSource.VisualState);
     }
 
+    init(): void {
+        throw new Error("Not implemented.");
+    }
+
+    hasStarted(): boolean {
+        throw new Error("Not implemented.");
+    }
+
+
     onDone(fn: Function): void { this._subscriptions.push(fn); }
 
     private _onFinish() {
