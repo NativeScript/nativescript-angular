@@ -10,7 +10,8 @@
 import { NativeScriptModule, platformNativeScriptDynamic } from "nativescript-angular/platform";
 import { NgModule } from "@angular/core";
 import { Router } from "@angular/router";
-import { NS_ROUTER_PROVIDERS } from "nativescript-angular/router";
+import { NativeScriptRouterModule } from "nativescript-angular/router";
+import { NativeScriptFormsModule } from "nativescript-angular/forms";
 import { HTTP_PROVIDERS } from "@angular/http";
 import { rendererTraceCategory, routerTraceCategory, listViewTraceCategory } from "nativescript-angular/trace";
 
@@ -59,27 +60,37 @@ import { AnimationStatesTest } from "./examples/animation/animation-states-test"
 //nativeScriptBootstrap(PlatfromDirectivesTest);
 
 // new router
-// nativeScriptBootstrap(RouterOutletAppComponent, [RouterOutletRouterProviders]);
+ //nativeScriptBootstrap(RouterOutletAppComponent, [RouterOutletRouterProviders]);
 // nativeScriptBootstrap(PageRouterOutletAppComponent, [PageRouterOutletRouterProviders]);
 // nativeScriptBootstrap(PageRouterOutletNestedAppComponent, [PageRouterOutletNestedRouterProviders]);
 // nativeScriptBootstrap(ClearHistoryAppComponent, [ClearHistoryRouterProviders]);
 // nativeScriptBootstrap(LoginAppComponent, [LoginExampleProviders]);
 
 @NgModule({
-    bootstrap: [
-        RendererTest
-    ],
     declarations: [
-        RendererTest
     ],
     imports: [
         NativeScriptModule,
+        NativeScriptFormsModule,
+        NativeScriptRouterModule,
+    ],
+    exports: [
+        NativeScriptModule,
+        NativeScriptFormsModule,
+        NativeScriptRouterModule,
     ],
     providers: []
 })
+class ExampleModule {}
+
+@NgModule({bootstrap: [RendererTest], declarations: [RendererTest], imports: [ExampleModule]})
 class RendererTestModule {}
 
+@NgModule({bootstrap: [PageRouterOutletAppComponent], imports: [ExampleModule]})
+class PageRouterOutletAppModule {}
+
 platformNativeScriptDynamic().bootstrapModule(RendererTestModule);
+//platformNativeScriptDynamic().bootstrapModule(PageRouterOutletAppModule);
 
 // Livesync test
 // var cahcedUrl: string;

@@ -36,7 +36,6 @@ import {
     Testability,
     createPlatformFactory
 } from '@angular/core';
-import { FormsModule } from "@angular/forms";
 import * as application from "application";
 import { topmost, NavigationEntry } from "ui/frame";
 import { Page } from 'ui/page';
@@ -90,12 +89,10 @@ class ConsoleLogger {
     imports: [
         CommonModule,
         ApplicationModule,
-        FormsModule, //TODO: split to a separate NativeScriptFormsModule
     ],
     exports: [
         CommonModule,
         ApplicationModule,
-        FormsModule, //TODO: split to a separate NativeScriptFormsModule
         NS_DIRECTIVES
     ]
 })
