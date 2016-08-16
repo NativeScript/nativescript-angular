@@ -60,15 +60,11 @@ class SecondComponent implements OnInit, OnDestroy {
     `
 })
 export class RouterOutletAppComponent {
+    static routes: RouterConfig = [
+        { path: "", redirectTo: "/first", terminal: true },
+        { path: "first", component: FirstComponent },
+        { path: "second/:id", component: SecondComponent },
+    ];
 }
 
 
-const routes: RouterConfig = [
-    { path: "", redirectTo: "/first", terminal: true },
-    { path: "first", component: FirstComponent },
-    { path: "second/:id", component: SecondComponent },
-];
-
-export const RouterOutletRouterProviders = [
-    nsProvideRouter(routes, { enableTracing: false })
-];
