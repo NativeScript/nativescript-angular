@@ -36,7 +36,7 @@ import {LivesyncApp, LivesyncTestRouterProviders} from "./examples/livesync-test
 
 // new router
 import { RouterOutletAppComponent } from "./examples/router/router-outlet-test";
-import { PageRouterOutletAppComponent, PageRouterOutletRouterProviders } from "./examples/router/page-router-outlet-test";
+import { PageRouterOutletAppComponent } from "./examples/router/page-router-outlet-test";
 import { PageRouterOutletNestedAppComponent, PageRouterOutletNestedRouterProviders } from "./examples/router/page-router-outlet-nested-test";
 import { ClearHistoryAppComponent, ClearHistoryRouterProviders } from "./examples/router/clear-history-test";
 import { LoginAppComponent, LoginExampleProviders } from "./examples/router/login-test";
@@ -47,12 +47,6 @@ import { AnimationKeyframesTest } from "./examples/animation/animation-keyframes
 import { AnimationNgClassTest } from "./examples/animation/animation-ngclass-test";
 import { AnimationStatesTest } from "./examples/animation/animation-states-test";
 
-// nativeScriptBootstrap(RendererTest);
-//nativeScriptBootstrap(TabViewTest);
-//nativeScriptBootstrap(Benchmark);
-// nativeScriptBootstrap(ListTest);
-// nativeScriptBootstrap(ListTestAsync);
-//nativeScriptBootstrap(ImageTest);
 // nativeScriptBootstrap(HttpTest);
 //nativeScriptBootstrap(ActionBarTest, [NS_ROUTER_PROVIDERS_DEPRECATED], { startPageActionBarHidden: false });
 //nativeScriptBootstrap(ActionBarTest, [NS_ROUTER_PROVIDERS_DEPRECATED]);
@@ -83,24 +77,34 @@ import { AnimationStatesTest } from "./examples/animation/animation-states-test"
 })
 class ExampleModule {}
 
-@NgModule({bootstrap: [RendererTest], declarations: [RendererTest], imports: [ExampleModule]})
-class RendererTestModule {}
+function makeExampleModule(componentType, routes = null, entryComponents = null) {
+    let imports: any[] = [ExampleModule];
+    if (routes) {
+        imports.push(NativeScriptRouterModule.forRoot(routes))
+    }
+    let entries = [];
+    if (entryComponents) {
+        entries = entryComponents;
+    }
+    @NgModule({
+        bootstrap: [componentType],
+        imports: imports,
+        entryComponents: entries,
+        declarations: entries,
+    })
+    class ExampleModuleForComponent {}
 
-@NgModule({bootstrap: [PageRouterOutletAppComponent], imports: [ExampleModule]})
-class PageRouterOutletAppModule {}
+    return ExampleModuleForComponent;
+}
 
-@NgModule({
-    bootstrap: [RouterOutletAppComponent],
-    imports: [
-        ExampleModule,
-        NativeScriptRouterModule.forRoot(RouterOutletAppComponent.routes),
-    ],
-})
-class RouterOutletAppModule {}
-
-//platformNativeScriptDynamic().bootstrapModule(RendererTestModule);
-platformNativeScriptDynamic().bootstrapModule(RouterOutletAppModule);
-//platformNativeScriptDynamic().bootstrapModule(PageRouterOutletAppModule);
+//platformNativeScriptDynamic().bootstrapModule(makeExampleModule(RendererTest));
+//platformNativeScriptDynamic().bootstrapModule(makeExampleModule(TabViewTest));
+//platformNativeScriptDynamic().bootstrapModule(makeExampleModule(Benchmark));
+//platformNativeScriptDynamic().bootstrapModule(makeExampleModule(ListTest));
+//platformNativeScriptDynamic().bootstrapModule(makeExampleModule(ListTestAsync));
+//platformNativeScriptDynamic().bootstrapModule(makeExampleModule(ImageTest));
+//platformNativeScriptDynamic().bootstrapModule(makeExampleModule(RouterOutletAppComponent, RouterOutletAppComponent.routes));
+platformNativeScriptDynamic().bootstrapModule(makeExampleModule(PageRouterOutletAppComponent, PageRouterOutletAppComponent.routes, PageRouterOutletAppComponent.entries));
 
 // Livesync test
 // var cahcedUrl: string;

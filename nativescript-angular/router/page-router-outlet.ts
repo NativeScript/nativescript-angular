@@ -2,7 +2,8 @@ import {
     Attribute, ComponentFactory, ComponentRef, Directive,
     ReflectiveInjector, ResolvedReflectiveProvider, ViewContainerRef,
     Inject, ComponentResolver, provide, ComponentFactoryResolver,
-    NoComponentFactoryError} from '@angular/core';
+    NoComponentFactoryError, Injector
+} from '@angular/core';
 
 import {isPresent} from '@angular/core/src/facade/lang';
 
@@ -103,7 +104,7 @@ export class PageRouterOutlet {
 
         this.viewUtil = new ViewUtil(device);
         compiler.resolveComponent(DetachedLoader).then((detachedLoaderFactory) => {
-            log("DetachedLoaderFactory leaded");
+            log("DetachedLoaderFactory loaded");
             this.detachedLoaderFactory = detachedLoaderFactory;
         });
     }
@@ -145,11 +146,10 @@ export class PageRouterOutlet {
      * Called by the Router to instantiate a new component during the commit phase of a navigation.
      * This method in turn is responsible for calling the `routerOnActivate` hook of its child.
      */
-    activate(
-        activatedRoute: ActivatedRoute,
-        providers: ResolvedReflectiveProvider[],
-        outletMap: RouterOutletMap): void {
-
+     activate(
+         activatedRoute: ActivatedRoute, loadedResolver: ComponentFactoryResolver,
+         loadedInjector: Injector, providers: ResolvedReflectiveProvider[],
+         outletMap: RouterOutletMap): void {
         this.outletMap = outletMap;
         this.currentActivatedRoute = activatedRoute;
 
