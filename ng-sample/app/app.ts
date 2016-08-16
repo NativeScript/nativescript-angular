@@ -35,7 +35,7 @@ import {LivesyncApp, LivesyncTestRouterProviders} from "./examples/livesync-test
 
 
 // new router
-import { RouterOutletAppComponent, RouterOutletRouterProviders} from "./examples/router/router-outlet-test";
+import { RouterOutletAppComponent } from "./examples/router/router-outlet-test";
 import { PageRouterOutletAppComponent, PageRouterOutletRouterProviders } from "./examples/router/page-router-outlet-test";
 import { PageRouterOutletNestedAppComponent, PageRouterOutletNestedRouterProviders } from "./examples/router/page-router-outlet-nested-test";
 import { ClearHistoryAppComponent, ClearHistoryRouterProviders } from "./examples/router/clear-history-test";
@@ -89,7 +89,17 @@ class RendererTestModule {}
 @NgModule({bootstrap: [PageRouterOutletAppComponent], imports: [ExampleModule]})
 class PageRouterOutletAppModule {}
 
-platformNativeScriptDynamic().bootstrapModule(RendererTestModule);
+@NgModule({
+    bootstrap: [RouterOutletAppComponent],
+    imports: [
+        ExampleModule,
+        NativeScriptRouterModule.forRoot(RouterOutletAppComponent.routes),
+    ],
+})
+class RouterOutletAppModule {}
+
+//platformNativeScriptDynamic().bootstrapModule(RendererTestModule);
+platformNativeScriptDynamic().bootstrapModule(RouterOutletAppModule);
 //platformNativeScriptDynamic().bootstrapModule(PageRouterOutletAppModule);
 
 // Livesync test
