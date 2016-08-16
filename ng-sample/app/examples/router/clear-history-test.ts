@@ -93,15 +93,17 @@ class ThirdComponent implements OnInit, OnDestroy {
     providers: [LocationLogService],
     template: `<page-router-outlet></page-router-outlet>`
 })
-export class ClearHistoryAppComponent { }
+export class ClearHistoryAppComponent {
+    static routes: RouterConfig = [
+        { path: "", redirectTo: "/first", terminal: true },
+        { path: "first", component: FirstComponent },
+        { path: "second", component: SecondComponent },
+        { path: "third", component: ThirdComponent },
+    ];
 
-const routes: RouterConfig = [
-    { path: "", redirectTo: "/first", terminal: true },
-    { path: "first", component: FirstComponent },
-    { path: "second", component: SecondComponent },
-    { path: "third", component: ThirdComponent },
-];
-
-export const ClearHistoryRouterProviders = [
-    nsProvideRouter(routes, { enableTracing: false })
-];
+    static entries = [
+        FirstComponent,
+        SecondComponent,
+        ThirdComponent,
+    ]
+}
