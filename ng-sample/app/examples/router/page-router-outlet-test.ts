@@ -110,19 +110,21 @@ class ThirdComponent implements OnInit, OnDestroy {
     template: `<page-router-outlet></page-router-outlet>`
 })
 export class PageRouterOutletAppComponent {
+    static routes: RouterConfig = [
+        { path: "", component: FirstComponent },
+        { path: "second/:id", component: SecondComponent },
+        { path: "third/:id", component: ThirdComponent },
+    ];
+
+    static entries = [
+        FirstComponent,
+        SecondComponent,
+        ThirdComponent
+    ]
+
     constructor(router: Router, private location: Location) {
         router.events.subscribe((e) => {
             console.log("--EVENT-->: " + e.toString());
         });
     }
 }
-
-const routes: RouterConfig = [
-    { path: "", component: FirstComponent },
-    { path: "second/:id", component: SecondComponent },
-    { path: "third/:id", component: ThirdComponent },
-];
-
-export const PageRouterOutletRouterProviders = [
-    nsProvideRouter(routes, { enableTracing: false })
-];
