@@ -13,6 +13,7 @@ export class NativeScriptAnimationPlayer implements AnimationPlayer {
 
     private _subscriptions: Function[] = [];
     private _finished = false;
+    private _started = false;
     private animation: KeyframeAnimation;
     private target: View;
 
@@ -64,11 +65,10 @@ export class NativeScriptAnimationPlayer implements AnimationPlayer {
     }
 
     init(): void {
-        throw new Error("Not implemented.");
     }
 
     hasStarted(): boolean {
-        throw new Error("Not implemented.");
+        return this._started;
     }
 
 
@@ -77,6 +77,7 @@ export class NativeScriptAnimationPlayer implements AnimationPlayer {
     private _onFinish() {
         if (!this._finished) {
             this._finished = true;
+            this._started = false;
             this._subscriptions.forEach(fn => fn());
             this._subscriptions = [];
         }
@@ -84,6 +85,7 @@ export class NativeScriptAnimationPlayer implements AnimationPlayer {
 
     play(): void {
         if (this.animation) {
+            this._started = true;
             this.animation.play(this.target)
                 .then(() => { this._onFinish(); })
                 .catch((e) => { });
