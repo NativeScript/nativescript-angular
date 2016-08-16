@@ -4,7 +4,7 @@ import {Component, trigger, style, animate, state, transition } from '@angular/c
     selector: 'animation-states',
     template: `
         <StackLayout>
-            <Button text="Touch me!" @state=" isOn ? 'active' : 'inactive' " (tap)="onTap()"></Button>
+            <Button text="Touch me!" [@state]=" isOn ? 'active' : 'inactive' " (tap)="onTap()"></Button>
         </StackLayout>`,
     animations: [
         trigger('state', [

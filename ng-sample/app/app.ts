@@ -76,6 +76,7 @@ function makeExampleModule(componentType) {
     if (componentType.entries) {
         entries = componentType.entries;
     }
+    entries.push(componentType);
     let providers = [];
     if (componentType.providers) {
         providers = componentType.providers
@@ -106,7 +107,12 @@ function makeExampleModule(componentType) {
 //platformNativeScriptDynamic().bootstrapModule(makeExampleModule(PageRouterOutletAppComponent));
 //platformNativeScriptDynamic().bootstrapModule(makeExampleModule(PageRouterOutletNestedAppComponent));
 //platformNativeScriptDynamic().bootstrapModule(makeExampleModule(ClearHistoryAppComponent));
-platformNativeScriptDynamic().bootstrapModule(makeExampleModule(LoginAppComponent));
+//platformNativeScriptDynamic().bootstrapModule(makeExampleModule(LoginAppComponent));
+//animations
+//platformNativeScriptDynamic().bootstrapModule(makeExampleModule(AnimationStatesTest));
+//platformNativeScriptDynamic().bootstrapModule(makeExampleModule(AnimationNgClassTest));
+//platformNativeScriptDynamic().bootstrapModule(makeExampleModule(AnimationKeyframesTest));
+platformNativeScriptDynamic().bootstrapModule(makeExampleModule(AnimationEnterLeaveTest));
 
 // Livesync test
 // var cahcedUrl: string;
@@ -129,9 +135,3 @@ platformNativeScriptDynamic().bootstrapModule(makeExampleModule(LoginAppComponen
 // });
 
 // nativeScriptBootstrap(LivesyncApp, [LivesyncTestRouterProviders]);
-
-// animations
-//nativeScriptBootstrap(AnimationStatesTest);
-//nativeScriptBootstrap(AnimationNgClassTest);
-//nativeScriptBootstrap(AnimationKeyframesTest);
-//nativeScriptBootstrap(AnimationEnterLeaveTest);
