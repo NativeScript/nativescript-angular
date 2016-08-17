@@ -54,6 +54,7 @@ import * as nativescriptIntl from "nativescript-intl";
 global.Intl = nativescriptIntl;
 
 export interface AppOptions {
+    bootInExistingPage: boolean,
     cssFile?: string;
     startPageActionBarHidden?: boolean;
 }
@@ -255,7 +256,12 @@ var _platformNativeScriptDynamic: PlatformFactory = createPlatformFactory(
     platformCoreDynamic, 'nativeScriptDynamic', NS_COMPILER_PROVIDERS);
 
 export function platformNativeScriptDynamic(options?: AppOptions, extraProviders?: any[]): PlatformRef {
-    return new NativeScriptPlatformRef(_platformNativeScriptDynamic(extraProviders), options);
+    //Return raw platform to advanced users only if explicitly requested
+    if (options && options.bootInExistingPage === true) {
+        return _platformNativeScriptDynamic(extraProviders);
+    } else {
+        return new NativeScriptPlatformRef(_platformNativeScriptDynamic(extraProviders), options);
+    }
 }
 
 export const onBeforeLivesync = new EventEmitter<NgModuleRef<any>>();
