@@ -6,8 +6,7 @@
 //profiling.start('application-start');
 
 // "nativescript-angular/application" import should be first in order to load some required settings (like globals and reflect-metadata)
-//import { nativeScriptBootstrap, onAfterLivesync, onBeforeLivesync} from "nativescript-angular/application";
-import { NativeScriptModule, platformNativeScriptDynamic } from "nativescript-angular/platform";
+import { NativeScriptModule, platformNativeScriptDynamic, onAfterLivesync, onBeforeLivesync } from "nativescript-angular/platform";
 import { NgModule } from "@angular/core";
 import { Router } from "@angular/router";
 import { NativeScriptRouterModule } from "nativescript-angular/router";
@@ -31,7 +30,7 @@ import { HttpTest } from "./examples/http/http-test";
 import { ActionBarTest } from "./examples/action-bar/action-bar-test";
 import { ModalTest } from "./examples/modal/modal-test";
 import { PlatfromDirectivesTest } from "./examples/platform-directives/platform-directives-test";
-import { LivesyncApp, LivesyncTestRouterProviders } from "./examples/livesync-test/livesync-test-app";
+import { LivesyncApp } from "./examples/livesync-test/livesync-test-app";
 
 // new router
 import { RouterOutletAppComponent } from "./examples/router/router-outlet-test";
@@ -101,7 +100,7 @@ function makeExampleModule(componentType) {
 //platformNativeScriptDynamic().bootstrapModule(makeExampleModule(ModalTest));
 //platformNativeScriptDynamic().bootstrapModule(makeExampleModule(HttpTest));
 //platformNativeScriptDynamic().bootstrapModule(makeExampleModule(PlatfromDirectivesTest));
-platformNativeScriptDynamic().bootstrapModule(makeExampleModule(ActionBarTest));
+//platformNativeScriptDynamic().bootstrapModule(makeExampleModule(ActionBarTest));
 
 //new router
 //platformNativeScriptDynamic().bootstrapModule(makeExampleModule(RouterOutletAppComponent));
@@ -115,24 +114,25 @@ platformNativeScriptDynamic().bootstrapModule(makeExampleModule(ActionBarTest));
 //platformNativeScriptDynamic().bootstrapModule(makeExampleModule(AnimationKeyframesTest));
 //platformNativeScriptDynamic().bootstrapModule(makeExampleModule(AnimationEnterLeaveTest));
 
-// Livesync test
-// var cahcedUrl: string;
-// onBeforeLivesync.subscribe((compRef) => {
-//     console.log("------- onBeforeLivesync");
-//     if (compRef) {
-//         const router = <Router>compRef.injector.get(Router);
-//         cahcedUrl = router.url;
-//         console.log("------- Caching URL: " + cahcedUrl);
-//     }
-// });
+//Livesync test
+var cachedUrl: string;
+onBeforeLivesync.subscribe((moduleRef) => {
+    console.log("------- onBeforeLivesync");
+    if (moduleRef) {
+        const router = <Router>moduleRef.injector.get(Router);
+        cachedUrl = router.url;
+        console.log("------- Caching URL: " + cachedUrl);
+    }
+});
 
-// onAfterLivesync.subscribe((compRef) => {
-//     console.log("------- onAfterLivesync cachedUrl:");
-//     const router = <Router>compRef.injector.get(Router);
-//     router.events.subscribe(e => console.log(e.toString()));
-//     if (router && cahcedUrl) {
-//         setTimeout(() => { router.navigateByUrl(cahcedUrl); }, 0);
-//     }
-// });
+onAfterLivesync.subscribe((moduleRef) => {
+    console.log("------- onAfterLivesync cachedUrl:");
+    const router = <Router>moduleRef.injector.get(Router);
+    router.events.subscribe(e => console.log(e.toString()));
+    if (router && cachedUrl) {
+        setTimeout(() => { router.navigateByUrl(cachedUrl); }, 0);
+    }
+});
 
-// nativeScriptBootstrap(LivesyncApp, [LivesyncTestRouterProviders]);
+platformNativeScriptDynamic().bootstrapModule(makeExampleModule(LivesyncApp));
+console.log("APP RESTART");

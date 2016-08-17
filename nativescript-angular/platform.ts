@@ -20,7 +20,6 @@ import {
     OpaqueToken,
     ApplicationModule,
     ExceptionHandler,
-    NgModule,
     platformCore,
     CompilerOptions,
     COMPILER_OPTIONS,
@@ -29,11 +28,12 @@ import {
     Renderer,
     RootRenderer,
     SanitizationService,
-    PLATFORM_DIRECTIVES,
     PlatformRef,
+    ComponentRef,
+    NgModule,
     NgModuleFactory,
     NgModuleRef,
-    Testability,
+    EventEmitter,
     createPlatformFactory
 } from '@angular/core';
 import * as application from "application";
@@ -101,7 +101,6 @@ export class NativeScriptModule {
 
 export const NS_COMPILER_PROVIDERS = [
     COMPILER_PROVIDERS,
-    //provide(PLATFORM_DIRECTIVES, { useValue: NS_DIRECTIVES, multi: true }),
     {
         provide: COMPILER_OPTIONS,
         useValue: {providers: [
@@ -112,12 +111,17 @@ export const NS_COMPILER_PROVIDERS = [
     }
 ];
 
-type BootstrapperAction<M> = () => Promise<NgModuleRef<M>>;
+type BootstrapperAction = () => Promise<NgModuleRef<any>>;
 
-let lastBootstrappedApp: WeakRef<NgModuleRef<any>>;
+let lastBootstrappedModule: WeakRef<NgModuleRef<any>>;
+interface BootstrapParams {
+    appModuleType: Type,
+    appOptions?: AppOptions
+}
+
+let bootstrapCache: BootstrapParams;
 
 class NativeScriptPlatformRef extends PlatformRef {
-
     constructor(private platform: PlatformRef, private appOptions?: AppOptions) {
         super();
     }
@@ -126,10 +130,40 @@ class NativeScriptPlatformRef extends PlatformRef {
         throw new Error("Not implemented.");
     }
 
-    bootstrapModule<M>(moduleType: ConcreteType<M>, compilerOptions: CompilerOptions|CompilerOptions[] = []): Promise<NgModuleRef<M>> {
-        const mainPageEntry = this.createNavigationEntry(() => this.platform.bootstrapModule(moduleType, compilerOptions));
+    private _bootstrapper: BootstrapperAction;
+
+    bootstrapModule<M>(moduleType: ConcreteType<M>, compilerOptions: CompilerOptions | CompilerOptions[] = []): Promise<NgModuleRef<M>> {
+        this._bootstrapper = () => this.platform.bootstrapModule(moduleType, compilerOptions);
+        // Patch livesync
+        global.__onLiveSyncCore = () => this.livesyncModule();
+
+        const mainPageEntry = this.createNavigationEntry(this._bootstrapper);
+
         application.start(mainPageEntry);
+
         return null; //Make the compiler happy
+    }
+
+    livesyncModule(): void {
+        rendererLog("ANGULAR LiveSync Started");
+
+        onBeforeLivesync.next(lastBootstrappedModule ? lastBootstrappedModule.get() : null);
+
+        const mainPageEntry = this.createNavigationEntry(
+            this._bootstrapper,
+            compRef => onAfterLivesync.next(compRef),
+            error => onAfterLivesync.error(error)
+        );
+        mainPageEntry.animated = false;
+        mainPageEntry.clearHistory = true;
+
+        const frame = topmost();
+        if (frame) {
+            if (frame.currentPage && frame.currentPage.modal) {
+                frame.currentPage.modal.closeModal();
+            }
+            frame.navigate(mainPageEntry);
+        }
     }
  
     registerDisposeListener(dispose: () => void): void {
@@ -160,7 +194,7 @@ class NativeScriptPlatformRef extends PlatformRef {
         return this.platform.destroyed;
     }
 
-    private createNavigationEntry<M>(bootstrapAction: BootstrapperAction<M>, resolve?: (comp: NgModuleRef<any>) => void, reject?: (e: Error) => void, isReboot: boolean = false): NavigationEntry {
+    private createNavigationEntry(bootstrapAction: BootstrapperAction, resolve?: (comp: NgModuleRef<any>) => void, reject?: (e: Error) => void, isReboot: boolean = false): NavigationEntry {
         const navEntry: NavigationEntry = {
             create: (): Page => {
                 let page = new Page();
@@ -178,7 +212,7 @@ class NativeScriptPlatformRef extends PlatformRef {
                     bootstrapAction().then((moduleRef) => {
                         //profiling.stop('ng-bootstrap');
                         rendererLog('ANGULAR BOOTSTRAP DONE.');
-                        lastBootstrappedApp = new WeakRef(moduleRef);
+                        lastBootstrappedModule = new WeakRef(moduleRef);
 
                         if (resolve) {
                             resolve(moduleRef);
@@ -212,6 +246,9 @@ class NativeScriptPlatformRef extends PlatformRef {
 
         return navEntry;
     }
+
+    liveSyncApp() {
+    }
 }
 
 var _platformNativeScriptDynamic: PlatformFactory = createPlatformFactory(
@@ -220,4 +257,7 @@ var _platformNativeScriptDynamic: PlatformFactory = createPlatformFactory(
 export function platformNativeScriptDynamic(options?: AppOptions, extraProviders?: any[]): PlatformRef {
     return new NativeScriptPlatformRef(_platformNativeScriptDynamic(extraProviders), options);
 }
+
+export const onBeforeLivesync = new EventEmitter<NgModuleRef<any>>();
+export const onAfterLivesync = new EventEmitter<NgModuleRef<any>>();
 
