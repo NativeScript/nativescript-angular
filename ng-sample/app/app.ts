@@ -46,7 +46,6 @@ import { AnimationKeyframesTest } from "./examples/animation/animation-keyframes
 import { AnimationNgClassTest } from "./examples/animation/animation-ngclass-test";
 import { AnimationStatesTest } from "./examples/animation/animation-states-test";
 
-// nativeScriptBootstrap(HttpTest);
 //nativeScriptBootstrap(ActionBarTest, [NS_ROUTER_PROVIDERS_DEPRECATED], { startPageActionBarHidden: false });
 //nativeScriptBootstrap(ActionBarTest, [NS_ROUTER_PROVIDERS_DEPRECATED]);
 
@@ -100,7 +99,9 @@ function makeExampleModule(componentType) {
 //platformNativeScriptDynamic().bootstrapModule(makeExampleModule(ListTestAsync));
 //platformNativeScriptDynamic().bootstrapModule(makeExampleModule(ImageTest));
 //platformNativeScriptDynamic().bootstrapModule(makeExampleModule(ModalTest));
+//platformNativeScriptDynamic().bootstrapModule(makeExampleModule(HttpTest));
 //platformNativeScriptDynamic().bootstrapModule(makeExampleModule(PlatfromDirectivesTest));
+platformNativeScriptDynamic().bootstrapModule(makeExampleModule(ActionBarTest));
 
 //new router
 //platformNativeScriptDynamic().bootstrapModule(makeExampleModule(RouterOutletAppComponent));
@@ -112,7 +113,7 @@ function makeExampleModule(componentType) {
 //platformNativeScriptDynamic().bootstrapModule(makeExampleModule(AnimationStatesTest));
 //platformNativeScriptDynamic().bootstrapModule(makeExampleModule(AnimationNgClassTest));
 //platformNativeScriptDynamic().bootstrapModule(makeExampleModule(AnimationKeyframesTest));
-platformNativeScriptDynamic().bootstrapModule(makeExampleModule(AnimationEnterLeaveTest));
+//platformNativeScriptDynamic().bootstrapModule(makeExampleModule(AnimationEnterLeaveTest));
 
 // Livesync test
 // var cahcedUrl: string;
