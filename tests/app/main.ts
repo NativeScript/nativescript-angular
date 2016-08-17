@@ -1,5 +1,7 @@
 // "nativescript-angular/application" import should be first in order to load some required settings (like globals and reflect-metadata)
-import {nativeScriptBootstrap, bootstrap} from "nativescript-angular/application";
+import { NativeScriptModule, platformNativeScriptDynamic } from "nativescript-angular/platform";
+import { NativeScriptRouterModule } from "nativescript-angular/router";
+import { NativeScriptFormsModule } from "nativescript-angular/forms";
 import {AppComponent} from "./app.component";
 import {GestureComponent} from "./snippets/gestures.component";
 import {LayoutsComponent} from "./snippets/layouts.component";
@@ -10,9 +12,9 @@ import {StackLayout} from "ui/layouts/stack-layout";
 
 import * as application from "application";
 import {HOOKS_LOG} from "./base.component";
-import {MultiPageMain, MultiPageRouterProviders} from "./multi-page-main.component";
-import {SinglePageMain, SinglePageRouterProviders} from "./single-page-main.component";
-import {provide, OpaqueToken} from "@angular/core";
+import {MultiPageMain, routes as multiPageRoutes} from "./multi-page-main.component";
+import {SinglePageMain, routes as singlePageRoutes} from "./single-page-main.component";
+import {provide, OpaqueToken, NgModule} from "@angular/core";
 
 import {APP_ROUTER_PROVIDERS} from "./snippets/navigation/app.routes";
 import {PageNavigationApp} from "./snippets/navigation/page-outlet";
@@ -28,17 +30,73 @@ trace.setCategories(routerTraceCategory);
 trace.enable();
 
 // nativeScriptBootstrap(NavigationApp, [APP_ROUTER_PROVIDERS]);
-// nativeScriptBootstrap(PageRouterNavigationApp, [APP_ROUTER_PROVIDERS]);
 
 
-// nativeScriptBootstrap(MultiPageMain, [NS_ROUTER_PROVIDERS]);
 // nativeScriptBootstrap(GestureComponent);
 // nativeScriptBootstrap(LayoutsComponent);
 // nativeScriptBootstrap(IconFontComponent);
+const platform = platformNativeScriptDynamic({bootInExistingPage: true});
+const root = new StackLayout();
+const rootViewProvider = provide(APP_ROOT_VIEW, { useValue: root });
+const singlePageHooksLog = new BehaviorSubject([]);
+const singlePageHooksLogProvider = provide(HOOKS_LOG, { useValue: singlePageHooksLog });
+const multiPageHooksLog = new BehaviorSubject([]);
+const multiPageHooksLogProvider = provide(HOOKS_LOG, { useValue: multiPageHooksLog });
+
+@NgModule({
+    bootstrap: [
+        SinglePageMain
+    ],
+    declarations: [
+        SinglePageMain
+    ],
+    imports: [
+        NativeScriptModule,
+        NativeScriptFormsModule,
+        NativeScriptRouterModule,
+        NativeScriptRouterModule.forRoot(singlePageRoutes),
+    ],
+    exports: [
+        NativeScriptModule,
+        NativeScriptFormsModule,
+        NativeScriptRouterModule,
+    ],
+    providers: [
+        rootViewProvider,
+        singlePageHooksLogProvider,
+    ]
+})
+class SinglePageModule {}
+
+@NgModule({
+    bootstrap: [
+        MultiPageMain
+    ],
+    declarations: [
+        MultiPageMain
+    ],
+    imports: [
+        NativeScriptModule,
+        NativeScriptFormsModule,
+        NativeScriptRouterModule,
+        NativeScriptRouterModule.forRoot(multiPageRoutes),
+    ],
+    exports: [
+        NativeScriptModule,
+        NativeScriptFormsModule,
+        NativeScriptRouterModule,
+    ],
+    providers: [
+        rootViewProvider,
+        multiPageHooksLogProvider,
+    ]
+})
+class MultiPageModule {}
+
+
 application.start({
     create: (): Page => {
         const page = new Page();
-        const root = new StackLayout();
         page.content = root;
 
         let onLoadedHandler = function(args) {
@@ -48,17 +106,9 @@ application.start({
 
             //profiling.start('ng-bootstrap');
             console.log('BOOTSTRAPPING TEST APPS...');
-            //bootstrap(MultiPageMain, [NS_ROUTER_PROVIDERS]);
-
-            const rootViewProvider = provide(APP_ROOT_VIEW, { useValue: root });
             
-            let singlePageHooksLog = new BehaviorSubject([]);
-            const singlePageHooksLogProvider = provide(HOOKS_LOG, { useValue: singlePageHooksLog });
-            bootstrap(SinglePageMain, [rootViewProvider, singlePageHooksLogProvider, SinglePageRouterProviders]);
-
-            let multiPageHooksLog = new BehaviorSubject([]);
-            const multiPageHooksLogProvider = provide(HOOKS_LOG, { useValue: multiPageHooksLog });
-            bootstrap(MultiPageMain, [rootViewProvider, multiPageHooksLogProvider, MultiPageRouterProviders]);
+            platform.bootstrapModule(SinglePageModule);
+            platform.bootstrapModule(MultiPageModule);
         }
 
         page.on('loaded', onLoadedHandler);

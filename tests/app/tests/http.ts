@@ -3,8 +3,6 @@ import {assert} from "./test-config";
 import {
     async,
     inject,
-    beforeEach,
-    beforeEachProviders
 } from '@angular/core/testing';
 import {ReflectiveInjector} from '@angular/core';
 import {BaseRequestOptions, ConnectionBackend, Http, HTTP_PROVIDERS, Response, ResponseOptions} from '@angular/http';
