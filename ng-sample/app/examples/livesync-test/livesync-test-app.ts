@@ -7,16 +7,16 @@ import {SecondComponent} from "./second/second.component";
 
 @Component({
     selector: 'livesync-app-test',
-    directives: [NS_ROUTER_DIRECTIVES],
     template: `<page-router-outlet></page-router-outlet>`
 })
-export class LivesyncApp { }
+export class LivesyncApp {
+    static routes = [
+        { path: "", component: FirstComponent },
+        { path: "second", component: SecondComponent },
+    ];
 
-const routes: RouterConfig = [
-    { path: "", component: FirstComponent },
-    { path: "second", component: SecondComponent },
-];
-
-export const LivesyncTestRouterProviders = [
-    nsProvideRouter(routes, { enableTracing: false })
-];
+    static entries = [
+        FirstComponent,
+        SecondComponent,
+    ];
+}
