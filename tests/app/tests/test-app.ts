@@ -1,7 +1,9 @@
-//make sure you import mocha-config before @angular/core
-import {bootstrap, ProviderArray} from "nativescript-angular/application";
-import {Type, Component, ComponentRef, DynamicComponentLoader,
-    ViewChild, ElementRef, provide, ApplicationRef, Renderer, ViewContainerRef, NgZone
+import { NativeScriptModule, platformNativeScriptDynamic } from "nativescript-angular/platform";
+import { NativeScriptRouterModule } from "nativescript-angular/router";
+import {
+    Type, Component, ComponentRef, DynamicComponentLoader,
+    ViewChild, ElementRef, provide, ApplicationRef, Renderer,
+    ViewContainerRef, NgZone, NgModule, NgModuleRef
 } from "@angular/core";
 
 import {GridLayout} from "ui/layouts/grid-layout";
@@ -22,6 +24,8 @@ export class TestApp {
         public appRef: ApplicationRef,
         public renderer: Renderer,
         public zone: NgZone) {
+
+        registerTestApp(TestApp, this, appRef);
     }
 
     public loadComponent(type: Type): Promise<ComponentRef<any>> {
@@ -39,7 +43,7 @@ export class TestApp {
         }
     }
 
-    public static create(providers?: ProviderArray): Promise<TestApp> {
+    public static create(providers?: any[]): Promise<TestApp> {
         return bootstrapTestApp(TestApp, providers);
     }
 
@@ -49,9 +53,19 @@ export class TestApp {
     }
 }
 
-const runningApps = new Map<any, { hostView: LayoutBase, appRoot: GridLayout, appRef: ApplicationRef }>();
+const runningApps = new Map<any, { container: LayoutBase, appRoot: GridLayout, appRef: ApplicationRef }>();
+const platform = platformNativeScriptDynamic({bootInExistingPage: true});
 
-export function bootstrapTestApp<T>(appComponentType: new (...args) => T, providers: ProviderArray = []): Promise<T> {
+export function registerTestApp(appType, appInstance, appRef) {
+    appType.moduleType.appInstance = appInstance;
+    runningApps.set(appInstance, {
+        container: appType.moduleType.container,
+        appRoot: appType.moduleType.viewRoot,
+        appRef: appRef,
+    });
+}
+
+export function bootstrapTestApp<T>(appComponentType: new (...args) => T, providers: any[] = [], routes: any[] = []): Promise<T> {
     const page = topmost().currentPage;
     const rootLayout = <LayoutBase>page.content;
     const viewRoot = new GridLayout();
@@ -62,18 +76,43 @@ export function bootstrapTestApp<T>(appComponentType: new (...args) => T, provid
     GridLayout.setRowSpan(rootLayout, 50);
     GridLayout.setColumnSpan(rootLayout, 50);
 
+    let imports: any[] = [
+        NativeScriptModule,
+        NativeScriptRouterModule,
+    ];
+    if (routes && routes.length > 0) {
+        imports.push(NativeScriptRouterModule.forRoot(routes));
+    }
+
     const rootViewProvider = provide(APP_ROOT_VIEW, { useValue: viewRoot });
-    return bootstrap(appComponentType, providers.concat(rootViewProvider)).then((componentRef) => {
-        componentRef.injector.get(ApplicationRef);
-        const testApp = componentRef.instance;
 
-        runningApps.set(testApp, {
-            hostView: rootLayout,
-            appRoot: viewRoot,
-            appRef: componentRef.injector.get(ApplicationRef)
-        });
+    @NgModule({
+        bootstrap: [
+            appComponentType
+        ],
+        declarations: [
+            appComponentType
+        ],
+        imports: imports,
+        exports: [
+            NativeScriptModule,
+        ],
+        providers: [
+            rootViewProvider,
+            ...providers,
+        ]
+    })
+    class TestAppModule {
+        public static viewRoot = viewRoot;
+        public static container = rootLayout;
+    }
+    //app registers with the module type via static fields on start
+    (<any>appComponentType).moduleType = TestAppModule;
 
-        return testApp;
+    return platform.bootstrapModule(TestAppModule).then(moduleRef => {
+        //app component constructor has run and we should have a
+        //registered component instance.
+        return (<any>TestAppModule).appInstance;
     });
 }
 
@@ -83,7 +122,7 @@ export function destroyTestApp(app: any) {
     }
 
     var entry = runningApps.get(app);
-    entry.hostView.removeChild(entry.appRoot);
+    entry.container.removeChild(entry.appRoot);
     entry.appRef.dispose();
     runningApps.delete(app);
 }

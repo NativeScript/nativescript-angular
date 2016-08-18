@@ -1,4 +1,4 @@
-// "nativescript-angular/application" import should be first in order to load some required settings (like globals and reflect-metadata)
+// "nativescript-angular/platform" import should be first in order to load some required settings (like globals and reflect-metadata)
 import { NativeScriptModule, platformNativeScriptDynamic } from "nativescript-angular/platform";
 import { NativeScriptRouterModule } from "nativescript-angular/router";
 import { NativeScriptFormsModule } from "nativescript-angular/forms";
@@ -16,7 +16,6 @@ import {MultiPageMain, routes as multiPageRoutes} from "./multi-page-main.compon
 import {SinglePageMain, routes as singlePageRoutes} from "./single-page-main.component";
 import {provide, OpaqueToken, NgModule} from "@angular/core";
 
-import {APP_ROUTER_PROVIDERS} from "./snippets/navigation/app.routes";
 import {PageNavigationApp} from "./snippets/navigation/page-outlet";
 import {NavigationApp} from "./snippets/navigation/router-outlet";
 
@@ -28,9 +27,6 @@ import trace = require("trace");
 // trace.setCategories(rendererTraceCategory + "," + routerTraceCategory);
 trace.setCategories(routerTraceCategory);
 trace.enable();
-
-// nativeScriptBootstrap(NavigationApp, [APP_ROUTER_PROVIDERS]);
-
 
 // nativeScriptBootstrap(GestureComponent);
 // nativeScriptBootstrap(LayoutsComponent);

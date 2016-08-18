@@ -1,10 +1,10 @@
 //make sure you import mocha-config before @angular/core
 import {assert} from "./test-config";
+import {TestApp} from "./test-app";
 import {Component, ElementRef, Renderer, AfterViewInit, OnInit, ViewChild, ChangeDetectionStrategy} from "@angular/core";
 import {ProxyViewContainer} from "ui/proxy-view-container";
 import {Red} from "color/known-colors";
 import {dumpView} from "./test-utils";
-import {TestApp} from "./test-app";
 import {LayoutBase} from "ui/layouts/layout-base";
 import {StackLayout} from "ui/layouts/stack-layout";
 import {DetachedLoader} from "nativescript-angular/common/detached-loader";
@@ -53,7 +53,7 @@ export class LoaderComponent extends LoaderComponentBase { }
 })
 export class LoaderComponentOnPush extends LoaderComponentBase { }
 
-describe ('DetachedLoader', () => {
+describe('DetachedLoader', () => {
     let testApp: TestApp = null;
 
     before(() => {
