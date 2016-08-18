@@ -1,14 +1,14 @@
+import {TestApp, registerTestApp} from "../../tests/test-app";
+import { ApplicationRef } from '@angular/core';
 // >> router-outlet-example
-import {Component} from '@angular/core';
-import {nativeScriptBootstrap} from 'nativescript-angular/application';
-import {ROUTER_DIRECTIVES, Router} from '@angular/router';
-import {NS_ROUTER_DIRECTIVES} from 'nativescript-angular/router';
-
-import {APP_ROUTER_PROVIDERS} from "./app.routes";
+import { Component, NgModule } from '@angular/core';
+import { platformNativeScriptDynamic } from "nativescript-angular/platform";
+import { NativeScriptRouterModule } from "nativescript-angular/router";
+import { Router } from '@angular/router';
+import { routes } from "./app.routes";
 
 @Component({
     selector: 'navigation-test',
-    directives: [ROUTER_DIRECTIVES, NS_ROUTER_DIRECTIVES],
     template: `
         <StackLayout>
             <StackLayout class="nav">
@@ -24,14 +24,25 @@ import {APP_ROUTER_PROVIDERS} from "./app.routes";
 })
 export class NavigationApp {
     // >> (hide)
-    constructor(public router: Router) { }
+    constructor(public router: Router, public appRef: ApplicationRef) {
+        registerTestApp(NavigationApp, this, appRef);
+    }
     // << (hide)
 }
+
+@NgModule({
+    bootstrap: [NavigationApp],
+    imports: [
+        NativeScriptRouterModule,
+        NativeScriptRouterModule.forRoot(routes)
+    ]
+})
+export class NavigationAppModule {}
 
 // >> (hide)
 function start_snippet() {
 // << (hide)
-nativeScriptBootstrap(NavigationApp, [APP_ROUTER_PROVIDERS]);
+platformNativeScriptDynamic().bootstrapModule(NavigationAppModule);
 // >> (hide)
 }
 // << (hide)

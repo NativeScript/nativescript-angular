@@ -7,7 +7,7 @@
         "removeComments": false,
         "emitDecoratorMetadata": true,
         "sourceMap": false,
-        "noEmitHelpers": false,
+        "noEmitHelpers": true,
         "noEmitOnError": true
     },
     "exclude": [

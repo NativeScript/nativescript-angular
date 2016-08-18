@@ -1,5 +1,4 @@
 import {Component} from "@angular/core";
-import {nativeScriptBootstrap} from 'nativescript-angular/application';
 import {NS_ROUTER_DIRECTIVES } from 'nativescript-angular/router';
 import {nsProvideRouter} from 'nativescript-angular/router';
 import {RouterConfig} from '@angular/router';
@@ -67,7 +66,6 @@ export class MainComponent {
 
 @Component({
     selector: 'application',
-    directives: [NS_ROUTER_DIRECTIVES],
     template: "<page-router-outlet></page-router-outlet>"
 })
 export class App { }
