@@ -1,3 +1,9 @@
+# 0.4.0 (2016-08-19)
+
+- Migrate to Angular 2 RC5.
+- Bootstrapping apps using NgModule's. The old `nativescriptBootstrap` method is gone, and apps should switch to the `platformNativeScriptDynamic().bootstrapModule(MyAppModule)` API
+- The library entrypoint is now the `nativescript-angular/platform` module. Import `NativeScriptRouterModule` from `nativescript-angular/router` and `NativeScriptFormsModule` from `nativescript-angular/forms` respectively if you want to use routing and form value accessor directives.
+
 # 0.1.8 (2016-06-22)
 
 - Migrate to Migrate to Angular RC3 and Angular Router 3.0.0-alpha.7:
