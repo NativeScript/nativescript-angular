@@ -36,8 +36,8 @@ install:
 - npm install
 - npm link
 - cd ../tests
+- tns install
 - npm link nativescript-angular
-- npm install
 
 before_script:
 - echo no | android create avd --force -n test -t android-19 -b armeabi-v7a
