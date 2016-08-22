@@ -53,13 +53,13 @@ export class LoaderComponent extends LoaderComponentBase { }
 })
 export class LoaderComponentOnPush extends LoaderComponentBase { }
 
-describe('DetachedLoader', () => {
+describe.skip('DetachedLoader', () => {
     let testApp: TestApp = null;
 
     before(() => {
         return TestApp.create().then((app) => {
             testApp = app;
-        })
+        });
     });
 
     after(() => {
