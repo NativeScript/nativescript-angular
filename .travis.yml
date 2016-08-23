@@ -47,7 +47,6 @@ before_script:
 script:
 - tns platform add android
 - tns test android --emulator --justlaunch
-- npm run appium-android
 
 before_deploy:
 - cd ../nativescript-angular
