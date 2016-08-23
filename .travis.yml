@@ -42,11 +42,15 @@ install:
 
 before_script:
 - echo no | android create avd --force -n test -t android-23 -b armeabi-v7a
-- emulator -avd test -no-audio -no-window &
+- emulator -avd test -no-skin -no-audio -no-window &
 - android-wait-for-emulator
 
 script:
 - tns platform add android
+- tns test android --justlaunch & 
+- PID=$!
+- sleep 5m
+- kill -HUP $PID
 - tns test android --justlaunch
 
 before_deploy:
