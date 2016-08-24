@@ -54,7 +54,7 @@ script:
 - tns test android --justlaunch &
 - PID=$!
 - sleep 9m
-- kill -HUP $PID
+- kill -STOP $PID
 
 before_deploy:
 - cd ../nativescript-angular
