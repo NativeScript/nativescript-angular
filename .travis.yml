@@ -54,7 +54,7 @@ script:
 - tns test android --justlaunch &
 - PID=$!
 - sleep 9m
-- kill -STOP $PID
+- adb -s emulator-5554 emu kill
 
 before_deploy:
 - cd ../nativescript-angular
