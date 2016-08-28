@@ -29,5 +29,5 @@ exports.getBeforeLivesyncHookDir = function getBeforeLivesyncHookDir() {
 };
 
 exports.getHookFilePath = function getHookFilePath() {
-    return path.join(exports.getBeforeLivesyncHookDir(), "nativescript-angular-sync .js");
+    return path.join(exports.getBeforeLivesyncHookDir(), "nativescript-angular-sync.js");
 };
