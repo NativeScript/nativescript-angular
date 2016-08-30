@@ -33,7 +33,7 @@ export class RouterExtensions {
         this.frame.goBack();
     }
 
-    public canGoBackToPreviousPage() {
-        this.frame.canGoBack();
+    public canGoBackToPreviousPage(): boolean {
+        return this.frame.canGoBack();
     }
 }
