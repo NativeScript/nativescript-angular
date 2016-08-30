@@ -13,6 +13,7 @@ export class NativeScriptAnimationPlayer implements AnimationPlayer {
 
     private _subscriptions: Function[] = [];
     private _finished = false;
+    private _started = false;
     private animation: KeyframeAnimation;
     private target: View;
 
@@ -63,11 +64,20 @@ export class NativeScriptAnimationPlayer implements AnimationPlayer {
         this.animation = KeyframeAnimation.keyframeAnimationFromInfo(keyframeAnimationInfo, observable.ValueSource.VisualState);
     }
 
+    init(): void {
+    }
+
+    hasStarted(): boolean {
+        return this._started;
+    }
+
+
     onDone(fn: Function): void { this._subscriptions.push(fn); }
 
     private _onFinish() {
         if (!this._finished) {
             this._finished = true;
+            this._started = false;
             this._subscriptions.forEach(fn => fn());
             this._subscriptions = [];
         }
@@ -75,6 +85,7 @@ export class NativeScriptAnimationPlayer implements AnimationPlayer {
 
     play(): void {
         if (this.animation) {
+            this._started = true;
             this.animation.play(this.target)
                 .then(() => { this._onFinish(); })
                 .catch((e) => { });

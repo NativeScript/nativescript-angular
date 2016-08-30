@@ -27,7 +27,7 @@ export class ProgressComponent {
 
 @Component({
 	selector: 'renderer-test',
-    directives: [TemplatedComponent, ProgressComponent, TextValueAccessor, CheckedValueAccessor],
+    directives: [TemplatedComponent, ProgressComponent],
 	templateUrl: './examples/renderer-test.html' 
 })
 export class RendererTest {
@@ -37,14 +37,16 @@ export class RendererTest {
     public moreDetailsText: string = "";
     public detailLines: Array<string> = [];
     public isValid: boolean = true;
-    public model: Observable;
+    public model: any;
+
+    public testModel = { mydate: new Date() };
 
     constructor() {
         this.buttonText = 'Save...'
         this.showDetails = true;
         this.detailsText = 'plain ng-if directive \ndetail 1-2-3...';
         this.moreDetailsText = 'More details:';
-        this.model = new Observable({
+        this.model = {
             'test': 'Jack',
             'testBoolean': false,
             'deliveryDate': new Date(),
@@ -62,7 +64,7 @@ export class RendererTest {
                 {'title': 'third'},
                 {'title': 'fourth'}
             ]
-        });
+        };
 
         this.detailLines = [
             "ngFor inside a ngIf 1",

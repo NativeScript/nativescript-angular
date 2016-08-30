@@ -125,25 +125,27 @@ class SecondComponent implements OnInit, OnDestroy {
     template: `<page-router-outlet></page-router-outlet>`
 })
 export class PageRouterOutletNestedAppComponent {
+    static routes: RouterConfig = [
+        { path: "", component: FirstComponent },
+        {
+            path: "second/:depth", component: SecondComponent,
+            children: [
+                { path: "", component: MasterComponent },
+                { path: "detail/:id", component: DetailComponent }
+            ]
+        },
+    ];
+
+    static entries = [
+        FirstComponent,
+        SecondComponent,
+        MasterComponent,
+        DetailComponent
+    ]
+
     constructor(router: Router, private location: Location) {
         router.events.subscribe((e) => {
             console.log("--EVENT-->: " + e.toString());
         })
     }
 }
-
-
-const routes: RouterConfig = [
-    { path: "", component: FirstComponent },
-    {
-        path: "second/:depth", component: SecondComponent,
-        children: [
-            { path: "", component: MasterComponent },
-            { path: "detail/:id", component: DetailComponent }
-        ]
-    },
-];
-
-export const PageRouterOutletNestedRouterProviders = [
-    nsProvideRouter(routes, { enableTracing: false })
-];

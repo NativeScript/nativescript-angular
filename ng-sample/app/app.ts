@@ -6,10 +6,11 @@
 //profiling.start('application-start');
 
 // "nativescript-angular/application" import should be first in order to load some required settings (like globals and reflect-metadata)
-import { nativeScriptBootstrap, onAfterLivesync, onBeforeLivesync } from "nativescript-angular/application";
+import { NativeScriptModule, platformNativeScriptDynamic, onAfterLivesync, onBeforeLivesync } from "nativescript-angular/platform";
+import { NgModule } from "@angular/core";
 import { Router } from "@angular/router";
-import { NS_ROUTER_PROVIDERS as NS_ROUTER_PROVIDERS_DEPRECATED } from "nativescript-angular/router-deprecated";
-import { NS_ROUTER_PROVIDERS } from "nativescript-angular/router";
+import { NativeScriptRouterModule } from "nativescript-angular/router";
+import { NativeScriptFormsModule } from "nativescript-angular/forms";
 import { HTTP_PROVIDERS } from "@angular/http";
 import { rendererTraceCategory, routerTraceCategory, listViewTraceCategory } from "nativescript-angular/trace";
 
@@ -19,29 +20,24 @@ trace.setCategories(routerTraceCategory);
 // trace.setCategories(listViewTraceCategory);
 trace.enable();
 
-import {RendererTest} from './examples/renderer-test';
-import {TabViewTest} from './examples/tab-view/tab-view-test';
-import {Benchmark} from './performance/benchmark';
-import {ListTest} from './examples/list/list-test';
-import {ListTestAsync, ListTestFilterAsync} from "./examples/list/list-test-async";
-import {ImageTest} from "./examples/image/image-test";
-import {HttpTest} from "./examples/http/http-test";
-import {ActionBarTest} from "./examples/action-bar/action-bar-test";
-import {ModalTest} from "./examples/modal/modal-test";
-import {PlatfromDirectivesTest} from "./examples/platform-directives/platform-directives-test";
-import {LivesyncApp, LivesyncTestRouterProviders} from "./examples/livesync-test/livesync-test-app";
-
-// router-deprecated
-import {NavigationTest} from "./examples/router-deprecated/navigation-test";
-import {RouterOutletTest} from "./examples/router-deprecated/router-outlet-test";
-import {LoginTest} from "./examples/router-deprecated/login-test";
+import { RendererTest } from './examples/renderer-test';
+import { TabViewTest } from './examples/tab-view/tab-view-test';
+import { Benchmark } from './performance/benchmark';
+import { ListTest } from './examples/list/list-test';
+import { ListTestAsync, ListTestFilterAsync } from "./examples/list/list-test-async";
+import { ImageTest } from "./examples/image/image-test";
+import { HttpTest } from "./examples/http/http-test";
+import { ActionBarTest } from "./examples/action-bar/action-bar-test";
+import { ModalTest } from "./examples/modal/modal-test";
+import { PlatfromDirectivesTest } from "./examples/platform-directives/platform-directives-test";
+import { LivesyncApp } from "./examples/livesync-test/livesync-test-app";
 
 // new router
-import { RouterOutletAppComponent, RouterOutletRouterProviders} from "./examples/router/router-outlet-test";
-import { PageRouterOutletAppComponent, PageRouterOutletRouterProviders } from "./examples/router/page-router-outlet-test";
-import { PageRouterOutletNestedAppComponent, PageRouterOutletNestedRouterProviders } from "./examples/router/page-router-outlet-nested-test";
-import { ClearHistoryAppComponent, ClearHistoryRouterProviders } from "./examples/router/clear-history-test";
-import { LoginAppComponent, LoginExampleProviders } from "./examples/router/login-test";
+import { RouterOutletAppComponent } from "./examples/router/router-outlet-test";
+import { PageRouterOutletAppComponent } from "./examples/router/page-router-outlet-test";
+import { PageRouterOutletNestedAppComponent } from "./examples/router/page-router-outlet-nested-test";
+import { ClearHistoryAppComponent } from "./examples/router/clear-history-test";
+import { LoginAppComponent } from "./examples/router/login-test";
 
 // animations
 import { AnimationEnterLeaveTest } from "./examples/animation/animation-enter-leave-test";
@@ -49,54 +45,94 @@ import { AnimationKeyframesTest } from "./examples/animation/animation-keyframes
 import { AnimationNgClassTest } from "./examples/animation/animation-ngclass-test";
 import { AnimationStatesTest } from "./examples/animation/animation-states-test";
 
-// nativeScriptBootstrap(RendererTest);
-//nativeScriptBootstrap(TabViewTest);
-//nativeScriptBootstrap(Benchmark);
-// nativeScriptBootstrap(ListTest);
-// nativeScriptBootstrap(ListTestAsync);
-//nativeScriptBootstrap(ImageTest);
-// nativeScriptBootstrap(HttpTest);
 //nativeScriptBootstrap(ActionBarTest, [NS_ROUTER_PROVIDERS_DEPRECATED], { startPageActionBarHidden: false });
 //nativeScriptBootstrap(ActionBarTest, [NS_ROUTER_PROVIDERS_DEPRECATED]);
-//nativeScriptBootstrap(ModalTest);
-//nativeScriptBootstrap(PlatfromDirectivesTest);
 
-// new router
-// nativeScriptBootstrap(RouterOutletAppComponent, [RouterOutletRouterProviders]);
-// nativeScriptBootstrap(PageRouterOutletAppComponent, [PageRouterOutletRouterProviders]);
-// nativeScriptBootstrap(PageRouterOutletNestedAppComponent, [PageRouterOutletNestedRouterProviders]);
-nativeScriptBootstrap(ClearHistoryAppComponent, [ClearHistoryRouterProviders]);
-// nativeScriptBootstrap(LoginAppComponent, [LoginExampleProviders]);
+@NgModule({
+    declarations: [
+    ],
+    imports: [
+        NativeScriptModule,
+        NativeScriptFormsModule,
+        NativeScriptRouterModule,
+    ],
+    exports: [
+        NativeScriptModule,
+        NativeScriptFormsModule,
+        NativeScriptRouterModule,
+    ],
+    providers: []
+})
+class ExampleModule {}
 
-// router-deprecated
-// nativeScriptBootstrap(NavigationTest, [NS_ROUTER_PROVIDERS_DEPRECATED]);
-// nativeScriptBootstrap(RouterOutletTest, [NS_ROUTER_PROVIDERS_DEPRECATED]);
-// nativeScriptBootstrap(LoginTest, [NS_ROUTER_PROVIDERS_DEPRECATED]);
+function makeExampleModule(componentType) {
+    let imports: any[] = [ExampleModule];
+    if (componentType.routes) {
+        imports.push(NativeScriptRouterModule.forRoot(componentType.routes))
+    }
+    let entries = [];
+    if (componentType.entries) {
+        entries = componentType.entries;
+    }
+    entries.push(componentType);
+    let providers = [];
+    if (componentType.providers) {
+        providers = componentType.providers
+    }
+    @NgModule({
+        bootstrap: [componentType],
+        imports: imports,
+        entryComponents: entries,
+        declarations: entries,
+        providers: providers,
+    })
+    class ExampleModuleForComponent {}
 
-// Livesync test
-// var cahcedUrl: string;
-// onBeforeLivesync.subscribe((compRef) => {
-//     console.log("------- onBeforeLivesync");
-//     if (compRef) {
-//         const router = <Router>compRef.injector.get(Router);
-//         cahcedUrl = router.url;
-//         console.log("------- Caching URL: " + cahcedUrl);
-//     }
-// });
+    return ExampleModuleForComponent;
+}
 
-// onAfterLivesync.subscribe((compRef) => {
-//     console.log("------- onAfterLivesync cachedUrl:");
-//     const router = <Router>compRef.injector.get(Router);
-//     router.events.subscribe(e => console.log(e.toString()));
-//     if (router && cahcedUrl) {
-//         setTimeout(() => { router.navigateByUrl(cahcedUrl); }, 0);
-//     }
-// });
+//platformNativeScriptDynamic().bootstrapModule(makeExampleModule(RendererTest));
+//platformNativeScriptDynamic().bootstrapModule(makeExampleModule(TabViewTest));
+//platformNativeScriptDynamic().bootstrapModule(makeExampleModule(Benchmark));
+//platformNativeScriptDynamic().bootstrapModule(makeExampleModule(ListTest));
+//platformNativeScriptDynamic().bootstrapModule(makeExampleModule(ListTestAsync));
+//platformNativeScriptDynamic().bootstrapModule(makeExampleModule(ImageTest));
+//platformNativeScriptDynamic().bootstrapModule(makeExampleModule(ModalTest));
+//platformNativeScriptDynamic().bootstrapModule(makeExampleModule(HttpTest));
+//platformNativeScriptDynamic().bootstrapModule(makeExampleModule(PlatfromDirectivesTest));
+//platformNativeScriptDynamic().bootstrapModule(makeExampleModule(ActionBarTest));
 
-// nativeScriptBootstrap(LivesyncApp, [LivesyncTestRouterProviders]);
+//new router
+//platformNativeScriptDynamic().bootstrapModule(makeExampleModule(RouterOutletAppComponent));
+//platformNativeScriptDynamic().bootstrapModule(makeExampleModule(PageRouterOutletAppComponent));
+//platformNativeScriptDynamic().bootstrapModule(makeExampleModule(PageRouterOutletNestedAppComponent));
+//platformNativeScriptDynamic().bootstrapModule(makeExampleModule(ClearHistoryAppComponent));
+//platformNativeScriptDynamic().bootstrapModule(makeExampleModule(LoginAppComponent));
+//animations
+//platformNativeScriptDynamic().bootstrapModule(makeExampleModule(AnimationStatesTest));
+//platformNativeScriptDynamic().bootstrapModule(makeExampleModule(AnimationNgClassTest));
+//platformNativeScriptDynamic().bootstrapModule(makeExampleModule(AnimationKeyframesTest));
+//platformNativeScriptDynamic().bootstrapModule(makeExampleModule(AnimationEnterLeaveTest));
 
-// animations
-//nativeScriptBootstrap(AnimationStatesTest);
-//nativeScriptBootstrap(AnimationNgClassTest);
-//nativeScriptBootstrap(AnimationKeyframesTest);
-//nativeScriptBootstrap(AnimationEnterLeaveTest);
+//Livesync test
+var cachedUrl: string;
+onBeforeLivesync.subscribe((moduleRef) => {
+    console.log("------- onBeforeLivesync");
+    if (moduleRef) {
+        const router = <Router>moduleRef.injector.get(Router);
+        cachedUrl = router.url;
+        console.log("------- Caching URL: " + cachedUrl);
+    }
+});
+
+onAfterLivesync.subscribe((moduleRef) => {
+    console.log("------- onAfterLivesync cachedUrl:");
+    const router = <Router>moduleRef.injector.get(Router);
+    router.events.subscribe(e => console.log(e.toString()));
+    if (router && cachedUrl) {
+        setTimeout(() => { router.navigateByUrl(cachedUrl); }, 0);
+    }
+});
+
+platformNativeScriptDynamic().bootstrapModule(makeExampleModule(LivesyncApp));
+console.log("APP RESTART");

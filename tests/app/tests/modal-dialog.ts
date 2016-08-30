@@ -1,7 +1,7 @@
 //make sure you import mocha-config before @angular/core
 import {assert} from "./test-config";
-import {Component, ComponentRef} from "@angular/core";
 import {TestApp} from "./test-app";
+import {Component, ComponentRef} from "@angular/core";
 import {Page} from "ui/page";
 import {topmost} from "ui/frame";
 import {ModalDialogHost, ModalDialogOptions, ModalDialogParams, ModalDialogService} from "nativescript-angular/directives/dialogs";

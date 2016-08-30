@@ -3,8 +3,8 @@ import {Observable} from "data/observable";
 
 @Component({
     selector: "main-component",
-    templateUrl: "./examples/animation/animation-ngClass-test.html",
-    styleUrls: [ "./examples/animation/animation-ngClass-test.css" ]
+    templateUrl: "./examples/animation/animation-ngclass-test.html",
+    styleUrls: [ "./examples/animation/animation-ngclass-test.css" ]
 })
 export class AnimationNgClassTest {
 

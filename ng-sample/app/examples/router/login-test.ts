@@ -41,7 +41,6 @@ class LoginService {
 
 @Component({
     selector: 'login',
-    directives: [NS_ROUTER_DIRECTIVES],
     styleUrls: ["examples/router/styles.css"],
     template: `
     <StackLayout>
@@ -70,7 +69,6 @@ class LoginComponent {
 
 @Component({
     selector: 'main',
-    directives: [NS_ROUTER_DIRECTIVES],
     styleUrls: ["examples/router/styles.css"],
     template: `
     <StackLayout>
@@ -115,19 +113,22 @@ class AuthGuard implements CanActivate {
 
 @Component({
     selector: 'navigation-test',
-    directives: [NS_ROUTER_DIRECTIVES],
     template: `<page-router-outlet></page-router-outlet>`
 })
-export class LoginAppComponent { }
+export class LoginAppComponent {
+    static routes: RouterConfig = [
+        { path: "", redirectTo: "/main", terminal: true },
+        { path: "main", component: MainComponent, canActivate: [AuthGuard] },
+        { path: "login", component: LoginComponent },
+    ]
 
-const routes: RouterConfig = [
-    { path: "", redirectTo: "/main", terminal: true },
-    { path: "main", component: MainComponent, canActivate: [AuthGuard] },
-    { path: "login", component: LoginComponent },
-];
+    static entries = [
+        MainComponent,
+        LoginComponent
+    ]
 
-export const LoginExampleProviders = [
-    LoginService,
-    AuthGuard,
-    nsProvideRouter(routes, { enableTracing: false })
-];
+    static providers = [
+        AuthGuard,
+        LoginService,
+    ]
+}

@@ -2,7 +2,7 @@
 var nsAppium = require("nativescript-dev-appium");
 
 describe("multi page routing", function () {
-    this.timeout(120000);
+    this.timeout(360000);
     var driver;
 
     before(function () {
@@ -19,6 +19,7 @@ describe("multi page routing", function () {
 
     it("loads default path", function () {
         return driver
+            .waitForElementByAccessibilityId("first-multi-page", 300000)
             .elementByAccessibilityId("first-multi-page")
                 .should.eventually.exist
             .text().should.eventually.equal("First: multi-page")
@@ -31,6 +32,7 @@ describe("multi page routing", function () {
             "second.destroy"] // <-- back (first component is reused)
             .join(",");
         return driver
+            .waitForElementByAccessibilityId("first-navigate-multi-page", 300000)
             .elementByAccessibilityId("first-navigate-multi-page")
                 .should.eventually.exist
             .tap()

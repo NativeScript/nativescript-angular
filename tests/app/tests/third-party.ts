@@ -1,9 +1,9 @@
 //make sure you import mocha-config before @angular/core
 import {assert} from "./test-config";
+import {TestApp} from "./test-app";
 import {Component, Directive, ElementRef, ViewContainerRef, TemplateRef, Inject} from "@angular/core";
 import {View} from "ui/core/view";
 import {Label} from "ui/label";
-import {TestApp} from "./test-app";
 
 // >> third-party-simple-view-registration
 import {registerElement} from "nativescript-angular/element-registry";

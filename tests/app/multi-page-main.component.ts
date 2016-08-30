@@ -22,11 +22,8 @@ export class MultiPageMain {
     }
 }
 
-const routes: RouterConfig = [
+export const routes = [
     { path: "", redirectTo: "first/multi-page", terminal: true },
     { path: "first/:id", component: FirstComponent },
     { path: "second/:id", component: SecondComponent },
-];
-export const MultiPageRouterProviders = [
-    nsProvideRouter(routes, { enableTracing: false })
 ];

@@ -2,7 +2,7 @@
 var nsAppium = require("nativescript-dev-appium");
 
 describe("single page routing", function () {
-    this.timeout(120000);
+    this.timeout(360000);
     var driver;
 
     before(function () {
@@ -19,6 +19,7 @@ describe("single page routing", function () {
 
     it("loads default path", function () {
         return driver
+            .waitForElementByAccessibilityId("first-single-page", 300000)
             .elementByAccessibilityId("first-single-page")
                 .should.eventually.exist
             .text().should.eventually.equal("First: single-page")
@@ -33,6 +34,7 @@ describe("single page routing", function () {
             "first.init"].join(",");
 
         return driver
+            .waitForElementByAccessibilityId("first-single-page", 300000)
             .elementByAccessibilityId("first-navigate-single-page")
                 .should.eventually.exist
             .tap()
