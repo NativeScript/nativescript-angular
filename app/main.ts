@@ -3,6 +3,7 @@ import { platformNativeScriptDynamic, NativeScriptModule } from "nativescript-an
 import { NgModule } from "@angular/core";
 import { NavigationMainPageRouter, routes, routableComponents } from "./main/main-page-router-outlet";
 import { NativeScriptRouterModule } from "nativescript-angular/router";
+import { NativeScriptFormsModule } from "nativescript-angular/forms";
 
 @NgModule({
     declarations: [
@@ -12,6 +13,7 @@ import { NativeScriptRouterModule } from "nativescript-angular/router";
     bootstrap: [NavigationMainPageRouter],
     imports: [
         NativeScriptModule,
+        NativeScriptFormsModule,
         NativeScriptRouterModule,
         NativeScriptRouterModule.forRoot(routes),
     ],
