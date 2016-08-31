@@ -1,6 +1,18 @@
 // this import should be first in order to load some required settings (like globals and reflect-metadata)
-import {nativeScriptBootstrap} from "nativescript-angular/application";
-import {NavigationMainPageRouter, MainRouterProviders} from "./main/main-page-router-outlet"
+import { platformNativeScriptDynamic, NativeScriptModule } from "nativescript-angular/platform";
+import { NgModule } from "@angular/core";
+import { NavigationMainPageRouter, routes} from "./main/main-page-router-outlet";
+import { NativeScriptRouterModule } from "nativescript-angular/router";
 
-// main-page-router-outlet
-nativeScriptBootstrap(NavigationMainPageRouter, [MainRouterProviders]);
+@NgModule({
+    declarations: [NavigationMainPageRouter],
+    bootstrap: [NavigationMainPageRouter],
+    imports: [
+        NativeScriptModule,
+        NativeScriptRouterModule,
+        NativeScriptRouterModule.forRoot(routes),
+    ],
+})
+class AppComponentModule { }
+
+platformNativeScriptDynamic().bootstrapModule(AppComponentModule);

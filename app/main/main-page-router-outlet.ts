@@ -69,7 +69,7 @@ class MainComponent { }
 export class NavigationMainPageRouter { }
 
 
-const routes: RouterConfig = [
+export const routes: RouterConfig = [
     { path: '', component: MainComponent },
     { path: 'template', component: AppComponent },
     { path: 'router', component: NavigationTestRouter, children: NavigationSubRoutes },

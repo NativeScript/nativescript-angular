@@ -1,36 +1,36 @@
 {
-	"description": "NativeScript Application",
-	"license": "SEE LICENSE IN <your-license-filename>",
-	"readme": "NativeScript Application",
-	"repository": "<fill-your-repository-here>",
-	"nativescript": {
-		"id": "org.nativescript.testsappng",
-		"tns-ios": {
-			"version": "2.1.1"
-		},
-		"tns-android": {
-			"version": "2.1.1"
-		}
-	},
-	"dependencies": {
-		"@angular/common": "2.0.0-rc.3",
-		"@angular/compiler": "2.0.0-rc.3",
-		"@angular/core": "2.0.0-rc.3",
-		"@angular/platform-browser": "2.0.0-rc.3",
-		"@angular/platform-browser-dynamic": "2.0.0-rc.3",
-		"@angular/platform-server": "2.0.0-rc.3",
-		"@angular/router-deprecated": "2.0.0-rc.2",
-		"@angular/router": "3.0.0-alpha.7",
-		"nativescript-angular": "next",
-		"tns-core-modules": "next"
-	},
-	"devDependencies": {
-		"babel-traverse": "6.8.0",
-		"babel-types": "6.8.1",
-		"babylon": "6.8.0",
-		"filewalker": "0.1.2",
-		"lazy": "1.0.11",
-		"nativescript-dev-typescript": "^0.3.2",
-		"typescript": "^1.8.10"
-	}
+  "description": "NativeScript Application",
+  "license": "SEE LICENSE IN <your-license-filename>",
+  "readme": "NativeScript Application",
+  "repository": "<fill-your-repository-here>",
+  "nativescript": {
+    "id": "org.nativescript.testsappng",
+    "tns-ios": {
+      "version": "2.1.1"
+    },
+    "tns-android": {
+      "version": "2.1.1"
+    }
+  },
+  "dependencies": {
+    "@angular/common": "2.0.0-rc.5",
+    "@angular/compiler": "2.0.0-rc.5",
+    "@angular/core": "2.0.0-rc.5",
+    "@angular/platform-browser": "2.0.0-rc.5",
+    "@angular/platform-browser-dynamic": "2.0.0-rc.5",
+    "@angular/platform-server": "2.0.0-rc.5",
+	"@angular/router": "3.0.0-rc.1",
+    "@angular/forms": "0.3.0",
+    "nativescript-angular": "0.4.0",
+    "tns-core-modules": "2.2.1"
+  },
+  "devDependencies": {
+    "babel-traverse": "6.8.0",
+    "babel-types": "6.8.1",
+    "babylon": "6.8.0",
+    "filewalker": "0.1.2",
+    "lazy": "1.0.11",
+    "nativescript-dev-typescript": "^0.3.2",
+    "typescript": "^1.8.10"
+  }
 }
