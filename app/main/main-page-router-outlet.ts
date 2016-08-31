@@ -59,7 +59,7 @@ import { NavigationInfoComponent } from "../navigation-options/navigation-info.c
     </StackLayout>
     `,
 })
-class MainComponent { }
+export class MainComponent { }
 
 @Component({
     selector: 'navigation-main',
@@ -91,5 +91,16 @@ export const routes: RouterConfig = [
     { path: 'nav-options', component: NavigationOptionsComponent },
     { path: 'nav-info', component: NavigationInfoComponent }
 ];
+
+export const routableComponents = [
+    AppComponent, MainComponent, NavigationTestRouter,
+    FirstComponent, SecondComponent,
+    FirstComponentActionBar, SecondComponentActionBar,
+    BindingComponent,
+    ListViewMainPageComponent, ListViewComponent,
+    ListViewControlComponent, ListViewAsyncPipeComponent,
+    ModalTest, ModalTestWithPushStrategy,
+    NavigationOptionsComponent, NavigationInfoComponent,
+]
 
 export var MainRouterProviders = nsProvideRouter(routes, { enableTracing: false });
