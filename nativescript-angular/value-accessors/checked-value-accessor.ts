@@ -1,10 +1,10 @@
-import {Directive, ElementRef, Renderer, Self, forwardRef, provide} from '@angular/core';
+import {Directive, ElementRef, Renderer, Self, forwardRef } from '@angular/core';
 import {NG_VALUE_ACCESSOR} from "@angular/forms";
-import {isBlank} from '@angular/core/src/facade/lang';
+import {isBlank} from "../lang-facade";
 import {BaseValueAccessor} from './base-value-accessor';
 import {Switch} from "ui/switch";
 
-const CHECKED_VALUE_ACCESSOR = provide(NG_VALUE_ACCESSOR, { useExisting: forwardRef(() => CheckedValueAccessor), multi: true });
+const CHECKED_VALUE_ACCESSOR = {provide: NG_VALUE_ACCESSOR, useExisting: forwardRef(() => CheckedValueAccessor), multi: true};
 
 /**
  * The accessor for setting a checked property and listening to changes that is used by the

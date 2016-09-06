@@ -1,6 +1,6 @@
 import {Directive, Component, ContentChildren, ElementRef, Optional} from '@angular/core';
 import {ActionItem, ActionBar, NavigationButton} from "ui/action-bar";
-import {isBlank} from "@angular/core/src/facade/lang";
+import {isBlank} from "../lang-facade";
 import {Page} from "ui/page";
 import {View} from 'ui/core/view';
 import {registerElement, ViewClassMeta, NgView } from '../element-registry';

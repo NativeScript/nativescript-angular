@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import {HTTP_PROVIDERS, Http, XHRBackend, ConnectionBackend, RequestOptions, RequestOptionsArgs, ResponseOptions, ResponseType, Response, XSRFStrategy} from '@angular/http';
+import {Http, XHRBackend, ConnectionBackend, RequestOptions, RequestOptionsArgs, ResponseOptions, ResponseType, Response, XSRFStrategy} from '@angular/http';
 import {Observable} from 'rxjs/Observable';
 import 'rxjs/add/observable/fromPromise';
 import {NSFileSystem} from '../file-system/ns-file-system';
@@ -53,15 +53,3 @@ function responseOptions(body: string | Object, status: number, url: string): Re
     url: url
   }));
 }
-
-export const NS_HTTP_PROVIDERS: any[] = [
-  HTTP_PROVIDERS,
-  { provide: XSRFStrategy, useValue: new NSXSRFStrategy() },
-  NSFileSystem,
-  {
-    provide: Http, useFactory: (backend, options, nsFileSystem) => {
-      return new NSHttp(backend, options, nsFileSystem);
-    }, deps: [XHRBackend, RequestOptions, NSFileSystem]
-  }
-];
-

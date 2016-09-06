@@ -1,5 +1,5 @@
 import {Directive, HostListener, Input, Optional, OnChanges} from '@angular/core';
-import {NavigationExtras} from "@angular/router/src/router";
+import {NavigationExtras} from "@angular/router";
 import {ActivatedRoute, Router, UrlTree} from '@angular/router';
 import {routerLog} from "../trace";
 import {PageRoute} from "./page-router-outlet";

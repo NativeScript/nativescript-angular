@@ -1,8 +1,8 @@
 import {AfterContentInit, ContentChildren, Directive, ElementRef, Input, OnChanges, OnDestroy, QueryList, Renderer} from '@angular/core';
 import {Subscription} from 'rxjs/Subscription';
 
-import {NavigationEnd, Router} from '@angular/router';
-import {UrlTree, containsTree} from '@angular/router/src/url_tree';
+import {NavigationEnd, Router, UrlTree} from '@angular/router';
+import {containsTree} from "../router-url-tree";
 
 import {NSRouterLink} from './ns-router-link';
 

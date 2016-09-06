@@ -1,17 +1,10 @@
-import {Inject, Injectable, Optional, NgZone} from '@angular/core';
 import {
-    Renderer,
-    RootRenderer,
-    RenderComponentType,
-    RenderDebugInfo
-} from '@angular/core/src/render/api';
-import { AnimationKeyframe } from '@angular/core/src/animation/animation_keyframe';
-import { AnimationPlayer } from '@angular/core/src/animation/animation_player';
-import { AnimationStyles } from '@angular/core/src/animation/animation_styles';
-import { AnimationDriver } from '@angular/platform-browser/src/dom/animation_driver';
+    Inject, Injectable, Optional, NgZone,
+    Renderer, RootRenderer, RenderComponentType,
+} from '@angular/core';
+import { AnimationPlayer, AnimationStyles, AnimationKeyframe  } from "./private_import_core";
 import {APP_ROOT_VIEW, DEVICE} from "./platform-providers";
-import {isBlank} from '@angular/core/src/facade/lang';
-import {CONTENT_ATTR} from '@angular/platform-browser/src/dom/dom_renderer';
+import {isBlank} from "./lang-facade";
 import {View} from "ui/core/view";
 import * as application from "application";
 import {topmost} from 'ui/frame';
@@ -21,16 +14,38 @@ import {rendererLog as traceLog} from "./trace";
 import {escapeRegexSymbols} from "utils/utils";
 import { Device } from "platform";
 
+import * as nsAnimationDriver from "./animation-driver";
+var nsAnimationDriverModule: typeof nsAnimationDriver;
+
+function ensureAnimationDriverModule() {
+    if (!nsAnimationDriverModule) {
+        nsAnimationDriverModule = require("./animation-driver");
+    }
+}
+
+//CONTENT_ATTR not exported from dom_renderer - we need it for styles application.
+export const COMPONENT_VARIABLE = '%COMP%';
+export const CONTENT_ATTR = `_ngcontent-${COMPONENT_VARIABLE}`;
+
+
 @Injectable()
 export class NativeScriptRootRenderer implements RootRenderer {
     private _viewUtil: ViewUtil;
+    private _animationDriver: nsAnimationDriver.NativeScriptAnimationDriver;
+
+    protected get animationDriver(): nsAnimationDriver.NativeScriptAnimationDriver {
+        if (!this._animationDriver) {
+            ensureAnimationDriverModule();
+            this._animationDriver = new nsAnimationDriverModule.NativeScriptAnimationDriver();
+        }
+        return this._animationDriver;
+    }
 
     constructor(
         @Optional() @Inject(APP_ROOT_VIEW) private _rootView: View,
         @Inject(DEVICE) device: Device,
-        private _animationDriver: AnimationDriver,
-        private _zone: NgZone) {
-
+        private _zone: NgZone
+    ) {
         this._viewUtil = new ViewUtil(device);
     }
 
@@ -54,7 +69,7 @@ export class NativeScriptRootRenderer implements RootRenderer {
     renderComponent(componentProto: RenderComponentType): Renderer {
         let renderer = this._registeredComponents.get(componentProto.id);
         if (isBlank(renderer)) {
-            renderer = new NativeScriptRenderer(this, componentProto, this._animationDriver, this._zone);
+            renderer = new NativeScriptRenderer(this, componentProto, this.animationDriver, this._zone);
             this._registeredComponents.set(componentProto.id, renderer);
         }
         return renderer;
@@ -73,7 +88,7 @@ export class NativeScriptRenderer extends Renderer {
     constructor(
         private rootRenderer: NativeScriptRootRenderer,
         private componentProto: RenderComponentType,
-        private animationDriver: AnimationDriver,
+        private animationDriver: nsAnimationDriver.NativeScriptAnimationDriver,
         private zone: NgZone) {
 
         super();
@@ -176,7 +191,7 @@ export class NativeScriptRenderer extends Renderer {
         traceLog('NativeScriptRenderer.setBindingDebugInfo: ' + renderElement + ', ' + propertyName + ' = ' + propertyValue);
     }
 
-    setElementDebugInfo(renderElement: any, info: RenderDebugInfo): void {
+    setElementDebugInfo(renderElement: any, info: any /*RenderDebugInfo*/): void {
         traceLog('NativeScriptRenderer.setElementDebugInfo: ' + renderElement);
     }
 

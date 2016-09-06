@@ -2,7 +2,7 @@ import {ElementRef, Directive, Input, TemplateRef, ViewContainerRef} from "@angu
 import {TabView, TabViewItem} from "ui/tab-view";
 import * as utils from '../common/utils';
 import {rendererLog, rendererError} from "../trace";
-import {isBlank} from '@angular/core/src/facade/lang';
+import {isBlank} from "../lang-facade";
 
 @Directive({
     selector: 'TabView',

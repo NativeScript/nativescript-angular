@@ -7,19 +7,22 @@ import './polyfills/console';
 
 import {
     ElementSchemaRegistry,
-    XHR,
+    ResourceLoader,
     COMPILER_PROVIDERS,
     CompilerConfig,
     platformCoreDynamic
 } from '@angular/compiler';
 import {CommonModule} from '@angular/common';
-import {provide, Provider} from '@angular/core';
+import {Provider} from '@angular/core';
 import {NativeScriptRootRenderer, NativeScriptRenderer} from './renderer';
+import {DetachedLoader} from "./common/detached-loader";
+import {ModalDialogService, ModalDialogHost} from "./directives/dialogs";
 import {
+    Type,
     Injector,
     OpaqueToken,
     ApplicationModule,
-    ExceptionHandler,
+    ErrorHandler,
     platformCore,
     CompilerOptions,
     COMPILER_OPTIONS,
@@ -27,7 +30,7 @@ import {
     PLATFORM_INITIALIZER,
     Renderer,
     RootRenderer,
-    SanitizationService,
+    Sanitizer,
     PlatformRef,
     ComponentRef,
     NgModule,
@@ -41,17 +44,18 @@ import { topmost, NavigationEntry } from "ui/frame";
 import { Page } from 'ui/page';
 import { rendererLog, rendererError } from "./trace";
 import { TextView } from 'ui/text-view';
-import { PlatformFactory } from "@angular/core/src/application_ref";
-import { isPresent, Type, ConcreteType, print } from '@angular/core/src/facade/lang';
-import { defaultPageProvider, defaultFrameProvider, defaultDeviceProvider, defaultAnimationDriverProvider
+import {
+    defaultPageProvider, defaultFrameProvider, defaultDeviceProvider
 } from "./platform-providers";
-import { NativeScriptDomAdapter, NativeScriptElementSchemaRegistry, NativeScriptSanitizationService
+import { NativeScriptDomAdapter, NativeScriptElementSchemaRegistry, NativeScriptSanitizer
 } from './dom-adapter';
-import { FileSystemXHR } from './http/xhr';
+import { FileSystemResourceLoader } from './resource-loader';
 import { NS_DIRECTIVES } from './directives';
 
 import * as nativescriptIntl from "nativescript-intl";
 global.Intl = nativescriptIntl;
+
+type PlatformFactory = (extraProviders?: Provider[]) => PlatformRef;
 
 export interface AppOptions {
     bootInExistingPage: boolean,
@@ -59,33 +63,31 @@ export interface AppOptions {
     startPageActionBarHidden?: boolean;
 }
 
-class ConsoleLogger {
-    log = print;
-    logError = print;
-    logGroup = print;
-    logGroupEnd() { }
-}
-
 @NgModule({
     declarations: [
-        NS_DIRECTIVES
+        DetachedLoader,
+        ModalDialogHost,
+        ...NS_DIRECTIVES,
     ],
     providers: [
-        provide(ExceptionHandler, {
+        {
+            provide:ErrorHandler,
             useFactory: () => {
-                return new ExceptionHandler(new ConsoleLogger(), true)
-            }, deps: []
-        }),
-
+                return new ErrorHandler(true)
+            }
+        },
         defaultFrameProvider,
         defaultPageProvider,
         defaultDeviceProvider,
-        defaultAnimationDriverProvider,
         NativeScriptRootRenderer,
-        provide(RootRenderer, { useClass: NativeScriptRootRenderer }),
+        {provide: RootRenderer, useClass: NativeScriptRootRenderer},
         NativeScriptRenderer,
-        provide(Renderer, { useClass: NativeScriptRenderer }),
-        provide(SanitizationService, { useClass: NativeScriptSanitizationService }),
+        {provide: Renderer, useClass: NativeScriptRenderer},
+        {provide: Sanitizer, useClass: NativeScriptSanitizer},
+        ModalDialogService,
+    ],
+    entryComponents: [
+        DetachedLoader,
     ],
     imports: [
         CommonModule,
@@ -94,7 +96,9 @@ class ConsoleLogger {
     exports: [
         CommonModule,
         ApplicationModule,
-        NS_DIRECTIVES
+        DetachedLoader,
+        ModalDialogHost,
+        ...NS_DIRECTIVES,
     ]
 })
 export class NativeScriptModule {
@@ -105,8 +109,8 @@ export const NS_COMPILER_PROVIDERS = [
     {
         provide: COMPILER_OPTIONS,
         useValue: {providers: [
-            {provide: XHR, useClass: FileSystemXHR},
-            provide(ElementSchemaRegistry, { useClass: NativeScriptElementSchemaRegistry }),
+            {provide: ResourceLoader, useClass: FileSystemResourceLoader},
+            {provide: ElementSchemaRegistry, useClass: NativeScriptElementSchemaRegistry},
         ]},
         multi: true
     }
@@ -116,7 +120,7 @@ type BootstrapperAction = () => Promise<NgModuleRef<any>>;
 
 let lastBootstrappedModule: WeakRef<NgModuleRef<any>>;
 interface BootstrapParams {
-    appModuleType: Type,
+    appModuleType: Type<any>,
     appOptions?: AppOptions
 }
 
@@ -133,7 +137,7 @@ class NativeScriptPlatformRef extends PlatformRef {
 
     private _bootstrapper: BootstrapperAction;
 
-    bootstrapModule<M>(moduleType: ConcreteType<M>, compilerOptions: CompilerOptions | CompilerOptions[] = []): Promise<NgModuleRef<M>> {
+    bootstrapModule<M>(moduleType: Type<M>, compilerOptions: CompilerOptions | CompilerOptions[] = []): Promise<NgModuleRef<M>> {
         this._bootstrapper = () => this.platform.bootstrapModule(moduleType, compilerOptions);
         // Patch livesync
         global.__onLiveSyncCore = () => this.livesyncModule();
@@ -166,10 +170,6 @@ class NativeScriptPlatformRef extends PlatformRef {
             frame.navigate(mainPageEntry);
         }
     }
- 
-    registerDisposeListener(dispose: () => void): void {
-        this.platform.registerDisposeListener(dispose);
-    }
 
     onDestroy(callback: () => void): void {
         this.platform.onDestroy(callback);
@@ -179,16 +179,8 @@ class NativeScriptPlatformRef extends PlatformRef {
         return this.platform.injector;
     };
 
-    dispose(): void {
-        this.platform.dispose();
-    }
-
     destroy(): void {
         this.platform.destroy();
-    }
-
-    get disposed(): boolean {
-        return this.platform.disposed;
     }
 
     get destroyed(): boolean {

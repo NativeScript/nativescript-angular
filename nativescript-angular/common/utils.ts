@@ -1,4 +1,4 @@
-import {isBlank, isNumber} from '@angular/core/src/facade/lang';
+import {isBlank, isNumber} from "../lang-facade";
 
 export function convertToInt(value): number {
     let normalizedValue;

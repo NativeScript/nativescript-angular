@@ -1,5 +1,5 @@
 import {NSLocationStrategy} from './ns-location-strategy';
-import {PlatformLocation, UrlChangeListener} from '@angular/common';
+import {PlatformLocation, LocationChangeListener} from '@angular/common';
 import {Injectable} from '@angular/core';
 import {routerLog} from "../trace";
 
@@ -16,11 +16,11 @@ export class NativescriptPlatformLocation extends PlatformLocation {
         return "/";
     }
 
-    onPopState(fn: UrlChangeListener): void {
+    onPopState(fn: LocationChangeListener): void {
         this.locationStartegy.onPopState(fn);
     }
 
-    onHashChange(fn: UrlChangeListener): void {
+    onHashChange(fn: LocationChangeListener): void {
     }
 
     get search(): string {

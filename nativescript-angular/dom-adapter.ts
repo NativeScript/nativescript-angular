@@ -1,9 +1,9 @@
-import {ElementSchemaRegistry} from '@angular/compiler';
-import {SanitizationService} from '@angular/core/src/security';
-import {Parse5DomAdapter} from '@angular/platform-server/src/parse5_adapter';
-import {setRootDomAdapter} from '@angular/platform-browser/src/dom/dom_adapter';
-import {Type} from '@angular/core/src/facade/lang';
-import {rendererLog, rendererError} from "./trace";
+import { ElementSchemaRegistry } from '@angular/compiler';
+import { Sanitizer, SchemaMetadata } from '@angular/core';
+import { Parse5DomAdapter } from "./parse5_adapter";
+import { setRootDomAdapter } from './private_import_platform-browser';
+import { rendererLog, rendererError } from "./trace";
+import { print } from "./lang-facade";
 
 export enum SecurityContext {
   NONE,
@@ -19,6 +19,11 @@ export class NativeScriptElementSchemaRegistry extends ElementSchemaRegistry {
       return true;
   }
 
+  hasElement(tagName: string, schemaMetas: SchemaMetadata[]): boolean {
+      return true;
+  }
+
+
   getMappedPropName(propName: string): string {
       return propName;
   }
@@ -32,7 +37,7 @@ export class NativeScriptElementSchemaRegistry extends ElementSchemaRegistry {
   }
 }
 
-export class NativeScriptSanitizationService extends SanitizationService {
+export class NativeScriptSanitizer extends Sanitizer {
     sanitize(context: SecurityContext, value: string): string {
         return value;
     }
@@ -44,12 +49,23 @@ export class NativeScriptDomAdapter extends Parse5DomAdapter {
       setRootDomAdapter(new NativeScriptDomAdapter());
   }
 
-  getXHR(): Type {
-      return null;
-  }
-
   hasProperty(element, name: string) {
       //TODO: actually check if the property exists.
       return true;
+  }
+
+  log(arg: any): void {
+      print(arg);
+  }
+
+  logError(arg: any): void {
+      print(arg);
+  }
+
+  logGroup(arg: any): void {
+      print(arg);
+  }
+
+  logGroupEnd(): void {
   }
 }

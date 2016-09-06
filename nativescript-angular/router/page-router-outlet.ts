@@ -1,12 +1,9 @@
 import {
     Attribute, ComponentFactory, ComponentRef, Directive,
     ReflectiveInjector, ResolvedReflectiveProvider, ViewContainerRef,
-    Inject, ComponentResolver, provide, ComponentFactoryResolver,
-    NoComponentFactoryError, Injector
+    Inject, ComponentFactoryResolver, Injector
 } from '@angular/core';
-
-import {isPresent} from '@angular/core/src/facade/lang';
-
+import {isPresent} from "../lang-facade";
 import {RouterOutletMap, ActivatedRoute, PRIMARY_OUTLET} from '@angular/router';
 import {NSLocationStrategy} from "./ns-location-strategy";
 import {DEVICE} from "../platform-providers";
@@ -96,17 +93,15 @@ export class PageRouterOutlet {
         @Attribute('name') name: string,
         private locationStrategy: NSLocationStrategy,
         private componentFactoryResolver: ComponentFactoryResolver,
-        compiler: ComponentResolver,
+        resolver: ComponentFactoryResolver,
         private frame: Frame,
         @Inject(DEVICE) device: Device) {
 
         parentOutletMap.registerOutlet(name ? name : PRIMARY_OUTLET, <any>this);
 
         this.viewUtil = new ViewUtil(device);
-        compiler.resolveComponent(DetachedLoader).then((detachedLoaderFactory) => {
-            log("DetachedLoaderFactory loaded");
-            this.detachedLoaderFactory = detachedLoaderFactory;
-        });
+        this.detachedLoaderFactory = resolver.resolveComponentFactory(DetachedLoader);
+        log("DetachedLoaderFactory loaded");
     }
 
     deactivate(): void {
@@ -180,7 +175,9 @@ export class PageRouterOutlet {
             log("PageRouterOutlet.activate() forward navigation - create detached loader in the loader container");
 
             const page = new Page();
-            const pageResolvedProvider = ReflectiveInjector.resolve([provide(Page, { useValue: page })]);
+            const pageResolvedProvider = ReflectiveInjector.resolve([
+                {provide: Page, useValue: page}
+            ]);
             const childInjector = ReflectiveInjector.fromResolvedProviders([...providers, ...pageResolvedProvider], this.containerRef.parentInjector);
             const loaderRef = this.containerRef.createComponent(this.detachedLoaderFactory, this.containerRef.length, childInjector, []);
 
@@ -252,7 +249,7 @@ export class PageRouterOutlet {
                 snapshot._resolvedComponentFactory :
                 this.componentFactoryResolver.resolveComponentFactory(component);
         } catch (e) {
-            if (!(e instanceof NoComponentFactoryError)) {
+            if (!(e.constructor.name === "NoComponentFactoryError")) {
                 throw e;
             }
             // TODO: vsavkin uncomment this once ComponentResolver is deprecated
