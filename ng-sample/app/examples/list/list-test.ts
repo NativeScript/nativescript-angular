@@ -36,7 +36,6 @@ export class ItemComponent implements AfterViewChecked, DoCheck {
 @Component({
     selector: 'list-test',
     styleUrls: ['examples/list/styles.css'],
-    directives: [ItemComponent],
     changeDetection: ChangeDetectionStrategy.OnPush,
     template: `
         <GridLayout rows="auto * auto">
@@ -85,4 +84,8 @@ export class ListTest {
         this.counter++;
         this.myItems.push(new DataItem(this.counter, "data item " + this.counter));
     }
+
+    public static entries = [
+        ItemComponent
+    ]
 }

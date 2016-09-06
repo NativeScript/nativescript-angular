@@ -7,7 +7,6 @@ import * as profiling from './profiling';
 @Component({
     selector: 'tree',
     inputs: ['data'],
-    directives: [TreeComponent],
     template:
     `<StackLayout>
           <Label [text]="data.value"></Label>
@@ -26,7 +25,6 @@ class TreeComponent {
 
 @Component({
     selector: 'benchmark',
-    directives: [TreeComponent],
     template: `
     <StackLayout>
         <Label text='Benchmark!' fontSize='20' verticalAlignment='center' padding='20'></Label>
@@ -47,6 +45,10 @@ export class Benchmark {
 
     constructor(private appRef: ApplicationRef) {
     }
+
+    public static entries = [
+        TreeComponent
+    ];
 
     public baselineTest(container: StackLayout) {
         this.createBaselineDom();

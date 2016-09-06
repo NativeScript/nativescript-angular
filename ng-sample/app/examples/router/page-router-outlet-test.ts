@@ -1,7 +1,6 @@
 import { Component, OnInit, OnDestroy } from "@angular/core";
-import { RouterConfig, ActivatedRoute, Router, ROUTER_DIRECTIVES } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Observable } from "rxjs";
-import { NS_ROUTER_DIRECTIVES, nsProvideRouter} from "nativescript-angular/router";
 import { Location } from '@angular/common';
 import { Page } from "ui/page";
 
@@ -9,7 +8,6 @@ import { Page } from "ui/page";
 @Component({
     selector: "first",
     styleUrls: ["examples/router/styles.css"],
-    directives: [ROUTER_DIRECTIVES, NS_ROUTER_DIRECTIVES],
     template: `
     <StackLayout>
         <Label text="First component" class="title"></Label>
@@ -37,7 +35,6 @@ class FirstComponent implements OnInit, OnDestroy {
 @Component({
     selector: "second",
     styleUrls: ["examples/router/styles.css"],
-    directives: [ROUTER_DIRECTIVES, NS_ROUTER_DIRECTIVES],
     template: `
     <StackLayout>
         <Label [text]="'Second component: ' + (id | async)" class="title"></Label>
@@ -72,7 +69,6 @@ class SecondComponent implements OnInit, OnDestroy {
 @Component({
     selector: "third",
     styleUrls: ["examples/router/styles.css"],
-    directives: [ROUTER_DIRECTIVES, NS_ROUTER_DIRECTIVES],
     template: `
     <StackLayout>
         <Label [text]="'Third component: ' + (id | async)" class="title"></Label>
@@ -106,11 +102,10 @@ class ThirdComponent implements OnInit, OnDestroy {
 
 @Component({
     selector: 'navigation-test',
-    directives: [ROUTER_DIRECTIVES, NS_ROUTER_DIRECTIVES],
     template: `<page-router-outlet></page-router-outlet>`
 })
 export class PageRouterOutletAppComponent {
-    static routes: RouterConfig = [
+    static routes = [
         { path: "", component: FirstComponent },
         { path: "second/:id", component: SecondComponent },
         { path: "third/:id", component: ThirdComponent },

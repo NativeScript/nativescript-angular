@@ -1,6 +1,6 @@
 import { Component, Input, ChangeDetectionStrategy } from '@angular/core';
 import * as Rx from 'rxjs/Observable';
-import { combineLatestStatic } from 'rxjs/operator/combineLatest';
+import { combineLatest } from 'rxjs/operator/combineLatest';
 import { BehaviorSubject } from "rxjs/BehaviorSubject";
 import { DataItem, DataService } from "./data.service"
 
@@ -92,7 +92,7 @@ export class ListTestFilterAsync {
 
     constructor(private service: DataService) {
         // Create filteredItems$ by combining the service.items$ and filter$
-        this.filteredItems$ = combineLatestStatic(this.service.items$, this.filter$, (data, filter) => {
+        this.filteredItems$ = combineLatest(this.service.items$, this.filter$, (data, filter) => {
             return filter ? data.filter(v => v.id % 2 === 0) : data;
         });
     }

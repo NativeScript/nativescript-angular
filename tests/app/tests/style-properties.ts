@@ -5,8 +5,7 @@ import {Red, Lime} from "color/known-colors";
 import {NativeScriptRenderer, NativeScriptRootRenderer} from "nativescript-angular/renderer";
 import {NativeScriptAnimationDriver} from "nativescript-angular/animation-driver";
 import {device} from "platform";
-import { ViewEncapsulation } from "@angular/core";
-import {RenderComponentType} from '@angular/core/src/render/api';
+import { ViewEncapsulation, RenderComponentType } from "@angular/core";
 import {NgView} from "nativescript-angular/view-util";
 
 describe("Setting style properties", () => {

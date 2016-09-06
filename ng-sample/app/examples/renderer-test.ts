@@ -5,7 +5,6 @@ import {CheckedValueAccessor} from 'nativescript-angular/value-accessors/checked
 
 @Component({
     selector: 'templated-component',
-    directives: [TemplatedComponent],
     templateUrl: 'title.html'
 })
 export class TemplatedComponent {
@@ -16,7 +15,7 @@ export class TemplatedComponent {
 @Directive({
     selector: 'Progress',
 })
-export class ProgressComponent {
+export class ProgressDirective {
     constructor(private element: ElementRef) {
     }
 
@@ -27,7 +26,6 @@ export class ProgressComponent {
 
 @Component({
 	selector: 'renderer-test',
-    directives: [TemplatedComponent, ProgressComponent],
 	templateUrl: './examples/renderer-test.html' 
 })
 export class RendererTest {
@@ -40,6 +38,14 @@ export class RendererTest {
     public model: any;
 
     public testModel = { mydate: new Date() };
+
+    static entries = [
+        TemplatedComponent,
+    ];
+
+    static exports = [
+        ProgressDirective
+    ];
 
     constructor() {
         this.buttonText = 'Save...'

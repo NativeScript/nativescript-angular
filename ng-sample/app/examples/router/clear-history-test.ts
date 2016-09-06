@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy, Injectable } from "@angular/core";
-import { RouterConfig, ActivatedRoute, Router, ROUTER_DIRECTIVES, CanDeactivate, ActivatedRouteSnapshot, RouterStateSnapshot} from '@angular/router';
+import { ActivatedRoute, Router, CanDeactivate, ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
 import { Observable } from "rxjs";
-import { NS_ROUTER_DIRECTIVES, nsProvideRouter, RouterExtensions, PageRoute} from "nativescript-angular/router";
+import { RouterExtensions, PageRoute } from "nativescript-angular/router";
 import { NSLocationStrategy } from "nativescript-angular/router/ns-location-strategy";
 import { BehaviorSubject} from "rxjs";
 
@@ -50,7 +50,6 @@ export class LocationLog {
 
 @Component({
     selector: "first",
-    directives: [ROUTER_DIRECTIVES, NS_ROUTER_DIRECTIVES, LocationLog],
     templateUrl: "examples/router/clear-history.component.html",
     styleUrls: ["examples/router/styles.css"]
 })
@@ -63,7 +62,6 @@ class FirstComponent implements OnInit, OnDestroy {
 
 @Component({
     selector: "second",
-    directives: [ROUTER_DIRECTIVES, NS_ROUTER_DIRECTIVES, LocationLog],
     templateUrl: "examples/router/clear-history.component.html",
     styleUrls: ["examples/router/styles.css"]
 })
@@ -76,7 +74,6 @@ class SecondComponent implements OnInit, OnDestroy {
 
 @Component({
     selector: "third",
-    directives: [ROUTER_DIRECTIVES, NS_ROUTER_DIRECTIVES, LocationLog],
     templateUrl: "examples/router/clear-history.component.html",
     styleUrls: ["examples/router/styles.css"]
 })
@@ -89,13 +86,12 @@ class ThirdComponent implements OnInit, OnDestroy {
 
 @Component({
     selector: 'navigation-test',
-    directives: [ROUTER_DIRECTIVES, NS_ROUTER_DIRECTIVES],
     providers: [LocationLogService],
     template: `<page-router-outlet></page-router-outlet>`
 })
 export class ClearHistoryAppComponent {
-    static routes: RouterConfig = [
-        { path: "", redirectTo: "/first", terminal: true },
+    static routes = [
+        { path: "", redirectTo: "/first", terminal: true, pathMatch: "full" },
         { path: "first", component: FirstComponent },
         { path: "second", component: SecondComponent },
         { path: "third", component: ThirdComponent },
@@ -105,5 +101,6 @@ export class ClearHistoryAppComponent {
         FirstComponent,
         SecondComponent,
         ThirdComponent,
+        LocationLog,
     ]
 }

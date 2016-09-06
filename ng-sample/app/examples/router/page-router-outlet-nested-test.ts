@@ -1,7 +1,6 @@
 import { Component, OnInit, OnDestroy } from "@angular/core";
-import { RouterConfig, ActivatedRoute, Router, ROUTER_DIRECTIVES, Event } from '@angular/router';
+import { ActivatedRoute, Router, Event } from '@angular/router';
 import { Observable } from "rxjs";
-import { NS_ROUTER_DIRECTIVES, nsProvideRouter} from "nativescript-angular/router"
 import { Location, LocationStrategy} from '@angular/common';
 import { Page } from "ui/page";
 
@@ -9,7 +8,6 @@ import { Page } from "ui/page";
 @Component({
     selector: "first",
     styleUrls: ["examples/router/styles.css"],
-    directives: [ROUTER_DIRECTIVES, NS_ROUTER_DIRECTIVES],
     template: `
     <StackLayout>
         <Label text="First component" class="title"></Label>
@@ -38,7 +36,6 @@ class FirstComponent implements OnInit, OnDestroy {
 @Component({
     selector: 'master',
     styleUrls: ["examples/router/styles.css"],
-    directives: [NS_ROUTER_DIRECTIVES],
     template: `
     <StackLayout class="master">
         <Label text="Master View" class="subtitle"></Label>
@@ -58,7 +55,6 @@ class MasterComponent {
 @Component({
     selector: 'detail',
     styleUrls: ["examples/router/styles.css"],
-    directives: [NS_ROUTER_DIRECTIVES],
     template: `
     <StackLayout class="detail">
         <Label text="Detail View" class="subtitle"></Label>
@@ -80,7 +76,6 @@ class DetailComponent {
 @Component({
     selector: "second",
     styleUrls: ["examples/router/styles.css"],
-    directives: [ROUTER_DIRECTIVES, NS_ROUTER_DIRECTIVES],
     template: `
     <StackLayout>
         <Label [text]="'Second component: ' + (depth$ | async)" class="title"></Label>
@@ -121,11 +116,10 @@ class SecondComponent implements OnInit, OnDestroy {
 
 @Component({
     selector: 'navigation-test',
-    directives: [ROUTER_DIRECTIVES, NS_ROUTER_DIRECTIVES],
     template: `<page-router-outlet></page-router-outlet>`
 })
 export class PageRouterOutletNestedAppComponent {
-    static routes: RouterConfig = [
+    static routes = [
         { path: "", component: FirstComponent },
         {
             path: "second/:depth", component: SecondComponent,

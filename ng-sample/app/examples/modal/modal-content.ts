@@ -1,4 +1,4 @@
-import {Component} from '@angular/core';
+import {Component, Input} from '@angular/core';
 import {ModalDialogParams} from "nativescript-angular/directives/dialogs";
 
 @Component({
@@ -14,7 +14,7 @@ import {ModalDialogParams} from "nativescript-angular/directives/dialogs";
     `
 })
 export class ModalContent {
-    public prompt: string;
+    @Input() public prompt: string;
     constructor(private params: ModalDialogParams) {
         console.log("ModalContent.constructor: " + JSON.stringify(params))
         this.prompt = params.context.promptMsg;
