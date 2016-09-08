@@ -206,7 +206,7 @@ export class PageRouterOutlet {
         // HACK: Fill the outlet map provided by the router, with the outlets that we have cached.
         // This is needed beacuse the component is taken form the cache and not created - so it will not register
         // its child router-outlets to the newly created outlet map.
-        Object.assign(outletMap, cacheItem.outletMap);
+        (<any>Object).assign(outletMap, cacheItem.outletMap);
 
         this.currentActivatedComp = cacheItem.componentRef;
     }
