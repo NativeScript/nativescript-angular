@@ -1,16 +1,10 @@
-import {Component} from "@angular/core";
-import {NS_ROUTER_DIRECTIVES } from 'nativescript-angular/router';
-import {nsProvideRouter} from 'nativescript-angular/router';
-import {RouterConfig} from '@angular/router';
-
-
+import { Component } from "@angular/core";
 import { RouterExtensions } from 'nativescript-angular/router';
 
 @Component({
     // ...
     // >> (hide)
     selector: "router-extensions-import",
-    directives: [NS_ROUTER_DIRECTIVES],
     templateUrl: 'snippets/navigation/router-extensions.html'
     // << (hide)
 })
@@ -70,9 +64,7 @@ export class MainComponent {
 })
 export class App { }
 
-const routes: RouterConfig = [
+const routes = [
     { path: "", component: MyComponent },
     { path: "main", component: MainComponent },
 ];
-
-export const providers = nsProvideRouter(routes, {});

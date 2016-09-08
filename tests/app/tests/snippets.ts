@@ -11,6 +11,7 @@ import {IconFontComponent} from "../snippets/icon-font.component";
 
 import {PageNavigationApp} from "../snippets/navigation/page-outlet";
 import {NavigationApp} from "../snippets/navigation/router-outlet";
+import {FirstComponent, SecondComponent} from "../snippets/navigation/navigation-common";
 import {routes} from "../snippets/navigation/app.routes";
 
 import {device, platformNames} from "platform";
@@ -20,7 +21,7 @@ describe('Snippets', () => {
     let testApp: TestApp = null;
 
     before(() => {
-        return TestApp.create().then((app) => {
+        return TestApp.create([], [GestureComponent, LayoutsComponent, IconFontComponent]).then((app) => {
             testApp = app;
         });
     });
@@ -72,50 +73,37 @@ describe('Snippets Navigation', () => {
     after(cleanup);
 
     it("router-outlet app", (done) => {
-        bootstrapTestApp(NavigationApp, [], routes).then((app) => {
-            console.log("NavigationApp instance: " + app);
+        bootstrapTestApp(NavigationApp, [], routes, [NavigationApp, FirstComponent, SecondComponent]).then((app) => {
             runningApp = app;
-            let navStarted = false;
 
-            subscription = app.router.events.subscribe((e) => {
-                console.log("------>>>>>> " + e.toString());
-                //TODO: investigate why NavigationStart isn't raised
-                //if (e instanceof NavigationStart) {
-                    //assert.equal("/", e.url);
-                    //navStarted = true;
-                //}
-                if (e instanceof NavigationEnd) {
-                    //assert.isTrue(navStarted, "No NavigationStart event");
-                    assert.equal("/", e.url);
-                    assert.equal("/first", e.urlAfterRedirects);
+            return runningApp.done.then(() => {
+                assert(app.startEvent instanceof NavigationStart);
+                assert.equal("/", app.startEvent.url);
 
-                    cleanup();
-                    done();
-                }
-            });
+                assert(app.endEvent instanceof NavigationEnd);
+                assert.equal("/", app.endEvent.url);
+                assert.equal("/first", app.endEvent.urlAfterRedirects);
+
+                cleanup();
+            }).then(() => done(), err => done(err));
         });
     });
 
     it("page-router-outlet app", (done) => {
-        bootstrapTestApp(PageNavigationApp, [], routes).then((app) => {
+        bootstrapTestApp(PageNavigationApp, [], routes, [PageNavigationApp, FirstComponent, SecondComponent]).then((app) => {
+            console.log("PageNavigationApp instance: " + app);
             runningApp = app;
-            let navStarted = false;
 
-            subscription = app.router.events.subscribe((e) => {
-                //TODO: investigate why NavigationStart isn't raised
-                //if (e instanceof NavigationStart) {
-                    //assert.equal("/", e.url);
-                    //navStarted = true;
-                //}
-                if (e instanceof NavigationEnd) {
-                    //assert.isTrue(navStarted, "No NavigationStart event");
-                    assert.equal("/", e.url);
-                    assert.equal("/first", e.urlAfterRedirects);
+            return runningApp.done.then(() => {
+                assert(app.startEvent instanceof NavigationStart);
+                assert.equal("/", app.startEvent.url);
 
-                    cleanup();
-                    done();
-                }
-            });
+                assert(app.endEvent instanceof NavigationEnd);
+                assert.equal("/", app.endEvent.url);
+                assert.equal("/first", app.endEvent.urlAfterRedirects);
+
+                cleanup();
+            }).then(() => done(), err => done(err));
         });
     });
 });

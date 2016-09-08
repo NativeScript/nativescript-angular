@@ -1,9 +1,10 @@
 import { NativeScriptModule, platformNativeScriptDynamic } from "nativescript-angular/platform";
 import { NativeScriptRouterModule } from "nativescript-angular/router";
 import {
-    Type, Component, ComponentRef, DynamicComponentLoader,
-    ViewChild, ElementRef, provide, ApplicationRef, Renderer,
-    ViewContainerRef, NgZone, NgModule, NgModuleRef
+    Type, Component, ComponentRef,
+    ComponentFactoryResolver, ApplicationRef, Renderer,
+    ViewContainerRef, NgZone, NgModule,
+    NgModuleRef,
 } from "@angular/core";
 
 import {GridLayout} from "ui/layouts/grid-layout";
@@ -16,24 +17,27 @@ import {APP_ROOT_VIEW} from "nativescript-angular/platform-providers";
     template: `<StackLayout #loadSite></StackLayout>`
 })
 export class TestApp {
-    @ViewChild("loadSite") public loadSiteRef: ElementRef;
     private _pendingDispose: ComponentRef<any>[] = [];
 
-    constructor(public loader: DynamicComponentLoader,
-        public elementRef: ViewContainerRef,
-        public appRef: ApplicationRef,
-        public renderer: Renderer,
-        public zone: NgZone) {
+    constructor(
+            private resolver: ComponentFactoryResolver,
+            private containerRef: ViewContainerRef,
+            public appRef: ApplicationRef,
+            public renderer: Renderer,
+            public zone: NgZone
+        ) {
 
         registerTestApp(TestApp, this, appRef);
     }
 
-    public loadComponent(type: Type): Promise<ComponentRef<any>> {
-        return this.loader.loadNextToLocation(type, this.elementRef).then((componentRef) => {
-            this._pendingDispose.push(componentRef);
-            this.appRef.tick();
-            return componentRef;
-        });
+    public loadComponent(componentType: Type<any>): Promise<ComponentRef<any>> {
+        const factory = this.resolver.resolveComponentFactory(componentType)
+        const componentRef = this.containerRef.createComponent(
+            factory, this.containerRef.length, this.containerRef.parentInjector);
+        this._pendingDispose.push(componentRef);
+
+        this.appRef.tick();
+        return Promise.resolve(componentRef);
     }
 
     public disposeComponents() {
@@ -43,8 +47,8 @@ export class TestApp {
         }
     }
 
-    public static create(providers?: any[]): Promise<TestApp> {
-        return bootstrapTestApp(TestApp, providers);
+    public static create(providers?: any[], components: any[] = [], directives: any[] = []): Promise<TestApp> {
+        return bootstrapTestApp(TestApp, providers, [], components, directives);
     }
 
     public dispose() {
@@ -65,7 +69,7 @@ export function registerTestApp(appType, appInstance, appRef) {
     });
 }
 
-export function bootstrapTestApp<T>(appComponentType: new (...args) => T, providers: any[] = [], routes: any[] = []): Promise<T> {
+export function bootstrapTestApp<T>(appComponentType: new (...args) => T, providers: any[] = [], routes: any[] = [], components: any[] = [], directives: any[] = []): Promise<T> {
     const page = topmost().currentPage;
     const rootLayout = <LayoutBase>page.content;
     const viewRoot = new GridLayout();
@@ -84,18 +88,25 @@ export function bootstrapTestApp<T>(appComponentType: new (...args) => T, provid
         imports.push(NativeScriptRouterModule.forRoot(routes));
     }
 
-    const rootViewProvider = provide(APP_ROOT_VIEW, { useValue: viewRoot });
+    const rootViewProvider = {provide: APP_ROOT_VIEW, useValue: viewRoot};
 
     @NgModule({
         bootstrap: [
             appComponentType
         ],
         declarations: [
-            appComponentType
+            appComponentType,
+            ...components,
+            ...directives,
+        ],
+        entryComponents: [
+            ...components,
         ],
         imports: imports,
         exports: [
             NativeScriptModule,
+            ...components,
+            ...directives,
         ],
         providers: [
             rootViewProvider,
@@ -123,6 +134,7 @@ export function destroyTestApp(app: any) {
 
     var entry = runningApps.get(app);
     entry.container.removeChild(entry.appRoot);
-    entry.appRef.dispose();
+    //TODO: App disposal not doing anything useful anymore. Get rid of it?
+    //entry.appRef.dispose();
     runningApps.delete(app);
 }

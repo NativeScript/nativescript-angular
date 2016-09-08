@@ -5,7 +5,7 @@ import {
     inject,
 } from '@angular/core/testing';
 import {ReflectiveInjector} from '@angular/core';
-import {BaseRequestOptions, ConnectionBackend, Http, HTTP_PROVIDERS, Response, ResponseOptions} from '@angular/http';
+import {BaseRequestOptions, ConnectionBackend, Http, Response, ResponseOptions} from '@angular/http';
 import 'rxjs/add/operator/map';
 import {MockBackend} from '@angular/http/testing';
 import {NSHttp} from "nativescript-angular/http/ns-http";

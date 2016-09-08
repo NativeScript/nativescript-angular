@@ -25,7 +25,6 @@ export class LabelCmp {
 }
 
 @Component({
-    directives: [LabelCmp],
     template: `<GridLayout><label-cmp></label-cmp></GridLayout>`
 })
 export class LabelContainer {
@@ -41,7 +40,6 @@ export class ProjectableCmp {
     }
 }
 @Component({
-    directives: [ProjectableCmp],
     template: `<GridLayout>
         <projectable-cmp><Button text="projected"></Button></projectable-cmp>
     </GridLayout>`
@@ -95,7 +93,7 @@ export class NgIfLabel {
 
 @Component({
     selector: "ng-for-label",
-    template: `<Label *ngFor="#item of items" [text]="item"></Label>`
+    template: `<Label *ngFor="let item of items" [text]="item"></Label>`
 })
 export class NgForLabel {
     public items: Array<string> = ["one", "two", "three"];
@@ -107,7 +105,12 @@ describe('Renderer E2E', () => {
     let testApp: TestApp = null;
 
     before(() => {
-        return TestApp.create().then((app) => {
+        return TestApp.create([], [
+            LayoutWithLabel, LabelCmp, LabelContainer,
+            ProjectableCmp, ProjectionContainer,
+            StyledLabelCmp, StyledLabelCmp2,
+            NgIfLabel, NgForLabel,
+        ]).then((app) => {
             testApp = app;
 
         });

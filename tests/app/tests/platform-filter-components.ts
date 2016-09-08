@@ -1,6 +1,6 @@
 //make sure you import mocha-config before @angular/core
 import {assert} from "./test-config";
-import {Component, ElementRef, provide} from "@angular/core";
+import {Component, ElementRef} from "@angular/core";
 import {ProxyViewContainer} from "ui/proxy-view-container";
 import {dumpView, createDevice} from "./test-utils";
 import {TestApp} from "./test-app";
@@ -42,7 +42,7 @@ describe('Platofrm filter directives', () => {
         let testApp: TestApp = null;
 
         before(() => {
-            return TestApp.create([provide(DEVICE, { useValue: createDevice(platformNames.ios) })]).then((app) => {
+            return TestApp.create([{provide: DEVICE, useValue: createDevice(platformNames.ios)}], [PlatformSpecificAttributeComponent, AndroidSpecificComponent, IosSpecificComponent]).then((app) => {
                 testApp = app;
             });
         });
@@ -84,7 +84,7 @@ describe('Platofrm filter directives', () => {
         let testApp: TestApp = null;
 
         before(() => {
-            return TestApp.create([provide(DEVICE, { useValue: createDevice(platformNames.android) })]).then((app) => {
+            return TestApp.create([{provide: DEVICE, useValue: createDevice(platformNames.android)}], [AndroidSpecificComponent, IosSpecificComponent, PlatformSpecificAttributeComponent]).then((app) => {
                 testApp = app;
             });
         });

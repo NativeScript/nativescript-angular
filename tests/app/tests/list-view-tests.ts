@@ -16,7 +16,7 @@ class DataItem {
     template: `
     <StackLayout>
         <ListView height="200" [items]="myItems" (setupItemView)="onSetupItemView($event)">
-            <template #item="item" #i="index" #odd="odd" #even="even">
+            <template let-item="item" let-i="index" let-odd="odd" let-even="even">
                 <StackLayout [class.odd]="odd" [class.even]="even">
                     <Label [text]='"index: " + i'></Label>
                     <Label [text]='"[" + item.id +"] " + item.name'></Label>
@@ -43,12 +43,11 @@ export class TestListViewComponent {
     }
 }
 
-// TODO: Skip list-view test until karma test launcher double navigate bug is fixed
-describe.skip('ListView-tests', () => {
+describe('ListView-tests', () => {
     let testApp: TestApp = null;
 
     before(() => {
-        return TestApp.create().then((app) => {
+        return TestApp.create([], [TestListViewComponent]).then((app) => {
             testApp = app;
         })
     });

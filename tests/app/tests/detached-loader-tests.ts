@@ -18,7 +18,7 @@ class TestComponent { }
 class LoaderComponentBase {
     @ViewChild(DetachedLoader) public loader: DetachedLoader;
 
-    public ready: Promise<LoaderComponent>;
+    public ready: Promise<LoaderComponentBase>;
     private resolve;
     constructor() {
         this.ready = new Promise((reslove, reject) => {
@@ -26,13 +26,13 @@ class LoaderComponentBase {
         })
     }
     ngAfterViewInit() {
+        console.log("!!! ngAfterViewInit -> loader: " + this.loader);
         this.resolve(this);
     }
 }
 
 @Component({
     selector: 'loader-component-on-push',
-    directives: [DetachedLoader],
     template: `
     <StackLayout>
         <DetachedContainer #loader></DetachedContainer>
@@ -43,7 +43,6 @@ export class LoaderComponent extends LoaderComponentBase { }
 
 @Component({
     selector: 'loader-component-on-push',
-    directives: [DetachedLoader],
     changeDetection: ChangeDetectionStrategy.OnPush,
     template: `
     <StackLayout>
@@ -57,7 +56,8 @@ describe('DetachedLoader', () => {
     let testApp: TestApp = null;
 
     before(() => {
-        return TestApp.create().then((app) => {
+        return TestApp.create([], [LoaderComponent, LoaderComponentOnPush, TestComponent]).then((app) => {
+            console.log("TEST APP: " + app);
             testApp = app;
         })
     });
