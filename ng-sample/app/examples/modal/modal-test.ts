@@ -5,6 +5,7 @@ import {ModalContent} from "./modal-content";
 
 @Component({
     selector: 'modal-test',
+    providers: [ModalDialogService],
     template: `
     <GridLayout rows="*, auto" modal-dialog-host>
         <StackLayout verticalAlignment="top" margin="12">
