@@ -16,7 +16,7 @@ import {CommonModule} from '@angular/common';
 import {Provider} from '@angular/core';
 import {NativeScriptRootRenderer, NativeScriptRenderer} from './renderer';
 import {DetachedLoader} from "./common/detached-loader";
-import {ModalDialogService, ModalDialogHost} from "./directives/dialogs";
+import {ModalDialogHost} from "./directives/dialogs";
 import {
     Type,
     Injector,
@@ -84,7 +84,6 @@ export interface AppOptions {
         NativeScriptRenderer,
         {provide: Renderer, useClass: NativeScriptRenderer},
         {provide: Sanitizer, useClass: NativeScriptSanitizer},
-        ModalDialogService,
     ],
     entryComponents: [
         DetachedLoader,
