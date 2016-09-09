@@ -52,8 +52,9 @@ script:
 
 before_deploy:
 - cd ../nativescript-angular
-- npm install typescript -g
-- npm install
+- npm install -g nativescript --ignore-scripts
+- tns usage-reporting disable
+- tns error-reporting disable
 - node ../build/travis-scripts/add-publishConfig.js next $PACKAGE_VERSION
 
 deploy:
