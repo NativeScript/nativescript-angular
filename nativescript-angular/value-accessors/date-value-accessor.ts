@@ -1,10 +1,10 @@
-import {Directive, ElementRef, Renderer, Self, forwardRef, provide} from '@angular/core';
+import {Directive, ElementRef, Renderer, Self, forwardRef } from '@angular/core';
 import {NG_VALUE_ACCESSOR} from '@angular/forms';
-import {isBlank, isDate} from '@angular/core/src/facade/lang';
+import {isBlank, isDate} from "../lang-facade";
 import {BaseValueAccessor} from './base-value-accessor';
 import {DatePicker} from "ui/date-picker";
 
-const DATE_VALUE_ACCESSOR = provide(NG_VALUE_ACCESSOR, { useExisting: forwardRef(() => DateValueAccessor), multi: true });
+const DATE_VALUE_ACCESSOR = {provide: NG_VALUE_ACCESSOR, useExisting: forwardRef(() => DateValueAccessor), multi: true};
 
 /**
  * The accessor for setting a date and listening to changes that is used by the

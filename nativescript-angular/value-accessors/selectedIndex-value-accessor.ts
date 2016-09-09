@@ -1,11 +1,11 @@
-import {Directive, ElementRef, Renderer, Self, forwardRef, provide} from '@angular/core';
+import {Directive, ElementRef, Renderer, Self, forwardRef } from '@angular/core';
 import {NG_VALUE_ACCESSOR} from "@angular/forms";
-import {isBlank, isNumber} from '@angular/core/src/facade/lang';
+import {isBlank, isNumber} from "../lang-facade";
 import {BaseValueAccessor} from './base-value-accessor';
 import {View} from "ui/core/view";
 import * as utils from '../common/utils';
 
-const SELECTED_INDEX_VALUE_ACCESSOR = provide(NG_VALUE_ACCESSOR, { useExisting: forwardRef(() => SelectedIndexValueAccessor), multi: true });
+const SELECTED_INDEX_VALUE_ACCESSOR = {provide: NG_VALUE_ACCESSOR, useExisting: forwardRef(() => SelectedIndexValueAccessor), multi: true};
 
 export type SelectableView = {selectedIndex: number} & View;
 

@@ -14,8 +14,8 @@ import {
     ViewChild,
     Output,
     ChangeDetectionStrategy } from '@angular/core';
-import {isBlank} from '@angular/core/src/facade/lang';
-import {isListLikeIterable} from '@angular/core/src/facade/collection';
+import {isBlank} from "../lang-facade";
+import {isListLikeIterable} from "../collection-facade";
 import {ListView} from 'ui/list-view';
 import {View} from 'ui/core/view';
 import {ObservableArray} from 'data/observable-array';
@@ -39,6 +39,7 @@ export interface SetupItemViewArgs {
     view: EmbeddedViewRef<any>;
     data: any;
     index: number;
+    context: ListItemContext;
 }
 
 @Component({

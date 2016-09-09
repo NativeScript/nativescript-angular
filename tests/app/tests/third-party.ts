@@ -73,7 +73,6 @@ export class DocumentTitleDirective {
 // >> third-party-document-form-container
 @Component({
     selector: 'document-form-container',
-    directives: [DocumentFormComponent, DocumentTitleDirective],
     template: `
     <document-form src="document1.pdf">
         <Label *documentTitle text="Document1"></Label>
@@ -90,7 +89,7 @@ describe('Third party component snippets', () => {
     before(() => {
         registerElement("document-form", () => require("ui/layouts/stack-layout").StackLayout);
 
-        return TestApp.create().then((app) => {
+        return TestApp.create([], [DocumentFormContainer, DocumentFormComponent, SimpleViewContainer], [DocumentTitleDirective]).then((app) => {
             testApp = app;
         })
     });

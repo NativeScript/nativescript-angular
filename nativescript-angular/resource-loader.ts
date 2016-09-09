@@ -1,7 +1,7 @@
 import {path, knownFolders, File} from "file-system";
-import {XHR} from "@angular/compiler/src/xhr";
+import {ResourceLoader} from "@angular/compiler";
 
-export class FileSystemXHR extends XHR {
+export class FileSystemResourceLoader extends ResourceLoader {
     resolve(url: string, baseUrl: string): string {
         //Angular assembles absolute URL's and prefixes them with //
         if (url.indexOf("/") !== 0) {

@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy, Injectable } from "@angular/core";
-import { RouterConfig, Router, CanActivate} from '@angular/router';
+import { Router, CanActivate} from '@angular/router';
 import { Observable } from "rxjs";
-import { NS_ROUTER_DIRECTIVES, nsProvideRouter, RouterExtensions, PageRoute} from "nativescript-angular/router";
+import { RouterExtensions } from "nativescript-angular/router";
 import { NSLocationStrategy } from "nativescript-angular/router/ns-location-strategy";
 import { BehaviorSubject} from "rxjs";
 import * as appSettings from "application-settings"
@@ -116,8 +116,8 @@ class AuthGuard implements CanActivate {
     template: `<page-router-outlet></page-router-outlet>`
 })
 export class LoginAppComponent {
-    static routes: RouterConfig = [
-        { path: "", redirectTo: "/main", terminal: true },
+    static routes = [
+        { path: "", redirectTo: "/main", terminal: true, pathMatch: "full" },
         { path: "main", component: MainComponent, canActivate: [AuthGuard] },
         { path: "login", component: LoginComponent },
     ]

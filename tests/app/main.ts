@@ -11,10 +11,14 @@ import {Page} from "ui/page";
 import {StackLayout} from "ui/layouts/stack-layout";
 
 import * as application from "application";
+import "ui/styling/style";
+import "ui/frame";
 import {HOOKS_LOG} from "./base.component";
 import {MultiPageMain, routes as multiPageRoutes} from "./multi-page-main.component";
 import {SinglePageMain, routes as singlePageRoutes} from "./single-page-main.component";
-import {provide, OpaqueToken, NgModule} from "@angular/core";
+import {FirstComponent} from "./first.component";
+import {SecondComponent} from "./second.component";
+import { OpaqueToken, NgModule } from "@angular/core";
 
 import {PageNavigationApp} from "./snippets/navigation/page-outlet";
 import {NavigationApp} from "./snippets/navigation/router-outlet";
@@ -33,18 +37,25 @@ trace.enable();
 // nativeScriptBootstrap(IconFontComponent);
 const platform = platformNativeScriptDynamic({bootInExistingPage: true});
 const root = new StackLayout();
-const rootViewProvider = provide(APP_ROOT_VIEW, { useValue: root });
+const rootViewProvider = {provide: APP_ROOT_VIEW, useValue: root};
 const singlePageHooksLog = new BehaviorSubject([]);
-const singlePageHooksLogProvider = provide(HOOKS_LOG, { useValue: singlePageHooksLog });
+const singlePageHooksLogProvider = {provide: HOOKS_LOG, useValue: singlePageHooksLog};
 const multiPageHooksLog = new BehaviorSubject([]);
-const multiPageHooksLogProvider = provide(HOOKS_LOG, { useValue: multiPageHooksLog });
+const multiPageHooksLogProvider = {provide: HOOKS_LOG, useValue: multiPageHooksLog};
 
 @NgModule({
     bootstrap: [
         SinglePageMain
     ],
     declarations: [
-        SinglePageMain
+        SinglePageMain,
+        FirstComponent,
+        SecondComponent,
+    ],
+    entryComponents: [
+        SinglePageMain,
+        FirstComponent,
+        SecondComponent,
     ],
     imports: [
         NativeScriptModule,
@@ -69,7 +80,14 @@ class SinglePageModule {}
         MultiPageMain
     ],
     declarations: [
-        MultiPageMain
+        MultiPageMain,
+        FirstComponent,
+        SecondComponent,
+    ],
+    entryComponents: [
+        MultiPageMain,
+        FirstComponent,
+        SecondComponent,
     ],
     imports: [
         NativeScriptModule,

@@ -4,7 +4,6 @@ import {MultiPageMain} from "./multi-page-main.component";
 
 @Component({
     selector: "my-app",
-    directives: [SinglePageMain, MultiPageMain],
     template: `
     <multi-page-main></multi-page-main>
     <!--

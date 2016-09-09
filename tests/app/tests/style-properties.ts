@@ -5,8 +5,7 @@ import {Red, Lime} from "color/known-colors";
 import {NativeScriptRenderer, NativeScriptRootRenderer} from "nativescript-angular/renderer";
 import {NativeScriptAnimationDriver} from "nativescript-angular/animation-driver";
 import {device} from "platform";
-import { ViewEncapsulation } from "@angular/core";
-import {RenderComponentType} from '@angular/core/src/render/api';
+import { ViewEncapsulation, RenderComponentType } from "@angular/core";
 import {NgView} from "nativescript-angular/view-util";
 
 describe("Setting style properties", () => {
@@ -14,8 +13,7 @@ describe("Setting style properties", () => {
     let element: NgView = null;
 
     beforeEach(() => {
-        const animationDriver = new NativeScriptAnimationDriver()
-        const rootRenderer = new NativeScriptRootRenderer(null, device, animationDriver, null);
+        const rootRenderer = new NativeScriptRootRenderer(null, device, null);
         const componentType = new RenderComponentType(
             "id",
             "templateUrl",
@@ -24,7 +22,7 @@ describe("Setting style properties", () => {
             [],
             {}
         );
-        renderer = new NativeScriptRenderer(rootRenderer, componentType, animationDriver, null);
+        renderer = new NativeScriptRenderer(rootRenderer, componentType, null, null);
         element = <NgView><any>new TextField();
     });
 

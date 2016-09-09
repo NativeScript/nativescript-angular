@@ -1,10 +1,8 @@
 // >> router-content-components
 import {Component} from '@angular/core';
-import {NS_ROUTER_DIRECTIVES} from 'nativescript-angular/router';
 
 @Component({
     selector: "first",
-    directives: [NS_ROUTER_DIRECTIVES],
     template: `
     <StackLayout>
         <Label text="First component" class="title"></Label>
@@ -15,7 +13,6 @@ export class FirstComponent { }
 
 @Component({
     selector: "second",
-    directives: [NS_ROUTER_DIRECTIVES],
     template: `
     <StackLayout>
         <Label text="Second component" class="title"></Label>

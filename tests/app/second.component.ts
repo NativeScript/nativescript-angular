@@ -1,4 +1,4 @@
-import {ROUTER_DIRECTIVES, Router, ActivatedRoute } from '@angular/router';
+import {Router, ActivatedRoute } from '@angular/router';
 import {Component, Inject} from "@angular/core";
 import {Location} from "@angular/common";
 import {HOOKS_LOG, BaseComponent} from "./base.component";

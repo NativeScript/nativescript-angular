@@ -1,6 +1,4 @@
 import { Component } from "@angular/core";
-import { RouterConfig } from '@angular/router';
-import { NS_ROUTER_DIRECTIVES, nsProvideRouter} from "nativescript-angular/router"
 
 import {FirstComponent} from "./first/first.component";
 import {SecondComponent} from "./second/second.component";

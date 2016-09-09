@@ -55,8 +55,8 @@ function createState(url: string, isPageNav: boolean = false) {
 }
 
 function simulatePageNavigation(strategy: NSLocationStrategy, url: string) {
-    strategy._beginPageNavigation();
     strategy.pushState(null, null, url, null);
+    strategy._beginPageNavigation();
 }
 
 function simulatePageBack(strategy: NSLocationStrategy) {

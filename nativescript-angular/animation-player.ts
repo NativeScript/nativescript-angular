@@ -1,5 +1,4 @@
-import { AnimationKeyframe } from '@angular/core/src/animation/animation_keyframe';
-import { AnimationPlayer } from '@angular/core/src/animation/animation_player';
+import { AnimationPlayer, AnimationKeyframe  } from "./private_import_core";
 import { KeyframeAnimation, KeyframeAnimationInfo, KeyframeInfo, KeyframeDeclaration } from 'ui/animation/keyframe-animation';
 import { View } from "ui/core/view";
 import enums = require("ui/enums");
@@ -11,7 +10,8 @@ export class NativeScriptAnimationPlayer implements AnimationPlayer {
 
     public parentPlayer: AnimationPlayer;
 
-    private _subscriptions: Function[] = [];
+    private _startSubscriptions: Function[] = [];
+    private _doneSubscriptions: Function[] = [];
     private _finished = false;
     private _started = false;
     private animation: KeyframeAnimation;
@@ -72,20 +72,29 @@ export class NativeScriptAnimationPlayer implements AnimationPlayer {
     }
 
 
-    onDone(fn: Function): void { this._subscriptions.push(fn); }
+    onStart(fn: Function): void { this._startSubscriptions.push(fn); }
+    onDone(fn: Function): void { this._doneSubscriptions.push(fn); }
+
+    private _onStart() {
+        if (!this._started) {
+            this._started = true;
+            this._startSubscriptions.forEach(fn => fn());
+            this._startSubscriptions = [];
+        }
+    }
 
     private _onFinish() {
         if (!this._finished) {
             this._finished = true;
             this._started = false;
-            this._subscriptions.forEach(fn => fn());
-            this._subscriptions = [];
+            this._doneSubscriptions.forEach(fn => fn());
+            this._doneSubscriptions = [];
         }
     }
 
     play(): void {
         if (this.animation) {
-            this._started = true;
+            this._onStart();
             this.animation.play(this.target)
                 .then(() => { this._onFinish(); })
                 .catch((e) => { });

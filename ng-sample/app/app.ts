@@ -11,7 +11,7 @@ import { NgModule } from "@angular/core";
 import { Router } from "@angular/router";
 import { NativeScriptRouterModule } from "nativescript-angular/router";
 import { NativeScriptFormsModule } from "nativescript-angular/forms";
-import { HTTP_PROVIDERS } from "@angular/http";
+import { NativeScriptHttpModule } from "nativescript-angular/http";
 import { rendererTraceCategory, routerTraceCategory, listViewTraceCategory } from "nativescript-angular/trace";
 
 import trace = require("trace");
@@ -54,11 +54,13 @@ import { AnimationStatesTest } from "./examples/animation/animation-states-test"
     imports: [
         NativeScriptModule,
         NativeScriptFormsModule,
+        NativeScriptHttpModule,
         NativeScriptRouterModule,
     ],
     exports: [
         NativeScriptModule,
         NativeScriptFormsModule,
+        NativeScriptHttpModule,
         NativeScriptRouterModule,
     ],
     providers: []
@@ -69,6 +71,10 @@ function makeExampleModule(componentType) {
     let imports: any[] = [ExampleModule];
     if (componentType.routes) {
         imports.push(NativeScriptRouterModule.forRoot(componentType.routes))
+    }
+    let exports: any[] = [];
+    if (componentType.exports) {
+        exports = componentType.exports
     }
     let entries = [];
     if (componentType.entries) {
@@ -83,8 +89,12 @@ function makeExampleModule(componentType) {
         bootstrap: [componentType],
         imports: imports,
         entryComponents: entries,
-        declarations: entries,
+        declarations: [
+            ...entries,
+            ...exports,
+        ],
         providers: providers,
+        exports: exports,
     })
     class ExampleModuleForComponent {}
 
@@ -112,7 +122,7 @@ function makeExampleModule(componentType) {
 //platformNativeScriptDynamic().bootstrapModule(makeExampleModule(AnimationStatesTest));
 //platformNativeScriptDynamic().bootstrapModule(makeExampleModule(AnimationNgClassTest));
 //platformNativeScriptDynamic().bootstrapModule(makeExampleModule(AnimationKeyframesTest));
-//platformNativeScriptDynamic().bootstrapModule(makeExampleModule(AnimationEnterLeaveTest));
+platformNativeScriptDynamic().bootstrapModule(makeExampleModule(AnimationEnterLeaveTest));
 
 //Livesync test
 var cachedUrl: string;
@@ -134,5 +144,5 @@ onAfterLivesync.subscribe((moduleRef) => {
     }
 });
 
-platformNativeScriptDynamic().bootstrapModule(makeExampleModule(LivesyncApp));
+//platformNativeScriptDynamic().bootstrapModule(makeExampleModule(LivesyncApp));
 console.log("APP RESTART");

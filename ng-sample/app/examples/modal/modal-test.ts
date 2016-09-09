@@ -5,8 +5,6 @@ import {ModalContent} from "./modal-content";
 
 @Component({
     selector: 'modal-test',
-    directives: [ModalDialogHost],
-    providers: [ModalDialogService],
     template: `
     <GridLayout rows="*, auto" modal-dialog-host>
         <StackLayout verticalAlignment="top" margin="12">
@@ -30,6 +28,14 @@ export class ModalTest {
 
     constructor(private modal: ModalDialogService) {
     }
+
+    static entries = [
+        ModalContent
+    ];
+
+    static exports = [
+        ModalContent
+    ];
 
     public showModal(fullscreen: boolean) {
         var options: ModalDialogOptions = {

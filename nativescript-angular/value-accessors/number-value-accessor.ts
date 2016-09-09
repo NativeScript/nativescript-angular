@@ -1,10 +1,10 @@
-import {Directive, ElementRef, Renderer, Self, forwardRef, provide} from '@angular/core';
+import {Directive, ElementRef, Renderer, Self, forwardRef } from '@angular/core';
 import {NG_VALUE_ACCESSOR} from "@angular/forms";
-import {isBlank, isNumber} from '@angular/core/src/facade/lang';
+import {isBlank, isNumber} from "../lang-facade";
 import {BaseValueAccessor} from './base-value-accessor';
 import {Slider} from "ui/slider";
 
-const NUMBER_VALUE_ACCESSOR = provide(NG_VALUE_ACCESSOR, { useExisting: forwardRef(() => NumberValueAccessor), multi: true });
+const NUMBER_VALUE_ACCESSOR = {provide: NG_VALUE_ACCESSOR, useExisting: forwardRef(() => NumberValueAccessor), multi: true};
 
 /**
  * The accessor for setting a value and listening to changes that is used by the

@@ -1,6 +1,5 @@
 import { Component, OnInit, OnDestroy } from "@angular/core";
-import { RouterConfig, ActivatedRoute, ROUTER_DIRECTIVES } from '@angular/router';
-import { NS_ROUTER_DIRECTIVES, nsProvideRouter} from "nativescript-angular/router";
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
     selector: "first",
@@ -45,7 +44,6 @@ class SecondComponent implements OnInit, OnDestroy {
 
 @Component({
     selector: 'navigation-test',
-    directives: [ROUTER_DIRECTIVES, NS_ROUTER_DIRECTIVES],
     styleUrls: ["examples/router/styles.css"],
     template: `
         <StackLayout>
@@ -60,10 +58,15 @@ class SecondComponent implements OnInit, OnDestroy {
     `
 })
 export class RouterOutletAppComponent {
-    static routes: RouterConfig = [
-        { path: "", redirectTo: "/first", terminal: true },
+    static routes = [
+        { path: "", redirectTo: "/first", terminal: true, pathMatch: "full" },
         { path: "first", component: FirstComponent },
         { path: "second/:id", component: SecondComponent },
+    ];
+
+    static entries = [
+        FirstComponent,
+        SecondComponent,
     ];
 }
 

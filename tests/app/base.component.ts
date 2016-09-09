@@ -1,4 +1,3 @@
-import {ROUTER_DIRECTIVES, Router } from '@angular/router';
 import {Component, OpaqueToken, OnInit, OnDestroy} from "@angular/core";
 export const HOOKS_LOG = new OpaqueToken("Hooks log");
 import {BehaviorSubject} from "rxjs";

@@ -1,6 +1,5 @@
 import {Injectable} from "@angular/core";
-import {Router, UrlTree} from "@angular/router";
-import {NavigationExtras} from "@angular/router/src/router";
+import {Router, UrlTree, NavigationExtras} from "@angular/router";
 import {NSLocationStrategy, NavigationOptions} from "./ns-location-strategy";
 import {Frame} from "ui/frame";
 

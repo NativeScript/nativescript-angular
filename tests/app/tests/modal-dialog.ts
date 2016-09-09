@@ -4,7 +4,7 @@ import {TestApp} from "./test-app";
 import {Component, ComponentRef} from "@angular/core";
 import {Page} from "ui/page";
 import {topmost} from "ui/frame";
-import {ModalDialogHost, ModalDialogOptions, ModalDialogParams, ModalDialogService} from "nativescript-angular/directives/dialogs";
+import {ModalDialogParams, ModalDialogService} from "nativescript-angular/directives/dialogs";
 
 import {device, platformNames} from "platform";
 const CLOSE_WAIT = (device.os === platformNames.ios) ? 1000 : 0;
@@ -24,7 +24,6 @@ export class ModalComponent {
 
 @Component({
     selector: "fail-comp",
-    providers: [ModalDialogService],
     template: `<Label text="This app is doomed"></Label>`
 
 })
@@ -35,8 +34,6 @@ export class FailComponent {
 
 @Component({
     selector: "sucess-comp",
-    directives: [ModalDialogHost],
-    providers: [ModalDialogService],
     template: `
     <GridLayout modal-dialog-host margin="20">
         <Label text="Modal dialogs"></Label>
@@ -47,11 +44,11 @@ export class SuccessComponent {
     }
 }
 
-describe.skip('modal-dialog', () => {
+describe('modal-dialog', () => {
     let testApp: TestApp = null;
 
     before((done) => {
-        return TestApp.create().then((app) => {
+        return TestApp.create([], [ModalComponent, FailComponent, SuccessComponent]).then((app) => {
             testApp = app;
 
             // HACK: Wait for the navigations from the test runner app
@@ -79,9 +76,7 @@ describe.skip('modal-dialog', () => {
             .then((ref) => {
                 var service = <ModalDialogService>ref.instance.service;
                 assert.throws(() => service.showModal(ModalComponent, {}), "No viewContainerRef: Make sure you have the modal-dialog-host directive inside your component.");
-                done();
-            })
-            .catch(done)
+            }).then(() => done(), err => done(err));
     });
 
     it("showModal succeeds when there is modal-dialog-host", (done) => {
@@ -90,8 +85,7 @@ describe.skip('modal-dialog', () => {
                 var service = <ModalDialogService>ref.instance.service;
                 return service.showModal(ModalComponent, {});
             })
-            .then((res) => setTimeout(done, CLOSE_WAIT)) // wait for the dialog to close in IOS
-            .catch(done)
+            .then((res) => setTimeout(done, CLOSE_WAIT), err => done(err)) // wait for the dialog to close in IOS
     });
 
 
@@ -105,7 +99,6 @@ describe.skip('modal-dialog', () => {
             .then((res) => {
                 assert.strictEqual(res, context);
                 setTimeout(done, CLOSE_WAIT) // wait for the dialog to close in IOS
-            })
-            .catch(done);
+            }, err => done(err));
     })
 });

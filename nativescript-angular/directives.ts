@@ -1,11 +1,9 @@
-import {Type} from '@angular/core/src/facade/lang';
 import {ListViewComponent, SetupItemViewArgs} from './directives/list-view-comp';
 import {TabViewDirective, TabViewItemDirective} from './directives/tab-view';
 import {ActionBarComponent, ActionBarScope, ActionItemDirective, NavigationButtonDirective} from './directives/action-bar';
 import {AndroidFilterComponent, IosFilterComponent} from './directives/platform-filters';
 
-
-export const NS_DIRECTIVES: Type[] = [
+export const NS_DIRECTIVES = [
     ListViewComponent,
     TabViewDirective,
     TabViewItemDirective,
@@ -14,7 +12,7 @@ export const NS_DIRECTIVES: Type[] = [
     ActionItemDirective,
     NavigationButtonDirective,
     AndroidFilterComponent,
-    IosFilterComponent
+    IosFilterComponent,
 ];
 
 export {ListViewComponent, SetupItemViewArgs} from './directives/list-view-comp';

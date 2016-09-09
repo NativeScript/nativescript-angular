@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { LocationStrategy } from '@angular/common';
 import { routerLog } from "../trace";
 import { Frame, NavigationTransition } from "ui/frame";
-import {isPresent} from '@angular/core/src/facade/lang';
+import { isPresent } from "../lang-facade";
 
 export interface NavigationOptions {
     clearHistory?: boolean;
@@ -30,7 +30,6 @@ export class NSLocationStrategy extends LocationStrategy {
     private popStateCallbacks = new Array<(_: any) => any>();
 
     private _isPageNavigationgBack = false;
-    private _isPageNavigatingForward: boolean = false;
     private _currentNavigationOptions: NavigationOptions;
 
     constructor(private frame: Frame) {
@@ -50,25 +49,13 @@ export class NSLocationStrategy extends LocationStrategy {
         return internal;
     }
 
-
     pushState(state: any, title: string, url: string, queryParams: string): void {
-        routerLog(`NSLocationStrategy.pushState state: ${state}, title: ${title}, url: ${url}, queryParams: ${queryParams}, isPageNavigation: ${this._isPageNavigatingForward}`);
+        routerLog(`NSLocationStrategy.pushState state: ${state}, title: ${title}, url: ${url}, queryParams: ${queryParams}`);
         this.pushStateInternal(state, title, url, queryParams);
     }
 
     pushStateInternal(state: any, title: string, url: string, queryParams: string): void {
-        let isNewPage = this._isPageNavigatingForward || this.states.length === 0;
-
-        const navOptions = this._currentNavigationOptions || defaultNavOptions;
-
-        if (navOptions.clearHistory) {
-            routerLog("NSLocationStrategy.pushStateInternal clearing states history");
-            this.states.length = 0;
-        }
-
-        this._currentNavigationOptions = undefined;
-
-        this._isPageNavigatingForward = false;
+        let isNewPage = this.states.length === 0;
         this.states.push({
             state: state,
             title: title,
@@ -179,13 +166,20 @@ export class NSLocationStrategy extends LocationStrategy {
     }
 
     public _beginPageNavigation(): NavigationOptions {
-        routerLog("NSLocationStrategy.navigateToNewPage()");
-        if (this._isPageNavigatingForward) {
-            throw new Error("Calling navigateToNewPage while already navigating to new page.");
+        routerLog("NSLocationStrategy._beginPageNavigation()");
+        const lastState = this.peekState();
+        if (lastState) {
+            lastState.isPageNavigation = true;
         }
 
-        this._isPageNavigatingForward = true;
-        return this._currentNavigationOptions || defaultNavOptions;
+        const navOptions = this._currentNavigationOptions || defaultNavOptions;
+        if (navOptions.clearHistory) {
+            routerLog("NSLocationStrategy._beginPageNavigation clearing states history");
+            this.states = [lastState];
+        }
+
+        this._currentNavigationOptions = undefined;
+        return navOptions;
     }
 
     public _setNavigationOptions(options: NavigationOptions) {
@@ -194,6 +188,7 @@ export class NSLocationStrategy extends LocationStrategy {
             animated: isPresent(options.animated) ? options.animated : true,
             transition: options.transition
         };
+        routerLog(`NSLocationStrategy._setNavigationOptions(${JSON.stringify(this._currentNavigationOptions)})`);
     }
 
     public _getSatates(): Array<LocationState> {
