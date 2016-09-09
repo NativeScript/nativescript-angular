@@ -1,6 +1,4 @@
 import { Component } from "@angular/core";
-import { RouterConfig } from '@angular/router';
-import { NS_ROUTER_DIRECTIVES, nsProvideRouter } from "nativescript-angular/router";
 
 import { FirstComponentActionBar } from "../action-bar/action-bar-first.component";
 import { SecondComponentActionBar } from "../action-bar/action-bar-second.component";
@@ -26,7 +24,6 @@ import { NavigationInfoComponent } from "../navigation-options/navigation-info.c
 
 @Component({
     selector: "main",
-    directives: [NS_ROUTER_DIRECTIVES],
     template: `
     <StackLayout>
         <Label text="Main Component" class="title"></Label>
@@ -63,13 +60,12 @@ export class MainComponent { }
 
 @Component({
     selector: 'navigation-main',
-    directives: [NS_ROUTER_DIRECTIVES],
     template: `<page-router-outlet></page-router-outlet>`
 })
 export class NavigationMainPageRouter { }
 
 
-export const routes: RouterConfig = [
+export const routes = [
     { path: '', component: MainComponent },
     { path: 'template', component: AppComponent },
     { path: 'router', component: NavigationTestRouter, children: NavigationSubRoutes },
@@ -102,5 +98,3 @@ export const routableComponents = [
     ModalTest, ModalTestWithPushStrategy,
     NavigationOptionsComponent, NavigationInfoComponent,
 ]
-
-export var MainRouterProviders = nsProvideRouter(routes, { enableTracing: false });

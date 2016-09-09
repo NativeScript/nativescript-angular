@@ -15,7 +15,6 @@ export class CustomTemplate {
 
 @Component({
     selector: 'list-test',
-    directives: [CustomTemplate],
     template: `
         <GridLayout rows="*" automationText="mainView"> 
             <ListView [items]="myItems">

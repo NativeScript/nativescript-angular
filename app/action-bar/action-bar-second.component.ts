@@ -1,9 +1,7 @@
 import {Component} from '@angular/core';
-import {NestedComponent} from "./action-bar-nested.component";
 
 @Component({
     selector: "second-action-bar",
-    directives: [NestedComponent],
     template: `
     <ActionBar title="Title 2" automationText="title">
         <NavigationButton text="First" android.systemIcon="ic_menu_back" automationText="back"></NavigationButton>

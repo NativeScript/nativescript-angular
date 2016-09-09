@@ -1,9 +1,7 @@
 import {Component} from '@angular/core';
-import {NS_ROUTER_DIRECTIVES} from "nativescript-angular/router";
 
 @Component({
     selector: "first-action-bar",
-    directives: [NS_ROUTER_DIRECTIVES],
     template: `
     <ActionBar title="Title 1" automationText="title"> 
         <ActionItem *ngIf="show" text="action" (tap)="onTap()" [nsRouterLink]="['/second']" 

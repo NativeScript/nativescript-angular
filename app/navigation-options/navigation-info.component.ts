@@ -1,12 +1,10 @@
 import {Component} from '@angular/core';
-import {NS_ROUTER_DIRECTIVES, RouterExtensions} from "nativescript-angular/router";
 import {NSLocationStrategy} from "nativescript-angular/router/ns-location-strategy";
 import {Frame} from "ui/frame";
 
 
 @Component({
     selector: 'nav-info',
-    directives: [NS_ROUTER_DIRECTIVES],
     template: `
     <StackLayout>
         <Label automationText="lbFrameStack" [text]="'frameStack: ' + frameStack" ></Label>

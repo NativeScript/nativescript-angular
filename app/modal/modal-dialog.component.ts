@@ -1,6 +1,6 @@
 import { Component, ChangeDetectionStrategy } from '@angular/core';
 import * as dialogs from "ui/dialogs";
-import { ModalDialogService, ModalDialogOptions, ModalDialogHost, ModalDialogParams } from "nativescript-angular/directives/dialogs";
+import { ModalDialogService, ModalDialogOptions, ModalDialogParams } from "nativescript-angular/directives/dialogs";
 
 
 @Component({
@@ -15,7 +15,7 @@ import { ModalDialogService, ModalDialogOptions, ModalDialogHost, ModalDialogPar
     </StackLayout>
     `
 })
-class ModalContent {
+export class ModalContent {
     public prompt: string;
     constructor(private params: ModalDialogParams) {
         this.prompt = params.context.message;
@@ -37,7 +37,6 @@ const TEMPLATE = `
 
 @Component({
     selector: 'modal-test',
-    directives: [ModalDialogHost],
     providers: [ModalDialogService],
     template: TEMPLATE
 })
@@ -66,8 +65,6 @@ export class ModalTest {
 
 @Component({
     selector: 'modal-test-on-push',
-    directives: [ModalDialogHost],
-    providers: [ModalDialogService],
     changeDetection: ChangeDetectionStrategy.OnPush,
     template: TEMPLATE
 })
