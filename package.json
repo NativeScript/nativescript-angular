@@ -24,7 +24,8 @@
     "@angular/platform-browser-dynamic": "2.0.0-rc.6",
     "@angular/platform-server": "2.0.0-rc.6",
     "@angular/forms": "2.0.0-rc.6",
-    "@angular/router": "3.0.0-rc.2"
+    "@angular/router": "3.0.0-rc.2",
+    "zone.js": "0.6.17"
   },
   "devDependencies": {
     "babel-traverse": "6.8.0",
