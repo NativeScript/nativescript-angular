@@ -24,6 +24,7 @@ export class ModalComponent {
 
 @Component({
     selector: "fail-comp",
+    providers: [ModalDialogService],
     template: `<Label text="This app is doomed"></Label>`
 
 })
@@ -34,6 +35,7 @@ export class FailComponent {
 
 @Component({
     selector: "sucess-comp",
+    providers: [ModalDialogService],
     template: `
     <GridLayout modal-dialog-host margin="20">
         <Label text="Modal dialogs"></Label>

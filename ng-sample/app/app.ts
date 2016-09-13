@@ -45,9 +45,6 @@ import { AnimationKeyframesTest } from "./examples/animation/animation-keyframes
 import { AnimationNgClassTest } from "./examples/animation/animation-ngclass-test";
 import { AnimationStatesTest } from "./examples/animation/animation-states-test";
 
-//nativeScriptBootstrap(ActionBarTest, [NS_ROUTER_PROVIDERS_DEPRECATED], { startPageActionBarHidden: false });
-//nativeScriptBootstrap(ActionBarTest, [NS_ROUTER_PROVIDERS_DEPRECATED]);
-
 @NgModule({
     declarations: [
     ],
@@ -122,7 +119,7 @@ function makeExampleModule(componentType) {
 //platformNativeScriptDynamic().bootstrapModule(makeExampleModule(AnimationStatesTest));
 //platformNativeScriptDynamic().bootstrapModule(makeExampleModule(AnimationNgClassTest));
 //platformNativeScriptDynamic().bootstrapModule(makeExampleModule(AnimationKeyframesTest));
-platformNativeScriptDynamic().bootstrapModule(makeExampleModule(AnimationEnterLeaveTest));
+//platformNativeScriptDynamic().bootstrapModule(makeExampleModule(AnimationEnterLeaveTest));
 
 //Livesync test
 var cachedUrl: string;
@@ -144,5 +141,5 @@ onAfterLivesync.subscribe((moduleRef) => {
     }
 });
 
-//platformNativeScriptDynamic().bootstrapModule(makeExampleModule(LivesyncApp));
+platformNativeScriptDynamic().bootstrapModule(makeExampleModule(LivesyncApp));
 console.log("APP RESTART");
