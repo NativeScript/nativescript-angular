@@ -98,7 +98,7 @@ function makeExampleModule(componentType) {
     return ExampleModuleForComponent;
 }
 
-//platformNativeScriptDynamic().bootstrapModule(makeExampleModule(RendererTest));
+platformNativeScriptDynamic().bootstrapModule(makeExampleModule(RendererTest));
 //platformNativeScriptDynamic().bootstrapModule(makeExampleModule(TabViewTest));
 //platformNativeScriptDynamic().bootstrapModule(makeExampleModule(Benchmark));
 //platformNativeScriptDynamic().bootstrapModule(makeExampleModule(ListTest));
@@ -141,5 +141,5 @@ onAfterLivesync.subscribe((moduleRef) => {
     }
 });
 
-platformNativeScriptDynamic().bootstrapModule(makeExampleModule(LivesyncApp));
+//platformNativeScriptDynamic().bootstrapModule(makeExampleModule(LivesyncApp));
 console.log("APP RESTART");
