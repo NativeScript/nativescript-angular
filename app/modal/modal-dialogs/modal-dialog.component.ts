@@ -2,7 +2,6 @@ import { Component, ChangeDetectionStrategy } from '@angular/core';
 import * as dialogs from "ui/dialogs";
 import { ModalDialogService, ModalDialogOptions, ModalDialogParams } from "nativescript-angular/directives/dialogs";
 
-
 @Component({
     selector: 'modal-content',
     template: `

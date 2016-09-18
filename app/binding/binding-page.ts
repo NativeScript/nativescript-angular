@@ -4,16 +4,16 @@ import { Component } from "@angular/core";
     selector: "binding",
     template: `
     <StackLayout>
-        <TextField hint="oneWayDataBinding" automationText="tfOneWayBinding" keyboardType="email" [text]="oneWayDataBinding" autocorrect="false" autocapitalizationType="none"></TextField>
-        <TextField hint="twoWayDataBindingBanana" automationText="tfTwoWayBinding" keyboardType="email" [(ngModel)]="twoWayDataBinding" autocorrect="false" autocapitalizationType="none"></TextField>
-        <TextField hint="" automationText="tfCurlyBracket" keyboardType="email" text="{{ curlyBracket }}" autocorrect="false" autocapitalizationType="none"></TextField>
-        <Label automationText="lbCurlyBracketBinding" text='Label with curlyBaracket binding: {{ twoWayDataBinding }}'></Label>
-        <Label automationText="lbDate" [text]='completedDate | date:"fullDate"' ></Label>
-        <StackLayout orientation="horizontal">
-            <Button (tap)="changeValues()" automationText="changeValues" text="update from code" ></Button>
-            <Button (tap)="getValues()" automationText="getValues" text="get" width="80" height="40"></Button>
+        <TextField hint="oneWayDataBinding" keyboardType="email" [text]="oneWayDataBinding" autocorrect="false" autocapitalizationType="none"></TextField>
+        <TextField hint="twoWayDataBindingBanana" keyboardType="email" [(ngModel)]="twoWayDataBinding" autocorrect="false" autocapitalizationType="none"></TextField>
+        <TextField hint="" keyboardType="email" text="{{ curlyBracket }}" autocorrect="false" autocapitalizationType="none"></TextField>
+        <Label text='Label with curlyBaracket binding: {{ twoWayDataBinding }}'></Label>
+        <Label [text]='completedDate | date:"fullDate"' ></Label>
+        <StackLayout orientation="horizontal" automationText="getValues">
+            <Button (tap)="changeValues()" text="update from code" ></Button>
+            <Button (tap)="getValues()" text="get" width="80" height="40"></Button>
         </StackLayout>
-        <TextView [text]="results" automationText="tvResults" textWrap="true"></TextView>
+        <TextView [text]="results" textWrap="true"></TextView>
     </StackLayout>
     `
 })

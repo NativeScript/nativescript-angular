@@ -4,20 +4,16 @@ import {Component} from '@angular/core';
     selector: "first-action-bar",
     template: `
     <ActionBar title="Title 1" automationText="title"> 
-        <ActionItem *ngIf="show" text="action" (tap)="onTap()" [nsRouterLink]="['/second']" 
-            automationText="action"></ActionItem>
+        <ActionItem *ngIf="show" text="action" (tap)="onTap()" [nsRouterLink]="['/second']"></ActionItem>
         <ActionItem (tap)="onShare()" ios.systemIcon="9" ios.position="left" 
-            android.systemIcon="ic_menu_share_holo_light" android.position="actionBar"
-            automationText="share"></ActionItem>
+            android.systemIcon="ic_menu_share_holo_light" android.position="actionBar"></ActionItem>
         <ActionItem text="delete" (tap)="onDelete()"
-            ios.systemIcon="16" ios.position="right"
-            android.position="popup" 
-            automationText="delete"></ActionItem>
+            ios.systemIcon="16" ios.position="right" android.position="popup"></ActionItem>
     </ActionBar>
 
     <StackLayout verticalAlignment="center">
-        <Label [text]="messageShare" automationText="lblShare"></Label>
-        <Label [text]="messageDelete" automationText="lblDelete"></Label>
+        <Label [text]="messageShare"></Label>
+        <Label [text]="messageDelete"></Label>
     </StackLayout>
     `,
 })

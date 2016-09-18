@@ -1,100 +1,44 @@
 import { Component } from "@angular/core";
-
-import { FirstComponentActionBar } from "../action-bar/action-bar-first.component";
-import { SecondComponentActionBar } from "../action-bar/action-bar-second.component";
-
-import { AppComponent } from "../template/app.component";
-
-import { FirstComponent } from "../components/first.component";
-import { SecondComponent } from "../components/second.component";
-import { NavigationTestRouter, NavigationSubRoutes } from "../router/router-outlet";
-
-import { BindingComponent } from "../binding/binding-page";
-
-import { ListViewComponent } from "../listView/commonTemplate/list-view-page";
-import { ListViewControlComponent } from "../listView/customTemplate/list-view-item-template";
-import { ListViewAsyncPipeComponent } from "../listView/asyncPipeTemplate/async-pipe-template";
-import { ListViewMainPageComponent } from "../listView/listViewMainPage/list-view-main-page";
-
-import { ModalTest, ModalTestWithPushStrategy } from "../modal/modal-dialog.component";
-
-import { NavigationOptionsComponent } from "../navigation-options/navigation-options.component";
-import { NavigationInfoComponent } from "../navigation-options/navigation-info.component";
-
+import { routes } from "../app.routes";
+import * as platform from "platform";
 
 @Component({
     selector: "main",
     template: `
-    <StackLayout>
-        <Label text="Main Component" class="title"></Label>
-
-        <StackLayout orientation="horizontal" horizontalAlignment="center">
-            <Button text="Template" [nsRouterLink]="['/template']"></Button>
-            <Button text="Router" [nsRouterLink]="['/router']"></Button>
-        </StackLayout>
-
-        <StackLayout orientation="horizontal" horizontalAlignment="center">
-            <Button text="First" [nsRouterLink]="['/first']"></Button>      
-            <Button text="Second" [nsRouterLink]="['/second']"></Button>
-        </StackLayout>
-
-        <StackLayout orientation="horizontal" horizontalAlignment="center">
-            <Button text="ActionBar1" [nsRouterLink]="['/first-action-bar']"></Button>
-            <Button text="ActionBar2" [nsRouterLink]="['/second-action-bar']"></Button>
-        </StackLayout>
-
-        <Button text="Binding" [nsRouterLink]="['/binding']"></Button>     
-
-        <Button text="ListViewExamples" [nsRouterLink]="['/listView']"></Button>  
-        
-        <StackLayout orientation="horizontal" horizontalAlignment="center">
-            <Button text="modal" [nsRouterLink]="['/modal']"></Button>
-            <Button text="modal(onPush)" [nsRouterLink]="['/modal-on-push']"></Button> 
-        </StackLayout> 
-
-        <Button text="nav-options" [nsRouterLink]="['/nav-options']"></Button>
-    </StackLayout>
+    <WrapLayout id='mainView' [orientation]="orientation">
+        <Button *ngFor="let route of routers" [text]="route.data.title" [nsRouterLink]="route.path" [color]="route.data.isNavigatable == true ? 'red':'blue'" height="40"></Button>  
+    </WrapLayout>
     `,
 })
-export class MainComponent { }
+export class MainComponent {
+    private _routers = [];
+    private _routes = require("../app.routes").routes
+    private _orientation: string = "vertical";
+
+    constructor() {
+        let routs = this._routes.filter((item) => {
+            let isNavigatable = item.data.isNavigatable != undefined && item.data.isNavigatable == true && item.path != '';
+            console.log("Page route:" + item.path + "; page name: " + item.data.title + "; isNavigatable: " + isNavigatable);
+            return isNavigatable;
+        });
+
+        this._routers = routs;
+        if (platform.isAndroid) {
+            this._orientation = "horizontal";
+        }
+    }
+
+    get routers() {
+        return this._routers;
+    }
+
+    get orientation() {
+        return this._orientation;
+    }
+}
 
 @Component({
     selector: 'navigation-main',
     template: `<page-router-outlet></page-router-outlet>`
 })
 export class NavigationMainPageRouter { }
-
-
-export const routes = [
-    { path: '', component: MainComponent },
-    { path: 'template', component: AppComponent },
-    { path: 'router', component: NavigationTestRouter, children: NavigationSubRoutes },
-    { path: 'first', component: FirstComponent },
-    { path: 'second', component: SecondComponent },
-
-    { path: 'first-action-bar', component: FirstComponentActionBar },
-    { path: 'second-action-bar', component: SecondComponentActionBar },
-    { path: 'binding', component: BindingComponent },
-
-    { path: 'listView', component: ListViewMainPageComponent },
-    { path: 'listView/commonTemplate', component: ListViewComponent },
-    { path: 'listView/customTemplate', component: ListViewControlComponent },
-    { path: 'listView/asyncPipeTemplate', component: ListViewAsyncPipeComponent },
-
-    { path: 'modal', component: ModalTest },
-    { path: 'modal-on-push', component: ModalTestWithPushStrategy },
-
-    { path: 'nav-options', component: NavigationOptionsComponent },
-    { path: 'nav-info', component: NavigationInfoComponent }
-];
-
-export const routableComponents = [
-    AppComponent, MainComponent, NavigationTestRouter,
-    FirstComponent, SecondComponent,
-    FirstComponentActionBar, SecondComponentActionBar,
-    BindingComponent,
-    ListViewMainPageComponent, ListViewComponent,
-    ListViewControlComponent, ListViewAsyncPipeComponent,
-    ModalTest, ModalTestWithPushStrategy,
-    NavigationOptionsComponent, NavigationInfoComponent,
-]

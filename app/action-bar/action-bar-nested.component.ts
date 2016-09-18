@@ -5,13 +5,13 @@ import {Component} from '@angular/core';
     template: `
     <ActionBarExtension>
         <ActionItem *ngIf="show" (tap)="onTap()">
-            <Button text="CUSTOM" automationText="btnCustom"></Button>
+            <Button text="CUSTOM"></Button>
         </ActionItem>
     </ActionBarExtension>
 
     <StackLayout orientation="horizontal" horizontalAlignment="center">
-        <Button [text]="show ? 'hide' : 'show'" (tap)="show = !show" automationText="btnShowHide"></Button>
-        <Label [text]="message" automationText="lblCustom"></Label>
+        <Button [text]="show ? 'hide' : 'show'" (tap)="show = !show"></Button>
+        <Label [text]="message"></Label>
     </StackLayout>
     `,
 })
