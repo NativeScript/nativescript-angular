@@ -28,6 +28,10 @@ export class RouterExtensions {
         this.locationStrategy.back();
     }
 
+    public canGoBack() {
+        return this.locationStrategy.canGoBack();
+    }
+
     public backToPreviousPage() {
         this.frame.goBack();
     }

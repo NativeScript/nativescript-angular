@@ -113,6 +113,10 @@ export class NSLocationStrategy extends LocationStrategy {
 
     }
 
+    canGoBack() {
+        return this.states.length > 1;
+    }
+
     onPopState(fn: (_: any) => any): void {
         routerLog("NSLocationStrategy.onPopState");
         this.popStateCallbacks.push(fn);
