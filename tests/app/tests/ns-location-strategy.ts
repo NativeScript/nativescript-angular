@@ -80,6 +80,20 @@ describe('NSLocationStrategy', () => {
         assert.equal(strategy.path(), "/test");
     });
 
+    it("canGoBack() return false initially", () => {
+        const strategy = initStrategy();
+
+        assert.isFalse(strategy.canGoBack(), "canGoBack() should reutrn false if there are no navigations");
+    });
+
+    it("canGoBack() return true after navigation", () => {
+        const strategy = initStrategy();
+
+        strategy.pushState(null, "test", "/test", null);
+
+        assert.isTrue(strategy.canGoBack(), "canGoBack() should reutrn true after navigation");
+    });
+
     it("back() calls onPopState", () => {
         const strategy = initStrategy();
         let popCount = 0;
