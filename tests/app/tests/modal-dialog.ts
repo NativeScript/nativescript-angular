@@ -1,7 +1,7 @@
 //make sure you import mocha-config before @angular/core
 import {assert} from "./test-config";
 import {TestApp} from "./test-app";
-import {Component, ComponentRef} from "@angular/core";
+import {Component, ViewContainerRef} from "@angular/core";
 import {Page} from "ui/page";
 import {topmost} from "ui/frame";
 import {ModalDialogParams, ModalDialogService} from "nativescript-angular/directives/dialogs";
@@ -16,7 +16,7 @@ const CLOSE_WAIT = (device.os === platformNames.ios) ? 1000 : 0;
 export class ModalComponent {
     constructor(public params: ModalDialogParams, private page: Page) {
         page.on("shownModally", () => {
-            var result = this.params.context;
+            const result = this.params.context;
             this.params.closeCallback(result);
         });
     }
@@ -42,7 +42,7 @@ export class FailComponent {
     </GridLayout>`
 })
 export class SuccessComponent {
-    constructor(public service: ModalDialogService) {
+    constructor(public service: ModalDialogService, public vcRef: ViewContainerRef) {
     }
 }
 
@@ -56,7 +56,7 @@ describe('modal-dialog', () => {
             // HACK: Wait for the navigations from the test runner app
             // Remove the setTimeout when test runner start tests on page.navigatedTo
             setTimeout(done, 1000);
-        })
+        });
     });
 
     after(() => {
@@ -64,7 +64,7 @@ describe('modal-dialog', () => {
     });
 
     afterEach(() => {
-        var page = topmost().currentPage;
+        const page = topmost().currentPage;
         if (page && page.modal) {
             console.log("Warning: closing a leftover modal page!");
             page.modal.closeModal();
@@ -73,10 +73,10 @@ describe('modal-dialog', () => {
     });
 
 
-    it("showModal throws when there is no modal-dialog-host", (done) => {
+    it("showModal throws when there is no modal-dialog-host and no viewContainer provided", (done) => {
         testApp.loadComponent(FailComponent)
             .then((ref) => {
-                var service = <ModalDialogService>ref.instance.service;
+                const service = <ModalDialogService>ref.instance.service;
                 assert.throws(() => service.showModal(ModalComponent, {}), "No viewContainerRef: Make sure you have the modal-dialog-host directive inside your component.");
             }).then(() => done(), err => done(err));
     });
@@ -84,23 +84,32 @@ describe('modal-dialog', () => {
     it("showModal succeeds when there is modal-dialog-host", (done) => {
         testApp.loadComponent(SuccessComponent)
             .then((ref) => {
-                var service = <ModalDialogService>ref.instance.service;
+                const service = <ModalDialogService>ref.instance.service;
                 return service.showModal(ModalComponent, {});
             })
-            .then((res) => setTimeout(done, CLOSE_WAIT), err => done(err)) // wait for the dialog to close in IOS
+            .then((res) => setTimeout(done, CLOSE_WAIT), err => done(err)); // wait for the dialog to close in IOS
+    });
+
+    it("showModal succeeds when there is viewContainer provided", (done) => {
+        testApp.loadComponent(SuccessComponent)
+            .then((ref) => {
+                const service = <ModalDialogService>ref.instance.service;
+                return service.showModal(ModalComponent, {});
+            })
+            .then((res) => setTimeout(done, CLOSE_WAIT), err => done(err)); // wait for the dialog to close in IOS
     });
 
 
     it("showModal passes modal params and gets result when resolved", (done) => {
-        var context = { property: "my context" };
+        const context = { property: "my context" };
         testApp.loadComponent(SuccessComponent)
             .then((ref) => {
-                var service = <ModalDialogService>ref.instance.service;
+                const service = <ModalDialogService>ref.instance.service;
                 return service.showModal(ModalComponent, { context: context });
             })
             .then((res) => {
                 assert.strictEqual(res, context);
-                setTimeout(done, CLOSE_WAIT) // wait for the dialog to close in IOS
+                setTimeout(done, CLOSE_WAIT); // wait for the dialog to close in IOS
             }, err => done(err));
-    })
+    });
 });

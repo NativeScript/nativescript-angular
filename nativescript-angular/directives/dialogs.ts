@@ -1,14 +1,15 @@
 import {
     ReflectiveInjector, ComponentFactoryResolver, ViewContainerRef,
-    Injector, Type, Injectable, ComponentRef, Directive
+    Type, Injectable, ComponentRef, Directive
 } from '@angular/core';
-import {Page} from 'ui/page';
-import {View} from 'ui/core/view';
-import {DetachedLoader} from '../common/detached-loader';
+import { Page } from 'ui/page';
+import { View } from 'ui/core/view';
+import { DetachedLoader } from '../common/detached-loader';
 
 export interface ModalDialogOptions {
     context?: any;
     fullscreen?: boolean;
+    viewContainerRef?: ViewContainerRef;
 }
 
 export class ModalDialogParams {
@@ -22,52 +23,61 @@ export class ModalDialogParams {
 export class ModalDialogService {
     private containerRef: ViewContainerRef;
 
-    constructor(
-        private page: Page,
-        private resolver: ComponentFactoryResolver) {
-    }
-
     public registerViewContainerRef(ref: ViewContainerRef) {
         this.containerRef = ref;
     }
 
     public showModal(type: Type<any>, options: ModalDialogOptions): Promise<any> {
-        if (!this.containerRef) {
-            throw new Error("No viewContainerRef: Make sure you have the modal-dialog-host directive inside your component.");
+        let viewContainerRef = options.viewContainerRef || this.containerRef;
+
+        if (!viewContainerRef) {
+            throw new Error("No viewContainerRef: Make sure you pass viewContainerRef in ModalDialogOptions.");
         }
+
+        const parentPage: Page = viewContainerRef.injector.get(Page);
+        const resolver: ComponentFactoryResolver = viewContainerRef.injector.get(ComponentFactoryResolver);
+
         return new Promise((resolve, reject) => {
-            setTimeout(() => this.showDialog(type, options, resolve), 10);
+            setTimeout(() => ModalDialogService.showDialog(type, options, resolve, viewContainerRef, resolver, parentPage), 10);
         });
     }
 
-    private showDialog(type: Type<any>, options: ModalDialogOptions, doneCallback): void {
+    private static showDialog(
+        type: Type<any>,
+        options: ModalDialogOptions,
+        doneCallback,
+        containerRef: ViewContainerRef,
+        resolver: ComponentFactoryResolver,
+        parentPage: Page): void {
+
         const page = new Page();
 
-        var detachedLoaderRef: ComponentRef<DetachedLoader>;
+        let detachedLoaderRef: ComponentRef<DetachedLoader>;
         const closeCallback = (...args) => {
             doneCallback.apply(undefined, args);
             page.closeModal();
             detachedLoaderRef.destroy();
-        }
+        };
+
         const modalParams = new ModalDialogParams(options.context, closeCallback);
 
         const providers = ReflectiveInjector.resolve([
-            {provide: Page, useValue: page },
-            {provide: ModalDialogParams, useValue: modalParams },
+            { provide: Page, useValue: page },
+            { provide: ModalDialogParams, useValue: modalParams },
         ]);
 
-        const childInjector = ReflectiveInjector.fromResolvedProviders(providers, this.containerRef.parentInjector);
-        const detachedFactory = this.resolver.resolveComponentFactory(DetachedLoader);
-        detachedLoaderRef = this.containerRef.createComponent(detachedFactory, -1, childInjector, null)
+        const childInjector = ReflectiveInjector.fromResolvedProviders(providers, containerRef.parentInjector);
+        const detachedFactory = resolver.resolveComponentFactory(DetachedLoader);
+        detachedLoaderRef = containerRef.createComponent(detachedFactory, -1, childInjector, null);
         detachedLoaderRef.instance.loadComponent(type).then((compRef) => {
             const componentView = <View>compRef.location.nativeElement;
-            
+
             if (componentView.parent) {
                 (<any>componentView.parent).removeChild(componentView);
             }
-            
+
             page.content = componentView;
-            this.page.showModal(page, options.context, closeCallback, options.fullscreen);
+            parentPage.showModal(page, options.context, closeCallback, options.fullscreen);
         });
     }
 }
@@ -78,6 +88,8 @@ export class ModalDialogService {
 })
 export class ModalDialogHost {
     constructor(containerRef: ViewContainerRef, modalService: ModalDialogService) {
+        console.log("ModalDialogHost is deprecated. Call ModalDialogService.showModal() by passing ViewContainerRef in the options instead.")
+
         modalService.registerViewContainerRef(containerRef);
     }
 } 

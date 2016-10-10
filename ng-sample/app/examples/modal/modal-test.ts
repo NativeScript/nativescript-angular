@@ -1,13 +1,12 @@
-import {Component} from '@angular/core';
+import { Component, ViewContainerRef } from '@angular/core';
 import * as dialogs from "ui/dialogs";
-import {ModalDialogService, ModalDialogOptions, ModalDialogHost} from "nativescript-angular/directives/dialogs";
-import {ModalContent} from "./modal-content";
+import { ModalDialogService, ModalDialogOptions } from "nativescript-angular/directives/dialogs";
+import { ModalContent} from "./modal-content";
 
 @Component({
     selector: 'modal-test',
-    providers: [ModalDialogService],
     template: `
-    <GridLayout rows="*, auto" modal-dialog-host>
+    <GridLayout rows="*, auto">
         <StackLayout verticalAlignment="top" margin="12">
             <Button text="show component" (tap)="showModal(false)"></Button>
             <Button text="show component fullscreen" (tap)="showModal(true)"></Button>
@@ -27,7 +26,7 @@ import {ModalContent} from "./modal-content";
 export class ModalTest {
     public result: string = "result";
 
-    constructor(private modal: ModalDialogService) {
+    constructor(private modal: ModalDialogService, private vcRef: ViewContainerRef) {
     }
 
     static entries = [
@@ -39,14 +38,15 @@ export class ModalTest {
     ];
 
     public showModal(fullscreen: boolean) {
-        var options: ModalDialogOptions = {
+        const options: ModalDialogOptions = {
             context: { promptMsg: "This is the prompt message!" },
-            fullscreen: fullscreen
+            fullscreen: fullscreen,
+            viewContainerRef: this.vcRef
         };
 
         this.modal.showModal(ModalContent, options).then((res: string) => {
             this.result = res || "empty result";
-        })
+        });
     }
 
     public showAlert() {
