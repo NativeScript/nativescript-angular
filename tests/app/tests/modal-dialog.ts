@@ -77,7 +77,7 @@ describe('modal-dialog', () => {
         testApp.loadComponent(FailComponent)
             .then((ref) => {
                 const service = <ModalDialogService>ref.instance.service;
-                assert.throws(() => service.showModal(ModalComponent, {}), "No viewContainerRef: Make sure you have the modal-dialog-host directive inside your component.");
+                assert.throws(() => service.showModal(ModalComponent, {}), "No viewContainerRef: Make sure you pass viewContainerRef in ModalDialogOptions.");
             }).then(() => done(), err => done(err));
     });
 
