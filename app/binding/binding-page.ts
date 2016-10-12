@@ -23,7 +23,7 @@ export class BindingComponent {
     private _twoWayDataBinding: string;
     private _curlyBracket: string;
     private _result: string;
-    public completedDate: Date = new Date("2016-06-03");
+    public completedDate: Date = new Date(2016,5,3);
 
     constructor() {
         this.refresh();
