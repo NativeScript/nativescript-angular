@@ -1,3 +1,12 @@
+# 1.1.0 (2016-10-13)
+
+- Angular 2.1.0 compatibility release
+
+# 1.0.2 (2016-10-13)
+
+- Angular 2.0.2 compatibility release
+- Modal dialogs no longer require that you create a ModalDialogService provider in your component.
+
 # 0.4.0 (2016-08-19)
 
 - Migrate to Angular 2 RC5.
