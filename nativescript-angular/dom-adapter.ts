@@ -35,6 +35,14 @@ export class NativeScriptElementSchemaRegistry extends ElementSchemaRegistry {
   securityContext(tagName: string, propName: string): any {
       return SecurityContext.NONE;
   }
+
+  validateProperty(name: string): {error: boolean, msg?: string} {
+      return {error: false};
+  }
+
+  validateAttribute(name: string): {error: boolean, msg?: string} {
+      return {error: false};
+  }
 }
 
 export class NativeScriptSanitizer extends Sanitizer {
