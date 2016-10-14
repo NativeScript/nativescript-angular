@@ -1,5 +1,5 @@
 import 'globals';
-import "./zone.js/dist/zone-nativescript";
+import './zone.js/dist/zone-nativescript';
 
 import 'reflect-metadata';
 import './polyfills/array';
@@ -15,7 +15,7 @@ import {
     Renderer,
     RootRenderer,
     Sanitizer,
-    NgModule
+    NgModule, NO_ERRORS_SCHEMA, CUSTOM_ELEMENTS_SCHEMA
 } from '@angular/core';
 import {
     defaultPageProvider, defaultFrameProvider, defaultDeviceProvider
@@ -26,13 +26,7 @@ import { NS_DIRECTIVES } from './directives';
 import * as nativescriptIntl from "nativescript-intl";
 global.Intl = nativescriptIntl;
 
-export interface AppOptions {
-    bootInExistingPage: boolean,
-    cssFile?: string;
-    startPageActionBarHidden?: boolean;
-}
-
-export const errorHandlerFactory = () => {
+export function errorHandlerFactory() {
     return new ErrorHandler(true);
 };
 
@@ -67,7 +61,8 @@ export const errorHandlerFactory = () => {
         DetachedLoader,
         ModalDialogHost,
         ...NS_DIRECTIVES,
-    ]
+    ],
+    schemas: [NO_ERRORS_SCHEMA]
 })
 export class NativeScriptModule {
 }

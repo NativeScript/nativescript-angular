@@ -1,5 +1,5 @@
 import 'globals';
-import "./zone.js/dist/zone-nativescript";
+import './zone.js/dist/zone-nativescript';
 
 import 'reflect-metadata';
 import './polyfills/array';
@@ -11,7 +11,7 @@ import {
     COMPILER_PROVIDERS,
     platformCoreDynamic
 } from '@angular/compiler';
-import { Provider } from '@angular/core';
+import { Provider, platformCore } from '@angular/core';
 import {
     Type,
     Injector,
@@ -60,6 +60,9 @@ export const NS_COMPILER_PROVIDERS = [
     }
 ];
 
+export const onBeforeLivesync = new EventEmitter<NgModuleRef<any>>();
+export const onAfterLivesync = new EventEmitter<NgModuleRef<any>>();
+
 type BootstrapperAction = () => Promise<NgModuleRef<any>>;
 
 let lastBootstrappedModule: WeakRef<NgModuleRef<any>>;
@@ -69,26 +72,34 @@ interface BootstrapParams {
 }
 
 class NativeScriptPlatformRef extends PlatformRef {
+    private _bootstrapper: BootstrapperAction;
+
     constructor(private platform: PlatformRef, private appOptions?: AppOptions) {
         super();
     }
 
     bootstrapModuleFactory<M>(moduleFactory: NgModuleFactory<M>): Promise<NgModuleRef<M>> {
-        throw new Error("Not implemented.");
+        this._bootstrapper = () => this.platform.bootstrapModuleFactory(moduleFactory);
+        
+        this.bootstrapApp();
+        
+        return null; //Make the compiler happy
     }
-
-    private _bootstrapper: BootstrapperAction;
 
     bootstrapModule<M>(moduleType: Type<M>, compilerOptions: CompilerOptions | CompilerOptions[] = []): Promise<NgModuleRef<M>> {
         this._bootstrapper = () => this.platform.bootstrapModule(moduleType, compilerOptions);
-        // Patch livesync
+
+        this.bootstrapApp();
+
+        return null; //Make the compiler happy
+    }
+
+    private bootstrapApp() {
         global.__onLiveSyncCore = () => this.livesyncModule();
 
         const mainPageEntry = this.createNavigationEntry(this._bootstrapper);
 
         application.start(mainPageEntry);
-
-        return null; //Make the compiler happy
     }
 
     livesyncModule(): void {
@@ -186,6 +197,7 @@ class NativeScriptPlatformRef extends PlatformRef {
     }
 }
 
+// Dynamic platfrom 
 const _platformNativeScriptDynamic: PlatformFactory = createPlatformFactory(
     platformCoreDynamic, 'nativeScriptDynamic', NS_COMPILER_PROVIDERS);
 
@@ -198,6 +210,15 @@ export function platformNativeScriptDynamic(options?: AppOptions, extraProviders
     }
 }
 
-export const onBeforeLivesync = new EventEmitter<NgModuleRef<any>>();
-export const onAfterLivesync = new EventEmitter<NgModuleRef<any>>();
+// "Static" platform
+const _platformNativeScript: PlatformFactory = createPlatformFactory(
+    platformCore, 'nativeScript');
 
+export function platformNativeScript(options?: AppOptions, extraProviders?: any[]): PlatformRef {
+    //Return raw platform to advanced users only if explicitly requested
+    if (options && options.bootInExistingPage === true) {
+        return _platformNativeScript(extraProviders);
+    } else {
+        return new NativeScriptPlatformRef(_platformNativeScript(extraProviders), options);
+    }
+}

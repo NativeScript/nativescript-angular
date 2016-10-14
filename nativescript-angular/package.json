@@ -15,7 +15,9 @@
   },
   "scripts": {
     "postinstall": "node postinstall.js",
-    "prepublish": "tsc"
+    "ngc": "ngc -p tsconfig.json",
+    "tsc": "tsc -p tsconfig.json",
+    "prepublish": "npm run tsc && npm run ngc"
   },
   "dependencies": {
     "nativescript-intl": "~0.0.4",
@@ -37,7 +39,8 @@
   "devDependencies": {
     "tns-core-modules": ">=2.2.0 || >=2.2.0-2016",
     "zone.js": "^0.6.21",
-    "typescript": "^1.8.10"
+    "typescript": "^2.0.2",
+    "@angular/compiler-cli": "2.1.0"
   },
   "nativescript": {}
 }

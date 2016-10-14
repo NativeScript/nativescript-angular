@@ -2,6 +2,7 @@ bin/dist
 node_modules
 tags
 **/*.js.map
+**/*.metadata.json
 
 /hooks
 

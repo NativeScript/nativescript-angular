@@ -1,9 +1,8 @@
 import {
     ComponentRef, ComponentFactory, ViewContainerRef,
-    Component, Type, ViewChild, Compiler,
-    ComponentFactoryResolver, ChangeDetectorRef, Host
+    Component, Type, ComponentFactoryResolver, ChangeDetectorRef
 } from '@angular/core';
-import trace = require("trace");
+import * as trace from "trace";
 
 type AnyComponentRef = ComponentRef<any>;
 interface PendingLoadEntry {

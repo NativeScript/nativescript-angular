@@ -1,15 +1,21 @@
 {
-    "compilerOptions": {
-        "target": "es5",
-        "module": "commonjs",
-        "sourceMap": true,
-        "emitDecoratorMetadata": true,
-        "experimentalDecorators": true,
-	"noImplicitUseStrict": true,
-	"noEmitHelpers": true,
-        "declaration": true,
-        "removeComments": false,
-        "noEmitOnError": true,
-        "noImplicitAny": false
-    }
+  "compilerOptions": {
+    "target": "es5",
+    "module": "commonjs",
+    "sourceMap": true,
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "noImplicitUseStrict": true,
+    "noEmitHelpers": true,
+    "declaration": true,
+    "removeComments": false,
+    "noEmitOnError": true,
+    "noImplicitAny": false
+  },
+  "angularCompilerOptions": {
+    "genDir": ".",
+    "skipMetadataEmit": false,
+    "skipTemplateCodegen": true,
+    "debug": true
+  }
 }
