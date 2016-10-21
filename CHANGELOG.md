@@ -1,3 +1,8 @@
+# 1.1.1 (2016-10-21)
+
+- Angular 2.1.1 compatibility release
+- [Experimental] Support for ahead-of-time(AOT) compilation.
+
 # 1.1.0 (2016-10-13)
 
 - Angular 2.1.0 compatibility release
