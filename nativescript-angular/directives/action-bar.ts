@@ -1,9 +1,9 @@
-import {Directive, Component, ContentChildren, ElementRef, Optional} from '@angular/core';
-import {ActionItem, ActionBar, NavigationButton} from "ui/action-bar";
-import {isBlank} from "../lang-facade";
+import { Directive, Component, ElementRef, Optional } from '@angular/core';
+import { ActionItem, ActionBar, NavigationButton } from "ui/action-bar";
+import { isBlank } from "../lang-facade";
 import {Page} from "ui/page";
-import {View} from 'ui/core/view';
-import {registerElement, ViewClassMeta, NgView } from '../element-registry';
+import { View } from 'ui/core/view';
+import { registerElement, ViewClassMeta, NgView } from '../element-registry';
 
 var actionBarMeta: ViewClassMeta = {
     skipAddToDom: true,
@@ -95,7 +95,7 @@ export class ActionItemDirective {
             this.ownerScope.onActionInit(this);
         }
     }
-    
+
     ngOnDestroy() {
         if (this.ownerScope) {
             this.ownerScope.onActionDestroy(this);

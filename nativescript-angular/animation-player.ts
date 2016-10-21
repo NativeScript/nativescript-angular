@@ -1,10 +1,10 @@
-import { AnimationPlayer, AnimationKeyframe  } from "./private_import_core";
+import { AnimationPlayer, AnimationKeyframe } from "./private_import_core";
 import { KeyframeAnimation, KeyframeAnimationInfo, KeyframeInfo, KeyframeDeclaration } from 'ui/animation/keyframe-animation';
 import { View } from "ui/core/view";
-import enums = require("ui/enums");
-import styleProperty = require('ui/styling/style-property');
-import observable = require('ui/core/dependency-observable');
-import types = require("utils/types");
+import { AnimationCurve } from "ui/enums";
+import { ValueSource } from 'ui/core/dependency-observable';
+import { isString } from "utils/types";
+import * as styleProperty from 'ui/styling/style-property';
 
 export class NativeScriptAnimationPlayer implements AnimationPlayer {
 
@@ -35,7 +35,7 @@ export class NativeScriptAnimationPlayer implements AnimationPlayer {
         keyframeAnimationInfo.duration = duration;
         keyframeAnimationInfo.delay = delay;
         keyframeAnimationInfo.iterations = 1;
-        keyframeAnimationInfo.curve = easing ? NativeScriptAnimationPlayer.animationTimingFunctionConverter(easing) : enums.AnimationCurve.ease;
+        keyframeAnimationInfo.curve = easing ? NativeScriptAnimationPlayer.animationTimingFunctionConverter(easing) : AnimationCurve.ease;
         keyframeAnimationInfo.keyframes = new Array<KeyframeInfo>();
         keyframeAnimationInfo.isForwards = true;
 
@@ -61,7 +61,7 @@ export class NativeScriptAnimationPlayer implements AnimationPlayer {
             keyframeAnimationInfo.keyframes.push(keyframeInfo);
         }
 
-        this.animation = KeyframeAnimation.keyframeAnimationFromInfo(keyframeAnimationInfo, observable.ValueSource.VisualState);
+        this.animation = KeyframeAnimation.keyframeAnimationFromInfo(keyframeAnimationInfo, ValueSource.VisualState);
     }
 
     init(): void {
@@ -136,24 +136,24 @@ export class NativeScriptAnimationPlayer implements AnimationPlayer {
     static animationTimingFunctionConverter(value): any {
         switch (value) {
             case "ease":
-                return enums.AnimationCurve.ease;
+                return AnimationCurve.ease;
             case "linear":
-                return enums.AnimationCurve.linear;
+                return AnimationCurve.linear;
             case "ease-in":
-                return enums.AnimationCurve.easeIn;
+                return AnimationCurve.easeIn;
             case "ease-out":
-                return enums.AnimationCurve.easeOut;
+                return AnimationCurve.easeOut;
             case "ease-in-out":
-                return enums.AnimationCurve.easeInOut;
+                return AnimationCurve.easeInOut;
             case "spring":
-                return enums.AnimationCurve.spring;
+                return AnimationCurve.spring;
             default:
                 if (value.indexOf("cubic-bezier(") === 0) {
                     let bezierArr = value.substring(13).split(/[,]+/);
                     if (bezierArr.length !== 4) {
                         throw new Error("Invalid value for animation: " + value);
                     }
-                    return enums.AnimationCurve.cubicBezier(
+                    return AnimationCurve.cubicBezier(
                         NativeScriptAnimationPlayer.bezieArgumentConverter(bezierArr[0]),
                         NativeScriptAnimationPlayer.bezieArgumentConverter(bezierArr[1]),
                         NativeScriptAnimationPlayer.bezieArgumentConverter(bezierArr[2]),
@@ -178,7 +178,7 @@ export class NativeScriptAnimationPlayer implements AnimationPlayer {
             operations[value] = value;
             return operations;
         }
-        else if (types.isString(value)) {
+        else if (isString(value)) {
             let operations = {};
             let operator = "";
             let pos = 0;

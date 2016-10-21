@@ -11,7 +11,7 @@ const parse5 = require('parse5');
 import {ListWrapper} from './collection-facade';
 import {DomAdapter, setRootDomAdapter} from './private_import_platform-browser';
 import {isPresent, isBlank, setValueOnPath} from "./lang-facade";
-import {SelectorMatcher, CssSelector} from './private_import_compiler';
+import {SelectorMatcher, CssSelector} from '@angular/compiler';
 
 var parser: any /** TODO #9100 */ = null;
 var serializer: any /** TODO #9100 */ = null;

@@ -1,4 +1,3 @@
-import application = require("application");
 import { Injectable } from '@angular/core';
 import { LocationStrategy } from '@angular/common';
 import { routerLog } from "../trace";

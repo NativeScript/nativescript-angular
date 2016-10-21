@@ -1,5 +1,5 @@
 import 'globals';
-import "./zone.js/dist/zone-nativescript";
+import './zone.js/dist/zone-nativescript';
 
 import 'reflect-metadata';
 import './polyfills/array';
@@ -9,34 +9,19 @@ import {
     ElementSchemaRegistry,
     ResourceLoader,
     COMPILER_PROVIDERS,
-    CompilerConfig,
     platformCoreDynamic
 } from '@angular/compiler';
-import {CommonModule} from '@angular/common';
-import {Provider} from '@angular/core';
-import {NativeScriptRootRenderer, NativeScriptRenderer} from './renderer';
-import {DetachedLoader} from "./common/detached-loader";
-import {ModalDialogHost, ModalDialogService} from "./directives/dialogs";
+import { Provider, platformCore } from '@angular/core';
 import {
     Type,
     Injector,
-    OpaqueToken,
-    ApplicationModule,
-    ErrorHandler,
-    platformCore,
     CompilerOptions,
     COMPILER_OPTIONS,
-    CompilerFactory,
-    PLATFORM_INITIALIZER,
-    Renderer,
-    RootRenderer,
-    Sanitizer,
     PlatformRef,
-    ComponentRef,
-    NgModule,
     NgModuleFactory,
     NgModuleRef,
     EventEmitter,
+    OpaqueToken,
     createPlatformFactory
 } from '@angular/core';
 import * as application from "application";
@@ -44,18 +29,16 @@ import { topmost, NavigationEntry } from "ui/frame";
 import { Page } from 'ui/page';
 import { rendererLog, rendererError } from "./trace";
 import { TextView } from 'ui/text-view';
-import {
-    defaultPageProvider, defaultFrameProvider, defaultDeviceProvider
-} from "./platform-providers";
-import { NativeScriptDomAdapter, NativeScriptElementSchemaRegistry, NativeScriptSanitizer
-} from './dom-adapter';
+
+import { NativeScriptElementSchemaRegistry } from './dom-adapter';
 import { FileSystemResourceLoader } from './resource-loader';
-import { NS_DIRECTIVES } from './directives';
 
 import * as nativescriptIntl from "nativescript-intl";
 global.Intl = nativescriptIntl;
 
 type PlatformFactory = (extraProviders?: Provider[]) => PlatformRef;
+
+export { NativeScriptModule } from "./nativescript.module";
 
 export interface AppOptions {
     bootInExistingPage: boolean,
@@ -63,58 +46,22 @@ export interface AppOptions {
     startPageActionBarHidden?: boolean;
 }
 
-@NgModule({
-    declarations: [
-        DetachedLoader,
-        ModalDialogHost,
-        ...NS_DIRECTIVES,
-    ],
-    providers: [
-        {
-            provide:ErrorHandler,
-            useFactory: () => {
-                return new ErrorHandler(true)
-            }
-        },
-        defaultFrameProvider,
-        defaultPageProvider,
-        defaultDeviceProvider,
-        NativeScriptRootRenderer,
-        {provide: RootRenderer, useClass: NativeScriptRootRenderer},
-        NativeScriptRenderer,
-        {provide: Renderer, useClass: NativeScriptRenderer},
-        {provide: Sanitizer, useClass: NativeScriptSanitizer},
-        ModalDialogService
-    ],
-    entryComponents: [
-        DetachedLoader,
-    ],
-    imports: [
-        CommonModule,
-        ApplicationModule,
-    ],
-    exports: [
-        CommonModule,
-        ApplicationModule,
-        DetachedLoader,
-        ModalDialogHost,
-        ...NS_DIRECTIVES,
-    ]
-})
-export class NativeScriptModule {
-}
-
 export const NS_COMPILER_PROVIDERS = [
     COMPILER_PROVIDERS,
     {
         provide: COMPILER_OPTIONS,
-        useValue: {providers: [
-            {provide: ResourceLoader, useClass: FileSystemResourceLoader},
-            {provide: ElementSchemaRegistry, useClass: NativeScriptElementSchemaRegistry},
-        ]},
+        useValue: {
+            providers: [
+                { provide: ResourceLoader, useClass: FileSystemResourceLoader },
+                { provide: ElementSchemaRegistry, useClass: NativeScriptElementSchemaRegistry },
+            ]
+        },
         multi: true
     }
 ];
+
+export const onBeforeLivesync = new EventEmitter<NgModuleRef<any>>();
+export const onAfterLivesync = new EventEmitter<NgModuleRef<any>>();
 
 type BootstrapperAction = () => Promise<NgModuleRef<any>>;
 
@@ -124,29 +71,35 @@ interface BootstrapParams {
     appOptions?: AppOptions
 }
 
-let bootstrapCache: BootstrapParams;
-
 class NativeScriptPlatformRef extends PlatformRef {
+    private _bootstrapper: BootstrapperAction;
+
     constructor(private platform: PlatformRef, private appOptions?: AppOptions) {
         super();
     }
 
     bootstrapModuleFactory<M>(moduleFactory: NgModuleFactory<M>): Promise<NgModuleRef<M>> {
-        throw new Error("Not implemented.");
+        this._bootstrapper = () => this.platform.bootstrapModuleFactory(moduleFactory);
+        
+        this.bootstrapApp();
+        
+        return null; //Make the compiler happy
     }
-
-    private _bootstrapper: BootstrapperAction;
 
     bootstrapModule<M>(moduleType: Type<M>, compilerOptions: CompilerOptions | CompilerOptions[] = []): Promise<NgModuleRef<M>> {
         this._bootstrapper = () => this.platform.bootstrapModule(moduleType, compilerOptions);
-        // Patch livesync
+
+        this.bootstrapApp();
+
+        return null; //Make the compiler happy
+    }
+
+    private bootstrapApp() {
         global.__onLiveSyncCore = () => this.livesyncModule();
 
         const mainPageEntry = this.createNavigationEntry(this._bootstrapper);
 
         application.start(mainPageEntry);
-
-        return null; //Make the compiler happy
     }
 
     livesyncModule(): void {
@@ -244,7 +197,8 @@ class NativeScriptPlatformRef extends PlatformRef {
     }
 }
 
-var _platformNativeScriptDynamic: PlatformFactory = createPlatformFactory(
+// Dynamic platfrom 
+const _platformNativeScriptDynamic: PlatformFactory = createPlatformFactory(
     platformCoreDynamic, 'nativeScriptDynamic', NS_COMPILER_PROVIDERS);
 
 export function platformNativeScriptDynamic(options?: AppOptions, extraProviders?: any[]): PlatformRef {
@@ -256,6 +210,15 @@ export function platformNativeScriptDynamic(options?: AppOptions, extraProviders
     }
 }
 
-export const onBeforeLivesync = new EventEmitter<NgModuleRef<any>>();
-export const onAfterLivesync = new EventEmitter<NgModuleRef<any>>();
+// "Static" platform
+const _platformNativeScript: PlatformFactory = createPlatformFactory(
+    platformCore, 'nativeScript');
 
+export function platformNativeScript(options?: AppOptions, extraProviders?: any[]): PlatformRef {
+    //Return raw platform to advanced users only if explicitly requested
+    if (options && options.bootInExistingPage === true) {
+        return _platformNativeScript(extraProviders);
+    } else {
+        return new NativeScriptPlatformRef(_platformNativeScript(extraProviders), options);
+    }
+}
