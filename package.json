@@ -13,7 +13,7 @@
     }
   },
   "dependencies": {
-    "nativescript-angular": "1.1.1",
+    "nativescript-angular": "~1.1.1",
     "tns-core-modules": "2.3.0",
     "nativescript-intl": "~0.0.4",
     "@angular/core": "~2.1.1",
