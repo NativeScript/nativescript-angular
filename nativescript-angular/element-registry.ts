@@ -95,6 +95,7 @@ registerElement("SegmentedBar", () => require("ui/segmented-bar").SegmentedBar);
 registerElement("SegmentedBarItem", () => require("ui/segmented-bar").SegmentedBarItem);
 registerElement("Slider", () => require("ui/slider").Slider);
 registerElement("StackLayout", () => require("ui/layouts/stack-layout").StackLayout);
+registerElement("FlexboxLayout", () => require("ui/layouts/flexbox-layout").FlexboxLayout);
 registerElement("Switch", () => require("ui/switch").Switch);
 registerElement("TabView", () => require("ui/tab-view").TabView);
 registerElement("TextField", () => require("ui/text-field").TextField);
