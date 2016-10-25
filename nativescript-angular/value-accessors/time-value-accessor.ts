@@ -16,7 +16,7 @@ const TIME_VALUE_ACCESSOR = {provide: NG_VALUE_ACCESSOR, useExisting: forwardRef
  *  ```
  */
 @Directive({
-    selector: 'TimePicker[ngModel]',
+    selector: 'TimePicker[ngModel], timePicker[ngModel], time-picker[ngModel]',
     host: { '(timeChange)': 'onChange($event.value)' },
     providers: [TIME_VALUE_ACCESSOR]
 })
