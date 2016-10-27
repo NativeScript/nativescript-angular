@@ -35,10 +35,9 @@ install:
 - tns error-reporting disable
 - cd nativescript-angular
 - npm install
-- npm link
 - cd ../tests
-- tns install
-- npm link nativescript-angular
+- npm install
+- tns platform add android
 
 before_script:
 - echo no | android create avd --force -n test -t android-19 -b armeabi-v7a
