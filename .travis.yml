@@ -1,6 +1,6 @@
 env:
     global:
-        - NODE_VERSION=6.4.0
+        - NODE_VERSION=6.9.1
         - DATE=$(date +%Y-%m-%d)
         - PACKAGE_VERSION=$DATE-$TRAVIS_BUILD_NUMBER
 
