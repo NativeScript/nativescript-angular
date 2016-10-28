@@ -13,17 +13,17 @@
     }
   },
   "dependencies": {
-    "nativescript-angular": "~1.1.1",
+    "nativescript-angular": "~1.1.2",
     "tns-core-modules": "2.3.0",
     "nativescript-intl": "~0.0.4",
-    "@angular/core": "~2.1.1",
-    "@angular/common": "~2.1.1",
-    "@angular/compiler": "~2.1.1",
-    "@angular/http": "~2.1.1",
-    "@angular/platform-browser": "~2.1.1",
-    "@angular/platform-browser-dynamic": "~2.1.1",
-    "@angular/forms": "~2.1.1",
-    "@angular/router": "~3.1.1"
+    "@angular/core": "~2.1.2",
+    "@angular/common": "~2.1.2",
+    "@angular/compiler": "~2.1.2",
+    "@angular/http": "~2.1.2",
+    "@angular/platform-browser": "~2.1.2",
+    "@angular/platform-browser-dynamic": "~2.1.2",
+    "@angular/forms": "~2.1.2",
+    "@angular/router": "~3.1.2"
   },
   "devDependencies": {
     "zone.js": "~0.6.21",
