@@ -1,3 +1,6 @@
+# 1.1.1 (2016-10-28)
+- Angular 2.1.2 compatibility release
+
 # 1.1.1 (2016-10-21)
 
 - Angular 2.1.1 compatibility release
