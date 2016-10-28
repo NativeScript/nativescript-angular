@@ -16,7 +16,7 @@ const CHECKED_VALUE_ACCESSOR = {provide: NG_VALUE_ACCESSOR, useExisting: forward
  *  ```
  */
 @Directive({
-    selector: 'Switch[ngModel]',
+    selector: 'Switch[ngModel], switch[ngModel]',
     host: { '(checkedChange)': 'onChange($event.value)' },
     providers: [CHECKED_VALUE_ACCESSOR]
 })

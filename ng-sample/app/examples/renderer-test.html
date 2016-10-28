@@ -2,6 +2,7 @@
     <Label [text]='model.mydate | date:"fullDate"' [ngStyle]="{'background-color': 'lime'}"></Label>
     <Progress value="50" style="color: red"></Progress>
     <SearchBar [(ngModel)]='model.search'></SearchBar>
+    <search-bar [(ngModel)]='model.search'></search-bar>
     <Label [text]='model.search' [style.backgroundColor]="'hotpink'"></Label>
     <Slider [(ngModel)]='model.sliderTest'></Slider>
     <Label [text]='model.sliderTest'></Label>

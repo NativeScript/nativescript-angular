@@ -19,7 +19,7 @@ export type SelectableView = {selectedIndex: number} & View;
  *  ```
  */
 @Directive({
-    selector: 'SegmentedBar[ngModel], ListPicker[ngModel], TabView[ngModel]',
+    selector: 'SegmentedBar[ngModel], segmentedBar[ngModel], segmented-bar[ngModel], ListPicker[ngModel], listPicker[ngModel], list-picker[ngModel], TabView[ngModel] tabView[ngModel], tab-view[ngModel]',
     host: { '(selectedIndexChange)': 'onChange($event.value)' },
     providers: [SELECTED_INDEX_VALUE_ACCESSOR]
 })

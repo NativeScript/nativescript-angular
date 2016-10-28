@@ -18,7 +18,7 @@ export type TextView = {text: string} & View;
  *  ```
  */
 @Directive({
-    selector: 'TextField[ngModel], TextView[ngModel], SearchBar[ngModel]',
+    selector: 'TextField[ngModel], textField[ngModel], text-field[ngModel], TextView[ngModel], textView[ngModel], text-view[ngModel], SearchBar[ngModel], search-bar[ngModel], searchBar[ngModel]',
     host: { '(textChange)': 'onChange($event.value)' },
     providers: [TEXT_VALUE_ACCESSOR]
 })
