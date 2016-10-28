@@ -13,10 +13,13 @@ import { NativeScriptRouterModule } from "nativescript-angular/router";
 import { NativeScriptFormsModule } from "nativescript-angular/forms";
 import { NativeScriptHttpModule } from "nativescript-angular/http";
 import { rendererTraceCategory, routerTraceCategory, listViewTraceCategory } from "nativescript-angular/trace";
+import { PAGE_FACTORY, PageFactory, PageFactoryOptions } from "nativescript-angular/platform-providers";
+import { Page } from "ui/page";
+import { Color } from "color";
 
 import trace = require("trace");
 // trace.setCategories(rendererTraceCategory);
-trace.setCategories(routerTraceCategory);
+// trace.setCategories(routerTraceCategory);
 // trace.setCategories(listViewTraceCategory);
 trace.enable();
 
@@ -62,7 +65,7 @@ import { AnimationStatesTest } from "./examples/animation/animation-states-test"
     ],
     providers: []
 })
-class ExampleModule {}
+class ExampleModule { }
 
 function makeExampleModule(componentType) {
     let imports: any[] = [ExampleModule];
@@ -93,25 +96,35 @@ function makeExampleModule(componentType) {
         providers: providers,
         exports: exports,
     })
-    class ExampleModuleForComponent {}
+    class ExampleModuleForComponent { }
 
     return ExampleModuleForComponent;
 }
 
-platformNativeScriptDynamic().bootstrapModule(makeExampleModule(RendererTest));
+const customPageFactoryProvider = {
+    provide: PAGE_FACTORY,
+    useValue: (opts: PageFactoryOptions) => {
+        const page = new Page();
+        page.backgroundColor = opts.isModal ? new Color("lightblue") : new Color("lightgreen");
+        return page;
+    }
+};
+
+// platformNativeScriptDynamic().bootstrapModule(makeExampleModule(RendererTest));
+platformNativeScriptDynamic(undefined, [customPageFactoryProvider]).bootstrapModule(makeExampleModule(RendererTest));
 //platformNativeScriptDynamic().bootstrapModule(makeExampleModule(TabViewTest));
 //platformNativeScriptDynamic().bootstrapModule(makeExampleModule(Benchmark));
 //platformNativeScriptDynamic().bootstrapModule(makeExampleModule(ListTest));
 //platformNativeScriptDynamic().bootstrapModule(makeExampleModule(ListTestAsync));
 //platformNativeScriptDynamic().bootstrapModule(makeExampleModule(ImageTest));
-//platformNativeScriptDynamic().bootstrapModule(makeExampleModule(ModalTest));
+// platformNativeScriptDynamic().bootstrapModule(makeExampleModule(ModalTest));
 //platformNativeScriptDynamic().bootstrapModule(makeExampleModule(HttpTest));
 //platformNativeScriptDynamic().bootstrapModule(makeExampleModule(PlatfromDirectivesTest));
 //platformNativeScriptDynamic().bootstrapModule(makeExampleModule(ActionBarTest));
 
 //new router
 //platformNativeScriptDynamic().bootstrapModule(makeExampleModule(RouterOutletAppComponent));
-//platformNativeScriptDynamic().bootstrapModule(makeExampleModule(PageRouterOutletAppComponent));
+// platformNativeScriptDynamic().bootstrapModule(makeExampleModule(PageRouterOutletAppComponent));
 //platformNativeScriptDynamic().bootstrapModule(makeExampleModule(PageRouterOutletNestedAppComponent));
 //platformNativeScriptDynamic().bootstrapModule(makeExampleModule(ClearHistoryAppComponent));
 //platformNativeScriptDynamic().bootstrapModule(makeExampleModule(LoginAppComponent));

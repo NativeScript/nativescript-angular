@@ -5,6 +5,7 @@ import {
 import { Page } from 'ui/page';
 import { View } from 'ui/core/view';
 import { DetachedLoader } from '../common/detached-loader';
+import { PageFactory, PAGE_FACTORY } from '../platform-providers';
 
 export interface ModalDialogOptions {
     context?: any;
@@ -36,9 +37,10 @@ export class ModalDialogService {
 
         const parentPage: Page = viewContainerRef.injector.get(Page);
         const resolver: ComponentFactoryResolver = viewContainerRef.injector.get(ComponentFactoryResolver);
+        const pageFactory: PageFactory = viewContainerRef.injector.get(PAGE_FACTORY);
 
         return new Promise((resolve, reject) => {
-            setTimeout(() => ModalDialogService.showDialog(type, options, resolve, viewContainerRef, resolver, parentPage), 10);
+            setTimeout(() => ModalDialogService.showDialog(type, options, resolve, viewContainerRef, resolver, parentPage, pageFactory), 10);
         });
     }
 
@@ -48,9 +50,10 @@ export class ModalDialogService {
         doneCallback,
         containerRef: ViewContainerRef,
         resolver: ComponentFactoryResolver,
-        parentPage: Page): void {
+        parentPage: Page,
+        pageFactory: PageFactory): void {
 
-        const page = new Page();
+        const page = pageFactory({ isModal: true, componentType: type });
 
         let detachedLoaderRef: ComponentRef<DetachedLoader>;
         const closeCallback = (...args) => {

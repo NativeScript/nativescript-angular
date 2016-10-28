@@ -33,6 +33,8 @@ import { TextView } from 'ui/text-view';
 import { NativeScriptElementSchemaRegistry } from './dom-adapter';
 import { FileSystemResourceLoader } from './resource-loader';
 
+import { PAGE_FACTORY, PageFactory, defaultPageFactoryProvider } from './platform-providers';
+
 import * as nativescriptIntl from "nativescript-intl";
 global.Intl = nativescriptIntl;
 
@@ -60,6 +62,10 @@ export const NS_COMPILER_PROVIDERS = [
     }
 ];
 
+const COMMON_PROVIDERS = [
+    defaultPageFactoryProvider,
+];
+
 export const onBeforeLivesync = new EventEmitter<NgModuleRef<any>>();
 export const onAfterLivesync = new EventEmitter<NgModuleRef<any>>();
 
@@ -80,9 +86,9 @@ class NativeScriptPlatformRef extends PlatformRef {
 
     bootstrapModuleFactory<M>(moduleFactory: NgModuleFactory<M>): Promise<NgModuleRef<M>> {
         this._bootstrapper = () => this.platform.bootstrapModuleFactory(moduleFactory);
-        
+
         this.bootstrapApp();
-        
+
         return null; //Make the compiler happy
     }
 
@@ -110,7 +116,8 @@ class NativeScriptPlatformRef extends PlatformRef {
         const mainPageEntry = this.createNavigationEntry(
             this._bootstrapper,
             compRef => onAfterLivesync.next(compRef),
-            error => onAfterLivesync.error(error)
+            error => onAfterLivesync.error(error),
+            true
         );
         mainPageEntry.animated = false;
         mainPageEntry.clearHistory = true;
@@ -140,10 +147,12 @@ class NativeScriptPlatformRef extends PlatformRef {
         return this.platform.destroyed;
     }
 
-    private createNavigationEntry(bootstrapAction: BootstrapperAction, resolve?: (comp: NgModuleRef<any>) => void, reject?: (e: Error) => void, isReboot: boolean = false): NavigationEntry {
+    private createNavigationEntry(bootstrapAction: BootstrapperAction, resolve?: (comp: NgModuleRef<any>) => void, reject?: (e: Error) => void, isLivesync: boolean = false, isReboot: boolean = false): NavigationEntry {
+        const pageFactory: PageFactory = this.platform.injector.get(PAGE_FACTORY);
+
         const navEntry: NavigationEntry = {
             create: (): Page => {
-                let page = new Page();
+                let page = pageFactory({ isBootstrap: true, isLivesync });
                 if (this.appOptions) {
                     page.actionBarHidden = this.appOptions.startPageActionBarHidden;
                 }
@@ -199,7 +208,7 @@ class NativeScriptPlatformRef extends PlatformRef {
 
 // Dynamic platfrom 
 const _platformNativeScriptDynamic: PlatformFactory = createPlatformFactory(
-    platformCoreDynamic, 'nativeScriptDynamic', NS_COMPILER_PROVIDERS);
+    platformCoreDynamic, 'nativeScriptDynamic', [...COMMON_PROVIDERS, ...NS_COMPILER_PROVIDERS]);
 
 export function platformNativeScriptDynamic(options?: AppOptions, extraProviders?: any[]): PlatformRef {
     //Return raw platform to advanced users only if explicitly requested
@@ -212,7 +221,7 @@ export function platformNativeScriptDynamic(options?: AppOptions, extraProviders
 
 // "Static" platform
 const _platformNativeScript: PlatformFactory = createPlatformFactory(
-    platformCore, 'nativeScript');
+    platformCore, 'nativeScript', [...COMMON_PROVIDERS]);
 
 export function platformNativeScript(options?: AppOptions, extraProviders?: any[]): PlatformRef {
     //Return raw platform to advanced users only if explicitly requested
