@@ -43,6 +43,10 @@ export class NativeScriptElementSchemaRegistry extends ElementSchemaRegistry {
   validateAttribute(name: string): {error: boolean, msg?: string} {
       return {error: false};
   }
+
+  allKnownElementNames(): string[] {
+      return [];
+  }
 }
 
 export class NativeScriptSanitizer extends Sanitizer {
