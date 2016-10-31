@@ -3,17 +3,17 @@ import {
     ReflectiveInjector, ResolvedReflectiveProvider, ViewContainerRef,
     Inject, ComponentFactoryResolver, Injector
 } from '@angular/core';
-import {isPresent} from "../lang-facade";
-import {RouterOutletMap, ActivatedRoute, PRIMARY_OUTLET} from '@angular/router';
-import {NSLocationStrategy} from "./ns-location-strategy";
-import {DEVICE} from "../platform-providers";
-import {Device} from "platform";
-import {routerLog} from "../trace";
-import {DetachedLoader} from "../common/detached-loader";
-import {ViewUtil} from "../view-util";
-import {Frame} from "ui/frame";
-import {Page, NavigatedData} from "ui/page";
-import {BehaviorSubject} from "rxjs";
+import { isPresent } from "../lang-facade";
+import { RouterOutletMap, ActivatedRoute, PRIMARY_OUTLET } from '@angular/router';
+import { NSLocationStrategy } from "./ns-location-strategy";
+import { DEVICE, PAGE_FACTORY, PageFactory } from "../platform-providers";
+import { Device } from "platform";
+import { routerLog } from "../trace";
+import { DetachedLoader } from "../common/detached-loader";
+import { ViewUtil } from "../view-util";
+import { Frame } from "ui/frame";
+import { Page, NavigatedData } from "ui/page";
+import { BehaviorSubject } from "rxjs";
 
 interface CacheItem {
     componentRef: ComponentRef<any>;
@@ -95,7 +95,8 @@ export class PageRouterOutlet {
         private componentFactoryResolver: ComponentFactoryResolver,
         resolver: ComponentFactoryResolver,
         private frame: Frame,
-        @Inject(DEVICE) device: Device) {
+        @Inject(DEVICE) device: Device,
+        @Inject(PAGE_FACTORY) private pageFactory: PageFactory) {
 
         parentOutletMap.registerOutlet(name ? name : PRIMARY_OUTLET, <any>this);
 
@@ -141,10 +142,10 @@ export class PageRouterOutlet {
      * Called by the Router to instantiate a new component during the commit phase of a navigation.
      * This method in turn is responsible for calling the `routerOnActivate` hook of its child.
      */
-     activate(
-         activatedRoute: ActivatedRoute, loadedResolver: ComponentFactoryResolver,
-         loadedInjector: Injector, providers: ResolvedReflectiveProvider[],
-         outletMap: RouterOutletMap): void {
+    activate(
+        activatedRoute: ActivatedRoute, loadedResolver: ComponentFactoryResolver,
+        loadedInjector: Injector, providers: ResolvedReflectiveProvider[],
+        outletMap: RouterOutletMap): void {
         this.outletMap = outletMap;
         this.currentActivatedRoute = activatedRoute;
 
@@ -174,9 +175,9 @@ export class PageRouterOutlet {
         } else {
             log("PageRouterOutlet.activate() forward navigation - create detached loader in the loader container");
 
-            const page = new Page();
+            const page = this.pageFactory({ isNavigation: true, componentType: factory.componentType });
             const pageResolvedProvider = ReflectiveInjector.resolve([
-                {provide: Page, useValue: page}
+                { provide: Page, useValue: page }
             ]);
             const childInjector = ReflectiveInjector.fromResolvedProviders([...providers, ...pageResolvedProvider], this.containerRef.parentInjector);
             const loaderRef = this.containerRef.createComponent(this.detachedLoaderFactory, this.containerRef.length, childInjector, []);
