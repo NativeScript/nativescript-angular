@@ -21,13 +21,14 @@ import { Color } from "color";
 import trace = require("trace");
 // trace.setCategories(rendererTraceCategory);
 // trace.setCategories(routerTraceCategory);
-// trace.setCategories(listViewTraceCategory);
+trace.setCategories(listViewTraceCategory);
 trace.enable();
 
 import { RendererTest } from './examples/renderer-test';
 import { TabViewTest } from './examples/tab-view/tab-view-test';
 import { Benchmark } from './performance/benchmark';
 import { ListTest } from './examples/list/list-test';
+import { ListTemplateSelectorTest } from './examples/list/template-selector';
 import { ListTestAsync, ListTestFilterAsync } from "./examples/list/list-test-async";
 import { ImageTest } from "./examples/image/image-test";
 import { HttpTest } from "./examples/http/http-test";
@@ -75,7 +76,7 @@ function makeExampleModule(componentType) {
     }
     let exports: any[] = [];
     if (componentType.exports) {
-        exports = componentType.exports
+        exports = componentType.exports;
     }
     let entries = [];
     if (componentType.entries) {
@@ -84,7 +85,7 @@ function makeExampleModule(componentType) {
     entries.push(componentType);
     let providers = [];
     if (componentType.providers) {
-        providers = componentType.providers
+        providers = componentType.providers;
     }
     @NgModule({
         bootstrap: [componentType],
@@ -112,10 +113,11 @@ const customPageFactoryProvider = {
 };
 
 // platformNativeScriptDynamic().bootstrapModule(makeExampleModule(RendererTest));
-platformNativeScriptDynamic(undefined, [customPageFactoryProvider]).bootstrapModule(makeExampleModule(RendererTest));
+// platformNativeScriptDynamic(undefined, [customPageFactoryProvider]).bootstrapModule(makeExampleModule(RendererTest));
 //platformNativeScriptDynamic().bootstrapModule(makeExampleModule(TabViewTest));
 //platformNativeScriptDynamic().bootstrapModule(makeExampleModule(Benchmark));
 //platformNativeScriptDynamic().bootstrapModule(makeExampleModule(ListTest));
+platformNativeScriptDynamic().bootstrapModule(makeExampleModule(ListTemplateSelectorTest));
 //platformNativeScriptDynamic().bootstrapModule(makeExampleModule(ListTestAsync));
 //platformNativeScriptDynamic().bootstrapModule(makeExampleModule(ImageTest));
 // platformNativeScriptDynamic().bootstrapModule(makeExampleModule(ModalTest));
