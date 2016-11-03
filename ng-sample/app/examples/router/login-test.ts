@@ -1,9 +1,10 @@
 import { Component, OnInit, OnDestroy, Injectable } from "@angular/core";
-import { Router, CanActivate} from '@angular/router';
+import { Router, CanActivate, Resolve, ActivatedRouteSnapshot, RouterStateSnapshot, ActivatedRoute, Params } from '@angular/router';
 import { Observable } from "rxjs";
-import { RouterExtensions } from "nativescript-angular/router";
+import { RouterExtensions, PageRoute } from "nativescript-angular/router";
 import { NSLocationStrategy } from "nativescript-angular/router/ns-location-strategy";
-import { BehaviorSubject} from "rxjs";
+import { BehaviorSubject } from "rxjs";
+import { Page } from "ui/page";
 import * as appSettings from "application-settings"
 
 const USER_KEY = "user";
@@ -67,6 +68,11 @@ class LoginComponent {
     }
 }
 
+
+export interface ResolvedData {
+    id: number
+}
+
 @Component({
     selector: 'main',
     styleUrls: ["examples/router/styles.css"],
@@ -74,14 +80,52 @@ class LoginComponent {
     <StackLayout>
       <Label text="Main Page" class="title"></Label>
       <Label [text]="'Hello, ' + loginService.username" class="subtitle"></Label>
+      <Label [text]="'data.id: ' + (data$ | async).id" class="subtitle"></Label>
+      <Button text="go deeper" nsRouterLink="/inner" class="stretch"></Button>
       <Button text='logout' (tap)="logout()" class="stretch"></Button>
     </StackLayout>
     `
 })
 class MainComponent {
+    private data$: Observable<ResolvedData>;
+    constructor(private nav: RouterExtensions, private loginService: LoginService, private pageRoute: PageRoute) {
+        this.data$ = this.pageRoute.activatedRoute
+            .switchMap(activatedRoute => activatedRoute.data)
+            .map(data => data[0]);
+    }
+
+    logout() {
+        this.loginService.logout().then((result) => {
+            if (result) {
+                this.nav.navigate(["/login"], { clearHistory: true });
+            }
+        });
+    }
+
+    onReslove(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
+        console.log("MainComponent.onReslove()")
+        return true;
+    }
+}
+
+@Component({
+    selector: 'inner',
+    styleUrls: ["examples/router/styles.css"],
+    template: `
+    <StackLayout>
+      <Label text="Inner Page" class="title"></Label>
+      <Button text='go back' (tap)="back()" class="stretch"></Button>
+      <Button text='logout' (tap)="logout()" class="stretch"></Button>
+    </StackLayout>
+    `
+})
+class InnerComponent {
     constructor(private nav: RouterExtensions, private loginService: LoginService) {
     }
 
+    back() {
+        this.nav.backToPreviousPage();
+    }
     logout() {
         this.loginService.logout().then((result) => {
             if (result) {
@@ -100,14 +144,24 @@ class AuthGuard implements CanActivate {
 
     canActivate() {
         if (this.loginService.isLogged) {
-            console.log("GUARD: authenticated");
+            console.log("AuthGuard: authenticated");
             return true;
         }
         else {
-            console.log("GUARD: redirecting to login");
+            console.log("AuthGuard: redirecting to login");
             this.nav.navigate(["/login"]);
             return false;
         }
+    }
+}
+
+@Injectable()
+class ResolveGuard implements Resolve<ResolvedData> {
+    static counter = 0;
+    resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<ResolvedData> | Promise<ResolvedData> | ResolvedData {
+        const result: ResolvedData = { id: ResolveGuard.counter++ }
+        console.log(`ResolveGuard: Fteching new data. Result: ${JSON.stringify(result)} `);
+        return result;
     }
 }
 
@@ -118,17 +172,20 @@ class AuthGuard implements CanActivate {
 export class LoginAppComponent {
     static routes = [
         { path: "", redirectTo: "/main", terminal: true, pathMatch: "full" },
-        { path: "main", component: MainComponent, canActivate: [AuthGuard] },
+        { path: "main", component: MainComponent, canActivate: [AuthGuard], resolve: [ResolveGuard] },
+        { path: "inner", component: InnerComponent, canActivate: [AuthGuard] },
         { path: "login", component: LoginComponent },
     ]
 
     static entries = [
+        LoginComponent,
         MainComponent,
-        LoginComponent
+        InnerComponent
     ]
 
     static providers = [
         AuthGuard,
+        ResolveGuard,
         LoginService,
     ]
 }
