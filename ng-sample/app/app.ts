@@ -112,12 +112,12 @@ const customPageFactoryProvider = {
     }
 };
 
-// platformNativeScriptDynamic().bootstrapModule(makeExampleModule(RendererTest));
+platformNativeScriptDynamic().bootstrapModule(makeExampleModule(RendererTest));
 // platformNativeScriptDynamic(undefined, [customPageFactoryProvider]).bootstrapModule(makeExampleModule(RendererTest));
 //platformNativeScriptDynamic().bootstrapModule(makeExampleModule(TabViewTest));
 //platformNativeScriptDynamic().bootstrapModule(makeExampleModule(Benchmark));
 //platformNativeScriptDynamic().bootstrapModule(makeExampleModule(ListTest));
-platformNativeScriptDynamic().bootstrapModule(makeExampleModule(ListTemplateSelectorTest));
+// platformNativeScriptDynamic().bootstrapModule(makeExampleModule(ListTemplateSelectorTest));
 //platformNativeScriptDynamic().bootstrapModule(makeExampleModule(ListTestAsync));
 //platformNativeScriptDynamic().bootstrapModule(makeExampleModule(ImageTest));
 // platformNativeScriptDynamic().bootstrapModule(makeExampleModule(ModalTest));

@@ -4,7 +4,6 @@ import {
     Type, Component, ComponentRef,
     ComponentFactoryResolver, ApplicationRef, Renderer,
     ViewContainerRef, NgZone, NgModule,
-    NgModuleRef,
 } from "@angular/core";
 
 import {GridLayout} from "ui/layouts/grid-layout";
@@ -42,7 +41,7 @@ export class TestApp {
 
     public disposeComponents() {
         while (this._pendingDispose.length > 0) {
-            const componentRef = this._pendingDispose.pop()
+            const componentRef = this._pendingDispose.pop();
             componentRef.destroy();
         }
     }
@@ -132,7 +131,7 @@ export function destroyTestApp(app: any) {
         throw new Error("Unable to cleanup app: " + app);
     }
 
-    var entry = runningApps.get(app);
+    const entry = runningApps.get(app);
     entry.container.removeChild(entry.appRoot);
     //TODO: App disposal not doing anything useful anymore. Get rid of it?
     //entry.appRef.dispose();

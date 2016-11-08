@@ -1,55 +1,89 @@
-import {assert} from "./test-config";
-import {
-    ElementRef,
-    Component
-} from '@angular/core';
-import {TestApp} from "./test-app";
-import {device, platformNames} from "platform";
-const IS_IOS = (device.os === platformNames.ios);
+import { assert } from "./test-config";
+import { Component, Input, AfterViewInit } from '@angular/core';
+import { TestApp } from "./test-app";
+
+// import trace = require("trace");
+// trace.setCategories("ns-list-view, " + trace.categories.Navigation);
+// trace.enable();
 
 class DataItem {
     constructor(public id: number, public name: string) { }
 }
 
+const ITEMS = [
+    new DataItem(0, "data item 0"),
+    new DataItem(1, "data item 1"),
+    new DataItem(2, "data item 2"),
+];
+
+
+let testTemplates: { first: number, second: number };
+
 @Component({
     selector: 'list-view-setupItemView',
     template: `
-    <StackLayout>
-        <ListView height="200" [items]="myItems" (setupItemView)="onSetupItemView($event)">
-            <template let-item="item" let-i="index" let-odd="odd" let-even="even">
-                <StackLayout [class.odd]="odd" [class.even]="even">
-                    <Label [text]='"index: " + i'></Label>
-                    <Label [text]='"[" + item.id +"] " + item.name'></Label>
-                </StackLayout>
+    <GridLayout>
+        <ListView [items]="myItems" (setupItemView)="onSetupItemView($event)">
+            <template let-item="item">
+                <Label [text]='"[" + item.id +"] " + item.name'></Label>
             </template>
         </ListView>
-    </StackLayout>
+    </GridLayout>
     `
 })
 export class TestListViewComponent {
-    public myItems: Array<DataItem>;
-    public counter: number;
+    public myItems: Array<DataItem> = ITEMS;
+    public counter: number = 0;
+    onSetupItemView(args) { this.counter++; }
+}
 
-    constructor(public elementRef: ElementRef) {
-        this.counter = 0;
-        this.myItems = [];
-        for (var i = 0; i < 2; i++) {
-            this.myItems.push(new DataItem(i, "data item " + i));
+@Component({
+    selector: 'item-component',
+    template: `<Label text="template"></Label>`
+})
+export class ItemTemplateComponent {
+    @Input() set templateName(value: any) {
+        if (value === "first") {
+            testTemplates.first = testTemplates.first + 1;
+        } else if (value === "second") {
+            testTemplates.second = testTemplates.second + 1;
+        } else {
+            throw new Error("Unexpected templateName: " + value);
         }
     }
+}
 
-    onSetupItemView(args) {
-        this.counter++;
+@Component({
+    selector: 'list-with-template-selector',
+    template: `
+    <GridLayout>
+        <ListView [items]="myItems" [itemTemplateSelector]="templateSelector">
+            <template nsTemplateKey="first">
+                <item-component templateName="first"></item-component>
+            </template>
+            
+            <template nsTemplateKey="second" let-item="item">
+                <item-component templateName="second"></item-component>
+            </template>
+        </ListView>
+    </GridLayout>
+  `
+})
+export class TestListViewSelectorComponent {
+    public myItems: Array<DataItem> = ITEMS;
+    public templateSelector = (item: DataItem, index: number, items: any) => {
+        return (item.id % 2 === 0) ? "first" : "second";
     }
+    constructor() { testTemplates = { first: 0, second: 0 }; }
 }
 
 describe('ListView-tests', () => {
     let testApp: TestApp = null;
 
     before(() => {
-        return TestApp.create([], [TestListViewComponent]).then((app) => {
+        return TestApp.create([], [TestListViewComponent, TestListViewSelectorComponent, ItemTemplateComponent]).then((app) => {
             testApp = app;
-        })
+        });
     });
 
     after(() => {
@@ -64,11 +98,21 @@ describe('ListView-tests', () => {
         return testApp.loadComponent(TestListViewComponent).then((componentRef) => {
             const component = componentRef.instance;
             setTimeout(() => {
-                console.log("component: " + component);
-                assert.equal(component.counter, 2);
+                assert.equal(component.counter, 3);
                 done();
             }, 1000);
         })
-        .catch(done);
+            .catch(done);
+    });
+
+
+    it('itemTemplateSelector selects templates', (done) => {
+        return testApp.loadComponent(TestListViewSelectorComponent).then((componentRef) => {
+            setTimeout(() => {
+                assert.deepEqual(testTemplates,  { first: 2, second: 1 });
+                done();
+            }, 1000);
+        })
+            .catch(done);
     });
 });

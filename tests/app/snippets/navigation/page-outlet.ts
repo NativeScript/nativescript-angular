@@ -24,7 +24,6 @@ export class PageNavigationApp {
 
         this.done = new Promise<void>((resolve, reject) => {
             this.router.events.subscribe((e) => {
-                console.log("------>>>>>> PageRouter event: " + e.toString());
                 if (e instanceof NavigationStart) {
                     this.startEvent = e;
                 }
