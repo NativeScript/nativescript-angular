@@ -49,12 +49,6 @@ export class NativeScriptElementSchemaRegistry extends ElementSchemaRegistry {
   }
 }
 
-export class NativeScriptSanitizer extends Sanitizer {
-    sanitize(context: SecurityContext, value: string): string {
-        return value;
-    }
-}
-
 export class NativeScriptDomAdapter extends Parse5DomAdapter {
   static makeCurrent() {
       rendererLog("Setting DOM");

@@ -14,13 +14,11 @@ import {
     ErrorHandler,
     Renderer,
     RootRenderer,
-    Sanitizer,
-    NgModule, NO_ERRORS_SCHEMA, CUSTOM_ELEMENTS_SCHEMA
+    NgModule, NO_ERRORS_SCHEMA,
 } from '@angular/core';
 import {
     defaultPageProvider, defaultFrameProvider, defaultDeviceProvider
 } from "./platform-providers";
-import { NativeScriptSanitizer } from './dom-adapter';
 import { NS_DIRECTIVES } from './directives';
 
 import * as nativescriptIntl from "nativescript-intl";
@@ -45,7 +43,6 @@ export function errorHandlerFactory() {
         { provide: RootRenderer, useClass: NativeScriptRootRenderer },
         NativeScriptRenderer,
         { provide: Renderer, useClass: NativeScriptRenderer },
-        { provide: Sanitizer, useClass: NativeScriptSanitizer },
         ModalDialogService
     ],
     entryComponents: [

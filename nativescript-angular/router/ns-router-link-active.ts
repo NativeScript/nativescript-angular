@@ -56,7 +56,7 @@ export class NSRouterLinkActive implements OnChanges, OnDestroy, AfterContentIni
     private classes: string[] = [];
     private subscription: Subscription;
 
-    @Input() private nsRouterLinkActiveOptions: { exact: boolean } = { exact: false };
+    @Input() nsRouterLinkActiveOptions: { exact: boolean } = { exact: false };
 
     constructor(private router: Router, private element: ElementRef, private renderer: Renderer) {
         this.subscription = router.events.subscribe(s => {
