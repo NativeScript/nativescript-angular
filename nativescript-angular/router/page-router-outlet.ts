@@ -152,15 +152,16 @@ export class PageRouterOutlet {
         if (this.locationStrategy._isPageNavigatingBack()) {
             this.activateOnGoBack(activatedRoute, providers, outletMap);
         } else {
-            this.activateOnGoForward(activatedRoute, providers, outletMap);
+            this.activateOnGoForward(activatedRoute, providers, outletMap, loadedResolver);
         }
     }
 
     private activateOnGoForward(
         activatedRoute: ActivatedRoute,
         providers: ResolvedReflectiveProvider[],
-        outletMap: RouterOutletMap): void {
-        const factory = this.getComponentFactory(activatedRoute);
+        outletMap: RouterOutletMap,
+        loadedResolver: ComponentFactoryResolver): void {
+        const factory = this.getComponentFactory(activatedRoute, loadedResolver);
 
         const pageRoute = new PageRoute(activatedRoute);
         providers = [...providers, ...ReflectiveInjector.resolve([{ provide: PageRoute, useValue: pageRoute }])];
@@ -241,31 +242,19 @@ export class PageRouterOutlet {
     }
 
     // NOTE: Using private APIs - potential break point!
-    private getComponentFactory(activatedRoute: any): ComponentFactory<any> {
+    private getComponentFactory(activatedRoute: any, loadedResolver: ComponentFactoryResolver): ComponentFactory<any> {
         const snapshot = activatedRoute._futureSnapshot;
         const component = <any>snapshot._routeConfig.component;
         let factory: ComponentFactory<any>;
-        try {
-            factory = typeof component === 'string' ?
-                snapshot._resolvedComponentFactory :
-                this.componentFactoryResolver.resolveComponentFactory(component);
-        } catch (e) {
-            if (!(e.constructor.name === "NoComponentFactoryError")) {
-                throw e;
-            }
-            // TODO: vsavkin uncomment this once ComponentResolver is deprecated
-            // const componentName = component ? component.name : null;
-            // console.warn(
-            //     `'${componentName}' not found in precompile array.  To ensure all components referred
-            //     to by the RouterConfig are compiled, you must add '${componentName}' to the
-            //     'precompile' array of your application component. This will be required in a future
-            //     release of the router.`);
 
-            factory = snapshot._resolvedComponentFactory;
+        if (loadedResolver) {
+            factory = loadedResolver.resolveComponentFactory(component);
+        } else {
+            factory = this.componentFactoryResolver.resolveComponentFactory(component);
         }
+
         return factory;
     }
-
 }
 
 function log(msg: string) {
