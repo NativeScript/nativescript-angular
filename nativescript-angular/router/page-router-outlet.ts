@@ -13,7 +13,7 @@ import { DetachedLoader } from "../common/detached-loader";
 import { ViewUtil } from "../view-util";
 import { Frame } from "ui/frame";
 import { Page, NavigatedData } from "ui/page";
-import { BehaviorSubject } from "rxjs";
+import { BehaviorSubject } from "rxjs/BehaviorSubject";
 
 interface CacheItem {
     componentRef: ComponentRef<any>;
