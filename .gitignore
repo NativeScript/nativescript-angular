@@ -6,12 +6,16 @@ tags
 
 /hooks
 
-nativescript-angular/**/*.d.ts
-!nativescript-angular/global.d.ts
-nativescript-angular/**/*.js
-!nativescript-angular/postinstall.js
-!nativescript-angular/hooks/**/*.js
-!nativescript-angular/gulpfile.js
+/nativescript-angular/**/*.d.ts
+/nativescript-angular/**/*.js
+
+!/nativescript-angular/global.d.ts
+!/nativescript-angular/postinstall.js
+!/nativescript-angular/hooks/**/*.js
+!/nativescript-angular/gulpfile.js
+!/nativescript-angular/rollup.config.js
+!/nativescript-angular/rollup-entry.js
+!/nativescript-angular/zone-js/**/*.js
 
 .tscache
 .nvm

@@ -2,9 +2,8 @@ import { TestApp, registerTestApp } from "../../tests/test-app";
 import { ApplicationRef } from '@angular/core';
 import { Router, NavigationStart, NavigationEnd } from "@angular/router";
 // >> page-outlet-example
-import { platformNativeScriptDynamic, NativeScriptModule } from "nativescript-angular/platform";
+import { platformNativeScriptDynamic, NativeScriptModule, NativeScriptRouterModule } from "nativescript-angular";
 import { Component, NgModule } from '@angular/core';
-import { NativeScriptRouterModule } from "nativescript-angular/router";
 import { routes } from "./app.routes";
 import { FirstComponent, SecondComponent } from "./navigation-common";
 

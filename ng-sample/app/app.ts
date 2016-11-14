@@ -3,32 +3,39 @@
 //global.registerModule("./main-page", function () { return require("./main-page"); });
 
 //import * as profiling from "./profiling";
-//profiling.start('application-start');
+//profiling.start("application-start");
 
 // "nativescript-angular/application" import should be first in order to load some required settings (like globals and reflect-metadata)
-import { NativeScriptModule, platformNativeScriptDynamic } from "nativescript-angular/platform";
-import { onAfterLivesync, onBeforeLivesync } from "nativescript-angular/platform-common";
+import { 
+    NativeScriptModule, 
+    platformNativeScriptDynamic, 
+    NativeScriptRouterModule, 
+    NativeScriptFormsModule,
+    NativeScriptHttpModule,
+    routerTraceCategory, 
+    rendererTraceCategory,
+    listViewTraceCategory,
+    PAGE_FACTORY, 
+    PageFactory, 
+    PageFactoryOptions,
+    onAfterLivesync,
+    onBeforeLivesync
+} from "nativescript-angular";
 import { NgModule } from "@angular/core";
 import { Router } from "@angular/router";
-import { NativeScriptRouterModule } from "nativescript-angular/router";
-import { NativeScriptFormsModule } from "nativescript-angular/forms";
-import { NativeScriptHttpModule } from "nativescript-angular/http";
-import { rendererTraceCategory, routerTraceCategory, listViewTraceCategory } from "nativescript-angular/trace";
-import { PAGE_FACTORY, PageFactory, PageFactoryOptions } from "nativescript-angular/platform-providers";
 import { Page } from "ui/page";
 import { Color } from "color";
+import { setCategories, enable } from "trace";
+// setCategories(rendererTraceCategory);
+// setCategories(routerTraceCategory);
+// setCategories(listViewTraceCategory);
+enable();
 
-import trace = require("trace");
-trace.setCategories(rendererTraceCategory);
-// trace.setCategories(routerTraceCategory);
-// trace.setCategories(listViewTraceCategory);
-trace.enable();
-
-import { RendererTest } from './examples/renderer-test';
-import { TabViewTest } from './examples/tab-view/tab-view-test';
-import { Benchmark } from './performance/benchmark';
-import { ListTest } from './examples/list/list-test';
-import { ListTemplateSelectorTest } from './examples/list/template-selector';
+import { RendererTest } from "./examples/renderer-test";
+import { TabViewTest } from "./examples/tab-view/tab-view-test";
+import { Benchmark } from "./performance/benchmark";
+import { ListTest } from "./examples/list/list-test";
+import { ListTemplateSelectorTest } from "./examples/list/template-selector";
 import { ListTestAsync, ListTestFilterAsync } from "./examples/list/list-test-async";
 import { ImageTest } from "./examples/image/image-test";
 import { HttpTest } from "./examples/http/http-test";
@@ -139,24 +146,24 @@ platformNativeScriptDynamic().bootstrapModule(makeExampleModule(RendererTest));
 // platformNativeScriptDynamic().bootstrapModule(makeExampleModule(AnimationEnterLeaveTest));
 
 //Livesync test
-var cachedUrl: string;
-onBeforeLivesync.subscribe((moduleRef) => {
-    console.log("------- onBeforeLivesync");
-    if (moduleRef) {
-        const router = <Router>moduleRef.injector.get(Router);
-        cachedUrl = router.url;
-        console.log("------- Caching URL: " + cachedUrl);
-    }
-});
-
-onAfterLivesync.subscribe((moduleRef) => {
-    console.log("------- onAfterLivesync cachedUrl:");
-    const router = <Router>moduleRef.injector.get(Router);
-    router.events.subscribe(e => console.log(e.toString()));
-    if (router && cachedUrl) {
-        setTimeout(() => { router.navigateByUrl(cachedUrl); }, 0);
-    }
-});
+//var cachedUrl: string;
+//onBeforeLivesync.subscribe((moduleRef) => {
+//    console.log("------- onBeforeLivesync");
+//    if (moduleRef) {
+//        const router = <Router>moduleRef.injector.get(Router);
+//        cachedUrl = router.url;
+//        console.log("------- Caching URL: " + cachedUrl);
+//    }
+//});
+//
+//onAfterLivesync.subscribe((moduleRef) => {
+//    console.log("------- onAfterLivesync cachedUrl:");
+//    const router = <Router>moduleRef.injector.get(Router);
+//    router.events.subscribe(e => console.log(e.toString()));
+//    if (router && cachedUrl) {
+//        setTimeout(() => { router.navigateByUrl(cachedUrl); }, 0);
+//    }
+//});
 
 //platformNativeScriptDynamic().bootstrapModule(makeExampleModule(LivesyncApp));
 console.log("APP RESTART");

@@ -13,8 +13,8 @@ export const routes = [
 ];
 // << router-config
 
-// >> router-provider
-import { NativeScriptRouterModule } from "nativescript-angular/router";
+// >> router-provider and bootstrap
+import { NativeScriptRouterModule, platformNativeScriptDynamic } from "nativescript-angular";
 
 @NgModule({
     bootstrap: [GroceriesApp],
@@ -26,8 +26,6 @@ import { NativeScriptRouterModule } from "nativescript-angular/router";
 export class GroceriesAppModule {}
 // << router-provider
 
-// >> router-bootstrap
-import { platformNativeScriptDynamic } from "nativescript-angular/platform";
 // >> (hide)
 function start_snippet() {
 // << (hide)

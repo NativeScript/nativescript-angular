@@ -2,11 +2,9 @@
 import {assert} from "./test-config";
 import {TextField} from "ui/text-field";
 import {Red, Lime} from "color/known-colors";
-import {NativeScriptRenderer, NativeScriptRootRenderer} from "nativescript-angular/renderer";
-import {NativeScriptAnimationDriver} from "nativescript-angular/animation-driver";
+import {NativeScriptRenderer, NativeScriptRootRenderer, NativeScriptAnimationDriver, NgView} from "nativescript-angular";
 import {device} from "platform";
 import { ViewEncapsulation, RenderComponentType } from "@angular/core";
-import {NgView} from "nativescript-angular/view-util";
 
 describe("Setting style properties", () => {
     let renderer: NativeScriptRenderer = null;

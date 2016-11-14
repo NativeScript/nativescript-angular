@@ -1,5 +1,5 @@
 import "globals";
-import "./zone.js/dist/zone-nativescript";
+import "./zone-js/dist/zone-nativescript";
 
 import "reflect-metadata";
 import "./polyfills/array";

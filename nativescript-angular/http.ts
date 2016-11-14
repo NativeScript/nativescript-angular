@@ -7,6 +7,8 @@ import { NSFileSystem } from "./file-system/ns-file-system";
 import { NgModule } from "@angular/core";
 import { HttpModule, XSRFStrategy } from "@angular/http";
 
+export { NSHttp } from "./http/ns-http";
+
 export function nsHttpFactory(backend, options, nsFileSystem) {
     return new NSHttp(backend, options, nsFileSystem);
 };

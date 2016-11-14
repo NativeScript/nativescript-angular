@@ -2,7 +2,7 @@ import { Directive, ElementRef, forwardRef, AfterViewInit, HostListener } from "
 import { NG_VALUE_ACCESSOR } from "@angular/forms";
 import { BaseValueAccessor } from "./base-value-accessor";
 import { View } from "ui/core/view";
-import * as utils from "../common/utils";
+import { convertToInt } from "../common/utils";
 
 const SELECTED_INDEX_VALUE_ACCESSOR = {provide: NG_VALUE_ACCESSOR,
     useExisting: forwardRef(() => SelectedIndexValueAccessor), multi: true};
@@ -38,7 +38,7 @@ export class SelectedIndexValueAccessor extends BaseValueAccessor<SelectableView
     private viewInitialized: boolean;
 
     writeValue(value: any): void {
-        this._normalizedValue = utils.convertToInt(value);
+        this._normalizedValue = convertToInt(value);
         if (this.viewInitialized) {
             this.view.selectedIndex = this._normalizedValue;
         }
