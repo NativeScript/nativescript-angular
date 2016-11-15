@@ -16,6 +16,7 @@ import "ui/frame";
 import {HOOKS_LOG} from "./base.component";
 import {MultiPageMain, routes as multiPageRoutes} from "./multi-page-main.component";
 import {SinglePageMain, routes as singlePageRoutes} from "./single-page-main.component";
+import {LazyLoadMain, routes as lazyLoadRoutes} from "./lazy-load-main";
 import {FirstComponent} from "./first.component";
 import {SecondComponent} from "./second.component";
 import { OpaqueToken, NgModule } from "@angular/core";
@@ -42,6 +43,8 @@ const singlePageHooksLog = new BehaviorSubject([]);
 const singlePageHooksLogProvider = {provide: HOOKS_LOG, useValue: singlePageHooksLog};
 const multiPageHooksLog = new BehaviorSubject([]);
 const multiPageHooksLogProvider = {provide: HOOKS_LOG, useValue: multiPageHooksLog};
+const lazyLoadHooksLog = new BehaviorSubject([]);
+const lazyLoadHooksLogProvider = {provide: HOOKS_LOG, useValue: lazyLoadHooksLog};
 
 @NgModule({
     bootstrap: [
@@ -107,6 +110,34 @@ class SinglePageModule {}
 })
 class MultiPageModule {}
 
+@NgModule({
+    bootstrap: [
+        LazyLoadMain
+    ],
+    declarations: [
+        LazyLoadMain,
+        FirstComponent,
+    ],
+    entryComponents: [
+        LazyLoadMain,
+    ],
+    imports: [
+        NativeScriptModule,
+        NativeScriptFormsModule,
+        NativeScriptRouterModule,
+        NativeScriptRouterModule.forRoot(lazyLoadRoutes),
+    ],
+    exports: [
+        NativeScriptModule,
+        NativeScriptFormsModule,
+        NativeScriptRouterModule,
+    ],
+    providers: [
+        rootViewProvider,
+        lazyLoadHooksLogProvider,
+    ]
+})
+class LazyLoadModule {}
 
 application.start({
     create: (): Page => {
@@ -120,9 +151,10 @@ application.start({
 
             //profiling.start('ng-bootstrap');
             console.log('BOOTSTRAPPING TEST APPS...');
-            
+
             platform.bootstrapModule(SinglePageModule);
             platform.bootstrapModule(MultiPageModule);
+            platform.bootstrapModule(LazyLoadModule);
         }
 
         page.on('loaded', onLoadedHandler);
