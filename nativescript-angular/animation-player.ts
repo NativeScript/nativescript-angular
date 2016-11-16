@@ -1,4 +1,5 @@
-import { AnimationPlayer, AnimationKeyframe } from "./private_import_core";
+import { AnimationPlayer } from "@angular/core";
+import { AnimationKeyframe } from "./private_import_core";
 import { KeyframeAnimation, KeyframeAnimationInfo, KeyframeInfo, KeyframeDeclaration } from 'ui/animation/keyframe-animation';
 import { View } from "ui/core/view";
 import { AnimationCurve } from "ui/enums";

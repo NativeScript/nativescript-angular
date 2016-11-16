@@ -1,4 +1,5 @@
-import { AnimationPlayer, AnimationStyles, AnimationKeyframe } from "./private_import_core";
+import { AnimationPlayer } from "@angular/core";
+import { AnimationStyles, AnimationKeyframe } from "./private_import_core";
 import { NativeScriptAnimationPlayer } from './animation-player';
 import { View } from "ui/core/view";
 import { getPropertyByCssName } from 'ui/styling/style-property';
