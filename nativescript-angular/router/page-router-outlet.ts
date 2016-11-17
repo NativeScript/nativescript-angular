@@ -60,13 +60,16 @@ class RefCache {
 export class PageRouterOutlet {
     private viewUtil: ViewUtil;
     private refCache: RefCache = new RefCache();
-    private isInitalPage: boolean = true;
+    private isInitialPage: boolean = true;
     private detachedLoaderFactory: ComponentFactory<DetachedLoader>;
 
     private currentActivatedComp: ComponentRef<any>;
     private currentActivatedRoute: ActivatedRoute;
 
     public outletMap: RouterOutletMap;
+
+    get locationInjector(): Injector { return this.containerRef.injector; }
+    get locationFactoryResolver(): ComponentFactoryResolver { return this.resolver; }
 
     get isActivated(): boolean {
         return !!this.currentActivatedComp;
@@ -93,7 +96,7 @@ export class PageRouterOutlet {
         @Attribute('name') name: string,
         private locationStrategy: NSLocationStrategy,
         private componentFactoryResolver: ComponentFactoryResolver,
-        resolver: ComponentFactoryResolver,
+        private resolver: ComponentFactoryResolver,
         private frame: Frame,
         @Inject(DEVICE) device: Device,
         @Inject(PAGE_FACTORY) private pageFactory: PageFactory) {
@@ -143,16 +146,15 @@ export class PageRouterOutlet {
      * This method in turn is responsible for calling the `routerOnActivate` hook of its child.
      */
     activate(
-        activatedRoute: ActivatedRoute, loadedResolver: ComponentFactoryResolver,
-        loadedInjector: Injector, providers: ResolvedReflectiveProvider[],
-        outletMap: RouterOutletMap): void {
+        activatedRoute: ActivatedRoute, resolver: ComponentFactoryResolver, injector: Injector,
+        providers: ResolvedReflectiveProvider[], outletMap: RouterOutletMap): void {
         this.outletMap = outletMap;
         this.currentActivatedRoute = activatedRoute;
 
         if (this.locationStrategy._isPageNavigatingBack()) {
             this.activateOnGoBack(activatedRoute, providers, outletMap);
         } else {
-            this.activateOnGoForward(activatedRoute, providers, outletMap, loadedResolver);
+            this.activateOnGoForward(activatedRoute, providers, outletMap, resolver, injector);
         }
     }
 
@@ -160,16 +162,17 @@ export class PageRouterOutlet {
         activatedRoute: ActivatedRoute,
         providers: ResolvedReflectiveProvider[],
         outletMap: RouterOutletMap,
-        loadedResolver: ComponentFactoryResolver): void {
+        loadedResolver: ComponentFactoryResolver,
+        injector: Injector): void {
         const factory = this.getComponentFactory(activatedRoute, loadedResolver);
 
         const pageRoute = new PageRoute(activatedRoute);
         providers = [...providers, ...ReflectiveInjector.resolve([{ provide: PageRoute, useValue: pageRoute }])];
 
-        if (this.isInitalPage) {
-            log("PageRouterOutlet.activate() inital page - just load component");
-            this.isInitalPage = false;
-            const inj = ReflectiveInjector.fromResolvedProviders(providers, this.containerRef.parentInjector);
+        if (this.isInitialPage) {
+            log("PageRouterOutlet.activate() initial page - just load component");
+            this.isInitialPage = false;
+            const inj = ReflectiveInjector.fromResolvedProviders(providers, injector);
             this.currentActivatedComp = this.containerRef.createComponent(factory, this.containerRef.length, inj, []);
             this.refCache.push(this.currentActivatedComp, pageRoute, outletMap, null);
 
@@ -180,7 +183,7 @@ export class PageRouterOutlet {
             const pageResolvedProvider = ReflectiveInjector.resolve([
                 { provide: Page, useValue: page }
             ]);
-            const childInjector = ReflectiveInjector.fromResolvedProviders([...providers, ...pageResolvedProvider], this.containerRef.parentInjector);
+            const childInjector = ReflectiveInjector.fromResolvedProviders([...providers, ...pageResolvedProvider], injector);
             const loaderRef = this.containerRef.createComponent(this.detachedLoaderFactory, this.containerRef.length, childInjector, []);
 
             this.currentActivatedComp = loaderRef.instance.loadWithFactory(factory);
@@ -193,7 +196,7 @@ export class PageRouterOutlet {
         activatedRoute: ActivatedRoute,
         providers: ResolvedReflectiveProvider[],
         outletMap: RouterOutletMap): void {
-        log("PageRouterOutlet.activate() - Back naviation, so load from cache");
+        log("PageRouterOutlet.activate() - Back navigation, so load from cache");
 
         this.locationStrategy._finishBackPageNavigation();
 
