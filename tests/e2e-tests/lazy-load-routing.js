@@ -6,15 +6,7 @@ describe("lazy load routing", function () {
     var driver;
 
     before(function () {
-        var caps = {
-            browserName: '',
-            'appium-version': '1.6',
-            platformName: 'Android',
-            platformVersion: '4.4.4',
-            deviceName: 'Android Emulator',
-            app: undefined // will be set later
-        };
-        driver = nsAppium.createDriver(caps);
+        driver = nsAppium.createDriver();
     });
 
     after(function () {
