@@ -6,7 +6,8 @@
 //profiling.start('application-start');
 
 // "nativescript-angular/application" import should be first in order to load some required settings (like globals and reflect-metadata)
-import { NativeScriptModule, platformNativeScriptDynamic, onAfterLivesync, onBeforeLivesync } from "nativescript-angular/platform";
+import { NativeScriptModule, platformNativeScriptDynamic } from "nativescript-angular/platform";
+import { onAfterLivesync, onBeforeLivesync } from "nativescript-angular/platform-common";
 import { NgModule } from "@angular/core";
 import { Router } from "@angular/router";
 import { NativeScriptRouterModule } from "nativescript-angular/router";

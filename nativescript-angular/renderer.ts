@@ -2,7 +2,8 @@ import {
     Inject, Injectable, Optional, NgZone,
     Renderer, RootRenderer, RenderComponentType,
 } from '@angular/core';
-import { AnimationPlayer, AnimationStyles, AnimationKeyframe  } from "./private_import_core";
+import { AnimationPlayer } from "@angular/core";
+import { AnimationStyles, AnimationKeyframe } from "./private_import_core";
 import {APP_ROOT_VIEW, DEVICE} from "./platform-providers";
 import {isBlank} from "./lang-facade";
 import {View} from "ui/core/view";

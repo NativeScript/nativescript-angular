@@ -1,11 +1,10 @@
 //make sure you import mocha-config before @angular/core
-import {assert} from "./test-config";
-import {Component, ElementRef} from "@angular/core";
-import {ProxyViewContainer} from "ui/proxy-view-container";
-import {dumpView, createDevice} from "./test-utils";
-import {TestApp} from "./test-app";
-import {DEVICE} from "nativescript-angular/platform-providers";
-import {platformNames} from "platform";
+import { assert } from "./test-config";
+import { Component, ElementRef } from "@angular/core";
+import { dumpView, createDevice } from "./test-utils";
+import { TestApp } from "./test-app";
+import { DEVICE } from "nativescript-angular/platform-providers";
+import { platformNames } from "platform";
 
 @Component({
     template: `
@@ -37,12 +36,12 @@ export class PlatformSpecificAttributeComponent {
     constructor(public elementRef: ElementRef) { }
 }
 
-describe('Platofrm filter directives', () => {
+describe('Platform filter directives', () => {
     describe('on IOS device', () => {
         let testApp: TestApp = null;
 
         before(() => {
-            return TestApp.create([{provide: DEVICE, useValue: createDevice(platformNames.ios)}], [PlatformSpecificAttributeComponent, AndroidSpecificComponent, IosSpecificComponent]).then((app) => {
+            return TestApp.create([{ provide: DEVICE, useValue: createDevice(platformNames.ios) }], [PlatformSpecificAttributeComponent, AndroidSpecificComponent, IosSpecificComponent]).then((app) => {
                 testApp = app;
             });
         });
@@ -51,21 +50,17 @@ describe('Platofrm filter directives', () => {
             testApp.dispose();
         });
 
-        it("does render ios sepecific conternt", () => {
+        it("does render ios specific content", () => {
             return testApp.loadComponent(IosSpecificComponent).then((componentRef) => {
                 const componentRoot = componentRef.instance.elementRef.nativeElement;
-                assert.equal(
-                    "(ProxyViewContainer (StackLayout (ProxyViewContainer (template), (Label[text=IOS]))))",
-                    dumpView(componentRoot, true));
+                assert.isTrue(dumpView(componentRoot, true).indexOf("(Label[text=IOS])") >= 0);
             });
         });
 
-        it("does not render android sepecific conternt", () => {
+        it("does not render android specific content", () => {
             return testApp.loadComponent(AndroidSpecificComponent).then((componentRef) => {
                 const componentRoot = componentRef.instance.elementRef.nativeElement;
-                assert.equal(
-                    "(ProxyViewContainer (StackLayout (ProxyViewContainer (template))))",
-                    dumpView(componentRoot, true));
+                assert.isTrue(dumpView(componentRoot, true).indexOf("Label") < 0);
             });
         });
 
@@ -84,7 +79,7 @@ describe('Platofrm filter directives', () => {
         let testApp: TestApp = null;
 
         before(() => {
-            return TestApp.create([{provide: DEVICE, useValue: createDevice(platformNames.android)}], [AndroidSpecificComponent, IosSpecificComponent, PlatformSpecificAttributeComponent]).then((app) => {
+            return TestApp.create([{ provide: DEVICE, useValue: createDevice(platformNames.android) }], [AndroidSpecificComponent, IosSpecificComponent, PlatformSpecificAttributeComponent]).then((app) => {
                 testApp = app;
             });
         });
@@ -93,21 +88,17 @@ describe('Platofrm filter directives', () => {
             testApp.dispose();
         });
 
-        it("does render android sepecific conternt", () => {
+        it("does render android specific content", () => {
             return testApp.loadComponent(AndroidSpecificComponent).then((componentRef) => {
                 const componentRoot = componentRef.instance.elementRef.nativeElement;
-                assert.equal(
-                    "(ProxyViewContainer (StackLayout (ProxyViewContainer (template), (Label[text=ANDROID]))))",
-                    dumpView(componentRoot, true));
+                assert.isTrue(dumpView(componentRoot, true).indexOf("(Label[text=ANDROID])") >= 0);
             });
         });
 
-        it("does not render ios sepecific conternt", () => {
+        it("does not render ios specific content", () => {
             return testApp.loadComponent(IosSpecificComponent).then((componentRef) => {
                 const componentRoot = componentRef.instance.elementRef.nativeElement;
-                assert.equal(
-                    "(ProxyViewContainer (StackLayout (ProxyViewContainer (template))))",
-                    dumpView(componentRoot, true));
+                assert.isTrue(dumpView(componentRoot, true).indexOf("Label") < 0);
             });
         });
 
