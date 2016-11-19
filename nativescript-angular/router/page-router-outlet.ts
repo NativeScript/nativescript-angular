@@ -111,18 +111,18 @@ export class PageRouterOutlet {
     deactivate(): void {
         if (this.locationStrategy._isPageNavigatingBack()) {
             log("PageRouterOutlet.deactivate() while going back - should destroy");
-            const popedItem = this.refCache.pop();
-            const popedRef = popedItem.componentRef;
+            const poppedItem = this.refCache.pop();
+            const poppedRef = poppedItem.componentRef;
 
-            if (this.currentActivatedComp !== popedRef) {
+            if (this.currentActivatedComp !== poppedRef) {
                 throw new Error("Current componentRef is different for cached componentRef");
             }
 
-            this.destroyCacheItem(popedItem);
+            this.destroyCacheItem(poppedItem);
             this.currentActivatedComp = null;
 
         } else {
-            log("PageRouterOutlet.deactivate() while going foward - do nothing");
+            log("PageRouterOutlet.deactivate() while going forward - do nothing");
         }
     }
 
@@ -131,13 +131,13 @@ export class PageRouterOutlet {
             this.destroyCacheItem(this.refCache.pop());
         }
     }
-    private destroyCacheItem(popedItem: CacheItem) {
-        if (isPresent(popedItem.componentRef)) {
-            popedItem.componentRef.destroy();
+    private destroyCacheItem(poppedItem: CacheItem) {
+        if (isPresent(poppedItem.componentRef)) {
+            poppedItem.componentRef.destroy();
         }
 
-        if (isPresent(popedItem.loaderRef)) {
-            popedItem.loaderRef.destroy();
+        if (isPresent(poppedItem.loaderRef)) {
+            poppedItem.loaderRef.destroy();
         }
     }
 
@@ -206,7 +206,7 @@ export class PageRouterOutlet {
         this.outletMap = cacheItem.outletMap;
 
         // HACK: Fill the outlet map provided by the router, with the outlets that we have cached.
-        // This is needed beacuse the component is taken form the cache and not created - so it will not register
+        // This is needed because the component is taken form the cache and not created - so it will not register
         // its child router-outlets to the newly created outlet map.
         (<any>Object).assign(outletMap, cacheItem.outletMap);
 

@@ -1,7 +1,10 @@
 import {
     Component,
+    Directive,
+    Input,
     DoCheck,
     OnDestroy,
+    AfterContentInit,
     ElementRef,
     ViewContainerRef,
     TemplateRef,
@@ -13,14 +16,16 @@ import {
     EventEmitter,
     ViewChild,
     Output,
-    ChangeDetectionStrategy } from '@angular/core';
-import {isBlank} from "../lang-facade";
-import {isListLikeIterable} from "../collection-facade";
-import {ListView} from 'ui/list-view';
-import {View} from 'ui/core/view';
-import {ObservableArray} from 'data/observable-array';
-import {LayoutBase} from 'ui/layouts/layout-base';
-import {listViewLog} from "../trace";
+    Host,
+    ChangeDetectionStrategy
+} from '@angular/core';
+import { isBlank } from "../lang-facade";
+import { isListLikeIterable } from "../collection-facade";
+import { ListView } from 'ui/list-view';
+import { View, KeyedTemplate } from 'ui/core/view';
+import { ObservableArray } from 'data/observable-array';
+import { LayoutBase } from 'ui/layouts/layout-base';
+import { listViewLog } from "../trace";
 
 const NG_VIEW = "_ngViewRef";
 
@@ -51,7 +56,7 @@ export interface SetupItemViewArgs {
     inputs: ['items'],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class ListViewComponent implements DoCheck, OnDestroy {
+export class ListViewComponent implements DoCheck, OnDestroy, AfterContentInit {
     public get nativeElement(): ListView {
         return this.listView;
     }
@@ -59,6 +64,7 @@ export class ListViewComponent implements DoCheck, OnDestroy {
     private listView: ListView;
     private _items: any;
     private _differ: IterableDiffer;
+    private _templateMap: Map<string, KeyedTemplate>;
 
     @ViewChild('loader', { read: ViewContainerRef }) loader: ViewContainerRef;
 
@@ -68,7 +74,7 @@ export class ListViewComponent implements DoCheck, OnDestroy {
 
     set items(value: any) {
         this._items = value;
-        var needDiffer = true;
+        let needDiffer = true;
         if (value instanceof ObservableArray) {
             needDiffer = false;
         }
@@ -87,12 +93,51 @@ export class ListViewComponent implements DoCheck, OnDestroy {
         this.listView.on("itemLoading", this.onItemLoading, this);
     }
 
+    ngAfterContentInit() {
+        listViewLog("ListView.ngAfterContentInit()");
+        this.setItemTemplates();
+    }
+
     ngOnDestroy() {
         this.listView.off("itemLoading", this.onItemLoading, this);
     }
 
+    private setItemTemplates() {
+        if (this._templateMap) {
+            listViewLog("Setting templates");
+
+            const templates: KeyedTemplate[] = [];
+            this._templateMap.forEach(value => {
+                templates.push(value);
+            });
+            this.listView.itemTemplates = templates;
+        }
+    }
+
+    public registerTemplate(key: string, template: TemplateRef<ListItemContext>) {
+        listViewLog("registerTemplate for key: " + key);
+        if (!this._templateMap) {
+            this._templateMap = new Map<string, KeyedTemplate>();
+        }
+
+        const keyedTemplate = {
+            key,
+            createView: () => {
+                listViewLog("registerTemplate for key: " + key);
+
+                const viewRef = this.loader.createEmbeddedView(template, new ListItemContext(), 0);
+                const resultView = getSingleViewFromViewRef(viewRef);
+                resultView[NG_VIEW] = viewRef;
+
+                return resultView;
+            }
+        };
+
+        this._templateMap.set(key, keyedTemplate);
+    }
+
     public onItemLoading(args) {
-        if (!this.itemTemplate) {
+        if (!args.view && !this.itemTemplate) {
             return;
         }
 
@@ -115,6 +160,7 @@ export class ListViewComponent implements DoCheck, OnDestroy {
             args.view = getSingleViewFromViewRef(viewRef);
             args.view[NG_VIEW] = viewRef;
         }
+
         this.setupViewRef(viewRef, currentItem, index);
 
         this.detectChangesOnChild(viewRef, index);
@@ -128,7 +174,7 @@ export class ListViewComponent implements DoCheck, OnDestroy {
         context.$implicit = data;
         context.item = data;
         context.index = index;
-        context.even = (index % 2 == 0);
+        context.even = (index % 2 === 0);
         context.odd = !context.even;
 
         this.setupItemView.next({ view: viewRef, data: data, index: index, context: context });
@@ -139,23 +185,22 @@ export class ListViewComponent implements DoCheck, OnDestroy {
         // TODO: Is there a better way of getting viewRef's change detector
         const childChangeDetector = <ChangeDetectorRef>(<any>viewRef);
 
-        listViewLog("Manually detect changes in child: " + index)
+        listViewLog("Manually detect changes in child: " + index);
         childChangeDetector.markForCheck();
         childChangeDetector.detectChanges();
     }
 
     ngDoCheck() {
         if (this._differ) {
-            listViewLog("ngDoCheck() - execute differ")
+            listViewLog("ngDoCheck() - execute differ");
             const changes = this._differ.diff(this._items);
             if (changes) {
-                listViewLog("ngDoCheck() - refresh")
+                listViewLog("ngDoCheck() - refresh");
                 this.listView.refresh();
             }
         }
     }
 }
-
 
 function getSingleViewRecursive(nodes: Array<any>, nestLevel: number) {
     const actualNodes = nodes.filter((n) => !!n && n.nodeName !== "#text");
@@ -175,7 +220,7 @@ function getSingleViewRecursive(nodes: Array<any>, nestLevel: number) {
             return actualNodes[0];
         }
         else {
-            return getSingleViewRecursive(actualNodes[0].children, nestLevel + 1)
+            return getSingleViewRecursive(actualNodes[0].children, nestLevel + 1);
         }
     }
 }
@@ -184,8 +229,24 @@ function getSingleViewFromViewRef(viewRef: EmbeddedViewRef<any>): View {
     return getSingleViewRecursive(viewRef.rootNodes, 0);
 }
 
-const changeDetectorMode = ["CheckOnce", "Checked", "CheckAlways", "Detached", "OnPush", "Default"];
-const changeDetectorStates = ["Never", "CheckedBefore", "Error"];
-function getChangeDetectorState(cdr: any) {
-    return "Mode: " + changeDetectorMode[parseInt(cdr.cdMode)] + " State: " + changeDetectorStates[parseInt(cdr.cdState)];
+@Directive({ selector: "[nsTemplateKey]" })
+export class TemplateKeyDirective {
+    constructor(
+        private templateRef: TemplateRef<any>,
+        @Host() private list: ListViewComponent) {
+    }
+
+    @Input()
+    set nsTemplateKey(value: any) {
+        if (this.list && this.templateRef) {
+            this.list.registerTemplate(value, this.templateRef);
+        }
+    }
 }
+
+// Debug helpers:
+// const changeDetectorMode = ["CheckOnce", "Checked", "CheckAlways", "Detached", "OnPush", "Default"];
+// const changeDetectorStates = ["Never", "CheckedBefore", "Error"];
+// function getChangeDetectorState(cdr: any) {
+//     return "Mode: " + changeDetectorMode[parseInt(cdr.cdMode)] + " State: " + changeDetectorStates[parseInt(cdr.cdState)];
+// }

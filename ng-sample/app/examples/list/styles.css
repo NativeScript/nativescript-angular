@@ -14,3 +14,15 @@ button {
     font-size: 20;
     text-align: center;
 }
+
+.header {
+    background-color: cornflowerblue;
+    font-size: 28;
+    color: black;
+    text-align: center;
+}
+
+.item {
+    background-color: lightgreen;
+    color: darkslategrey;
+}
