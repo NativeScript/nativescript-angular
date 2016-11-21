@@ -20,7 +20,7 @@ export class NativescriptPlatformLocation extends PlatformLocation {
         this.locationStartegy.onPopState(fn);
     }
 
-    onHashChange(fn: LocationChangeListener): void {
+    onHashChange(_fn: LocationChangeListener): void {
     }
 
     get search(): string {
@@ -32,7 +32,7 @@ export class NativescriptPlatformLocation extends PlatformLocation {
     get pathname(): string {
         return this.locationStartegy.path();
     }
-    set pathname(newPath: string) {
+    set pathname(_newPath: string) {
         throw new Error("NativescriptPlatformLocation set pathname - not implemented")
     }
 

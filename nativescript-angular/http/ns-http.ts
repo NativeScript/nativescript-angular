@@ -1,11 +1,11 @@
 import {Injectable} from '@angular/core';
-import {Http, XHRBackend, ConnectionBackend, RequestOptions, RequestOptionsArgs, ResponseOptions, ResponseType, Response, XSRFStrategy} from '@angular/http';
+import {Http, ConnectionBackend, RequestOptionsArgs, ResponseOptions, ResponseType, Response} from '@angular/http';
 import {Observable} from 'rxjs/Observable';
 import 'rxjs/add/observable/fromPromise';
 import {NSFileSystem} from '../file-system/ns-file-system';
 
 export class NSXSRFStrategy {
-  public configureRequest(req: any) {
+  public configureRequest(_req: any) {
     // noop
   }
 }

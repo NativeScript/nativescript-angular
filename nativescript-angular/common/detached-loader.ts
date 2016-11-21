@@ -4,12 +4,6 @@ import {
 } from '@angular/core';
 import * as trace from "trace";
 
-type AnyComponentRef = ComponentRef<any>;
-interface PendingLoadEntry {
-    componentType: Type<any>;
-    resolveCallback: (AnyComponentRef) => void;
-}
-
 export const CATEGORY = "detached-loader";
 function log(message: string) {
     trace.write(message, CATEGORY);

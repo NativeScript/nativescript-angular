@@ -88,7 +88,7 @@ export class NativeScriptRenderer extends Renderer {
 
     constructor(
         private rootRenderer: NativeScriptRootRenderer,
-        private componentProto: RenderComponentType,
+        componentProto: RenderComponentType,
         private animationDriver: nsAnimationDriver.NativeScriptAnimationDriver,
         private zone: NgZone) {
 
@@ -154,7 +154,7 @@ export class NativeScriptRenderer extends Renderer {
         }
     }
 
-    public destroyView(hostElement: NgView, viewAllNodes: NgView[]) {
+    public destroyView(_hostElement: NgView, _viewAllNodes: NgView[]) {
         traceLog("NativeScriptRenderer.destroyView");
         // Seems to be called on component dispose only (router outlet)
         //TODO: handle this when we resolve routing and navigation.
@@ -192,18 +192,18 @@ export class NativeScriptRenderer extends Renderer {
         traceLog('NativeScriptRenderer.setBindingDebugInfo: ' + renderElement + ', ' + propertyName + ' = ' + propertyValue);
     }
 
-    setElementDebugInfo(renderElement: any, info: any /*RenderDebugInfo*/): void {
+    setElementDebugInfo(renderElement: any, _info: any /*RenderDebugInfo*/): void {
         traceLog('NativeScriptRenderer.setElementDebugInfo: ' + renderElement);
     }
 
     /**
     * Calls a method on an element.
     */
-    invokeElementMethod(renderElement: NgView, methodName: string, args: Array<any>) {
+    invokeElementMethod(_renderElement: NgView, methodName: string, args: Array<any>) {
         traceLog("NativeScriptRenderer.invokeElementMethod " + methodName + " " + args);
     }
 
-    setText(renderNode: any, text: string) {
+    setText(_renderNode: any, _text: string) {
         traceLog("NativeScriptRenderer.setText");
     }
 
@@ -224,9 +224,9 @@ export class NativeScriptRenderer extends Renderer {
         });
     }
 
-    public createText(parentElement: NgView, value: string): NgView {
+    public createText(_parentElement: NgView, _value: string): NgView {
         traceLog('NativeScriptRenderer.createText');
-        return this.viewUtil.createText(value);
+        return this.viewUtil.createText();
     }
 
     public listen(renderElement: NgView, eventName: string, callback: Function): Function {
@@ -246,7 +246,7 @@ export class NativeScriptRenderer extends Renderer {
         return () => renderElement.off(eventName, zonedCallback);
     }
 
-    public listenGlobal(target: string, eventName: string, callback: Function): Function {
+    public listenGlobal(_target: string, _eventName: string, _callback: Function): Function {
         throw new Error('NativeScriptRenderer.listenGlobal() - Not implemented.');
     }
 

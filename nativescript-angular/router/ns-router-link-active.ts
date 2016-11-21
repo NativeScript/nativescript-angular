@@ -67,7 +67,7 @@ export class NSRouterLinkActive implements OnChanges, OnDestroy, AfterContentIni
     }
 
     ngAfterContentInit(): void {
-        this.links.changes.subscribe(s => this.update());
+        this.links.changes.subscribe(() => this.update());
         this.update();
     }
 
@@ -80,7 +80,7 @@ export class NSRouterLinkActive implements OnChanges, OnDestroy, AfterContentIni
         }
     }
 
-    ngOnChanges(changes: {}): any { this.update(); }
+    ngOnChanges(_: {}): any { this.update(); }
     ngOnDestroy(): any { this.subscription.unsubscribe(); }
 
     private update(): void {

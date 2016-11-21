@@ -39,7 +39,7 @@ export class ModalDialogService {
         const resolver: ComponentFactoryResolver = viewContainerRef.injector.get(ComponentFactoryResolver);
         const pageFactory: PageFactory = viewContainerRef.injector.get(PAGE_FACTORY);
 
-        return new Promise((resolve, reject) => {
+        return new Promise((resolve) => {
             setTimeout(() => ModalDialogService.showDialog(type, options, resolve, viewContainerRef, resolver, parentPage, pageFactory), 10);
         });
     }

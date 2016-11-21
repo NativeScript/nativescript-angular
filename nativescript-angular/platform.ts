@@ -10,11 +10,17 @@ import {
 
 import {
     COMPILER_OPTIONS,
-    Sanitizer,
     PlatformRef,
     OpaqueToken,
     createPlatformFactory
 } from '@angular/core';
+
+//Work around a TS bug requiring an import of OpaqueToken without using it
+if (global.___TS_UNUSED) {
+    () => {
+        return OpaqueToken;
+    }
+}
 
 import { NativeScriptElementSchemaRegistry } from './dom-adapter';
 import { FileSystemResourceLoader } from './resource-loader';

@@ -105,7 +105,7 @@ export class NSRouterLink implements OnChanges {
     }
   }
 
-  ngOnChanges(changes: {}): any {
+  ngOnChanges(_: {}): any {
     this.updateUrlTree();
   }
 

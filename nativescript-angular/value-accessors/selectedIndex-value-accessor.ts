@@ -1,6 +1,5 @@
-import {Directive, ElementRef, Renderer, Self, forwardRef } from '@angular/core';
+import {Directive, ElementRef, forwardRef } from '@angular/core';
 import {NG_VALUE_ACCESSOR} from "@angular/forms";
-import {isBlank, isNumber} from "../lang-facade";
 import {BaseValueAccessor} from './base-value-accessor';
 import {View} from "ui/core/view";
 import * as utils from '../common/utils';

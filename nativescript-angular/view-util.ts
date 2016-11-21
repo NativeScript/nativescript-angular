@@ -119,11 +119,11 @@ export class ViewUtil {
             const viewClass = getViewClass(name);
             return this.createAndAttach(name, viewClass, parent, beforeAttach);
         } else {
-            return this.createViewContainer(name, parent, beforeAttach);
+            return this.createViewContainer(parent, beforeAttach);
         }
     }
 
-    public createText(value: string): NgView {
+    public createText(): NgView {
         const text = <NgView>new Placeholder();
         text.nodeName = "#text";
         text.visibility = "collapse";
@@ -131,7 +131,7 @@ export class ViewUtil {
         return text;
     }
 
-    public createViewContainer(name: string, parentElement: NgView, beforeAttach: BeforeAttachAction) {
+    public createViewContainer(parentElement: NgView, beforeAttach: BeforeAttachAction) {
         traceLog('Creating view container in:' + parentElement);
 
         const layout = this.createView('ProxyViewContainer', parentElement, beforeAttach);

@@ -1,8 +1,8 @@
-import {ElementRef, Directive, Input, TemplateRef, ViewContainerRef} from "@angular/core";
-import {TabView, TabViewItem} from "ui/tab-view";
+import { ElementRef, Directive, Input, TemplateRef, ViewContainerRef } from "@angular/core";
+import { TabView, TabViewItem } from "ui/tab-view";
 import * as utils from '../common/utils';
-import {rendererLog, rendererError} from "../trace";
-import {isBlank} from "../lang-facade";
+import { rendererLog } from "../trace";
+import { isBlank } from "../lang-facade";
 
 @Directive({
     selector: 'TabView',
@@ -24,7 +24,7 @@ export class TabViewDirective {
         }
     }
 
-    constructor(private element: ElementRef) {
+    constructor(element: ElementRef) {
         this.tabView = element.nativeElement;
     }
     

@@ -152,7 +152,7 @@ export class PageRouterOutlet {
         this.currentActivatedRoute = activatedRoute;
 
         if (this.locationStrategy._isPageNavigatingBack()) {
-            this.activateOnGoBack(activatedRoute, providers, outletMap);
+            this.activateOnGoBack(activatedRoute, outletMap);
         } else {
             this.activateOnGoForward(activatedRoute, providers, outletMap, resolver, injector);
         }
@@ -194,7 +194,6 @@ export class PageRouterOutlet {
 
     private activateOnGoBack(
         activatedRoute: ActivatedRoute,
-        providers: ResolvedReflectiveProvider[],
         outletMap: RouterOutletMap): void {
         log("PageRouterOutlet.activate() - Back navigation, so load from cache");
 

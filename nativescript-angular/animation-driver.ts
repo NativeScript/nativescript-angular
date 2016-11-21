@@ -16,7 +16,7 @@ export class NativeScriptAnimationDriver implements AnimationDriver {
         return (<View>element).style._getValue(getPropertyByCssName(prop));
     }
 
-    animate(element: any, startingStyles: AnimationStyles, keyframes: AnimationKeyframe[], duration: number, delay: number, easing: string): AnimationPlayer {
+    animate(element: any, _startingStyles: AnimationStyles, keyframes: AnimationKeyframe[], duration: number, delay: number, easing: string): AnimationPlayer {
         return new NativeScriptAnimationPlayer(element, keyframes, duration, delay, easing);
     }
 }

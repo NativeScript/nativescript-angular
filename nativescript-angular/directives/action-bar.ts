@@ -7,7 +7,7 @@ import { registerElement, ViewClassMeta, NgView } from '../element-registry';
 
 var actionBarMeta: ViewClassMeta = {
     skipAddToDom: true,
-    insertChild: (parent: NgView, child: NgView, atIndex: number) => {
+    insertChild: (parent: NgView, child: NgView, _atIndex: number) => {
         const bar = <ActionBar>(<any>parent);
         const childView = <any>child;
 

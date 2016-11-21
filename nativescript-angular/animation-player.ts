@@ -98,7 +98,7 @@ export class NativeScriptAnimationPlayer implements AnimationPlayer {
             this._onStart();
             this.animation.play(this.target)
                 .then(() => { this._onFinish(); })
-                .catch((e) => { });
+                .catch((_e) => { });
         }
     }
 
@@ -126,7 +126,7 @@ export class NativeScriptAnimationPlayer implements AnimationPlayer {
         this._onFinish();
     }
 
-    setPosition(p: any): void {
+    setPosition(_p: any): void {
         throw new Error("AnimationPlayer.setPosition method is not supported!");
     }
 

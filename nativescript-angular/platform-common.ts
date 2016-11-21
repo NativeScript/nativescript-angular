@@ -18,6 +18,13 @@ import {
   OpaqueToken,
 } from '@angular/core';
 
+//Work around a TS bug requiring an import of OpaqueToken without using it
+if (global.___TS_UNUSED) {
+    () => {
+        return OpaqueToken;
+    }
+}
+
 import { rendererLog, rendererError } from "./trace";
 import { PAGE_FACTORY, PageFactory, defaultPageFactoryProvider } from './platform-providers';
 
@@ -34,11 +41,6 @@ export const onAfterLivesync = new EventEmitter<NgModuleRef<any>>();
 let lastBootstrappedModule: WeakRef<NgModuleRef<any>>;
 type BootstrapperAction = () => Promise<NgModuleRef<any>>;
 
-interface BootstrapParams {
-  appModuleType: Type<any>;
-  appOptions?: AppOptions;
-}
-
 export interface AppOptions {
   bootInExistingPage: boolean;
   cssFile?: string;
@@ -48,7 +50,7 @@ export interface AppOptions {
 export type PlatformFactory = (extraProviders?: Provider[]) => PlatformRef;
 
 export class NativeScriptSanitizer extends Sanitizer {
-  sanitize(context: any, value: string): string {
+  sanitize(_context: any, value: string): string {
     return value;
   }
 }
@@ -144,7 +146,7 @@ export class NativeScriptPlatformRef extends PlatformRef {
           page.actionBarHidden = this.appOptions.startPageActionBarHidden;
         }
 
-        let onLoadedHandler = function (args) {
+        let onLoadedHandler = function () {
           page.off('loaded', onLoadedHandler);
           //profiling.stop('application-start');
           rendererLog('Page loaded');

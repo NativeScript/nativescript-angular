@@ -1,4 +1,3 @@
-import {View} from "ui/core/view";
 import {ControlValueAccessor} from "@angular/forms";
 
 export class BaseValueAccessor<TView> implements ControlValueAccessor {
@@ -19,11 +18,11 @@ export class BaseValueAccessor<TView> implements ControlValueAccessor {
         }
     }
     
-    writeValue(value: any) {
+    writeValue(_: any) {
         //
     }
     
-    registerOnTouched(fn: () => void): void {
+    registerOnTouched(_: () => void): void {
         // 
     }
 }
