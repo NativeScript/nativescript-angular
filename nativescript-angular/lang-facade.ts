@@ -1,3 +1,4 @@
+/* tslint:disable */
 //Copied unexported functions from @angular/core/src/facade/lang
 var globalScope = global;
 export var global = globalScope;
@@ -32,16 +33,16 @@ export function isArray(obj: any): boolean {
 
 // When Symbol.iterator doesn't exist, retrieves the key used in es6-shim
 declare var Symbol: any;
-var _symbolIterator: any = null;
+let _symbolIterator: any = null;
 export function getSymbolIterator(): string|symbol {
   if (isBlank(_symbolIterator)) {
     if (isPresent((<any>globalScope).Symbol) && isPresent(Symbol.iterator)) {
       _symbolIterator = Symbol.iterator;
     } else {
       // es6-shim specific logic
-      var keys = Object.getOwnPropertyNames(Map.prototype);
-      for (var i = 0; i < keys.length; ++i) {
-        var key = keys[i];
+      let keys = Object.getOwnPropertyNames(Map.prototype);
+      for (let i = 0; i < keys.length; ++i) {
+        let key = keys[i];
         if (key !== 'entries' && key !== 'size' &&
             (Map as any).prototype[key] === Map.prototype['entries']) {
           _symbolIterator = key;
@@ -66,10 +67,10 @@ export class DateWrapper {
 }
 
 export function setValueOnPath(global: any, path: string, value: any) {
-  var parts = path.split('.');
-  var obj: any = global;
+  let parts = path.split('.');
+  let obj: any = global;
   while (parts.length > 1) {
-    var name = parts.shift();
+    let name = parts.shift();
     if (obj.hasOwnProperty(name) && isPresent(obj[name])) {
       obj = obj[name];
     } else {

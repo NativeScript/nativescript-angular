@@ -1,7 +1,7 @@
-import { ElementSchemaRegistry } from '@angular/compiler';
-import { SchemaMetadata } from '@angular/core';
+import { ElementSchemaRegistry } from "@angular/compiler";
+import { SchemaMetadata } from "@angular/core";
 import { Parse5DomAdapter } from "./parse5_adapter";
-import { setRootDomAdapter } from './private_import_platform-browser';
+import { setRootDomAdapter } from "./private_import_platform-browser";
 import { rendererLog } from "./trace";
 import { print } from "./lang-facade";
 
@@ -29,7 +29,7 @@ export class NativeScriptElementSchemaRegistry extends ElementSchemaRegistry {
   }
 
   getDefaultComponentElementName(): string {
-    return 'ng-component';
+    return "ng-component";
   }
 
   securityContext(_tagName: string, _propName: string): any {
@@ -52,7 +52,11 @@ export class NativeScriptElementSchemaRegistry extends ElementSchemaRegistry {
     return propName;
   }
 
-  normalizeAnimationStyleValue(_camelCaseProp: string, _userProvidedProp: string, val: string | number):
+  normalizeAnimationStyleValue(
+      _camelCaseProp: string,
+      _userProvidedProp: string,
+      val: string | number
+  ):
     { error: string, value: string } {
     return { error: null, value: val.toString() };
   }
@@ -65,7 +69,7 @@ export class NativeScriptDomAdapter extends Parse5DomAdapter {
   }
 
   hasProperty(_element: any, _name: string) {
-    //TODO: actually check if the property exists.
+    // TODO: actually check if the property exists.
     return true;
   }
 

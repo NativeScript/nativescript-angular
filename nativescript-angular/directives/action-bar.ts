@@ -1,11 +1,11 @@
-import { Directive, Component, ElementRef, Optional } from '@angular/core';
+import { Directive, Component, ElementRef, Optional } from "@angular/core";
 import { ActionItem, ActionBar, NavigationButton } from "ui/action-bar";
 import { isBlank } from "../lang-facade";
 import {Page} from "ui/page";
-import { View } from 'ui/core/view';
-import { registerElement, ViewClassMeta, NgView } from '../element-registry';
+import { View } from "ui/core/view";
+import { registerElement, ViewClassMeta, NgView } from "../element-registry";
 
-var actionBarMeta: ViewClassMeta = {
+let actionBarMeta: ViewClassMeta = {
     skipAddToDom: true,
     insertChild: (parent: NgView, child: NgView, _atIndex: number) => {
         const bar = <ActionBar>(<any>parent);
@@ -34,11 +34,12 @@ var actionBarMeta: ViewClassMeta = {
         } else if (child instanceof ActionItem) {
             bar.actionItems.removeItem(childView);
             childView.parent = null;
-        } else if (child.nodeName !== "template" && child instanceof View && bar.titleView && bar.titleView === childView) {
+        } else if (child.nodeName !== "template" && child instanceof View &&
+                bar.titleView && bar.titleView === childView) {
             bar.titleView = null;
         }
     },
-}
+};
 
 registerElement("ActionBar", () => require("ui/action-bar").ActionBar, actionBarMeta);
 registerElement("ActionItem", () => require("ui/action-bar").ActionItem);

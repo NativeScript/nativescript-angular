@@ -1,11 +1,11 @@
 import {
     ReflectiveInjector, ComponentFactoryResolver, ViewContainerRef,
     Type, Injectable, ComponentRef, Directive
-} from '@angular/core';
-import { Page } from 'ui/page';
-import { View } from 'ui/core/view';
-import { DetachedLoader } from '../common/detached-loader';
-import { PageFactory, PAGE_FACTORY } from '../platform-providers';
+} from "@angular/core";
+import { Page } from "ui/page";
+import { View } from "ui/core/view";
+import { DetachedLoader } from "../common/detached-loader";
+import { PageFactory, PAGE_FACTORY } from "../platform-providers";
 
 export interface ModalDialogOptions {
     context?: any;
@@ -32,15 +32,25 @@ export class ModalDialogService {
         let viewContainerRef = options.viewContainerRef || this.containerRef;
 
         if (!viewContainerRef) {
-            throw new Error("No viewContainerRef: Make sure you pass viewContainerRef in ModalDialogOptions.");
+            throw new Error(
+                "No viewContainerRef: Make sure you pass viewContainerRef in ModalDialogOptions.");
         }
 
         const parentPage: Page = viewContainerRef.injector.get(Page);
-        const resolver: ComponentFactoryResolver = viewContainerRef.injector.get(ComponentFactoryResolver);
+        const resolver: ComponentFactoryResolver = viewContainerRef.injector.get(
+            ComponentFactoryResolver);
         const pageFactory: PageFactory = viewContainerRef.injector.get(PAGE_FACTORY);
 
         return new Promise((resolve) => {
-            setTimeout(() => ModalDialogService.showDialog(type, options, resolve, viewContainerRef, resolver, parentPage, pageFactory), 10);
+            setTimeout(() => ModalDialogService.showDialog(
+                type,
+                options,
+                resolve,
+                viewContainerRef,
+                resolver,
+                parentPage,
+                pageFactory
+            ), 10);
         });
     }
 
@@ -69,7 +79,8 @@ export class ModalDialogService {
             { provide: ModalDialogParams, useValue: modalParams },
         ]);
 
-        const childInjector = ReflectiveInjector.fromResolvedProviders(providers, containerRef.parentInjector);
+        const childInjector = ReflectiveInjector.fromResolvedProviders(
+            providers, containerRef.parentInjector);
         const detachedFactory = resolver.resolveComponentFactory(DetachedLoader);
         detachedLoaderRef = containerRef.createComponent(detachedFactory, -1, childInjector, null);
         detachedLoaderRef.instance.loadComponent(type).then((compRef) => {
@@ -91,8 +102,9 @@ export class ModalDialogService {
 })
 export class ModalDialogHost {
     constructor(containerRef: ViewContainerRef, modalService: ModalDialogService) {
-        console.log("ModalDialogHost is deprecated. Call ModalDialogService.showModal() by passing ViewContainerRef in the options instead.")
+        console.log("ModalDialogHost is deprecated. Call ModalDialogService.showModal() " +
+            "by passing ViewContainerRef in the options instead.");
 
         modalService.registerViewContainerRef(containerRef);
     }
-} 
+}

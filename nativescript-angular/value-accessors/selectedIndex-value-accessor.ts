@@ -1,10 +1,11 @@
-import {Directive, ElementRef, forwardRef } from '@angular/core';
+import {Directive, ElementRef, forwardRef } from "@angular/core";
 import {NG_VALUE_ACCESSOR} from "@angular/forms";
-import {BaseValueAccessor} from './base-value-accessor';
+import {BaseValueAccessor} from "./base-value-accessor";
 import {View} from "ui/core/view";
-import * as utils from '../common/utils';
+import * as utils from "../common/utils";
 
-const SELECTED_INDEX_VALUE_ACCESSOR = {provide: NG_VALUE_ACCESSOR, useExisting: forwardRef(() => SelectedIndexValueAccessor), multi: true};
+const SELECTED_INDEX_VALUE_ACCESSOR = {provide: NG_VALUE_ACCESSOR,
+    useExisting: forwardRef(() => SelectedIndexValueAccessor), multi: true};
 
 export type SelectableView = {selectedIndex: number} & View;
 
@@ -14,12 +15,13 @@ export type SelectableView = {selectedIndex: number} & View;
  *
  *  ### Example
  *  ```
- *  <SegmentedBar [(ngModel)]='model.test'>
+ *  <SegmentedBar [(ngModel)]="model.test">
  *  ```
  */
 @Directive({
-    selector: 'SegmentedBar[ngModel], segmentedBar[ngModel], segmented-bar[ngModel], ListPicker[ngModel], listPicker[ngModel], list-picker[ngModel], TabView[ngModel] tabView[ngModel], tab-view[ngModel]',
-    host: { '(selectedIndexChange)': 'onChange($event.value)' },
+    // tslint:disable:max-line-length
+    selector: "SegmentedBar[ngModel], segmentedBar[ngModel], segmented-bar[ngModel], ListPicker[ngModel], listPicker[ngModel], list-picker[ngModel], TabView[ngModel] tabView[ngModel], tab-view[ngModel]",
+    host: { "(selectedIndexChange)": "onChange($event.value)" },
     providers: [SELECTED_INDEX_VALUE_ACCESSOR]
 })
 export class SelectedIndexValueAccessor extends BaseValueAccessor<SelectableView> {
@@ -28,7 +30,7 @@ export class SelectedIndexValueAccessor extends BaseValueAccessor<SelectableView
     constructor(elementRef: ElementRef) {
         super(elementRef.nativeElement);
     }
-    
+
     private _normalizedValue: number;
     private viewInitialized: boolean;
 
@@ -38,7 +40,7 @@ export class SelectedIndexValueAccessor extends BaseValueAccessor<SelectableView
             this.view.selectedIndex = this._normalizedValue;
         }
     }
-    
+
     ngAfterViewInit() {
         this.viewInitialized = true;
         this.view.selectedIndex = this._normalizedValue;

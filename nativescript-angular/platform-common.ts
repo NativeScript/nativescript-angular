@@ -1,9 +1,9 @@
 // Initial imports and polyfills
-import 'globals';
-import './zone.js/dist/zone-nativescript';
-import 'reflect-metadata';
-import './polyfills/array';
-import './polyfills/console';
+import "globals";
+import "./zone.js/dist/zone-nativescript";
+import "reflect-metadata";
+import "./polyfills/array";
+import "./polyfills/console";
 
 import {
   Type,
@@ -16,22 +16,22 @@ import {
   Provider,
   Sanitizer,
   OpaqueToken,
-} from '@angular/core';
+} from "@angular/core";
 
-//Work around a TS bug requiring an import of OpaqueToken without using it
+// Work around a TS bug requiring an import of OpaqueToken without using it
 if (global.___TS_UNUSED) {
-    () => {
+    (() => {
         return OpaqueToken;
-    }
+    })();
 }
 
 import { rendererLog, rendererError } from "./trace";
-import { PAGE_FACTORY, PageFactory, defaultPageFactoryProvider } from './platform-providers';
+import { PAGE_FACTORY, PageFactory, defaultPageFactoryProvider } from "./platform-providers";
 
 import * as application from "application";
 import { topmost, NavigationEntry } from "ui/frame";
-import { Page } from 'ui/page';
-import { TextView } from 'ui/text-view';
+import { Page } from "ui/page";
+import { TextView } from "ui/text-view";
 
 import * as nativescriptIntl from "nativescript-intl";
 global.Intl = nativescriptIntl;
@@ -72,15 +72,18 @@ export class NativeScriptPlatformRef extends PlatformRef {
 
     this.bootstrapApp();
 
-    return null; //Make the compiler happy
+    return null; // Make the compiler happy
   }
 
-  bootstrapModule<M>(moduleType: Type<M>, compilerOptions: CompilerOptions | CompilerOptions[] = []): Promise<NgModuleRef<M>> {
+  bootstrapModule<M>(
+      moduleType: Type<M>,
+      compilerOptions: CompilerOptions | CompilerOptions[] = []
+  ): Promise<NgModuleRef<M>> {
     this._bootstrapper = () => this.platform.bootstrapModule(moduleType, compilerOptions);
 
     this.bootstrapApp();
 
-    return null; //Make the compiler happy
+    return null; // Make the compiler happy
   }
 
   private bootstrapApp() {
@@ -147,15 +150,15 @@ export class NativeScriptPlatformRef extends PlatformRef {
         }
 
         let onLoadedHandler = function () {
-          page.off('loaded', onLoadedHandler);
-          //profiling.stop('application-start');
-          rendererLog('Page loaded');
+          page.off("loaded", onLoadedHandler);
+          // profiling.stop("application-start");
+          rendererLog("Page loaded");
 
-          //profiling.start('ng-bootstrap');
-          rendererLog('BOOTSTRAPPING...');
+          // profiling.start("ng-bootstrap");
+          rendererLog("BOOTSTRAPPING...");
           bootstrapAction().then((moduleRef) => {
-            //profiling.stop('ng-bootstrap');
-            rendererLog('ANGULAR BOOTSTRAP DONE.');
+            // profiling.stop("ng-bootstrap");
+            rendererLog("ANGULAR BOOTSTRAP DONE.");
             lastBootstrappedModule = new WeakRef(moduleRef);
 
             if (resolve) {
@@ -163,7 +166,7 @@ export class NativeScriptPlatformRef extends PlatformRef {
             }
             return moduleRef;
           }, (err) => {
-            rendererError('ERROR BOOTSTRAPPING ANGULAR');
+            rendererError("ERROR BOOTSTRAPPING ANGULAR");
             let errorMessage = err.message + "\n\n" + err.stack;
             rendererError(errorMessage);
 
@@ -177,7 +180,7 @@ export class NativeScriptPlatformRef extends PlatformRef {
           });
         };
 
-        page.on('loaded', onLoadedHandler);
+        page.on("loaded", onLoadedHandler);
 
         return page;
       }

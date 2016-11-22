@@ -1,9 +1,16 @@
 import {isString, isDefined} from "utils/types";
 import {View} from "ui/core/view";
 import {Placeholder} from "ui/placeholder";
-import {ContentView} from 'ui/content-view';
-import {LayoutBase} from 'ui/layouts/layout-base';
-import {ViewClass, getViewClass, getViewMeta, isKnownView, ViewExtensions, NgView} from './element-registry';
+import {ContentView} from "ui/content-view";
+import {LayoutBase} from "ui/layouts/layout-base";
+import {
+    ViewClass,
+    getViewClass,
+    getViewMeta,
+    isKnownView,
+    ViewExtensions,
+    NgView
+} from "./element-registry";
 import {getSpecialPropertySetter} from "ui/builder/special-properties";
 import {StyleProperty, getPropertyByName, withStyleProperty} from "ui/styling/style-property";
 import {ValueSource} from "ui/core/dependency-observable";
@@ -67,7 +74,7 @@ export class ViewUtil {
         } else if (parent && parent._addChildFromBuilder) {
             parent._addChildFromBuilder(child.nodeName, child);
         } else {
-            //throw new Error("Parent can't contain children: " + parent.nodeName + ', ' + parent);
+            // throw new Error("Parent can"t contain children: " + parent.nodeName + ", " + parent);
         }
     }
 
@@ -87,7 +94,7 @@ export class ViewUtil {
         } else if (isView(parent)) {
             parent._removeView(child);
         } else {
-            //throw new Error('Unknown parent type: ' + parent);
+            // throw new Error("Unknown parent type: " + parent);
         }
     }
 
@@ -97,11 +104,16 @@ export class ViewUtil {
         } else if (isContentView(parent)) {
             return child === parent.content ? 0 : -1;
         } else {
-            //throw new Error("Parent can't contain children: " + parent);
+            // throw new Error("Parent can"t contain children: " + parent);
         }
     }
 
-    private createAndAttach(name: string, viewClass: ViewClass, parent: NgView, beforeAttach?: BeforeAttachAction): NgView {
+    private createAndAttach(
+        name: string,
+        viewClass: ViewClass,
+        parent: NgView,
+        beforeAttach?: BeforeAttachAction
+    ): NgView {
         const view = <NgView>new viewClass();
         view.nodeName = name;
         view.meta = getViewMeta(name);
@@ -132,16 +144,16 @@ export class ViewUtil {
     }
 
     public createViewContainer(parentElement: NgView, beforeAttach: BeforeAttachAction) {
-        traceLog('Creating view container in:' + parentElement);
+        traceLog("Creating view container in:" + parentElement);
 
-        const layout = this.createView('ProxyViewContainer', parentElement, beforeAttach);
-        layout.nodeName = 'ProxyViewContainer';
+        const layout = this.createView("ProxyViewContainer", parentElement, beforeAttach);
+        layout.nodeName = "ProxyViewContainer";
         return layout;
     }
 
     public createTemplateAnchor(parentElement: NgView) {
-        //HACK: Using a ContentView here, so that it creates a native View object
-        const anchor = this.createAndAttach('template', ContentView, parentElement);
+        // HACK: Using a ContentView here, so that it creates a native View object
+        const anchor = this.createAndAttach("template", ContentView, parentElement);
         anchor.visibility = "collapse";
         anchor.templateParent = parentElement;
         return anchor;
@@ -209,7 +221,7 @@ export class ViewUtil {
     }
 
     private setPropertyInternal(view: NgView, attributeName: string, value: any): void {
-        traceLog('Setting attribute: ' + attributeName);
+        traceLog("Setting attribute: " + attributeName);
 
         let specialSetter = getSpecialPropertySetter(attributeName);
         let propMap = this.getProperties(view);
@@ -253,7 +265,7 @@ export class ViewUtil {
 
         if (!propertyMaps.has(type)) {
             let propMap = new Map<string, string>();
-            for (let propName in instance) {
+            for (let propName in instance) { // tslint:disable:forin
                 propMap.set(propName.toLowerCase(), propName);
             }
             propertyMaps.set(type, propMap);
@@ -286,7 +298,7 @@ export class ViewUtil {
     }
 
     private syncClasses(view: NgView): void {
-        let classValue = (<any>Array).from(this.cssClasses(view).keys()).join(' ');
+        let classValue = (<any>Array).from(this.cssClasses(view).keys()).join(" ");
         view.cssClass = classValue;
     }
 
@@ -298,12 +310,12 @@ export class ViewUtil {
         try {
             if (value === null) {
                 view.style._resetValue(property, ValueSource.Local);
-            }
-            else {
+            } else {
                 view.style._setValue(property, value, ValueSource.Local);
             }
         } catch (ex) {
-            styleError("Error setting property: " + property.name + " view: " + view + " value: " + value + " " + ex);
+            styleError("Error setting property: " + property.name + " view: " + view +
+                " value: " + value + " " + ex);
         }
     }
 
@@ -314,7 +326,7 @@ export class ViewUtil {
         let resolvedValue = this.resolveCssValue(styleValue);
         withStyleProperty(name, resolvedValue, (property, value) => {
             if (isString(property)) {
-                //Fall back to resolving property by name.
+                // Fall back to resolving property by name.
                 const resolvedProperty = getPropertyByName(name);
                 if (resolvedProperty) {
                     this.setStyleValue(view, resolvedProperty, resolvedValue);

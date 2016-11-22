@@ -1,3 +1,4 @@
+/* tslint:disable */
 /**
  * @license
  * Copyright Google Inc. All Rights Reserved.
@@ -13,9 +14,9 @@ import {DomAdapter, setRootDomAdapter} from './private_import_platform-browser';
 import {isPresent, isBlank, setValueOnPath} from "./lang-facade";
 import {SelectorMatcher, CssSelector} from '@angular/compiler';
 
-var parser: any /** TODO #9100 */ = null;
-var serializer: any /** TODO #9100 */ = null;
-var treeAdapter: any /** TODO #9100 */ = null;
+let parser: any /** TODO #9100 */ = null;
+let serializer: any /** TODO #9100 */ = null;
+let treeAdapter: any /** TODO #9100 */ = null;
 
 const _attrToPropMap: {[key: string]: string} = {
   'class': 'className',

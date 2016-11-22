@@ -5,7 +5,7 @@ export class BaseValueAccessor<TView> implements ControlValueAccessor {
 
     onChange = (_) => { };
     private pendingChangeNotification: number = 0;
-    
+
     registerOnChange(fn: (_: any) => void): void {
         this.onChange = (arg) => {
             if (this.pendingChangeNotification) {
@@ -15,13 +15,13 @@ export class BaseValueAccessor<TView> implements ControlValueAccessor {
                 this.pendingChangeNotification = 0;
                 fn(arg);
             }, 20);
-        }
+        };
     }
-    
+
     writeValue(_: any) {
         //
     }
-    
+
     registerOnTouched(_: () => void): void {
         // 
     }

@@ -18,13 +18,13 @@ import {
     Output,
     Host,
     ChangeDetectionStrategy
-} from '@angular/core';
+} from "@angular/core";
 import { isBlank } from "../lang-facade";
 import { isListLikeIterable } from "../collection-facade";
-import { ListView } from 'ui/list-view';
-import { View, KeyedTemplate } from 'ui/core/view';
-import { ObservableArray } from 'data/observable-array';
-import { LayoutBase } from 'ui/layouts/layout-base';
+import { ListView } from "ui/list-view";
+import { View, KeyedTemplate } from "ui/core/view";
+import { ObservableArray } from "data/observable-array";
+import { LayoutBase } from "ui/layouts/layout-base";
 import { listViewLog } from "../trace";
 
 const NG_VIEW = "_ngViewRef";
@@ -48,12 +48,12 @@ export interface SetupItemViewArgs {
 }
 
 @Component({
-    selector: 'ListView',
+    selector: "ListView",
     template: `
         <DetachedContainer>
             <Placeholder #loader></Placeholder>
         </DetachedContainer>`,
-    inputs: ['items'],
+    inputs: ["items"],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ListViewComponent implements DoCheck, OnDestroy, AfterContentInit {
@@ -66,9 +66,9 @@ export class ListViewComponent implements DoCheck, OnDestroy, AfterContentInit {
     private _differ: IterableDiffer;
     private _templateMap: Map<string, KeyedTemplate>;
 
-    @ViewChild('loader', { read: ViewContainerRef }) loader: ViewContainerRef;
+    @ViewChild("loader", { read: ViewContainerRef }) loader: ViewContainerRef;
 
-    @Output() public setupItemView: EventEmitter<SetupItemViewArgs> = new EventEmitter<SetupItemViewArgs>();
+    @Output() public setupItemView = new EventEmitter<SetupItemViewArgs>();
 
     @ContentChild(TemplateRef) itemTemplate: TemplateRef<ListItemContext>;
 
@@ -79,7 +79,8 @@ export class ListViewComponent implements DoCheck, OnDestroy, AfterContentInit {
             needDiffer = false;
         }
         if (needDiffer && !this._differ && isListLikeIterable(value)) {
-            this._differ = this._iterableDiffers.find(this._items).create(this._cdr, (_index, item) => { return item; });
+            this._differ = this._iterableDiffers.find(this._items)
+                .create(this._cdr, (_index, item) => { return item; });
         }
 
         this.listView.items = this._items;
@@ -143,18 +144,20 @@ export class ListViewComponent implements DoCheck, OnDestroy, AfterContentInit {
 
         let index = args.index;
         let items = args.object.items;
-        let currentItem = typeof (items.getItem) === "function" ? items.getItem(index) : items[index];
+        let currentItem = typeof (items.getItem) === "function" ?
+            items.getItem(index) : items[index];
         let viewRef: EmbeddedViewRef<ListItemContext>;
 
         if (args.view) {
             listViewLog("onItemLoading: " + index + " - Reusing existing view");
             viewRef = args.view[NG_VIEW];
-            // getting angular view from original element (in cases when ProxyViewContainer is used NativeScript internally wraps it in a StackLayout)
+            // getting angular view from original element (in cases when ProxyViewContainer
+            // is used NativeScript internally wraps it in a StackLayout)
             if (!viewRef) {
-                viewRef = (args.view._subViews && args.view._subViews.length > 0) ? args.view._subViews[0][NG_VIEW] : undefined;
+                viewRef = (args.view._subViews && args.view._subViews.length > 0) ?
+                    args.view._subViews[0][NG_VIEW] : undefined;
             }
-        }
-        else {
+        } else {
             listViewLog("onItemLoading: " + index + " - Creating view from template");
             viewRef = this.loader.createEmbeddedView(this.itemTemplate, new ListItemContext(), 0);
             args.view = getSingleViewFromViewRef(viewRef);
@@ -182,7 +185,7 @@ export class ListViewComponent implements DoCheck, OnDestroy, AfterContentInit {
 
     private detectChangesOnChild(viewRef: EmbeddedViewRef<ListItemContext>, index: number) {
         // Manually detect changes in child view ref
-        // TODO: Is there a better way of getting viewRef's change detector
+        // TODO: Is there a better way of getting viewRef"s change detector
         const childChangeDetector = <ChangeDetectorRef>(<any>viewRef);
 
         listViewLog("Manually detect changes in child: " + index);
@@ -207,19 +210,16 @@ function getSingleViewRecursive(nodes: Array<any>, nestLevel: number) {
 
     if (actualNodes.length === 0) {
         throw new Error("No suitable views found in list template! Nesting level: " + nestLevel);
-    }
-    else if (actualNodes.length > 1) {
+    } else if (actualNodes.length > 1) {
         throw new Error("More than one view found in list template! Nesting level: " + nestLevel);
-    }
-    else {
+    } else {
         if (actualNodes[0]) {
             let parentLayout = actualNodes[0].parent;
             if (parentLayout instanceof LayoutBase) {
                 parentLayout.removeChild(actualNodes[0]);
             }
             return actualNodes[0];
-        }
-        else {
+        } else {
             return getSingleViewRecursive(actualNodes[0].children, nestLevel + 1);
         }
     }
@@ -243,10 +243,3 @@ export class TemplateKeyDirective {
         }
     }
 }
-
-// Debug helpers:
-// const changeDetectorMode = ["CheckOnce", "Checked", "CheckAlways", "Detached", "OnPush", "Default"];
-// const changeDetectorStates = ["Never", "CheckedBefore", "Error"];
-// function getChangeDetectorState(cdr: any) {
-//     return "Mode: " + changeDetectorMode[parseInt(cdr.cdMode)] + " State: " + changeDetectorStates[parseInt(cdr.cdState)];
-// }

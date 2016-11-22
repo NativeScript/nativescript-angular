@@ -1,10 +1,11 @@
-import {Directive, ElementRef, forwardRef } from '@angular/core';
+import {Directive, ElementRef, forwardRef } from "@angular/core";
 import {NG_VALUE_ACCESSOR} from "@angular/forms";
 import {isBlank} from "../lang-facade";
-import {BaseValueAccessor} from './base-value-accessor';
+import {BaseValueAccessor} from "./base-value-accessor";
 import {Switch} from "ui/switch";
 
-const CHECKED_VALUE_ACCESSOR = {provide: NG_VALUE_ACCESSOR, useExisting: forwardRef(() => CheckedValueAccessor), multi: true};
+const CHECKED_VALUE_ACCESSOR = {provide: NG_VALUE_ACCESSOR,
+    useExisting: forwardRef(() => CheckedValueAccessor), multi: true};
 
 /**
  * The accessor for setting a checked property and listening to changes that is used by the
@@ -12,12 +13,12 @@ const CHECKED_VALUE_ACCESSOR = {provide: NG_VALUE_ACCESSOR, useExisting: forward
  *
  *  ### Example
  *  ```
- *  <Switch [(ngModel)]='model.test'>
+ *  <Switch [(ngModel)]="model.test">
  *  ```
  */
 @Directive({
-    selector: 'Switch[ngModel], switch[ngModel]',
-    host: { '(checkedChange)': 'onChange($event.value)' },
+    selector: "Switch[ngModel], switch[ngModel]",
+    host: { "(checkedChange)": "onChange($event.value)" },
     providers: [CHECKED_VALUE_ACCESSOR]
 })
 export class CheckedValueAccessor extends BaseValueAccessor<Switch> {
@@ -30,8 +31,8 @@ export class CheckedValueAccessor extends BaseValueAccessor<Switch> {
     writeValue(value: any): void {
         let normalizedValue = false;
         if (!isBlank(value)) {
-            if (typeof value === 'string') {
-                normalizedValue = value.toLowerCase() === 'true' ? true : false;
+            if (typeof value === "string") {
+                normalizedValue = value.toLowerCase() === "true" ? true : false;
             } else {
                 normalizedValue = !!value;
             }

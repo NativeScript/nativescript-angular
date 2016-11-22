@@ -1,10 +1,11 @@
-import {Directive, ElementRef, forwardRef } from '@angular/core';
-import {NG_VALUE_ACCESSOR} from '@angular/forms';
+import {Directive, ElementRef, forwardRef } from "@angular/core";
+import {NG_VALUE_ACCESSOR} from "@angular/forms";
 import {isBlank, isDate} from "../lang-facade";
-import {BaseValueAccessor} from './base-value-accessor';
+import {BaseValueAccessor} from "./base-value-accessor";
 import {DatePicker} from "ui/date-picker";
 
-const DATE_VALUE_ACCESSOR = {provide: NG_VALUE_ACCESSOR, useExisting: forwardRef(() => DateValueAccessor), multi: true};
+const DATE_VALUE_ACCESSOR = {provide: NG_VALUE_ACCESSOR,
+    useExisting: forwardRef(() => DateValueAccessor), multi: true};
 
 /**
  * The accessor for setting a date and listening to changes that is used by the
@@ -12,12 +13,12 @@ const DATE_VALUE_ACCESSOR = {provide: NG_VALUE_ACCESSOR, useExisting: forwardRef
  *
  *  ### Example
  *  ```
- *  <DatePicker [(ngModel)]='model.test'>
+ *  <DatePicker [(ngModel)]="model.test">
  *  ```
  */
 @Directive({
-    selector: 'DatePicker[ngModel], datePicker[ngModel], date-picker[ngModel]',
-    host: { '(dateChange)': 'onChange($event.value)' },
+    selector: "DatePicker[ngModel], datePicker[ngModel], date-picker[ngModel]",
+    host: { "(dateChange)": "onChange($event.value)" },
     providers: [DATE_VALUE_ACCESSOR]
 })
 export class DateValueAccessor extends BaseValueAccessor<DatePicker> {
@@ -28,11 +29,11 @@ export class DateValueAccessor extends BaseValueAccessor<DatePicker> {
     }
 
     writeValue(value: any): void {
-        var normalizedValue = isBlank(value) ? new Date() : value;
+        let normalizedValue = isBlank(value) ? new Date() : value;
         if (!isDate(normalizedValue)) {
-            if (typeof normalizedValue === 'string') {
+            if (typeof normalizedValue === "string") {
                 normalizedValue = new Date(normalizedValue);
-            } else if (typeof normalizedValue === 'number') {
+            } else if (typeof normalizedValue === "number") {
                 normalizedValue = new Date(normalizedValue);
             }
 

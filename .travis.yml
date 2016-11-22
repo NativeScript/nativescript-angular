@@ -35,6 +35,7 @@ install:
 - tns error-reporting disable
 - cd nativescript-angular
 - npm install
+- npm run tslint
 - cd ../tests
 - npm install
 - tns platform add android
