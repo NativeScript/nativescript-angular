@@ -1,11 +1,18 @@
-import {Injectable} from '@angular/core';
-import {Http, XHRBackend, ConnectionBackend, RequestOptions, RequestOptionsArgs, ResponseOptions, ResponseType, Response, XSRFStrategy} from '@angular/http';
-import {Observable} from 'rxjs/Observable';
-import 'rxjs/add/observable/fromPromise';
-import {NSFileSystem} from '../file-system/ns-file-system';
+import {Injectable} from "@angular/core";
+import {
+    Http,
+    ConnectionBackend,
+    RequestOptionsArgs,
+    ResponseOptions,
+    ResponseType,
+    Response
+} from "@angular/http";
+import {Observable} from "rxjs/Observable";
+import "rxjs/add/observable/fromPromise";
+import {NSFileSystem} from "../file-system/ns-file-system";
 
 export class NSXSRFStrategy {
-  public configureRequest(req: any) {
+  public configureRequest(_req: any) {
     // noop
   }
 }
@@ -21,9 +28,9 @@ export class NSHttp extends Http {
    * Uses a local file if `~/` resource is requested.
    */
   get(url: string, options?: RequestOptionsArgs): Observable<Response> {
-    if (url.indexOf('~') === 0 || url.indexOf('/') === 0) {
+    if (url.indexOf("~") === 0 || url.indexOf("/") === 0) {
       // normalize url
-      url = url.replace('~', '').replace('/', '');
+      url = url.replace("~", "").replace("/", "");
       // request from local app resources
       return Observable.fromPromise<Response>(new Promise((resolve, reject) => {
         let app = this.nsFileSystem.currentApp();
@@ -35,7 +42,7 @@ export class NSHttp extends Http {
             reject(responseOptions(err, 400, url));
           });
         } else {
-          reject(responseOptions('Not Found', 404, url));
+          reject(responseOptions("Not Found", 404, url));
         }
       }));
     } else {
@@ -48,7 +55,7 @@ function responseOptions(body: string | Object, status: number, url: string): Re
   return new Response(new ResponseOptions({
     body: body,
     status: status,
-    statusText: 'OK',
+    statusText: "OK",
     type: status === 200 ? ResponseType.Default : ResponseType.Error,
     url: url
   }));

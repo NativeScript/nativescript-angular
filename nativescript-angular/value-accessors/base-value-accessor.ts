@@ -1,4 +1,3 @@
-import {View} from "ui/core/view";
 import {ControlValueAccessor} from "@angular/forms";
 
 export class BaseValueAccessor<TView> implements ControlValueAccessor {
@@ -6,7 +5,7 @@ export class BaseValueAccessor<TView> implements ControlValueAccessor {
 
     onChange = (_) => { };
     private pendingChangeNotification: number = 0;
-    
+
     registerOnChange(fn: (_: any) => void): void {
         this.onChange = (arg) => {
             if (this.pendingChangeNotification) {
@@ -16,14 +15,14 @@ export class BaseValueAccessor<TView> implements ControlValueAccessor {
                 this.pendingChangeNotification = 0;
                 fn(arg);
             }, 20);
-        }
+        };
     }
-    
-    writeValue(value: any) {
+
+    writeValue(_: any) {
         //
     }
-    
-    registerOnTouched(fn: () => void): void {
+
+    registerOnTouched(_: () => void): void {
         // 
     }
 }

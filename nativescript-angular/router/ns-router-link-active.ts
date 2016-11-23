@@ -1,14 +1,18 @@
-import {AfterContentInit, ContentChildren, Directive, ElementRef, Input, OnChanges, OnDestroy, QueryList, Renderer} from '@angular/core';
-import {Subscription} from 'rxjs/Subscription';
+import {
+    AfterContentInit, ContentChildren, Directive,
+    ElementRef, Input, OnChanges, OnDestroy,
+    QueryList, Renderer
+} from "@angular/core";
+import {Subscription} from "rxjs/Subscription";
 
-import {NavigationEnd, Router, UrlTree} from '@angular/router';
+import {NavigationEnd, Router, UrlTree} from "@angular/router";
 import {containsTree} from "../router-url-tree";
 
-import {NSRouterLink} from './ns-router-link';
+import {NSRouterLink} from "./ns-router-link";
 
 
 /**
- * The NSRouterLinkActive directive lets you add a CSS class to an element when the link's route
+ * The NSRouterLinkActive directive lets you add a CSS class to an element when the link"s route
  * becomes active.
  *
  * Consider the following example:
@@ -17,22 +21,22 @@ import {NSRouterLink} from './ns-router-link';
  * <a [nsRouterLink]="/user/bob" [nsRouterLinkActive]="active-link">Bob</a>
  * ```
  *
- * When the url is either '/user' or '/user/bob', the active-link class will
+ * When the url is either "/user" or "/user/bob", the active-link class will
  * be added to the component. If the url changes, the class will be removed.
  *
  * You can set more than one class, as follows:
  *
  * ```
  * <a [nsRouterLink]="/user/bob" [nsRouterLinkActive]="class1 class2">Bob</a>
- * <a [nsRouterLink]="/user/bob" [nsRouterLinkActive]="['class1', 'class2']">Bob</a>
+ * <a [nsRouterLink]="/user/bob" [nsRouterLinkActive]="["class1", "class2"]">Bob</a>
  * ```
  *
- * You can configure NSRouterLinkActive by passing `exact: true`. This will add the classes
- * only when the url matches the link exactly.
+ * You can configure NSRouterLinkActive by passing `exact: true`. This will add the
+ * classes only when the url matches the link exactly.
  *
  * ```
- * <a [nsRouterLink]="/user/bob" [nsRouterLinkActive]="active-link" [nsRouterLinkActiveOptions]="{exact:
- * true}">Bob</a>
+ * <a [nsRouterLink]="/user/bob" [nsRouterLinkActive]="active-link"
+ * [nsRouterLinkActiveOptions]="{exact: true}">Bob</a>
  * ```
  *
  * Finally, you can apply the NSRouterLinkActive directive to an ancestor of a RouterLink.
@@ -44,12 +48,12 @@ import {NSRouterLink} from './ns-router-link';
  * </div>
  * ```
  *
- * This will set the active-link class on the div tag if the url is either '/user/jim' or
- * '/user/bob'.
+ * This will set the active-link class on the div tag if the url is either "/user/jim" or
+ * "/user/bob".
  *
  * @stable
  */
-@Directive({ selector: '[nsRouterLinkActive]' })
+@Directive({ selector: "[nsRouterLinkActive]" })
 export class NSRouterLinkActive implements OnChanges, OnDestroy, AfterContentInit {
     @ContentChildren(NSRouterLink) links: QueryList<NSRouterLink>;
 
@@ -67,7 +71,7 @@ export class NSRouterLinkActive implements OnChanges, OnDestroy, AfterContentIni
     }
 
     ngAfterContentInit(): void {
-        this.links.changes.subscribe(s => this.update());
+        this.links.changes.subscribe(() => this.update());
         this.update();
     }
 
@@ -76,15 +80,17 @@ export class NSRouterLinkActive implements OnChanges, OnDestroy, AfterContentIni
         if (Array.isArray(data)) {
             this.classes = <any>data;
         } else {
-            this.classes = data.split(' ');
+            this.classes = data.split(" ");
         }
     }
 
-    ngOnChanges(changes: {}): any { this.update(); }
+    ngOnChanges(_: {}): any { this.update(); }
     ngOnDestroy(): any { this.subscription.unsubscribe(); }
 
     private update(): void {
-        if (!this.links) return;
+        if (!this.links) {
+            return;
+        }
 
         const currentUrlTree = this.router.parseUrl(this.router.url);
         const isActiveLinks = this.reduceList(currentUrlTree, this.links);
@@ -95,8 +101,9 @@ export class NSRouterLinkActive implements OnChanges, OnDestroy, AfterContentIni
 
     private reduceList(currentUrlTree: UrlTree, q: QueryList<any>): boolean {
         return q.reduce(
-            (res: boolean, link: NSRouterLink) =>
-                res || containsTree(currentUrlTree, link.urlTree, this.nsRouterLinkActiveOptions.exact),
-            false);
+            (res: boolean, link: NSRouterLink) => {
+                return res || containsTree(currentUrlTree, link.urlTree,
+                    this.nsRouterLinkActiveOptions.exact);
+            }, false);
     }
 }

@@ -1,8 +1,8 @@
-import { ElementSchemaRegistry } from '@angular/compiler';
-import { Sanitizer, SchemaMetadata } from '@angular/core';
+import { ElementSchemaRegistry } from "@angular/compiler";
+import { SchemaMetadata } from "@angular/core";
 import { Parse5DomAdapter } from "./parse5_adapter";
-import { setRootDomAdapter } from './private_import_platform-browser';
-import { rendererLog, rendererError } from "./trace";
+import { setRootDomAdapter } from "./private_import_platform-browser";
+import { rendererLog } from "./trace";
 import { print } from "./lang-facade";
 
 export enum SecurityContext {
@@ -15,11 +15,11 @@ export enum SecurityContext {
 }
 
 export class NativeScriptElementSchemaRegistry extends ElementSchemaRegistry {
-  hasProperty(tagName: string, propName: string): boolean {
+  hasProperty(_tagName: string, _propName: string): boolean {
     return true;
   }
 
-  hasElement(tagName: string, schemaMetas: SchemaMetadata[]): boolean {
+  hasElement(_tagName: string, _schemaMetas: SchemaMetadata[]): boolean {
     return true;
   }
 
@@ -29,18 +29,18 @@ export class NativeScriptElementSchemaRegistry extends ElementSchemaRegistry {
   }
 
   getDefaultComponentElementName(): string {
-    return 'ng-component';
+    return "ng-component";
   }
 
-  securityContext(tagName: string, propName: string): any {
+  securityContext(_tagName: string, _propName: string): any {
     return SecurityContext.NONE;
   }
 
-  validateProperty(name: string): { error: boolean, msg?: string } {
+  validateProperty(_name: string): { error: boolean, msg?: string } {
     return { error: false };
   }
 
-  validateAttribute(name: string): { error: boolean, msg?: string } {
+  validateAttribute(_name: string): { error: boolean, msg?: string } {
     return { error: false };
   }
 
@@ -52,7 +52,11 @@ export class NativeScriptElementSchemaRegistry extends ElementSchemaRegistry {
     return propName;
   }
 
-  normalizeAnimationStyleValue(camelCaseProp: string, userProvidedProp: string, val: string | number):
+  normalizeAnimationStyleValue(
+      _camelCaseProp: string,
+      _userProvidedProp: string,
+      val: string | number
+  ):
     { error: string, value: string } {
     return { error: null, value: val.toString() };
   }
@@ -64,8 +68,8 @@ export class NativeScriptDomAdapter extends Parse5DomAdapter {
     setRootDomAdapter(new NativeScriptDomAdapter());
   }
 
-  hasProperty(element, name: string) {
-    //TODO: actually check if the property exists.
+  hasProperty(_element: any, _name: string) {
+    // TODO: actually check if the property exists.
     return true;
   }
 

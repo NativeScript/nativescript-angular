@@ -9,3 +9,4 @@ tsconfig.json
 global.d.ts
 .npmignore
 gulpfile.js
+tslint.json

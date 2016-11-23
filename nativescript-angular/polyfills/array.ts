@@ -1,25 +1,25 @@
 if (!(<any>Array.prototype).fill)  {
   (<any>Array.prototype).fill = function(value) {
- 
-    var O = Object(this);
-    var len = parseInt(O.length, 10);
-    var start = arguments[1];
-    var relativeStart = parseInt(start, 10) || 0;
-    var k = relativeStart < 0
-            ? Math.max( len + relativeStart, 0) 
+
+    let O = Object(this);
+    let len = parseInt(O.length, 10);
+    let start = arguments[1];
+    let relativeStart = parseInt(start, 10) || 0;
+    let k = relativeStart < 0
+            ? Math.max( len + relativeStart, 0)
             : Math.min( relativeStart, len );
-    var end = arguments[2];
-    var relativeEnd = end === undefined
-                      ? len 
-                      : (parseInt( end) || 0) ;
-    var final = relativeEnd < 0
+    let end = arguments[2];
+    let relativeEnd = end === undefined
+                      ? len
+                      : (parseInt(end, 10) || 0) ;
+    let final = relativeEnd < 0
                 ? Math.max(len + relativeEnd, 0)
                 : Math.min(relativeEnd, len);
- 
+
     for (; k < final; k++) {
         O[k] = value;
     }
- 
+
     return O;
   };
 }
@@ -29,16 +29,16 @@ if (!(<any>Array).from) {
         let results: Array<any> = [];
 
         if (iterable.next) {
-            //Iterator objects
-            let step = null;
-            while (step = iterable.next()) {
-                if (step.done)
+            // Iterator objects
+            for (let step = null; ; step = iterable.next()) {
+                if (step.done) {
                     break;
-                else
+                } else {
                     results.push(step.value);
+                }
             }
         } else {
-            //Array-like objects
+            // Array-like objects
             results = [].slice.call(iterable);
         }
 

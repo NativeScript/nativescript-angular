@@ -1,12 +1,12 @@
-import 'globals';
-import './zone.js/dist/zone-nativescript';
+import "globals";
+import "./zone.js/dist/zone-nativescript";
 
-import 'reflect-metadata';
-import './polyfills/array';
-import './polyfills/console';
+import "reflect-metadata";
+import "./polyfills/array";
+import "./polyfills/console";
 
-import { CommonModule } from '@angular/common';
-import { NativeScriptRootRenderer, NativeScriptRenderer } from './renderer';
+import { CommonModule } from "@angular/common";
+import { NativeScriptRootRenderer, NativeScriptRenderer } from "./renderer";
 import { DetachedLoader } from "./common/detached-loader";
 import { ModalDialogHost, ModalDialogService } from "./directives/dialogs";
 import {
@@ -15,11 +15,11 @@ import {
     Renderer,
     RootRenderer,
     NgModule, NO_ERRORS_SCHEMA,
-} from '@angular/core';
+} from "@angular/core";
 import {
     defaultPageProvider, defaultFrameProvider, defaultDeviceProvider
 } from "./platform-providers";
-import { NS_DIRECTIVES } from './directives';
+import { NS_DIRECTIVES } from "./directives";
 
 import * as nativescriptIntl from "nativescript-intl";
 global.Intl = nativescriptIntl;

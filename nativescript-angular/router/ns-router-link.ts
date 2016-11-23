@@ -1,6 +1,6 @@
-import {Directive, HostListener, Input, Optional, OnChanges} from '@angular/core';
+import {Directive, HostListener, Input, Optional, OnChanges} from "@angular/core";
 import {NavigationExtras} from "@angular/router";
-import {ActivatedRoute, Router, UrlTree} from '@angular/router';
+import {ActivatedRoute, Router, UrlTree} from "@angular/router";
 import {routerLog} from "../trace";
 import {PageRoute} from "./page-router-outlet";
 import {RouterExtensions} from "./router-extensions";
@@ -12,28 +12,27 @@ import {isString} from "utils/types";
  * The nsRouterLink directive lets you link to specific parts of your app.
  *
  * Consider the following route configuration:
-
  * ```
- * [{ path: '/user', component: UserCmp }]
+ * [{ path: "/user", component: UserCmp }]
  * ```
  *
  * When linking to this `User` route, you can write:
  *
  * ```
- * <a [nsRouterLink]="['/user']">link to user component</a>
+ * <a [nsRouterLink]="["/user"]">link to user component</a>
  * ```
  *
  * NSRouterLink expects the value to be an array of path segments, followed by the params
- * for that level of routing. For instance `['/team', {teamId: 1}, 'user', {userId: 2}]`
+ * for that level of routing. For instance `["/team", {teamId: 1}, "user", {userId: 2}]`
  * means that we want to generate a link to `/team;teamId=1/user;userId=2`.
  *
  * The first segment name can be prepended with `/`, `./`, or `../`.
  * If the segment begins with `/`, the router will look up the route from the root of the app.
- * If the segment begins with `./`, or doesn't begin with a slash, the router will
- * instead look in the current component's children for the route.
+ * If the segment begins with `./`, or doesn"t begin with a slash, the router will
+ * instead look in the current component"s children for the route.
  * And if the segment begins with `../`, the router will go up one level.
  */
-@Directive({ selector: '[nsRouterLink]' })
+@Directive({ selector: "[nsRouterLink]" })
 export class NSRouterLink implements OnChanges {
   private commands: any[] = [];
   @Input() target: string;
@@ -72,7 +71,9 @@ export class NSRouterLink implements OnChanges {
 
   @HostListener("tap")
   onTap() {
-    routerLog("nsRouterLink.tapped: " + this.commands + " usePageRoute: " + this.usePageRoute + " clearHistory: " + this.clearHistory + " transition: " + JSON.stringify(this.pageTransition));
+    routerLog("nsRouterLink.tapped: " + this.commands + " usePageRoute: " +
+        this.usePageRoute + " clearHistory: " + this.clearHistory + " transition: " +
+        JSON.stringify(this.pageTransition));
 
     const transition = this.getTransition();
 
@@ -105,7 +106,7 @@ export class NSRouterLink implements OnChanges {
     }
   }
 
-  ngOnChanges(changes: {}): any {
+  ngOnChanges(_: {}): any {
     this.updateUrlTree();
   }
 

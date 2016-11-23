@@ -1,11 +1,16 @@
 import { AnimationPlayer } from "@angular/core";
 import { AnimationKeyframe } from "./private_import_core";
-import { KeyframeAnimation, KeyframeAnimationInfo, KeyframeInfo, KeyframeDeclaration } from 'ui/animation/keyframe-animation';
+import {
+    KeyframeAnimation,
+    KeyframeAnimationInfo,
+    KeyframeInfo,
+    KeyframeDeclaration
+} from "ui/animation/keyframe-animation";
 import { View } from "ui/core/view";
 import { AnimationCurve } from "ui/enums";
-import { ValueSource } from 'ui/core/dependency-observable';
+import { ValueSource } from "ui/core/dependency-observable";
 import { isString } from "utils/types";
-import * as styleProperty from 'ui/styling/style-property';
+import * as styleProperty from "ui/styling/style-property";
 
 export class NativeScriptAnimationPlayer implements AnimationPlayer {
 
@@ -18,7 +23,13 @@ export class NativeScriptAnimationPlayer implements AnimationPlayer {
     private animation: KeyframeAnimation;
     private target: View;
 
-    constructor(element: Node, keyframes: AnimationKeyframe[], duration: number, delay: number, easing: string) {
+    constructor(
+        element: Node,
+        keyframes: AnimationKeyframe[],
+        duration: number,
+        delay: number,
+        easing: string
+    ) {
 
         this.parentPlayer = null;
 
@@ -36,7 +47,9 @@ export class NativeScriptAnimationPlayer implements AnimationPlayer {
         keyframeAnimationInfo.duration = duration;
         keyframeAnimationInfo.delay = delay;
         keyframeAnimationInfo.iterations = 1;
-        keyframeAnimationInfo.curve = easing ? NativeScriptAnimationPlayer.animationTimingFunctionConverter(easing) : AnimationCurve.ease;
+        keyframeAnimationInfo.curve = easing ?
+            NativeScriptAnimationPlayer.animationTimingFunctionConverter(easing) :
+            AnimationCurve.ease;
         keyframeAnimationInfo.keyframes = new Array<KeyframeInfo>();
         keyframeAnimationInfo.isForwards = true;
 
@@ -53,8 +66,7 @@ export class NativeScriptAnimationPlayer implements AnimationPlayer {
                             value = property.valueConverter(<string>value);
                         }
                         keyframeInfo.declarations.push({ property: property.name, value: value });
-                    }
-                    else if (typeof value === "string" && substyle === "transform") {
+                    } else if (typeof value === "string" && substyle === "transform") {
                         NativeScriptAnimationPlayer.parseTransform(<string>value, keyframeInfo);
                     }
                 }
@@ -62,7 +74,8 @@ export class NativeScriptAnimationPlayer implements AnimationPlayer {
             keyframeAnimationInfo.keyframes.push(keyframeInfo);
         }
 
-        this.animation = KeyframeAnimation.keyframeAnimationFromInfo(keyframeAnimationInfo, ValueSource.VisualState);
+        this.animation = KeyframeAnimation.keyframeAnimationFromInfo(
+            keyframeAnimationInfo, ValueSource.VisualState);
     }
 
     init(): void {
@@ -98,7 +111,7 @@ export class NativeScriptAnimationPlayer implements AnimationPlayer {
             this._onStart();
             this.animation.play(this.target)
                 .then(() => { this._onFinish(); })
-                .catch((e) => { });
+                .catch((_e) => { });
         }
     }
 
@@ -126,7 +139,7 @@ export class NativeScriptAnimationPlayer implements AnimationPlayer {
         this._onFinish();
     }
 
-    setPosition(p: any): void {
+    setPosition(_p: any): void {
         throw new Error("AnimationPlayer.setPosition method is not supported!");
     }
 
@@ -159,8 +172,7 @@ export class NativeScriptAnimationPlayer implements AnimationPlayer {
                         NativeScriptAnimationPlayer.bezieArgumentConverter(bezierArr[1]),
                         NativeScriptAnimationPlayer.bezieArgumentConverter(bezierArr[2]),
                         NativeScriptAnimationPlayer.bezieArgumentConverter(bezierArr[3]));
-                }
-                else {
+                } else {
                     throw new Error("Invalid value for animation: " + value);
                 }
         }
@@ -178,16 +190,14 @@ export class NativeScriptAnimationPlayer implements AnimationPlayer {
             let operations = {};
             operations[value] = value;
             return operations;
-        }
-        else if (isString(value)) {
+        } else if (isString(value)) {
             let operations = {};
             let operator = "";
             let pos = 0;
             while (pos < value.length) {
                 if (value[pos] === " " || value[pos] === ",") {
                     pos++;
-                }
-                else if (value[pos] === "(") {
+                } else if (value[pos] === "(") {
                     let start = pos + 1;
                     while (pos < value.length && value[pos] !== ")") {
                         pos++;
@@ -196,14 +206,12 @@ export class NativeScriptAnimationPlayer implements AnimationPlayer {
                     operations[operator] = operand.trim();
                     operator = "";
                     pos++;
-                }
-                else {
+                } else {
                     operator += value[pos++];
                 }
             }
             return operations;
-        }
-        else {
+        } else {
             return undefined;
         }
     }
@@ -215,29 +223,50 @@ export class NativeScriptAnimationPlayer implements AnimationPlayer {
         for (let transform in newTransform) {
             switch (transform) {
                 case "scaleX":
-                    animationInfo.declarations.push({ property: "scale", value: { x: parseFloat(newTransform[transform]), y: 1 } });
+                    animationInfo.declarations.push({
+                        property: "scale",
+                        value: { x: parseFloat(newTransform[transform]), y: 1 }
+                    });
                     break;
                 case "scaleY":
-                    animationInfo.declarations.push({ property: "scale", value: { x: 1, y: parseFloat(newTransform[transform]) } });
+                    animationInfo.declarations.push({
+                        property: "scale",
+                        value: { x: 1, y: parseFloat(newTransform[transform]) }
+                    });
                     break;
                 case "scale":
                 case "scale3d":
                     values = newTransform[transform].split(",");
                     if (values.length === 2 || values.length === 3) {
-                        animationInfo.declarations.push({ property: "scale", value: { x: parseFloat(values[0]), y: parseFloat(values[1]) } });
+                        animationInfo.declarations.push({
+                            property: "scale",
+                            value: { x: parseFloat(values[0]), y: parseFloat(values[1]) }
+                        });
                     }
                     break;
                 case "translateX":
-                    animationInfo.declarations.push({ property: "translate", value: { x: parseFloat(newTransform[transform]), y: 0 } });
+                    animationInfo.declarations.push({
+                        property: "translate",
+                        value: { x: parseFloat(newTransform[transform]), y: 0 }
+                    });
                     break;
                 case "translateY":
-                    animationInfo.declarations.push({ property: "translate", value: { x: 0, y: parseFloat(newTransform[transform]) } });
+                    animationInfo.declarations.push({
+                        property: "translate",
+                        value: { x: 0, y: parseFloat(newTransform[transform]) }
+                    });
                     break;
                 case "translate":
                 case "translate3d":
                     values = newTransform[transform].split(",");
                     if (values.length === 2 || values.length === 3) {
-                        animationInfo.declarations.push({ property: "translate", value: { x: parseFloat(values[0]), y: parseFloat(values[1]) } });
+                        animationInfo.declarations.push({
+                            property: "translate",
+                            value: {
+                                x: parseFloat(values[0]),
+                                y: parseFloat(values[1])
+                            }
+                        });
                     }
                     break;
                 case "rotate":
@@ -250,9 +279,12 @@ export class NativeScriptAnimationPlayer implements AnimationPlayer {
                     break;
                 case "none":
                     animationInfo.declarations.push({ property: "scale", value: { x: 1, y: 1 } });
-                    animationInfo.declarations.push({ property: "translate", value: { x: 0, y: 0 } });
+                    animationInfo.declarations.push(
+                        { property: "translate", value: { x: 0, y: 0 } });
                     animationInfo.declarations.push({ property: "rotate", value: 0 });
                     break;
+                default:
+                    throw new Error("Unsupported transform: " + transform);
             }
         }
         return array;

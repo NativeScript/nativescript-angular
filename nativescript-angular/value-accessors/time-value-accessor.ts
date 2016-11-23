@@ -1,10 +1,11 @@
-import {Directive, ElementRef, Renderer, Self, forwardRef } from '@angular/core';
-import {NG_VALUE_ACCESSOR} from '@angular/forms';
+import {Directive, ElementRef, forwardRef } from "@angular/core";
+import {NG_VALUE_ACCESSOR} from "@angular/forms";
 import {isBlank, isDate} from "../lang-facade";
-import {BaseValueAccessor} from './base-value-accessor';
+import {BaseValueAccessor} from "./base-value-accessor";
 import {TimePicker} from "ui/time-picker";
 
-const TIME_VALUE_ACCESSOR = {provide: NG_VALUE_ACCESSOR, useExisting: forwardRef(() => TimeValueAccessor), multi: true};
+const TIME_VALUE_ACCESSOR = {provide: NG_VALUE_ACCESSOR,
+    useExisting: forwardRef(() => TimeValueAccessor), multi: true};
 
 /**
  * The accessor for setting a time and listening to changes that is used by the
@@ -12,12 +13,12 @@ const TIME_VALUE_ACCESSOR = {provide: NG_VALUE_ACCESSOR, useExisting: forwardRef
  *
  *  ### Example
  *  ```
- *  <TimePicker [(ngModel)]='model.test'>
+ *  <TimePicker [(ngModel)]="model.test">
  *  ```
  */
 @Directive({
-    selector: 'TimePicker[ngModel], timePicker[ngModel], time-picker[ngModel]',
-    host: { '(timeChange)': 'onChange($event.value)' },
+    selector: "TimePicker[ngModel], timePicker[ngModel], time-picker[ngModel]",
+    host: { "(timeChange)": "onChange($event.value)" },
     providers: [TIME_VALUE_ACCESSOR]
 })
 export class TimeValueAccessor extends BaseValueAccessor<TimePicker> {
@@ -28,11 +29,11 @@ export class TimeValueAccessor extends BaseValueAccessor<TimePicker> {
     }
 
     writeValue(value: any): void {
-        var normalizedValue = isBlank(value) ? new Date() : value;
+        let normalizedValue = isBlank(value) ? new Date() : value;
         if (!isDate(normalizedValue)) {
-            if (typeof normalizedValue === 'string') {
+            if (typeof normalizedValue === "string") {
                 normalizedValue = new Date(normalizedValue);
-            } else if (typeof normalizedValue === 'number') {
+            } else if (typeof normalizedValue === "number") {
                 normalizedValue = new Date(normalizedValue);
             }
             if (!isDate(normalizedValue)) {

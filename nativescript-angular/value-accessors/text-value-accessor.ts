@@ -1,10 +1,11 @@
-import {Directive, ElementRef, Renderer, Self, forwardRef } from '@angular/core';
+import {Directive, ElementRef, forwardRef } from "@angular/core";
 import {NG_VALUE_ACCESSOR} from "@angular/forms";
 import {isBlank} from "../lang-facade";
-import {BaseValueAccessor} from './base-value-accessor'
+import {BaseValueAccessor} from "./base-value-accessor";
 import {View} from "ui/core/view";
 
-const TEXT_VALUE_ACCESSOR = {provide: NG_VALUE_ACCESSOR, useExisting: forwardRef(() => TextValueAccessor), multi: true};
+const TEXT_VALUE_ACCESSOR = {provide: NG_VALUE_ACCESSOR,
+    useExisting: forwardRef(() => TextValueAccessor), multi: true};
 
 export type TextView = {text: string} & View;
 
@@ -14,12 +15,13 @@ export type TextView = {text: string} & View;
  *
  *  ### Example
  *  ```
- *  <TextField [(ngModel)]='model.test'>
+ *  <TextField [(ngModel)]="model.test">
  *  ```
  */
 @Directive({
-    selector: 'TextField[ngModel], textField[ngModel], text-field[ngModel], TextView[ngModel], textView[ngModel], text-view[ngModel], SearchBar[ngModel], search-bar[ngModel], searchBar[ngModel]',
-    host: { '(textChange)': 'onChange($event.value)' },
+    // tslint:disable:max-line-length
+    selector: "TextField[ngModel], textField[ngModel], text-field[ngModel], TextView[ngModel], textView[ngModel], text-view[ngModel], SearchBar[ngModel], search-bar[ngModel], searchBar[ngModel]",
+    host: { "(textChange)": "onChange($event.value)" },
     providers: [TEXT_VALUE_ACCESSOR]
 })
 export class TextValueAccessor extends BaseValueAccessor<TextView> {
@@ -30,7 +32,7 @@ export class TextValueAccessor extends BaseValueAccessor<TextView> {
     }
 
     writeValue(value: any): void {
-        var normalizedValue = isBlank(value) ? '' : value.toString();
+        let normalizedValue = isBlank(value) ? "" : value.toString();
         this.view.text = normalizedValue;
     }
 

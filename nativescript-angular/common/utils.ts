@@ -8,7 +8,7 @@ export function convertToInt(value): number {
             if (isNumber(value)) {
                 normalizedValue = value;
             } else {
-                let parsedValue = parseInt(value.toString());
+                let parsedValue = parseInt(value.toString(), 10);
                 normalizedValue = isNaN(parsedValue) ? 0 : parsedValue;
             }
         }

@@ -1,22 +1,22 @@
-import {ElementRef, Directive, Input, TemplateRef, ViewContainerRef} from "@angular/core";
-import {TabView, TabViewItem} from "ui/tab-view";
-import * as utils from '../common/utils';
-import {rendererLog, rendererError} from "../trace";
-import {isBlank} from "../lang-facade";
+import { ElementRef, Directive, Input, TemplateRef, ViewContainerRef } from "@angular/core";
+import { TabView, TabViewItem } from "ui/tab-view";
+import * as utils from "../common/utils";
+import { rendererLog } from "../trace";
+import { isBlank } from "../lang-facade";
 
 @Directive({
-    selector: 'TabView',
-    inputs: ['selectedIndex']
+    selector: "TabView",
+    inputs: ["selectedIndex"]
 })
 export class TabViewDirective {
     public tabView: TabView;
     private _selectedIndex: number;
     private viewInitialized: boolean;
-    
+
     get selectedIndex(): number {
         return this._selectedIndex;
     }
-    
+
     set selectedIndex(value) {
         this._selectedIndex = utils.convertToInt(value);
         if (this.viewInitialized) {
@@ -24,10 +24,10 @@ export class TabViewDirective {
         }
     }
 
-    constructor(private element: ElementRef) {
+    constructor(element: ElementRef) {
         this.tabView = element.nativeElement;
     }
-    
+
     ngAfterViewInit() {
         this.viewInitialized = true;
         rendererLog("this._selectedIndex: " + this._selectedIndex);
@@ -38,8 +38,8 @@ export class TabViewDirective {
 }
 
 @Directive({
-    selector: '[tabItem]',
-    inputs: ['title', 'iconSource']
+    selector: "[tabItem]",
+    inputs: ["title", "iconSource"]
 })
 export class TabViewItemDirective {
     private item: TabViewItem;
@@ -53,7 +53,7 @@ export class TabViewItemDirective {
     ) {
     }
 
-    @Input('tabItem') config: any;
+    @Input("tabItem") config: any;
 
     set title(value: string) {
         if (this._title !== value) {
@@ -85,9 +85,9 @@ export class TabViewItemDirective {
         }
 
         const viewRef = this.viewContainer.createEmbeddedView(this.templateRef);
-        //Filter out text nodes, etc
+        // Filter out text nodes, etc
         const realViews = viewRef.rootNodes.filter((node) =>
-                            node.nodeName && node.nodeName !== '#text')
+                            node.nodeName && node.nodeName !== "#text");
 
         if (realViews.length > 0) {
             this.item.view = realViews[0];

@@ -1,22 +1,22 @@
 import {
     Inject, Injectable, Optional, NgZone,
     Renderer, RootRenderer, RenderComponentType,
-} from '@angular/core';
+} from "@angular/core";
 import { AnimationPlayer } from "@angular/core";
 import { AnimationStyles, AnimationKeyframe } from "./private_import_core";
 import {APP_ROOT_VIEW, DEVICE} from "./platform-providers";
 import {isBlank} from "./lang-facade";
 import {View} from "ui/core/view";
 import * as application from "application";
-import {topmost} from 'ui/frame';
-import {Page} from 'ui/page';
+import {topmost} from "ui/frame";
+import {Page} from "ui/page";
 import {ViewUtil, NgView} from "./view-util";
 import {rendererLog as traceLog} from "./trace";
 import {escapeRegexSymbols} from "utils/utils";
 import { Device } from "platform";
 
 import * as nsAnimationDriver from "./animation-driver";
-var nsAnimationDriverModule: typeof nsAnimationDriver;
+let nsAnimationDriverModule: typeof nsAnimationDriver;
 
 function ensureAnimationDriverModule() {
     if (!nsAnimationDriverModule) {
@@ -24,8 +24,8 @@ function ensureAnimationDriverModule() {
     }
 }
 
-//CONTENT_ATTR not exported from dom_renderer - we need it for styles application.
-export const COMPONENT_VARIABLE = '%COMP%';
+// CONTENT_ATTR not exported from dom_renderer - we need it for styles application.
+export const COMPONENT_VARIABLE = "%COMP%";
 export const CONTENT_ATTR = `_ngcontent-${COMPONENT_VARIABLE}`;
 
 
@@ -50,7 +50,7 @@ export class NativeScriptRootRenderer implements RootRenderer {
         this._viewUtil = new ViewUtil(device);
     }
 
-    private _registeredComponents: Map<string, NativeScriptRenderer> = new Map<string, NativeScriptRenderer>();
+    private _registeredComponents = new Map<string, NativeScriptRenderer>();
 
     public get rootView(): View {
         if (!this._rootView) {
@@ -70,7 +70,8 @@ export class NativeScriptRootRenderer implements RootRenderer {
     renderComponent(componentProto: RenderComponentType): Renderer {
         let renderer = this._registeredComponents.get(componentProto.id);
         if (isBlank(renderer)) {
-            renderer = new NativeScriptRenderer(this, componentProto, this.animationDriver, this._zone);
+            renderer = new NativeScriptRenderer(this, componentProto,
+                this.animationDriver, this._zone);
             this._registeredComponents.set(componentProto.id, renderer);
         }
         return renderer;
@@ -88,7 +89,7 @@ export class NativeScriptRenderer extends Renderer {
 
     constructor(
         private rootRenderer: NativeScriptRootRenderer,
-        private componentProto: RenderComponentType,
+        componentProto: RenderComponentType,
         private animationDriver: nsAnimationDriver.NativeScriptAnimationDriver,
         private zone: NgZone) {
 
@@ -101,7 +102,7 @@ export class NativeScriptRenderer extends Renderer {
             const realCSS = this.replaceNgAttribute(cssString, this.componentProtoId);
             application.addCss(realCSS);
         }
-        traceLog('NativeScriptRenderer created');
+        traceLog("NativeScriptRenderer created");
     }
 
     private attrReplacer = new RegExp(escapeRegexSymbols(CONTENT_ATTR), "g");
@@ -117,26 +118,26 @@ export class NativeScriptRenderer extends Renderer {
     }
 
     selectRootElement(selector: string): NgView {
-        traceLog('selectRootElement: ' + selector);
+        traceLog("selectRootElement: " + selector);
         const rootView = <NgView><any>this.rootRenderer.rootView;
-        rootView.nodeName = 'ROOT';
+        rootView.nodeName = "ROOT";
         return rootView;
     }
 
     createViewRoot(hostElement: NgView): NgView {
-        traceLog('CREATE VIEW ROOT: ' + hostElement.nodeName);
+        traceLog("CREATE VIEW ROOT: " + hostElement.nodeName);
         return hostElement;
     }
 
     projectNodes(parentElement: NgView, nodes: NgView[]): void {
-        traceLog('NativeScriptRenderer.projectNodes');
+        traceLog("NativeScriptRenderer.projectNodes");
         nodes.forEach((node) => {
             this.viewUtil.insertChild(parentElement, node);
         });
     }
 
     attachViewAfter(anchorNode: NgView, viewRootNodes: NgView[]) {
-        traceLog('NativeScriptRenderer.attachViewAfter: ' + anchorNode.nodeName + ' ' + anchorNode);
+        traceLog("NativeScriptRenderer.attachViewAfter: " + anchorNode.nodeName + " " + anchorNode);
         const parent = (<NgView>anchorNode.parent || anchorNode.templateParent);
         const insertPosition = this.viewUtil.getChildIndex(parent, anchorNode);
 
@@ -147,26 +148,28 @@ export class NativeScriptRenderer extends Renderer {
     }
 
     detachView(viewRootNodes: NgView[]) {
-        traceLog('NativeScriptRenderer.detachView');
+        traceLog("NativeScriptRenderer.detachView");
         for (let i = 0; i < viewRootNodes.length; i++) {
             let node = viewRootNodes[i];
             this.viewUtil.removeChild(<NgView>node.parent, node);
         }
     }
 
-    public destroyView(hostElement: NgView, viewAllNodes: NgView[]) {
+    public destroyView(_hostElement: NgView, _viewAllNodes: NgView[]) {
         traceLog("NativeScriptRenderer.destroyView");
         // Seems to be called on component dispose only (router outlet)
-        //TODO: handle this when we resolve routing and navigation.
+        // TODO: handle this when we resolve routing and navigation.
     }
 
     setElementProperty(renderElement: NgView, propertyName: string, propertyValue: any) {
-        traceLog("NativeScriptRenderer.setElementProperty " + renderElement + ': ' + propertyName + " = " + propertyValue);
+        traceLog("NativeScriptRenderer.setElementProperty " + renderElement + ": " +
+            propertyName + " = " + propertyValue);
         this.viewUtil.setProperty(renderElement, propertyName, propertyValue);
     }
 
     setElementAttribute(renderElement: NgView, attributeName: string, attributeValue: string) {
-        traceLog("NativeScriptRenderer.setElementAttribute " + renderElement + ': ' + attributeName + " = " + attributeValue);
+        traceLog("NativeScriptRenderer.setElementAttribute " + renderElement + ": " +
+            attributeName + " = " + attributeValue);
         return this.setElementProperty(renderElement, attributeName, attributeValue);
     }
 
@@ -184,36 +187,33 @@ export class NativeScriptRenderer extends Renderer {
         this.viewUtil.setStyleProperty(renderElement, styleName, styleValue);
     }
 
-    /**
-    * Used only in debug mode to serialize property changes to comment nodes,
-    * such as <template> placeholders.
-    */
+    // Used only in debug mode to serialize property changes to comment nodes,
+    // such as <template> placeholders.
     setBindingDebugInfo(renderElement: NgView, propertyName: string, propertyValue: string): void {
-        traceLog('NativeScriptRenderer.setBindingDebugInfo: ' + renderElement + ', ' + propertyName + ' = ' + propertyValue);
+        traceLog("NativeScriptRenderer.setBindingDebugInfo: " + renderElement + ", " +
+            propertyName + " = " + propertyValue);
     }
 
-    setElementDebugInfo(renderElement: any, info: any /*RenderDebugInfo*/): void {
-        traceLog('NativeScriptRenderer.setElementDebugInfo: ' + renderElement);
+    setElementDebugInfo(renderElement: any, _info: any /*RenderDebugInfo*/): void {
+        traceLog("NativeScriptRenderer.setElementDebugInfo: " + renderElement);
     }
 
-    /**
-    * Calls a method on an element.
-    */
-    invokeElementMethod(renderElement: NgView, methodName: string, args: Array<any>) {
+    invokeElementMethod(_renderElement: NgView, methodName: string, args: Array<any>) {
         traceLog("NativeScriptRenderer.invokeElementMethod " + methodName + " " + args);
     }
 
-    setText(renderNode: any, text: string) {
+    setText(_renderNode: any, _text: string) {
         traceLog("NativeScriptRenderer.setText");
     }
 
     public createTemplateAnchor(parentElement: NgView): NgView {
-        traceLog('NativeScriptRenderer.createTemplateAnchor');
+        traceLog("NativeScriptRenderer.createTemplateAnchor");
         return this.viewUtil.createTemplateAnchor(parentElement);
     }
 
     public createElement(parentElement: NgView, name: string): NgView {
-        traceLog('NativeScriptRenderer.createElement: ' + name + ' parent: ' + parentElement + ', ' + (parentElement ? parentElement.nodeName : 'null'));
+        traceLog("NativeScriptRenderer.createElement: " + name + " parent: " +
+            parentElement + ", " + (parentElement ? parentElement.nodeName : "null"));
         return this.viewUtil.createView(name, parentElement, (view) => {
             // Set an attribute to the view to scope component-specific css.
             // The property name is pre-generated by Angular.
@@ -224,13 +224,13 @@ export class NativeScriptRenderer extends Renderer {
         });
     }
 
-    public createText(parentElement: NgView, value: string): NgView {
-        traceLog('NativeScriptRenderer.createText');
-        return this.viewUtil.createText(value);
+    public createText(_parentElement: NgView, _value: string): NgView {
+        traceLog("NativeScriptRenderer.createText");
+        return this.viewUtil.createText();
     }
 
     public listen(renderElement: NgView, eventName: string, callback: Function): Function {
-        traceLog('NativeScriptRenderer.listen: ' + eventName);
+        traceLog("NativeScriptRenderer.listen: " + eventName);
         // Explicitly wrap in zone
         let zonedCallback = (...args) => {
             this.zone.run(() => {
@@ -246,12 +246,20 @@ export class NativeScriptRenderer extends Renderer {
         return () => renderElement.off(eventName, zonedCallback);
     }
 
-    public listenGlobal(target: string, eventName: string, callback: Function): Function {
-        throw new Error('NativeScriptRenderer.listenGlobal() - Not implemented.');
+    public listenGlobal(_target: string, _eventName: string, _callback: Function): Function {
+        throw new Error("NativeScriptRenderer.listenGlobal() - Not implemented.");
     }
 
-    public animate(element: any, startingStyles: AnimationStyles, keyframes: AnimationKeyframe[], duration: number, delay: number, easing: string): AnimationPlayer {
-        let player = this.animationDriver.animate(element, startingStyles, keyframes, duration, delay, easing);
+    public animate(
+        element: any,
+        startingStyles: AnimationStyles,
+        keyframes: AnimationKeyframe[],
+        duration: number,
+        delay: number,
+        easing: string
+    ): AnimationPlayer {
+        let player = this.animationDriver.animate(
+            element, startingStyles, keyframes, duration, delay, easing);
         return player;
     }
 }

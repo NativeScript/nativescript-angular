@@ -1,6 +1,6 @@
 import {
     Http, XHRBackend, RequestOptions
-} from '@angular/http';
+} from "@angular/http";
 import { NSXSRFStrategy, NSHttp } from "./http/ns-http";
 import { NSFileSystem } from "./file-system/ns-file-system";
 
@@ -17,9 +17,10 @@ export function nsXSRFStrategyFactory() {
 
 @NgModule({
     providers: [
-        { provide: XSRFStrategy, useFactory: nsXSRFStrategyFactory },
+        {provide: XSRFStrategy, useFactory: nsXSRFStrategyFactory},
         NSFileSystem,
-        { provide: Http, useFactory: nsHttpFactory, deps: [XHRBackend, RequestOptions, NSFileSystem] }
+        {provide: Http, useFactory: nsHttpFactory,
+            deps: [XHRBackend, RequestOptions, NSFileSystem]}
     ],
     imports: [
         HttpModule,

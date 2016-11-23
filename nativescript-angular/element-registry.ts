@@ -1,4 +1,4 @@
-import {View} from 'ui/core/view';
+import {View} from "ui/core/view";
 
 export type ViewResolver = () => ViewClass;
 export type NgView = View & ViewExtensions;
@@ -17,17 +17,21 @@ export interface ViewExtensions {
 }
 
 export interface ViewClass {
-    new (): View
+    new (): View;
 }
 
 const defaultViewMeta: ViewClassMeta = {
     skipAddToDom: false,
 };
 
-const elementMap: Map<string, { resolver: ViewResolver, meta?: ViewClassMeta }> = new Map<string, { resolver: ViewResolver, meta?: ViewClassMeta }>();
+const elementMap  = new Map<string, { resolver: ViewResolver, meta?: ViewClassMeta }>();
 const camelCaseSplit = /([a-z0-9])([A-Z])/g;
 
-export function registerElement(elementName: string, resolver: ViewResolver, meta?: ViewClassMeta): void {
+export function registerElement(
+    elementName: string,
+    resolver: ViewResolver,
+    meta?: ViewClassMeta
+): void {
     if (elementMap.has(elementName)) {
         throw new Error(`Element for ${elementName} already registered.`);
     } else {
@@ -66,9 +70,8 @@ export function isKnownView(elementName: string): boolean {
 }
 
 
-
-//Register default NativeScript components
-//Note: ActionBar related components are registerd together with action-bar directives.
+// Register default NativeScript components
+// Note: ActionBar related components are registerd together with action-bar directives.
 registerElement("AbsoluteLayout", () => require("ui/layouts/absolute-layout").AbsoluteLayout);
 registerElement("ActivityIndicator", () => require("ui/activity-indicator").ActivityIndicator);
 registerElement("Border", () => require("ui/border").Border);
@@ -106,4 +109,5 @@ registerElement("WrapLayout", () => require("ui/layouts/wrap-layout").WrapLayout
 registerElement("FormattedString", () => require("text/formatted-string").FormattedString);
 registerElement("Span", () => require("text/span").Span);
 
-registerElement("DetachedContainer", () => require("ui/proxy-view-container").ProxyViewContainer, { skipAddToDom: true });
+registerElement("DetachedContainer", () => require("ui/proxy-view-container").ProxyViewContainer,
+    { skipAddToDom: true });

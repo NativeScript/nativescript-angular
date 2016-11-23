@@ -8,7 +8,11 @@ export type ExtendedNavigationExtras = NavigationExtras & NavigationOptions;
 @Injectable()
 export class RouterExtensions {
 
-    constructor(public router: Router, public locationStrategy: NSLocationStrategy, public frame: Frame) { }
+    constructor(
+        public router: Router,
+        public locationStrategy: NSLocationStrategy,
+        public frame: Frame
+    ) { }
 
     public navigate(commands: any[], extras?: ExtendedNavigationExtras): Promise<boolean> {
         if (extras) {

@@ -1,6 +1,6 @@
-import {NSLocationStrategy} from './ns-location-strategy';
-import {PlatformLocation, LocationChangeListener} from '@angular/common';
-import {Injectable} from '@angular/core';
+import {NSLocationStrategy} from "./ns-location-strategy";
+import {PlatformLocation, LocationChangeListener} from "@angular/common";
+import {Injectable} from "@angular/core";
 import {routerLog} from "../trace";
 
 
@@ -20,7 +20,7 @@ export class NativescriptPlatformLocation extends PlatformLocation {
         this.locationStartegy.onPopState(fn);
     }
 
-    onHashChange(fn: LocationChangeListener): void {
+    onHashChange(_fn: LocationChangeListener): void {
     }
 
     get search(): string {
@@ -32,8 +32,8 @@ export class NativescriptPlatformLocation extends PlatformLocation {
     get pathname(): string {
         return this.locationStartegy.path();
     }
-    set pathname(newPath: string) {
-        throw new Error("NativescriptPlatformLocation set pathname - not implemented")
+    set pathname(_newPath: string) {
+        throw new Error("NativescriptPlatformLocation set pathname - not implemented");
     }
 
     pushState(state: any, title: string, url: string): void {

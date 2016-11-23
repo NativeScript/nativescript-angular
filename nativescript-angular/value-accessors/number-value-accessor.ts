@@ -1,10 +1,11 @@
-import {Directive, ElementRef, Renderer, Self, forwardRef } from '@angular/core';
+import {Directive, ElementRef, forwardRef } from "@angular/core";
 import {NG_VALUE_ACCESSOR} from "@angular/forms";
 import {isBlank, isNumber} from "../lang-facade";
-import {BaseValueAccessor} from './base-value-accessor';
+import {BaseValueAccessor} from "./base-value-accessor";
 import {Slider} from "ui/slider";
 
-const NUMBER_VALUE_ACCESSOR = {provide: NG_VALUE_ACCESSOR, useExisting: forwardRef(() => NumberValueAccessor), multi: true};
+const NUMBER_VALUE_ACCESSOR = {provide: NG_VALUE_ACCESSOR,
+    useExisting: forwardRef(() => NumberValueAccessor), multi: true};
 
 /**
  * The accessor for setting a value and listening to changes that is used by the
@@ -12,12 +13,12 @@ const NUMBER_VALUE_ACCESSOR = {provide: NG_VALUE_ACCESSOR, useExisting: forwardR
  *
  *  ### Example
  *  ```
- *  <Slider [(ngModel)]='model.test'>
+ *  <Slider [(ngModel)]="model.test">
  *  ```
  */
 @Directive({
-    selector: 'Slider[ngModel], slider[ngModel]',
-    host: { '(valueChange)': 'onChange($event.value)' },
+    selector: "Slider[ngModel], slider[ngModel]",
+    host: { "(valueChange)": "onChange($event.value)" },
     providers: [NUMBER_VALUE_ACCESSOR]
 })
 export class NumberValueAccessor extends BaseValueAccessor<Slider> {

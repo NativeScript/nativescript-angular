@@ -1,5 +1,5 @@
-import { Injectable } from '@angular/core';
-import { LocationStrategy } from '@angular/common';
+import { Injectable } from "@angular/core";
+import { LocationStrategy } from "@angular/common";
 import { routerLog } from "../trace";
 import { Frame, NavigationTransition } from "ui/frame";
 import { isPresent } from "../lang-facade";
@@ -16,11 +16,11 @@ const defaultNavOptions: NavigationOptions = {
 };
 
 export interface LocationState {
-    state: any,
-    title: string,
-    url: string,
-    queryParams: string,
-    isPageNavigation: boolean
+    state: any;
+    title: string;
+    url: string;
+    queryParams: string;
+    isPageNavigation: boolean;
 }
 
 @Injectable()
@@ -49,7 +49,8 @@ export class NSLocationStrategy extends LocationStrategy {
     }
 
     pushState(state: any, title: string, url: string, queryParams: string): void {
-        routerLog(`NSLocationStrategy.pushState state: ${state}, title: ${title}, url: ${url}, queryParams: ${queryParams}`);
+        routerLog("NSLocationStrategy.pushState state: " +
+            `${state}, title: ${title}, url: ${url}, queryParams: ${queryParams}`);
         this.pushStateInternal(state, title, url, queryParams);
     }
 
@@ -66,15 +67,16 @@ export class NSLocationStrategy extends LocationStrategy {
 
     replaceState(state: any, title: string, url: string, queryParams: string): void {
         if (this.states.length > 0) {
-            routerLog(`NSLocationStrategy.replaceState changing exisitng state: ${state}, title: ${title}, url: ${url}, queryParams: ${queryParams}`);
+            routerLog("NSLocationStrategy.replaceState changing exisitng state: " +
+                `${state}, title: ${title}, url: ${url}, queryParams: ${queryParams}`);
             const topState = this.peekState();
             topState.state = state;
             topState.title = title;
             topState.url = url;
             topState.queryParams = queryParams;
-        }
-        else {
-            routerLog(`NSLocationStrategy.replaceState pushing new state: ${state}, title: ${title}, url: ${url}, queryParams: ${queryParams}`);
+        } else {
+            routerLog("NSLocationStrategy.replaceState pushing new state: " +
+                `${state}, title: ${title}, url: ${url}, queryParams: ${queryParams}`);
             this.pushStateInternal(state, title, url, queryParams);
         }
     }
@@ -101,11 +103,13 @@ export class NSLocationStrategy extends LocationStrategy {
             let state = this.peekState();
             if (state.isPageNavigation) {
                 // This was a page navigation - so navigate through frame.
-                routerLog("NSLocationStrategy.back() while not navigating back but top state is page - will call frame.goback()");
+                routerLog("NSLocationStrategy.back() while not navigating back but top" +
+                    " state is page - will call frame.goback()");
                 this.frame.goBack();
             } else {
                 // Nested navigation - just pop the state
-                routerLog("NSLocationStrategy.back() while not navigating back but top state is not page - just pop");
+                routerLog("NSLocationStrategy.back() while not navigating back but top" +
+                    " state is not page - just pop");
                 this.callPopState(this.states.pop(), true);
             }
         }
@@ -191,7 +195,8 @@ export class NSLocationStrategy extends LocationStrategy {
             animated: isPresent(options.animated) ? options.animated : true,
             transition: options.transition
         };
-        routerLog(`NSLocationStrategy._setNavigationOptions(${JSON.stringify(this._currentNavigationOptions)})`);
+        routerLog("NSLocationStrategy._setNavigationOptions(" +
+            `${JSON.stringify(this._currentNavigationOptions)})`);
     }
 
     public _getSatates(): Array<LocationState> {

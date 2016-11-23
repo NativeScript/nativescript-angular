@@ -1,5 +1,5 @@
-import {Injectable} from '@angular/core';
-import {knownFolders, Folder} from 'file-system';
+import {Injectable} from "@angular/core";
+import {knownFolders, Folder} from "file-system";
 
 // Allows greater flexibility with `file-system` and Angular
 // Also provides a way for `file-system` to be mocked for testing
