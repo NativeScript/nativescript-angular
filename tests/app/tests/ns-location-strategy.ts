@@ -24,6 +24,26 @@ class FakeFrame extends View implements Frame {
     constructor(private backCB?: () => void) {
         super();
     }
+
+    public navigationQueueIsEmpty(): boolean {
+        throw new Error("I am a FakeFrame");
+    }
+
+    public get navigationBarHeight(): number {
+        throw new Error("I am a FakeFrame");
+    }
+    
+    public _processNavigationQueue(page: Page) {
+        throw new Error("I am a FakeFrame");
+    }
+
+    public _updateActionBar(page?: Page){
+        throw new Error("I am a FakeFrame");
+    }
+
+    public _getNavBarVisible(page: Page): boolean {
+        throw new Error("I am a FakeFrame");
+    }
 }
 
 function initStrategy(back?: () => void): NSLocationStrategy {
