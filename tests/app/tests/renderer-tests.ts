@@ -1,12 +1,15 @@
 //make sure you import mocha-config before @angular/core
-import {assert} from "./test-config";
-import {Component, ElementRef, Renderer, NgZone} from "@angular/core";
-import {ProxyViewContainer} from "ui/proxy-view-container";
-import {Red} from "color/known-colors";
-import {dumpView} from "./test-utils";
-import {TestApp} from "./test-app";
-import {LayoutBase} from "ui/layouts/layout-base";
-import {StackLayout} from "ui/layouts/stack-layout";
+import { assert } from "./test-config";
+import { Component, ElementRef, Renderer, NgZone } from "@angular/core";
+import { ProxyViewContainer } from "ui/proxy-view-container";
+import { Red } from "color/known-colors";
+import { dumpView } from "./test-utils";
+import { TestApp } from "./test-app";
+import { LayoutBase } from "ui/layouts/layout-base";
+import { StackLayout } from "ui/layouts/stack-layout";
+import { ContentView } from "ui/content-view";
+import { Button } from "ui/button";
+import { NgView } from "nativescript-angular/element-registry";
 
 @Component({
     template: `<StackLayout><Label text="Layout"></Label></StackLayout>`
@@ -170,9 +173,9 @@ describe('Renderer E2E', () => {
     it("executes events inside NgZone when listen is called inside NgZone", (done) => {
         const eventName = "someEvent";
         const view = new StackLayout();
-        const evetArg = { eventName, object: view };
+        const eventArg = { eventName, object: view };
         const callback = (arg) => {
-            assert.equal(arg, evetArg);
+            assert.equal(arg, eventArg);
             assert.isTrue(NgZone.isInAngularZone(), "Event should be executed inside NgZone");
             done();
         };
@@ -183,7 +186,7 @@ describe('Renderer E2E', () => {
 
         setTimeout(() => {
             testApp.zone.runOutsideAngular(() => {
-                view.notify(evetArg);
+                view.notify(eventArg);
             });
         }, 10);
     });
@@ -191,9 +194,9 @@ describe('Renderer E2E', () => {
     it("executes events inside NgZone when listen is called outside NgZone", (done) => {
         const eventName = "someEvent";
         const view = new StackLayout();
-        const evetArg = { eventName, object: view };
+        const eventArg = { eventName, object: view };
         const callback = (arg) => {
-            assert.equal(arg, evetArg);
+            assert.equal(arg, eventArg);
             assert.isTrue(NgZone.isInAngularZone(), "Event should be executed inside NgZone");
             done();
         };
@@ -201,7 +204,7 @@ describe('Renderer E2E', () => {
         testApp.zone.runOutsideAngular(() => {
             testApp.renderer.listen(view, eventName, callback);
 
-            view.notify(evetArg);
+            view.notify(eventArg);
         });
     });
 
@@ -265,7 +268,7 @@ describe('Renderer createElement', () => {
         return TestApp.create().then((app) => {
             testApp = app;
             renderer = testApp.renderer;
-        })
+        });
     });
 
     after(() => {
@@ -291,4 +294,83 @@ describe('Renderer createElement', () => {
         const result = renderer.createElement(null, "unknown-tag", null);
         assert.instanceOf(result, ProxyViewContainer, "Renderer should create ProxyViewContainer form 'unknown-tag'")
     });
-})
+});
+
+
+describe('Renderer attach/detach', () => {
+    let testApp: TestApp = null;
+    let renderer: Renderer = null;
+
+    before(() => {
+        return TestApp.create().then((app) => {
+            testApp = app;
+            renderer = testApp.renderer;
+        });
+    });
+
+    after(() => {
+        testApp.dispose();
+    });
+
+    it("createElement element with parent attaches element to content view", () => {
+        const parent = <ContentView>renderer.createElement(null, "ContentView", null);
+        const button = <Button>renderer.createElement(parent, "Button", null);
+
+        assert.equal(parent.content, button);
+        assert.equal(button.parent, parent);
+    });
+
+    it("createElement element with parent attaches element to layout view", () => {
+        const parent = <StackLayout>renderer.createElement(null, "StackLayout", null);
+        const button = <Button>renderer.createElement(parent, "Button", null);
+
+        assert.equal(parent.getChildAt(0), button);
+        assert.equal(button.parent, parent);
+    });
+
+    it("detachView element removes element from content view", () => {
+        const parent = <ContentView>renderer.createElement(null, "ContentView", null);
+        const button = <Button>renderer.createElement(parent, "Button", null);
+
+        renderer.detachView([button]);
+
+        assert.isNull(parent.content);
+        assert.isUndefined(button.parent);
+    });
+
+    it("detachView element removes element from layout view", () => {
+        const parent = <StackLayout>renderer.createElement(null, "StackLayout", null);
+        const button = <Button>renderer.createElement(parent, "Button", null);
+
+        renderer.detachView([button]);
+
+        assert.equal(parent.getChildrenCount(), 0);
+        assert.isUndefined(button.parent);
+    });
+
+    it("attaching template anchor in content view does not replace its content", () => {
+        const parent = <ContentView>renderer.createElement(null, "ContentView", null);
+        const button = <Button>renderer.createElement(parent, "Button", null);
+
+        assert.equal(parent.content, button);
+
+        const anchor = <NgView>renderer.createTemplateAnchor(parent);
+
+        assert.equal(parent.content, button);
+        assert.equal(anchor.parent, parent);
+        assert.equal(anchor.templateParent, parent);
+    });
+
+    it("attaching and detaching template anchor to content view does not affect its content", () => {
+        const parent = <ContentView>renderer.createElement(null, "ContentView", null);
+        const button = <Button>renderer.createElement(parent, "Button", null);
+        const anchor = <NgView>renderer.createTemplateAnchor(null);
+        assert.equal(parent.content, button);
+
+        renderer.attachViewAfter(button, [anchor]);
+        assert.equal(parent.content, button);
+
+        renderer.detachView([anchor]);
+        assert.equal(parent.content, button);
+    });
+});

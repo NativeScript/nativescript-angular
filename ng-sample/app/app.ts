@@ -19,9 +19,9 @@ import { Page } from "ui/page";
 import { Color } from "color";
 
 import trace = require("trace");
-// trace.setCategories(rendererTraceCategory);
+trace.setCategories(rendererTraceCategory);
 // trace.setCategories(routerTraceCategory);
-trace.setCategories(listViewTraceCategory);
+// trace.setCategories(listViewTraceCategory);
 trace.enable();
 
 import { RendererTest } from './examples/renderer-test';
@@ -114,28 +114,29 @@ const customPageFactoryProvider = {
 
 platformNativeScriptDynamic().bootstrapModule(makeExampleModule(RendererTest));
 // platformNativeScriptDynamic(undefined, [customPageFactoryProvider]).bootstrapModule(makeExampleModule(RendererTest));
-//platformNativeScriptDynamic().bootstrapModule(makeExampleModule(TabViewTest));
-//platformNativeScriptDynamic().bootstrapModule(makeExampleModule(Benchmark));
-//platformNativeScriptDynamic().bootstrapModule(makeExampleModule(ListTest));
+// platformNativeScriptDynamic().bootstrapModule(makeExampleModule(TabViewTest));
+// platformNativeScriptDynamic().bootstrapModule(makeExampleModule(Benchmark));
+// platformNativeScriptDynamic().bootstrapModule(makeExampleModule(ListTest));
 // platformNativeScriptDynamic().bootstrapModule(makeExampleModule(ListTemplateSelectorTest));
-//platformNativeScriptDynamic().bootstrapModule(makeExampleModule(ListTestAsync));
-//platformNativeScriptDynamic().bootstrapModule(makeExampleModule(ImageTest));
+// platformNativeScriptDynamic().bootstrapModule(makeExampleModule(ListTestAsync));
+// platformNativeScriptDynamic().bootstrapModule(makeExampleModule(ImageTest));
 // platformNativeScriptDynamic().bootstrapModule(makeExampleModule(ModalTest));
-//platformNativeScriptDynamic().bootstrapModule(makeExampleModule(HttpTest));
-//platformNativeScriptDynamic().bootstrapModule(makeExampleModule(PlatfromDirectivesTest));
-//platformNativeScriptDynamic().bootstrapModule(makeExampleModule(ActionBarTest));
+// platformNativeScriptDynamic().bootstrapModule(makeExampleModule(HttpTest));
+// platformNativeScriptDynamic().bootstrapModule(makeExampleModule(PlatfromDirectivesTest));
+// platformNativeScriptDynamic().bootstrapModule(makeExampleModule(ActionBarTest));
 
-//new router
-//platformNativeScriptDynamic().bootstrapModule(makeExampleModule(RouterOutletAppComponent));
+// router
+// platformNativeScriptDynamic().bootstrapModule(makeExampleModule(RouterOutletAppComponent));
 // platformNativeScriptDynamic().bootstrapModule(makeExampleModule(PageRouterOutletAppComponent));
-//platformNativeScriptDynamic().bootstrapModule(makeExampleModule(PageRouterOutletNestedAppComponent));
-//platformNativeScriptDynamic().bootstrapModule(makeExampleModule(ClearHistoryAppComponent));
-//platformNativeScriptDynamic().bootstrapModule(makeExampleModule(LoginAppComponent));
-//animations
-//platformNativeScriptDynamic().bootstrapModule(makeExampleModule(AnimationStatesTest));
-//platformNativeScriptDynamic().bootstrapModule(makeExampleModule(AnimationNgClassTest));
-//platformNativeScriptDynamic().bootstrapModule(makeExampleModule(AnimationKeyframesTest));
-//platformNativeScriptDynamic().bootstrapModule(makeExampleModule(AnimationEnterLeaveTest));
+// platformNativeScriptDynamic().bootstrapModule(makeExampleModule(PageRouterOutletNestedAppComponent));
+// platformNativeScriptDynamic().bootstrapModule(makeExampleModule(ClearHistoryAppComponent));
+// platformNativeScriptDynamic().bootstrapModule(makeExampleModule(LoginAppComponent));
+
+// animations
+// platformNativeScriptDynamic().bootstrapModule(makeExampleModule(AnimationStatesTest));
+// platformNativeScriptDynamic().bootstrapModule(makeExampleModule(AnimationNgClassTest));
+// platformNativeScriptDynamic().bootstrapModule(makeExampleModule(AnimationKeyframesTest));
+// platformNativeScriptDynamic().bootstrapModule(makeExampleModule(AnimationEnterLeaveTest));
 
 //Livesync test
 var cachedUrl: string;

@@ -1,12 +1,14 @@
-import {View} from "ui/core/view";
+import { View } from "ui/core/view";
 
 export type ViewResolver = () => ViewClass;
 export type NgView = View & ViewExtensions;
+export const TEMPLATE = "template";
 
 export interface ViewClassMeta {
     skipAddToDom?: boolean;
     insertChild?: (parent: NgView, child: NgView, atIndex: number) => void;
     removeChild?: (parent: NgView, child: NgView) => void;
+    isTemplateAnchor?: boolean;
 }
 
 export interface ViewExtensions {
@@ -24,7 +26,7 @@ const defaultViewMeta: ViewClassMeta = {
     skipAddToDom: false,
 };
 
-const elementMap  = new Map<string, { resolver: ViewResolver, meta?: ViewClassMeta }>();
+const elementMap = new Map<string, { resolver: ViewResolver, meta?: ViewClassMeta }>();
 const camelCaseSplit = /([a-z0-9])([A-Z])/g;
 
 export function registerElement(
@@ -69,6 +71,10 @@ export function isKnownView(elementName: string): boolean {
         elementMap.has(elementName.toLowerCase());
 }
 
+// Empty view used for template anchors
+export class TemplateView extends View {
+}
+registerElement(TEMPLATE, () => TemplateView, { isTemplateAnchor: true });
 
 // Register default NativeScript components
 // Note: ActionBar related components are registerd together with action-bar directives.

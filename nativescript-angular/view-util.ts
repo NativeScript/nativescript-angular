@@ -1,21 +1,22 @@
-import {isString, isDefined} from "utils/types";
-import {View} from "ui/core/view";
-import {Placeholder} from "ui/placeholder";
-import {ContentView} from "ui/content-view";
-import {LayoutBase} from "ui/layouts/layout-base";
+import { isString, isDefined } from "utils/types";
+import { View } from "ui/core/view";
+import { Placeholder } from "ui/placeholder";
+import { ContentView } from "ui/content-view";
+import { LayoutBase } from "ui/layouts/layout-base";
 import {
     ViewClass,
     getViewClass,
     getViewMeta,
     isKnownView,
     ViewExtensions,
-    NgView
+    NgView,
+    TEMPLATE
 } from "./element-registry";
-import {getSpecialPropertySetter} from "ui/builder/special-properties";
-import {StyleProperty, getPropertyByName, withStyleProperty} from "ui/styling/style-property";
-import {ValueSource} from "ui/core/dependency-observable";
-import {platformNames, Device} from "platform";
-import {rendererLog as traceLog, styleError} from "./trace";
+import { getSpecialPropertySetter } from "ui/builder/special-properties";
+import { StyleProperty, getPropertyByName, withStyleProperty } from "ui/styling/style-property";
+import { ValueSource } from "ui/core/dependency-observable";
+import { platformNames, Device } from "platform";
+import { rendererLog as traceLog, styleError } from "./trace";
 
 const IOS_PREFX: string = ":ios:";
 const ANDROID_PREFX: string = ":android:";
@@ -70,7 +71,12 @@ export class ViewUtil {
                 parent.addChild(child);
             }
         } else if (isContentView(parent)) {
-            parent.content = child;
+            // Explicit handling of template anchors inside ContentView
+            if (child.meta.isTemplateAnchor) {
+                parent._addView(child, atIndex);
+            } else {
+                parent.content = child;
+            }
         } else if (parent && parent._addChildFromBuilder) {
             parent._addChildFromBuilder(child.nodeName, child);
         } else {
@@ -90,6 +96,11 @@ export class ViewUtil {
         } else if (isContentView(parent)) {
             if (parent.content === child) {
                 parent.content = null;
+            }
+
+            // Explicit handling of template anchors inside ContentView
+            if (child.meta.isTemplateAnchor) {
+                parent._removeView(child);
             }
         } else if (isView(parent)) {
             parent._removeView(child);
@@ -152,10 +163,10 @@ export class ViewUtil {
     }
 
     public createTemplateAnchor(parentElement: NgView) {
-        // HACK: Using a ContentView here, so that it creates a native View object
-        const anchor = this.createAndAttach("template", ContentView, parentElement);
-        anchor.visibility = "collapse";
+        const viewClass = getViewClass(TEMPLATE);
+        const anchor = this.createAndAttach(TEMPLATE, viewClass, parentElement);
         anchor.templateParent = parentElement;
+        traceLog("Created templateAnchor: " + anchor);
         return anchor;
     }
 

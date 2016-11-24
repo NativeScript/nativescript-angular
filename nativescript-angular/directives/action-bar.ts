@@ -1,9 +1,9 @@
 import { Directive, Component, ElementRef, Optional } from "@angular/core";
 import { ActionItem, ActionBar, NavigationButton } from "ui/action-bar";
 import { isBlank } from "../lang-facade";
-import {Page} from "ui/page";
+import { Page } from "ui/page";
 import { View } from "ui/core/view";
-import { registerElement, ViewClassMeta, NgView } from "../element-registry";
+import { registerElement, ViewClassMeta, NgView, TEMPLATE } from "../element-registry";
 
 let actionBarMeta: ViewClassMeta = {
     skipAddToDom: true,
@@ -17,7 +17,7 @@ let actionBarMeta: ViewClassMeta = {
         } else if (child instanceof ActionItem) {
             bar.actionItems.addItem(childView);
             childView.parent = bar;
-        } else if (child.nodeName === "template") {
+        } else if (child.nodeName === TEMPLATE) {
             child.templateParent = parent;
         } else if (child.nodeName !== "#text" && child instanceof View) {
             bar.titleView = childView;
@@ -34,8 +34,8 @@ let actionBarMeta: ViewClassMeta = {
         } else if (child instanceof ActionItem) {
             bar.actionItems.removeItem(childView);
             childView.parent = null;
-        } else if (child.nodeName !== "template" && child instanceof View &&
-                bar.titleView && bar.titleView === childView) {
+        } else if (child.nodeName !== TEMPLATE && child instanceof View &&
+            bar.titleView && bar.titleView === childView) {
             bar.titleView = null;
         }
     },
