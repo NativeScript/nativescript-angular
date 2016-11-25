@@ -1,0 +1,11 @@
+<!-- >> list-view-template-selector -->
+<ListView [items]="myItems" [itemTemplateSelector]="templateSelector">
+    <template nsTemplateKey="header" let-item="item">
+        <header-component [data]="item"></header-component>
+    </template>
+    
+    <template nsTemplateKey="item" let-item="item">
+        <item-component [data]="item"></item-component>
+    </template>
+</ListView>
+<!-- << list-view-template-selector -->
