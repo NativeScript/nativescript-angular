@@ -1,20 +1,21 @@
 //make sure you import mocha-config before @angular/core
-import {assert} from "./test-config";
+import { assert } from "./test-config";
 
-import {NavigationEnd, NavigationStart} from "@angular/router";
-import {Subscription} from "rxjs";
-import {TestApp, bootstrapTestApp, destroyTestApp} from "./test-app";
+import { NavigationEnd, NavigationStart } from "@angular/router";
+import { Subscription } from "rxjs";
+import { TestApp, bootstrapTestApp, destroyTestApp } from "./test-app";
 
-import {GestureComponent} from "../snippets/gestures.component";
-import {LayoutsComponent} from "../snippets/layouts.component";
-import {IconFontComponent} from "../snippets/icon-font.component";
+import { GestureComponent } from "../snippets/gestures.component";
+import { LayoutsComponent } from "../snippets/layouts.component";
+import { IconFontComponent } from "../snippets/icon-font.component";
 
-import {PageNavigationApp} from "../snippets/navigation/page-outlet";
-import {NavigationApp} from "../snippets/navigation/router-outlet";
-import {FirstComponent, SecondComponent} from "../snippets/navigation/navigation-common";
-import {routes} from "../snippets/navigation/app.routes";
+import { PageNavigationApp } from "../snippets/navigation/page-outlet";
+import { NavigationApp } from "../snippets/navigation/router-outlet";
+import { FirstComponent, SecondComponent } from "../snippets/navigation/navigation-common";
+import { routes } from "../snippets/navigation/app.routes";
+import { HeaderComponent, ItemComponent, DataService, ListTemplateSelectorTest } from "../snippets/list-view/template-selector.component";
 
-import {device, platformNames} from "platform";
+import { device, platformNames } from "platform";
 const IS_IOS = (device.os === platformNames.ios);
 
 describe('Snippets', () => {
@@ -105,5 +106,29 @@ describe('Snippets Navigation', () => {
                 cleanup();
             }).then(() => done(), err => done(err));
         });
+    });
+});
+
+describe('Snippets ListView', () => {
+    let runningApp: any;
+
+    const cleanup = () => {
+        if (runningApp) {
+            destroyTestApp(runningApp);
+            runningApp = null;
+        }
+    };
+
+    after(cleanup);
+
+    it("template selector", (done) => {
+        bootstrapTestApp(ListTemplateSelectorTest, [DataService], null, [HeaderComponent, ItemComponent, ListTemplateSelectorTest])
+            .then((app) => {
+                setTimeout(() => {
+                    cleanup();
+                    done();
+                }, 100);
+            })
+            .catch(err => done(err));
     });
 });

@@ -1,4 +1,4 @@
-import {TestApp, registerTestApp} from "../../tests/test-app";
+import { TestApp, registerTestApp } from "../../tests/test-app";
 import { ApplicationRef } from '@angular/core';
 import { Router, NavigationStart, NavigationEnd } from "@angular/router";
 // >> page-outlet-example
@@ -46,7 +46,7 @@ export class PageNavigationApp {
         NativeScriptRouterModule.forRoot(routes)
     ]
 })
-export class PageNavigationAppModule {}
+export class PageNavigationAppModule { }
 
 // >> (hide)
 function start_snippet_() {
