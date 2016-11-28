@@ -1,18 +1,18 @@
-import { ElementRef, Directive, Input, TemplateRef, ViewContainerRef } from "@angular/core";
+import { ElementRef, Directive, Input, TemplateRef, ViewContainerRef, OnInit, AfterViewInit } from "@angular/core";
 import { TabView, TabViewItem } from "ui/tab-view";
 import * as utils from "../common/utils";
 import { rendererLog } from "../trace";
 import { isBlank } from "../lang-facade";
 
 @Directive({
-    selector: "TabView",
-    inputs: ["selectedIndex"]
+    selector: "TabView", // tslint:disable-line:directive-selector
 })
-export class TabViewDirective {
+export class TabViewDirective implements AfterViewInit {
     public tabView: TabView;
     private _selectedIndex: number;
     private viewInitialized: boolean;
 
+    @Input()
     get selectedIndex(): number {
         return this._selectedIndex;
     }
@@ -38,10 +38,9 @@ export class TabViewDirective {
 }
 
 @Directive({
-    selector: "[tabItem]",
-    inputs: ["title", "iconSource"]
+    selector: "[tabItem]" // tslint:disable-line:directive-selector
 })
-export class TabViewItemDirective {
+export class TabViewItemDirective implements OnInit {
     private item: TabViewItem;
     private _title: string;
     private _iconSource: string;
@@ -53,7 +52,12 @@ export class TabViewItemDirective {
     ) {
     }
 
-    @Input("tabItem") config: any;
+    @Input("tabItem") config: any; // tslint:disable-line:no-input-rename
+
+    @Input()
+    get title() {
+        return this._title;
+    }
 
     set title(value: string) {
         if (this._title !== value) {
@@ -61,6 +65,11 @@ export class TabViewItemDirective {
             this.ensureItem();
             this.item.title = this._title;
         }
+    }
+
+    @Input()
+    get iconSource() {
+        return this._iconSource;
     }
 
     set iconSource(value: string) {

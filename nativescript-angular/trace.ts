@@ -1,4 +1,4 @@
-import {write, categories, messageType} from "trace";
+import { write, categories, messageType } from "trace";
 
 export const rendererTraceCategory = "ns-renderer";
 export const routerTraceCategory = "ns-router";

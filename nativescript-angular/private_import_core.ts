@@ -6,7 +6,7 @@
  * found in the LICENSE file at https://angular.io/license
  */
 
-import {__core_private__ as r} from "@angular/core";
+import { __core_private__ as r } from "@angular/core";
 
 export type RenderDebugInfo = typeof r._RenderDebugInfo;
 export let RenderDebugInfo: typeof r.RenderDebugInfo = r.RenderDebugInfo;

@@ -1,8 +1,8 @@
-import {Directive, ElementRef, forwardRef } from "@angular/core";
-import {NG_VALUE_ACCESSOR} from "@angular/forms";
-import {isBlank} from "../lang-facade";
-import {BaseValueAccessor} from "./base-value-accessor";
-import {Switch} from "ui/switch";
+import { Directive, ElementRef, forwardRef, HostListener } from "@angular/core";
+import { NG_VALUE_ACCESSOR } from "@angular/forms";
+import { isBlank } from "../lang-facade";
+import { BaseValueAccessor } from "./base-value-accessor";
+import { Switch } from "ui/switch";
 
 const CHECKED_VALUE_ACCESSOR = {provide: NG_VALUE_ACCESSOR,
     useExisting: forwardRef(() => CheckedValueAccessor), multi: true};
@@ -17,11 +17,15 @@ const CHECKED_VALUE_ACCESSOR = {provide: NG_VALUE_ACCESSOR,
  *  ```
  */
 @Directive({
-    selector: "Switch[ngModel], switch[ngModel]",
-    host: { "(checkedChange)": "onChange($event.value)" },
+    selector: "Switch[ngModel], switch[ngModel]", // tslint:disable-line:directive-selector
     providers: [CHECKED_VALUE_ACCESSOR]
 })
-export class CheckedValueAccessor extends BaseValueAccessor<Switch> {
+export class CheckedValueAccessor extends BaseValueAccessor<Switch> { // tslint:disable-line:directive-class-suffix
+    @HostListener("checkedChange", ["$event"])
+    checkedChangeListener(event: any) {
+        this.onChange(event.value);
+    }
+
     onTouched = () => { };
 
     constructor(elementRef: ElementRef) {

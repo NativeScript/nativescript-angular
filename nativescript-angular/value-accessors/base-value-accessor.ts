@@ -1,4 +1,4 @@
-import {ControlValueAccessor} from "@angular/forms";
+import { ControlValueAccessor } from "@angular/forms";
 
 export class BaseValueAccessor<TView> implements ControlValueAccessor {
     constructor(public view: TView) { }
@@ -23,6 +23,6 @@ export class BaseValueAccessor<TView> implements ControlValueAccessor {
     }
 
     registerOnTouched(_: () => void): void {
-        // 
+        //
     }
 }

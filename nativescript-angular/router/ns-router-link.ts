@@ -1,12 +1,12 @@
-import {Directive, HostListener, Input, Optional, OnChanges} from "@angular/core";
-import {NavigationExtras} from "@angular/router";
-import {ActivatedRoute, Router, UrlTree} from "@angular/router";
-import {routerLog} from "../trace";
-import {PageRoute} from "./page-router-outlet";
-import {RouterExtensions} from "./router-extensions";
-import {NavigationOptions} from "./ns-location-strategy";
-import {NavigationTransition} from "ui/frame";
-import {isString} from "utils/types";
+import { Directive, HostListener, Input, Optional, OnChanges } from "@angular/core";
+import { NavigationExtras } from "@angular/router";
+import { ActivatedRoute, Router, UrlTree } from "@angular/router";
+import { routerLog } from "../trace";
+import { PageRoute } from "./page-router-outlet";
+import { RouterExtensions } from "./router-extensions";
+import { NavigationOptions } from "./ns-location-strategy";
+import { NavigationTransition } from "ui/frame";
+import { isString } from "utils/types";
 
 /**
  * The nsRouterLink directive lets you link to specific parts of your app.
@@ -33,7 +33,7 @@ import {isString} from "utils/types";
  * And if the segment begins with `../`, the router will go up one level.
  */
 @Directive({ selector: "[nsRouterLink]" })
-export class NSRouterLink implements OnChanges {
+export class NSRouterLink implements OnChanges { // tslint:disable-line:directive-class-suffix
   private commands: any[] = [];
   @Input() target: string;
   @Input() queryParams: { [k: string]: any };

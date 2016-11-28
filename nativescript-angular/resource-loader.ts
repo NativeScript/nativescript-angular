@@ -1,5 +1,5 @@
-import {path, knownFolders, File} from "file-system";
-import {ResourceLoader} from "@angular/compiler";
+import { path, knownFolders, File } from "file-system";
+import { ResourceLoader } from "@angular/compiler";
 
 export class FileSystemResourceLoader extends ResourceLoader {
     resolve(url: string, baseUrl: string): string {

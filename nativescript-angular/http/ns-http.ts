@@ -1,4 +1,4 @@
-import {Injectable} from "@angular/core";
+import { Injectable } from "@angular/core";
 import {
     Http,
     ConnectionBackend,
@@ -7,9 +7,9 @@ import {
     ResponseType,
     Response
 } from "@angular/http";
-import {Observable} from "rxjs/Observable";
+import { Observable } from "rxjs/Observable";
 import "rxjs/add/observable/fromPromise";
-import {NSFileSystem} from "../file-system/ns-file-system";
+import { NSFileSystem } from "../file-system/ns-file-system";
 
 export class NSXSRFStrategy {
   public configureRequest(_req: any) {

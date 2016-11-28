@@ -91,9 +91,9 @@ export class ModalDialogService {
 
 
 @Directive({
-    selector: "[modal-dialog-host]"
+    selector: "[modal-dialog-host]" // tslint:disable-line:directive-selector
 })
-export class ModalDialogHost {
+export class ModalDialogHost { // tslint:disable-line:directive-class-suffix
     constructor() {
         throw new Error("ModalDialogHost is deprecated. Call ModalDialogService.showModal() " +
             "by passing ViewContainerRef in the options instead.");

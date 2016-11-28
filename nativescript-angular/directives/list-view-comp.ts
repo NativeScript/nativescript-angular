@@ -53,7 +53,6 @@ export interface SetupItemViewArgs {
         <DetachedContainer>
             <Placeholder #loader></Placeholder>
         </DetachedContainer>`,
-    inputs: ["items"],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ListViewComponent implements DoCheck, OnDestroy, AfterContentInit {
@@ -71,6 +70,11 @@ export class ListViewComponent implements DoCheck, OnDestroy, AfterContentInit {
     @Output() public setupItemView = new EventEmitter<SetupItemViewArgs>();
 
     @ContentChild(TemplateRef) itemTemplate: TemplateRef<ListItemContext>;
+
+    @Input()
+    get items() {
+        return this._items;
+    }
 
     set items(value: any) {
         this._items = value;
