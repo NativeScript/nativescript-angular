@@ -49,7 +49,7 @@ export const routes = [
 
     routeEntry({ path: 'modal', component: ModalViewMainPageComponent, data: { title: "Modals", isNavigatable: true} }),
     routeEntry({ path: 'modal/modal-dialogs', component: ModalTest, data: { title: "modal" } }),
-    routeEntry({ path: 'modal/modal-dialogs', component: ModalTestWithPushStrategy, data: { title: "modal(onPush)" } }),
+    routeEntry({ path: 'modal/modal-dialogs-push', component: ModalTestWithPushStrategy, data: { title: "modal(onPush)" } }),
 
     routeEntry({ path: 'nav-options', component: NavigationOptionsComponent, data: { title: "nav-options", isNavigatable: true} }),
     routeEntry({ path: 'nav-info', component: NavigationInfoComponent, data: { title: "nav-info" } }),

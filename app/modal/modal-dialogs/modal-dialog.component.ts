@@ -1,5 +1,4 @@
-import { Component, ChangeDetectionStrategy } from '@angular/core';
-import * as dialogs from "ui/dialogs";
+import { Component, ChangeDetectionStrategy, ViewContainerRef } from '@angular/core';
 import { ModalDialogService, ModalDialogOptions, ModalDialogParams } from "nativescript-angular/directives/dialogs";
 
 @Component({
@@ -26,7 +25,7 @@ export class ModalContent {
 }
 
 const TEMPLATE = `
-<GridLayout rows="auto, auto, *" modal-dialog-host>
+<GridLayout rows="auto, auto, *">
     <Button text="show component" (tap)="showModal()"></Button>
     <Button text="show component (async)" (tap)="showModalAsync()" row="1"></Button>
     
@@ -42,22 +41,23 @@ const TEMPLATE = `
 export class ModalTest {
     public result: string = "---";
 
-    constructor(private modal: ModalDialogService) { }
+    constructor(private modal: ModalDialogService, private vcRef: ViewContainerRef) { }
 
     public showModal() {
         const options: ModalDialogOptions = {
+            viewContainerRef: this.vcRef,
             context: { message: "Hello from dialog!" },
             fullscreen: true
         };
 
         this.modal.showModal(ModalContent, options).then((res: string) => {
             this.result = res || "empty result";
-        })
+        });
     }
 
     public showModalAsync() {
         setTimeout(() => {
-            this.showModal()
+            this.showModal();
         }, 10);
     }
 }
@@ -70,22 +70,23 @@ export class ModalTest {
 export class ModalTestWithPushStrategy {
     public result: string = "---";
 
-    constructor(private modal: ModalDialogService) { }
+    constructor(private modal: ModalDialogService, private vcRef: ViewContainerRef) { }
 
     public showModal() {
         const options: ModalDialogOptions = {
+            viewContainerRef: this.vcRef,
             context: { message: "Hello from dialog (onPush)!" },
             fullscreen: true
         };
 
         this.modal.showModal(ModalContent, options).then((res: string) => {
             this.result = res || "empty result";
-        })
+        });
     }
 
     public showModalAsync() {
         setTimeout(() => {
-            this.showModal()
+            this.showModal();
         }, 10);
     }
 }
