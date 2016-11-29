@@ -4,15 +4,15 @@ import {
 } from "@angular/core";
 import { AnimationPlayer } from "@angular/core";
 import { AnimationStyles, AnimationKeyframe } from "./private_import_core";
-import {APP_ROOT_VIEW, DEVICE} from "./platform-providers";
-import {isBlank} from "./lang-facade";
-import {View} from "ui/core/view";
+import { APP_ROOT_VIEW, DEVICE } from "./platform-providers";
+import { isBlank } from "./lang-facade";
+import { View } from "ui/core/view";
 import * as application from "application";
-import {topmost} from "ui/frame";
-import {Page} from "ui/page";
-import {ViewUtil, NgView} from "./view-util";
-import {rendererLog as traceLog} from "./trace";
-import {escapeRegexSymbols} from "utils/utils";
+import { topmost } from "ui/frame";
+import { Page } from "ui/page";
+import { ViewUtil, NgView } from "./view-util";
+import { rendererLog as traceLog } from "./trace";
+import { escapeRegexSymbols } from "utils/utils";
 import { Device } from "platform";
 
 import * as nsAnimationDriver from "./animation-driver";

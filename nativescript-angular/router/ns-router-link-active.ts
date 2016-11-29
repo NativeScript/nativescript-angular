@@ -3,12 +3,12 @@ import {
     ElementRef, Input, OnChanges, OnDestroy,
     QueryList, Renderer
 } from "@angular/core";
-import {Subscription} from "rxjs/Subscription";
+import { Subscription } from "rxjs/Subscription";
 
-import {NavigationEnd, Router, UrlTree} from "@angular/router";
-import {containsTree} from "../router-url-tree";
+import { NavigationEnd, Router, UrlTree } from "@angular/router";
+import { containsTree } from "../router-url-tree";
 
-import {NSRouterLink} from "./ns-router-link";
+import { NSRouterLink } from "./ns-router-link";
 
 
 /**
@@ -54,7 +54,7 @@ import {NSRouterLink} from "./ns-router-link";
  * @stable
  */
 @Directive({ selector: "[nsRouterLinkActive]" })
-export class NSRouterLinkActive implements OnChanges, OnDestroy, AfterContentInit {
+export class NSRouterLinkActive implements OnChanges, OnDestroy, AfterContentInit { // tslint:disable-line:max-line-length directive-class-suffix
     @ContentChildren(NSRouterLink) links: QueryList<NSRouterLink>;
 
     private classes: string[] = [];

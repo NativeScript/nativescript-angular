@@ -1,6 +1,6 @@
-import {Component, Inject} from "@angular/core";
-import {Device, platformNames} from "platform";
-import {DEVICE} from "../platform-providers";
+import { Component, Inject } from "@angular/core";
+import { Device, platformNames } from "platform";
+import { DEVICE } from "../platform-providers";
 
 @Component({
     selector: "android",

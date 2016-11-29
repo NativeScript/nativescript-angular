@@ -1,4 +1,4 @@
-import {isBlank, isNumber} from "../lang-facade";
+import { isBlank, isNumber } from "../lang-facade";
 
 export function convertToInt(value): number {
     let normalizedValue;

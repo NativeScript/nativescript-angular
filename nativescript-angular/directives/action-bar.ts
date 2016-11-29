@@ -1,4 +1,4 @@
-import { Directive, Component, ElementRef, Optional } from "@angular/core";
+import { Directive, Component, ElementRef, Optional, OnDestroy } from "@angular/core";
 import { ActionItem, ActionBar, NavigationButton } from "ui/action-bar";
 import { isBlank } from "../lang-facade";
 import { Page } from "ui/page";
@@ -63,7 +63,7 @@ export class ActionBarComponent {
     selector: "ActionBarExtension",
     template: ""
 })
-export class ActionBarScope {
+export class ActionBarScope { // tslint:disable-line:component-class-suffix
     constructor(private page: Page) {
     }
 
@@ -88,9 +88,9 @@ export class ActionBarScope {
 }
 
 @Directive({
-    selector: "ActionItem"
+    selector: "ActionItem" // tslint:disable-line:directive-selector
 })
-export class ActionItemDirective {
+export class ActionItemDirective implements OnDestroy {
     constructor(public element: ElementRef, @Optional() private ownerScope: ActionBarScope) {
         if (this.ownerScope) {
             this.ownerScope.onActionInit(this);
@@ -105,9 +105,9 @@ export class ActionItemDirective {
 }
 
 @Directive({
-    selector: "NavigationButton"
+    selector: "NavigationButton" // tslint:disable-line:directive-selector
 })
-export class NavigationButtonDirective {
+export class NavigationButtonDirective implements OnDestroy {
     constructor(public element: ElementRef, @Optional() private ownerScope: ActionBarScope) {
         if (this.ownerScope) {
             this.ownerScope.onNavButtonInit(this);

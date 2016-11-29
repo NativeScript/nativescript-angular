@@ -1,7 +1,7 @@
-import {NSLocationStrategy} from "./ns-location-strategy";
-import {PlatformLocation, LocationChangeListener} from "@angular/common";
-import {Injectable} from "@angular/core";
-import {routerLog} from "../trace";
+import { NSLocationStrategy } from "./ns-location-strategy";
+import { PlatformLocation, LocationChangeListener } from "@angular/common";
+import { Injectable } from "@angular/core";
+import { routerLog } from "../trace";
 
 
 @Injectable()

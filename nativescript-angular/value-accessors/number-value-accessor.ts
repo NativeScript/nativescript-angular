@@ -1,8 +1,8 @@
-import {Directive, ElementRef, forwardRef } from "@angular/core";
-import {NG_VALUE_ACCESSOR} from "@angular/forms";
-import {isBlank, isNumber} from "../lang-facade";
-import {BaseValueAccessor} from "./base-value-accessor";
-import {Slider} from "ui/slider";
+import { Directive, ElementRef, forwardRef, HostListener } from "@angular/core";
+import { NG_VALUE_ACCESSOR } from "@angular/forms";
+import { isBlank, isNumber } from "../lang-facade";
+import { BaseValueAccessor } from "./base-value-accessor";
+import { Slider } from "ui/slider";
 
 const NUMBER_VALUE_ACCESSOR = {provide: NG_VALUE_ACCESSOR,
     useExisting: forwardRef(() => NumberValueAccessor), multi: true};
@@ -17,11 +17,15 @@ const NUMBER_VALUE_ACCESSOR = {provide: NG_VALUE_ACCESSOR,
  *  ```
  */
 @Directive({
-    selector: "Slider[ngModel], slider[ngModel]",
-    host: { "(valueChange)": "onChange($event.value)" },
+    selector: "Slider[ngModel], slider[ngModel]", // tslint:disable-line:directive-selector
     providers: [NUMBER_VALUE_ACCESSOR]
 })
-export class NumberValueAccessor extends BaseValueAccessor<Slider> {
+export class NumberValueAccessor extends BaseValueAccessor<Slider> { // tslint:disable-line:directive-class-suffix
+    @HostListener("valueChange", ["$event"])
+    valueChangeListener(event: any) {
+        this.onChange(event.value);
+    }
+
     onTouched = () => { };
 
     constructor(elementRef: ElementRef) {

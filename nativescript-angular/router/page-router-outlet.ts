@@ -56,8 +56,8 @@ class RefCache {
     }
 }
 
-@Directive({ selector: "page-router-outlet" })
-export class PageRouterOutlet {
+@Directive({ selector: "page-router-outlet" }) // tslint:disable-line:directive-selector
+export class PageRouterOutlet { // tslint:disable-line:directive-class-suffix
     private viewUtil: ViewUtil;
     private refCache: RefCache = new RefCache();
     private isInitialPage: boolean = true;

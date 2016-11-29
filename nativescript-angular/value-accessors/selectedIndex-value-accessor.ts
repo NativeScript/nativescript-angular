@@ -1,7 +1,7 @@
-import {Directive, ElementRef, forwardRef } from "@angular/core";
-import {NG_VALUE_ACCESSOR} from "@angular/forms";
-import {BaseValueAccessor} from "./base-value-accessor";
-import {View} from "ui/core/view";
+import { Directive, ElementRef, forwardRef, AfterViewInit, HostListener } from "@angular/core";
+import { NG_VALUE_ACCESSOR } from "@angular/forms";
+import { BaseValueAccessor } from "./base-value-accessor";
+import { View } from "ui/core/view";
 import * as utils from "../common/utils";
 
 const SELECTED_INDEX_VALUE_ACCESSOR = {provide: NG_VALUE_ACCESSOR,
@@ -19,12 +19,15 @@ export type SelectableView = {selectedIndex: number} & View;
  *  ```
  */
 @Directive({
-    // tslint:disable:max-line-length
-    selector: "SegmentedBar[ngModel], segmentedBar[ngModel], segmented-bar[ngModel], ListPicker[ngModel], listPicker[ngModel], list-picker[ngModel], TabView[ngModel], tabView[ngModel], tab-view[ngModel]",
-    host: { "(selectedIndexChange)": "onChange($event.value)" },
+    selector: "SegmentedBar[ngModel], segmentedBar[ngModel], segmented-bar[ngModel], ListPicker[ngModel], listPicker[ngModel], list-picker[ngModel], TabView[ngModel], tabView[ngModel], tab-view[ngModel]", // tslint:disable-line:max-line-length directive-selector
     providers: [SELECTED_INDEX_VALUE_ACCESSOR]
 })
-export class SelectedIndexValueAccessor extends BaseValueAccessor<SelectableView> {
+export class SelectedIndexValueAccessor extends BaseValueAccessor<SelectableView> implements AfterViewInit { // tslint:disable-line:max-line-length directive-class-suffix
+    @HostListener("selectedIndexChange", ["$event"])
+    selectedIndexChangeListener(event: any) {
+        this.onChange(event.value);
+    }
+
     onTouched = () => { };
 
     constructor(elementRef: ElementRef) {
