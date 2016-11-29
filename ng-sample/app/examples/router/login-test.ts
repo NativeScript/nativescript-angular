@@ -102,8 +102,8 @@ class MainComponent {
         });
     }
 
-    onReslove(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
-        console.log("MainComponent.onReslove()")
+    onResolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
+        console.log("MainComponent.onResolve()")
         return true;
     }
 }
