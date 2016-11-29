@@ -166,6 +166,7 @@ export class ViewUtil {
         const viewClass = getViewClass(TEMPLATE);
         const anchor = this.createAndAttach(TEMPLATE, viewClass, parentElement);
         anchor.templateParent = parentElement;
+        anchor.visibility = "collapse";
         traceLog("Created templateAnchor: " + anchor);
         return anchor;
     }
