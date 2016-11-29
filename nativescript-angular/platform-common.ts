@@ -33,8 +33,7 @@ import { topmost, NavigationEntry } from "ui/frame";
 import { Page } from "ui/page";
 import { TextView } from "ui/text-view";
 
-import * as nativescriptIntl from "nativescript-intl";
-global.Intl = nativescriptIntl;
+import "nativescript-intl";
 
 export const onBeforeLivesync = new EventEmitter<NgModuleRef<any>>();
 export const onAfterLivesync = new EventEmitter<NgModuleRef<any>>();

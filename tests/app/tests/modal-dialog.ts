@@ -1,12 +1,12 @@
 //make sure you import mocha-config before @angular/core
-import {assert} from "./test-config";
-import {TestApp} from "./test-app";
-import {Component, ViewContainerRef} from "@angular/core";
-import {Page} from "ui/page";
-import {topmost} from "ui/frame";
-import {ModalDialogParams, ModalDialogService} from "nativescript-angular/directives/dialogs";
+import { assert } from "./test-config";
+import { TestApp } from "./test-app";
+import { Component, ViewContainerRef } from "@angular/core";
+import { Page } from "ui/page";
+import { topmost } from "ui/frame";
+import { ModalDialogParams, ModalDialogService } from "nativescript-angular/directives/dialogs";
 
-import {device, platformNames} from "platform";
+import { device, platformNames } from "platform";
 const CLOSE_WAIT = (device.os === platformNames.ios) ? 1000 : 0;
 
 @Component({
@@ -37,7 +37,7 @@ export class FailComponent {
     selector: "sucess-comp",
     providers: [ModalDialogService],
     template: `
-    <GridLayout modal-dialog-host margin="20">
+    <GridLayout margin="20">
         <Label text="Modal dialogs"></Label>
     </GridLayout>`
 })
@@ -73,7 +73,7 @@ describe('modal-dialog', () => {
     });
 
 
-    it("showModal throws when there is no modal-dialog-host and no viewContainer provided", (done) => {
+    it("showModal throws when there is no viewContainer provided", (done) => {
         testApp.loadComponent(FailComponent)
             .then((ref) => {
                 const service = <ModalDialogService>ref.instance.service;
@@ -81,31 +81,26 @@ describe('modal-dialog', () => {
             }).then(() => done(), err => done(err));
     });
 
-    it("showModal succeeds when there is modal-dialog-host", (done) => {
-        testApp.loadComponent(SuccessComponent)
-            .then((ref) => {
-                const service = <ModalDialogService>ref.instance.service;
-                return service.showModal(ModalComponent, {});
-            })
-            .then((res) => setTimeout(done, CLOSE_WAIT), err => done(err)); // wait for the dialog to close in IOS
-    });
-
     it("showModal succeeds when there is viewContainer provided", (done) => {
         testApp.loadComponent(SuccessComponent)
             .then((ref) => {
                 const service = <ModalDialogService>ref.instance.service;
-                return service.showModal(ModalComponent, {});
+                const comp = <SuccessComponent>ref.instance;
+                return service.showModal(ModalComponent, { viewContainerRef: comp.vcRef });
             })
             .then((res) => setTimeout(done, CLOSE_WAIT), err => done(err)); // wait for the dialog to close in IOS
     });
-
 
     it("showModal passes modal params and gets result when resolved", (done) => {
         const context = { property: "my context" };
         testApp.loadComponent(SuccessComponent)
             .then((ref) => {
                 const service = <ModalDialogService>ref.instance.service;
-                return service.showModal(ModalComponent, { context: context });
+                const comp = <SuccessComponent>ref.instance;
+                return service.showModal(ModalComponent, {
+                    viewContainerRef: comp.vcRef,
+                    context: context
+                });
             })
             .then((res) => {
                 assert.strictEqual(res, context);

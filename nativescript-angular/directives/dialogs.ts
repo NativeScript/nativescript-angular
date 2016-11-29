@@ -22,20 +22,13 @@ export class ModalDialogParams {
 
 @Injectable()
 export class ModalDialogService {
-    private containerRef: ViewContainerRef;
-
-    public registerViewContainerRef(ref: ViewContainerRef) {
-        this.containerRef = ref;
-    }
-
     public showModal(type: Type<any>, options: ModalDialogOptions): Promise<any> {
-        let viewContainerRef = options.viewContainerRef || this.containerRef;
-
-        if (!viewContainerRef) {
+        if (!options.viewContainerRef) {
             throw new Error(
                 "No viewContainerRef: Make sure you pass viewContainerRef in ModalDialogOptions.");
         }
 
+        const viewContainerRef = options.viewContainerRef;
         const parentPage: Page = viewContainerRef.injector.get(Page);
         const resolver: ComponentFactoryResolver = viewContainerRef.injector.get(
             ComponentFactoryResolver);
@@ -101,10 +94,8 @@ export class ModalDialogService {
     selector: "[modal-dialog-host]"
 })
 export class ModalDialogHost {
-    constructor(containerRef: ViewContainerRef, modalService: ModalDialogService) {
-        console.log("ModalDialogHost is deprecated. Call ModalDialogService.showModal() " +
+    constructor() {
+        throw new Error("ModalDialogHost is deprecated. Call ModalDialogService.showModal() " +
             "by passing ViewContainerRef in the options instead.");
-
-        modalService.registerViewContainerRef(containerRef);
     }
 }
