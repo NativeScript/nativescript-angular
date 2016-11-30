@@ -41,6 +41,10 @@ export class DetachedLoader { // tslint:disable-line:component-class-suffix
         return Promise.resolve(componentRef);
     }
 
+    public detectChanges() {
+        this.changeDetector.markForCheck();
+    }
+
     // TODO: change this API -- async promises not needed here anymore.
     public loadComponent(componentType: Type<any>): Promise<ComponentRef<any>> {
         log("DetachedLoader.loadComponent");
