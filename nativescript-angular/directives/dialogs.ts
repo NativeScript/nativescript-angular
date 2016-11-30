@@ -62,6 +62,7 @@ export class ModalDialogService {
         const closeCallback = (...args) => {
             doneCallback.apply(undefined, args);
             page.closeModal();
+            detachedLoaderRef.instance.detectChanges();
             detachedLoaderRef.destroy();
         };
 
