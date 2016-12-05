@@ -1,4 +1,4 @@
-import { Component, ChangeDetectionStrategy, ViewContainerRef } from '@angular/core';
+import { Component, ChangeDetectionStrategy, ViewContainerRef, ChangeDetectorRef } from '@angular/core';
 import { ModalDialogService, ModalDialogOptions, ModalDialogParams } from "nativescript-angular/directives/dialogs";
 
 @Component({
@@ -70,7 +70,10 @@ export class ModalTest {
 export class ModalTestWithPushStrategy {
     public result: string = "---";
 
-    constructor(private modal: ModalDialogService, private vcRef: ViewContainerRef) { }
+    constructor(
+        private modal: ModalDialogService,
+        private vcRef: ViewContainerRef,
+        private cdRef: ChangeDetectorRef) { }
 
     public showModal() {
         const options: ModalDialogOptions = {
@@ -81,6 +84,7 @@ export class ModalTestWithPushStrategy {
 
         this.modal.showModal(ModalContent, options).then((res: string) => {
             this.result = res || "empty result";
+            this.cdRef.markForCheck();
         });
     }
 
