@@ -23,9 +23,6 @@ import {
 } from "./platform-providers";
 import { NS_DIRECTIVES } from "./directives";
 
-import * as nativescriptIntl from "nativescript-intl";
-global.Intl = nativescriptIntl;
-
 export function errorHandlerFactory() {
     return new ErrorHandler(true);
 };
