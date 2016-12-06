@@ -17,7 +17,9 @@ import {
     NgModule, NO_ERRORS_SCHEMA,
 } from "@angular/core";
 import {
-    defaultPageProvider, defaultFrameProvider, defaultDeviceProvider
+    defaultPageProvider,
+    defaultFrameProvider,
+    defaultDeviceProvider
 } from "./platform-providers";
 import { NS_DIRECTIVES } from "./directives";
 
@@ -36,6 +38,7 @@ export function errorHandlerFactory() {
         defaultFrameProvider,
         defaultPageProvider,
         defaultDeviceProvider,
+
         NativeScriptRootRenderer,
         { provide: RootRenderer, useClass: NativeScriptRootRenderer },
         NativeScriptRenderer,

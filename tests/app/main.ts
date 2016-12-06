@@ -2,31 +2,31 @@
 import { NativeScriptModule, platformNativeScriptDynamic } from "nativescript-angular/platform";
 import { NativeScriptRouterModule } from "nativescript-angular/router";
 import { NativeScriptFormsModule } from "nativescript-angular/forms";
-import {AppComponent} from "./app.component";
-import {GestureComponent} from "./snippets/gestures.component";
-import {LayoutsComponent} from "./snippets/layouts.component";
-import {IconFontComponent} from "./snippets/icon-font.component";
-import {APP_ROOT_VIEW} from "nativescript-angular/platform-providers";
-import {Page} from "ui/page";
-import {StackLayout} from "ui/layouts/stack-layout";
+import { AppComponent } from "./app.component";
+import { GestureComponent } from "./snippets/gestures.component";
+import { LayoutsComponent } from "./snippets/layouts.component";
+import { IconFontComponent } from "./snippets/icon-font.component";
+import { APP_ROOT_VIEW } from "nativescript-angular/platform-providers";
+import { Page } from "ui/page";
+import { StackLayout } from "ui/layouts/stack-layout";
 
 import * as application from "application";
 import "ui/styling/style";
 import "ui/frame";
-import {HOOKS_LOG} from "./base.component";
-import {MultiPageMain, routes as multiPageRoutes} from "./multi-page-main.component";
-import {SinglePageMain, routes as singlePageRoutes} from "./single-page-main.component";
-import {LazyLoadMain, routes as lazyLoadRoutes} from "./lazy-load-main";
-import {FirstComponent} from "./first.component";
-import {SecondComponent} from "./second.component";
+import { HOOKS_LOG } from "./base.component";
+import { MultiPageMain, routes as multiPageRoutes } from "./multi-page-main.component";
+import { SinglePageMain, routes as singlePageRoutes } from "./single-page-main.component";
+import { LazyLoadMain, routes as lazyLoadRoutes } from "./lazy-load-main";
+import { FirstComponent } from "./first.component";
+import { SecondComponent } from "./second.component";
 import { OpaqueToken, NgModule } from "@angular/core";
 
-import {PageNavigationApp} from "./snippets/navigation/page-outlet";
-import {NavigationApp} from "./snippets/navigation/router-outlet";
+import { PageNavigationApp } from "./snippets/navigation/page-outlet";
+import { NavigationApp } from "./snippets/navigation/router-outlet";
 
 import { rendererTraceCategory, routerTraceCategory } from "nativescript-angular/trace";
 
-import {BehaviorSubject} from "rxjs";
+import { BehaviorSubject } from "rxjs";
 
 import trace = require("trace");
 // trace.setCategories(rendererTraceCategory + "," + routerTraceCategory);
@@ -36,15 +36,15 @@ trace.enable();
 // nativeScriptBootstrap(GestureComponent);
 // nativeScriptBootstrap(LayoutsComponent);
 // nativeScriptBootstrap(IconFontComponent);
-const platform = platformNativeScriptDynamic({bootInExistingPage: true});
+const platform = platformNativeScriptDynamic({ bootInExistingPage: true });
 const root = new StackLayout();
-const rootViewProvider = {provide: APP_ROOT_VIEW, useValue: root};
+const rootViewProvider = { provide: APP_ROOT_VIEW, useValue: root };
 const singlePageHooksLog = new BehaviorSubject([]);
-const singlePageHooksLogProvider = {provide: HOOKS_LOG, useValue: singlePageHooksLog};
+const singlePageHooksLogProvider = { provide: HOOKS_LOG, useValue: singlePageHooksLog };
 const multiPageHooksLog = new BehaviorSubject([]);
-const multiPageHooksLogProvider = {provide: HOOKS_LOG, useValue: multiPageHooksLog};
+const multiPageHooksLogProvider = { provide: HOOKS_LOG, useValue: multiPageHooksLog };
 const lazyLoadHooksLog = new BehaviorSubject([]);
-const lazyLoadHooksLogProvider = {provide: HOOKS_LOG, useValue: lazyLoadHooksLog};
+const lazyLoadHooksLogProvider = { provide: HOOKS_LOG, useValue: lazyLoadHooksLog };
 
 @NgModule({
     bootstrap: [
@@ -76,7 +76,7 @@ const lazyLoadHooksLogProvider = {provide: HOOKS_LOG, useValue: lazyLoadHooksLog
         singlePageHooksLogProvider,
     ]
 })
-class SinglePageModule {}
+class SinglePageModule { }
 
 @NgModule({
     bootstrap: [
@@ -108,7 +108,7 @@ class SinglePageModule {}
         multiPageHooksLogProvider,
     ]
 })
-class MultiPageModule {}
+class MultiPageModule { }
 
 @NgModule({
     bootstrap: [
@@ -137,14 +137,14 @@ class MultiPageModule {}
         lazyLoadHooksLogProvider,
     ]
 })
-class LazyLoadModule {}
+class LazyLoadModule { }
 
 application.start({
     create: (): Page => {
         const page = new Page();
         page.content = root;
 
-        let onLoadedHandler = function(args) {
+        let onLoadedHandler = function (args) {
             page.off('loaded', onLoadedHandler);
             //profiling.stop('application-start');
             console.log('Page loaded');

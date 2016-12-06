@@ -13,5 +13,5 @@ export class LazyLoadMain {
 export const routes = [
     { path: "", redirectTo: "first/lazy-load", pathMatch: "full" },
     { path: "first/:id", component: FirstComponent },
-    { path: "second", loadChildren: () => require("./lazy-loaded.module")["SecondModule"] }
+    { path: "second", loadChildren: "./lazy-loaded.module#SecondModule" }
 ];

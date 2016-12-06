@@ -15,7 +15,7 @@ import {
     EventEmitter,
     Provider,
     Sanitizer,
-    OpaqueToken,
+    OpaqueToken
 } from "@angular/core";
 
 // Work around a TS bug requiring an import of OpaqueToken without using it
