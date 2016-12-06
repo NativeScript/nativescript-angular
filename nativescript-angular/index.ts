@@ -17,3 +17,4 @@ export * from "./view-util";
 export * from "./animation-driver";
 export * from "./resource-loader";
 export * from "./element-registry";
+export * from "./value-accessors/base-value-accessor";
