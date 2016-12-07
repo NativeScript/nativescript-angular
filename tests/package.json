@@ -2,7 +2,7 @@
     "nativescript": {
         "id": "org.nativescript.ngtests",
         "tns-android": {
-            "version": "2.4.0"
+            "version": "2.3.0"
         },
         "tns-ios": {
             "version": "2.4.0"
