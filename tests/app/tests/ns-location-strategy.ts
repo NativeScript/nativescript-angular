@@ -1,6 +1,6 @@
 //make sure you import mocha-config before @angular/core
 import {assert} from "./test-config";
-import {NSLocationStrategy, LocationState} from "nativescript-angular/router/ns-location-strategy";
+import {NSLocationStrategy, LocationState} from "nativescript-angular";
 import {Frame, BackstackEntry, NavigationEntry} from "ui/frame";
 import {Page} from "ui/page";
 import {View} from "ui/core/view";

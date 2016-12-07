@@ -4,14 +4,16 @@ import { LocationStrategy, PlatformLocation } from "@angular/common";
 import { NSRouterLink } from "./router/ns-router-link";
 import { NSRouterLinkActive } from "./router/ns-router-link-active";
 import { PageRouterOutlet } from "./router/page-router-outlet";
-import { NSLocationStrategy } from "./router/ns-location-strategy";
+import { NSLocationStrategy, LocationState } from "./router/ns-location-strategy";
 import { NativescriptPlatformLocation } from "./router/ns-platform-location";
 import { RouterExtensions } from "./router/router-extensions";
-export { routerTraceCategory } from "./trace";
-export { PageRoute } from "./router/page-router-outlet";
-export { RouterExtensions } from "./router/router-extensions";
 import { NativeScriptModule } from "./nativescript.module";
 import { NsModuleFactoryLoader } from "./router/ns-module-factory-loader";
+
+export { PageRoute } from "./router/page-router-outlet";
+export { RouterExtensions } from "./router/router-extensions";
+export { NSLocationStrategy } from "./router/ns-location-strategy";
+export type LocationState = LocationState;
 
 @NgModule({
     declarations: [

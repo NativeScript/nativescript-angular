@@ -1,5 +1,4 @@
-import { NativeScriptModule, platformNativeScriptDynamic } from "nativescript-angular/platform";
-import { NativeScriptRouterModule } from "nativescript-angular/router";
+import { NativeScriptModule, platformNativeScriptDynamic, NativeScriptRouterModule, APP_ROOT_VIEW } from "nativescript-angular";
 import {
     Type, Component, ComponentRef,
     ComponentFactoryResolver, ApplicationRef, Renderer,
@@ -9,7 +8,6 @@ import {
 import {GridLayout} from "ui/layouts/grid-layout";
 import {LayoutBase} from "ui/layouts/layout-base";
 import {topmost} from 'ui/frame';
-import {APP_ROOT_VIEW} from "nativescript-angular/platform-providers";
 
 @Component({
     selector: 'my-app',

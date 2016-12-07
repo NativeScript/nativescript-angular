@@ -1,8 +1,7 @@
 //make sure you import mocha-config before @angular/core
 import {assert} from "./test-config";
 import {View} from "ui/core/view";
-import {ViewUtil} from "nativescript-angular/view-util";
-import {NgView, ViewExtensions, ViewClassMeta} from "nativescript-angular/element-registry";
+import {ViewUtil, NgView, ViewExtensions, ViewClassMeta} from "nativescript-angular";
 import {Red} from "color/known-colors";
 import {device, platformNames} from "platform";
 import {createDevice} from "./test-utils";

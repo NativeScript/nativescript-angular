@@ -10,7 +10,7 @@ import { View } from "ui/core/view";
 import { AnimationCurve } from "ui/enums";
 import { ValueSource } from "ui/core/dependency-observable";
 import { isString } from "utils/types";
-import * as styleProperty from "ui/styling/style-property";
+import { getPropertyByCssName, KeyValuePair, Property } from "ui/styling/style-property";
 
 export class NativeScriptAnimationPlayer implements AnimationPlayer {
 
@@ -60,7 +60,7 @@ export class NativeScriptAnimationPlayer implements AnimationPlayer {
             for (let style of keyframe.styles.styles) {
                 for (let substyle in style) {
                     let value = style[substyle];
-                    let property = styleProperty.getPropertyByCssName(substyle);
+                    let property = getPropertyByCssName(substyle);
                     if (property) {
                         if (typeof value === "string" && property.valueConverter) {
                             value = property.valueConverter(<string>value);
@@ -218,7 +218,7 @@ export class NativeScriptAnimationPlayer implements AnimationPlayer {
 
     static parseTransform(value: string, animationInfo: KeyframeInfo) {
         let newTransform = NativeScriptAnimationPlayer.transformConverter(value);
-        let array = new Array<styleProperty.KeyValuePair<styleProperty.Property, any>>();
+        let array = new Array<KeyValuePair<Property, any>>();
         let values = undefined;
         for (let transform in newTransform) {
             switch (transform) {

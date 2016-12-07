@@ -1,6 +1,5 @@
 import { NgModule } from '@angular/core';
-import { NativeScriptModule } from "nativescript-angular";
-import { NativeScriptRouterModule } from "nativescript-angular/router";
+import { NativeScriptModule, NativeScriptRouterModule } from "nativescript-angular";
 
 import { SecondComponent } from './second.component';
 

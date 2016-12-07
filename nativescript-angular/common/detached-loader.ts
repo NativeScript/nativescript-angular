@@ -2,11 +2,11 @@ import {
     ComponentRef, ComponentFactory, ViewContainerRef,
     Component, Type, ComponentFactoryResolver, ChangeDetectorRef
 } from "@angular/core";
-import * as trace from "trace";
+import { write } from "trace";
 
 export const CATEGORY = "detached-loader";
 function log(message: string) {
-    trace.write(message, CATEGORY);
+    write(message, CATEGORY);
 }
 
 

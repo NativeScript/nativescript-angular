@@ -1,11 +1,11 @@
-import {Component, Directive, Host, ElementRef, Input} from '@angular/core';
-import {Observable} from 'data/observable';
-import {TextValueAccessor} from 'nativescript-angular/value-accessors/text-value-accessor';
-import {CheckedValueAccessor} from 'nativescript-angular/value-accessors/checked-value-accessor';
+import {Component, Directive, Host, ElementRef, Input} from "@angular/core";
+import {Observable} from "data/observable";
+import { TextValueAccessor, CheckedValueAccessor } from "nativescript-angular";
 
 @Component({
-    selector: 'templated-component',
-    templateUrl: 'title.html'
+    moduleId: module.id,
+    selector: "templated-component",
+    templateUrl: "../title.html"
 })
 export class TemplatedComponent {
     @Input() public renderChild: boolean = false;
@@ -13,7 +13,7 @@ export class TemplatedComponent {
 }
 
 @Directive({
-    selector: 'Progress',
+    selector: "Progress",
 })
 export class ProgressDirective {
     constructor(private element: ElementRef) {
@@ -25,8 +25,9 @@ export class ProgressDirective {
 }
 
 @Component({
-	selector: 'renderer-test',
-	templateUrl: './examples/renderer-test.html' 
+    moduleId: module.id,
+	selector: "renderer-test",
+	templateUrl: "./renderer-test.html" 
 })
 export class RendererTest {
     public buttonText: string = "";
@@ -48,27 +49,27 @@ export class RendererTest {
     ];
 
     constructor() {
-        this.buttonText = 'Save...'
+        this.buttonText = "Save..."
         this.showDetails = true;
-        this.detailsText = 'plain ng-if directive \ndetail 1-2-3...';
-        this.moreDetailsText = 'More details:';
+        this.detailsText = "plain ng-if directive \ndetail 1-2-3...";
+        this.moreDetailsText = "More details:";
         this.model = {
-            'test': 'Jack',
-            'testBoolean': false,
-            'deliveryDate': new Date(),
-            'deliveryTime': new Date(),
-            'mydate': new Date(),
-            'sliderTest': 0,
-            'search': null,
-            'selectedIndex': 0,
-            'listPickerItems': [
+            "test": "Jack",
+            "testBoolean": false,
+            "deliveryDate": new Date(),
+            "deliveryTime": new Date(),
+            "mydate": new Date(),
+            "sliderTest": 0,
+            "search": null,
+            "selectedIndex": 0,
+            "listPickerItems": [
                 1,2,3,4
             ],
-            'segmentedBarItems': [
-                {'title': 'first'},
-                {'title': 'second'},
-                {'title': 'third'},
-                {'title': 'fourth'}
+            "segmentedBarItems": [
+                {"title": "first"},
+                {"title": "second"},
+                {"title": "third"},
+                {"title": "fourth"}
             ]
         };
 
@@ -79,7 +80,7 @@ export class RendererTest {
     }
 
     onSave($event, name, $el) {
-        console.log('onSave event ' + $event + ' name ' + name);
+        console.log("onSave event " + $event + " name " + name);
         alert(name);
     }
 
@@ -88,7 +89,7 @@ export class RendererTest {
     }
 
     onToggleDetails() {
-        console.log('onToggleDetails current: ' + this.showDetails);
+        console.log("onToggleDetails current: " + this.showDetails);
         this.showDetails = !this.showDetails;
     }
 

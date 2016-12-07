@@ -1,12 +1,16 @@
-// "nativescript-angular/platform" import should be first in order to load some required settings (like globals and reflect-metadata)
-import { NativeScriptModule, platformNativeScriptDynamic } from "nativescript-angular/platform";
-import { NativeScriptRouterModule } from "nativescript-angular/router";
-import { NativeScriptFormsModule } from "nativescript-angular/forms";
+import {
+    NativeScriptModule,
+    platformNativeScriptDynamic,
+    rendererTraceCategory,
+    routerTraceCategory,
+    NativeScriptRouterModule,
+    NativeScriptFormsModule,
+    APP_ROOT_VIEW
+} from "nativescript-angular";
 import { AppComponent } from "./app.component";
 import { GestureComponent } from "./snippets/gestures.component";
 import { LayoutsComponent } from "./snippets/layouts.component";
 import { IconFontComponent } from "./snippets/icon-font.component";
-import { APP_ROOT_VIEW } from "nativescript-angular/platform-providers";
 import { Page } from "ui/page";
 import { StackLayout } from "ui/layouts/stack-layout";
 
@@ -23,8 +27,6 @@ import { OpaqueToken, NgModule } from "@angular/core";
 
 import { PageNavigationApp } from "./snippets/navigation/page-outlet";
 import { NavigationApp } from "./snippets/navigation/router-outlet";
-
-import { rendererTraceCategory, routerTraceCategory } from "nativescript-angular/trace";
 
 import { BehaviorSubject } from "rxjs";
 

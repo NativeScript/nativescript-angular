@@ -1,6 +1,6 @@
 // Initial imports and polyfills
 import "globals";
-import "./zone.js/dist/zone-nativescript";
+import "./zone-js/dist/zone-nativescript";
 import "reflect-metadata";
 import "./polyfills/array";
 import "./polyfills/console";
@@ -28,7 +28,7 @@ if (global.___TS_UNUSED) {
 import { rendererLog, rendererError } from "./trace";
 import { PAGE_FACTORY, PageFactory, defaultPageFactoryProvider } from "./platform-providers";
 
-import * as application from "application";
+import { start, setCssFileName } from "application";
 import { topmost, NavigationEntry } from "ui/frame";
 import { Page } from "ui/page";
 import { TextView } from "ui/text-view";
@@ -91,12 +91,11 @@ export class NativeScriptPlatformRef extends PlatformRef {
         const mainPageEntry = this.createNavigationEntry(this._bootstrapper);
 
         if (this.appOptions && typeof this.appOptions.cssFile === "string") {
-            // TODO: All exported filed in ES6 modules should be read-only
+            // TODO: All exported fields in ES6 modules should be read-only
             // Change the case when tns-core-modules become ES6 compatible and there is a legal way to set cssFile
-            (<any>application).cssFile = this.appOptions.cssFile;
+            setCssFileName(this.appOptions.cssFile);
         }
-
-        application.start(mainPageEntry);
+        start(mainPageEntry);
     }
 
     livesyncModule(): void {

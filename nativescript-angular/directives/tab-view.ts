@@ -1,6 +1,6 @@
 import { ElementRef, Directive, Input, TemplateRef, ViewContainerRef, OnInit, AfterViewInit } from "@angular/core";
 import { TabView, TabViewItem } from "ui/tab-view";
-import * as utils from "../common/utils";
+import { convertToInt } from "../common/utils";
 import { rendererLog } from "../trace";
 import { isBlank } from "../lang-facade";
 
@@ -18,7 +18,7 @@ export class TabViewDirective implements AfterViewInit {
     }
 
     set selectedIndex(value) {
-        this._selectedIndex = utils.convertToInt(value);
+        this._selectedIndex = convertToInt(value);
         if (this.viewInitialized) {
             this.tabView.selectedIndex = this._selectedIndex;
         }
