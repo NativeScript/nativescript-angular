@@ -1,7 +1,7 @@
 import { Directive, ElementRef, forwardRef, HostListener } from "@angular/core";
 import { NG_VALUE_ACCESSOR } from "@angular/forms";
 import { isBlank, isNumber } from "../lang-facade";
-import { BaseValueAccessor, generateValueAccessorSelector } from "./base-value-accessor";
+import { BaseValueAccessor } from "./base-value-accessor";
 import { Slider } from "ui/slider";
 
 const NUMBER_VALUE_ACCESSOR = {provide: NG_VALUE_ACCESSOR,
@@ -17,7 +17,8 @@ const NUMBER_VALUE_ACCESSOR = {provide: NG_VALUE_ACCESSOR,
  *  ```
  */
 @Directive({
-    selector: generateValueAccessorSelector("Slider"),
+    // tslint:disable-next-line:max-line-length directive-selector
+    selector: "Slider[ngModel], Slider[formControlName], slider[ngModel], slider[formControlName], slider[ngModel], slider[formControlName]",
     providers: [NUMBER_VALUE_ACCESSOR]
 })
 export class NumberValueAccessor extends BaseValueAccessor<Slider> { // tslint:disable-line:directive-class-suffix

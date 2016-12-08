@@ -1,7 +1,7 @@
 import { Directive, ElementRef, forwardRef, HostListener } from "@angular/core";
 import { NG_VALUE_ACCESSOR } from "@angular/forms";
 import { isBlank } from "../lang-facade";
-import { BaseValueAccessor, generateValueAccessorSelector } from "./base-value-accessor";
+import { BaseValueAccessor } from "./base-value-accessor";
 import { Switch } from "ui/switch";
 
 const CHECKED_VALUE_ACCESSOR = {provide: NG_VALUE_ACCESSOR,
@@ -17,7 +17,8 @@ const CHECKED_VALUE_ACCESSOR = {provide: NG_VALUE_ACCESSOR,
  *  ```
  */
 @Directive({
-    selector: generateValueAccessorSelector("Switch"),
+    // tslint:disable-next-line:max-line-length directive-selector
+    selector: "Switch[ngModel], Switch[formControlName], switch[ngModel], switch[formControlName], switch[ngModel], switch[formControlName]",
     providers: [CHECKED_VALUE_ACCESSOR]
 })
 export class CheckedValueAccessor extends BaseValueAccessor<Switch> { // tslint:disable-line:directive-class-suffix

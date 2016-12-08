@@ -1,7 +1,7 @@
 import { Directive, ElementRef, forwardRef, HostListener } from "@angular/core";
 import { NG_VALUE_ACCESSOR } from "@angular/forms";
 import { isBlank } from "../lang-facade";
-import { BaseValueAccessor, generateValueAccessorSelector } from "./base-value-accessor";
+import { BaseValueAccessor } from "./base-value-accessor";
 import { View } from "ui/core/view";
 
 const TEXT_VALUE_ACCESSOR = {provide: NG_VALUE_ACCESSOR,
@@ -19,7 +19,8 @@ export type TextView = {text: string} & View;
  *  ```
  */
 @Directive({
-    selector: generateValueAccessorSelector("TextField", "TextView", "SearchBar"),
+    // tslint:disable-next-line:max-line-length directive-selector
+    selector: "TextField[ngModel], TextField[formControlName], textField[ngModel], textField[formControlName], text-field[ngModel], text-field[formControlName], TextView[ngModel], TextView[formControlName], textView[ngModel], textView[formControlName], text-view[ngModel], text-view[formControlName], SearchBar[ngModel], SearchBar[formControlName], searchBar[ngModel], searchBar[formControlName], search-bar[ngModel], search-bar[formControlName]",
     providers: [TEXT_VALUE_ACCESSOR]
 })
 export class TextValueAccessor extends BaseValueAccessor<TextView> { // tslint:disable-line:directive-class-suffix

@@ -1,6 +1,6 @@
 import { Directive, ElementRef, forwardRef, AfterViewInit, HostListener } from "@angular/core";
 import { NG_VALUE_ACCESSOR } from "@angular/forms";
-import { BaseValueAccessor, generateValueAccessorSelector } from "./base-value-accessor";
+import { BaseValueAccessor } from "./base-value-accessor";
 import { View } from "ui/core/view";
 import { convertToInt } from "../common/utils";
 
@@ -19,7 +19,8 @@ export type SelectableView = {selectedIndex: number} & View;
  *  ```
  */
 @Directive({
-    selector: generateValueAccessorSelector("SegmentedBar", "ListPicker", "TabView"),
+    // tslint:disable-next-line:max-line-length directive-selector
+    selector: "SegmentedBar[ngModel], SegmentedBar[formControlName], segmentedBar[ngModel], segmentedBar[formControlName], segmented-bar[ngModel], segmented-bar[formControlName], ListPicker[ngModel], ListPicker[formControlName], listPicker[ngModel], listPicker[formControlName], list-picker[ngModel], list-picker[formControlName], TabView[ngModel], TabView[formControlName], tabView[ngModel], tabView[formControlName], tab-view[ngModel], tab-view[formControlName]",
     providers: [SELECTED_INDEX_VALUE_ACCESSOR]
 })
 export class SelectedIndexValueAccessor extends BaseValueAccessor<SelectableView> implements AfterViewInit { // tslint:disable-line:max-line-length directive-class-suffix

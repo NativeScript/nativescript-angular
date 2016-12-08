@@ -1,7 +1,7 @@
 import { Directive, ElementRef, forwardRef, HostListener } from "@angular/core";
 import { NG_VALUE_ACCESSOR } from "@angular/forms";
 import { isBlank, isDate } from "../lang-facade";
-import { BaseValueAccessor, generateValueAccessorSelector } from "./base-value-accessor";
+import { BaseValueAccessor } from "./base-value-accessor";
 import { DatePicker } from "ui/date-picker";
 
 const DATE_VALUE_ACCESSOR = {provide: NG_VALUE_ACCESSOR,
@@ -17,7 +17,8 @@ const DATE_VALUE_ACCESSOR = {provide: NG_VALUE_ACCESSOR,
  *  ```
  */
 @Directive({
-    selector: generateValueAccessorSelector("DatePicker"),
+    // tslint:disable-next-line:max-line-length directive-selector
+    selector: "DatePicker[ngModel], DatePicker[formControlName], datePicker[ngModel], datePicker[formControlName], date-picker[ngModel], date-picker[formControlName]",
     providers: [DATE_VALUE_ACCESSOR]
 })
 export class DateValueAccessor extends BaseValueAccessor<DatePicker> { // tslint:disable-line:directive-class-suffix
