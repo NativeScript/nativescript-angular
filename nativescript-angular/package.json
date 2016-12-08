@@ -42,7 +42,7 @@
     "codelyzer": "^2.0.0-beta.1",
     "tns-core-modules": ">=2.4.0 || >=2.4.0-2016",
     "tslint": "~4.0.1",
-    "typescript": "^2.0.2",
+    "typescript": "~2.0.10",
     "zone.js": "^0.6.21"
   },
   "nativescript": {}
