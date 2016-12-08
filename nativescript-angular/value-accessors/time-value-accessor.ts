@@ -1,7 +1,7 @@
 import { Directive, ElementRef, forwardRef, HostListener } from "@angular/core";
 import { NG_VALUE_ACCESSOR } from "@angular/forms";
 import { isBlank, isDate } from "../lang-facade";
-import { BaseValueAccessor } from "./base-value-accessor";
+import { BaseValueAccessor, generateValueAccessorSelector } from "./base-value-accessor";
 import { TimePicker } from "ui/time-picker";
 
 const TIME_VALUE_ACCESSOR = {provide: NG_VALUE_ACCESSOR,
@@ -17,7 +17,7 @@ const TIME_VALUE_ACCESSOR = {provide: NG_VALUE_ACCESSOR,
  *  ```
  */
 @Directive({
-    selector: "TimePicker[ngModel], timePicker[ngModel], time-picker[ngModel]", // tslint:disable-line:max-line-length directive-selector
+    selector: generateValueAccessorSelector("TimePicker"),
     providers: [TIME_VALUE_ACCESSOR]
 })
 export class TimeValueAccessor extends BaseValueAccessor<TimePicker> { // tslint:disable-line:directive-class-suffix

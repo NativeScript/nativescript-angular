@@ -45,7 +45,7 @@
     "nativescript-dev-typescript": "^0.3.1",
     "nativescript-dev-webpack": "0.0.13",
     "shelljs": "^0.7.0",
-    "typescript": "^2.0.2"
+    "typescript": "~2.0.10"
   },
   "nativescript": {
     "id": "org.nativescript.ngsample",
