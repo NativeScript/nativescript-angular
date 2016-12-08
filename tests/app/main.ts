@@ -5,6 +5,7 @@ import {
     routerTraceCategory,
     NativeScriptRouterModule,
     NativeScriptFormsModule,
+    NSModuleFactoryLoader,
     APP_ROOT_VIEW
 } from "nativescript-angular";
 import { AppComponent } from "./app.component";
@@ -23,7 +24,7 @@ import { SinglePageMain, routes as singlePageRoutes } from "./single-page-main.c
 import { LazyLoadMain, routes as lazyLoadRoutes } from "./lazy-load-main";
 import { FirstComponent } from "./first.component";
 import { SecondComponent } from "./second.component";
-import { OpaqueToken, NgModule } from "@angular/core";
+import { OpaqueToken, NgModule, NgModuleFactoryLoader } from "@angular/core";
 
 import { PageNavigationApp } from "./snippets/navigation/page-outlet";
 import { NavigationApp } from "./snippets/navigation/router-outlet";
@@ -137,6 +138,7 @@ class MultiPageModule { }
     providers: [
         rootViewProvider,
         lazyLoadHooksLogProvider,
+        { provide: NgModuleFactoryLoader, useClass: NSModuleFactoryLoader },
     ]
 })
 class LazyLoadModule { }

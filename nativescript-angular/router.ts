@@ -1,4 +1,4 @@
-import { NgModule, ModuleWithProviders, NO_ERRORS_SCHEMA, NgModuleFactoryLoader } from "@angular/core";
+import { NgModule, ModuleWithProviders, NO_ERRORS_SCHEMA } from "@angular/core";
 import { RouterModule, Routes, ExtraOptions } from "@angular/router";
 import { LocationStrategy, PlatformLocation } from "@angular/common";
 import { NSRouterLink } from "./router/ns-router-link";
@@ -8,7 +8,7 @@ import { NSLocationStrategy, LocationState } from "./router/ns-location-strategy
 import { NativescriptPlatformLocation } from "./router/ns-platform-location";
 import { RouterExtensions } from "./router/router-extensions";
 import { NativeScriptModule } from "./nativescript.module";
-import { NsModuleFactoryLoader } from "./router/ns-module-factory-loader";
+export { NSModuleFactoryLoader } from "./router/ns-module-factory-loader";
 
 export { PageRoute } from "./router/page-router-outlet";
 export { RouterExtensions } from "./router/router-extensions";
@@ -42,14 +42,7 @@ export type LocationState = LocationState;
 })
 export class NativeScriptRouterModule {
     static forRoot(routes: Routes, config?: ExtraOptions): ModuleWithProviders {
-        let moduleWithProviders = RouterModule.forRoot(routes, config);
-
-        // Override the stock SystemJsNgModuleLoader
-        moduleWithProviders.providers.push(
-            { provide: NgModuleFactoryLoader, useClass: NsModuleFactoryLoader },
-        );
-
-        return moduleWithProviders;
+        return RouterModule.forRoot(routes, config);
     }
 
     static forChild(routes: Routes): ModuleWithProviders {

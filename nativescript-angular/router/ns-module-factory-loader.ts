@@ -13,7 +13,7 @@ const FACTORY_CLASS_SUFFIX = "NgFactory";
 const FACTORY_PATH_SUFFIX = ".ngfactory";
 
 @Injectable()
-export class NsModuleFactoryLoader implements NgModuleFactoryLoader {
+export class NSModuleFactoryLoader implements NgModuleFactoryLoader {
     private offlineMode: boolean;
 
     constructor(private compiler: Compiler) {
