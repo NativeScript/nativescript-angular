@@ -3,7 +3,7 @@ import { assert } from "./test-config";
 import { Component, ElementRef } from "@angular/core";
 import { dumpView, createDevice } from "./test-utils";
 import { TestApp } from "./test-app";
-import { DEVICE } from "nativescript-angular";
+import { DEVICE } from "nativescript-angular/platform-providers";
 import { platformNames } from "platform";
 
 @Component({

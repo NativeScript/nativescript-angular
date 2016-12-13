@@ -9,7 +9,7 @@ import { LayoutBase } from "ui/layouts/layout-base";
 import { StackLayout } from "ui/layouts/stack-layout";
 import { ContentView } from "ui/content-view";
 import { Button } from "ui/button";
-import { NgView } from "nativescript-angular";
+import { NgView } from "nativescript-angular/element-registry";
 
 @Component({
     template: `<StackLayout><Label text="Layout"></Label></StackLayout>`

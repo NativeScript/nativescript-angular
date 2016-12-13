@@ -4,7 +4,7 @@ import { TestApp } from "./test-app";
 import { Component, ViewContainerRef } from "@angular/core";
 import { Page } from "ui/page";
 import { topmost } from "ui/frame";
-import { ModalDialogParams, ModalDialogService } from "nativescript-angular";
+import { ModalDialogParams, ModalDialogService } from "nativescript-angular/directives/dialogs";
 
 import { device, platformNames } from "platform";
 const CLOSE_WAIT = (device.os === platformNames.ios) ? 1000 : 0;

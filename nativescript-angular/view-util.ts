@@ -22,6 +22,8 @@ const IOS_PREFX: string = ":ios:";
 const ANDROID_PREFX: string = ":android:";
 const whiteSpaceSplitter = /\s+/;
 
+export type ViewExtensions = ViewExtensions;
+export type NgView = NgView;
 export type NgLayoutBase = LayoutBase & ViewExtensions;
 export type NgContentView = ContentView & ViewExtensions;
 export type BeforeAttachAction = (view: View) => void;

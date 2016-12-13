@@ -11,7 +11,7 @@ class MyComponent {
 
 
 // >> router-params-page-route
-import { PageRoute } from "nativescript-angular";
+import { PageRoute } from "nativescript-angular/router";
 class MyPageComponent {
   id: number;
   constructor(private pageRoute: PageRoute) {

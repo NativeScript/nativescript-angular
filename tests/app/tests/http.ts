@@ -8,7 +8,8 @@ import {ReflectiveInjector} from '@angular/core';
 import {BaseRequestOptions, ConnectionBackend, Http, Response, ResponseOptions} from '@angular/http';
 import 'rxjs/add/operator/map';
 import {MockBackend} from '@angular/http/testing';
-import { NSHttp, NSFileSystem } from "nativescript-angular";
+import {NSHttp} from "nativescript-angular/http/ns-http";
+import {NSFileSystem} from "nativescript-angular/file-system/ns-file-system";
 import {NSFileSystemMock, FileResponses} from './mocks/ns-file-system.mock';
 
 describe("Http", () => {
