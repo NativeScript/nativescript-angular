@@ -1,0 +1,28 @@
+{
+  "compilerOptions": {
+    "target": "es6",
+    "module": "es6",
+    "moduleResolution": "node",
+    "sourceMap": true,
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "noImplicitUseStrict": true,
+    "noEmitHelpers": true,
+    "declaration": true,
+    "removeComments": false,
+    "noEmitOnError": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noImplicitAny": false
+  },
+  "exclude": [
+      "./global.d.ts",
+      "./node_modules/**/*.*"
+  ],
+  "angularCompilerOptions": {
+    "genDir": ".",
+    "skipMetadataEmit": false,
+    "skipTemplateCodegen": true,
+    "debug": true
+  }
+}

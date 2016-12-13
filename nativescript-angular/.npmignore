@@ -6,7 +6,11 @@
 *.js.map
 
 tsconfig.json
+tsconfig.es6.json
 global.d.ts
+global.es6.d.ts
 .npmignore
 gulpfile.js
 tslint.json
+rollup.config.js
+rollup-entry.js
