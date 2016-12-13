@@ -6,7 +6,7 @@ import {View} from "ui/core/view";
 import {Label} from "ui/label";
 
 // >> third-party-simple-view-registration
-import {registerElement} from "nativescript-angular";
+import {registerElement} from "nativescript-angular/element-registry";
 registerElement("third-party-view", () => require("./third-party-view").SimpleTag);
 // << third-party-simple-view-registration
 

@@ -8,11 +8,10 @@ import { NSLocationStrategy, LocationState } from "./router/ns-location-strategy
 import { NativescriptPlatformLocation } from "./router/ns-platform-location";
 import { RouterExtensions } from "./router/router-extensions";
 import { NativeScriptModule } from "./nativescript.module";
-export { NSModuleFactoryLoader } from "./router/ns-module-factory-loader";
 
 export { PageRoute } from "./router/page-router-outlet";
 export { RouterExtensions } from "./router/router-extensions";
-export { NSLocationStrategy } from "./router/ns-location-strategy";
+export { NSModuleFactoryLoader } from "./router/ns-module-factory-loader";
 export type LocationState = LocationState;
 
 @NgModule({

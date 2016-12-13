@@ -1,6 +1,6 @@
 //make sure you import mocha-config before @angular/core
 import {assert} from "./test-config";
-import {FileSystemResourceLoader} from "nativescript-angular";
+import {FileSystemResourceLoader} from "nativescript-angular/resource-loader";
 
 describe("XHR name resolution", () => {
     it("resolves relative paths from app root", () => {

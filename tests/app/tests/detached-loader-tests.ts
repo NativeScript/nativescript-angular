@@ -7,7 +7,7 @@ import {Red} from "color/known-colors";
 import {dumpView} from "./test-utils";
 import {LayoutBase} from "ui/layouts/layout-base";
 import {StackLayout} from "ui/layouts/stack-layout";
-import {DetachedLoader} from "nativescript-angular";
+import {DetachedLoader} from "nativescript-angular/common/detached-loader";
 
 @Component({
     template: `<StackLayout><Label text="COMPONENT"></Label></StackLayout>`
