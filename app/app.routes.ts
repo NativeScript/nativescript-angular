@@ -15,6 +15,7 @@ import { ListViewComponent } from "./listView/commonTemplate/list-view-page";
 import { ListViewControlComponent } from "./listView/customTemplate/list-view-item-template";
 import { ListViewAsyncPipeComponent } from "./listView/asyncPipeTemplate/async-pipe-template";
 import { ListViewMainPageComponent } from "./listView/listViewMainPage/list-view-main-page";
+import { ListViewWithNestedTemplateComponent } from "./listView/nestedTemplate/list-view-nested-template";
 
 import { ModalTest, ModalTestWithPushStrategy, ModalContent } from "./modal/modal-dialogs/modal-dialog.component";
 import { ModalViewMainPageComponent } from "./modal/modal-view-main-page";
@@ -46,6 +47,7 @@ export const routes = [
     routeEntry({ path: 'listView/commonTemplate', component: ListViewComponent, data: { title: "commonTemplate" } }),
     routeEntry({ path: 'listView/customTemplate', component: ListViewControlComponent, data: { title: "customTemplate" } }),
     routeEntry({ path: 'listView/asyncPipeTemplate', component: ListViewAsyncPipeComponent, data: { title: "asyncPipeTemplate" } }),
+    routeEntry({ path: 'listView/nestedTemplate', component: ListViewWithNestedTemplateComponent, data: { title: "nestedTemplate" } }),
 
     routeEntry({ path: 'modal', component: ModalViewMainPageComponent, data: { title: "Modals", isNavigatable: true} }),
     routeEntry({ path: 'modal/modal-dialogs', component: ModalTest, data: { title: "modal" } }),
