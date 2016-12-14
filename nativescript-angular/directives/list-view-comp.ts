@@ -69,7 +69,9 @@ export class ListViewComponent implements DoCheck, OnDestroy, AfterContentInit {
 
     @Output() public setupItemView = new EventEmitter<SetupItemViewArgs>();
 
-    @ContentChild(TemplateRef) itemTemplate: TemplateRef<ListItemContext>;
+    @ContentChild(TemplateRef) itemTemplateQuery: TemplateRef<ListItemContext>;
+
+    itemTemplate: TemplateRef<ListItemContext>;
 
     @Input()
     get items() {
@@ -108,6 +110,10 @@ export class ListViewComponent implements DoCheck, OnDestroy, AfterContentInit {
     }
 
     private setItemTemplates() {
+        // The itemTemplateQuery may be changed after list items are added that contain <template> inside,
+        // so cache and use only the original template to avoid errors.
+        this.itemTemplate = this.itemTemplateQuery;
+
         if (this._templateMap) {
             listViewLog("Setting templates");
 
