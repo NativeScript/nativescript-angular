@@ -1,9 +1,9 @@
 //make sure you import mocha-config before @angular/core
-import {assert} from "./test-config";
-import {NSLocationStrategy, LocationState} from "nativescript-angular/router/ns-location-strategy";
-import {Frame, BackstackEntry, NavigationEntry} from "ui/frame";
-import {Page} from "ui/page";
-import {View} from "ui/core/view";
+import { assert } from "./test-config";
+import { NSLocationStrategy, LocationState } from "nativescript-angular/router/ns-location-strategy";
+import { Frame, BackstackEntry, NavigationEntry } from "ui/frame";
+import { Page } from "ui/page";
+import { View } from "ui/core/view";
 
 class FakeFrame extends View implements Frame {
     backStack: Array<BackstackEntry>;
@@ -32,12 +32,12 @@ class FakeFrame extends View implements Frame {
     public get navigationBarHeight(): number {
         throw new Error("I am a FakeFrame");
     }
-    
+
     public _processNavigationQueue(page: Page) {
         throw new Error("I am a FakeFrame");
     }
 
-    public _updateActionBar(page?: Page){
+    public _updateActionBar(page?: Page) {
         throw new Error("I am a FakeFrame");
     }
 
@@ -52,15 +52,15 @@ function initStrategy(back?: () => void): NSLocationStrategy {
     return strategy;
 }
 
-function assertStatesEqual(actual: Array<LocationState>, expeced: Array<LocationState>) {
+function assertStatesEqual(actual: Array<LocationState>, expected: Array<LocationState>) {
     assert.isArray(actual);
-    assert.isArray(expeced);
-    assert.equal(actual.length, expeced.length);
+    assert.isArray(expected);
+    assert.equal(actual.length, expected.length);
 
     for (let i = 0; i < actual.length; i++) {
         assert.deepEqual(
-            actual[i], expeced[i],
-            `State[${i}] does not match!\n  actual: ${JSON.stringify(actual[i])}\nexpected: ${JSON.stringify(expeced[i])}`);
+            actual[i], expected[i],
+            `State[${i}] does not match!\n  actual: ${JSON.stringify(actual[i])}\nexpected: ${JSON.stringify(expected[i])}`);
     }
 }
 
@@ -103,7 +103,7 @@ describe('NSLocationStrategy', () => {
     it("canGoBack() return false initially", () => {
         const strategy = initStrategy();
 
-        assert.isFalse(strategy.canGoBack(), "canGoBack() should reutrn false if there are no navigations");
+        assert.isFalse(strategy.canGoBack(), "canGoBack() should return false if there are no navigations");
     });
 
     it("canGoBack() return true after navigation", () => {
@@ -111,7 +111,7 @@ describe('NSLocationStrategy', () => {
 
         strategy.pushState(null, "test", "/test", null);
 
-        assert.isTrue(strategy.canGoBack(), "canGoBack() should reutrn true after navigation");
+        assert.isTrue(strategy.canGoBack(), "canGoBack() should return true after navigation");
     });
 
     it("back() calls onPopState", () => {
@@ -128,7 +128,7 @@ describe('NSLocationStrategy', () => {
         assert.equal(popCount, 1);
     });
 
-    it("replaceState() replaces state - dosn't call onPopState", () => {
+    it("replaceState() replaces state - doesn't call onPopState", () => {
         const strategy = initStrategy();
         let popCount = 0;
         strategy.onPopState(() => { popCount++; });
@@ -144,15 +144,15 @@ describe('NSLocationStrategy', () => {
 
     it("pushState() with page navigation", () => {
         const strategy = initStrategy();
-        const expextedStates: Array<LocationState> = [createState("/", true)];
+        const expectedStates: Array<LocationState> = [createState("/", true)];
 
         simulatePageNavigation(strategy, "/page");
-        expextedStates.push(createState("/page", true));
+        expectedStates.push(createState("/page", true));
 
         strategy.pushState(null, null, "/internal", null);
-        expextedStates.push(createState("/internal"));
+        expectedStates.push(createState("/internal"));
 
-        assertStatesEqual(strategy._getSatates(), expextedStates);
+        assertStatesEqual(strategy._getStates(), expectedStates);
     });
 
 
@@ -166,7 +166,7 @@ describe('NSLocationStrategy', () => {
 
         assert.equal(frameBackCount, 0);
         assert.equal(popCount, 0);
-        assert.equal(strategy._getSatates().length, 2);
+        assert.equal(strategy._getStates().length, 2);
 
         // Act
         strategy.back();
@@ -174,7 +174,7 @@ describe('NSLocationStrategy', () => {
         // Assert
         assert.equal(frameBackCount, 1);
         assert.equal(popCount, 0);
-        assert.equal(strategy._getSatates().length, 2);
+        assert.equal(strategy._getStates().length, 2);
     });
 
 
@@ -188,7 +188,7 @@ describe('NSLocationStrategy', () => {
 
         assert.equal(frameBackCount, 0);
         assert.equal(popCount, 0);
-        assert.equal(strategy._getSatates().length, 2);
+        assert.equal(strategy._getStates().length, 2);
 
         // Act
         simulatePageBack(strategy);
@@ -196,7 +196,7 @@ describe('NSLocationStrategy', () => {
         // Assert
         assert.equal(frameBackCount, 0);
         assert.equal(popCount, 1);
-        assert.equal(strategy._getSatates().length, 1);
+        assert.equal(strategy._getStates().length, 1);
     });
 
 
@@ -208,9 +208,6 @@ describe('NSLocationStrategy', () => {
         simulatePageNavigation(strategy, "/cleared");
 
         // Assert
-        assertStatesEqual(strategy._getSatates(), [createState("/cleared", true)]);
+        assertStatesEqual(strategy._getStates(), [createState("/cleared", true)]);
     });
 });
-
-
-

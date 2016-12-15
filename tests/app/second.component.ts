@@ -1,8 +1,8 @@
-import {Router, ActivatedRoute } from '@angular/router';
-import {Component, Inject} from "@angular/core";
-import {Location} from "@angular/common";
-import {HOOKS_LOG, BaseComponent} from "./base.component";
-import {BehaviorSubject} from "rxjs";
+import { Router, ActivatedRoute } from "@angular/router";
+import { Component, Inject } from "@angular/core";
+import { Location } from "@angular/common";
+import { HOOKS_LOG, BaseComponent } from "./base.component";
+import { BehaviorSubject } from "rxjs/BehaviorSubject";
 
 @Component({
     selector: "second-comp",
@@ -17,7 +17,7 @@ import {BehaviorSubject} from "rxjs";
 })
 export class SecondComponent extends BaseComponent {
     protected name = "second";
-    public id: string = ""
+    public id: string = "";
 
     constructor(private router: Router, private location: Location, private routeData: ActivatedRoute, @Inject(HOOKS_LOG) hooksLog: BehaviorSubject<Array<string>>) {
         super(hooksLog);

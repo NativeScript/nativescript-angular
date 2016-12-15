@@ -26,7 +26,7 @@ import { NavigationApp } from "./snippets/navigation/router-outlet";
 
 import { rendererTraceCategory, routerTraceCategory } from "nativescript-angular/trace";
 
-import { BehaviorSubject } from "rxjs";
+import { BehaviorSubject } from "rxjs/BehaviorSubject";
 
 import trace = require("trace");
 // trace.setCategories(rendererTraceCategory + "," + routerTraceCategory);

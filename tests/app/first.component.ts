@@ -1,7 +1,7 @@
 import { Router, ActivatedRoute } from '@angular/router';
 import { Component, Inject } from "@angular/core";
 import { HOOKS_LOG, BaseComponent } from "./base.component";
-import { BehaviorSubject } from "rxjs";
+import { BehaviorSubject } from "rxjs/BehaviorSubject";
 
 @Component({
     selector: "first-comp",
