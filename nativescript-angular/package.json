@@ -1,6 +1,9 @@
 {
   "private": true,
   "name": "nativescript-angular",
+  "main": "bundle.all",
+  "module": "index",
+  "typings": "index.d.ts",
   "version": "1.3.0",
   "description": "An Angular 2 renderer that lets you build mobile apps with NativeScript.",
   "homepage": "http://www.telerik.com",
@@ -18,7 +21,11 @@
     "postinstall": "node postinstall.js",
     "ngc": "ngc -p tsconfig.json",
     "tsc": "tsc -p tsconfig.json",
-    "prepublish": "npm run tsc && npm run ngc"
+    "commonjs-build": "npm run tsc && npm run ngc",
+    "ngc-es6": "ngc -p tsconfig.es6.json",
+    "tsc-es6": "tsc -p tsconfig.es6.json",
+    "es6-build": "npm run tsc-es6 && npm run rollup && npm run ngc-es6",
+    "rollup": "rollup -c"
   },
   "dependencies": {
     "nativescript-intl": "~0.0.8",
@@ -38,12 +45,12 @@
     "url": "0.10.3"
   },
   "devDependencies": {
-    "typescript": "~2.0.10",
-    "tslint": "~4.0.1",
-    "codelyzer": "^2.0.0-beta.1",
     "@angular/compiler-cli": "~2.2.1",
     "codelyzer": "^2.0.0-beta.1",
+    "rollup": "^0.37.0",
     "tns-core-modules": ">=2.5.0 || >=2.5.0-2016",
+    "tslint": "~4.0.1",
+    "typescript": "~2.0.10",
     "zone.js": "^0.6.21"
   },
   "nativescript": {}
