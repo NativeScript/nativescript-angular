@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "target": "es6",
+    "target": "es5",
     "module": "es6",
     "moduleResolution": "node",
     "sourceMap": true,
@@ -16,7 +16,6 @@
     "noImplicitAny": false
   },
   "exclude": [
-      "./global.d.ts",
       "./node_modules/**/*.*"
   ],
   "angularCompilerOptions": {
