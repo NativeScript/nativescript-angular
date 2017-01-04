@@ -12,6 +12,8 @@ class MyComponent {
 
 // >> router-params-page-route
 import { PageRoute } from "nativescript-angular/router";
+import "rxjs/add/operator/switchMap";
+
 class MyPageComponent {
   id: number;
   constructor(private pageRoute: PageRoute) {

@@ -1,11 +1,10 @@
-import { Component, OnInit, OnDestroy, Injectable } from "@angular/core";
-import { Router, CanActivate, Resolve, ActivatedRouteSnapshot, RouterStateSnapshot, ActivatedRoute, Params } from '@angular/router';
-import { Observable } from "rxjs";
+import { Component, Injectable } from "@angular/core";
+import { CanActivate, Resolve, ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
 import { RouterExtensions, PageRoute } from "nativescript-angular/router";
-import { NSLocationStrategy } from "nativescript-angular/router/ns-location-strategy";
-import { BehaviorSubject } from "rxjs";
-import { Page } from "ui/page";
-import * as appSettings from "application-settings"
+import * as appSettings from "application-settings";
+import { Observable } from "rxjs/Observable";
+import "rxjs/add/operator/map";
+import "rxjs/add/operator/switchMap";
 
 const USER_KEY = "user";
 
@@ -160,7 +159,7 @@ class ResolveGuard implements Resolve<ResolvedData> {
     static counter = 0;
     resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<ResolvedData> | Promise<ResolvedData> | ResolvedData {
         const result: ResolvedData = { id: ResolveGuard.counter++ }
-        console.log(`ResolveGuard: Fteching new data. Result: ${JSON.stringify(result)} `);
+        console.log(`ResolveGuard: Fetching new data. Result: ${JSON.stringify(result)} `);
         return result;
     }
 }
@@ -175,17 +174,17 @@ export class LoginAppComponent {
         { path: "main", component: MainComponent, canActivate: [AuthGuard], resolve: [ResolveGuard] },
         { path: "inner", component: InnerComponent, canActivate: [AuthGuard] },
         { path: "login", component: LoginComponent },
-    ]
+    ];
 
     static entries = [
         LoginComponent,
         MainComponent,
         InnerComponent
-    ]
+    ];
 
     static providers = [
         AuthGuard,
         ResolveGuard,
         LoginService,
-    ]
+    ];
 }

@@ -1,8 +1,9 @@
 import { Component, OnInit, OnDestroy } from "@angular/core";
 import { ActivatedRoute, Router } from '@angular/router';
-import { Observable } from "rxjs";
 import { Location } from '@angular/common';
 import { Page } from "ui/page";
+import { Observable } from "rxjs/Observable";
+import 'rxjs/add/operator/map';
 
 
 @Component({

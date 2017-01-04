@@ -1,5 +1,6 @@
 import { Component, OnInit, OnDestroy } from "@angular/core";
 import { ActivatedRoute } from '@angular/router';
+import "rxjs/add/operator/map";
 
 @Component({
     selector: "first",

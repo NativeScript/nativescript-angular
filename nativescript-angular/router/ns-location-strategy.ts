@@ -28,7 +28,7 @@ export class NSLocationStrategy extends LocationStrategy {
     private states = new Array<LocationState>();
     private popStateCallbacks = new Array<(_: any) => any>();
 
-    private _isPageNavigationgBack = false;
+    private _isPageNavigationBack = false;
     private _currentNavigationOptions: NavigationOptions;
 
     constructor(private frame: Frame) {
@@ -86,7 +86,7 @@ export class NSLocationStrategy extends LocationStrategy {
     }
 
     back(): void {
-        if (this._isPageNavigationgBack) {
+        if (this._isPageNavigationBack) {
             // We are navigating to the previous page 
             // clear the stack until we get to a page navigation state
             let state = this.states.pop();
@@ -154,22 +154,22 @@ export class NSLocationStrategy extends LocationStrategy {
     // Methods for syncing with page navigation in PageRouterOutlet
     public _beginBackPageNavigation() {
         routerLog("NSLocationStrategy.startGoBack()");
-        if (this._isPageNavigationgBack) {
+        if (this._isPageNavigationBack) {
             throw new Error("Calling startGoBack while going back.");
         }
-        this._isPageNavigationgBack = true;
+        this._isPageNavigationBack = true;
     }
 
     public _finishBackPageNavigation() {
         routerLog("NSLocationStrategy.finishBackPageNavigation()");
-        if (!this._isPageNavigationgBack) {
+        if (!this._isPageNavigationBack) {
             throw new Error("Calling endGoBack while not going back.");
         }
-        this._isPageNavigationgBack = false;
+        this._isPageNavigationBack = false;
     }
 
     public _isPageNavigatingBack() {
-        return this._isPageNavigationgBack;
+        return this._isPageNavigationBack;
     }
 
     public _beginPageNavigation(): NavigationOptions {
@@ -199,7 +199,7 @@ export class NSLocationStrategy extends LocationStrategy {
             `${JSON.stringify(this._currentNavigationOptions)})`);
     }
 
-    public _getSatates(): Array<LocationState> {
+    public _getStates(): Array<LocationState> {
         return this.states.slice();
     }
 }

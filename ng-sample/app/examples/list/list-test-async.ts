@@ -1,8 +1,8 @@
-import { Component, Input, ChangeDetectionStrategy } from '@angular/core';
-import * as Rx from 'rxjs/Observable';
-import { combineLatest } from 'rxjs/operator/combineLatest';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
+import { DataItem, DataService } from "./data.service";
+import { Observable } from "rxjs/Observable";
 import { BehaviorSubject } from "rxjs/BehaviorSubject";
-import { DataItem, DataService } from "./data.service"
+import "rxjs/add/operator/combineLatest";
 
 @Component({
     selector: 'list-test-async',
@@ -80,19 +80,18 @@ export class ListTestAsync {
 
         <StackLayout row="2" colSpan="2" orientation="horizontal">
             <button (tap)="toggleAsyncUpdates()" [text]="isUpdating ? 'stop updates' : 'start updates'"></button>
-            <button (tap)="toogleFilter()" [text]="(filter$ | async) ? 'show all' : 'show even'"></button>
+            <button (tap)="toggleFilter()" [text]="(filter$ | async) ? 'show all' : 'show even'"></button>
         </StackLayout>
     </GridLayout>
     `
 })
 export class ListTestFilterAsync {
     public isUpdating: boolean = false;
-    public filteredItems$: Rx.Observable<Array<DataItem>>;
+    public filteredItems$: Observable<Array<DataItem>>;
     private filter$ = new BehaviorSubject(false);
 
     constructor(private service: DataService) {
-        // Create filteredItems$ by combining the service.items$ and filter$
-        this.filteredItems$ = combineLatest(this.service.items$, this.filter$, (data, filter) => {
+        this.filteredItems$ = this.service.items$.combineLatest(this.filter$, (data, filter) => {
             return filter ? data.filter(v => v.id % 2 === 0) : data;
         });
     }
@@ -111,7 +110,7 @@ export class ListTestFilterAsync {
         this.isUpdating = !this.isUpdating;
     }
 
-    public toogleFilter() {
+    public toggleFilter() {
         this.filter$.next(!this.filter$.value);
     }
 }

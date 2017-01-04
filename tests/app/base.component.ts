@@ -1,6 +1,6 @@
-import {Component, OpaqueToken, OnInit, OnDestroy} from "@angular/core";
+import { OpaqueToken, OnInit, OnDestroy } from "@angular/core";
 export const HOOKS_LOG = new OpaqueToken("Hooks log");
-import {BehaviorSubject} from "rxjs";
+import { BehaviorSubject } from "rxjs/BehaviorSubject";
 
 export class BaseComponent implements OnInit, OnDestroy {
     protected name: string = "";

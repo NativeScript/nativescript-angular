@@ -1,9 +1,8 @@
 import { Component, OnInit, OnDestroy, Injectable } from "@angular/core";
-import { ActivatedRoute, Router, CanDeactivate, ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
-import { Observable } from "rxjs";
-import { RouterExtensions, PageRoute } from "nativescript-angular/router";
+import { Router } from '@angular/router';
+import { RouterExtensions } from "nativescript-angular/router";
 import { NSLocationStrategy } from "nativescript-angular/router/ns-location-strategy";
-import { BehaviorSubject} from "rxjs";
+import { BehaviorSubject } from "rxjs/BehaviorSubject";
 
 @Injectable()
 class LocationLogService {
@@ -15,7 +14,7 @@ class LocationLogService {
         router.events.subscribe((e) => {
             this.routerEvents$.next([...this.routerEvents$.getValue(), e.toString()]);
 
-            let states = this.strategy._getSatates()
+            let states = this.strategy._getStates()
                 .map((v, i) => {
                     return (i + "." + (v.isPageNavigation ? "[PAGE]" : "") + " \"" + v.url + "\"");
                 })
