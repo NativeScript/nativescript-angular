@@ -21,7 +21,7 @@ import {SecondComponent} from "../components/second.component";
 export class NavigationTestRouter { }
 
 export var NavigationSubRoutes = [
-    { path: '', redirectTo: 'first' },
+    { path: '', redirectTo: 'first', pathMatch: "full" },
     { path: 'first', component: FirstComponent },
     { path: 'second', component: SecondComponent },
 ];
