@@ -38,7 +38,7 @@
     "url": "0.10.3"
   },
   "devDependencies": {
-    "typescript": "~2.0.10",
+    "typescript": "^2.0.10",
     "tslint": "~4.0.1",
     "codelyzer": "^2.0.0-beta.1",
     "@angular/compiler-cli": "~2.4.2",
