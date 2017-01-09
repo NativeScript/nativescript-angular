@@ -3784,11 +3784,6 @@
         }
       }
     },
-    "rxjs": {
-      "version": "5.0.3",
-      "from": "rxjs@>=5.0.1 <5.1.0",
-      "resolved": "https://registry.npmjs.org/rxjs/-/rxjs-5.0.3.tgz"
-    },
     "semver": {
       "version": "4.3.6",
       "from": "semver@>=4.3.3 <4.4.0",
