@@ -42,7 +42,7 @@ export class NSModuleFactoryLoader implements NgModuleFactoryLoader {
     private loadAndCompile(modulePath: string, exportName: string): Promise<NgModuleFactory<any>> {
         modulePath = getAbsolutePath(modulePath);
 
-        let loadedModule = require(modulePath)[exportName];
+        let loadedModule = global.require(modulePath)[exportName];
         checkNotEmpty(loadedModule, modulePath, exportName);
 
         return Promise.resolve(this.compiler.compileModuleAsync(loadedModule));
