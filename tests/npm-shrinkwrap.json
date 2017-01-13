@@ -2,46 +2,6 @@
   "name": "ngtests",
   "version": "1.0.0",
   "dependencies": {
-    "@angular/common": {
-      "version": "2.3.1",
-      "from": "@angular/common@>=2.3.1 <2.4.0",
-      "resolved": "https://registry.npmjs.org/@angular/common/-/common-2.3.1.tgz"
-    },
-    "@angular/compiler": {
-      "version": "2.3.1",
-      "from": "@angular/compiler@>=2.3.1 <2.4.0",
-      "resolved": "https://registry.npmjs.org/@angular/compiler/-/compiler-2.3.1.tgz"
-    },
-    "@angular/core": {
-      "version": "2.3.1",
-      "from": "@angular/core@>=2.3.1 <2.4.0",
-      "resolved": "https://registry.npmjs.org/@angular/core/-/core-2.3.1.tgz"
-    },
-    "@angular/forms": {
-      "version": "2.3.1",
-      "from": "@angular/forms@>=2.3.1 <2.4.0",
-      "resolved": "https://registry.npmjs.org/@angular/forms/-/forms-2.3.1.tgz"
-    },
-    "@angular/http": {
-      "version": "2.3.1",
-      "from": "@angular/http@>=2.3.1 <2.4.0",
-      "resolved": "https://registry.npmjs.org/@angular/http/-/http-2.3.1.tgz"
-    },
-    "@angular/platform-browser": {
-      "version": "2.3.1",
-      "from": "@angular/platform-browser@>=2.3.1 <2.4.0",
-      "resolved": "https://registry.npmjs.org/@angular/platform-browser/-/platform-browser-2.3.1.tgz"
-    },
-    "@angular/platform-browser-dynamic": {
-      "version": "2.3.1",
-      "from": "@angular/platform-browser-dynamic@>=2.3.1 <2.4.0",
-      "resolved": "https://registry.npmjs.org/@angular/platform-browser-dynamic/-/platform-browser-dynamic-2.3.1.tgz"
-    },
-    "@angular/router": {
-      "version": "3.3.1",
-      "from": "@angular/router@>=3.3.1 <3.4.0",
-      "resolved": "https://registry.npmjs.org/@angular/router/-/router-3.3.1.tgz"
-    },
     "abbrev": {
       "version": "1.0.9",
       "from": "abbrev@>=1.0.0 <2.0.0",
@@ -3825,9 +3785,9 @@
       }
     },
     "rxjs": {
-      "version": "5.0.0-rc.4",
-      "from": "rxjs@5.0.0-rc.4",
-      "resolved": "https://registry.npmjs.org/rxjs/-/rxjs-5.0.0-rc.4.tgz"
+      "version": "5.0.3",
+      "from": "rxjs@>=5.0.1 <5.1.0",
+      "resolved": "https://registry.npmjs.org/rxjs/-/rxjs-5.0.3.tgz"
     },
     "semver": {
       "version": "4.3.6",

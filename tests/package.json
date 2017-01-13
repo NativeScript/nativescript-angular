@@ -29,14 +29,14 @@
         "nativescript-unit-test-runner": "^0.3.4",
         "tns-core-modules": "~2.4.0",
         "nativescript-angular": "file:../nativescript-angular",
-        "@angular/core": "~2.3.1",
-        "@angular/common": "~2.3.1",
-        "@angular/compiler": "~2.3.1",
-        "@angular/http": "~2.3.1",
-        "@angular/platform-browser": "~2.3.1",
-        "@angular/platform-browser-dynamic": "~2.3.1",
-        "@angular/router": "~3.3.1",
-        "rxjs": "5.0.0-rc.4"
+        "@angular/core": "~2.4.3",
+        "@angular/common": "~2.4.3",
+        "@angular/compiler": "~2.4.3",
+        "@angular/http": "~2.4.3",
+        "@angular/platform-browser": "~2.4.3",
+        "@angular/platform-browser-dynamic": "~2.4.3",
+        "@angular/router": "~3.4.3",
+        "rxjs": "~5.0.1"
     },
     "devDependencies": {
         "zone.js": "^0.7.2",
@@ -56,7 +56,7 @@
         "mocha": "^2.4.5",
         "nativescript-dev-appium": "0.0.14",
         "nativescript-dev-typescript": "^0.3.1",
-        "typescript": "~2.0.10",
+        "typescript": "~2.1.0",
         "socket.io": "1.4.8",
         "socket.io-client": "1.4.8",
         "wd": "0.4.0"
