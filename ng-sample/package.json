@@ -23,7 +23,7 @@
   },
   "homepage": "https://github.com/NativeScript/template-hello-world",
   "dependencies": {
-    "tns-core-modules": "~2.4.0",
+    "tns-core-modules": "~2.5.0",
     "@angular/common": "~2.4.3",
     "@angular/compiler": "~2.4.3",
     "@angular/core": "~2.4.3",

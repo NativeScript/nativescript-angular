@@ -33,12 +33,12 @@ export function createDevice(os: string): Device {
     return {
         os: os,
         osVersion: "0",
-        deviceType: "phone",
+        deviceType: "Phone",
         language: "en",
         uuid: "0000",
         sdkVersion: "0",
         region: "US",
         manufacturer: "tester",
         model: "test device"
-    }
+    };
 }

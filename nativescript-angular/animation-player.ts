@@ -8,9 +8,9 @@ import {
 } from "ui/animation/keyframe-animation";
 import { View } from "ui/core/view";
 import { AnimationCurve } from "ui/enums";
-import { ValueSource } from "ui/core/dependency-observable";
 import { isString } from "utils/types";
-import { getPropertyByCssName, KeyValuePair, Property } from "ui/styling/style-property";
+// import { ValueSource } from "ui/core/dependency-observable";
+// import { getPropertyByCssName, KeyValuePair, Property } from "ui/styling/style-property";
 
 export class NativeScriptAnimationPlayer implements AnimationPlayer {
 
@@ -60,22 +60,25 @@ export class NativeScriptAnimationPlayer implements AnimationPlayer {
             for (let style of keyframe.styles.styles) {
                 for (let substyle in style) {
                     let value = style[substyle];
-                    let property = getPropertyByCssName(substyle);
-                    if (property) {
-                        if (typeof value === "string" && property.valueConverter) {
-                            value = property.valueConverter(<string>value);
-                        }
-                        keyframeInfo.declarations.push({ property: property.name, value: value });
-                    } else if (typeof value === "string" && substyle === "transform") {
-                        NativeScriptAnimationPlayer.parseTransform(<string>value, keyframeInfo);
-                    }
+                    console.log(value);
+
+                    // TODO: Implement this using the modules 3.0 APIs
+
+                    // let property = getPropertyByCssName(substyle);
+                    // if (property) {
+                    //     if (typeof value === "string" && property.valueConverter) {
+                    //         value = property.valueConverter(<string>value);
+                    //     }
+                    //     keyframeInfo.declarations.push({ property: property.name, value: value });
+                    // } else if (typeof value === "string" && substyle === "transform") {
+                    //     NativeScriptAnimationPlayer.parseTransform(<string>value, keyframeInfo);
+                    // }
                 }
             }
             keyframeAnimationInfo.keyframes.push(keyframeInfo);
         }
 
-        this.animation = KeyframeAnimation.keyframeAnimationFromInfo(
-            keyframeAnimationInfo, ValueSource.VisualState);
+        this.animation = KeyframeAnimation.keyframeAnimationFromInfo(keyframeAnimationInfo);
     }
 
     init(): void {
@@ -218,7 +221,6 @@ export class NativeScriptAnimationPlayer implements AnimationPlayer {
 
     static parseTransform(value: string, animationInfo: KeyframeInfo) {
         let newTransform = NativeScriptAnimationPlayer.transformConverter(value);
-        let array = new Array<KeyValuePair<Property, any>>();
         let values = undefined;
         for (let transform in newTransform) {
             switch (transform) {
@@ -287,6 +289,5 @@ export class NativeScriptAnimationPlayer implements AnimationPlayer {
                     throw new Error("Unsupported transform: " + transform);
             }
         }
-        return array;
     }
 }

@@ -2,7 +2,6 @@ import { AnimationPlayer } from "@angular/core";
 import { AnimationStyles, AnimationKeyframe } from "./private_import_core";
 import { NativeScriptAnimationPlayer } from "./animation-player";
 import { View } from "ui/core/view";
-import { getPropertyByCssName } from "ui/styling/style-property";
 
 export abstract class AnimationDriver {
     abstract animate(
@@ -13,7 +12,8 @@ export abstract class AnimationDriver {
 export class NativeScriptAnimationDriver implements AnimationDriver {
 
     computeStyle(element: any, prop: string): string {
-        return (<View>element).style._getValue(getPropertyByCssName(prop));
+        const view = <View>element;
+        return view.style[`css-${prop}`];
     }
 
     animate(

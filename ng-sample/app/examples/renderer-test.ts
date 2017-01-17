@@ -1,7 +1,15 @@
-import {Component, Directive, Host, ElementRef, Input} from '@angular/core';
-import {Observable} from 'data/observable';
-import {TextValueAccessor} from 'nativescript-angular/value-accessors/text-value-accessor';
-import {CheckedValueAccessor} from 'nativescript-angular/value-accessors/checked-value-accessor';
+import { Component, Directive, Host, ElementRef, Input } from '@angular/core';
+import { Observable } from 'data/observable';
+import { TextValueAccessor } from 'nativescript-angular/value-accessors/text-value-accessor';
+import { CheckedValueAccessor } from 'nativescript-angular/value-accessors/checked-value-accessor';
+import { SegmentedBarItem } from 'ui/segmented-bar';
+
+
+function createTabItem(title: string) {
+    let item = new SegmentedBarItem();
+    item.title = title;
+    return item;
+}
 
 @Component({
     moduleId: module.id,
@@ -27,8 +35,8 @@ export class ProgressDirective {
 
 @Component({
     moduleId: module.id,
-	selector: "renderer-test",
-	templateUrl: "./renderer-test.html" 
+    selector: "renderer-test",
+    templateUrl: "./renderer-test.html"
 })
 export class RendererTest {
     public buttonText: string = "";
@@ -64,13 +72,13 @@ export class RendererTest {
             "search": null,
             "selectedIndex": 0,
             "listPickerItems": [
-                1,2,3,4
+                1, 2, 3, 4
             ],
             "segmentedBarItems": [
-                {"title": "first"},
-                {"title": "second"},
-                {"title": "third"},
-                {"title": "fourth"}
+                createTabItem("first"),
+                createTabItem("second"),
+                createTabItem("third"),
+                createTabItem("fourth")
             ]
         };
 
