@@ -1,5 +1,5 @@
-import { isString, isDefined } from "utils/types";
-import { View } from "ui/core/view";
+import { isDefined } from "utils/types";
+import { View, unsetValue } from "ui/core/view";
 import { Placeholder } from "ui/placeholder";
 import { ContentView } from "ui/content-view";
 import { LayoutBase } from "ui/layouts/layout-base";
@@ -12,11 +12,8 @@ import {
     NgView,
     TEMPLATE
 } from "./element-registry";
-import { getSpecialPropertySetter } from "ui/builder/special-properties";
-import { StyleProperty, getPropertyByName, withStyleProperty } from "ui/styling/style-property";
-import { ValueSource } from "ui/core/dependency-observable";
 import { platformNames, Device } from "platform";
-import { rendererLog as traceLog, styleError } from "./trace";
+import { rendererLog as traceLog } from "./trace";
 
 const IOS_PREFX: string = ":ios:";
 const ANDROID_PREFX: string = ":android:";
@@ -235,15 +232,12 @@ export class ViewUtil {
     private setPropertyInternal(view: NgView, attributeName: string, value: any): void {
         traceLog("Setting attribute: " + attributeName);
 
-        let specialSetter = getSpecialPropertySetter(attributeName);
         let propMap = this.getProperties(view);
 
         if (attributeName === "class") {
             this.setClasses(view, value);
         } else if (this.isXMLAttribute(attributeName)) {
             view._applyXmlAttribute(attributeName, value);
-        } else if (specialSetter) {
-            specialSetter(view, value);
         } else if (propMap.has(attributeName)) {
             // We have a lower-upper case mapped property.
             let propertyName = propMap.get(attributeName);
@@ -311,45 +305,19 @@ export class ViewUtil {
 
     private syncClasses(view: NgView): void {
         let classValue = (<any>Array).from(this.cssClasses(view).keys()).join(" ");
-        view.cssClass = classValue;
-    }
-
-    private resolveCssValue(styleValue: string): string {
-        return styleValue;
-    }
-
-    private setStyleValue(view: NgView, property: StyleProperty, value: any) {
-        try {
-            if (value === null) {
-                view.style._resetValue(property, ValueSource.Local);
-            } else {
-                view.style._setValue(property, value, ValueSource.Local);
-            }
-        } catch (ex) {
-            styleError("Error setting property: " + property.name + " view: " + view +
-                " value: " + value + " " + ex);
-        }
+        view.className = classValue;
     }
 
     public setStyleProperty(view: NgView, styleName: string, styleValue: string): void {
         traceLog("setStyleProperty: " + styleName + " = " + styleValue);
 
         let name = styleName;
-        let resolvedValue = this.resolveCssValue(styleValue);
-        withStyleProperty(name, resolvedValue, (property, value) => {
-            if (isString(property)) {
-                // Fall back to resolving property by name.
-                const resolvedProperty = getPropertyByName(name);
-                if (resolvedProperty) {
-                    this.setStyleValue(view, resolvedProperty, resolvedValue);
-                } else {
-                    traceLog("Unknown style property: " + styleName);
-                }
-            } else {
-                const resolvedProperty = <StyleProperty>property;
-                this.setStyleValue(view, resolvedProperty, value);
-            }
+        let resolvedValue = styleValue; //this.resolveCssValue(styleValue);
 
-        });
+        if (resolvedValue !== null) {
+            view.style[name] = resolvedValue;
+        } else {
+            view.style[name] = unsetValue;
+        }
     }
 }
