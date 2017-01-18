@@ -1,0 +1,33 @@
+#!/usr/bin/env node
+
+var path = require("path");
+var fs = require("fs");
+
+var binPath = __dirname;
+var pluginPath = path.dirname(binPath);
+var pluginPackageJsonPath = path.join(pluginPath, "package.json");
+var projectPath = path.dirname(path.dirname(pluginPath));
+var appPackageJsonPath = path.join(projectPath, "package.json");
+
+var appPackageJson = JSON.parse(fs.readFileSync(appPackageJsonPath, "utf8"));
+var pluginPackageJson = JSON.parse(fs.readFileSync(pluginPackageJsonPath, "utf8"));
+
+Object.keys(pluginPackageJson.dependencies).forEach(function(dependencyName) {
+    var version = pluginPackageJson.dependencies[dependencyName];
+    if (dependencyName.startsWith("@angular") || dependencyName === "rxjs") {
+        appPackageJson.dependencies[dependencyName] = version;
+        console.log("Updated dependency '" + dependencyName + "' to version: " + version + ".");
+    }
+});
+
+Object.keys(pluginPackageJson.devDependencies).forEach(function(dependencyName) {
+    var version = pluginPackageJson.devDependencies[dependencyName];
+    if (dependencyName.startsWith("@angular") || dependencyName === "zone.js") {
+        appPackageJson.devDependencies[dependencyName] = version;
+        console.log("Updated dev dependency '" + dependencyName + "' to version: " + version + ".");
+    }
+});
+
+fs.writeFileSync(appPackageJsonPath, JSON.stringify(appPackageJson, null, 2));
+
+console.log("\nAngular dependencies updated. Don't forget to run `npm install`.");
