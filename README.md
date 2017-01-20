@@ -14,12 +14,6 @@ https://docs.nativescript.org/setup/quick-setup
 ## Install dependencies
 
 ```
-$ npm install -g gulp
-```
-
-Then install the needed NPM packages:
-
-```
 $ cd nativescript-angular
 $ npm install
 ```
@@ -38,20 +32,6 @@ Start the app:
 ```
 $ tns run android
 $ tns run ios
-```
-
-## (Optional) Webpack bundling
-
-Install the webpack tool:
-
-```
-$ npm install -g webpack
-```
-
-Enable the webpack hook by setting the `WEBPACK_BUILD` environment variable. You can do it with a single command on OSX/Linux using:
-
-```
-$ env WEBPACK_BUILD=1 tns run android
 ```
 
 # Running the tests
