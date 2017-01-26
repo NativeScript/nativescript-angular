@@ -1,7 +1,7 @@
 import { topmost, Frame } from "ui/frame";
 import { Page } from "ui/page";
 import { OpaqueToken } from "@angular/core";
-import { device } from "platform";
+import { device, Device } from "platform";
 import * as platform from "platform";
 
 export const APP_ROOT_VIEW = new OpaqueToken("App Root View");
@@ -15,6 +15,7 @@ if (global.___TS_UNUSED) {
     })();
 }
 
+// Use an exported function to make the AoT compiler happy.
 export function getDefaultPage(): Page {
     const frame = topmost();
     if (frame) {
@@ -23,11 +24,22 @@ export function getDefaultPage(): Page {
         return null;
     }
 }
+
 export const defaultPageProvider = { provide: Page, useFactory: getDefaultPage };
 
-export const defaultFrameProvider = { provide: Frame, useFactory: topmost };
+// Use an exported function to make the AoT compiler happy.
+export function getDefaultFrame(): Frame {
+    return topmost();
+}
 
-export const defaultDeviceProvider = { provide: DEVICE, useValue: device };
+export const defaultFrameProvider = { provide: Frame, useFactory: getDefaultFrame };
+
+// Use an exported function to make the AoT compiler happy.
+export function getDefaultDevice(): Device {
+    return device;
+}
+
+export const defaultDeviceProvider = { provide: DEVICE, useFactory: getDefaultDevice };
 
 export type PageFactory = (options: PageFactoryOptions) => Page;
 export interface PageFactoryOptions {
