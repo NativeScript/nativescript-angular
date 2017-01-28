@@ -38,7 +38,9 @@ describe("lazy load routing", function () {
             .tap()
             .elementByAccessibilityId("second-lazy-load")
                 .should.eventually.exist
-            .text().should.eventually.equal("Second: lazy-load")
+                .text().should.eventually.equal("Second: lazy-load")
+            .elementByAccessibilityId("router-location-strategy-states-lazy-load")
+                .text().should.eventually.equal("/first/lazy-load,/second/lazy-load")
             .elementByAccessibilityId("second-navigate-back-lazy-load")
                 .should.eventually.exist
             .tap()
@@ -47,5 +49,18 @@ describe("lazy load routing", function () {
                 .text().should.eventually.equal("First: lazy-load")
             .elementByAccessibilityId("hooks-log-lazy-load")
                 .text().should.eventually.equal(expectedHookLog)
+    });
+
+    it("navigates and clear history", function() {
+        return driver
+            .waitForElementByAccessibilityId("first-navigate-lazy-load", 300000)
+            .elementByAccessibilityId("first-navigate-clear-history-lazy-load")
+                .should.eventually.exist
+            .tap()
+            .elementByAccessibilityId("second-lazy-load")
+                .should.eventually.exist
+                .text().should.eventually.equal("Second: lazy-load")
+            .elementByAccessibilityId("router-location-strategy-states-lazy-load")
+                .text().should.eventually.equal("/second/lazy-load")
     });
 });
