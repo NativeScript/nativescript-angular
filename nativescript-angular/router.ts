@@ -1,6 +1,7 @@
-import { NgModule, ModuleWithProviders, NO_ERRORS_SCHEMA } from "@angular/core";
+import { NgModule, ModuleWithProviders, NO_ERRORS_SCHEMA, Optional, SkipSelf } from "@angular/core";
 import { RouterModule, Routes, ExtraOptions } from "@angular/router";
 import { LocationStrategy, PlatformLocation } from "@angular/common";
+import { Frame } from "ui/frame";
 import { NSRouterLink } from "./router/ns-router-link";
 import { NSRouterLinkActive } from "./router/ns-router-link-active";
 import { PageRouterOutlet } from "./router/page-router-outlet";
@@ -21,7 +22,11 @@ export type LocationState = LocationState;
         PageRouterOutlet
     ],
     providers: [
-        NSLocationStrategy,
+        {
+            provide: NSLocationStrategy,
+            useFactory: provideLocationStrategy,
+            deps: [[NSLocationStrategy, new Optional(), new SkipSelf()], Frame]
+        },
         { provide: LocationStrategy, useExisting: NSLocationStrategy },
         NativescriptPlatformLocation,
         { provide: PlatformLocation, useClass: NativescriptPlatformLocation },
@@ -47,4 +52,8 @@ export class NativeScriptRouterModule {
     static forChild(routes: Routes): ModuleWithProviders {
         return RouterModule.forChild(routes);
     }
+}
+
+export function provideLocationStrategy(locationStrategy: NSLocationStrategy, frame: Frame): NSLocationStrategy {
+    return locationStrategy ? locationStrategy : new NSLocationStrategy(frame);
 }
