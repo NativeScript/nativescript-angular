@@ -64,7 +64,7 @@ export class NativeScriptElementSchemaRegistry extends ElementSchemaRegistry {
 
 export class NativeScriptDomAdapter extends Parse5DomAdapter {
   static makeCurrent() {
-    rendererLog("Setting DOM");
+    rendererLog("Setting DOM adapter");
     setRootDomAdapter(new NativeScriptDomAdapter());
   }
 
@@ -88,3 +88,5 @@ export class NativeScriptDomAdapter extends Parse5DomAdapter {
   logGroupEnd(): void {
   }
 }
+
+NativeScriptDomAdapter.makeCurrent();
