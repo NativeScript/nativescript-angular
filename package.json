@@ -6,26 +6,26 @@
   "nativescript": {
     "id": "org.nativescript.testsappng",
     "tns-ios": {
-      "version": "2.4.0"
+      "version": "2.5.0"
     },
     "tns-android": {
-      "version": "2.4.1"
+      "version": "2.5.0"
     }
   },
   "dependencies": {
-    "nativescript-angular": "~1.4.0",
-    "tns-core-modules": "2.4.0",
-    "nativescript-intl": "~0.0.10",
-    "@angular/core": "~2.4.3",
     "@angular/common": "~2.4.3",
     "@angular/compiler": "~2.4.3",
+    "@angular/core": "~2.4.3",
+    "@angular/forms": "~2.4.3",
     "@angular/http": "~2.4.3",
     "@angular/platform-browser": "~2.4.3",
     "@angular/platform-browser-dynamic": "~2.4.3",
-    "@angular/forms": "~2.4.3",
     "@angular/router": "~3.4.3",
+    "nativescript-angular": "~1.4.0",
+    "nativescript-intl": "~0.0.10",
+    "reflect-metadata": "~0.1.8",
     "rxjs": "~5.0.1",
-    "reflect-metadata": "~0.1.8"
+    "tns-core-modules": "~2.5.0"
   },
   "devDependencies": {
     "zone.js": "~0.7.2",
@@ -34,7 +34,7 @@
     "babylon": "6.8.0",
     "filewalker": "0.1.2",
     "lazy": "1.0.11",
-    "nativescript-dev-typescript": "^0.3.2",
-    "typescript": "~2.1.0"
+    "nativescript-dev-typescript": "~0.3.7",
+    "typescript": "~2.1.5"
   }
 }
