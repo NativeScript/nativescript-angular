@@ -27,7 +27,10 @@ if (global.___TS_UNUSED) {
     })();
 }
 
-import { NativeScriptElementSchemaRegistry } from "./dom-adapter";
+// Register DOM adapter, if possible. Dynamic platform only!
+import "./dom-adapter";
+
+import { NativeScriptElementSchemaRegistry } from "./schema-registry";
 import { FileSystemResourceLoader } from "./resource-loader";
 
 export { NativeScriptModule } from "./nativescript.module";
