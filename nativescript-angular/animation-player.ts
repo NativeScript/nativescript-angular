@@ -9,8 +9,7 @@ import {
 import { View } from "ui/core/view";
 import { AnimationCurve } from "ui/enums";
 import { isString } from "utils/types";
-// import { ValueSource } from "ui/core/dependency-observable";
-// import { getPropertyByCssName, KeyValuePair, Property } from "ui/styling/style-property";
+import { CssAnimationProperty } from "ui/core/properties";
 
 export class NativeScriptAnimationPlayer implements AnimationPlayer {
 
@@ -60,19 +59,16 @@ export class NativeScriptAnimationPlayer implements AnimationPlayer {
             for (let style of keyframe.styles.styles) {
                 for (let substyle in style) {
                     let value = style[substyle];
-                    console.log(value);
 
-                    // TODO: Implement this using the modules 3.0 APIs
-
-                    // let property = getPropertyByCssName(substyle);
-                    // if (property) {
-                    //     if (typeof value === "string" && property.valueConverter) {
-                    //         value = property.valueConverter(<string>value);
-                    //     }
-                    //     keyframeInfo.declarations.push({ property: property.name, value: value });
-                    // } else if (typeof value === "string" && substyle === "transform") {
-                    //     NativeScriptAnimationPlayer.parseTransform(<string>value, keyframeInfo);
-                    // }
+                    let property = CssAnimationProperty._getByCssName(substyle);
+                    if (property) {
+                        if (typeof value === "string" && property._valueConverter) {
+                            value = property._valueConverter(<string>value);
+                        }
+                        keyframeInfo.declarations.push({ property: property.name, value: value });
+                    } else if (typeof value === "string" && substyle === "transform") {
+                        NativeScriptAnimationPlayer.parseTransform(<string>value, keyframeInfo);
+                    }
                 }
             }
             keyframeAnimationInfo.keyframes.push(keyframeInfo);
@@ -281,8 +277,7 @@ export class NativeScriptAnimationPlayer implements AnimationPlayer {
                     break;
                 case "none":
                     animationInfo.declarations.push({ property: "scale", value: { x: 1, y: 1 } });
-                    animationInfo.declarations.push(
-                        { property: "translate", value: { x: 0, y: 0 } });
+                    animationInfo.declarations.push({ property: "translate", value: { x: 0, y: 0 } });
                     animationInfo.declarations.push({ property: "rotate", value: 0 });
                     break;
                 default:
