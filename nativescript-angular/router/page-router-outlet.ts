@@ -1,6 +1,7 @@
 import {
     Attribute, ComponentFactory, ComponentRef, Directive,
-    ReflectiveInjector, ResolvedReflectiveProvider, ViewContainerRef,
+    ReflectiveInjector, ResolvedReflectiveProvider,
+    ViewRef, ViewContainerRef,
     Inject, ComponentFactoryResolver, Injector
 } from "@angular/core";
 import { isPresent } from "../lang-facade";
@@ -61,6 +62,7 @@ export class PageRouterOutlet { // tslint:disable-line:directive-class-suffix
     private viewUtil: ViewUtil;
     private refCache: RefCache = new RefCache();
     private isInitialPage: boolean = true;
+    private previousPagesViews: Array<ViewRef> = new Array();
     private detachedLoaderFactory: ComponentFactory<DetachedLoader>;
 
     private currentActivatedComp: ComponentRef<any>;
@@ -152,8 +154,16 @@ export class PageRouterOutlet { // tslint:disable-line:directive-class-suffix
         this.currentActivatedRoute = activatedRoute;
 
         if (this.locationStrategy._isPageNavigatingBack()) {
+            if (this.previousPagesViews.length) {
+                this.containerRef.insert(this.previousPagesViews.pop());
+            }
+
             this.activateOnGoBack(activatedRoute, outletMap);
         } else {
+            if (this.containerRef.length) {
+                this.previousPagesViews.push(this.containerRef.detach());
+            }
+
             this.activateOnGoForward(activatedRoute, providers, outletMap, resolver, injector);
         }
     }
@@ -176,6 +186,9 @@ export class PageRouterOutlet { // tslint:disable-line:directive-class-suffix
             const inj = ReflectiveInjector.fromResolvedProviders(providers, injector);
             this.currentActivatedComp = this.containerRef.createComponent(
                 factory, this.containerRef.length, inj, []);
+
+            this.currentActivatedComp.changeDetectorRef.detectChanges();
+
             this.refCache.push(this.currentActivatedComp, pageRoute, outletMap, null);
 
         } else {
@@ -194,7 +207,12 @@ export class PageRouterOutlet { // tslint:disable-line:directive-class-suffix
             const loaderRef = this.containerRef.createComponent(
                 this.detachedLoaderFactory, this.containerRef.length, childInjector, []);
 
+            loaderRef.changeDetectorRef.detectChanges();
+
             this.currentActivatedComp = loaderRef.instance.loadWithFactory(factory);
+
+            this.currentActivatedComp.changeDetectorRef.detectChanges();
+
             this.loadComponentInPage(page, this.currentActivatedComp);
             this.refCache.push(this.currentActivatedComp, pageRoute, outletMap, loaderRef);
         }

@@ -36,13 +36,12 @@ export class DetachedLoader { // tslint:disable-line:component-class-suffix
         // We are inside a promise here so no need for setTimeout - CD should trigger
         // after the promise.
         log("DetachedLoader.loadInLocation component loaded -> markForCheck");
-        this.changeDetector.markForCheck();
 
         return Promise.resolve(componentRef);
     }
 
     public detectChanges() {
-        this.changeDetector.markForCheck();
+        this.changeDetector.detectChanges();
     }
 
     // TODO: change this API -- async promises not needed here anymore.
