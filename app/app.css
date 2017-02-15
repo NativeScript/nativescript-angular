@@ -3,5 +3,10 @@
 }
 
 label {
-    text-align: center;   
+    text-align: center;
 }
+
+.tab-view-container { 
+    font-family: 'Courier'; /* Enabling this results in the error and shows a blank TabView */
+}
+

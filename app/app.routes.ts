@@ -20,6 +20,8 @@ import { ListViewWithNestedTemplateComponent } from "./listView/nestedTemplate/l
 import { ModalTest, ModalTestWithPushStrategy, ModalContent } from "./modal/modal-dialogs/modal-dialog.component";
 import { ModalViewMainPageComponent } from "./modal/modal-view-main-page";
 
+import { TabViewComponent } from "./tab-view/tab-view.component";
+
 import { NavigationOptionsComponent } from "./navigation-options/navigation-options.component";
 import { NavigationInfoComponent } from "./navigation-options/navigation-info.component";
 import { MainComponent } from "./main/main-page-router-outlet";
@@ -52,6 +54,8 @@ export const routes = [
     routeEntry({ path: 'modal', component: ModalViewMainPageComponent, data: { title: "Modals", isNavigatable: true} }),
     routeEntry({ path: 'modal/modal-dialogs', component: ModalTest, data: { title: "modal" } }),
     routeEntry({ path: 'modal/modal-dialogs-push', component: ModalTestWithPushStrategy, data: { title: "modal(onPush)" } }),
+
+    routeEntry({ path: 'tab-view', component: TabViewComponent, data: { title: "tab-view", isNavigatable: true } }),
 
     routeEntry({ path: 'nav-options', component: NavigationOptionsComponent, data: { title: "nav-options", isNavigatable: true} }),
     routeEntry({ path: 'nav-info', component: NavigationInfoComponent, data: { title: "nav-info" } }),
