@@ -62,7 +62,7 @@ export class ListViewComponent implements DoCheck, OnDestroy, AfterContentInit {
 
     private listView: ListView;
     private _items: any;
-    private _differ: IterableDiffer;
+    private _differ: IterableDiffer<KeyedTemplate>;
     private _templateMap: Map<string, KeyedTemplate>;
 
     @ViewChild("loader", { read: ViewContainerRef }) loader: ViewContainerRef;
