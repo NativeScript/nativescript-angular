@@ -16,15 +16,15 @@ import {
 import {
     COMPILER_OPTIONS,
     PlatformRef,
-    OpaqueToken,
+    InjectionToken,
+    ViewEncapsulation,
     createPlatformFactory
 } from "@angular/core";
 
-// Work around a TS bug requiring an import of OpaqueToken without using it
+// Work around a TS bug requiring an imports of InjectionToken and ViewEncapsulation without using them
 if ((<any>global).___TS_UNUSED) {
-    (() => {
-        return OpaqueToken;
-    })();
+    (() => InjectionToken)();
+    (() => ViewEncapsulation)();
 }
 
 // Register DOM adapter, if possible. Dynamic platform only!
