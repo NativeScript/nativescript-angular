@@ -41,7 +41,7 @@ export class DetachedLoader { // tslint:disable-line:component-class-suffix
     }
 
     public detectChanges() {
-        this.changeDetector.detectChanges();
+        this.changeDetector.markForCheck();
     }
 
     // TODO: change this API -- async promises not needed here anymore.
