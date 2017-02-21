@@ -145,7 +145,7 @@ export class NativeScriptDomAdapter implements DomAdapter {
   defaultDoc(): HTMLDocument { throw new Error("Not implemented!") }
   getBoundingClientRect(_el: any /** TODO #9100 */): any /** TODO #9100 */ { throw new Error("Not implemented!") }
   getTitle(): string { throw new Error("Not implemented!") }
-  setTitle(_newTitle: string): any /** TODO #9100 */ { throw new Error("Not implemented!") }
+  setTitle(_doc: Document, _newTitle: string): any /** TODO #9100 */ { throw new Error("Not implemented!") }
   elementMatches(_n: any /** TODO #9100 */, _selector: string): boolean { throw new Error("Not implemented!") }
   isTemplateElement(_el: any): boolean { throw new Error("Not implemented!") }
   isTextNode(_node: any /** TODO #9100 */): boolean { throw new Error("Not implemented!") }
@@ -161,7 +161,7 @@ export class NativeScriptDomAdapter implements DomAdapter {
       /** TODO #9100 */ { throw new Error("Not implemented!") }
   supportsDOMEvents(): boolean { throw new Error("Not implemented!") }
   supportsNativeShadowDOM(): boolean { throw new Error("Not implemented!") }
-  getGlobalEventTarget(_target: string): any { throw new Error("Not implemented!") }
+  getGlobalEventTarget(_doc: Document, _target: string): any { throw new Error("Not implemented!") }
   getHistory(): History { throw new Error("Not implemented!") }
   getLocation(): Location { throw new Error("Not implemented!") }
   getBaseHref(): string { throw new Error("Not implemented!") }
