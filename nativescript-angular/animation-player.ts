@@ -88,6 +88,7 @@ export class NativeScriptAnimationPlayer implements AnimationPlayer {
 
     onStart(fn: Function): void { this._startSubscriptions.push(fn); }
     onDone(fn: Function): void { this._doneSubscriptions.push(fn); }
+    onDestroy(fn: Function): void { this._doneSubscriptions.push(fn); }
 
     private _onStart() {
         if (!this._started) {
