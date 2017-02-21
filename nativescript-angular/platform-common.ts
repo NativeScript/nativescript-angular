@@ -19,7 +19,7 @@ import {
 } from "@angular/core";
 
 // Work around a TS bug requiring an import of OpaqueToken without using it
-if (global.___TS_UNUSED) {
+if ((<any>global).___TS_UNUSED) {
     (() => {
         return OpaqueToken;
     })();
@@ -86,7 +86,7 @@ export class NativeScriptPlatformRef extends PlatformRef {
     }
 
     private bootstrapApp() {
-        global.__onLiveSyncCore = () => this.livesyncModule();
+        (<any>global).__onLiveSyncCore = () => this.livesyncModule();
 
         const mainPageEntry = this.createNavigationEntry(this._bootstrapper);
 
