@@ -87,7 +87,7 @@ export class NSLocationStrategy extends LocationStrategy {
 
     back(): void {
         if (this._isPageNavigationBack) {
-            // We are navigating to the previous page 
+            // We are navigating to the previous page
             // clear the stack until we get to a page navigation state
             let state = this.states.pop();
             let count = 1;
