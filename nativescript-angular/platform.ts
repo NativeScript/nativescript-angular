@@ -18,13 +18,17 @@ import {
     PlatformRef,
     InjectionToken,
     ViewEncapsulation,
-    createPlatformFactory
+    createPlatformFactory,
+    MissingTranslationStrategy
 } from "@angular/core";
 
-// Work around a TS bug requiring an imports of InjectionToken and ViewEncapsulation without using them
+// Work around a TS bug requiring an imports of
+// InjectionToken, ViewEncapsulation and MissingTranslationStrategy
+// without using them
 if (global.___TS_UNUSED) {
     (() => InjectionToken)();
     (() => ViewEncapsulation)();
+    (() => MissingTranslationStrategy)();
 }
 
 // Register DOM adapter, if possible. Dynamic platform only!
