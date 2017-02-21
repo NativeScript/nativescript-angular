@@ -9,7 +9,7 @@ export const DEVICE = new OpaqueToken("platfrom device");
 export const PAGE_FACTORY = new OpaqueToken("page factory");
 
 // Work around a TS bug requiring an import of platform.Device without using it
-if (global.___TS_UNUSED) {
+if ((<any>global).___TS_UNUSED) {
     (() => {
         return platform;
     })();

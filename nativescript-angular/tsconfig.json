@@ -13,7 +13,11 @@
     "noEmitOnError": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
-    "noImplicitAny": false
+    "noImplicitAny": false,
+    "lib": [
+        "dom",
+        "es6"
+    ]
   },
   "angularCompilerOptions": {
     "genDir": ".",
