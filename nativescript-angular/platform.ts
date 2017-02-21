@@ -1,4 +1,4 @@
-// Always import platform-common first - because polyfills 
+// Always import platform-common first - because polyfills
 import {
     NativeScriptPlatformRef,
     AppOptions,
@@ -49,7 +49,7 @@ export const NS_COMPILER_PROVIDERS = [
     },
 ];
 
-// Dynamic platform 
+// Dynamic platform
 const _platformNativeScriptDynamic: PlatformFactory = createPlatformFactory(
     platformCoreDynamic, "nativeScriptDynamic", [...COMMON_PROVIDERS, ...NS_COMPILER_PROVIDERS]);
 

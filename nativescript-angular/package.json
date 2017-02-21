@@ -39,11 +39,11 @@
     "url": "0.10.3"
   },
   "devDependencies": {
-    "typescript": "~2.1.0",
-    "tslint": "~4.0.1",
-    "codelyzer": "^2.0.0-beta.1",
     "@angular/compiler-cli": "~2.4.3",
-    "tns-core-modules": ">=2.5.0 || >=2.5.0-2016",
+    "codelyzer": "~2.0.0",
+    "tns-core-modules": "internal-preview",
+    "tslint": "~4.4.0",
+    "typescript": "~2.2.0",
     "zone.js": "^0.7.2"
   },
   "nativescript": {}

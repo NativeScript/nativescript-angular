@@ -1,4 +1,4 @@
-// Always import platform-common first - because polyfills 
+// Always import platform-common first - because polyfills
 import {
     NativeScriptPlatformRef,
     AppOptions,

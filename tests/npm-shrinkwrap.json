@@ -3971,16 +3971,6 @@
         }
       }
     },
-    "tns-core-modules": {
-      "version": "2.4.0",
-      "from": "tns-core-modules@2.4.0",
-      "resolved": "https://registry.npmjs.org/tns-core-modules/-/tns-core-modules-2.4.0.tgz"
-    },
-    "tns-core-modules-widgets": {
-      "version": "2.4.0",
-      "from": "tns-core-modules-widgets@2.4.0",
-      "resolved": "https://registry.npmjs.org/tns-core-modules-widgets/-/tns-core-modules-widgets-2.4.0.tgz"
-    },
     "to-array": {
       "version": "0.1.4",
       "from": "to-array@0.1.4",
