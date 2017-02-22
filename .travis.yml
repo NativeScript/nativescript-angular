@@ -46,7 +46,7 @@ before_deploy:
 - npm install -g nativescript --ignore-scripts
 - tns usage-reporting disable
 - tns error-reporting disable
-- node ../build/travis-scripts/add-publishConfig.js next $PACKAGE_VERSION
+- node ../build/travis-scripts/add-publishConfig.js internal-preview $PACKAGE_VERSION
 deploy:
   provider: npm
   email: nativescript@telerik.com
