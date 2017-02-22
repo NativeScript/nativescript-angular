@@ -312,7 +312,7 @@ export class ViewUtil {
         traceLog("setStyleProperty: " + styleName + " = " + styleValue);
 
         let name = styleName;
-        let resolvedValue = styleValue; //this.resolveCssValue(styleValue);
+        let resolvedValue = styleValue; // this.resolveCssValue(styleValue);
 
         if (resolvedValue !== null) {
             view.style[name] = resolvedValue;
