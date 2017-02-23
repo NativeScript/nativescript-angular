@@ -1,4 +1,11 @@
-import { NgModule, ModuleWithProviders, NO_ERRORS_SCHEMA, Optional, SkipSelf } from "@angular/core";
+import {
+    NgModule,
+    ModuleWithProviders,
+    NO_ERRORS_SCHEMA,
+    Optional,
+    SkipSelf,
+    SystemJsNgModuleLoader,
+} from "@angular/core";
 import { RouterModule, Routes, ExtraOptions } from "@angular/router";
 import { LocationStrategy, PlatformLocation } from "@angular/common";
 import { Frame } from "ui/frame";
@@ -30,7 +37,8 @@ export type LocationState = LocationState;
         { provide: LocationStrategy, useExisting: NSLocationStrategy },
         NativescriptPlatformLocation,
         { provide: PlatformLocation, useClass: NativescriptPlatformLocation },
-        RouterExtensions
+        RouterExtensions,
+        SystemJsNgModuleLoader,
     ],
     imports: [
         RouterModule,
