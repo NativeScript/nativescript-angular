@@ -1,7 +1,7 @@
 {
   "private": true,
   "name": "nativescript-angular",
-  "version": "1.4.1",
+  "version": "1.4.2",
   "description": "An Angular 2 renderer that lets you build mobile apps with NativeScript.",
   "homepage": "http://www.telerik.com",
   "bugs": "http://www.telerik.com",
@@ -21,7 +21,7 @@
     "prepublish": "npm run tsc && npm run ngc"
   },
   "bin": {
-      "update-app-ng-deps": "./bin/update-app-ng-deps"
+    "update-app-ng-deps": "./bin/update-app-ng-deps"
   },
   "dependencies": {
     "nativescript-intl": "~0.0.8",
