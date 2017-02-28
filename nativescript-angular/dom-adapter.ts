@@ -1,17 +1,17 @@
 /* tslint:disable */
 import { Type } from "@angular/core";
-import { DomAdapter } from "./private_import_platform-browser";
+import { ɵDomAdapter } from "@angular/platform-browser";
 import { rendererLog } from "./trace";
 import { print } from "./lang-facade";
 
-export class NativeScriptDomAdapter implements DomAdapter {
+export class NativeScriptDomAdapter implements ɵDomAdapter {
   static makeCurrent() {
 
     // Don't register when bundling (likely AoT setup).
     if (!global.TNS_WEBPACK) {
         try {
-            const privateAPI = global.require("@angular/platform-browser").__platform_browser_private__;
-            const setRootDomAdapter = privateAPI.setRootDomAdapter;
+            const privateAPI = global.require("@angular/platform-browser");
+            const setRootDomAdapter = privateAPI.ɵsetRootDomAdapter;
 
             rendererLog("Setting root DOM adapter...");
             setRootDomAdapter(new NativeScriptDomAdapter());

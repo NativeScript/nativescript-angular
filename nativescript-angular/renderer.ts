@@ -1,8 +1,8 @@
 import {
     Inject, Injectable, Optional, NgZone,
-    Renderer, RootRenderer, RenderComponentType, AnimationPlayer
+    Renderer, RootRenderer, RenderComponentType, AnimationPlayer,
+    ɵAnimationStyles, ɵAnimationKeyframe,
 } from "@angular/core";
-import { AnimationStyles, AnimationKeyframe } from "./private_import_core";
 import { APP_ROOT_VIEW, DEVICE } from "./platform-providers";
 import { isBlank } from "./lang-facade";
 import { View } from "tns-core-modules/ui/core/view";
@@ -245,8 +245,8 @@ export class NativeScriptRenderer extends Renderer {
 
     public animate(
         element: any,
-        startingStyles: AnimationStyles,
-        keyframes: AnimationKeyframe[],
+        startingStyles: ɵAnimationStyles,
+        keyframes: ɵAnimationKeyframe[],
         duration: number,
         delay: number,
         easing: string
