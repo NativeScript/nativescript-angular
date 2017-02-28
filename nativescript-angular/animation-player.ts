@@ -1,5 +1,4 @@
-import { AnimationPlayer } from "@angular/core";
-import { AnimationKeyframe } from "./private_import_core";
+import { AnimationPlayer, ɵAnimationKeyframe  } from "@angular/core";
 import {
     KeyframeAnimation,
     KeyframeAnimationInfo,
@@ -24,7 +23,7 @@ export class NativeScriptAnimationPlayer implements AnimationPlayer {
 
     constructor(
         element: Node,
-        keyframes: AnimationKeyframe[],
+        keyframes: ɵAnimationKeyframe[],
         duration: number,
         delay: number,
         easing: string
