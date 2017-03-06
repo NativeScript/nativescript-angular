@@ -16,8 +16,8 @@
   "scripts": {
     "tslint": "tslint --project tsconfig.json --config tslint.json",
     "postinstall": "node postinstall.js",
-    "ngc": "ngc -p tsconfig.json",
     "tsc": "tsc -p tsconfig.json",
+    "ngc": "ngc -p tsconfig.json",
     "prepublish": "npm run tsc && npm run ngc"
   },
   "bin": {

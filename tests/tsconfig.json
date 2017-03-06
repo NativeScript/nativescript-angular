@@ -2,9 +2,7 @@
     "compilerOptions": {
         "module": "commonjs",
         "target": "es5",
-        "inlineSourceMap": true,
         "experimentalDecorators": true,
-        "removeComments": false,
         "emitDecoratorMetadata": true,
         "noEmitHelpers": true,
         "noEmitOnError": true,
@@ -23,6 +21,7 @@
     },
     "exclude": [
         "node_modules",
-        "platforms"
+        "platforms",
+        "**/*.aot"
     ]
 }
