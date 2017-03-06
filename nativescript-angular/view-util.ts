@@ -4,13 +4,11 @@ import { Placeholder } from "tns-core-modules/ui/placeholder";
 import { ContentView } from "tns-core-modules/ui/content-view";
 import { LayoutBase } from "tns-core-modules/ui/layouts/layout-base";
 import {
-    ViewClass,
     getViewClass,
     getViewMeta,
     isKnownView,
     ViewExtensions,
     NgView,
-    TEMPLATE
 } from "./element-registry";
 import { platformNames, Device } from "tns-core-modules/platform";
 import { rendererLog as traceLog } from "./trace";
@@ -48,13 +46,13 @@ export class ViewUtil {
         this.isAndroid = device.os === platformNames.android;
     }
 
-    public insertChild(parent: any, child: NgView, atIndex = -1) {
+    public insertChild(parent: any, child: NgView, atIndex: number = -1) {
         if (!parent || child.meta.skipAddToDom) {
             return;
         }
 
         if (parent.meta && parent.meta.insertChild) {
-            parent.meta.insertChild(parent, child, atIndex);
+             parent.meta.insertChild(parent, child, atIndex);
         } else if (isLayout(parent)) {
             if (child.parent === parent) {
                 let index = (<LayoutBase>parent).getChildIndex(child);
@@ -116,31 +114,22 @@ export class ViewUtil {
         }
     }
 
-    private createAndAttach(
-        name: string,
-        viewClass: ViewClass,
-        parent: NgView,
-        beforeAttach?: BeforeAttachAction
-    ): NgView {
-        const view = <NgView>new viewClass();
+    public createView(name: string, beforeAttach?: BeforeAttachAction): NgView {
+        traceLog("Creating view:" + name);
+
+        if (!isKnownView(name)) {
+            name = "ProxyViewContainer";
+        }
+        const viewClass = getViewClass(name);
+        let view = <NgView>new viewClass();
         view.nodeName = name;
         view.meta = getViewMeta(name);
+
         if (beforeAttach) {
             beforeAttach(view);
         }
-        if (parent) {
-            this.insertChild(parent, view);
-        }
-        return view;
-    }
 
-    public createView(name: string, parent: NgView, beforeAttach?: BeforeAttachAction): NgView {
-        if (isKnownView(name)) {
-            const viewClass = getViewClass(name);
-            return this.createAndAttach(name, viewClass, parent, beforeAttach);
-        } else {
-            return this.createViewContainer(parent, beforeAttach);
-        }
+        return view;
     }
 
     public createText(): NgView {
@@ -149,23 +138,6 @@ export class ViewUtil {
         text.visibility = "collapse";
         text.meta = getViewMeta("Placeholder");
         return text;
-    }
-
-    public createViewContainer(parentElement: NgView, beforeAttach: BeforeAttachAction) {
-        traceLog("Creating view container in:" + parentElement);
-
-        const layout = this.createView("ProxyViewContainer", parentElement, beforeAttach);
-        layout.nodeName = "ProxyViewContainer";
-        return layout;
-    }
-
-    public createTemplateAnchor(parentElement: NgView) {
-        const viewClass = getViewClass(TEMPLATE);
-        const anchor = this.createAndAttach(TEMPLATE, viewClass, parentElement);
-        anchor.templateParent = parentElement;
-        anchor.visibility = "collapse";
-        traceLog("Created templateAnchor: " + anchor);
-        return anchor;
     }
 
     private isXMLAttribute(name: string): boolean {
@@ -308,16 +280,11 @@ export class ViewUtil {
         view.className = classValue;
     }
 
-    public setStyleProperty(view: NgView, styleName: string, styleValue: string): void {
-        traceLog("setStyleProperty: " + styleName + " = " + styleValue);
+    public setStyle(view: NgView, styleName: string, value: any) {
+        view.style[styleName] = value;
+    }
 
-        let name = styleName;
-        let resolvedValue = styleValue; // this.resolveCssValue(styleValue);
-
-        if (resolvedValue !== null) {
-            view.style[name] = resolvedValue;
-        } else {
-            view.style[name] = unsetValue;
-        }
+    public removeStyle(view: NgView, styleName: string) {
+        view.style[styleName] = unsetValue;
     }
 }

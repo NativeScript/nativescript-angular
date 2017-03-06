@@ -6,14 +6,14 @@ import "./polyfills/array";
 import "./polyfills/console";
 
 import { CommonModule } from "@angular/common";
-import { NativeScriptRootRenderer, NativeScriptRenderer } from "./renderer";
+import { NativeScriptRendererFactory } from "./renderer";
 import { DetachedLoader } from "./common/detached-loader";
 import { ModalDialogHost, ModalDialogService } from "./directives/dialogs";
 import {
     ApplicationModule,
     ErrorHandler,
-    Renderer,
-    RootRenderer,
+    // RendererV2,
+    RendererFactoryV2,
     NgModule, NO_ERRORS_SCHEMA,
 } from "@angular/core";
 import {
@@ -39,10 +39,10 @@ export function errorHandlerFactory() {
         defaultPageProvider,
         defaultDeviceProvider,
 
-        NativeScriptRootRenderer,
-        { provide: RootRenderer, useClass: NativeScriptRootRenderer },
-        NativeScriptRenderer,
-        { provide: Renderer, useClass: NativeScriptRenderer },
+        NativeScriptRendererFactory,
+        { provide: RendererFactoryV2, useClass: NativeScriptRendererFactory },
+        // NativeScriptRenderer,
+        // { provide: RendererV2, useClass: NativeScriptRenderer },
         ModalDialogService
     ],
     entryComponents: [

@@ -30,9 +30,9 @@ import { rendererTraceCategory, routerTraceCategory } from "nativescript-angular
 import { BehaviorSubject } from "rxjs/BehaviorSubject";
 
 import trace = require("trace");
-// trace.setCategories(rendererTraceCategory + "," + routerTraceCategory);
-trace.setCategories(routerTraceCategory);
-trace.enable();
+trace.setCategories(rendererTraceCategory + "," + routerTraceCategory);
+// trace.setCategories(routerTraceCategory);
+// trace.enable();
 
 // nativeScriptBootstrap(GestureComponent);
 // nativeScriptBootstrap(LayoutsComponent);
