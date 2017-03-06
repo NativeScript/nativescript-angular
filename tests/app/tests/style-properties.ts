@@ -2,10 +2,10 @@
 import {assert} from "./test-config";
 import {TextField} from "ui/text-field";
 import {Red, Lime} from "color/known-colors";
-import {NativeScriptRenderer, NativeScriptRootRenderer} from "nativescript-angular/renderer";
+import { NativeScriptRendererFactory, NativeScriptRenderer } from "nativescript-angular/renderer";
 import {NativeScriptAnimationDriver} from "nativescript-angular/animation-driver";
 import {device} from "platform";
-import { ViewEncapsulation, RenderComponentType } from "@angular/core";
+import { ViewEncapsulation, RendererTypeV2, RendererV2 } from "@angular/core";
 import {NgView} from "nativescript-angular/view-util";
 
 describe("Setting style properties", () => {
@@ -13,31 +13,29 @@ describe("Setting style properties", () => {
     let element: NgView = null;
 
     beforeEach(() => {
-        const rootRenderer = new NativeScriptRootRenderer(null, device, null);
-        const componentType = new RenderComponentType(
-            "id",
-            "templateUrl",
-            0,
-            ViewEncapsulation.None,
-            [],
-            {}
-        );
-        renderer = new NativeScriptRenderer(rootRenderer, componentType, null, null);
+        const rendererFactory = new NativeScriptRendererFactory(null, device, null);
+        renderer = rendererFactory.createRenderer(null, {
+            id: "id",
+            encapsulation: ViewEncapsulation.None,
+            styles: [],
+            data: {}
+        });
+
         element = <NgView><any>new TextField();
     });
 
     it("resolves hyphenated CSS names", () => {
-        renderer.setElementStyle(element, "background-color", "red");
+        renderer.setStyle(element, "background-color", "red");
         assert.equal(Red, element.style.backgroundColor.hex);
     });
 
     it("resolves camel-cased JavaScript names", () => {
-        renderer.setElementStyle(element, "backgroundColor", "lime");
+        renderer.setStyle(element, "backgroundColor", "lime");
         assert.equal(Lime, element.style.backgroundColor.hex);
     });
 
     it("resolves CSS shorthand properties", () => {
-        renderer.setElementStyle(element, "font", "12");
+        renderer.setStyle(element, "font", "12");
         assert.equal(12, element.style.fontSize);
     });
 })
