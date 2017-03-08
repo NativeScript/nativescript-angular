@@ -15,6 +15,7 @@ import { rendererLog as traceLog } from "./trace";
 
 const IOS_PREFX: string = ":ios:";
 const ANDROID_PREFX: string = ":android:";
+const XML_ATTRIBUTES = Object.freeze([ "style", "row", "columns", "fontAttributes"]);
 const whiteSpaceSplitter = /\s+/;
 
 export type ViewExtensions = ViewExtensions;
@@ -114,7 +115,7 @@ export class ViewUtil {
         }
     }
 
-    public createView(name: string, beforeAttach?: BeforeAttachAction): NgView {
+    public createView(name: string): NgView {
         traceLog("Creating view:" + name);
 
         if (!isKnownView(name)) {
@@ -124,10 +125,6 @@ export class ViewUtil {
         let view = <NgView>new viewClass();
         view.nodeName = name;
         view.meta = getViewMeta(name);
-
-        if (beforeAttach) {
-            beforeAttach(view);
-        }
 
         return view;
     }
@@ -141,13 +138,7 @@ export class ViewUtil {
     }
 
     private isXMLAttribute(name: string): boolean {
-        switch (name) {
-            case "style": return true;
-            case "rows": return true;
-            case "columns": return true;
-            case "fontAttributes": return true;
-            default: return false;
-        }
+        return XML_ATTRIBUTES.indexOf(name) !== -1;
     }
 
     private platformFilter(attribute: string): string {
