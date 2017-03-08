@@ -23,7 +23,6 @@
   },
   "homepage": "https://github.com/NativeScript/template-hello-world",
   "dependencies": {
-    "tns-core-modules": "internal-preview",
     "@angular/common": "~2.4.3",
     "@angular/compiler": "~2.4.3",
     "@angular/core": "~2.4.3",
@@ -33,7 +32,8 @@
     "@angular/platform-browser-dynamic": "~2.4.3",
     "@angular/router": "~3.4.3",
     "nativescript-angular": "file:../nativescript-angular",
-    "rxjs": "~5.0.1"
+    "rxjs": "~5.0.1",
+    "tns-core-modules": "internal-preview"
   },
   "devDependencies": {
     "zone.js": "~0.7.2",
@@ -50,7 +50,7 @@
   "nativescript": {
     "id": "org.nativescript.ngsample",
     "tns-android": {
-      "version": "2.4.1"
+      "version": "2.5.0"
     },
     "tns-ios": {
       "version": "2.4.0"
