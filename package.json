@@ -36,7 +36,6 @@
     "lazy": "1.0.11",
     "nativescript-dev-android-snapshot": "~0.0.6",
     "nativescript-dev-typescript": "~0.3.7",
-    "typescript": "~2.1.5",
     "typescript": "~2.2.1"
   }
 }
