@@ -1,8 +1,7 @@
 import {
     Inject, Injectable, Optional, NgZone,
     RendererV2, RendererFactoryV2, RendererTypeV2,
-    // ViewEncapsulation
-    // ɵAnimationStyles, ɵAnimationKeyframe,
+    ViewEncapsulation,
 } from "@angular/core";
 import { APP_ROOT_VIEW, DEVICE } from "./platform-providers";
 import { isBlank } from "./lang-facade";
@@ -16,8 +15,12 @@ import { escapeRegexSymbols } from "utils/utils";
 import { Device } from "platform";
 
 // CONTENT_ATTR not exported from NativeScript_renderer - we need it for styles application.
+const COMPONENT_REGEX = /%COMP%/g;
 export const COMPONENT_VARIABLE = "%COMP%";
+export const HOST_ATTR = `_nghost-${COMPONENT_VARIABLE}`;
 export const CONTENT_ATTR = `_ngcontent-${COMPONENT_VARIABLE}`;
+const ATTR_REPLACER = new RegExp(escapeRegexSymbols(CONTENT_ATTR), "g");
+const ATTR_SANITIZER = /-/g;
 
 @Injectable()
 export class NativeScriptRendererFactory implements RendererFactoryV2 {
@@ -29,7 +32,7 @@ export class NativeScriptRendererFactory implements RendererFactoryV2 {
     constructor(
         @Optional() @Inject(APP_ROOT_VIEW) rootView: View,
         @Inject(DEVICE) device: Device,
-        zone: NgZone
+        private zone: NgZone
     ) {
         this.viewUtil = new ViewUtil(device);
         this.setRootNgView(rootView);
@@ -50,30 +53,19 @@ export class NativeScriptRendererFactory implements RendererFactoryV2 {
         }
 
         let renderer: NativeScriptRenderer = this.componentRenderers.get(type.id);
-        if (isBlank(renderer)) {
-            renderer = this.defaultRenderer;
-
-            let stylesLength = type.styles.length;
-            for (let i = 0; i < stylesLength; i++) {
-                console.log(type.styles[i]);
-                // this.hasComponentStyles = true;
-                let cssString = type.styles[i] + "";
-                const realCSS = this.replaceNgAttribute(cssString, type.id);
-                addCss(realCSS);
-            }
-            this.componentRenderers.set(type.id, renderer);
+        if (!isBlank(renderer)) {
+            return renderer;
         }
 
-       return renderer;
-    }
+        if (type.encapsulation === ViewEncapsulation.Emulated) {
+            renderer = new EmulatedRenderer(type, this.rootNgView, this.zone, this.viewUtil);
+            (<EmulatedRenderer>renderer).applyToHost(element);
+        } else {
+            renderer = this.defaultRenderer;
+        }
 
-    private attrReplacer = new RegExp(escapeRegexSymbols(CONTENT_ATTR), "g");
-    private attrSanitizer = /-/g;
-
-
-    private replaceNgAttribute(input: string, componentId: string): string {
-        return input.replace(this.attrReplacer,
-            "_ng_content_" + componentId.replace(this.attrSanitizer, "_"));
+        this.componentRenderers.set(type.id, renderer);
+        return renderer;
     }
 }
 
@@ -89,16 +81,21 @@ export class NativeScriptRenderer extends RendererV2 {
         traceLog("NativeScriptRenderer created");
     }
 
-    appendChild(parent: any, newChild: any): void {
+    appendChild(parent: any, newChild: NgView): void {
         traceLog(`NativeScriptRenderer.appendChild child: ${newChild} parent: ${parent}`);
+        console.log(typeof parent)
+        console.log("appending child")
+        console.log(newChild.id)
         this.viewUtil.insertChild(parent, newChild);
     }
 
 
-    insertBefore(parent: any, newChild: any, refChild: any): void {
+    insertBefore(parent: any, newChild: any, _refChild: any): void {
         traceLog(`NativeScriptRenderer.insertBefore child: ${newChild} parent: ${parent}`);
         if (parent) {
-            parent.insertBefore(newChild, refChild);
+            // Temporary solution until we implement nextSibling method
+            this.appendChild(parent, newChild);
+            // parent.insertBefore(newChild, refChild);
         }
     }
 
@@ -112,8 +109,8 @@ export class NativeScriptRenderer extends RendererV2 {
         return this.rootView;
     }
 
-    parentNode(node: NgView): NgView {
-        return node.templateParent;
+    parentNode(node: NgView): any {
+        return node.parent;
     }
 
     nextSibling(_node: NgView): void {
@@ -121,15 +118,13 @@ export class NativeScriptRenderer extends RendererV2 {
     }
 
     createViewRoot(hostElement: NgView): NgView {
-        traceLog("CREATE VIEW ROOT: " + hostElement.nodeName);
+        traceLog(`NativeScriptRenderer.createViewRoot ${hostElement.nodeName}`)
         return hostElement;
     }
 
     projectNodes(parentElement: NgView, nodes: NgView[]): void {
         traceLog("NativeScriptRenderer.projectNodes");
-        nodes.forEach((node) => {
-            this.viewUtil.insertChild(parentElement, node);
-        });
+        nodes.forEach((node) => this.viewUtil.insertChild(parentElement, node));
     }
 
     destroy() {
@@ -197,17 +192,7 @@ export class NativeScriptRenderer extends RendererV2 {
 
     createElement(name: any, _namespace: string): NgView {
         traceLog(`NativeScriptRenderer.createElement: ${name}`);
-
-        return this.viewUtil.createView(name, view => {
-            console.log(view);
-            // Set an attribute to the view to scope component-specific css.
-            // The property name is pre-generated by Angular.
-
-            // if (this.hasComponentStyles) {
-            //     const cssAttribute = this.replaceNgAttribute(CONTENT_ATTR, this.componentProtoId);
-            //     view[cssAttribute] = true;
-            // }
-        });
+        return this.viewUtil.createView(name)
     }
 
     createText(_value: string): NgView {
@@ -234,3 +219,63 @@ export class NativeScriptRenderer extends RendererV2 {
     }
 }
 
+class EmulatedRenderer extends NativeScriptRenderer {
+    private contentAttr: string;
+    private hostAttr: string;
+
+    constructor(
+        private component: RendererTypeV2,
+        rootView: NgView,
+        zone: NgZone,
+        viewUtil: ViewUtil,
+    ) {
+        super(rootView, zone, viewUtil);
+
+        this.addStyles();
+        this.contentAttr = shimContentAttribute(component.id);
+        this.hostAttr = shimHostAttribute(component.id);
+    }
+
+    applyToHost(view: NgView) {
+        super.setAttribute(view, this.hostAttr, "");
+    }
+
+    appendChild(parent: any, newChild: NgView): void {
+        // Set an attribute to the view to scope component-specific css.
+        // The property name is pre-generated by Angular.
+        const cssAttribute = this.replaceNgAttribute(CONTENT_ATTR);
+        newChild[cssAttribute] = true;
+
+        super.appendChild(parent, newChild);
+    }
+
+    createElement(parent: any, name: string): NgView {
+        const view = super.createElement(parent, name);
+        super.setAttribute(view, this.contentAttr, "");
+
+        return view;
+    }
+
+    private addStyles() {
+        this.component.styles
+            .map(s => s.toString())
+            .map(s => this.replaceNgAttribute(s))
+            .forEach(addCss);
+    }
+
+    private replaceNgAttribute(input: string): string {
+        return input.replace(ATTR_REPLACER , `_ng_content_${this.componentId}`);
+    }
+
+    private get componentId(): string {
+        return this.component.id.replace(ATTR_SANITIZER , "_");
+    }
+}
+
+function shimContentAttribute(componentShortId: string): string {
+    return CONTENT_ATTR.replace(COMPONENT_REGEX, componentShortId);
+}
+
+function shimHostAttribute(componentShortId: string): string {
+    return HOST_ATTR.replace(COMPONENT_REGEX, componentShortId);
+}
