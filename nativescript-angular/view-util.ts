@@ -22,6 +22,7 @@ export type ViewExtensions = ViewExtensions;
 export type NgView = NgView;
 export type NgLayoutBase = LayoutBase & ViewExtensions;
 export type NgContentView = ContentView & ViewExtensions;
+export type NgPlaceholder = Placeholder & ViewExtensions;
 export type BeforeAttachAction = (view: View) => void;
 
 export function isView(view: any): view is NgView {
@@ -36,6 +37,10 @@ export function isContentView(view: any): view is NgContentView {
     return view instanceof ContentView;
 }
 
+export function isPlaceholder(view: any): view is NgPlaceholder {
+    return view instanceof Placeholder;
+}
+
 const propertyMaps: Map<Function, Map<string, string>> = new Map<Function, Map<string, string>>();
 
 export class ViewUtil {
@@ -48,7 +53,7 @@ export class ViewUtil {
     }
 
     public insertChild(parent: any, child: NgView, atIndex: number = -1) {
-        if (!parent || child.meta.skipAddToDom) {
+        if (!parent || child.meta.skipAddToDom || isPlaceholder(child) === true) {
             return;
         }
 
