@@ -56,7 +56,7 @@ export class ViewUtil {
         }
 
         if (parent.meta && parent.meta.insertChild) {
-             parent.meta.insertChild(parent, child, atIndex);
+            parent.meta.insertChild(parent, child, atIndex);
         } else if (isLayout(parent)) {
             if (child.parent === parent) {
                 let index = (<LayoutBase>parent).getChildIndex(child);
@@ -192,6 +192,18 @@ export class ViewUtil {
 
         if (isDefined(view)) {
             this.setPropertyInternal(view, attributeName, value);
+        }
+    }
+
+    // finds the node in the parent's views and returns the next index
+    // returns -1 if the node has no parent or next sibling
+    public nextSibling(node: NgView): number {
+        const parent = node.parent;
+        if (!parent || typeof (<any>parent)._subViews === "undefined") {
+            return -1;
+        } else {
+            const index = (<any>parent)._subViews.indexOf(node);
+            return index === -1 ? index : index + 1;
         }
     }
 
