@@ -18,7 +18,8 @@
     "postinstall": "node postinstall.js",
     "ngc": "ngc -p tsconfig.json",
     "tsc": "tsc -p tsconfig.json",
-    "prepublish": "npm run tsc && npm run ngc"
+    "fix-tns-imports": "./bin/fix-tns-imports",
+    "prepublish": "npm run tsc && npm run ngc && npm run fix-tns-imports"
   },
   "bin": {
     "update-app-ng-deps": "./bin/update-app-ng-deps"

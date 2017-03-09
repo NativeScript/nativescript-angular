@@ -1,0 +1,54 @@
+#!/usr/bin/env node
+
+const path = require("path");
+const fs = require("fs");
+
+const PROJECT_DIR = path.resolve(__dirname, "../");
+const EXCLUDED_DIRS = Object.freeze([path.resolve(PROJECT_DIR, "node_modules")]);
+
+const METADATA_MATCHER = /\.metadata.json$/;
+
+let getFilePath = (directory, file) => path.join(directory, file);
+let isDir = file => fs.lstatSync(file).isDirectory();
+
+function traverseDirectory(directory, callback) {
+    const files = fs.readdirSync(directory).map(f => getFilePath(directory, f));
+
+    files.filter(isDir)
+        .filter(f => !EXCLUDED_DIRS.includes(f))
+        .forEach( f => traverseDirectory(f, callback));
+
+    files.filter(f => METADATA_MATCHER.test(f)).forEach(f => callback(f));
+}
+
+traverseDirectory(PROJECT_DIR, replaceImport);
+
+function replaceImport(file) {
+    const json = require(file);
+    traverseObject(json, fixCoreModulesImport);
+
+    fs.writeFileSync(file, JSON.stringify(json), "utf8");
+}
+
+function traverseObject(o, fn) {
+    for (var i in o) {
+        if (o[i] !== null && typeof(o[i]) === "object") {
+            traverseObject(o[i], fn);
+        } else {
+            fn(o);
+        }
+    }
+}
+
+function fixCoreModulesImport(node) {
+    if (node.module && hasCoreModulesImport(node)) {
+        node.module = `tns-core-modules/${node.module}`;
+    }
+
+    return node;
+}
+
+function hasCoreModulesImport(node) {
+    const importStatement = node.module;
+    return importStatement.startsWith("ui\/") || importStatement.startsWith("platform");
+}
