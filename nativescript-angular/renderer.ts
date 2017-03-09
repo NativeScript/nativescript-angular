@@ -70,7 +70,7 @@ export class NativeScriptRendererFactory implements RendererFactoryV2 {
 }
 
 export class NativeScriptRenderer extends RendererV2 {
-    data: {[key: string]: any} = Object.create(null);
+    data: { [key: string]: any } = Object.create(null);
 
     constructor(
         private rootView: NgView,
@@ -83,25 +83,23 @@ export class NativeScriptRenderer extends RendererV2 {
 
     appendChild(parent: any, newChild: NgView): void {
         traceLog(`NativeScriptRenderer.appendChild child: ${newChild} parent: ${parent}`);
-        console.log(typeof parent)
-        console.log("appending child")
-        console.log(newChild.id)
         this.viewUtil.insertChild(parent, newChild);
     }
 
-
-    insertBefore(parent: any, newChild: any, _refChild: any): void {
+    insertBefore(parent: NgView, newChild: NgView, refChildIndex: number): void {
         traceLog(`NativeScriptRenderer.insertBefore child: ${newChild} parent: ${parent}`);
+
         if (parent) {
-            // Temporary solution until we implement nextSibling method
-            this.appendChild(parent, newChild);
-            // parent.insertBefore(newChild, refChild);
+            this.viewUtil.insertChild(parent, newChild, refChildIndex);
         }
     }
 
     removeChild(parent: any, oldChild: NgView): void {
         traceLog(`NativeScriptRenderer.removeChild child: ${oldChild} parent: ${parent}`);
-        this.viewUtil.removeChild(parent, oldChild);
+
+        if (parent) {
+            this.viewUtil.removeChild(parent, oldChild);
+        }
     }
 
     selectRootElement(selector: string): NgView {
@@ -113,12 +111,13 @@ export class NativeScriptRenderer extends RendererV2 {
         return node.parent;
     }
 
-    nextSibling(_node: NgView): void {
-        traceLog(`NativeScriptRenderer.nextSibling ${_node}`);
+    nextSibling(node: NgView): number {
+        traceLog(`NativeScriptRenderer.nextSibling ${node}`);
+        return this.viewUtil.nextSibling(node);
     }
 
     createViewRoot(hostElement: NgView): NgView {
-        traceLog(`NativeScriptRenderer.createViewRoot ${hostElement.nodeName}`)
+        traceLog(`NativeScriptRenderer.createViewRoot ${hostElement.nodeName}`);
         return hostElement;
     }
 
@@ -192,7 +191,7 @@ export class NativeScriptRenderer extends RendererV2 {
 
     createElement(name: any, _namespace: string): NgView {
         traceLog(`NativeScriptRenderer.createElement: ${name}`);
-        return this.viewUtil.createView(name)
+        return this.viewUtil.createView(name);
     }
 
     createText(_value: string): NgView {
