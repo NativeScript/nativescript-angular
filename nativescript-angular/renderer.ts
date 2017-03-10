@@ -124,6 +124,21 @@ export class NativeScriptRenderer extends RendererV2 {
         return this.viewUtil.nextSiblingIndex(node);
     }
 
+    createComment(_value: any) {
+        traceLog(`NativeScriptRenderer.createComment ${_value}`);
+        return this.viewUtil.createComment();
+    }
+
+    createElement(name: any, _namespace: string): NgView {
+        traceLog(`NativeScriptRenderer.createElement: ${name}`);
+        return this.viewUtil.createView(name);
+    }
+
+    createText(_value: string) {
+        traceLog(`NativeScriptRenderer.createText ${_value}`);
+        return this.viewUtil.createText();
+    }
+
     createViewRoot(hostElement: NgView): NgView {
         traceLog(`NativeScriptRenderer.createViewRoot ${hostElement.nodeName}`);
         return hostElement;
@@ -139,11 +154,6 @@ export class NativeScriptRenderer extends RendererV2 {
         // Seems to be called on component dispose only (router outlet)
         // TODO: handle this when we resolve routing and navigation.
     }
-
-    createComment(_value: any) {
-        traceLog(`NativeScriptRenderer.createComment ${_value}`);
-    }
-
     setAttribute(view: NgView, name: string, value: string) {
         traceLog(`NativeScriptRenderer.setAttribute ${view} : ${name} = ${value}`);
         return this.setProperty(view, name, value);
@@ -195,16 +205,6 @@ export class NativeScriptRenderer extends RendererV2 {
 
     setValue(_renderNode: any, _value: string) {
         traceLog("NativeScriptRenderer.setValue");
-    }
-
-    createElement(name: any, _namespace: string): NgView {
-        traceLog(`NativeScriptRenderer.createElement: ${name}`);
-        return this.viewUtil.createView(name);
-    }
-
-    createText(_value: string) {
-        traceLog("NativeScriptRenderer.createText");
-        return this.viewUtil.createText();
     }
 
     listen(renderElement: any, eventName: string, callback: (event: any) => boolean):
