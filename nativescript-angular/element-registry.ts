@@ -2,7 +2,7 @@ import { View } from "ui/core/view";
 
 export type ViewResolver = () => ViewClass;
 export type NgView = View & ViewExtensions;
-export const TEMPLATE = "template";
+export const TEMPLATE = "ng-template";
 
 export interface ViewClassMeta {
     skipAddToDom?: boolean;
@@ -117,3 +117,10 @@ registerElement("Span", () => require("text/span").Span);
 
 registerElement("DetachedContainer", () => require("ui/proxy-view-container").ProxyViewContainer,
     { skipAddToDom: true });
+
+registerElement("DetachedText", () => require("ui/placeholder").Placeholder,
+    { skipAddToDom: true });
+
+registerElement("Comment", () => require("ui/placeholder").Placeholder,
+    { skipAddToDom: false });
+
