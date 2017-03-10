@@ -202,13 +202,24 @@ export class ViewUtil {
 
     // finds the node in the parent's views and returns the next index
     // returns -1 if the node has no parent or next sibling
-    public nextSibling(node: NgView): number {
+    public nextSiblingIndex(node: NgView): number {
         const parent = node.parent;
-        if (!parent || typeof (<any>parent)._subViews === "undefined") {
+
+        if (!parent) {
             return -1;
         } else {
-            const index = (<any>parent)._subViews.indexOf(node);
-            return index === -1 ? index : index + 1;
+            let index = 0;
+            let found = false;
+            parent.eachChild(child => {
+                if (child === node) {
+                    found = true;
+                }
+
+                index += 1;
+                return !found;
+            });
+
+            return found ? index : -1;
         }
     }
 
