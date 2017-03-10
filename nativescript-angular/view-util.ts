@@ -53,7 +53,7 @@ export class ViewUtil {
     }
 
     public insertChild(parent: any, child: NgView, atIndex: number = -1) {
-        if (!parent || child.meta.skipAddToDom || isPlaceholder(child) === true) {
+        if (!parent || child.meta.skipAddToDom) {
             return;
         }
 
@@ -120,8 +120,24 @@ export class ViewUtil {
         }
     }
 
+    public createComment(): NgView {
+        const commentView = this.createView("Comment");
+        commentView.nodeName = "#comment";
+        commentView.visibility = "collapse";
+
+        return commentView;
+    }
+
+    public createText(): NgView {
+        const detachedText = this.createView("DetachedText");
+        detachedText.nodeName = "#text";
+        detachedText.visibility = "collapse";
+
+        return detachedText;
+    }
+
     public createView(name: string): NgView {
-        traceLog("Creating view:" + name);
+        traceLog(`Creating view: ${name}`);
 
         if (!isKnownView(name)) {
             name = "ProxyViewContainer";
@@ -132,14 +148,6 @@ export class ViewUtil {
         view.meta = getViewMeta(name);
 
         return view;
-    }
-
-    public createText(): NgView {
-        const text = <NgView>new Placeholder();
-        text.nodeName = "#text";
-        text.visibility = "collapse";
-        text.meta = getViewMeta("Placeholder");
-        return text;
     }
 
     private isXMLAttribute(name: string): boolean {
@@ -201,23 +209,22 @@ export class ViewUtil {
     // returns -1 if the node has no parent or next sibling
     public nextSiblingIndex(node: NgView): number {
         const parent = node.parent;
-
         if (!parent) {
             return -1;
-        } else {
-            let index = 0;
-            let found = false;
-            parent.eachChild(child => {
-                if (child === node) {
-                    found = true;
-                }
-
-                index += 1;
-                return !found;
-            });
-
-            return found ? index : -1;
         }
+
+        let index = 0;
+        let found = false;
+        parent.eachChild(child => {
+            if (child === node) {
+                found = true;
+            }
+
+            index += 1;
+            return !found;
+        });
+
+        return found ? index : -1;
     }
 
     private setPropertyInternal(view: NgView, attributeName: string, value: any): void {
