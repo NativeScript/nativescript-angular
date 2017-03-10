@@ -1,8 +1,8 @@
 import { Directive, Component, ElementRef, Optional, OnDestroy } from "@angular/core";
-import { ActionItem, ActionBar, NavigationButton } from "ui/action-bar";
+import { ActionItem, ActionBar, NavigationButton } from "tns-core-modules/ui/action-bar";
 import { isBlank } from "../lang-facade";
-import { Page } from "ui/page";
-import { View } from "ui/core/view";
+import { Page } from "tns-core-modules/ui/page";
+import { View } from "tns-core-modules/ui/core/view";
 import { registerElement, ViewClassMeta, NgView, TEMPLATE } from "../element-registry";
 
 let actionBarMeta: ViewClassMeta = {

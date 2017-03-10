@@ -28,10 +28,10 @@ if ((<any>global).___TS_UNUSED) {
 import { rendererLog, rendererError } from "./trace";
 import { PAGE_FACTORY, PageFactory, defaultPageFactoryProvider } from "./platform-providers";
 
-import { start, setCssFileName } from "application";
-import { topmost, NavigationEntry } from "ui/frame";
-import { Page } from "ui/page";
-import { TextView } from "ui/text-view";
+import { start, setCssFileName } from "tns-core-modules/application";
+import { topmost, NavigationEntry } from "tns-core-modules/ui/frame";
+import { Page } from "tns-core-modules/ui/page";
+import { TextView } from "tns-core-modules/ui/text-view";
 
 import "nativescript-intl";
 

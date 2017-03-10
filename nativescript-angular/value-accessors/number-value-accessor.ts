@@ -2,7 +2,7 @@ import { Directive, ElementRef, forwardRef, HostListener } from "@angular/core";
 import { NG_VALUE_ACCESSOR } from "@angular/forms";
 import { isBlank, isNumber } from "../lang-facade";
 import { BaseValueAccessor } from "./base-value-accessor";
-import { Slider } from "ui/slider";
+import { Slider } from "tns-core-modules/ui/slider";
 
 const NUMBER_VALUE_ACCESSOR = {provide: NG_VALUE_ACCESSOR,
     useExisting: forwardRef(() => NumberValueAccessor), multi: true};

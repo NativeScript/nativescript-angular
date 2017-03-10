@@ -1,7 +1,7 @@
 import { Injectable } from "@angular/core";
 import { LocationStrategy } from "@angular/common";
 import { routerLog } from "../trace";
-import { Frame, NavigationTransition } from "ui/frame";
+import { Frame, NavigationTransition } from "tns-core-modules/ui/frame";
 import { isPresent } from "../lang-facade";
 
 export interface NavigationOptions {

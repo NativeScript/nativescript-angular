@@ -5,8 +5,8 @@ import { routerLog } from "../trace";
 import { PageRoute } from "./page-router-outlet";
 import { RouterExtensions } from "./router-extensions";
 import { NavigationOptions } from "./ns-location-strategy";
-import { NavigationTransition } from "ui/frame";
-import { isString } from "utils/types";
+import { NavigationTransition } from "tns-core-modules/ui/frame";
+import { isString } from "tns-core-modules/utils/types";
 
 /**
  * The nsRouterLink directive lets you link to specific parts of your app.

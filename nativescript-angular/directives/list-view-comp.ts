@@ -21,10 +21,10 @@ import {
 } from "@angular/core";
 import { isBlank } from "../lang-facade";
 import { isListLikeIterable } from "../collection-facade";
-import { ListView } from "ui/list-view";
-import { View, KeyedTemplate } from "ui/core/view";
-import { ObservableArray } from "data/observable-array";
-import { LayoutBase } from "ui/layouts/layout-base";
+import { ListView } from "tns-core-modules/ui/list-view";
+import { View, KeyedTemplate } from "tns-core-modules/ui/core/view";
+import { ObservableArray } from "tns-core-modules/data/observable-array";
+import { LayoutBase } from "tns-core-modules/ui/layouts/layout-base";
 import { listViewLog } from "../trace";
 
 const NG_VIEW = "_ngViewRef";

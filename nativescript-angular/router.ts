@@ -8,7 +8,7 @@ import {
 } from "@angular/core";
 import { RouterModule, Routes, ExtraOptions } from "@angular/router";
 import { LocationStrategy, PlatformLocation } from "@angular/common";
-import { Frame } from "ui/frame";
+import { Frame } from "tns-core-modules/ui/frame";
 import { NSRouterLink } from "./router/ns-router-link";
 import { NSRouterLinkActive } from "./router/ns-router-link-active";
 import { PageRouterOutlet } from "./router/page-router-outlet";

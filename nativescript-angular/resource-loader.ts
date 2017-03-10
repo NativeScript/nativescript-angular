@@ -1,4 +1,4 @@
-import { path, knownFolders, File } from "file-system";
+import { path, knownFolders, File } from "tns-core-modules/file-system";
 import { ResourceLoader } from "@angular/compiler";
 
 export class FileSystemResourceLoader extends ResourceLoader {

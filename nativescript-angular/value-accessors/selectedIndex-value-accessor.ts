@@ -1,7 +1,7 @@
 import { Directive, ElementRef, forwardRef, AfterViewInit, HostListener } from "@angular/core";
 import { NG_VALUE_ACCESSOR } from "@angular/forms";
 import { BaseValueAccessor } from "./base-value-accessor";
-import { View } from "ui/core/view";
+import { View } from "tns-core-modules/ui/core/view";
 import { convertToInt } from "../common/utils";
 
 const SELECTED_INDEX_VALUE_ACCESSOR = {provide: NG_VALUE_ACCESSOR,

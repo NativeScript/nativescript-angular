@@ -5,11 +5,11 @@ import {
     KeyframeAnimationInfo,
     KeyframeInfo,
     KeyframeDeclaration
-} from "ui/animation/keyframe-animation";
-import { View } from "ui/core/view";
-import { AnimationCurve } from "ui/enums";
-import { isString } from "utils/types";
-import { CssAnimationProperty } from "ui/core/properties";
+} from "tns-core-modules/ui/animation/keyframe-animation";
+import { View } from "tns-core-modules/ui/core/view";
+import { AnimationCurve } from "tns-core-modules/ui/enums";
+import { isString } from "tns-core-modules/utils/types";
+import { CssAnimationProperty } from "tns-core-modules/ui/core/properties";
 
 export class NativeScriptAnimationPlayer implements AnimationPlayer {
 
