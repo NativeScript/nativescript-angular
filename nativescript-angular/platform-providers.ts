@@ -1,8 +1,8 @@
-import { topmost, Frame } from "ui/frame";
-import { Page } from "ui/page";
+import { topmost, Frame } from "tns-core-modules/ui/frame";
+import { Page } from "tns-core-modules/ui/page";
 import { OpaqueToken } from "@angular/core";
-import { device, Device } from "platform";
-import * as platform from "platform";
+import { device, Device } from "tns-core-modules/platform";
+import * as platform from "tns-core-modules/platform";
 
 export const APP_ROOT_VIEW = new OpaqueToken("App Root View");
 export const DEVICE = new OpaqueToken("platfrom device");

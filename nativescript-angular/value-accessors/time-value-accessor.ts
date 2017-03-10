@@ -2,7 +2,7 @@ import { Directive, ElementRef, forwardRef, HostListener } from "@angular/core";
 import { NG_VALUE_ACCESSOR } from "@angular/forms";
 import { isBlank, isDate } from "../lang-facade";
 import { BaseValueAccessor } from "./base-value-accessor";
-import { TimePicker } from "ui/time-picker";
+import { TimePicker } from "tns-core-modules/ui/time-picker";
 
 const TIME_VALUE_ACCESSOR = {provide: NG_VALUE_ACCESSOR,
     useExisting: forwardRef(() => TimeValueAccessor), multi: true};

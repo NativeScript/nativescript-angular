@@ -1,5 +1,5 @@
 import { ElementRef, Directive, Input, TemplateRef, ViewContainerRef, OnInit, AfterViewInit } from "@angular/core";
-import { TabView, TabViewItem } from "ui/tab-view";
+import { TabView, TabViewItem } from "tns-core-modules/ui/tab-view";
 import { convertToInt } from "../common/utils";
 import { rendererLog } from "../trace";
 import { isBlank } from "../lang-facade";

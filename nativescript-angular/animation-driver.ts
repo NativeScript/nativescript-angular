@@ -1,7 +1,7 @@
 import { AnimationPlayer } from "@angular/core";
 import { AnimationStyles, AnimationKeyframe } from "./private_import_core";
 import { NativeScriptAnimationPlayer } from "./animation-player";
-import { View } from "ui/core/view";
+import { View } from "tns-core-modules/ui/core/view";
 
 export abstract class AnimationDriver {
     abstract animate(

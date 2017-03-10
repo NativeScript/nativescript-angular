@@ -17,14 +17,7 @@
     "lib": [
         "dom",
         "es6"
-    ],
-    "baseUrl": ".",
-    "paths": {
-      "*": [
-        "./node_modules/tns-core-modules/*",
-        "./node_modules/*"
-      ]
-    }
+    ]
   },
   "angularCompilerOptions": {
     "genDir": ".",

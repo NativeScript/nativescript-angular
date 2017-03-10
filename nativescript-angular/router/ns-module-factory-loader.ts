@@ -6,7 +6,7 @@ import {
     SystemJsNgModuleLoader,
 } from "@angular/core";
 
-import { path, knownFolders } from "file-system";
+import { path, knownFolders } from "tns-core-modules/file-system";
 
 const SEPARATOR = "#";
 

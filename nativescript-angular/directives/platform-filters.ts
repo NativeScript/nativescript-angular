@@ -1,5 +1,5 @@
 import { Component, Inject } from "@angular/core";
-import { Device, platformNames } from "platform";
+import { Device, platformNames } from "tns-core-modules/platform";
 import { DEVICE } from "../platform-providers";
 
 @Component({

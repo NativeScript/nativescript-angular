@@ -1,7 +1,7 @@
 import { Injectable } from "@angular/core";
 import { Router, UrlTree, NavigationExtras } from "@angular/router";
 import { NSLocationStrategy, NavigationOptions } from "./ns-location-strategy";
-import { Frame } from "ui/frame";
+import { Frame } from "tns-core-modules/ui/frame";
 
 export type ExtendedNavigationExtras = NavigationExtras & NavigationOptions;
 

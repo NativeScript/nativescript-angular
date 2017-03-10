@@ -1,8 +1,8 @@
-import { isDefined } from "utils/types";
-import { View, unsetValue } from "ui/core/view";
-import { Placeholder } from "ui/placeholder";
-import { ContentView } from "ui/content-view";
-import { LayoutBase } from "ui/layouts/layout-base";
+import { isDefined } from "tns-core-modules/utils/types";
+import { View, unsetValue } from "tns-core-modules/ui/core/view";
+import { Placeholder } from "tns-core-modules/ui/placeholder";
+import { ContentView } from "tns-core-modules/ui/content-view";
+import { LayoutBase } from "tns-core-modules/ui/layouts/layout-base";
 import {
     ViewClass,
     getViewClass,
@@ -12,7 +12,7 @@ import {
     NgView,
     TEMPLATE
 } from "./element-registry";
-import { platformNames, Device } from "platform";
+import { platformNames, Device } from "tns-core-modules/platform";
 import { rendererLog as traceLog } from "./trace";
 
 const IOS_PREFX: string = ":ios:";

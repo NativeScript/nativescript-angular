@@ -2,8 +2,8 @@ import {
     ReflectiveInjector, ComponentFactoryResolver, ViewContainerRef,
     Type, Injectable, ComponentRef, Directive
 } from "@angular/core";
-import { Page } from "ui/page";
-import { View } from "ui/core/view";
+import { Page } from "tns-core-modules/ui/page";
+import { View } from "tns-core-modules/ui/core/view";
 import { DetachedLoader } from "../common/detached-loader";
 import { PageFactory, PAGE_FACTORY } from "../platform-providers";
 

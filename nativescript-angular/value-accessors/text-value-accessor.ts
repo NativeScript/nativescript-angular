@@ -2,7 +2,7 @@ import { Directive, ElementRef, forwardRef, HostListener } from "@angular/core";
 import { NG_VALUE_ACCESSOR } from "@angular/forms";
 import { isBlank } from "../lang-facade";
 import { BaseValueAccessor } from "./base-value-accessor";
-import { View } from "ui/core/view";
+import { View } from "tns-core-modules/ui/core/view";
 
 const TEXT_VALUE_ACCESSOR = {provide: NG_VALUE_ACCESSOR,
     useExisting: forwardRef(() => TextValueAccessor), multi: true};

@@ -7,12 +7,12 @@ import { isPresent } from "../lang-facade";
 import { RouterOutletMap, ActivatedRoute, PRIMARY_OUTLET } from "@angular/router";
 import { NSLocationStrategy } from "./ns-location-strategy";
 import { DEVICE, PAGE_FACTORY, PageFactory } from "../platform-providers";
-import { Device } from "platform";
+import { Device } from "tns-core-modules/platform";
 import { routerLog } from "../trace";
 import { DetachedLoader } from "../common/detached-loader";
 import { ViewUtil } from "../view-util";
-import { Frame } from "ui/frame";
-import { Page, NavigatedData } from "ui/page";
+import { Frame } from "tns-core-modules/ui/frame";
+import { Page, NavigatedData } from "tns-core-modules/ui/page";
 import { BehaviorSubject } from "rxjs/BehaviorSubject";
 
 interface CacheItem {
