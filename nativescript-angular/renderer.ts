@@ -116,7 +116,7 @@ export class NativeScriptRenderer extends RendererV2 {
 
     nextSibling(node: NgView): number {
         traceLog(`NativeScriptRenderer.nextSibling ${node}`);
-        return this.viewUtil.nextSibling(node);
+        return this.viewUtil.nextSiblingIndex(node);
     }
 
     createViewRoot(hostElement: NgView): NgView {
