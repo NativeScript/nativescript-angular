@@ -5,9 +5,9 @@ import {
 } from "@angular/core";
 import { APP_ROOT_VIEW, DEVICE } from "./platform-providers";
 import { isBlank } from "./lang-facade";
-import { View } from "ui/core/view";
+import { View } from "tns-core-modules/ui/core/view";
 import { addCss } from "application";
-import { topmost } from "ui/frame";
+import { topmost } from "tns-core-modules/ui/frame";
 import { ViewUtil } from "./view-util";
 import { NgView } from "./element-registry";
 import { rendererLog as traceLog } from "./trace";
