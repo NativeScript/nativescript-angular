@@ -12,8 +12,7 @@ import { ModalDialogHost, ModalDialogService } from "./directives/dialogs";
 import {
     ApplicationModule,
     ErrorHandler,
-    // RendererV2,
-    RendererFactoryV2,
+    RendererFactory2,
     NgModule, NO_ERRORS_SCHEMA,
 } from "@angular/core";
 import {
@@ -38,11 +37,8 @@ export function errorHandlerFactory() {
         defaultFrameProvider,
         defaultPageProvider,
         defaultDeviceProvider,
-
         NativeScriptRendererFactory,
-        { provide: RendererFactoryV2, useClass: NativeScriptRendererFactory },
-        // NativeScriptRenderer,
-        // { provide: RendererV2, useClass: NativeScriptRenderer },
+        { provide: RendererFactory2, useClass: NativeScriptRendererFactory },
         ModalDialogService
     ],
     entryComponents: [

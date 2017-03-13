@@ -1,6 +1,6 @@
 import {
     Inject, Injectable, Optional, NgZone,
-    RendererV2, RendererFactoryV2, RendererTypeV2,
+    Renderer2, RendererFactory2, RendererType2,
     ViewEncapsulation,
 } from "@angular/core";
 
@@ -28,7 +28,7 @@ const ATTR_REPLACER = new RegExp(escapeRegexSymbols(CONTENT_ATTR), "g");
 const ATTR_SANITIZER = /-/g;
 
 @Injectable()
-export class NativeScriptRendererFactory implements RendererFactoryV2 {
+export class NativeScriptRendererFactory implements RendererFactory2 {
     private componentRenderers = new Map<string, NativeScriptRenderer>();
     private viewUtil: ViewUtil;
     private defaultRenderer: NativeScriptRenderer;
@@ -52,7 +52,7 @@ export class NativeScriptRendererFactory implements RendererFactoryV2 {
         this.rootNgView = rootView;
     }
 
-    createRenderer(element: any, type: RendererTypeV2): NativeScriptRenderer {
+    createRenderer(element: any, type: RendererType2): NativeScriptRenderer {
         if (!element || !type) {
             return this.defaultRenderer;
         }
@@ -74,7 +74,7 @@ export class NativeScriptRendererFactory implements RendererFactoryV2 {
     }
 }
 
-export class NativeScriptRenderer extends RendererV2 {
+export class NativeScriptRenderer extends Renderer2 {
     data: { [key: string]: any } = Object.create(null);
 
     constructor(
@@ -231,7 +231,7 @@ class EmulatedRenderer extends NativeScriptRenderer {
     private hostAttr: string;
 
     constructor(
-        private component: RendererTypeV2,
+        private component: RendererType2,
         rootView: NgView,
         zone: NgZone,
         viewUtil: ViewUtil,
