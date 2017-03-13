@@ -3,9 +3,8 @@ import {assert} from "./test-config";
 import {TextField} from "ui/text-field";
 import {Red, Lime} from "color/known-colors";
 import { NativeScriptRendererFactory, NativeScriptRenderer } from "nativescript-angular/renderer";
-import {NativeScriptAnimationDriver} from "nativescript-angular/animation-driver";
 import {device} from "platform";
-import { ViewEncapsulation, RendererTypeV2, RendererV2 } from "@angular/core";
+import { ViewEncapsulation, RendererType2, Renderer2 } from "@angular/core";
 import {NgView} from "nativescript-angular/view-util";
 
 describe("Setting style properties", () => {
