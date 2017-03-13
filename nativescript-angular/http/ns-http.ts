@@ -2,6 +2,7 @@ import { Injectable } from "@angular/core";
 import {
     Http,
     ConnectionBackend,
+    RequestOptions,
     RequestOptionsArgs,
     ResponseOptions,
     ResponseType,
@@ -19,7 +20,7 @@ export class NSXSRFStrategy {
 
 @Injectable()
 export class NSHttp extends Http {
-  constructor(backend: ConnectionBackend, defaultOptions: any, private nsFileSystem: NSFileSystem) {
+  constructor(backend: ConnectionBackend, defaultOptions: RequestOptions, private nsFileSystem: NSFileSystem) {
     super(backend, defaultOptions);
   }
 
