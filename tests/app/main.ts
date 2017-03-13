@@ -1,5 +1,6 @@
 // "nativescript-angular/platform" import should be first in order to load some required settings (like globals and reflect-metadata)
-import { NativeScriptModule, platformNativeScriptDynamic } from "nativescript-angular/platform";
+import { NativeScriptModule } from "nativescript-angular/nativescript.module";
+import { platformNativeScriptDynamic } from "nativescript-angular/platform";
 import { NativeScriptRouterModule, NSModuleFactoryLoader } from "nativescript-angular/router";
 import { NativeScriptFormsModule } from "nativescript-angular/forms";
 import { AppComponent } from "./app.component";
