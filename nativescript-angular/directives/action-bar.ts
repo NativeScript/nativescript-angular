@@ -83,7 +83,9 @@ export class ActionBarScope { // tslint:disable-line:component-class-suffix
     }
 
     public onActionDestroy(item: ActionItemDirective) {
-        this.page.actionBar.actionItems.removeItem(item.element.nativeElement);
+        if (item.element.nativeElement.actionBar) {
+            this.page.actionBar.actionItems.removeItem(item.element.nativeElement);
+        }
     }
 }
 
