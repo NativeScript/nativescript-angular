@@ -37,10 +37,6 @@ export function isContentView(view: any): view is NgContentView {
     return view instanceof ContentView;
 }
 
-export function isPlaceholder(view: any): view is NgPlaceholder {
-    return view instanceof Placeholder;
-}
-
 const propertyMaps: Map<Function, Map<string, string>> = new Map<Function, Map<string, string>>();
 
 export class ViewUtil {
