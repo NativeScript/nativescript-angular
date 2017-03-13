@@ -15,7 +15,7 @@ import { rendererLog as traceLog } from "./trace";
 
 const IOS_PREFX: string = ":ios:";
 const ANDROID_PREFX: string = ":android:";
-const XML_ATTRIBUTES = Object.freeze([ "style", "row", "columns", "fontAttributes"]);
+const XML_ATTRIBUTES = Object.freeze(["style", "rows", "columns", "fontAttributes"]);
 const whiteSpaceSplitter = /\s+/;
 
 export type ViewExtensions = ViewExtensions;
@@ -146,10 +146,6 @@ export class ViewUtil {
         return view;
     }
 
-    private isXMLAttribute(name: string): boolean {
-        return XML_ATTRIBUTES.indexOf(name) !== -1;
-    }
-
     private platformFilter(attribute: string): string {
         let lowered = attribute.toLowerCase();
         if (lowered.indexOf(IOS_PREFX) === 0) {
@@ -230,7 +226,7 @@ export class ViewUtil {
 
         if (attributeName === "class") {
             this.setClasses(view, value);
-        } else if (this.isXMLAttribute(attributeName)) {
+        } else if (XML_ATTRIBUTES.indexOf(attributeName) !== -1) {
             view._applyXmlAttribute(attributeName, value);
         } else if (propMap.has(attributeName)) {
             // We have a lower-upper case mapped property.

@@ -6,9 +6,9 @@ import {
 
 import { escapeRegexSymbols } from "tns-core-modules/utils/utils";
 import { Device } from "tns-core-modules/platform";
-import { View } from "ui/core/view";
-import { addCss } from "application";
-import { topmost } from "ui/frame";
+import { View } from "tns-core-modules/ui/core/view";
+import { addCss } from "tns-core-modules/application";
+import { topmost } from "tns-core-modules/ui/frame";
 
 import { APP_ROOT_VIEW, DEVICE } from "./platform-providers";
 import { isBlank } from "./lang-facade";
