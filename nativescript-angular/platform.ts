@@ -33,8 +33,6 @@ import "./dom-adapter";
 import { NativeScriptElementSchemaRegistry } from "./schema-registry";
 import { FileSystemResourceLoader } from "./resource-loader";
 
-export { NativeScriptModule } from "./nativescript.module";
-
 export const NS_COMPILER_PROVIDERS = [
     COMPILER_PROVIDERS,
     {
