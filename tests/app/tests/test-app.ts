@@ -1,4 +1,5 @@
-import { NativeScriptModule, platformNativeScriptDynamic } from "nativescript-angular/platform";
+import { platformNativeScriptDynamic } from "nativescript-angular/platform";
+import { NativeScriptModule } from "nativescript-angular/nativescript.module";
 import { NativeScriptRouterModule } from "nativescript-angular/router";
 import {
     Type, Component, ComponentRef,
