@@ -4,7 +4,7 @@ import {Device} from "platform";
 
 function getChildren(view: View): Array<View> {
     var children: Array<View> = [];
-    (<any>view)._eachChildView((child) => {
+    (<any>view).eachChildView((child) => {
         children.push(child);
         return true;
     });
