@@ -137,7 +137,7 @@ export class ListViewComponent implements DoCheck, OnDestroy, AfterContentInit {
                 listViewLog("registerTemplate for key: " + key);
 
                 const viewRef = this.loader.createEmbeddedView(template, new ListItemContext(), 0);
-                const resultView = getSingleViewFromViewRef(viewRef);
+                const resultView = getItemViewRoot(viewRef);
                 resultView[NG_VIEW] = viewRef;
 
                 return resultView;
@@ -170,7 +170,7 @@ export class ListViewComponent implements DoCheck, OnDestroy, AfterContentInit {
         } else {
             listViewLog("onItemLoading: " + index + " - Creating view from template");
             viewRef = this.loader.createEmbeddedView(this.itemTemplate, new ListItemContext(), 0);
-            args.view = getSingleViewFromViewRef(viewRef);
+            args.view = getItemViewRoot(viewRef);
             args.view[NG_VIEW] = viewRef;
         }
 
@@ -215,7 +215,7 @@ export class ListViewComponent implements DoCheck, OnDestroy, AfterContentInit {
     }
 }
 
-function getSingleViewRecursive(nodes: Array<any>, nestLevel: number) {
+function getSingleViewRecursive(nodes: Array<any>, nestLevel: number): View {
     const actualNodes = nodes.filter((n) => !!n && n.nodeName !== "#text");
 
     if (actualNodes.length === 0) {
@@ -235,8 +235,18 @@ function getSingleViewRecursive(nodes: Array<any>, nestLevel: number) {
     }
 }
 
-function getSingleViewFromViewRef(viewRef: EmbeddedViewRef<any>): View {
-    return getSingleViewRecursive(viewRef.rootNodes, 0);
+export interface ComponentView {
+    rootNodes: Array<any>;
+    destroy(): void;
+};
+export type RootLocator = (nodes: Array<any>, nestLevel: number) => View;
+
+export function getItemViewRoot(viewRef: ComponentView, rootLocator: RootLocator = getSingleViewRecursive): View {
+    const rootView = rootLocator(viewRef.rootNodes, 0);
+    rootView.on("unloaded", () => {
+        viewRef.destroy();
+    });
+    return rootView;
 }
 
 @Directive({ selector: "[nsTemplateKey]" })

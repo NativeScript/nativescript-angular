@@ -1,6 +1,8 @@
 import { assert } from "./test-config";
-import { Component, Input, AfterViewInit } from '@angular/core';
+import { Component, Input, AfterViewInit } from "@angular/core";
 import { TestApp } from "./test-app";
+import { RootLocator, ComponentView, getItemViewRoot } from "nativescript-angular/directives/list-view-comp";
+import { ProxyViewContainer } from "tns-core-modules/ui/proxy-view-container";
 
 // import trace = require("trace");
 // trace.setCategories("ns-list-view, " + trace.categories.Navigation);
@@ -20,7 +22,7 @@ const ITEMS = [
 let testTemplates: { first: number, second: number };
 
 @Component({
-    selector: 'list-view-setupItemView',
+    selector: "list-view-setupItemView",
     template: `
     <GridLayout>
         <ListView [items]="myItems" (setupItemView)="onSetupItemView($event)">
@@ -61,7 +63,6 @@ export class ItemTemplateComponent {
             <template nsTemplateKey="first">
                 <item-component templateName="first"></item-component>
             </template>
-            
             <template nsTemplateKey="second" let-item="item">
                 <item-component templateName="second"></item-component>
             </template>
@@ -77,7 +78,7 @@ export class TestListViewSelectorComponent {
     constructor() { testTemplates = { first: 0, second: 0 }; }
 }
 
-describe('ListView-tests', () => {
+describe("ListView-tests", () => {
     let testApp: TestApp = null;
 
     before(() => {
@@ -94,7 +95,7 @@ describe('ListView-tests', () => {
         testApp.disposeComponents();
     });
 
-    it('setupItemView is called for every item', (done) => {
+    it("setupItemView is called for every item", (done) => {
         return testApp.loadComponent(TestListViewComponent).then((componentRef) => {
             const component = componentRef.instance;
             setTimeout(() => {
@@ -106,7 +107,7 @@ describe('ListView-tests', () => {
     });
 
 
-    it('itemTemplateSelector selects templates', (done) => {
+    it("itemTemplateSelector selects templates", (done) => {
         return testApp.loadComponent(TestListViewSelectorComponent).then((componentRef) => {
             setTimeout(() => {
                 assert.deepEqual(testTemplates,  { first: 2, second: 1 });
@@ -114,5 +115,21 @@ describe('ListView-tests', () => {
             }, 1000);
         })
             .catch(done);
+    });
+});
+
+describe("ListView item templates", () => {
+    it("destroy child ng views on unload", () => {
+        const childRoot = new ProxyViewContainer();
+        let viewDestroyed = false;
+        const view: ComponentView = {
+            rootNodes: [],
+            destroy: () => {
+                viewDestroyed = true;
+            }
+        };
+        const itemRoot = getItemViewRoot(view, (_rootNodes, _level) => childRoot);
+        itemRoot.notify({eventName: "unloaded", object: itemRoot});
+        assert.isTrue(viewDestroyed, "ng view not destroyed");
     });
 });
