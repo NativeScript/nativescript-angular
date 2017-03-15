@@ -39,7 +39,19 @@ class TestDateValueAccessor extends DateValueAccessor {
 
 class TestSelectedIndexValueAccessor extends SelectedIndexValueAccessor {
     constructor() {
-        super(new TestElementRef(new ListPicker()));
+        super(new TestElementRef(TestSelectedIndexValueAccessor.picker()));
+    }
+
+    static picker(): ListPicker {
+        const picker = new ListPicker();
+        picker.items = [
+            "1",
+            "2",
+            "3",
+            "4",
+            "5",
+        ];
+        return picker;
     }
 }
 
