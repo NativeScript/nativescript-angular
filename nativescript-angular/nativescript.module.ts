@@ -1,3 +1,5 @@
+/// <reference path="./iterable.d.ts" />
+
 import "globals";
 import "./zone-js/dist/zone-nativescript";
 

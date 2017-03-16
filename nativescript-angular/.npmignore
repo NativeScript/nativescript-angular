@@ -5,8 +5,8 @@
 
 *.js.map
 
-tsconfig.json
 global.d.ts
+tsconfig.json
 .npmignore
 gulpfile.js
 tslint.json

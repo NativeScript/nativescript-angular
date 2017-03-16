@@ -9,6 +9,7 @@ tags
 /nativescript-angular/**/*.d.ts
 /nativescript-angular/**/*.js
 
+!/nativescript-angular/iterable.d.ts
 !/nativescript-angular/global.d.ts
 !/nativescript-angular/postinstall.js
 !/nativescript-angular/hooks/**/*.js

@@ -210,7 +210,8 @@ export class ViewUtil {
 
         let index = 0;
         let found = false;
-        parent.eachChild(child => {
+
+        parent._eachLayoutView(child => {
             if (child === node) {
                 found = true;
             }

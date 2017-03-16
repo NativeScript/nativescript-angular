@@ -1,3 +1,12 @@
+{
+  "nativescript": {
+    "id": "org.nativescript.ngtests",
+    "tns-android": {
+      "version": "2.5.0"
+    },
+    "tns-ios": {
+      "version": "2.5.0"
+    }
   },
   "name": "ngtests",
   "main": "app.js",
@@ -48,7 +57,7 @@
     "nativescript-dev-typescript": "^0.3.1",
     "socket.io": "1.4.8",
     "socket.io-client": "1.4.8",
-    "typescript": "~2.2.0",
+    "typescript": "~2.1.0",
     "wd": "0.4.0",
     "zone.js": "^0.7.2"
   },

@@ -14,7 +14,7 @@
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "noImplicitAny": false
- },
+},
   "angularCompilerOptions": {
     "genDir": ".",
     "skipMetadataEmit": false,
