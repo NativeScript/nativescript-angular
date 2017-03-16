@@ -1,15 +1,17 @@
 import { ɵDomAnimationEngine as DomAnimationEngine } from "@angular/platform-browser/animations";
-import {
-    AnimationEvent,
-    AnimationPlayer,
-    NoopAnimationPlayer,
-    ɵAnimationGroupPlayer,
-    ɵStyleData,
-} from "@angular/animations";
-
-import { unsetValue } from "tns-core-modules/ui/core/view";
+import { AnimationEvent, AnimationPlayer } from "@angular/animations";
 
 import { NgView } from "../element-registry";
+import {
+    eraseStylesOverride,
+    cssClasses,
+    getOrSetAsInMap,
+    deleteFromArrayMap,
+    optimizeGroupPlayer,
+    copyArray,
+    makeAnimationEvent,
+    setStyles
+} from "./utils";
 
 const MARKED_FOR_ANIMATION = "ng-animate";
 
@@ -138,69 +140,4 @@ export class NativeScriptAnimationEngine extends DomAnimationEngine {
     private _getTransitionAnimation(element: NgView) {
         return (<any>this)._activeTransitionAnimations.get(element);
     }
-}
-
-// overriden to use the default 'unsetValue'
-// instead of empty string ''
-function eraseStylesOverride(element: NgView, styles: ɵStyleData) {
-    if (element["style"]) {
-        Object.keys(styles).forEach(prop => {
-            element.style[prop] = unsetValue;
-        });
-    }
-}
-
-function cssClasses(element: NgView) {
-    if (!element.ngCssClasses) {
-        element.ngCssClasses = new Map<string, boolean>();
-    }
-    return element.ngCssClasses;
-}
-
-function getOrSetAsInMap(map: Map<any, any>, key: any, defaultValue: any) {
-    let value = map.get(key);
-    if (!value) {
-        map.set(key, value = defaultValue);
-    }
-    return value;
-}
-
-function deleteFromArrayMap(map: Map<any, any[]>, key: any, value: any) {
-    let arr = map.get(key);
-    if (arr) {
-        const index = arr.indexOf(value);
-        if (index >= 0) {
-            arr.splice(index, 1);
-            if (arr.length === 0) {
-                map.delete(key);
-            }
-        }
-    }
-}
-
-function optimizeGroupPlayer(players: AnimationPlayer[]): AnimationPlayer {
-    switch (players.length) {
-        case 0:
-            return new NoopAnimationPlayer();
-        case 1:
-            return players[0];
-        default:
-            return new ɵAnimationGroupPlayer(players);
-    }
-}
-
-function copyArray(source: any[]): any[] {
-    return source ? source.splice(0) : [];
-}
-
-function makeAnimationEvent(
-        element: NgView, triggerName: string, fromState: string, toState: string, phaseName: string,
-        totalTime: number): AnimationEvent {
-    return <AnimationEvent>{element, triggerName, fromState, toState, phaseName, totalTime};
-}
-
-function setStyles(element: NgView, styles: ɵStyleData) {
-    if (element["style"]) {
-        Object.keys(styles).forEach(prop => element.style[prop] = styles[prop]);
-  }
 }
