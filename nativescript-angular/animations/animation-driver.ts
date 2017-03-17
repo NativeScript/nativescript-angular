@@ -1,12 +1,13 @@
 import { AnimationPlayer } from "@angular/animations";
-import { View } from "tns-core-modules/ui/core/view";
+import { NgView } from "../element-registry";
 
 import { NativeScriptAnimationPlayer } from "./animation-player";
+import { Keyframe } from "./utils";
 
 export abstract class AnimationDriver {
     abstract animate(
         element: any,
-        keyframes: {[key: string]: string | number}[],
+        keyframes: Keyframe[],
         duration: number,
         delay: number,
         easing: string
@@ -14,18 +15,18 @@ export abstract class AnimationDriver {
 }
 
 export class NativeScriptAnimationDriver implements AnimationDriver {
-    computeStyle(element: any, prop: string): string {
-        const view = <View>element;
-        return view.style[`css-${prop}`];
+    computeStyle(element: NgView, prop: string): string {
+        return element.style[`css-${prop}`];
     }
 
     animate(
-        element: any,
-        keyframes: {[key: string]: string | number}[],
+        element: NgView,
+        keyframes: Keyframe[],
         duration: number,
         delay: number,
         easing: string
     ): AnimationPlayer {
-        return new NativeScriptAnimationPlayer(element, keyframes, duration, delay, easing);
+        return new NativeScriptAnimationPlayer(
+            element, keyframes, duration, delay, easing);
     }
 }

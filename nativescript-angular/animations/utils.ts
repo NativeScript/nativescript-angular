@@ -1,78 +1,139 @@
 import {
-    AnimationEvent,
-    AnimationPlayer,
-    NoopAnimationPlayer,
-    ɵAnimationGroupPlayer,
-    ɵStyleData,
-} from "@angular/animations";
+    KeyframeDeclaration,
+    KeyframeInfo,
+} from "tns-core-modules/ui/animation/keyframe-animation";
+import { CssAnimationProperty } from "tns-core-modules/ui/core/properties";
+import { AnimationCurve } from "tns-core-modules/ui/enums";
 
-import { unsetValue } from "tns-core-modules/ui/core/view";
-
-import { NgView } from "../element-registry";
-
-// overriden to use the default 'unsetValue'
-// instead of empty string ''
-export function eraseStylesOverride(element: NgView, styles: ɵStyleData) {
-    if (element["style"]) {
-        Object.keys(styles).forEach(prop => {
-            element.style[prop] = unsetValue;
-        });
-    }
+export interface Keyframe {
+    [key: string]: string | number;
 }
 
-export function cssClasses(element: NgView) {
-    if (!element.ngCssClasses) {
-        element.ngCssClasses = new Map<string, boolean>();
-    }
-    return element.ngCssClasses;
+interface Transformation {
+    property: string;
+    value: number | { x: number, y: number };
 }
 
-// The following functions are from
-// the original DomAnimationEngine
-export function getOrSetAsInMap(map: Map<any, any>, key: any, defaultValue: any) {
-    let value = map.get(key);
+const TRANSFORM_MATCHER = new RegExp(/(.+)\((.+)\)/);
+const TRANSFORM_SPLITTER = new RegExp(/[\s,]+/);
+
+const STYLE_TRANSFORMATION_MAP = Object.freeze({
+    "scale": value => ({ property: "scale", value }),
+    "scale3d": value => ({ property: "scale", value }),
+    "scaleX": value => ({ property: "scale", value: { x: value, y: 1 } }),
+    "scaleY": value => ({ property: "scale", value: { x: 1, y: value } }),
+
+    "translate": value => ({ property: "translate", value }),
+    "translate3d": value => ({ property: "translate", value }),
+    "translateX": value => ({ property: "translate", value: { x: value, y: 0 } }),
+    "translateY": value => ({ property: "translate", value: { x: 0, y: value } }),
+
+    "rotate": value => ({ property: "rotate", value }),
+
+    "none": _value => [
+        { property: "scale", value: { x: 1, y: 1 } },
+        { property: "translate", value: { x: 0, y: 0 } },
+        { property: "rotate", value: 0 },
+    ],
+});
+
+const STYLE_CURVE_MAP = Object.freeze({
+    "ease": AnimationCurve.ease,
+    "linear": AnimationCurve.linear,
+    "ease-in": AnimationCurve.easeIn,
+    "ease-out": AnimationCurve.easeOut,
+    "ease-in-out": AnimationCurve.easeInOut,
+    "spring": AnimationCurve.spring,
+});
+
+export function getAnimationCurve(value: string): any {
     if (!value) {
-        map.set(key, value = defaultValue);
+        return AnimationCurve.ease;
     }
-    return value;
+
+    const curve = STYLE_CURVE_MAP[value];
+    if (curve) {
+        return curve;
+    }
+
+    const [, property = "", pointsString = ""] = TRANSFORM_MATCHER.exec(value) || [];
+    const coords = pointsString.split(TRANSFORM_SPLITTER).map(stringToBezieCoords);
+
+    if (property !== "cubic-bezier" || coords.length !== 4) {
+        throw new Error(`Invalid value for animation: ${value}`);
+    } else {
+        return (<any>AnimationCurve).cubicBezier(...coords);
+    }
 }
 
-export function deleteFromArrayMap(map: Map<any, any[]>, key: any, value: any) {
-    let arr = map.get(key);
-    if (arr) {
-        const index = arr.indexOf(value);
-        if (index >= 0) {
-            arr.splice(index, 1);
-            if (arr.length === 0) {
-                map.delete(key);
+export function parseAnimationKeyframe(styles: Keyframe) {
+    let keyframeInfo = <KeyframeInfo>{};
+    keyframeInfo.duration = <number>styles.offset;
+    keyframeInfo.declarations = Object.keys(styles).reduce((declarations, prop) => {
+        let value = styles[prop];
+
+        const property = CssAnimationProperty._getByCssName(prop);
+        if (property) {
+            if (typeof value === "string" && property._valueConverter) {
+                value = property._valueConverter(<string>value);
             }
+            declarations.push({ property: property.name, value });
+        } else if (typeof value === "string" && prop === "transform") {
+            declarations.push(...parseTransformation(<string>value));
         }
+
+        return declarations;
+    }, new Array<KeyframeDeclaration>());
+
+    return keyframeInfo;
+}
+
+function stringToBezieCoords(value: string): number {
+    let result = parseFloat(value);
+    if (result < 0) {
+        return 0;
+    } else if (result > 1) {
+        return 1;
     }
+
+    return result;
 }
 
-export function optimizeGroupPlayer(players: AnimationPlayer[]): AnimationPlayer {
-    switch (players.length) {
-        case 0:
-            return new NoopAnimationPlayer();
-        case 1:
-            return players[0];
-        default:
-            return new ɵAnimationGroupPlayer(players);
+function parseTransformation(styleString: string): KeyframeDeclaration[] {
+    return parseStyle(styleString)
+        .reduce((transformations, style) => {
+            const transform = STYLE_TRANSFORMATION_MAP[style.property](style.value);
+
+            if (Array.isArray(transform)) {
+                transformations.push(...transform);
+            } else if (typeof transform !== "undefined") {
+                transformations.push(transform);
+            }
+
+            return transformations;
+        }, new Array<Transformation>());
+}
+
+function parseStyle(text: string): Transformation[] {
+    return text.split(TRANSFORM_SPLITTER).map(stringToTransformation).filter(t => !!t);
+}
+
+function stringToTransformation(text: string): Transformation {
+    const [, property = "", stringValue = ""] = TRANSFORM_MATCHER.exec(text) || [];
+    if (!property) {
+        return;
     }
-}
 
-export function copyArray(source: any[]): any[] {
-    return source ? source.splice(0) : [];
-}
+    const [x, y] = stringValue.split(",").map(parseFloat);
+    if (x && y) {
+        return { property, value: {x, y} };
+    } else {
+        let value: number = x;
 
-export function makeAnimationEvent(
-        element: NgView, triggerName: string, fromState: string, toState: string, phaseName: string,
-        totalTime: number): AnimationEvent {
-    return <AnimationEvent>{element, triggerName, fromState, toState, phaseName, totalTime};
-}
+        if (stringValue.slice(-3) === "rad") {
+            value *= 180.0 / Math.PI;
+        }
 
-export function setStyles(element: NgView, styles: ɵStyleData) {
-    if (element["style"]) {
-        Object.keys(styles).forEach(prop => element.style[prop] = styles[prop]);
-    }
+        return { property, value };
+     }
 }

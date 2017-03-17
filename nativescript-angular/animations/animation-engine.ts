@@ -3,15 +3,15 @@ import { AnimationEvent, AnimationPlayer } from "@angular/animations";
 
 import { NgView } from "../element-registry";
 import {
-    eraseStylesOverride,
-    cssClasses,
-    getOrSetAsInMap,
-    deleteFromArrayMap,
-    optimizeGroupPlayer,
     copyArray,
+    cssClasses,
+    deleteFromArrayMap,
+    eraseStylesOverride,
+    getOrSetAsInMap,
     makeAnimationEvent,
-    setStyles
-} from "./utils";
+    optimizeGroupPlayer,
+    setStyles,
+} from "./dom-utils";
 
 const MARKED_FOR_ANIMATION = "ng-animate";
 
