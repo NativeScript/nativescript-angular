@@ -3,16 +3,19 @@ import {
     Renderer2, RendererFactory2, RendererType2,
     RendererStyleFlags2, ViewEncapsulation,
 } from "@angular/core";
-import { APP_ROOT_VIEW, DEVICE } from "./platform-providers";
+
 import { isBlank } from "./lang-facade";
 import { View } from "ui/core/view";
 import { addCss } from "application";
 import { topmost } from "ui/frame";
-import { ViewUtil } from "./view-util";
-import { NgView } from "./element-registry";
-import { rendererLog as traceLog } from "./trace";
 import { escapeRegexSymbols } from "utils/utils";
 import { Device } from "platform";
+
+import { ViewUtil } from "./view-util";
+import { APP_ROOT_VIEW, DEVICE } from "./platform-providers";
+import { NgView } from "./element-registry";
+import { rendererLog as traceLog } from "./trace";
+import { NativeScriptPlatformRef } from "./platform-common";
 
 // CONTENT_ATTR not exported from NativeScript_renderer - we need it for styles application.
 const COMPONENT_REGEX = /%COMP%/g;
@@ -41,7 +44,7 @@ export class NativeScriptRendererFactory implements RendererFactory2 {
 
     private setRootNgView(rootView: any) {
         if (!rootView) {
-            rootView = <NgView><any>topmost().currentPage;
+            rootView = NativeScriptPlatformRef.rootPage || <NgView><any>topmost().currentPage;
         }
         rootView.nodeName = "NONE";
         this.rootNgView = rootView;
