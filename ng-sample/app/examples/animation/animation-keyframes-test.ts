@@ -1,4 +1,5 @@
-import {Component, trigger, style, animate, state, transition, keyframes } from '@angular/core';
+import { Component } from '@angular/core';
+import { trigger, style, animate, state, transition, keyframes } from '@angular/animations';
 
 @Component({
     selector: 'animation-states',
@@ -8,8 +9,8 @@ import {Component, trigger, style, animate, state, transition, keyframes } from 
         </StackLayout>`,
     animations: [
         trigger('state', [
-            state('active', style({ transform: 'translateX(0)', opacity: 1 })),
-            state('inactive', style({ transform: 'translateX(0)', opacity: 0.2 })),
+            state('active', style({ opacity: 1 })),
+            state('inactive', style({ opacity: 0.2 })),
             transition('inactive => active', [
                 animate(300, keyframes([
                     style({opacity: 0.2, transform: 'translateX(-100)', offset: 0}),
