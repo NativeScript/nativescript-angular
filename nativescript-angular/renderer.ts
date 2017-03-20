@@ -14,6 +14,7 @@ import { NgView } from "./element-registry";
 import { rendererLog as traceLog } from "./trace";
 import { escapeRegexSymbols } from "tns-core-modules/utils/utils";
 import { Device } from "tns-core-modules/platform";
+import { NativeScriptPlatformRef } from "./platform-common";
 
 import { NativeScriptAnimationDriver } from "./animation-driver";
 
@@ -46,7 +47,7 @@ export class NativeScriptRootRenderer implements RootRenderer {
 
     public get rootView(): View {
         if (!this._rootView) {
-            this._rootView = topmost().currentPage;
+            this._rootView = NativeScriptPlatformRef.rootPage || topmost().currentPage;
         }
         return this._rootView;
     }
