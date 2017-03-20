@@ -36,6 +36,7 @@
     "nativescript-angular": "internal-preview",
     "nativescript-unit-test-runner": "^0.3.4",
     "rxjs": "~5.0.1",
+    "zone.js": "^0.8.2",
     "tns-core-modules": "~2.5.0"
   },
   "devDependencies": {
@@ -58,8 +59,7 @@
     "socket.io": "1.4.8",
     "socket.io-client": "1.4.8",
     "typescript": "~2.1.0",
-    "wd": "0.4.0",
-    "zone.js": "^0.7.2"
+    "wd": "0.4.0"
   },
   "scripts": {
     "updateTests": "grunt updateTests",

@@ -33,10 +33,10 @@
     "@angular/router": "4.0.0-rc.5",
     "nativescript-angular": "file:../nativescript-angular",
     "rxjs": "~5.0.1",
-    "tns-core-modules": "~2.5.0"
+    "tns-core-modules": "~2.5.0",
+    "zone.js": "~0.8.2"
   },
   "devDependencies": {
-    "zone.js": "~0.7.2",
     "babel-traverse": "6.9.0",
     "babel-types": "6.10.0",
     "babylon": "6.8.1",
