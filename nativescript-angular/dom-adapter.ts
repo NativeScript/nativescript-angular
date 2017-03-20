@@ -49,6 +49,7 @@ export class NativeScriptDomAdapter implements ɵDomAdapter {
   getProperty(_el: Element, _name: string): any { throw new Error("Not implemented!") }
   invoke(_el: Element, _methodName: string, _args: any[]): any { throw new Error("Not implemented!") }
 
+  contains(_nodeA: any, _nodeB: any): any /** TODO #9100 */ { throw new Error("Not implemented!") }
   parse(_templateHtml: string): any /** TODO #9100 */ { throw new Error("Not implemented!") }
   query(_selector: string): any { throw new Error("Not implemented!") }
   querySelector(_el: any /** TODO #9100 */, _selector: string): HTMLElement { throw new Error("Not implemented!") }

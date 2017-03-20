@@ -12,7 +12,7 @@ import {Component, trigger, style, animate, state, transition, keyframes } from 
             state('inactive', style({ transform: 'translateX(0)', opacity: 0.2 })),
             transition('inactive => active', [
                 animate(300, keyframes([
-                    style({opacity: 0.2, transform: 'translateX(-100)', offset: 0}),
+                    style({opacity: 0.2, transform: 'translateX(-100),translateY(100)', offset: 0}),
                     style({opacity: 1, transform: 'translateX(15)', offset: 0.3}),
                     style({opacity: 1, transform: 'translateX(0)', offset: 1.0})
                 ]))

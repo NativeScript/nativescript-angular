@@ -1,7 +1,7 @@
 import {
     Inject, Injectable, Optional, NgZone,
     Renderer2, RendererFactory2, RendererType2,
-    ViewEncapsulation,
+    RendererStyleFlags2, ViewEncapsulation,
 } from "@angular/core";
 
 import { escapeRegexSymbols } from "tns-core-modules/utils/utils";
@@ -178,12 +178,12 @@ export class NativeScriptRenderer extends Renderer2 {
         this.viewUtil.removeClass(view, name);
     }
 
-    setStyle(view: NgView, styleName: string, value: any, _hasVendorPrefix?: boolean, _hasImportant?: boolean): void {
+    setStyle(view: NgView, styleName: string, value: any, _flags?: RendererStyleFlags2): void {
         traceLog(`NativeScriptRenderer.setStyle: ${styleName} = ${value}`);
         this.viewUtil.setStyle(view, styleName, value);
     }
 
-    removeStyle(view: NgView, styleName: string, _hasVendorPrefix?: boolean): void {
+    removeStyle(view: NgView, styleName: string, _flags?: RendererStyleFlags2): void {
         traceLog("NativeScriptRenderer.removeStyle: ${styleName}");
         this.viewUtil.removeStyle(view, styleName);
     }
