@@ -1,6 +1,5 @@
 import "application";
 
-export * from "./animations";
 export * from "./platform-common";
 export * from "./platform";
 export * from "./platform-static";

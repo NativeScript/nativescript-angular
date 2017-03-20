@@ -23,6 +23,7 @@
   },
   "homepage": "https://github.com/NativeScript/template-hello-world",
   "dependencies": {
+    "@angular/animations": "4.0.0-rc.5",
     "@angular/common": "4.0.0-rc.5",
     "@angular/compiler": "4.0.0-rc.5",
     "@angular/core": "4.0.0-rc.5",
@@ -33,10 +34,10 @@
     "@angular/router": "4.0.0-rc.5",
     "nativescript-angular": "file:../nativescript-angular",
     "rxjs": "~5.0.1",
-    "tns-core-modules": "internal-preview"
+    "tns-core-modules": "internal-preview",
+    "zone.js": "~0.8.2"
   },
   "devDependencies": {
-    "zone.js": "~0.7.2",
     "babel-traverse": "6.9.0",
     "babel-types": "6.10.0",
     "babylon": "6.8.1",

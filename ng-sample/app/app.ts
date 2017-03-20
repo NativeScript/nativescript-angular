@@ -71,7 +71,10 @@ import { AnimationStatesTest } from "./examples/animation/animation-states-test"
 class ExampleModule { }
 
 function makeExampleModule(componentType) {
-    let imports: any[] = [NativeScriptAnimationsModule, ExampleModule];
+    let imports: any[] = [
+        NativeScriptAnimationsModule,
+        ExampleModule,
+    ];
     if (componentType.routes) {
         imports.push(NativeScriptRouterModule.forRoot(componentType.routes))
     }
@@ -136,9 +139,9 @@ const customPageFactoryProvider = {
 // platformNativeScriptDynamic().bootstrapModule(makeExampleModule(LoginAppComponent));
 
 // animations
-platformNativeScriptDynamic().bootstrapModule(makeExampleModule(AnimationStatesTest));
+// platformNativeScriptDynamic().bootstrapModule(makeExampleModule(AnimationStatesTest));
 // platformNativeScriptDynamic().bootstrapModule(makeExampleModule(AnimationNgClassTest));
-// platformNativeScriptDynamic().bootstrapModule(makeExampleModule(AnimationKeyframesTest));
+platformNativeScriptDynamic().bootstrapModule(makeExampleModule(AnimationKeyframesTest));
 // platformNativeScriptDynamic().bootstrapModule(makeExampleModule(AnimationEnterLeaveTest));
 
 //Livesync test

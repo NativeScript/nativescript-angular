@@ -4,9 +4,10 @@ import {
     AnimationDriver,
     ɵAnimationEngine as AnimationEngine,
     ɵAnimationStyleNormalizer as AnimationStyleNormalizer,
-    ɵAnimationRendererFactory as AnimationRendererFactory,
-    ɵg as WebAnimationsStyleNormalizer
-} from "@angular/platform-browser/animations";
+    ɵWebAnimationsStyleNormalizer as WebAnimationsStyleNormalizer
+} from "@angular/animations/browser";
+
+import { ɵAnimationRendererFactory as AnimationRendererFactory } from "@angular/platform-browser/animations";
 
 import { NativeScriptAnimationEngine } from "./animations/animation-engine";
 import { NativeScriptAnimationDriver } from "./animations/animation-driver";

@@ -1,4 +1,4 @@
-import { ɵDomAnimationEngine as DomAnimationEngine } from "@angular/platform-browser/animations";
+import { ɵDomAnimationEngine as DomAnimationEngine } from "@angular/animations/browser";
 import { AnimationEvent, AnimationPlayer } from "@angular/animations";
 
 import { NgView } from "../element-registry";

@@ -25,7 +25,6 @@
   },
   "dependencies": {
     "nativescript-intl": "~0.0.8",
-    "@angular/animations": "4.0.0-rc.5",
     "@angular/core": "4.0.0-rc.5",
     "@angular/common": "4.0.0-rc.5",
     "@angular/compiler": "4.0.0-rc.5",
@@ -41,6 +40,7 @@
     "url": "0.10.3"
   },
   "devDependencies": {
+    "@angular/animations": "4.0.0-rc.5",
     "@angular/compiler-cli": "4.0.0-rc.5",
     "codelyzer": "~2.0.0",
     "tns-core-modules": "internal-preview",
