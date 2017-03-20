@@ -1,13 +1,6 @@
-//import "globals";
-// import "./modules";
-//global.registerModule("./main-page", function () { return require("./main-page"); });
-
-//import * as profiling from "./profiling";
-//profiling.start("application-start");
-
-// "nativescript-angular/application" import should be first in order to load some required settings (like globals and reflect-metadata)
 import { NativeScriptModule } from "nativescript-angular/nativescript.module";
 import { platformNativeScriptDynamic } from "nativescript-angular/platform";
+import { NativeScriptAnimationsModule } from "nativescript-angular/animations";
 import { onAfterLivesync, onBeforeLivesync } from "nativescript-angular/platform-common";
 import { NgModule } from "@angular/core";
 import { Router } from "@angular/router";
@@ -70,7 +63,10 @@ import { AnimationStatesTest } from "./examples/animation/animation-states-test"
 class ExampleModule { }
 
 function makeExampleModule(componentType) {
-    let imports: any[] = [ExampleModule];
+    let imports: any[] = [
+        NativeScriptAnimationsModule,
+        ExampleModule,
+    ];
     if (componentType.routes) {
         imports.push(NativeScriptRouterModule.forRoot(componentType.routes))
     }
@@ -83,20 +79,22 @@ function makeExampleModule(componentType) {
         entries = componentType.entries;
     }
     entries.push(componentType);
+
     let providers = [];
     if (componentType.providers) {
-        providers = componentType.providers;
+        providers = [componentType.providers];
     }
+
     @NgModule({
         bootstrap: [componentType],
-        imports: imports,
+        imports,
         entryComponents: entries,
         declarations: [
             ...entries,
             ...exports,
         ],
-        providers: providers,
-        exports: exports,
+        providers,
+        exports,
     })
     class ExampleModuleForComponent { }
 
@@ -112,7 +110,7 @@ const customPageFactoryProvider = {
     }
 };
 
-platformNativeScriptDynamic().bootstrapModule(makeExampleModule(RendererTest));
+// platformNativeScriptDynamic().bootstrapModule(makeExampleModule(RendererTest));
 // platformNativeScriptDynamic(undefined, [customPageFactoryProvider]).bootstrapModule(makeExampleModule(RendererTest));
 // platformNativeScriptDynamic().bootstrapModule(makeExampleModule(TabViewTest));
 // platformNativeScriptDynamic().bootstrapModule(makeExampleModule(Benchmark));
@@ -135,7 +133,7 @@ platformNativeScriptDynamic().bootstrapModule(makeExampleModule(RendererTest));
 // animations
 // platformNativeScriptDynamic().bootstrapModule(makeExampleModule(AnimationStatesTest));
 // platformNativeScriptDynamic().bootstrapModule(makeExampleModule(AnimationNgClassTest));
-// platformNativeScriptDynamic().bootstrapModule(makeExampleModule(AnimationKeyframesTest));
+platformNativeScriptDynamic().bootstrapModule(makeExampleModule(AnimationKeyframesTest));
 // platformNativeScriptDynamic().bootstrapModule(makeExampleModule(AnimationEnterLeaveTest));
 
 //Livesync test
