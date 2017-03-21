@@ -1,6 +1,6 @@
-import {Router} from '@angular/router';
+import {Router} from "@angular/router";
 import {Component, ElementRef} from "@angular/core";
-import {Location, LocationStrategy} from '@angular/common';
+import {Location, LocationStrategy} from "@angular/common";
 import {FirstComponent} from "./first.component";
 import {SecondComponent} from "./second.component";
 

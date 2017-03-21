@@ -1,4 +1,4 @@
-import { Router, ActivatedRoute } from '@angular/router';
+import { Router, ActivatedRoute } from "@angular/router";
 import { Component, Inject } from "@angular/core";
 import { RouterExtensions } from "nativescript-angular/router";
 import { HOOKS_LOG, BaseComponent } from "./base.component";
@@ -37,6 +37,6 @@ export class FirstComponent extends BaseComponent {
     }
 
     gotoSecondAndClearHistory() {
-        this.routerExtensions.navigateByUrl("/second/" + this.id, { clearHistory: true })
+        this.routerExtensions.navigateByUrl("/second/" + this.id, { clearHistory: true });
     }
 }

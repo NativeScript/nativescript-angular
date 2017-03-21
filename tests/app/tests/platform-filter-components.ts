@@ -1,4 +1,4 @@
-//make sure you import mocha-config before @angular/core
+// make sure you import mocha-config before @angular/core
 import { assert } from "./test-config";
 import { Component, ElementRef } from "@angular/core";
 import { dumpView, createDevice } from "./test-utils";
@@ -36,12 +36,16 @@ export class PlatformSpecificAttributeComponent {
     constructor(public elementRef: ElementRef) { }
 }
 
-describe('Platform filter directives', () => {
-    describe('on IOS device', () => {
+describe("Platform filter directives", () => {
+    describe("on IOS device", () => {
         let testApp: TestApp = null;
 
         before(() => {
-            return TestApp.create([{ provide: DEVICE, useValue: createDevice(platformNames.ios) }], [PlatformSpecificAttributeComponent, AndroidSpecificComponent, IosSpecificComponent]).then((app) => {
+            return TestApp.create([{ provide: DEVICE, useValue: createDevice(platformNames.ios) }], [
+                PlatformSpecificAttributeComponent,
+                AndroidSpecificComponent,
+                IosSpecificComponent
+            ]).then((app) => {
                 testApp = app;
             });
         });
@@ -75,11 +79,15 @@ describe('Platform filter directives', () => {
         });
     });
 
-    describe('on Android device', () => {
+    describe("on Android device", () => {
         let testApp: TestApp = null;
 
         before(() => {
-            return TestApp.create([{ provide: DEVICE, useValue: createDevice(platformNames.android) }], [AndroidSpecificComponent, IosSpecificComponent, PlatformSpecificAttributeComponent]).then((app) => {
+            return TestApp.create([{ provide: DEVICE, useValue: createDevice(platformNames.android) }], [
+                AndroidSpecificComponent,
+                IosSpecificComponent,
+                PlatformSpecificAttributeComponent
+            ]).then((app) => {
                 testApp = app;
             });
         });

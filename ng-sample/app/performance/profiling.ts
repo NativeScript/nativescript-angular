@@ -3,9 +3,9 @@ declare var CACurrentMediaTime: any;
 declare var __startCPUProfiler: any;
 declare var __stopCPUProfiler: any;
 
-export var ENABLE_PROFILING = true;
+export let ENABLE_PROFILING = true;
 
-var anyGlobal = <any>global;
+let anyGlobal = <any>global;
 
 export function time(): number {
     if (!ENABLE_PROFILING) {
@@ -14,8 +14,7 @@ export function time(): number {
 
     if (anyGlobal.android) {
         return java.lang.System.nanoTime() / 1000000; // 1 ms = 1000000 ns
-    }
-    else {
+    } else {
         return CACurrentMediaTime() * 1000;
     }
 }
@@ -35,15 +34,14 @@ export function start(name: string): void {
         return;
     }
 
-    var info: TimerInfo;
+    let info: TimerInfo;
     if (anyGlobal.timers.has(name)) {
         info = anyGlobal.timers.get(name);
-        if (info.currentStart != 0) {
+        if (info.currentStart !== 0) {
             throw new Error(`Timer already started: ${name}`);
         }
         info.currentStart = time();
-    }
-    else {
+    } else {
         info = {
             totalTime: 0,
             count: 0,
@@ -58,7 +56,7 @@ export function pause(name: string) {
         return;
     }
 
-    var info = pauseInternal(name);
+    let info = pauseInternal(name);
     console.log(`---- [${name}] PAUSE last: ${info.lastTime} total: ${info.totalTime} count: ${info.count}`);
 }
 
@@ -67,14 +65,14 @@ export function stop(name: string) {
         return;
     }
 
-    var info = pauseInternal(name);
+    let info = pauseInternal(name);
     console.log(`---- [${name}] STOP total: ${info.totalTime} count:${info.count}`);
 
     anyGlobal.timers.delete(name);
 }
 
 function pauseInternal(name: string): TimerInfo {
-    var info = anyGlobal.timers.get(name);
+    let info = anyGlobal.timers.get(name);
     if (!info) {
         throw new Error(`No timer started: ${name}`);
     }

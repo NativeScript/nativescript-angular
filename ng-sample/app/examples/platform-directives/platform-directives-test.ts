@@ -1,7 +1,7 @@
-import {Component} from '@angular/core';
+import {Component} from "@angular/core";
 
 @Component({
-    selector: 'action-bar-test',
+    selector: "action-bar-test",
     template: `
     <StackLayout>
         <android><Label text="This is Android specific content"></Label></android>
@@ -14,5 +14,4 @@ import {Component} from '@angular/core';
 })
 export class PlatfromDirectivesTest {
 }
-
 

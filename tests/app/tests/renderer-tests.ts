@@ -1,4 +1,4 @@
-//make sure you import mocha-config before @angular/core
+// make sure you import mocha-config before @angular/core
 import { assert } from "./test-config";
 import { Component, ElementRef, Renderer, NgZone } from "@angular/core";
 import { ProxyViewContainer } from "ui/proxy-view-container";
@@ -104,7 +104,7 @@ export class NgForLabel {
     }
 }
 
-describe('Renderer E2E', () => {
+describe("Renderer E2E", () => {
     let testApp: TestApp = null;
 
     before(() => {
@@ -144,7 +144,9 @@ describe('Renderer E2E', () => {
     it("projects content into components", () => {
         return testApp.loadComponent(ProjectionContainer).then((componentRef) => {
             const componentRoot = componentRef.instance.elementRef.nativeElement;
-            assert.equal("(ProxyViewContainer (GridLayout (ProxyViewContainer (StackLayout (Button)))))", dumpView(componentRoot));
+            assert.equal(
+                "(ProxyViewContainer (GridLayout (ProxyViewContainer (StackLayout (Button)))))",
+                 dumpView(componentRoot));
         });
     });
 
@@ -230,7 +232,9 @@ describe('Renderer E2E', () => {
         it("ngFor creates element for each item", () => {
             return testApp.loadComponent(NgForLabel).then((componentRef) => {
                 const componentRoot = componentRef.instance.elementRef.nativeElement;
-                assert.equal("(ProxyViewContainer (template), (Label[text=one]), (Label[text=two]), (Label[text=three]))", dumpView(componentRoot, true));
+                assert.equal(
+                    "(ProxyViewContainer (template), (Label[text=one]), (Label[text=two]), (Label[text=three]))",
+                    dumpView(componentRoot, true));
             });
         });
 
@@ -242,7 +246,9 @@ describe('Renderer E2E', () => {
                 component.items.splice(1, 1);
                 testApp.appRef.tick();
 
-                assert.equal("(ProxyViewContainer (template), (Label[text=one]), (Label[text=three]))", dumpView(componentRoot, true));
+                assert.equal(
+                    "(ProxyViewContainer (template), (Label[text=one]), (Label[text=three]))",
+                    dumpView(componentRoot, true));
             });
         });
 
@@ -254,13 +260,16 @@ describe('Renderer E2E', () => {
                 component.items.splice(1, 0, "new");
                 testApp.appRef.tick();
 
-                assert.equal("(ProxyViewContainer (template), (Label[text=one]), (Label[text=new]), (Label[text=two]), (Label[text=three]))", dumpView(componentRoot, true));
+                assert.equal(
+                    "(ProxyViewContainer (template), " +
+                    "(Label[text=one]), (Label[text=new]), (Label[text=two]), (Label[text=three]))",
+                    dumpView(componentRoot, true));
             });
         });
     });
 });
 
-describe('Renderer createElement', () => {
+describe("Renderer createElement", () => {
     let testApp: TestApp = null;
     let renderer: Renderer = null;
 
@@ -277,27 +286,27 @@ describe('Renderer createElement', () => {
 
     it("creates element from CamelCase", () => {
         const result = renderer.createElement(null, "StackLayout", null);
-        assert.instanceOf(result, StackLayout, "Renderer should create StackLayout form 'StackLayout'")
+        assert.instanceOf(result, StackLayout, "Renderer should create StackLayout form 'StackLayout'");
     });
 
     it("creates element from lowercase", () => {
         const result = renderer.createElement(null, "stacklayout", null);
-        assert.instanceOf(result, StackLayout, "Renderer should create StackLayout form 'stacklayout'")
+        assert.instanceOf(result, StackLayout, "Renderer should create StackLayout form 'stacklayout'");
     });
 
     it("creates element from kebab-case", () => {
         const result = renderer.createElement(null, "stack-layout", null);
-        assert.instanceOf(result, StackLayout, "Renderer should create StackLayout form 'stack-layout'")
+        assert.instanceOf(result, StackLayout, "Renderer should create StackLayout form 'stack-layout'");
     });
 
     it("creates ProxyViewContainer for unknownTag", () => {
         const result = renderer.createElement(null, "unknown-tag", null);
-        assert.instanceOf(result, ProxyViewContainer, "Renderer should create ProxyViewContainer form 'unknown-tag'")
+        assert.instanceOf(result, ProxyViewContainer, "Renderer should create ProxyViewContainer form 'unknown-tag'");
     });
 });
 
 
-describe('Renderer attach/detach', () => {
+describe("Renderer attach/detach", () => {
     let testApp: TestApp = null;
     let renderer: Renderer = null;
 
@@ -374,3 +383,4 @@ describe('Renderer attach/detach', () => {
         assert.equal(parent.content, button);
     });
 });
+

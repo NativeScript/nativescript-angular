@@ -1,4 +1,4 @@
-//make sure you import mocha-config before @angular/core
+// make sure you import mocha-config before @angular/core
 import {assert} from "./test-config";
 import {View} from "ui/core/view";
 import {ViewUtil} from "nativescript-angular/view-util";
@@ -23,19 +23,19 @@ class TestView extends View implements ViewExtensions {
 const iosDevice = createDevice(platformNames.ios);
 const androidDevice = createDevice(platformNames.android);
 
-describe('setting View properties', () => {
+describe("setting View properties", () => {
     let viewUtil: ViewUtil;
     before(() => {
         viewUtil = new ViewUtil(device);
     });
 
-    it('preserves string values', () => {
+    it("preserves string values", () => {
         let view = new TestView();
         viewUtil.setProperty(view, "stringValue", "blah");
         assert.equal("blah", view.stringValue);
     });
 
-    it('converts number values', () => {
+    it("converts number values", () => {
         let view = new TestView();
         viewUtil.setProperty(view, "numValue", "42");
         assert.strictEqual(42, view.numValue);
@@ -43,7 +43,7 @@ describe('setting View properties', () => {
         assert.strictEqual(0, view.numValue);
     });
 
-    it('converts boolean values', () => {
+    it("converts boolean values", () => {
         let view = new TestView();
         viewUtil.setProperty(view, "boolValue", "true");
         assert.strictEqual(true, view.boolValue);
@@ -51,19 +51,19 @@ describe('setting View properties', () => {
         assert.strictEqual(false, view.boolValue);
     });
 
-    it('sets style values', () => {
+    it("sets style values", () => {
         let view = new TestView();
         viewUtil.setProperty(view, "style", "color: red");
         assert.equal(Red, view.style.color.hex);
     });
 
-    it('doesn\'t convert blank strings', () => {
+    it("doesn\'t convert blank strings", () => {
         let view = new TestView();
         viewUtil.setProperty(view, "stringValue", "");
         assert.strictEqual("", view.stringValue);
     });
 
-    it('doesn\'t convert booleans', () => {
+    it("doesn\'t convert booleans", () => {
         let view = new TestView();
         viewUtil.setProperty(view, "boolValue", true);
         assert.strictEqual(true, view.boolValue);
@@ -71,44 +71,45 @@ describe('setting View properties', () => {
         assert.strictEqual(false, view.boolValue);
     });
 
-    it('preserves objects', () => {
+    it("preserves objects", () => {
         let value = { name: "Jim", age: 23 };
         let view = new TestView();
         viewUtil.setProperty(view, "anyValue", value);
         assert.deepEqual(value, view.anyValue);
     });
 
-    it('sets nested properties', () => {
+    it("sets nested properties", () => {
         let view = new TestView();
         viewUtil.setProperty(view, "nested.property", "blah");
         assert.strictEqual("blah", view.nested.property);
     });
 
-    it('sets ios property in ios', () => {
+    it("sets ios property in ios", () => {
         let view = new TestView();
         let testUtil = new ViewUtil(iosDevice);
         testUtil.setProperty(view, ":ios:anyValue", "blah");
         assert.strictEqual("blah", view.anyValue);
     });
 
-    it('doesn\'t set android property in ios', () => {
+    it("doesn\'t set android property in ios", () => {
         let view = new TestView();
         let testUtil = new ViewUtil(iosDevice);
         testUtil.setProperty(view, ":android:anyValue", "blah");
         assert.isUndefined(view.anyValue);
     });
 
-    it('sets android property in android', () => {
+    it("sets android property in android", () => {
         let view = new TestView();
         let testUtil = new ViewUtil(androidDevice);
         testUtil.setProperty(view, ":android:anyValue", "blah");
         assert.strictEqual("blah", view.anyValue);
     });
 
-    it('doesn\'t set ios property in android', () => {
+    it("doesn\'t set ios property in android", () => {
         let view = new TestView();
         let testUtil = new ViewUtil(androidDevice);
         testUtil.setProperty(view, ":ios:anyValue", "blah");
         assert.isUndefined(view.anyValue);
     });
 });
+

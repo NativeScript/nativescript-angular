@@ -68,7 +68,7 @@ function makeExampleModule(componentType) {
         ExampleModule,
     ];
     if (componentType.routes) {
-        imports.push(NativeScriptRouterModule.forRoot(componentType.routes))
+        imports.push(NativeScriptRouterModule.forRoot(componentType.routes));
     }
     let exports: any[] = [];
     if (componentType.exports) {
@@ -133,11 +133,11 @@ const customPageFactoryProvider = {
 // animations
 // platformNativeScriptDynamic().bootstrapModule(makeExampleModule(AnimationStatesTest));
 // platformNativeScriptDynamic().bootstrapModule(makeExampleModule(AnimationNgClassTest));
-platformNativeScriptDynamic().bootstrapModule(makeExampleModule(AnimationKeyframesTest));
-// platformNativeScriptDynamic().bootstrapModule(makeExampleModule(AnimationEnterLeaveTest));
+// platformNativeScriptDynamic().bootstrapModule(makeExampleModule(AnimationKeyframesTest));
+platformNativeScriptDynamic().bootstrapModule(makeExampleModule(AnimationEnterLeaveTest));
 
-//Livesync test
-var cachedUrl: string;
+// Livesync test
+let cachedUrl: string;
 onBeforeLivesync.subscribe((moduleRef) => {
     console.log("------- onBeforeLivesync");
     if (moduleRef) {
@@ -156,5 +156,5 @@ onAfterLivesync.subscribe((moduleRef) => {
     }
 });
 
-//platformNativeScriptDynamic().bootstrapModule(makeExampleModule(LivesyncApp));
+// platformNativeScriptDynamic().bootstrapModule(makeExampleModule(LivesyncApp));
 console.log("APP RESTART");

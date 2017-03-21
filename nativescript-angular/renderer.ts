@@ -10,14 +10,11 @@ import { View } from "tns-core-modules/ui/core/view";
 import { addCss } from "tns-core-modules/application";
 import { topmost } from "tns-core-modules/ui/frame";
 
-import { APP_ROOT_VIEW, DEVICE } from "./platform-providers";
+import { APP_ROOT_VIEW, DEVICE, getRootPage } from "./platform-providers";
 import { isBlank } from "./lang-facade";
 import { ViewUtil } from "./view-util";
 import { NgView } from "./element-registry";
 import { rendererLog as traceLog } from "./trace";
-import { escapeRegexSymbols } from "tns-core-modules/utils/utils";
-import { Device } from "tns-core-modules/platform";
-import { getRootPage } from "./platform-providers";
 
 // CONTENT_ATTR not exported from NativeScript_renderer - we need it for styles application.
 const COMPONENT_REGEX = /%COMP%/g;
