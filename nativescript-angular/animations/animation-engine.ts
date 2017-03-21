@@ -90,7 +90,7 @@ export class NativeScriptAnimationEngine extends DomAnimationEngine {
         // find all of the children that are currently animating and clear
         // them out by destroying each of them.
         let elms = [];
-        element._eachLayoutView(child => {
+        (<any>element)._eachChildView(child => {
             if (cssClasses(<NgView>child).get(MARKED_FOR_ANIMATION)) {
                 elms.push(child);
             }
