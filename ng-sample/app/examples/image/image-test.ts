@@ -1,13 +1,15 @@
-import {Component} from '@angular/core';
+import { Component } from "@angular/core";
 
 /* IMPORTANT
-In order to test out the full image example, to fix the App Transport Security error in iOS 9, you will need to follow this after adding the iOS platform:
+In order to test out the full image example,
+to fix the App Transport Security error in iOS 9,
+you will need to follow this after adding the iOS platform:
 
 https://blog.nraboy.com/2015/12/fix-ios-9-app-transport-security-issues-in-nativescript/
 */
 
 @Component({
-    selector: 'image-test',
+    selector: "image-test",
     template: `
     <StackLayout horizontalAlignment="center">
         <Image [src]="currentImage" width="300" height="300"></Image>
@@ -22,19 +24,19 @@ https://blog.nraboy.com/2015/12/fix-ios-9-app-transport-security-issues-in-nativ
     `
 })
 export class ImageTest {
-  
+
   public currentImage: string;
   private images: Array<string> = [
-    'res://300x300.jpg',
-    '~/examples/image/img/Default.png',
-    'http://www.codeproject.com/KB/mobile/883465/NativeScript.png'
+    "res://300x300.jpg",
+    "~/examples/image/img/Default.png",
+    "http://www.codeproject.com/KB/mobile/883465/NativeScript.png"
   ];
   private cnt: number = 0;
 
-  constructor() { 
+  constructor() {
     this.currentImage = this.images[this.cnt];
   }
-  
+
   changeImage(direction: number) {
     if (direction > 0) {
       this.cnt++;
@@ -50,12 +52,12 @@ export class ImageTest {
     }
     this.currentImage = this.images[this.cnt];
   }
-  
+
   addImage(e: any, name: string): void {
-    if (name.indexOf('http') === -1) {
+    if (name.indexOf("http") === -1) {
       alert(`Must be a valid url to an image starting with 'http'!`);
     } else {
-      this.images.push(name); 
+      this.images.push(name);
       this.currentImage = this.images[this.images.length - 1];
     }
   }

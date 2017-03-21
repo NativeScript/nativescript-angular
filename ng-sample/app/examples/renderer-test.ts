@@ -1,8 +1,8 @@
-import { Component, Directive, Host, ElementRef, Input } from '@angular/core';
-import { Observable } from 'data/observable';
-import { TextValueAccessor } from 'nativescript-angular/value-accessors/text-value-accessor';
-import { CheckedValueAccessor } from 'nativescript-angular/value-accessors/checked-value-accessor';
-import { SegmentedBarItem } from 'ui/segmented-bar';
+import { Component, Directive, Host, ElementRef, Input } from "@angular/core";
+import { Observable } from "data/observable";
+import { TextValueAccessor } from "nativescript-angular/value-accessors/text-value-accessor";
+import { CheckedValueAccessor } from "nativescript-angular/value-accessors/checked-value-accessor";
+import { SegmentedBarItem } from "ui/segmented-bar";
 
 
 function createTabItem(title: string) {
@@ -58,7 +58,7 @@ export class RendererTest {
     ];
 
     constructor() {
-        this.buttonText = "Save..."
+        this.buttonText = "Save...";
         this.showDetails = true;
         this.detailsText = "plain ng-if directive \ndetail 1-2-3...";
         this.moreDetailsText = "More details:";

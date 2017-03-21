@@ -1,7 +1,7 @@
 import {Component} from "@angular/core";
 
 // >> icon-font-sample
-@Component({ 
+@Component({
     // >> (hide)
     selector: "icon-font",
     templateUrl: "snippets/icon-font.component.html",
@@ -12,11 +12,11 @@ import {Component} from "@angular/core";
 export class IconFontComponent {
     public glyphs = new Array<{ icon: string, code: string }>();
     constructor() {
-        for (var charCode = 0xe903; charCode <= 0xeaea; charCode++) {
-            var glyph = {
+        for (let charCode = 0xe903; charCode <= 0xeaea; charCode++) {
+            let glyph = {
                 icon: String.fromCharCode(charCode),
                 code: charCode.toString(16)
-            }
+            };
             this.glyphs.push(glyph);
         }
     }

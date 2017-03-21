@@ -13,11 +13,6 @@ export class AnimationNgClassTest {
 
     onTap() {
         this.isOn = !this.isOn;
-        if (this.isOn) {
-            this.text = "Toggled";
-        }
-        else {
-            this.text = "Normal";
-        }
+        this.text = this.isOn ? "Toggled" : "Normal";
     }
 }

@@ -1,10 +1,10 @@
-import { Component, ViewContainerRef } from '@angular/core';
+import { Component, ViewContainerRef } from "@angular/core";
 import * as dialogs from "ui/dialogs";
 import { ModalDialogService, ModalDialogOptions } from "nativescript-angular/directives/dialogs";
 import { ModalContent} from "./modal-content";
 
 @Component({
-    selector: 'modal-test',
+    selector: "modal-test",
     template: `
     <GridLayout rows="*, auto">
         <StackLayout verticalAlignment="top" margin="12">
@@ -105,7 +105,9 @@ export class ModalTest {
             userName: "John",
             password: "Reese"
         }).then((loginResult) => {
-            this.result = loginResult.result ? ("user: " + loginResult.userName + " pass: " + loginResult.password) : "no result";
+            this.result = loginResult.result ?
+                ("user: " + loginResult.userName + " pass: " + loginResult.password) :
+                "no result";
         });
     }
 }

@@ -1,4 +1,13 @@
 {
+  "nativescript": {
+    "id": "org.nativescript.ngsample",
+    "tns-android": {
+      "version": "2.5.0"
+    },
+    "tns-ios": {
+      "version": "2.4.0"
+    }
+  },
   "name": "tns-template-hello-world",
   "main": "app.js",
   "version": "1.1.0",
@@ -46,15 +55,10 @@
     "nativescript-dev-typescript": "^0.3.1",
     "nativescript-dev-webpack": "0.0.13",
     "shelljs": "^0.7.0",
+    "tslint": "^4.5.1",
     "typescript": "~2.2.0"
   },
-  "nativescript": {
-    "id": "org.nativescript.ngsample",
-    "tns-android": {
-      "version": "2.5.0"
-    },
-    "tns-ios": {
-      "version": "2.4.0"
-    }
+  "scripts": {
+    "tslint": "tslint --project tsconfig.json --config tslint.json"
   }
 }

@@ -1,14 +1,14 @@
-import {Component, Input, WrappedValue, ChangeDetectionStrategy, AfterViewChecked, DoCheck} from '@angular/core';
-import {Label} from 'ui/label';
-import {ObservableArray} from 'data/observable-array';
+import {Component, Input, WrappedValue, ChangeDetectionStrategy, AfterViewChecked, DoCheck} from "@angular/core";
+import {Label} from "ui/label";
+import {ObservableArray} from "data/observable-array";
 
 class DataItem {
     constructor(public id: number, public name: string) { }
 }
 
 @Component({
-    selector: 'item-component',
-    styleUrls: ['examples/list/styles.css'],
+    selector: "item-component",
+    styleUrls: ["examples/list/styles.css"],
     changeDetection: ChangeDetectionStrategy.OnPush,
     template: `
         <StackLayout [class.odd]="odd" [class.even]="even">
@@ -34,8 +34,8 @@ export class ItemComponent implements AfterViewChecked, DoCheck {
 }
 
 @Component({
-    selector: 'list-test',
-    styleUrls: ['examples/list/styles.css'],
+    selector: "list-test",
+    styleUrls: ["examples/list/styles.css"],
     changeDetection: ChangeDetectionStrategy.OnPush,
     template: `
         <GridLayout rows="auto * auto">
@@ -58,7 +58,7 @@ export class ItemComponent implements AfterViewChecked, DoCheck {
     // IN-PLACE TEMPLATE
     // <template let-data="item" let-i="index" let-odd="odd" let-even="even">
     //     <StackLayout [class.odd]="odd" [class.even]="even">
-    //         <Label [text]='"index: " + i'></Label>                        
+    //         <Label [text]='"index: " + i'></Label>
     //         <Label [text]='"[" + data.id +"]" + data.name'></Label>
     //     </StackLayout>
     // </template>
@@ -70,7 +70,7 @@ export class ListTest {
     constructor() {
         this.myItems = [];
         this.counter = 0;
-        for (var i = 0; i < 100; i++) {
+        for (let i = 0; i < 100; i++) {
             this.myItems.push(new DataItem(i, "data item " + i));
             this.counter = i;
         }
@@ -87,5 +87,5 @@ export class ListTest {
 
     public static entries = [
         ItemComponent
-    ]
+    ];
 }

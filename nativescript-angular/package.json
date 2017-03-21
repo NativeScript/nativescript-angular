@@ -42,9 +42,9 @@
   "devDependencies": {
     "@angular/animations": "4.0.0-rc.5",
     "@angular/compiler-cli": "4.0.0-rc.5",
-    "codelyzer": "~2.0.0",
+    "codelyzer": "~3.0.0-beta.4",
     "tns-core-modules": "internal-preview",
-    "tslint": "~4.4.0",
+    "tslint": "~4.5.0",
     "typescript": "~2.2.1",
     "zone.js": "^0.8.2"
   },

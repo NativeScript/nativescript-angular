@@ -1,4 +1,4 @@
-import { Component, Input, Injectable } from '@angular/core';
+import { Component, Input, Injectable } from "@angular/core";
 
 class DataItem {
     private static count = 0;
@@ -9,7 +9,7 @@ class DataItem {
 }
 
 @Component({
-    selector: 'header-component',
+    selector: "header-component",
     template: `<Label [text]='"HEADER: " +data.name'></Label>`
 })
 export class HeaderComponent {
@@ -17,7 +17,7 @@ export class HeaderComponent {
 }
 
 @Component({
-    selector: 'item-component',
+    selector: "item-component",
     template: `<Label [text]='"ITEM: " + data.name'></Label>`
 })
 export class ItemComponent {
@@ -41,7 +41,7 @@ export class DataService {
 
 @Component({
     moduleId: module.id,
-    selector: 'list-test',
+    selector: "list-test",
     templateUrl: "./template-selector.component.html"
 })
 // >> list-view-template-selector
@@ -60,3 +60,4 @@ export class ListTemplateSelectorTest {
     }
 }
 // << list-view-template-selector
+

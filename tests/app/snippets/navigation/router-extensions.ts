@@ -1,11 +1,11 @@
 import { Component } from "@angular/core";
-import { RouterExtensions } from 'nativescript-angular/router';
+import { RouterExtensions } from "nativescript-angular/router";
 
 @Component({
     // ...
     // >> (hide)
     selector: "router-extensions-import",
-    templateUrl: 'snippets/navigation/router-extensions.html'
+    templateUrl: "snippets/navigation/router-extensions.html"
     // << (hide)
 })
 export class MyComponent {
@@ -47,7 +47,7 @@ export class MyComponent {
 @Component({
     // ...
     // >> (hide)
-    selector: 'component',
+    selector: "component",
     template: `<StackLayout><Label text="Main Page"></Label></StackLayout>`
     // << (hide)
 })
@@ -59,7 +59,7 @@ export class MainComponent {
 // << router-extensions-import
 
 @Component({
-    selector: 'application',
+    selector: "application",
     template: "<page-router-outlet></page-router-outlet>"
 })
 export class App { }

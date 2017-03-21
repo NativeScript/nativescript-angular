@@ -1,4 +1,4 @@
-import { Component, Input, ChangeDetectionStrategy, DoCheck } from '@angular/core';
+import { Component, Input, ChangeDetectionStrategy, DoCheck } from "@angular/core";
 
 class DataItem {
     private static count = 0;
@@ -9,8 +9,8 @@ class DataItem {
 }
 
 @Component({
-    selector: 'item-component',
-    styleUrls: ['examples/list/styles.css'],
+    selector: "item-component",
+    styleUrls: ["examples/list/styles.css"],
     changeDetection: ChangeDetectionStrategy.OnPush,
     template: `<Label class="item" [text]='"[" + data.id +"]" + data.name'></Label>`
 })
@@ -20,8 +20,8 @@ export class ItemComponent implements DoCheck {
 }
 
 @Component({
-    selector: 'header-component',
-    styleUrls: ['examples/list/styles.css'],
+    selector: "header-component",
+    styleUrls: ["examples/list/styles.css"],
     changeDetection: ChangeDetectionStrategy.OnPush,
     template: `<Label class="header" [text]='data.name'></Label>`
 })
@@ -31,14 +31,17 @@ export class HeaderComponent implements DoCheck {
 }
 
 @Component({
-    selector: 'list-test',
-    styleUrls: ['examples/list/styles.css'],
+    selector: "list-test",
+    styleUrls: ["examples/list/styles.css"],
     changeDetection: ChangeDetectionStrategy.OnPush,
     template: `
         <GridLayout rows="auto * auto">
             <Label text="ListView With Template Selector" class="list-title"></Label>
 
-            <ListView [items]="myItems" (itemTap)="onItemTap($event)" row="1" margin="10" [itemTemplateSelector]="templateSelector">
+            <ListView [items]="myItems"
+                (itemTap)="onItemTap($event)"
+                row="1" margin="10"
+                [itemTemplateSelector]="templateSelector">
                 
                 <template nsTemplateKey="header" let-item="item" let-i="index" let-odd="odd" let-even="even">
                     <header-component [data]="item"></header-component>

@@ -1,4 +1,4 @@
-//make sure you import mocha-config before @angular/core
+// make sure you import mocha-config before @angular/core
 import {assert} from "./test-config";
 import {View} from "ui/core/view";
 import {Slider} from "ui/slider";
@@ -13,7 +13,7 @@ import {DateValueAccessor} from "nativescript-angular/value-accessors/date-value
 import {TimeValueAccessor} from "nativescript-angular/value-accessors/time-value-accessor";
 import {SelectedIndexValueAccessor} from "nativescript-angular/value-accessors/selectedIndex-value-accessor";
 import {TextValueAccessor} from "nativescript-angular/value-accessors/text-value-accessor";
-import {ElementRef} from '@angular/core';
+import {ElementRef} from "@angular/core";
 
 class TestElementRef implements ElementRef {
     constructor(public nativeElement: View) {};
@@ -69,78 +69,78 @@ class TestTextValueAccessor extends TextValueAccessor {
 
 describe("two-way binding via ng-model", () => {
     it("converts strings to numbers", () => {
-        const accessor = new TestNumberValueAccessor()
+        const accessor = new TestNumberValueAccessor();
 
         accessor.writeValue(null);
-        assert.strictEqual(0, accessor.view.value, "default to 0 on empty")
+        assert.strictEqual(0, accessor.view.value, "default to 0 on empty");
 
         accessor.writeValue("42");
-        assert.strictEqual(42, accessor.view.value)
+        assert.strictEqual(42, accessor.view.value);
 
         accessor.writeValue("blah");
-        assert.strictEqual(0, accessor.view.value, "default to 0 on parse errors")
+        assert.strictEqual(0, accessor.view.value, "default to 0 on parse errors");
     });
 
     it("converts strings to bools", () => {
-        const accessor = new TestCheckedValueAccessor()
+        const accessor = new TestCheckedValueAccessor();
 
         accessor.writeValue(null);
-        assert.strictEqual(false, accessor.view.checked, "default to false on empty")
+        assert.strictEqual(false, accessor.view.checked, "default to false on empty");
 
         accessor.writeValue("true");
-        assert.strictEqual(true, accessor.view.checked)
+        assert.strictEqual(true, accessor.view.checked);
 
         accessor.writeValue("blah");
-        assert.strictEqual(false, accessor.view.checked, "default to false on parse errors")
+        assert.strictEqual(false, accessor.view.checked, "default to false on parse errors");
     });
 
     it("converts strings to dates", () => {
         const now = new Date();
-        const accessor = new TestDateValueAccessor()
+        const accessor = new TestDateValueAccessor();
 
         accessor.writeValue(null);
-        assert.equal(formatDate(now), formatDate(accessor.view.date), "default to now on empty")
+        assert.equal(formatDate(now), formatDate(accessor.view.date), "default to now on empty");
 
         accessor.writeValue("2010-03-17");
-        assert.equal(formatDate(new Date(2010, 2, 17)), formatDate(accessor.view.date))
+        assert.equal(formatDate(new Date(2010, 2, 17)), formatDate(accessor.view.date));
 
         accessor.writeValue("a fortnight ago");
-        assert.equal(formatDate(now), formatDate(accessor.view.date), "default to now on parse error")
+        assert.equal(formatDate(now), formatDate(accessor.view.date), "default to now on parse error");
     });
 
     it("converts strings to int selection", () => {
-        const accessor = new TestSelectedIndexValueAccessor()
+        const accessor = new TestSelectedIndexValueAccessor();
 
         accessor.writeValue(null);
         accessor.ngAfterViewInit();
-        assert.strictEqual(0, accessor.view.selectedIndex, "default to 0 on empty")
+        assert.strictEqual(0, accessor.view.selectedIndex, "default to 0 on empty");
 
         accessor.writeValue("3");
         accessor.ngAfterViewInit();
-        assert.strictEqual(3, accessor.view.selectedIndex)
+        assert.strictEqual(3, accessor.view.selectedIndex);
 
         accessor.writeValue("blah");
         accessor.ngAfterViewInit();
-        assert.strictEqual(0, accessor.view.selectedIndex, "default to 0 on parse errors")
+        assert.strictEqual(0, accessor.view.selectedIndex, "default to 0 on parse errors");
     });
 
     it("converts strings to times", () => {
         const now = new Date();
-        const accessor = new TestTimeValueAccessor()
+        const accessor = new TestTimeValueAccessor();
 
         accessor.writeValue(null);
-        assert.equal(formatTime(now), formatTime(accessor.view.time), "default to now on empty")
+        assert.equal(formatTime(now), formatTime(accessor.view.time), "default to now on empty");
 
         accessor.writeValue("2010/03/17 12:54");
-        assert.equal(formatTime(new Date(2010, 2, 17, 12, 54)), formatTime(accessor.view.time))
+        assert.equal(formatTime(new Date(2010, 2, 17, 12, 54)), formatTime(accessor.view.time));
 
         accessor.writeValue("three hours from now");
-        assert.equal(formatTime(now), formatTime(accessor.view.time), "default to now on parse error")
+        assert.equal(formatTime(now), formatTime(accessor.view.time), "default to now on parse error");
     });
 
     it("converts values to text", () => {
         const now = new Date();
-        const accessor = new TestTextValueAccessor()
+        const accessor = new TestTextValueAccessor();
 
         accessor.writeValue(null);
         assert.equal("", accessor.view.text);
@@ -151,7 +151,7 @@ describe("two-way binding via ng-model", () => {
         accessor.writeValue({toString: () => "stringified"});
         assert.equal("stringified", accessor.view.text);
     });
-})
+});
 
 function formatDate(date: Date) {
     return `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`;

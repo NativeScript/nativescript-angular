@@ -1,12 +1,12 @@
-import {StackLayout} from 'ui/layouts/stack-layout';
-import {Button} from 'ui/button';
-import {Label} from 'ui/label';
-import {Inject, Component, ApplicationRef} from '@angular/core';
-import * as profiling from './profiling';
+import {StackLayout} from "ui/layouts/stack-layout";
+import {Button} from "ui/button";
+import {Label} from "ui/label";
+import {Inject, Component, ApplicationRef} from "@angular/core";
+import * as profiling from "./profiling";
 
 @Component({
-    selector: 'tree',
-    inputs: ['data'],
+    selector: "tree",
+    inputs: ["data"],
     template:
     `<StackLayout>
           <Label [text]="data.value"></Label>
@@ -24,7 +24,7 @@ class TreeComponent {
 }
 
 @Component({
-    selector: 'benchmark',
+    selector: "benchmark",
     template: `
     <StackLayout>
         <Label text='Benchmark!' fontSize='20' verticalAlignment='center' padding='20'></Label>
@@ -40,8 +40,8 @@ class TreeComponent {
 export class Benchmark {
     private count: number = 0;
     private maxDepth: number = 10;
-    public initDataNg = new TreeNode('', null, null);
-    public initDataBaseline = new TreeNode('', null, null);
+    public initDataNg = new TreeNode("", null, null);
+    public initDataBaseline = new TreeNode("", null, null);
 
     constructor(private appRef: ApplicationRef) {
     }
@@ -53,20 +53,20 @@ export class Benchmark {
     public baselineTest(container: StackLayout) {
         this.createBaselineDom();
 
-        profiling.start('baseline');
+        profiling.start("baseline");
         this.renderBaselineNode(container, this.initDataBaseline);
-        profiling.stop('baseline');
+        profiling.stop("baseline");
 
         container.removeChildren();
     }
 
     public componentTest() {
-        this.initDataNg = new TreeNode('', null, null);
+        this.initDataNg = new TreeNode("", null, null);
         this.appRef.tick();
 
-        profiling.start('angular');
+        profiling.start("angular");
         this.createNgDom();
-        profiling.stop('angular');
+        profiling.stop("angular");
     }
 
     private renderBaselineNode(container: StackLayout, node: TreeNode) {
@@ -87,15 +87,15 @@ export class Benchmark {
     }
 
     private createBaselineDom() {
-        var values = this.count++ % 2 == 0 ? ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '*'] :
-            ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', '-'];
+        let values = this.count++ % 2 === 0 ? ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "*"] :
+            ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "-"];
         this.initDataBaseline = buildTree(this.maxDepth, values, 0);
         this.appRef.tick();
     }
 
     private createNgDom() {
-        var values = this.count++ % 2 == 0 ? ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '*'] :
-            ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', '-'];
+        let values = this.count++ % 2 === 0 ? ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "*"] :
+            ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "-"];
         this.initDataNg = buildTree(this.maxDepth, values, 0);
         this.appRef.tick();
     }
@@ -113,7 +113,7 @@ export class TreeNode {
     }
 }
 
-var nodes = 0;
+let nodes = 0;
 
 function buildTree(maxDepth, values, curDepth) {
     if (curDepth === 0) {
@@ -121,8 +121,16 @@ function buildTree(maxDepth, values, curDepth) {
     } else {
         nodes++;
     }
-    if (maxDepth === curDepth) return new TreeNode('', null, null);
-    let result = new TreeNode(values[curDepth], buildTree(maxDepth, values, curDepth + 1), buildTree(maxDepth, values, curDepth + 1));
+
+    if (maxDepth === curDepth) {
+        return new TreeNode("", null, null);
+    }
+
+    let result = new TreeNode(
+        values[curDepth],
+        buildTree(maxDepth, values, curDepth + 1),
+        buildTree(maxDepth, values, curDepth + 1));
+
     if (curDepth === 0) {
         console.log(`${nodes} nodes created.`);
     }

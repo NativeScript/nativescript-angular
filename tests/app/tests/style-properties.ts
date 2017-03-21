@@ -1,4 +1,4 @@
-//make sure you import mocha-config before @angular/core
+// make sure you import mocha-config before @angular/core
 import {assert} from "./test-config";
 import {TextField} from "ui/text-field";
 import {Red, Lime} from "color/known-colors";
@@ -37,4 +37,4 @@ describe("Setting style properties", () => {
         renderer.setStyle(element, "font", "12");
         assert.equal(12, element.style.fontSize);
     });
-})
+});

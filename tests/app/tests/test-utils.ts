@@ -1,9 +1,9 @@
-import {View} from "ui/core/view";
-import {TextBase} from "ui/text-base";
-import {Device} from "platform";
+import { View } from "ui/core/view";
+import { TextBase } from "ui/text-base";
+import { Device } from "platform";
 
 function getChildren(view: View): Array<View> {
-    var children: Array<View> = [];
+    let children: Array<View> = [];
     (<any>view).eachChildView((child) => {
         children.push(child);
         return true;
@@ -16,7 +16,7 @@ export function dumpView(view: View, verbose: boolean = false): string {
     let output = ["(", nodeName];
     if (verbose) {
         if (view instanceof TextBase) {
-            output.push("[text=", view.text, "]")
+            output.push("[text=", view.text, "]");
         }
     }
 
@@ -42,3 +42,4 @@ export function createDevice(os: string): Device {
         model: "test device"
     };
 }
+

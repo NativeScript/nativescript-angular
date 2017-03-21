@@ -1,4 +1,4 @@
-//make sure you import mocha-config before @angular/core
+// make sure you import mocha-config before @angular/core
 import { assert } from "./test-config";
 
 import { NavigationEnd, NavigationStart } from "@angular/router";
@@ -13,12 +13,17 @@ import { PageNavigationApp } from "../snippets/navigation/page-outlet";
 import { NavigationApp } from "../snippets/navigation/router-outlet";
 import { FirstComponent, SecondComponent } from "../snippets/navigation/navigation-common";
 import { routes } from "../snippets/navigation/app.routes";
-import { HeaderComponent, ItemComponent, DataService, ListTemplateSelectorTest } from "../snippets/list-view/template-selector.component";
+import {
+    HeaderComponent,
+    ItemComponent,
+    DataService,
+    ListTemplateSelectorTest,
+} from "../snippets/list-view/template-selector.component";
 
 import { device, platformNames } from "platform";
 const IS_IOS = (device.os === platformNames.ios);
 
-describe('Snippets', () => {
+describe("Snippets", () => {
     let testApp: TestApp = null;
 
     before(() => {
@@ -50,13 +55,13 @@ describe('Snippets', () => {
         testApp.loadComponent(IconFontComponent).then((componentRef) => {
             const componentInstance = componentRef.instance;
             assert.instanceOf(componentInstance, IconFontComponent);
-            //Works around a "dehydrated change detector" exception.
+            // Works around a "dehydrated change detector" exception.
             setTimeout(done, 10);
         });
     });
 });
 
-describe('Snippets Navigation', () => {
+describe("Snippets Navigation", () => {
     let runningApp: any;
     let subscription: Subscription;
 
@@ -91,7 +96,12 @@ describe('Snippets Navigation', () => {
     });
 
     it("page-router-outlet app", (done) => {
-        bootstrapTestApp(PageNavigationApp, [], routes, [PageNavigationApp, FirstComponent, SecondComponent]).then((app) => {
+        bootstrapTestApp(PageNavigationApp, [], routes, [
+            PageNavigationApp,
+            FirstComponent,
+            SecondComponent
+        ]).then((app) => {
+
             console.log("PageNavigationApp instance: " + app);
             runningApp = app;
 
@@ -109,7 +119,7 @@ describe('Snippets Navigation', () => {
     });
 });
 
-describe('Snippets ListView', () => {
+describe("Snippets ListView", () => {
     let runningApp: any;
 
     const cleanup = () => {
@@ -122,7 +132,15 @@ describe('Snippets ListView', () => {
     after(cleanup);
 
     it("template selector", (done) => {
-        bootstrapTestApp(ListTemplateSelectorTest, [DataService], null, [HeaderComponent, ItemComponent, ListTemplateSelectorTest])
+        bootstrapTestApp(
+            ListTemplateSelectorTest,
+            [DataService],
+            null,
+            [
+                HeaderComponent,
+                ItemComponent,
+                ListTemplateSelectorTest
+            ])
             .then((app) => {
                 setTimeout(() => {
                     cleanup();
@@ -132,3 +150,4 @@ describe('Snippets ListView', () => {
             .catch(err => done(err));
     });
 });
+

@@ -1,9 +1,9 @@
 import { Component, OnInit, OnDestroy } from "@angular/core";
-import { ActivatedRoute, Router } from '@angular/router';
-import { Location } from '@angular/common';
+import { ActivatedRoute, Router } from "@angular/router";
+import { Location } from "@angular/common";
 import { Page } from "ui/page";
 import { Observable } from "rxjs/Observable";
-import 'rxjs/add/operator/map';
+import "rxjs/add/operator/map";
 
 @Component({
     selector: "first",
@@ -32,9 +32,8 @@ class FirstComponent implements OnInit, OnDestroy {
 }
 
 
-
 @Component({
-    selector: 'master',
+    selector: "master",
     styleUrls: ["examples/router/styles.css"],
     template: `
     <StackLayout class="master">
@@ -53,7 +52,7 @@ class MasterComponent {
 }
 
 @Component({
-    selector: 'detail',
+    selector: "detail",
     styleUrls: ["examples/router/styles.css"],
     template: `
     <StackLayout class="detail">
@@ -84,7 +83,10 @@ class DetailComponent {
 
         <StackLayout class="nav">
             <Button class="link" text="< BACK" (tap)="goBack()"></Button>
-            <Button class="link" [text]="'Second ' + (nextDepth$ | async) + ' >'" [nsRouterLink]="['/second', (nextDepth$ | async)]"></Button>
+            <Button class="link"
+                [text]="'Second ' + (nextDepth$ | async) + ' >'"
+                [nsRouterLink]="['/second', (nextDepth$ | async)]">
+            </Button>
         </StackLayout>
 
         <router-outlet></router-outlet>
@@ -115,7 +117,7 @@ class SecondComponent implements OnInit, OnDestroy {
 
 
 @Component({
-    selector: 'navigation-test',
+    selector: "navigation-test",
     template: `<page-router-outlet></page-router-outlet>`
 })
 export class PageRouterOutletNestedAppComponent {
@@ -135,11 +137,11 @@ export class PageRouterOutletNestedAppComponent {
         SecondComponent,
         MasterComponent,
         DetailComponent
-    ]
+    ];
 
     constructor(router: Router, private location: Location) {
         router.events.subscribe((e) => {
             console.log("--EVENT-->: " + e.toString());
-        })
+        });
     }
 }

@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy } from "@angular/core";
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute } from "@angular/router";
 import "rxjs/add/operator/map";
 
 @Component({
@@ -44,14 +44,17 @@ class SecondComponent implements OnInit, OnDestroy {
 }
 
 @Component({
-    selector: 'navigation-test',
+    selector: "navigation-test",
     styleUrls: ["examples/router/styles.css"],
     template: `
         <StackLayout>
             <StackLayout class="nav">
                 <Button text="First" nsRouterLinkActive="active" nsRouterLink="/first"></Button>
-                <Button text="Second(1)" nsRouterLinkActive="active" nsRouterLink="/second/1"></Button>           <!-- Both work -->
-                <Button text="Second(2)" nsRouterLinkActive="active" [nsRouterLink]="['/second', '2' ]"></Button> <!-- Both work -->
+                <Button text="Second(1)" nsRouterLinkActive="active" nsRouterLink="/second/1"></Button>           
+                <Button text="Second(2)"
+                    nsRouterLinkActive="active"
+                    [nsRouterLink]="['/second', '2' ]">
+                </Button>
             </StackLayout>
             
             <router-outlet></router-outlet>
@@ -70,5 +73,4 @@ export class RouterOutletAppComponent {
         SecondComponent,
     ];
 }
-
 
