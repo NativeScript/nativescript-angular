@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy, Injectable } from "@angular/core";
-import { Router } from '@angular/router';
+import { Router } from "@angular/router";
 import { RouterExtensions } from "nativescript-angular/router";
 import { NSLocationStrategy } from "nativescript-angular/router/ns-location-strategy";
 import { BehaviorSubject } from "rxjs/BehaviorSubject";
@@ -26,7 +26,7 @@ class LocationLogService {
 }
 
 @Component({
-    selector: 'location-log',
+    selector: "location-log",
     styleUrls: ["examples/router/styles.css"],
     template: `
     <GridLayout rows="auto *" columns="*">
@@ -34,11 +34,17 @@ class LocationLogService {
             [text]="service.showStack ? 'show events' : 'show stack'" 
             (tap)="service.showStack=!service.showStack"></button>
 
-        <ListView row="1" [items]="service.showStack ? (service.locationStack$ | async) : (service.routerEvents$ | async)" margin="10">
+        <ListView row="1"
+            [items]="service.showStack ?
+                (service.locationStack$ | async) :
+                (service.routerEvents$ | async)"
+                margin="10">
+
             <template let-data="item" let-odd="odd" let-even="even">
                 <Label [text]="data" textWrap="true"
                     [class.odd]="odd" [class.even]="even"></Label>
             </template>
+
         </ListView>
     </GridLayout>
   `
@@ -84,7 +90,7 @@ class ThirdComponent implements OnInit, OnDestroy {
 }
 
 @Component({
-    selector: 'navigation-test',
+    selector: "navigation-test",
     providers: [LocationLogService],
     template: `<page-router-outlet></page-router-outlet>`
 })
@@ -101,5 +107,5 @@ export class ClearHistoryAppComponent {
         SecondComponent,
         ThirdComponent,
         LocationLog,
-    ]
+    ];
 }

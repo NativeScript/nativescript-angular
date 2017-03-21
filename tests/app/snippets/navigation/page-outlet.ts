@@ -1,15 +1,17 @@
 import { TestApp, registerTestApp } from "../../tests/test-app";
-import { ApplicationRef } from '@angular/core';
+import { ApplicationRef } from "@angular/core";
 import { Router, NavigationStart, NavigationEnd } from "@angular/router";
 // >> page-outlet-example
-import { platformNativeScriptDynamic, NativeScriptModule } from "nativescript-angular/platform";
-import { Component, NgModule } from '@angular/core';
+import { Component, NgModule } from "@angular/core";
+import { platformNativeScriptDynamic } from "nativescript-angular/platform";
+import { NativeScriptModule } from "nativescript-angular/nativescript.module";
 import { NativeScriptRouterModule } from "nativescript-angular/router";
+
 import { routes } from "./app.routes";
 import { FirstComponent, SecondComponent } from "./navigation-common";
 
 @Component({
-    selector: 'page-navigation-test',
+    selector: "page-navigation-test",
     template: `<page-router-outlet></page-router-outlet>`
 })
 export class PageNavigationApp {
@@ -28,7 +30,7 @@ export class PageNavigationApp {
                     this.startEvent = e;
                 }
                 if (e instanceof NavigationEnd) {
-                    this.endEvent = e
+                    this.endEvent = e;
                     resolve();
                 }
             });

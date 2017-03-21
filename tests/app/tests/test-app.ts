@@ -6,13 +6,13 @@ import {
     ViewContainerRef, NgZone, NgModule,
 } from "@angular/core";
 
-import {GridLayout} from "ui/layouts/grid-layout";
-import {LayoutBase} from "ui/layouts/layout-base";
-import {topmost} from 'ui/frame';
-import {APP_ROOT_VIEW} from "nativescript-angular/platform-providers";
+import { GridLayout } from "ui/layouts/grid-layout";
+import { LayoutBase } from "ui/layouts/layout-base";
+import { topmost } from "ui/frame";
+import { APP_ROOT_VIEW } from "nativescript-angular/platform-providers";
 
 @Component({
-    selector: 'my-app',
+    selector: "my-app",
     template: `<StackLayout #loadSite></StackLayout>`
 })
 export class TestApp {
@@ -30,7 +30,7 @@ export class TestApp {
     }
 
     public loadComponent(componentType: Type<any>): Promise<ComponentRef<any>> {
-        const factory = this.resolver.resolveComponentFactory(componentType)
+        const factory = this.resolver.resolveComponentFactory(componentType);
         const componentRef = this.containerRef.createComponent(
             factory, this.containerRef.length, this.containerRef.parentInjector);
         this._pendingDispose.push(componentRef);
@@ -68,7 +68,13 @@ export function registerTestApp(appType, appInstance, appRef) {
     });
 }
 
-export function bootstrapTestApp<T>(appComponentType: new (...args) => T, providers: any[] = [], routes: any[] = [], components: any[] = [], directives: any[] = []): Promise<T> {
+export function bootstrapTestApp<T>(
+    appComponentType: new (...args) => T,
+    providers: any[] = [],
+    routes: any[] = [],
+    components: any[] = [],
+    directives: any[] = []
+): Promise<T> {
     const page = topmost().currentPage;
     const rootLayout = <LayoutBase>page.content;
     const viewRoot = new GridLayout();
@@ -116,12 +122,12 @@ export function bootstrapTestApp<T>(appComponentType: new (...args) => T, provid
         public static viewRoot = viewRoot;
         public static container = rootLayout;
     }
-    //app registers with the module type via static fields on start
+    // app registers with the module type via static fields on start
     (<any>appComponentType).moduleType = TestAppModule;
 
     return platform.bootstrapModule(TestAppModule).then(moduleRef => {
-        //app component constructor has run and we should have a
-        //registered component instance.
+        // app component constructor has run and we should have a
+        // registered component instance.
         return (<any>TestAppModule).appInstance;
     });
 }
@@ -133,7 +139,7 @@ export function destroyTestApp(app: any) {
 
     const entry = runningApps.get(app);
     entry.container.removeChild(entry.appRoot);
-    //TODO: App disposal not doing anything useful anymore. Get rid of it?
-    //entry.appRef.dispose();
+    // TODO: App disposal not doing anything useful anymore. Get rid of it?
+    // entry.appRef.dispose();
     runningApps.delete(app);
 }

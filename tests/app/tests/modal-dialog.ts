@@ -1,4 +1,4 @@
-//make sure you import mocha-config before @angular/core
+// make sure you import mocha-config before @angular/core
 import { assert } from "./test-config";
 import { TestApp } from "./test-app";
 import { Component, ViewContainerRef } from "@angular/core";
@@ -46,7 +46,7 @@ export class SuccessComponent {
     }
 }
 
-describe('modal-dialog', () => {
+describe("modal-dialog", () => {
     let testApp: TestApp = null;
 
     before((done) => {
@@ -77,7 +77,9 @@ describe('modal-dialog', () => {
         testApp.loadComponent(FailComponent)
             .then((ref) => {
                 const service = <ModalDialogService>ref.instance.service;
-                assert.throws(() => service.showModal(ModalComponent, {}), "No viewContainerRef: Make sure you pass viewContainerRef in ModalDialogOptions.");
+                assert.throws(() => service.showModal(ModalComponent, {}),
+                              "No viewContainerRef: Make sure you pass viewContainerRef in ModalDialogOptions."
+                             );
             }).then(() => done(), err => done(err));
     });
 
