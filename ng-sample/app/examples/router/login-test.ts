@@ -1,5 +1,5 @@
 import { Component, Injectable } from "@angular/core";
-import { CanActivate, Resolve, ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
+import { CanActivate, Resolve, ActivatedRouteSnapshot, RouterStateSnapshot } from "@angular/router";
 import { RouterExtensions, PageRoute } from "nativescript-angular/router";
 import * as appSettings from "application-settings";
 import { Observable } from "rxjs/Observable";
@@ -40,7 +40,7 @@ class LoginService {
 
 
 @Component({
-    selector: 'login',
+    selector: "login",
     styleUrls: ["examples/router/styles.css"],
     template: `
     <StackLayout>
@@ -69,11 +69,11 @@ class LoginComponent {
 
 
 export interface ResolvedData {
-    id: number
+    id: number;
 }
 
 @Component({
-    selector: 'main',
+    selector: "main",
     styleUrls: ["examples/router/styles.css"],
     template: `
     <StackLayout>
@@ -102,13 +102,13 @@ class MainComponent {
     }
 
     onResolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
-        console.log("MainComponent.onResolve()")
+        console.log("MainComponent.onResolve()");
         return true;
     }
 }
 
 @Component({
-    selector: 'inner',
+    selector: "inner",
     styleUrls: ["examples/router/styles.css"],
     template: `
     <StackLayout>
@@ -145,8 +145,7 @@ class AuthGuard implements CanActivate {
         if (this.loginService.isLogged) {
             console.log("AuthGuard: authenticated");
             return true;
-        }
-        else {
+        } else {
             console.log("AuthGuard: redirecting to login");
             this.nav.navigate(["/login"]);
             return false;
@@ -157,15 +156,16 @@ class AuthGuard implements CanActivate {
 @Injectable()
 class ResolveGuard implements Resolve<ResolvedData> {
     static counter = 0;
-    resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<ResolvedData> | Promise<ResolvedData> | ResolvedData {
-        const result: ResolvedData = { id: ResolveGuard.counter++ }
+    resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot):
+            Observable<ResolvedData> | Promise<ResolvedData> | ResolvedData {
+        const result: ResolvedData = { id: ResolveGuard.counter++ };
         console.log(`ResolveGuard: Fetching new data. Result: ${JSON.stringify(result)} `);
         return result;
     }
 }
 
 @Component({
-    selector: 'navigation-test',
+    selector: "navigation-test",
     template: `<page-router-outlet></page-router-outlet>`
 })
 export class LoginAppComponent {

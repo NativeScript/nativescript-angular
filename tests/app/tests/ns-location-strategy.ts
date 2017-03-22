@@ -1,4 +1,4 @@
-//make sure you import mocha-config before @angular/core
+// make sure you import mocha-config before @angular/core
 import { assert } from "./test-config";
 import { NSLocationStrategy, LocationState } from "nativescript-angular/router/ns-location-strategy";
 import { Frame, BackstackEntry, NavigationEntry } from "ui/frame";
@@ -60,7 +60,10 @@ function assertStatesEqual(actual: Array<LocationState>, expected: Array<Locatio
     for (let i = 0; i < actual.length; i++) {
         assert.deepEqual(
             actual[i], expected[i],
-            `State[${i}] does not match!\n  actual: ${JSON.stringify(actual[i])}\nexpected: ${JSON.stringify(expected[i])}`);
+            `State[${i}] does not match!
+    actual: ${JSON.stringify(actual[i])}
+    expected: ${JSON.stringify(expected[i])}
+            `);
     }
 }
 
@@ -85,7 +88,7 @@ function simulatePageBack(strategy: NSLocationStrategy) {
     strategy._finishBackPageNavigation();
 }
 
-describe('NSLocationStrategy', () => {
+describe("NSLocationStrategy", () => {
 
     it("initial path() value", () => {
         const strategy = new NSLocationStrategy(new FakeFrame());

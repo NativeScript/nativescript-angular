@@ -1,3 +1,5 @@
+/// <reference path="./iterable.d.ts" />
+
 import "globals";
 import "./zone-js/dist/zone-nativescript";
 
@@ -6,14 +8,13 @@ import "./polyfills/array";
 import "./polyfills/console";
 
 import { CommonModule } from "@angular/common";
-import { NativeScriptRootRenderer, NativeScriptRenderer } from "./renderer";
+import { NativeScriptRendererFactory } from "./renderer";
 import { DetachedLoader } from "./common/detached-loader";
 import { ModalDialogHost, ModalDialogService } from "./directives/dialogs";
 import {
     ApplicationModule,
     ErrorHandler,
-    Renderer,
-    RootRenderer,
+    RendererFactory2,
     NgModule, NO_ERRORS_SCHEMA,
 } from "@angular/core";
 import {
@@ -38,11 +39,8 @@ export function errorHandlerFactory() {
         defaultFrameProvider,
         defaultPageProvider,
         defaultDeviceProvider,
-
-        NativeScriptRootRenderer,
-        { provide: RootRenderer, useClass: NativeScriptRootRenderer },
-        NativeScriptRenderer,
-        { provide: Renderer, useClass: NativeScriptRenderer },
+        NativeScriptRendererFactory,
+        { provide: RendererFactory2, useClass: NativeScriptRendererFactory },
         ModalDialogService
     ],
     entryComponents: [

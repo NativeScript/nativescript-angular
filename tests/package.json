@@ -1,70 +1,72 @@
 {
-    "nativescript": {
-        "id": "org.nativescript.ngtests",
-        "tns-android": {
-            "version": "2.4.1"
-        },
-        "tns-ios": {
-            "version": "2.4.0"
-        }
+  "nativescript": {
+    "id": "org.nativescript.ngtests",
+    "tns-android": {
+      "version": "2.5.0"
     },
-    "name": "ngtests",
-    "main": "app.js",
-    "version": "1.0.0",
-    "author": "Telerik <support@telerik.com>",
-    "description": "Angular tests",
-    "license": "BSD",
-    "keywords": [
-        "telerik",
-        "mobile",
-        "angular",
-        "nativescript",
-        "{N}",
-        "tns",
-        "appbuilder",
-        "template"
-    ],
-    "homepage": "http://nativescript.org",
-    "dependencies": {
-        "nativescript-unit-test-runner": "^0.3.4",
-        "tns-core-modules": "~2.4.0",
-        "nativescript-angular": "file:../nativescript-angular",
-        "@angular/core": "~2.4.3",
-        "@angular/common": "~2.4.3",
-        "@angular/compiler": "~2.4.3",
-        "@angular/http": "~2.4.3",
-        "@angular/platform-browser": "~2.4.3",
-        "@angular/platform-browser-dynamic": "~2.4.3",
-        "@angular/router": "~3.4.3",
-        "rxjs": "~5.0.1"
-    },
-    "devDependencies": {
-        "zone.js": "^0.7.2",
-        "babel-traverse": "6.8.0",
-        "babel-types": "6.8.1",
-        "babylon": "6.8.0",
-        "chai": "^3.5.0",
-        "chai-as-promised": "^5.3.0",
-        "filewalker": "0.1.2",
-        "grunt-cli": "^1.2.0",
-        "karma": "^0.13.19",
-        "karma-chai": "^0.1.0",
-        "karma-mocha": "^0.2.1",
-        "karma-mocha-reporter": "^1.2.0",
-        "karma-nativescript-launcher": "^0.4.0",
-        "lazy": "1.0.11",
-        "mocha": "^2.4.5",
-        "nativescript-dev-appium": "0.0.14",
-        "nativescript-dev-typescript": "^0.3.1",
-        "typescript": "~2.1.0",
-        "socket.io": "1.4.8",
-        "socket.io-client": "1.4.8",
-        "wd": "0.4.0"
-    },
-    "scripts": {
-        "updateTests": "grunt updateTests",
-        "appium-android": "tns build android && npm run run-appium-android",
-        "run-appium-android": "nativescript-dev-appium android",
-        "appium-ios-simulator": "tns build ios && nativescript-dev-appium ios-simulator"
+    "tns-ios": {
+      "version": "2.5.0"
     }
+  },
+  "name": "ngtests",
+  "main": "app.js",
+  "version": "1.0.0",
+  "author": "Telerik <support@telerik.com>",
+  "description": "Angular tests",
+  "license": "BSD",
+  "keywords": [
+    "telerik",
+    "mobile",
+    "angular",
+    "nativescript",
+    "{N}",
+    "tns",
+    "appbuilder",
+    "template"
+  ],
+  "homepage": "http://nativescript.org",
+  "dependencies": {
+    "@angular/common": "4.0.0-rc.5",
+    "@angular/compiler": "4.0.0-rc.5",
+    "@angular/core": "4.0.0-rc.5",
+    "@angular/http": "4.0.0-rc.5",
+    "@angular/platform-browser": "4.0.0-rc.5",
+    "@angular/platform-browser-dynamic": "4.0.0-rc.5",
+    "@angular/router": "4.0.0-rc.5",
+    "nativescript-angular": "internal-preview",
+    "nativescript-unit-test-runner": "^0.3.4",
+    "rxjs": "~5.0.1",
+    "zone.js": "^0.8.2",
+    "tns-core-modules": "~2.5.0"
+  },
+  "devDependencies": {
+    "babel-traverse": "6.8.0",
+    "babel-types": "6.8.1",
+    "babylon": "6.8.0",
+    "chai": "^3.5.0",
+    "chai-as-promised": "^5.3.0",
+    "filewalker": "0.1.2",
+    "grunt-cli": "^1.2.0",
+    "karma": "^0.13.19",
+    "karma-chai": "^0.1.0",
+    "karma-mocha": "^0.2.1",
+    "karma-mocha-reporter": "^1.2.0",
+    "karma-nativescript-launcher": "^0.4.0",
+    "lazy": "1.0.11",
+    "mocha": "^2.4.5",
+    "nativescript-dev-appium": "0.0.14",
+    "nativescript-dev-typescript": "^0.3.1",
+    "socket.io": "1.4.8",
+    "socket.io-client": "1.4.8",
+    "tslint": "^4.5.1",
+    "typescript": "~2.1.0",
+    "wd": "0.4.0"
+  },
+  "scripts": {
+    "updateTests": "grunt updateTests",
+    "appium-android": "tns build android && npm run run-appium-android",
+    "run-appium-android": "nativescript-dev-appium android",
+    "appium-ios-simulator": "tns build ios && nativescript-dev-appium ios-simulator",
+    "tslint": "tslint --project tsconfig.json --config tslint.json"
+  }
 }

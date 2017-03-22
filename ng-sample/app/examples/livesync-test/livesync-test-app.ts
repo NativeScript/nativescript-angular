@@ -4,7 +4,7 @@ import {FirstComponent} from "./first/first.component";
 import {SecondComponent} from "./second/second.component";
 
 @Component({
-    selector: 'livesync-app-test',
+    selector: "livesync-app-test",
     template: `<page-router-outlet></page-router-outlet>`
 })
 export class LivesyncApp {

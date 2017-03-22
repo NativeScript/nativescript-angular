@@ -1,6 +1,6 @@
 import {
     Attribute, ComponentFactory, ComponentRef, Directive,
-    ReflectiveInjector, ResolvedReflectiveProvider, ViewContainerRef,
+    ViewContainerRef,
     Inject, ComponentFactoryResolver, Injector
 } from "@angular/core";
 import { isPresent } from "../lang-facade";
@@ -68,7 +68,9 @@ export class PageRouterOutlet { // tslint:disable-line:directive-class-suffix
 
     public outletMap: RouterOutletMap;
 
-    get locationInjector(): Injector { return this.containerRef.injector; }
+    /** @deprecated from Angular since v4 */
+    get locationInjector(): Injector { return this.location.injector; }
+    /** @deprecated from Angular since v4 */
     get locationFactoryResolver(): ComponentFactoryResolver { return this.resolver; }
 
     get isActivated(): boolean {
@@ -92,7 +94,7 @@ export class PageRouterOutlet { // tslint:disable-line:directive-class-suffix
 
     constructor(
         parentOutletMap: RouterOutletMap,
-        private containerRef: ViewContainerRef,
+        private location: ViewContainerRef,
         @Attribute("name") name: string,
         private locationStrategy: NSLocationStrategy,
         private componentFactoryResolver: ComponentFactoryResolver,
@@ -145,37 +147,38 @@ export class PageRouterOutlet { // tslint:disable-line:directive-class-suffix
      * Called by the Router to instantiate a new component during the commit phase of a navigation.
      * This method in turn is responsible for calling the `routerOnActivate` hook of its child.
      */
-    activate(
-        activatedRoute: ActivatedRoute, resolver: ComponentFactoryResolver, injector: Injector,
-        providers: ResolvedReflectiveProvider[], outletMap: RouterOutletMap): void {
+    activateWith(
+        activatedRoute: ActivatedRoute, resolver: ComponentFactoryResolver|null,
+        outletMap: RouterOutletMap): void {
         this.outletMap = outletMap;
         this.currentActivatedRoute = activatedRoute;
+
+        resolver = resolver || this.resolver;
 
         if (this.locationStrategy._isPageNavigatingBack()) {
             this.activateOnGoBack(activatedRoute, outletMap);
         } else {
-            this.activateOnGoForward(activatedRoute, providers, outletMap, resolver, injector);
+            this.activateOnGoForward(activatedRoute, outletMap, resolver);
         }
     }
 
     private activateOnGoForward(
         activatedRoute: ActivatedRoute,
-        providers: ResolvedReflectiveProvider[],
         outletMap: RouterOutletMap,
-        loadedResolver: ComponentFactoryResolver,
-        injector: Injector): void {
+        loadedResolver: ComponentFactoryResolver): void {
         const factory = this.getComponentFactory(activatedRoute, loadedResolver);
 
         const pageRoute = new PageRoute(activatedRoute);
-        providers = [...providers, ...ReflectiveInjector.resolve(
-            [{ provide: PageRoute, useValue: pageRoute }])];
+        const inj = new OutletInjector(activatedRoute, outletMap, this.location.injector);
 
         if (this.isInitialPage) {
             log("PageRouterOutlet.activate() initial page - just load component");
             this.isInitialPage = false;
-            const inj = ReflectiveInjector.fromResolvedProviders(providers, injector);
-            this.currentActivatedComp = this.containerRef.createComponent(
-                factory, this.containerRef.length, inj, []);
+            this.currentActivatedComp = this.location.createComponent(
+                factory, this.location.length, inj, []);
+
+            this.currentActivatedComp.changeDetectorRef.detectChanges();
+
             this.refCache.push(this.currentActivatedComp, pageRoute, outletMap, null);
 
         } else {
@@ -186,15 +189,13 @@ export class PageRouterOutlet { // tslint:disable-line:directive-class-suffix
                 isNavigation: true,
                 componentType: factory.componentType
             });
-            const pageResolvedProvider = ReflectiveInjector.resolve([
-                { provide: Page, useValue: page }
-            ]);
-            const childInjector = ReflectiveInjector.fromResolvedProviders(
-                [...providers, ...pageResolvedProvider], injector);
-            const loaderRef = this.containerRef.createComponent(
-                this.detachedLoaderFactory, this.containerRef.length, childInjector, []);
+            const loaderRef = this.location.createComponent(
+                this.detachedLoaderFactory, this.location.length, inj, []);
+            loaderRef.changeDetectorRef.detectChanges();
 
             this.currentActivatedComp = loaderRef.instance.loadWithFactory(factory);
+            this.currentActivatedComp.changeDetectorRef.detectChanges();
+
             this.loadComponentInPage(page, this.currentActivatedComp);
             this.refCache.push(this.currentActivatedComp, pageRoute, outletMap, loaderRef);
         }
@@ -266,6 +267,23 @@ export class PageRouterOutlet { // tslint:disable-line:directive-class-suffix
         }
 
         return factory;
+    }
+}
+
+class OutletInjector implements Injector {
+    constructor(
+        private route: ActivatedRoute, private map: RouterOutletMap, private parent: Injector) { }
+
+    get(token: any, notFoundValue?: any): any {
+        if (token === ActivatedRoute) {
+            return this.route;
+        }
+
+        if (token === RouterOutletMap) {
+            return this.map;
+        }
+
+        return this.parent.get(token, notFoundValue);
     }
 }
 

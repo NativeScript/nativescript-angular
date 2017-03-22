@@ -1,12 +1,12 @@
-import { Component, ChangeDetectionStrategy } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from "@angular/core";
 import { DataItem, DataService } from "./data.service";
 import { Observable } from "rxjs/Observable";
 import { BehaviorSubject } from "rxjs/BehaviorSubject";
 import "rxjs/add/operator/combineLatest";
 
 @Component({
-    selector: 'list-test-async',
-    styleUrls: ['examples/list/styles.css'],
+    selector: "list-test-async",
+    styleUrls: ["examples/list/styles.css"],
     providers: [DataService],
     changeDetection: ChangeDetectionStrategy.OnPush,
     template: `
@@ -29,7 +29,11 @@ import "rxjs/add/operator/combineLatest";
             </StackLayout>
         </StackLayout>
 
-        <button row="2" colSpan="2" (tap)="toggleAsyncUpdates()" [text]="isUpdating ? 'stop updates' : 'start updates'"></button>
+        <Button
+            row="2" colSpan="2"
+            (tap)="toggleAsyncUpdates()"
+            [text]="isUpdating ? 'stop updates' : 'start updates'">
+        </Button>
     </GridLayout>
     `
 })
@@ -54,8 +58,8 @@ export class ListTestAsync {
 }
 
 @Component({
-    selector: 'list-test-async-filter',
-    styleUrls: ['examples/list/styles.css'],
+    selector: "list-test-async-filter",
+    styleUrls: ["examples/list/styles.css"],
     providers: [DataService],
     changeDetection: ChangeDetectionStrategy.OnPush,
     template: `

@@ -1,5 +1,5 @@
-import { Component } from '@angular/core';
-import { Page} from "ui/page";
+import { Component } from "@angular/core";
+import { Page } from "ui/page";
 
 @Component({
     selector: "first",
@@ -29,7 +29,6 @@ class FirstComponent {
 @Component({
     selector: "nested-component",
     template: `
-
     <ActionBarExtension>
         <ActionItem *ngIf="show" (tap)="onTap()">
             <Button text="CUSTOM"></Button>
@@ -70,7 +69,7 @@ class SecondComponent {
 }
 
 @Component({
-    selector: 'action-bar-test',
+    selector: "action-bar-test",
     template: `
     <GridLayout>
        <page-router-outlet></page-router-outlet>
@@ -79,14 +78,12 @@ class SecondComponent {
 })
 export class ActionBarTest {
     static routes = [
-        { path: '', component: FirstComponent },
-        { path: 'second', component: SecondComponent },
-    ]
+        { path: "", component: FirstComponent },
+        { path: "second", component: SecondComponent },
+    ];
 
     static entries = [
         FirstComponent,
         SecondComponent,
-    ]
+    ];
 }
-
-

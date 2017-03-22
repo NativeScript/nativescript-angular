@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable } from "@angular/core";
 import { BehaviorSubject } from "rxjs/BehaviorSubject";
 
 export class DataItem {
@@ -10,13 +10,13 @@ export class DataService {
     private _intervalId;
     private _counter = 0;
     private _currentItems: Array<DataItem>;
-    
+
     public items$: BehaviorSubject<Array<DataItem>>;
 
     constructor() {
         this._currentItems = [];
-        for (var i = 0; i < 3; i++) {
-            this.appendItem()
+        for (let i = 0; i < 3; i++) {
+            this.appendItem();
         }
 
         this.items$ = new BehaviorSubject(this._currentItems);
@@ -52,3 +52,4 @@ export class DataService {
         this._counter++;
     }
 }
+

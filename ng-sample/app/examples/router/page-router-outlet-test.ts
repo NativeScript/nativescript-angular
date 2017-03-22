@@ -1,9 +1,9 @@
 import { Component, OnInit, OnDestroy } from "@angular/core";
-import { ActivatedRoute, Router } from '@angular/router';
-import { Location } from '@angular/common';
+import { ActivatedRoute, Router } from "@angular/router";
+import { Location } from "@angular/common";
 import { Page } from "ui/page";
 import { Observable } from "rxjs/Observable";
-import 'rxjs/add/operator/map';
+import "rxjs/add/operator/map";
 
 
 @Component({
@@ -102,7 +102,7 @@ class ThirdComponent implements OnInit, OnDestroy {
 }
 
 @Component({
-    selector: 'navigation-test',
+    selector: "navigation-test",
     template: `<page-router-outlet></page-router-outlet>`
 })
 export class PageRouterOutletAppComponent {
@@ -116,7 +116,7 @@ export class PageRouterOutletAppComponent {
         FirstComponent,
         SecondComponent,
         ThirdComponent
-    ]
+    ];
 
     constructor(router: Router, private location: Location) {
         router.events.subscribe((e) => {

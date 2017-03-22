@@ -1,182 +1,189 @@
 import {
     Inject, Injectable, Optional, NgZone,
-    Renderer, RootRenderer, RenderComponentType, AnimationPlayer
+    Renderer2, RendererFactory2, RendererType2,
+    RendererStyleFlags2, ViewEncapsulation,
 } from "@angular/core";
-import { AnimationStyles, AnimationKeyframe } from "./private_import_core";
-import { APP_ROOT_VIEW, DEVICE } from "./platform-providers";
+
 import { isBlank } from "./lang-facade";
 import { View } from "ui/core/view";
 import { addCss } from "application";
 import { topmost } from "ui/frame";
-import { Page } from "ui/page";
-import { ViewUtil } from "./view-util";
-import { NgView } from "./element-registry";
-import { rendererLog as traceLog } from "./trace";
 import { escapeRegexSymbols } from "utils/utils";
 import { Device } from "platform";
 
-import { NativeScriptAnimationDriver } from "./animation-driver";
+import { ViewUtil } from "./view-util";
+import { APP_ROOT_VIEW, DEVICE } from "./platform-providers";
+import { NgView } from "./element-registry";
+import { rendererLog as traceLog } from "./trace";
+import { NativeScriptPlatformRef } from "./platform-common";
 
-// CONTENT_ATTR not exported from dom_renderer - we need it for styles application.
+// CONTENT_ATTR not exported from NativeScript_renderer - we need it for styles application.
+const COMPONENT_REGEX = /%COMP%/g;
 export const COMPONENT_VARIABLE = "%COMP%";
+export const HOST_ATTR = `_nghost-${COMPONENT_VARIABLE}`;
 export const CONTENT_ATTR = `_ngcontent-${COMPONENT_VARIABLE}`;
-
+const ATTR_REPLACER = new RegExp(escapeRegexSymbols(CONTENT_ATTR), "g");
+const ATTR_SANITIZER = /-/g;
 
 @Injectable()
-export class NativeScriptRootRenderer implements RootRenderer {
-    private _viewUtil: ViewUtil;
-    private _animationDriver: NativeScriptAnimationDriver;
-
-    protected get animationDriver(): NativeScriptAnimationDriver {
-        if (!this._animationDriver) {
-            this._animationDriver = new NativeScriptAnimationDriver();
-        }
-        return this._animationDriver;
-    }
+export class NativeScriptRendererFactory implements RendererFactory2 {
+    private componentRenderers = new Map<string, NativeScriptRenderer>();
+    private viewUtil: ViewUtil;
+    private defaultRenderer: NativeScriptRenderer;
+    private rootNgView: NgView;
 
     constructor(
-        @Optional() @Inject(APP_ROOT_VIEW) private _rootView: View,
+        @Optional() @Inject(APP_ROOT_VIEW) rootView: View,
         @Inject(DEVICE) device: Device,
-        private _zone: NgZone
+        private zone: NgZone
     ) {
-        this._viewUtil = new ViewUtil(device);
+        this.viewUtil = new ViewUtil(device);
+        this.setRootNgView(rootView);
+        this.defaultRenderer = new NativeScriptRenderer(this.rootNgView, zone, this.viewUtil);
     }
 
-    private _registeredComponents = new Map<string, NativeScriptRenderer>();
-
-    public get rootView(): View {
-        if (!this._rootView) {
-            this._rootView = topmost().currentPage;
+    private setRootNgView(rootView: any) {
+        if (!rootView) {
+            rootView = NativeScriptPlatformRef.rootPage || <NgView><any>topmost().currentPage;
         }
-        return this._rootView;
+        rootView.nodeName = "NONE";
+        this.rootNgView = rootView;
     }
 
-    public get page(): Page {
-        return <Page>this.rootView.page;
-    }
-
-    public get viewUtil(): ViewUtil {
-        return this._viewUtil;
-    }
-
-    renderComponent(componentProto: RenderComponentType): Renderer {
-        let renderer = this._registeredComponents.get(componentProto.id);
-        if (isBlank(renderer)) {
-            renderer = new NativeScriptRenderer(this, componentProto,
-                this.animationDriver, this._zone);
-            this._registeredComponents.set(componentProto.id, renderer);
+    createRenderer(element: any, type: RendererType2): NativeScriptRenderer {
+        if (!element || !type) {
+            return this.defaultRenderer;
         }
+
+        let renderer: NativeScriptRenderer = this.componentRenderers.get(type.id);
+        if (!isBlank(renderer)) {
+            return renderer;
+        }
+
+        if (type.encapsulation === ViewEncapsulation.Emulated) {
+            renderer = new EmulatedRenderer(type, this.rootNgView, this.zone, this.viewUtil);
+            (<EmulatedRenderer>renderer).applyToHost(element);
+        } else {
+            renderer = this.defaultRenderer;
+        }
+
+        this.componentRenderers.set(type.id, renderer);
         return renderer;
     }
 }
 
-@Injectable()
-export class NativeScriptRenderer extends Renderer {
-    private componentProtoId: string;
-    private hasComponentStyles: boolean;
-
-    private get viewUtil(): ViewUtil {
-        return this.rootRenderer.viewUtil;
-    }
+export class NativeScriptRenderer extends Renderer2 {
+    data: { [key: string]: any } = Object.create(null);
 
     constructor(
-        private rootRenderer: NativeScriptRootRenderer,
-        private componentProto: RenderComponentType,
-        private animationDriver: NativeScriptAnimationDriver,
-        private zone: NgZone) {
-
+        private rootView: NgView,
+        private zone: NgZone,
+        private viewUtil: ViewUtil
+    ) {
         super();
-        let stylesLength = this.componentProto.styles.length;
-        this.componentProtoId = this.componentProto.id;
-        for (let i = 0; i < stylesLength; i++) {
-            this.hasComponentStyles = true;
-            let cssString = this.componentProto.styles[i] + "";
-            const realCSS = this.replaceNgAttribute(cssString, this.componentProtoId);
-            addCss(realCSS);
-        }
         traceLog("NativeScriptRenderer created");
     }
 
-    private attrReplacer = new RegExp(escapeRegexSymbols(CONTENT_ATTR), "g");
-    private attrSanitizer = /-/g;
+    appendChild(parent: any, newChild: NgView): void {
+        traceLog(`NativeScriptRenderer.appendChild child: ${newChild} parent: ${parent}`);
 
-    private replaceNgAttribute(input: string, componentId: string): string {
-        return input.replace(this.attrReplacer,
-            "_ng_content_" + componentId.replace(this.attrSanitizer, "_"));
+        if (parent) {
+            this.viewUtil.insertChild(parent, newChild);
+        }
     }
 
-    renderComponent(componentProto: RenderComponentType): Renderer {
-        return this.rootRenderer.renderComponent(componentProto);
+    insertBefore(parent: NgView, newChild: NgView, refChildIndex: number): void {
+        traceLog(`NativeScriptRenderer.insertBefore child: ${newChild} parent: ${parent}`);
+
+        if (parent) {
+            this.viewUtil.insertChild(parent, newChild, refChildIndex);
+        }
+    }
+
+    removeChild(parent: any, oldChild: NgView): void {
+        traceLog(`NativeScriptRenderer.removeChild child: ${oldChild} parent: ${parent}`);
+
+        if (parent) {
+            this.viewUtil.removeChild(parent, oldChild);
+        }
     }
 
     selectRootElement(selector: string): NgView {
         traceLog("selectRootElement: " + selector);
-        const rootView = <NgView><any>this.rootRenderer.rootView;
-        rootView.nodeName = "ROOT";
-        return rootView;
+        return this.rootView;
+    }
+
+    parentNode(node: NgView): any {
+        return node.parent;
+    }
+
+    nextSibling(node: NgView): number {
+        traceLog(`NativeScriptRenderer.nextSibling ${node}`);
+        return this.viewUtil.nextSiblingIndex(node);
+    }
+
+    createComment(_value: any) {
+        traceLog(`NativeScriptRenderer.createComment ${_value}`);
+        return this.viewUtil.createComment();
+    }
+
+    createElement(name: any, _namespace: string): NgView {
+        traceLog(`NativeScriptRenderer.createElement: ${name}`);
+        return this.viewUtil.createView(name);
+    }
+
+    createText(_value: string) {
+        traceLog(`NativeScriptRenderer.createText ${_value}`);
+        return this.viewUtil.createText();
     }
 
     createViewRoot(hostElement: NgView): NgView {
-        traceLog("CREATE VIEW ROOT: " + hostElement.nodeName);
+        traceLog(`NativeScriptRenderer.createViewRoot ${hostElement.nodeName}`);
         return hostElement;
     }
 
     projectNodes(parentElement: NgView, nodes: NgView[]): void {
         traceLog("NativeScriptRenderer.projectNodes");
-        nodes.forEach((node) => {
-            this.viewUtil.insertChild(parentElement, node);
-        });
+        nodes.forEach((node) => this.viewUtil.insertChild(parentElement, node));
     }
 
-    attachViewAfter(anchorNode: NgView, viewRootNodes: NgView[]) {
-        traceLog("NativeScriptRenderer.attachViewAfter: " + anchorNode.nodeName + " " + anchorNode);
-        const parent = (<NgView>anchorNode.parent || anchorNode.templateParent);
-        const insertPosition = this.viewUtil.getChildIndex(parent, anchorNode);
-
-        viewRootNodes.forEach((node, index) => {
-            const childIndex = insertPosition + index + 1;
-            this.viewUtil.insertChild(parent, node, childIndex);
-        });
-    }
-
-    detachView(viewRootNodes: NgView[]) {
-        traceLog("NativeScriptRenderer.detachView");
-        for (let i = 0; i < viewRootNodes.length; i++) {
-            let node = viewRootNodes[i];
-            this.viewUtil.removeChild(<NgView>node.parent, node);
-        }
-    }
-
-    public destroyView(_hostElement: NgView, _viewAllNodes: NgView[]) {
-        traceLog("NativeScriptRenderer.destroyView");
+    destroy() {
+        traceLog("NativeScriptRenderer.destroy");
         // Seems to be called on component dispose only (router outlet)
         // TODO: handle this when we resolve routing and navigation.
     }
-
-    setElementProperty(renderElement: NgView, propertyName: string, propertyValue: any) {
-        traceLog("NativeScriptRenderer.setElementProperty " + renderElement + ": " +
-            propertyName + " = " + propertyValue);
-        this.viewUtil.setProperty(renderElement, propertyName, propertyValue);
+    setAttribute(view: NgView, name: string, value: string) {
+        traceLog(`NativeScriptRenderer.setAttribute ${view} : ${name} = ${value}`);
+        return this.setProperty(view, name, value);
     }
 
-    setElementAttribute(renderElement: NgView, attributeName: string, attributeValue: string) {
-        traceLog("NativeScriptRenderer.setElementAttribute " + renderElement + ": " +
-            attributeName + " = " + attributeValue);
-        return this.setElementProperty(renderElement, attributeName, attributeValue);
+    removeAttribute(_el: NgView, _name: string): void {
+        traceLog(`NativeScriptRenderer.removeAttribute ${_el}: ${_name}`);
     }
 
-    setElementClass(renderElement: NgView, className: string, isAdd: boolean): void {
-        traceLog("NativeScriptRenderer.setElementClass " + className + " - " + isAdd);
-
-        if (isAdd) {
-            this.viewUtil.addClass(renderElement, className);
-        } else {
-            this.viewUtil.removeClass(renderElement, className);
-        }
+    setProperty(view: any, name: string, value: any) {
+        traceLog(`NativeScriptRenderer.setProperty ${view} : ${name} = ${value}`);
+        this.viewUtil.setProperty(view, name, value);
     }
 
-    setElementStyle(renderElement: NgView, styleName: string, styleValue: string): void {
-        this.viewUtil.setStyleProperty(renderElement, styleName, styleValue);
+    addClass(view: NgView, name: string): void {
+        traceLog(`NativeScriptRenderer.addClass ${name}`);
+        this.viewUtil.addClass(view, name);
+    }
+
+    removeClass(view: NgView, name: string): void {
+        traceLog(`NativeScriptRenderer.removeClass ${name}`);
+        this.viewUtil.removeClass(view, name);
+    }
+
+    setStyle(view: NgView, styleName: string, value: any, _flags?: RendererStyleFlags2): void {
+        traceLog(`NativeScriptRenderer.setStyle: ${styleName} = ${value}`);
+        this.viewUtil.setStyle(view, styleName, value);
+    }
+
+    removeStyle(view: NgView, styleName: string, _flags?: RendererStyleFlags2): void {
+        traceLog("NativeScriptRenderer.removeStyle: ${styleName}");
+        this.viewUtil.removeStyle(view, styleName);
     }
 
     // Used only in debug mode to serialize property changes to comment nodes,
@@ -194,34 +201,12 @@ export class NativeScriptRenderer extends Renderer {
         traceLog("NativeScriptRenderer.invokeElementMethod " + methodName + " " + args);
     }
 
-    setText(_renderNode: any, _text: string) {
-        traceLog("NativeScriptRenderer.setText");
+    setValue(_renderNode: any, _value: string) {
+        traceLog("NativeScriptRenderer.setValue");
     }
 
-    public createTemplateAnchor(parentElement: NgView): NgView {
-        traceLog("NativeScriptRenderer.createTemplateAnchor");
-        return this.viewUtil.createTemplateAnchor(parentElement);
-    }
-
-    public createElement(parentElement: NgView, name: string): NgView {
-        traceLog("NativeScriptRenderer.createElement: " + name + " parent: " +
-            parentElement + ", " + (parentElement ? parentElement.nodeName : "null"));
-        return this.viewUtil.createView(name, parentElement, (view) => {
-            // Set an attribute to the view to scope component-specific css.
-            // The property name is pre-generated by Angular.
-            if (this.hasComponentStyles) {
-                const cssAttribute = this.replaceNgAttribute(CONTENT_ATTR, this.componentProtoId);
-                view[cssAttribute] = true;
-            }
-        });
-    }
-
-    public createText(_parentElement: NgView, _value: string): NgView {
-        traceLog("NativeScriptRenderer.createText");
-        return this.viewUtil.createText();
-    }
-
-    public listen(renderElement: NgView, eventName: string, callback: Function): Function {
+    listen(renderElement: any, eventName: string, callback: (event: any) => boolean):
+        () => void {
         traceLog("NativeScriptRenderer.listen: " + eventName);
         // Explicitly wrap in zone
         let zonedCallback = (...args) => {
@@ -237,21 +222,65 @@ export class NativeScriptRenderer extends Renderer {
         }
         return () => renderElement.off(eventName, zonedCallback);
     }
+}
 
-    public listenGlobal(_target: string, _eventName: string, _callback: Function): Function {
-        throw new Error("NativeScriptRenderer.listenGlobal() - Not implemented.");
+class EmulatedRenderer extends NativeScriptRenderer {
+    private contentAttr: string;
+    private hostAttr: string;
+
+    constructor(
+        private component: RendererType2,
+        rootView: NgView,
+        zone: NgZone,
+        viewUtil: ViewUtil,
+    ) {
+        super(rootView, zone, viewUtil);
+
+        this.addStyles();
+        this.contentAttr = shimContentAttribute(component.id);
+        this.hostAttr = shimHostAttribute(component.id);
     }
 
-    public animate(
-        element: any,
-        startingStyles: AnimationStyles,
-        keyframes: AnimationKeyframe[],
-        duration: number,
-        delay: number,
-        easing: string
-    ): AnimationPlayer {
-        let player = this.animationDriver.animate(
-            element, startingStyles, keyframes, duration, delay, easing);
-        return player;
+    applyToHost(view: NgView) {
+        super.setAttribute(view, this.hostAttr, "");
     }
+
+    appendChild(parent: any, newChild: NgView): void {
+        // Set an attribute to the view to scope component-specific css.
+        // The property name is pre-generated by Angular.
+        const cssAttribute = this.replaceNgAttribute(CONTENT_ATTR);
+        newChild[cssAttribute] = true;
+
+        super.appendChild(parent, newChild);
+    }
+
+    createElement(parent: any, name: string): NgView {
+        const view = super.createElement(parent, name);
+        super.setAttribute(view, this.contentAttr, "");
+
+        return view;
+    }
+
+    private addStyles() {
+        this.component.styles
+            .map(s => s.toString())
+            .map(s => this.replaceNgAttribute(s))
+            .forEach(addCss);
+    }
+
+    private replaceNgAttribute(input: string): string {
+        return input.replace(ATTR_REPLACER , `_ng_content_${this.componentId}`);
+    }
+
+    private get componentId(): string {
+        return this.component.id.replace(ATTR_SANITIZER , "_");
+    }
+}
+
+function shimContentAttribute(componentShortId: string): string {
+    return CONTENT_ATTR.replace(COMPONENT_REGEX, componentShortId);
+}
+
+function shimHostAttribute(componentShortId: string): string {
+    return HOST_ATTR.replace(COMPONENT_REGEX, componentShortId);
 }

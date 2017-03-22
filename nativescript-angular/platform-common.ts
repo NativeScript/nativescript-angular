@@ -61,9 +61,18 @@ export const COMMON_PROVIDERS = [
 
 export class NativeScriptPlatformRef extends PlatformRef {
     private _bootstrapper: BootstrapperAction;
+    private static _rootPageRef: WeakRef<Page>;
 
     constructor(private platform: PlatformRef, private appOptions?: AppOptions) {
         super();
+    }
+
+    static set rootPage(page: Page) {
+        NativeScriptPlatformRef._rootPageRef = new WeakRef(page);
+    }
+
+    static get rootPage(): Page {
+        return NativeScriptPlatformRef._rootPageRef.get();
     }
 
     bootstrapModuleFactory<M>(moduleFactory: NgModuleFactory<M>): Promise<NgModuleRef<M>> {
@@ -149,12 +158,13 @@ export class NativeScriptPlatformRef extends PlatformRef {
         const navEntry: NavigationEntry = {
             create: (): Page => {
                 let page = pageFactory({ isBootstrap: true, isLivesync });
+                NativeScriptPlatformRef.rootPage = page;
                 if (this.appOptions) {
                     page.actionBarHidden = this.appOptions.startPageActionBarHidden;
                 }
 
-                let onLoadedHandler = function () {
-                    page.off("loaded", onLoadedHandler);
+                let initHandler = function () {
+                    page.off(Page.navigatingToEvent, initHandler);
                     // profiling.stop("application-start");
                     rendererLog("Page loaded");
 
@@ -184,7 +194,7 @@ export class NativeScriptPlatformRef extends PlatformRef {
                     });
                 };
 
-                page.on("loaded", onLoadedHandler);
+                page.on(Page.navigatingToEvent, initHandler);
 
                 return page;
             }

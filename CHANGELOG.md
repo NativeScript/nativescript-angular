@@ -1,3 +1,59 @@
+<a name="1.5.0"></a>
+# [1.5.0](https://github.com/NativeScript/nativescript-angular/compare/v1.4.1...v1.5.0) (2017-03-22)
+
+### Bug Fixes
+
+* **action-bar:** Don't remove action items twice. ([677d7e0](https://github.com/NativeScript/nativescript-angular/commit/677d7e0))
+* **animations:** add onDestroy method to NativeScriptAnimationPlayer ([2e24010](https://github.com/NativeScript/nativescript-angular/commit/2e24010))
+* **dom_adapter:** add missing `contains` method signature ([bae45f6](https://github.com/NativeScript/nativescript-angular/commit/bae45f6))
+* **dom_adapter:** update setTitle and getGlobalEventTarget to be compliant with Angular API ([25c134d](https://github.com/NativeScript/nativescript-angular/commit/25c134d))
+* **gitignore:** Add editor files into gitignore ([819a960](https://github.com/NativeScript/nativescript-angular/commit/819a960))
+* **init:** Bootstrap Angular on page "navigatingTo" event. ([ab04aba](https://github.com/NativeScript/nativescript-angular/commit/ab04aba))
+* **list-view-comp:** IterableDiffer is now parameterized on \<KeyedTemplate\> ([780967d](https://github.com/NativeScript/nativescript-angular/commit/780967d))
+* **ns-http:** make defaultOptions of type RequestOptions ([db730e2](https://github.com/NativeScript/nativescript-angular/commit/db730e2))
+* **page-router-outlet:** activateWith instead of activate method ([8d832bc](https://github.com/NativeScript/nativescript-angular/commit/8d832bc))
+* **page-router-outlet:** manually run detect changes when navigating to new page ([07caa74](https://github.com/NativeScript/nativescript-angular/commit/07caa74))
+* **platform:** import InjectionToken and ViewEncapsulation instead of OpaqueToken ([c4dc8d4](https://github.com/NativeScript/nativescript-angular/commit/c4dc8d4))
+* **platform:** import MissingTranslationStrategy ([d2328a5](https://github.com/NativeScript/nativescript-angular/commit/d2328a5))
+* **renderer:** implement createComment and createText methods using Placeholders ([c0ec870](https://github.com/NativeScript/nativescript-angular/commit/c0ec870))
+* **renderer:** use _eachChildView for nextSibling ([150c1ce](https://github.com/NativeScript/nativescript-angular/commit/150c1ce))
+* **renderer:** use flags  in `setStyle` and `removeStyle` instead of booleans ([a6d9247](https://github.com/NativeScript/nativescript-angular/commit/a6d9247))
+* **ts:** ship package with reference to iterable interface ([7edfa6b](https://github.com/NativeScript/nativescript-angular/commit/7edfa6b))
+
+
+### Code Refactoring
+
+* stop exporting NativeScriptModule from platform ([#701](https://github.com/NativeScript/nativescript-angular/issues/701)) ([409e717](https://github.com/NativeScript/nativescript-angular/commit/409e717))
+
+
+### Features
+
+* **animations:** introduce NativeScriptAnimationsModule ([b5874ba](https://github.com/NativeScript/nativescript-angular/commit/b5874ba))
+* **renderer:** implement simple nextSibling method using parent's _eachChildView ([98d9d20](https://github.com/NativeScript/nativescript-angular/commit/98d9d20))
+* **renderer:** upgrade to be compliant with Angular 4's Renderer2 and RendererFactory2 ([a3adcca](https://github.com/NativeScript/nativescript-angular/commit/a3adcca))
+* **renderer:** use EmulatedRenderer to scope component styles ([25f5111](https://github.com/NativeScript/nativescript-angular/commit/25f5111))
+
+
+### BREAKING CHANGES
+
+* **NativeScriptModule:** User applications cannot import NativeScriptModule from
+"nativescript-angular/platform" anymore.
+Migration:
+Before:
+```
+import { NativeScriptModule } from "nativescript-angular/platform";
+```
+After
+```
+import { NativeScriptModule } from
+"nativescript-angular/nativescript.module";
+```
+* **animations:** To use animations, you need to import the
+NativeScriptAnimationsModule from "nativescript-angular/animations" in
+your root NgModule. Also you need a dependency to "@angular/animations".
+
+* **typescript:** The required version of TypeScript is ~2.1. Support for ~2.2 requires changes in `tns-core-modules` and will be provided with NativeScript 3.0.
+
 # 1.1.2 (2016-10-28)
 - Angular 2.1.2 compatibility release
 

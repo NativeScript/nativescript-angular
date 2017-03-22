@@ -9,6 +9,7 @@ tags
 /nativescript-angular/**/*.d.ts
 /nativescript-angular/**/*.js
 
+!/nativescript-angular/iterable.d.ts
 !/nativescript-angular/global.d.ts
 !/nativescript-angular/postinstall.js
 !/nativescript-angular/hooks/**/*.js
@@ -38,3 +39,19 @@ ng-sample/app/nativescript-angular
 startup-test/platforms
 startup-test/lib
 startup-test/node_modules
+
+# IDEs and editors
+/.idea
+.project
+.classpath
+.c9/
+*.launch
+.settings/
+
+# IDE - VSCode
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+

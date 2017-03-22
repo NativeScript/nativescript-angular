@@ -16,15 +16,19 @@ import {
 import {
     COMPILER_OPTIONS,
     PlatformRef,
-    OpaqueToken,
-    createPlatformFactory
+    InjectionToken,
+    ViewEncapsulation,
+    createPlatformFactory,
+    MissingTranslationStrategy
 } from "@angular/core";
 
-// Work around a TS bug requiring an import of OpaqueToken without using it
+// Work around a TS bug requiring an imports of
+// InjectionToken, ViewEncapsulation and MissingTranslationStrategy
+// without using them
 if (global.___TS_UNUSED) {
-    (() => {
-        return OpaqueToken;
-    })();
+    (() => InjectionToken)();
+    (() => ViewEncapsulation)();
+    (() => MissingTranslationStrategy)();
 }
 
 // Register DOM adapter, if possible. Dynamic platform only!
@@ -32,8 +36,6 @@ import "./dom-adapter";
 
 import { NativeScriptElementSchemaRegistry } from "./schema-registry";
 import { FileSystemResourceLoader } from "./resource-loader";
-
-export { NativeScriptModule } from "./nativescript.module";
 
 export const NS_COMPILER_PROVIDERS = [
     COMPILER_PROVIDERS,

@@ -1,4 +1,4 @@
-//make sure you import mocha-config before @angular/core
+// make sure you import mocha-config before @angular/core
 import {assert} from "./test-config";
 import {TestApp} from "./test-app";
 import {Component, Directive, ElementRef, ViewContainerRef, TemplateRef, Inject} from "@angular/core";
@@ -12,7 +12,7 @@ registerElement("third-party-view", () => require("./third-party-view").SimpleTa
 
 // >> third-party-simple-view-container
 @Component({
-    selector: 'simple-view-container',
+    selector: "simple-view-container",
     template: `
         <third-party-view prop1="value1"></third-party-view>
     `
@@ -23,8 +23,8 @@ export class SimpleViewContainer {
 //
 // >> third-party-document-form-component
 @Component({
-    selector: 'document-form',
-    template: ''
+    selector: "document-form",
+    template: ""
 })
 export class DocumentFormComponent {
     // >> (hide)
@@ -45,7 +45,7 @@ export class DocumentFormComponent {
 
 // >> third-party-template-directive
 @Directive({
-    selector: '[documentTitle]'
+    selector: "[documentTitle]"
 })
 export class DocumentTitleDirective {
     public static titleLabel: Label;
@@ -58,9 +58,9 @@ export class DocumentTitleDirective {
 
     ngOnInit() {
         const viewRef = this.viewContainer.createEmbeddedView(this.template);
-        //filter out whitespace nodes
+        // filter out whitespace nodes
         const titleViews = viewRef.rootNodes.filter((node) =>
-                            node && node.nodeName !== '#text')
+                            node && node.nodeName !== "#text");
 
         if (titleViews.length > 0) {
             const titleView = titleViews[0];
@@ -72,7 +72,7 @@ export class DocumentTitleDirective {
 
 // >> third-party-document-form-container
 @Component({
-    selector: 'document-form-container',
+    selector: "document-form-container",
     template: `
     <document-form src="document1.pdf">
         <Label *documentTitle text="Document1"></Label>
@@ -83,15 +83,19 @@ export class DocumentFormContainer {
 }
 // << third-party-document-form-container
 
-describe('Third party component snippets', () => {
+describe("Third party component snippets", () => {
     let testApp: TestApp = null;
 
     before(() => {
         registerElement("document-form", () => require("ui/layouts/stack-layout").StackLayout);
 
-        return TestApp.create([], [DocumentFormContainer, DocumentFormComponent, SimpleViewContainer], [DocumentTitleDirective]).then((app) => {
+        return TestApp.create([], [
+            DocumentFormContainer,
+            DocumentFormComponent,
+            SimpleViewContainer
+        ], [DocumentTitleDirective]).then((app) => {
             testApp = app;
-        })
+        });
     });
 
     after(() => {
@@ -110,4 +114,4 @@ describe('Third party component snippets', () => {
             assert.equal("Document1", DocumentFormComponent.titleLabel.text);
         });
     });
-})
+});

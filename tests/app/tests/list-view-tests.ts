@@ -38,7 +38,7 @@ export class TestListViewComponent {
 }
 
 @Component({
-    selector: 'item-component',
+    selector: "item-component",
     template: `<Label text="template"></Label>`
 })
 export class ItemTemplateComponent {
@@ -54,7 +54,7 @@ export class ItemTemplateComponent {
 }
 
 @Component({
-    selector: 'list-with-template-selector',
+    selector: "list-with-template-selector",
     template: `
     <GridLayout>
         <ListView [items]="myItems" [itemTemplateSelector]="templateSelector">
@@ -81,7 +81,11 @@ describe('ListView-tests', () => {
     let testApp: TestApp = null;
 
     before(() => {
-        return TestApp.create([], [TestListViewComponent, TestListViewSelectorComponent, ItemTemplateComponent]).then((app) => {
+        return TestApp.create([], [
+            TestListViewComponent,
+            TestListViewSelectorComponent,
+            ItemTemplateComponent
+        ]).then((app) => {
             testApp = app;
         });
     });

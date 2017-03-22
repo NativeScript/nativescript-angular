@@ -1,7 +1,15 @@
-//make sure you import mocha-config before @angular/core
+// make sure you import mocha-config before @angular/core
 import {assert} from "./test-config";
 import {TestApp} from "./test-app";
-import {Component, ElementRef, Renderer, AfterViewInit, OnInit, ViewChild, ChangeDetectionStrategy} from "@angular/core";
+import {
+    Component,
+    ElementRef,
+    Renderer,
+    AfterViewInit,
+    OnInit,
+    ViewChild,
+    ChangeDetectionStrategy
+} from "@angular/core";
 import {ProxyViewContainer} from "ui/proxy-view-container";
 import {Red} from "color/known-colors";
 import {dumpView} from "./test-utils";
@@ -23,7 +31,7 @@ class LoaderComponentBase {
     constructor() {
         this.ready = new Promise((reslove, reject) => {
             this.resolve = reslove;
-        })
+        });
     }
     ngAfterViewInit() {
         console.log("!!! ngAfterViewInit -> loader: " + this.loader);
@@ -32,7 +40,7 @@ class LoaderComponentBase {
 }
 
 @Component({
-    selector: 'loader-component-on-push',
+    selector: "loader-component-on-push",
     template: `
     <StackLayout>
         <DetachedContainer #loader></DetachedContainer>
@@ -42,7 +50,7 @@ class LoaderComponentBase {
 export class LoaderComponent extends LoaderComponentBase { }
 
 @Component({
-    selector: 'loader-component-on-push',
+    selector: "loader-component-on-push",
     changeDetection: ChangeDetectionStrategy.OnPush,
     template: `
     <StackLayout>
@@ -52,14 +60,14 @@ export class LoaderComponent extends LoaderComponentBase { }
 })
 export class LoaderComponentOnPush extends LoaderComponentBase { }
 
-describe('DetachedLoader', () => {
+describe("DetachedLoader", () => {
     let testApp: TestApp = null;
 
     before(() => {
         return TestApp.create([], [LoaderComponent, LoaderComponentOnPush, TestComponent]).then((app) => {
             console.log("TEST APP: " + app);
             testApp = app;
-        })
+        });
     });
 
     after(() => {
@@ -90,7 +98,7 @@ describe('DetachedLoader', () => {
     it("creates component when ChangeDetectionStrategy is OnPush", (done) => {
         testApp.loadComponent(LoaderComponentOnPush)
             .then((componentRef) => {
-                // wait for the ngAfterViewInit                
+                // wait for the ngAfterViewInit
                 return (<LoaderComponentOnPush>componentRef.instance).ready;
             })
             .then((comp) => {
@@ -102,4 +110,4 @@ describe('DetachedLoader', () => {
             })
             .catch(done);
     });
-})
+});

@@ -1,17 +1,17 @@
 /* tslint:disable */
 import { Type } from "@angular/core";
-import { DomAdapter } from "./private_import_platform-browser";
+import { ɵDomAdapter } from "@angular/platform-browser";
 import { rendererLog } from "./trace";
 import { print } from "./lang-facade";
 
-export class NativeScriptDomAdapter implements DomAdapter {
+export class NativeScriptDomAdapter implements ɵDomAdapter {
   static makeCurrent() {
 
     // Don't register when bundling (likely AoT setup).
     if (!global.TNS_WEBPACK) {
         try {
-            const privateAPI = global.require("@angular/platform-browser").__platform_browser_private__;
-            const setRootDomAdapter = privateAPI.setRootDomAdapter;
+            const privateAPI = global.require("@angular/platform-browser");
+            const setRootDomAdapter = privateAPI.ɵsetRootDomAdapter;
 
             rendererLog("Setting root DOM adapter...");
             setRootDomAdapter(new NativeScriptDomAdapter());
@@ -49,6 +49,7 @@ export class NativeScriptDomAdapter implements DomAdapter {
   getProperty(_el: Element, _name: string): any { throw new Error("Not implemented!") }
   invoke(_el: Element, _methodName: string, _args: any[]): any { throw new Error("Not implemented!") }
 
+  contains(_nodeA: any, _nodeB: any): any /** TODO #9100 */ { throw new Error("Not implemented!") }
   parse(_templateHtml: string): any /** TODO #9100 */ { throw new Error("Not implemented!") }
   query(_selector: string): any { throw new Error("Not implemented!") }
   querySelector(_el: any /** TODO #9100 */, _selector: string): HTMLElement { throw new Error("Not implemented!") }
@@ -145,7 +146,7 @@ export class NativeScriptDomAdapter implements DomAdapter {
   defaultDoc(): HTMLDocument { throw new Error("Not implemented!") }
   getBoundingClientRect(_el: any /** TODO #9100 */): any /** TODO #9100 */ { throw new Error("Not implemented!") }
   getTitle(): string { throw new Error("Not implemented!") }
-  setTitle(_newTitle: string): any /** TODO #9100 */ { throw new Error("Not implemented!") }
+  setTitle(_doc: Document, _newTitle: string): any /** TODO #9100 */ { throw new Error("Not implemented!") }
   elementMatches(_n: any /** TODO #9100 */, _selector: string): boolean { throw new Error("Not implemented!") }
   isTemplateElement(_el: any): boolean { throw new Error("Not implemented!") }
   isTextNode(_node: any /** TODO #9100 */): boolean { throw new Error("Not implemented!") }
@@ -161,7 +162,7 @@ export class NativeScriptDomAdapter implements DomAdapter {
       /** TODO #9100 */ { throw new Error("Not implemented!") }
   supportsDOMEvents(): boolean { throw new Error("Not implemented!") }
   supportsNativeShadowDOM(): boolean { throw new Error("Not implemented!") }
-  getGlobalEventTarget(_target: string): any { throw new Error("Not implemented!") }
+  getGlobalEventTarget(_doc: Document, _target: string): any { throw new Error("Not implemented!") }
   getHistory(): History { throw new Error("Not implemented!") }
   getLocation(): Location { throw new Error("Not implemented!") }
   getBaseHref(): string { throw new Error("Not implemented!") }
