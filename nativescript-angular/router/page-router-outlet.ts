@@ -3,17 +3,18 @@ import {
     ViewContainerRef,
     Inject, ComponentFactoryResolver, Injector
 } from "@angular/core";
-import { isPresent } from "../lang-facade";
 import { RouterOutletMap, ActivatedRoute, PRIMARY_OUTLET } from "@angular/router";
-import { NSLocationStrategy } from "./ns-location-strategy";
-import { DEVICE, PAGE_FACTORY, PageFactory } from "../platform-providers";
 import { Device } from "tns-core-modules/platform";
-import { routerLog } from "../trace";
-import { DetachedLoader } from "../common/detached-loader";
-import { ViewUtil } from "../view-util";
 import { Frame } from "tns-core-modules/ui/frame";
 import { Page, NavigatedData } from "tns-core-modules/ui/page";
 import { BehaviorSubject } from "rxjs/BehaviorSubject";
+
+import { isPresent } from "../lang-facade";
+import { DEVICE, PAGE_FACTORY, PageFactory } from "../platform-providers";
+import { routerLog } from "../trace";
+import { DetachedLoader } from "../common/detached-loader";
+import { ViewUtil } from "../view-util";
+import { NSLocationStrategy } from "./ns-location-strategy";
 
 interface CacheItem {
     componentRef: ComponentRef<any>;
@@ -169,13 +170,15 @@ export class PageRouterOutlet { // tslint:disable-line:directive-class-suffix
         const factory = this.getComponentFactory(activatedRoute, loadedResolver);
 
         const pageRoute = new PageRoute(activatedRoute);
-        const inj = new OutletInjector(activatedRoute, outletMap, this.location.injector);
 
         if (this.isInitialPage) {
             log("PageRouterOutlet.activate() initial page - just load component");
+
             this.isInitialPage = false;
+
+            const injector = new OutletInjector(activatedRoute, outletMap, this.location.injector);
             this.currentActivatedComp = this.location.createComponent(
-                factory, this.location.length, inj, []);
+                factory, this.location.length, injector, []);
 
             this.currentActivatedComp.changeDetectorRef.detectChanges();
 
@@ -189,8 +192,11 @@ export class PageRouterOutlet { // tslint:disable-line:directive-class-suffix
                 isNavigation: true,
                 componentType: factory.componentType
             });
+
+            const childInjector = new ChildInjector(activatedRoute, outletMap, page, this.location.injector);
+
             const loaderRef = this.location.createComponent(
-                this.detachedLoaderFactory, this.location.length, inj, []);
+                this.detachedLoaderFactory, this.location.length, childInjector, []);
             loaderRef.changeDetectorRef.detectChanges();
 
             this.currentActivatedComp = loaderRef.instance.loadWithFactory(factory);
@@ -284,6 +290,21 @@ class OutletInjector implements Injector {
         }
 
         return this.parent.get(token, notFoundValue);
+    }
+}
+
+class ChildInjector extends OutletInjector {
+    constructor(
+        route: ActivatedRoute, map: RouterOutletMap, private page: Page, parent: Injector) {
+            super(route, map, parent);
+        }
+
+    get(token: any, notFoundValue?: any): any {
+         if (token === Page) {
+            return this.page;
+        }
+
+        return super.get(token, notFoundValue);
     }
 }
 
