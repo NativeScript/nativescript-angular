@@ -15,14 +15,20 @@ if (global.___TS_UNUSED) {
     })();
 }
 
+let _rootPageRef: WeakRef<Page>;
+
+export function setRootPage(page: Page): void {
+    _rootPageRef = new WeakRef(page);
+}
+
+export function getRootPage(): Page {
+    return _rootPageRef && _rootPageRef.get();
+}
+
 // Use an exported function to make the AoT compiler happy.
 export function getDefaultPage(): Page {
     const frame = topmost();
-    if (frame) {
-        return frame.currentPage;
-    } else {
-        return null;
-    }
+    return getRootPage() || (frame && frame.currentPage);
 }
 
 export const defaultPageProvider = { provide: Page, useFactory: getDefaultPage };

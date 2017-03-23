@@ -12,10 +12,9 @@ import { escapeRegexSymbols } from "utils/utils";
 import { Device } from "platform";
 
 import { ViewUtil } from "./view-util";
-import { APP_ROOT_VIEW, DEVICE } from "./platform-providers";
+import { APP_ROOT_VIEW, DEVICE, getRootPage } from "./platform-providers";
 import { NgView } from "./element-registry";
 import { rendererLog as traceLog } from "./trace";
-import { NativeScriptPlatformRef } from "./platform-common";
 
 // CONTENT_ATTR not exported from NativeScript_renderer - we need it for styles application.
 const COMPONENT_REGEX = /%COMP%/g;
@@ -44,8 +43,9 @@ export class NativeScriptRendererFactory implements RendererFactory2 {
 
     private setRootNgView(rootView: any) {
         if (!rootView) {
-            rootView = NativeScriptPlatformRef.rootPage || <NgView><any>topmost().currentPage;
+            rootView = getRootPage() || topmost().currentPage;
         }
+
         rootView.nodeName = "NONE";
         this.rootNgView = rootView;
     }

@@ -26,7 +26,7 @@ if (global.___TS_UNUSED) {
 }
 
 import { rendererLog, rendererError } from "./trace";
-import { PAGE_FACTORY, PageFactory, defaultPageFactoryProvider } from "./platform-providers";
+import { PAGE_FACTORY, PageFactory, defaultPageFactoryProvider, setRootPage } from "./platform-providers";
 
 import { start, setCssFileName } from "application";
 import { topmost, NavigationEntry } from "ui/frame";
@@ -61,18 +61,9 @@ export const COMMON_PROVIDERS = [
 
 export class NativeScriptPlatformRef extends PlatformRef {
     private _bootstrapper: BootstrapperAction;
-    private static _rootPageRef: WeakRef<Page>;
 
     constructor(private platform: PlatformRef, private appOptions?: AppOptions) {
         super();
-    }
-
-    static set rootPage(page: Page) {
-        NativeScriptPlatformRef._rootPageRef = new WeakRef(page);
-    }
-
-    static get rootPage(): Page {
-        return NativeScriptPlatformRef._rootPageRef.get();
     }
 
     bootstrapModuleFactory<M>(moduleFactory: NgModuleFactory<M>): Promise<NgModuleRef<M>> {
@@ -158,7 +149,7 @@ export class NativeScriptPlatformRef extends PlatformRef {
         const navEntry: NavigationEntry = {
             create: (): Page => {
                 let page = pageFactory({ isBootstrap: true, isLivesync });
-                NativeScriptPlatformRef.rootPage = page;
+                setRootPage(page);
                 if (this.appOptions) {
                     page.actionBarHidden = this.appOptions.startPageActionBarHidden;
                 }
