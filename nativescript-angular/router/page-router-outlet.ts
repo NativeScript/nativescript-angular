@@ -200,9 +200,9 @@ export class PageRouterOutlet { // tslint:disable-line:directive-class-suffix
             loaderRef.changeDetectorRef.detectChanges();
 
             this.currentActivatedComp = loaderRef.instance.loadWithFactory(factory);
-            this.currentActivatedComp.changeDetectorRef.detectChanges();
-
             this.loadComponentInPage(page, this.currentActivatedComp);
+
+            this.currentActivatedComp.changeDetectorRef.detectChanges();
             this.refCache.push(this.currentActivatedComp, pageRoute, outletMap, loaderRef);
         }
     }
