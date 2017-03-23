@@ -61,6 +61,6 @@ describe("lazy load routing", function () {
                 .should.eventually.exist
                 .text().should.eventually.equal("Second: lazy-load")
             .elementByAccessibilityId("router-location-strategy-states-lazy-load")
-            .text().should.eventually.equal("/first/lazy-load,/second/lazy-load")
+            .text().should.eventually.equal("/second/lazy-load")
     });
 });
