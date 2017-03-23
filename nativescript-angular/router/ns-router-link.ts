@@ -34,85 +34,89 @@ import { isString } from "tns-core-modules/utils/types";
  */
 @Directive({ selector: "[nsRouterLink]" })
 export class NSRouterLink implements OnChanges { // tslint:disable-line:directive-class-suffix
-  private commands: any[] = [];
-  @Input() target: string;
-  @Input() queryParams: { [k: string]: any };
-  @Input() fragment: string;
+    private commands: any[] = [];
+    @Input() target: string;
+    @Input() queryParams: { [k: string]: any };
+    @Input() fragment: string;
 
-  @Input() clearHistory: boolean;
-  @Input() pageTransition: boolean | string | NavigationTransition = true;
+    @Input() clearHistory: boolean;
+    @Input() pageTransition: boolean | string | NavigationTransition = true;
 
-  urlTree: UrlTree;
+    urlTree: UrlTree;
 
-  private usePageRoute: boolean;
+    private usePageRoute: boolean;
 
-  private get currentRoute(): ActivatedRoute {
-    return this.usePageRoute ? this.pageRoute.activatedRoute.getValue() : this.route;
-  }
-
-  constructor(
-    private router: Router,
-    private navigator: RouterExtensions,
-    private route: ActivatedRoute,
-    @Optional() private pageRoute: PageRoute) {
-
-    this.usePageRoute = (this.pageRoute && this.route === this.pageRoute.activatedRoute.getValue());
-  }
-
-  @Input("nsRouterLink")
-  set params(data: any[] | string) {
-    if (Array.isArray(data)) {
-      this.commands = data;
-    } else {
-      this.commands = [data];
+    private get currentRoute(): ActivatedRoute {
+        return this.usePageRoute ? this.pageRoute.activatedRoute.getValue() : this.route;
     }
-  }
+
+    constructor(
+        private router: Router,
+        private navigator: RouterExtensions,
+        private route: ActivatedRoute,
+        @Optional() private pageRoute: PageRoute) {
+
+            this.usePageRoute = (this.pageRoute && this.route === this.pageRoute.activatedRoute.getValue());
+        }
+
+        @Input("nsRouterLink")
+        set params(data: any[] | string) {
+            if (Array.isArray(data)) {
+                this.commands = data;
+            } else {
+                this.commands = [data];
+            }
+        }
 
 
-  @HostListener("tap")
-  onTap() {
-    routerLog("nsRouterLink.tapped: " + this.commands + " usePageRoute: " +
-        this.usePageRoute + " clearHistory: " + this.clearHistory + " transition: " +
-        JSON.stringify(this.pageTransition));
+        @HostListener("tap")
+        onTap() {
+            routerLog("nsRouterLink.tapped: " + this.commands + " usePageRoute: " +
+                      this.usePageRoute + " clearHistory: " + this.clearHistory + " transition: " +
+                      JSON.stringify(this.pageTransition));
 
-    const transition = this.getTransition();
+            const extras = this.getExtras();
+            this.navigator.navigate(this.commands, extras);
+        }
 
-    let extras: NavigationExtras & NavigationOptions = {
-      relativeTo: this.currentRoute,
-      queryParams: this.queryParams,
-      fragment: this.fragment,
-      clearHistory: this.clearHistory,
-      animated: transition.animated,
-      transition: transition.transition
-    };
+        private getExtras() {
+            const transition = this.getTransition();
+            const extras: NavigationExtras & NavigationOptions = {
+                queryParams: this.queryParams,
+                fragment: this.fragment,
+                clearHistory: this.clearHistory,
+                animated: transition.animated,
+                transition: transition.transition,
+            };
 
-    this.navigator.navigate(this.commands, extras);
-  }
+            return (<any>Object).assign(extras,
+                this.currentRoute.toString() !== "Route(url:'', path:'')" && this.currentRoute);
+        }
 
-  private getTransition(): { animated: boolean, transition?: NavigationTransition } {
-    if (typeof this.pageTransition === "boolean") {
-      return { animated: <boolean>this.pageTransition };
-    } else if (isString(this.pageTransition)) {
-      if (this.pageTransition === "none" || this.pageTransition === "false") {
-        return { animated: false };
-      } else {
-        return { animated: true, transition: { name: <string>this.pageTransition } };
-      }
-    } else {
-      return {
-        animated: true,
-        transition: this.pageTransition
-      };
-    }
-  }
+        private getTransition(): { animated: boolean, transition?: NavigationTransition } {
+            if (typeof this.pageTransition === "boolean") {
+                return { animated: <boolean>this.pageTransition };
+            } else if (isString(this.pageTransition)) {
+                if (this.pageTransition === "none" || this.pageTransition === "false") {
+                    return { animated: false };
+                } else {
+                    return { animated: true, transition: { name: <string>this.pageTransition } };
+                }
+            } else {
+                return {
+                    animated: true,
+                    transition: this.pageTransition
+                };
+            }
+        }
 
-  ngOnChanges(_: {}): any {
-    this.updateUrlTree();
-  }
+        ngOnChanges(_: {}): any {
+            this.updateUrlTree();
+        }
 
-  private updateUrlTree(): void {
-    this.urlTree = this.router.createUrlTree(
-      this.commands,
-      { relativeTo: this.currentRoute, queryParams: this.queryParams, fragment: this.fragment });
-  }
+        private updateUrlTree(): void {
+            this.urlTree = this.router.createUrlTree(
+                this.commands,
+                { relativeTo: this.currentRoute, queryParams: this.queryParams, fragment: this.fragment });
+        }
 }
