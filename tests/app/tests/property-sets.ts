@@ -87,28 +87,28 @@ describe("setting View properties", () => {
     it("sets ios property in ios", () => {
         let view = new TestView();
         let testUtil = new ViewUtil(iosDevice);
-        testUtil.setProperty(view, "ios-anyValue", "blah");
+        testUtil.setProperty(view, "anyValue", "blah", "ios");
         assert.strictEqual("blah", view.anyValue);
     });
 
     it("doesn\'t set android property in ios", () => {
         let view = new TestView();
         let testUtil = new ViewUtil(iosDevice);
-        testUtil.setProperty(view, "android-anyValue", "blah");
+        testUtil.setProperty(view, "anyValue", "blah", "android");
         assert.isUndefined(view.anyValue);
     });
 
     it("sets android property in android", () => {
         let view = new TestView();
         let testUtil = new ViewUtil(androidDevice);
-        testUtil.setProperty(view, "android-anyValue", "blah");
+        testUtil.setProperty(view, "anyValue", "blah", "android");
         assert.strictEqual("blah", view.anyValue);
     });
 
     it("doesn\'t set ios property in android", () => {
         let view = new TestView();
         let testUtil = new ViewUtil(androidDevice);
-        testUtil.setProperty(view, "ios-anyValue", "blah");
+        testUtil.setProperty(view, "anyValue", "blah", "ios");
         assert.isUndefined(view.anyValue);
     });
 });
