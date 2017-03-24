@@ -16,8 +16,6 @@ import { ValueSource } from "ui/core/dependency-observable";
 import { platformNames, Device } from "platform";
 import { rendererLog as traceLog, styleError } from "./trace";
 
-const IOS_PREFX: string = "ios-";
-const ANDROID_PREFX: string = "android-";
 const XML_ATTRIBUTES = Object.freeze(["style", "rows", "columns", "fontAttributes"]);
 const whiteSpaceSplitter = /\s+/;
 
@@ -149,30 +147,8 @@ export class ViewUtil {
         return view;
     }
 
-    private platformFilter(attribute: string): string {
-        let lowered = attribute.toLowerCase();
-        if (lowered.indexOf(IOS_PREFX) === 0) {
-            if (this.isIos) {
-                return attribute.substr(IOS_PREFX.length);
-            } else {
-                return null;
-            }
-        }
-
-        if (lowered.indexOf(ANDROID_PREFX) === 0) {
-            if (this.isAndroid) {
-                return attribute.substr(ANDROID_PREFX.length);
-            } else {
-                return null;
-            }
-        }
-
-        return attribute;
-    }
-
-    public setProperty(view: NgView, attributeName: string, value: any): void {
-        attributeName = this.platformFilter(attributeName);
-        if (!attributeName) {
+    public setProperty(view: NgView, attributeName: string, value: any, namespace?: string): void {
+        if (namespace && !this.runsIn(namespace)) {
             return;
         }
 
@@ -222,6 +198,12 @@ export class ViewUtil {
 
         return found ? index : -1;
     }
+
+    private runsIn(platform: string): boolean {
+        return (platform === "ios" && this.isIos) ||
+            (platform === "android" && this.isAndroid);
+    }
+
 
     private setPropertyInternal(view: NgView, attributeName: string, value: any): void {
         traceLog("Setting attribute: " + attributeName);
@@ -354,3 +336,4 @@ export class ViewUtil {
         }
     }
 }
+
