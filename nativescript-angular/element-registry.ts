@@ -2,13 +2,10 @@ import { View } from "ui/core/view";
 
 export type ViewResolver = () => ViewClass;
 export type NgView = View & ViewExtensions;
-export const TEMPLATE = "ng-template";
-
 export interface ViewClassMeta {
     skipAddToDom?: boolean;
     insertChild?: (parent: NgView, child: NgView, atIndex: number) => void;
     removeChild?: (parent: NgView, child: NgView) => void;
-    isTemplateAnchor?: boolean;
 }
 
 export interface ViewExtensions {
@@ -70,11 +67,6 @@ export function isKnownView(elementName: string): boolean {
     return elementMap.has(elementName) ||
         elementMap.has(elementName.toLowerCase());
 }
-
-// Empty view used for template anchors
-export class TemplateView extends View {
-}
-registerElement(TEMPLATE, () => TemplateView, { isTemplateAnchor: true });
 
 // Register default NativeScript components
 // Note: ActionBar related components are registerd together with action-bar directives.
