@@ -29,7 +29,7 @@ export class AndroidSpecificComponent {
 @Component({
     template: `
     <StackLayout>
-        <Label android:text="ANDROID" ios:text="IOS"></Label>
+        <Label android-text="ANDROID" ios-text="IOS"></Label>
     </StackLayout>`
 })
 export class PlatformSpecificAttributeComponent {
