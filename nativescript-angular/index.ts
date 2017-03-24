@@ -17,13 +17,11 @@ export * from "./view-util";
 export * from "./resource-loader";
 export {
     ViewResolver,
-    TEMPLATE,
     ViewClass,
     ViewClassMeta,
     registerElement,
     getViewClass,
     getViewMeta,
     isKnownView,
-    TemplateView
 } from "./element-registry";
 export * from "./value-accessors/base-value-accessor";

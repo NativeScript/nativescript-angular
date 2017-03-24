@@ -1,6 +1,6 @@
 // make sure you import mocha-config before @angular/core
 import { assert } from "./test-config";
-import { Component, ElementRef, Renderer, NgZone } from "@angular/core";
+import { Component, ElementRef, Renderer2, NgZone } from "@angular/core";
 import { ProxyViewContainer } from "ui/proxy-view-container";
 import { Red } from "color/known-colors";
 import { dumpView } from "./test-utils";
@@ -214,7 +214,7 @@ describe("Renderer E2E", () => {
         it("ngIf hides component when false", () => {
             return testApp.loadComponent(NgIfLabel).then((componentRef) => {
                 const componentRoot = componentRef.instance.elementRef.nativeElement;
-                assert.equal("(ProxyViewContainer (template))", dumpView(componentRoot));
+                assert.equal("(ProxyViewContainer (#comment))", dumpView(componentRoot));
             });
         });
 
@@ -225,7 +225,7 @@ describe("Renderer E2E", () => {
 
                 component.show = true;
                 testApp.appRef.tick();
-                assert.equal("(ProxyViewContainer (template), (Label))", dumpView(componentRoot));
+                assert.equal("(ProxyViewContainer (#comment), (Label))", dumpView(componentRoot));
             });
         });
 
@@ -233,7 +233,7 @@ describe("Renderer E2E", () => {
             return testApp.loadComponent(NgForLabel).then((componentRef) => {
                 const componentRoot = componentRef.instance.elementRef.nativeElement;
                 assert.equal(
-                    "(ProxyViewContainer (template), (Label[text=one]), (Label[text=two]), (Label[text=three]))",
+                    "(ProxyViewContainer (#comment), (Label[text=one]), (Label[text=two]), (Label[text=three]))",
                     dumpView(componentRoot, true));
             });
         });
@@ -247,7 +247,7 @@ describe("Renderer E2E", () => {
                 testApp.appRef.tick();
 
                 assert.equal(
-                    "(ProxyViewContainer (template), (Label[text=one]), (Label[text=three]))",
+                    "(ProxyViewContainer (#comment), (Label[text=one]), (Label[text=three]))",
                     dumpView(componentRoot, true));
             });
         });
@@ -261,7 +261,7 @@ describe("Renderer E2E", () => {
                 testApp.appRef.tick();
 
                 assert.equal(
-                    "(ProxyViewContainer (template), " +
+                    "(ProxyViewContainer (#comment), " +
                     "(Label[text=one]), (Label[text=new]), (Label[text=two]), (Label[text=three]))",
                     dumpView(componentRoot, true));
             });
@@ -271,7 +271,7 @@ describe("Renderer E2E", () => {
 
 describe("Renderer createElement", () => {
     let testApp: TestApp = null;
-    let renderer: Renderer = null;
+    let renderer: Renderer2 = null;
 
     before(() => {
         return TestApp.create().then((app) => {
@@ -285,22 +285,22 @@ describe("Renderer createElement", () => {
     });
 
     it("creates element from CamelCase", () => {
-        const result = renderer.createElement(null, "StackLayout", null);
+        const result = renderer.createElement("StackLayout");
         assert.instanceOf(result, StackLayout, "Renderer should create StackLayout form 'StackLayout'");
     });
 
     it("creates element from lowercase", () => {
-        const result = renderer.createElement(null, "stacklayout", null);
+        const result = renderer.createElement("stacklayout");
         assert.instanceOf(result, StackLayout, "Renderer should create StackLayout form 'stacklayout'");
     });
 
     it("creates element from kebab-case", () => {
-        const result = renderer.createElement(null, "stack-layout", null);
+        const result = renderer.createElement("stack-layout");
         assert.instanceOf(result, StackLayout, "Renderer should create StackLayout form 'stack-layout'");
     });
 
     it("creates ProxyViewContainer for unknownTag", () => {
-        const result = renderer.createElement(null, "unknown-tag", null);
+        const result = renderer.createElement("unknown-tag");
         assert.instanceOf(result, ProxyViewContainer, "Renderer should create ProxyViewContainer form 'unknown-tag'");
     });
 });
@@ -308,7 +308,7 @@ describe("Renderer createElement", () => {
 
 describe("Renderer attach/detach", () => {
     let testApp: TestApp = null;
-    let renderer: Renderer = null;
+    let renderer: Renderer2 = null;
 
     before(() => {
         return TestApp.create().then((app) => {
@@ -322,65 +322,57 @@ describe("Renderer attach/detach", () => {
     });
 
     it("createElement element with parent attaches element to content view", () => {
-        const parent = <ContentView>renderer.createElement(null, "ContentView", null);
-        const button = <Button>renderer.createElement(parent, "Button", null);
+        const parent = <ContentView>renderer.createElement("ContentView");
+        const button = <Button>renderer.createElement("Button");
+        renderer.appendChild(parent, button);
 
         assert.equal(parent.content, button);
         assert.equal(button.parent, parent);
     });
 
     it("createElement element with parent attaches element to layout view", () => {
-        const parent = <StackLayout>renderer.createElement(null, "StackLayout", null);
-        const button = <Button>renderer.createElement(parent, "Button", null);
+        const parent = <StackLayout>renderer.createElement("StackLayout");
+        const button = <Button>renderer.createElement("Button");
+        renderer.appendChild(parent, button);
 
         assert.equal(parent.getChildAt(0), button);
         assert.equal(button.parent, parent);
     });
 
     it("detachView element removes element from content view", () => {
-        const parent = <ContentView>renderer.createElement(null, "ContentView", null);
-        const button = <Button>renderer.createElement(parent, "Button", null);
+        const parent = <ContentView>renderer.createElement("ContentView");
+        const button = <Button>renderer.createElement("Button");
+        renderer.appendChild(parent, button);
 
-        renderer.detachView([button]);
+        renderer.removeChild(parent, button);
 
         assert.isNull(parent.content);
         assert.isUndefined(button.parent);
     });
 
     it("detachView element removes element from layout view", () => {
-        const parent = <StackLayout>renderer.createElement(null, "StackLayout", null);
-        const button = <Button>renderer.createElement(parent, "Button", null);
+        const parent = <StackLayout>renderer.createElement("StackLayout");
+        const button = <Button>renderer.createElement("Button");
+        renderer.appendChild(parent, button);
 
-        renderer.detachView([button]);
+        renderer.removeChild(parent, button);
 
         assert.equal(parent.getChildrenCount(), 0);
         assert.isUndefined(button.parent);
     });
 
-    it("attaching template anchor in content view does not replace its content", () => {
-        const parent = <ContentView>renderer.createElement(null, "ContentView", null);
-        const button = <Button>renderer.createElement(parent, "Button", null);
+    it("attaching and detaching comment anchor to content view does not affect its content", () => {
+        const parent = <ContentView>renderer.createElement("ContentView");
+        const button = <Button>renderer.createElement("Button");
+        renderer.appendChild(parent, button);
+        const anchor = <NgView>renderer.createComment("anchor");
+        assert.equal(parent.content, button, "parent has button as initial content");
 
-        assert.equal(parent.content, button);
+        renderer.appendChild(parent, anchor);
+        assert.equal(parent.content, button, "parent still has button as content after inserting anchor");
 
-        const anchor = <NgView>renderer.createTemplateAnchor(parent);
-
-        assert.equal(parent.content, button);
-        assert.equal(anchor.parent, parent);
-        assert.equal(anchor.templateParent, parent);
-    });
-
-    it("attaching and detaching template anchor to content view does not affect its content", () => {
-        const parent = <ContentView>renderer.createElement(null, "ContentView", null);
-        const button = <Button>renderer.createElement(parent, "Button", null);
-        const anchor = <NgView>renderer.createTemplateAnchor(null);
-        assert.equal(parent.content, button);
-
-        renderer.attachViewAfter(button, [anchor]);
-        assert.equal(parent.content, button);
-
-        renderer.detachView([anchor]);
-        assert.equal(parent.content, button);
+        renderer.removeChild(parent, anchor);
+        assert.equal(parent.content, button, "parent has button as content even after removing anchor");
     });
 });
 

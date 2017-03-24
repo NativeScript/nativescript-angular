@@ -69,7 +69,7 @@ export class ViewUtil {
             }
         } else if (isContentView(parent)) {
             // Explicit handling of template anchors inside ContentView
-            if (child.meta.isTemplateAnchor) {
+            if (child.nodeName === "#comment") {
                 parent._addView(child, atIndex);
             } else {
                 parent.content = child;
@@ -96,7 +96,7 @@ export class ViewUtil {
             }
 
             // Explicit handling of template anchors inside ContentView
-            if (child.meta.isTemplateAnchor) {
+            if (child.nodeName === "#comment") {
                 parent._removeView(child);
             }
         } else if (isView(parent)) {
