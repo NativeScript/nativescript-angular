@@ -3,7 +3,7 @@ import { NativeScriptModule } from "nativescript-angular/nativescript.module";
 import { NativeScriptRouterModule } from "nativescript-angular/router";
 import {
     Type, Component, ComponentRef,
-    ComponentFactoryResolver, ApplicationRef, Renderer,
+    ComponentFactoryResolver, ApplicationRef, Renderer2,
     ViewContainerRef, NgZone, NgModule,
 } from "@angular/core";
 
@@ -23,7 +23,7 @@ export class TestApp {
             private resolver: ComponentFactoryResolver,
             private containerRef: ViewContainerRef,
             public appRef: ApplicationRef,
-            public renderer: Renderer,
+            public renderer: Renderer2,
             public zone: NgZone
         ) {
 
