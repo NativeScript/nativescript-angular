@@ -4,7 +4,6 @@ import {
     RendererStyleFlags2, ViewEncapsulation,
 } from "@angular/core";
 
-import { escapeRegexSymbols } from "tns-core-modules/utils/utils";
 import { Device } from "tns-core-modules/platform";
 import { View } from "tns-core-modules/ui/core/view";
 import { addCss } from "tns-core-modules/application";
@@ -151,9 +150,10 @@ export class NativeScriptRenderer extends Renderer2 {
         // Seems to be called on component dispose only (router outlet)
         // TODO: handle this when we resolve routing and navigation.
     }
-    setAttribute(view: NgView, name: string, value: string) {
-        traceLog(`NativeScriptRenderer.setAttribute ${view} : ${name} = ${value}`);
-        return this.setProperty(view, name, value);
+
+    setAttribute(view: NgView, name: string, value: string, namespace?: string) {
+        traceLog(`NativeScriptRenderer.setAttribute ${view} : ${name} = ${value}, namespace: ${namespace}`);
+        return this.viewUtil.setProperty(view, name, value, namespace);
     }
 
     removeAttribute(_el: NgView, _name: string): void {
@@ -162,7 +162,7 @@ export class NativeScriptRenderer extends Renderer2 {
 
     setProperty(view: any, name: string, value: any) {
         traceLog(`NativeScriptRenderer.setProperty ${view} : ${name} = ${value}`);
-        this.viewUtil.setProperty(view, name, value);
+        return this.viewUtil.setProperty(view, name, value);
     }
 
     addClass(view: NgView, name: string): void {
