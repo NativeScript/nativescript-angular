@@ -9,6 +9,7 @@ import {createDevice} from "./test-utils";
 
 class TestView extends View implements ViewExtensions {
     public nodeName: string = "TestView";
+    public nodeType: number = 1;
     public templateParent: NgView = null;
     public meta: ViewClassMeta = { skipAddToDom: false };
     public ngCssClasses: Map<string, boolean> = new Map<string, boolean>();
