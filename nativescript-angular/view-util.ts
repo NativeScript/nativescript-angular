@@ -14,6 +14,7 @@ import { platformNames, Device } from "tns-core-modules/platform";
 import { rendererLog as traceLog } from "./trace";
 
 const XML_ATTRIBUTES = Object.freeze(["style", "rows", "columns", "fontAttributes"]);
+const ELEMENT_NODE_TYPE = 1;
 const whiteSpaceSplitter = /\s+/;
 
 export type ViewExtensions = ViewExtensions;
@@ -140,6 +141,13 @@ export class ViewUtil {
         let view = <NgView>new viewClass();
         view.nodeName = name;
         view.meta = getViewMeta(name);
+
+        // we're setting the node type of the view
+        // to 'element' because of checks done in the
+        // dom animation engine:
+        // tslint:disable-next-line:max-line-length
+        // https://github.com/angular/angular/blob/master/packages/animations/browser/src/render/dom_animation_engine.ts#L70-L81
+        view.nodeType = ELEMENT_NODE_TYPE;
 
         return view;
     }

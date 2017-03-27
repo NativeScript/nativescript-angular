@@ -13,7 +13,8 @@ import {
     setStyles,
 } from "./dom-utils";
 
-const MARKED_FOR_ANIMATION = "ng-animate";
+const MARKED_FOR_ANIMATION_CLASSNAME = "ng-animating";
+const MARKED_FOR_ANIMATION_SELECTOR = ".ng-animating";
 
 interface QueuedAnimationTransitionTuple {
     element: NgView;
@@ -50,9 +51,9 @@ export class NativeScriptAnimationEngine extends DomAnimationEngine {
         // we first run this so that the previous animation player
         // data can be passed into the successive animation players
         let totalTime = 0;
-        const players = instruction.timelines.map(timelineInstruction => {
+        const players = instruction.timelines.map((timelineInstruction, i) => {
             totalTime = Math.max(totalTime, timelineInstruction.totalTime);
-            return (<any>this)._buildPlayer(element, timelineInstruction, previousPlayers);
+            return (<any>this)._buildPlayer(element, timelineInstruction, previousPlayers, i);
         });
 
         previousPlayers.forEach(previousPlayer => previousPlayer.destroy());
@@ -91,7 +92,7 @@ export class NativeScriptAnimationEngine extends DomAnimationEngine {
         // them out by destroying each of them.
         let elms = [];
         element.eachChild(child => {
-            if (cssClasses(<NgView>child).get(MARKED_FOR_ANIMATION)) {
+            if (cssClasses(<NgView>child).get(MARKED_FOR_ANIMATION_SELECTOR)) {
                 elms.push(child);
             }
 
@@ -129,8 +130,8 @@ export class NativeScriptAnimationEngine extends DomAnimationEngine {
         (<any>this)._queuedTransitionAnimations.push(tuple);
         player.init();
 
-        cssClasses(element).set(MARKED_FOR_ANIMATION, true);
-        player.onDone(() => cssClasses(element).set(MARKED_FOR_ANIMATION, false));
+        cssClasses(element).set(MARKED_FOR_ANIMATION_CLASSNAME, true);
+        player.onDone(() => cssClasses(element).set(MARKED_FOR_ANIMATION_CLASSNAME, false));
     }
 
     private _getElementAnimation(element: NgView) {
