@@ -76,21 +76,19 @@ export class NSRouterLink implements OnChanges { // tslint:disable-line:directiv
                       JSON.stringify(this.pageTransition));
 
             const extras = this.getExtras();
-            this.navigator.navigate(this.commands, extras);
+            this.navigator.navigateByUrl(this.urlTree, extras);
         }
 
-        private getExtras() {
+        private getExtras(): NavigationExtras & NavigationOptions {
             const transition = this.getTransition();
-            const extras: NavigationExtras & NavigationOptions = {
+            return {
                 queryParams: this.queryParams,
                 fragment: this.fragment,
                 clearHistory: this.clearHistory,
                 animated: transition.animated,
                 transition: transition.transition,
+                relativeTo: this.currentRoute,
             };
-
-            return (<any>Object).assign(extras,
-                this.currentRoute.toString() !== "Route(url:'', path:'')" && this.currentRoute);
         }
 
         private getTransition(): { animated: boolean, transition?: NavigationTransition } {
