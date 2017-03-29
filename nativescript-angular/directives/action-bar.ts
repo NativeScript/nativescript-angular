@@ -5,9 +5,9 @@ import { Page } from "ui/page";
 import { View } from "ui/core/view";
 import { registerElement, ViewClassMeta, NgView } from "../element-registry";
 
-let actionBarMeta: ViewClassMeta = {
+const actionBarMeta: ViewClassMeta = {
     skipAddToDom: true,
-    insertChild: (parent: NgView, child: NgView, _atIndex: number) => {
+    insertChild: (parent: NgView, child: NgView, atIndex: number) => {
         const bar = <ActionBar>(<any>parent);
         const childView = <any>child;
 
@@ -17,13 +17,16 @@ let actionBarMeta: ViewClassMeta = {
         } else if (child instanceof ActionItem) {
             bar.actionItems.addItem(childView);
             childView.parent = bar;
-        } else if (child.nodeName !== "#text" && child instanceof View) {
+        } else if (child.nodeName === "#comment") {
+            bar._addView(childView, atIndex);
+        } else if (child instanceof View) {
             bar.titleView = childView;
         }
     },
     removeChild: (parent: NgView, child: NgView) => {
         const bar = <ActionBar>(<any>parent);
         const childView = <any>child;
+
         if (child instanceof NavigationButton) {
             if (bar.navigationButton === childView) {
                 bar.navigationButton = null;
