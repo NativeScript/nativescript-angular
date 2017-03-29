@@ -158,7 +158,7 @@ export class ListViewComponent implements DoCheck, OnDestroy, AfterContentInit {
             items.getItem(index) : items[index];
         let viewRef: EmbeddedViewRef<ListItemContext>;
 
-        if (args.view) {
+        if (args.view && args.view[NG_VIEW]) {
             listViewLog("onItemLoading: " + index + " - Reusing existing view");
             viewRef = args.view[NG_VIEW];
             // getting angular view from original element (in cases when ProxyViewContainer
@@ -245,6 +245,7 @@ export function getItemViewRoot(viewRef: ComponentView, rootLocator: RootLocator
     const rootView = rootLocator(viewRef.rootNodes, 0);
     rootView.on("unloaded", () => {
         viewRef.destroy();
+        delete rootView[NG_VIEW];
     });
     return rootView;
 }
