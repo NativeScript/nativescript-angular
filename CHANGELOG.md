@@ -1,3 +1,14 @@
+<a name="1.5.1"></a>
+## [1.5.1](https://github.com/NativeScript/nativescript-angular/compare/v1.5.0...v1.5.1) (2017-03-30)
+
+
+### Bug Fixes
+
+* **action bar:** attach #comment nodes with _addView ([#729](https://github.com/NativeScript/nativescript-angular/issues/729)) ([be93db6](https://github.com/NativeScript/nativescript-angular/commit/be93db6)), closes [#725](https://github.com/NativeScript/nativescript-angular/issues/725)
+* **ns-router-link:** navigate with urlTree ([#728](https://github.com/NativeScript/nativescript-angular/issues/728)) ([71058f8](https://github.com/NativeScript/nativescript-angular/commit/71058f8)), closes [#724](https://github.com/NativeScript/nativescript-angular/issues/724)
+
+
+
 <a name="1.5.0"></a>
 # [1.5.0](https://github.com/NativeScript/nativescript-angular/compare/v1.4.1...v1.5.0) (2017-03-22)
 
