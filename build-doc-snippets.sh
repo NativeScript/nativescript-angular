@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 set -e
 
+ENV="${ENV:-dev}"
 DIST_DIR="bin/dist"
 TARGET_DIR="$DIST_DIR/snippets"
 PACKAGE_VERSION="${PACKAGE_VERSION:-0.0.0}"
@@ -17,4 +18,4 @@ mkdir -p "$TARGET_DIR"
 
 extractSnippets
 
-(cd "$DIST_DIR" && tar zcvf "nativescript-angular-snippets-$PACKAGE_VERSION.tar.gz" snippets)
+(cd "$DIST_DIR" && tar zcvf "nativescript-angular-snippets-$ENV-$PACKAGE_VERSION.tar.gz" snippets)
