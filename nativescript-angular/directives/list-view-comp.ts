@@ -243,10 +243,6 @@ export type RootLocator = (nodes: Array<any>, nestLevel: number) => View;
 
 export function getItemViewRoot(viewRef: ComponentView, rootLocator: RootLocator = getSingleViewRecursive): View {
     const rootView = rootLocator(viewRef.rootNodes, 0);
-    rootView.on("unloaded", () => {
-        viewRef.destroy();
-        delete rootView[NG_VIEW];
-    });
     return rootView;
 }
 

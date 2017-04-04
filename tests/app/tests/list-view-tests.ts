@@ -121,19 +121,3 @@ describe("ListView-tests", () => {
             .catch(done);
     });
 });
-
-describe("ListView item templates", () => {
-    it("destroy child ng views on unload", () => {
-        const childRoot = new ProxyViewContainer();
-        let viewDestroyed = false;
-        const view: ComponentView = {
-            rootNodes: [],
-            destroy: () => {
-                viewDestroyed = true;
-            }
-        };
-        const itemRoot = getItemViewRoot(view, (_rootNodes, _level) => childRoot);
-        itemRoot.notify({eventName: "unloaded", object: itemRoot});
-        assert.isTrue(viewDestroyed, "ng view not destroyed");
-    });
-});
