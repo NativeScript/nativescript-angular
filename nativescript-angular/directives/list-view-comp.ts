@@ -25,6 +25,8 @@ import { ListView } from "tns-core-modules/ui/list-view";
 import { View, KeyedTemplate } from "tns-core-modules/ui/core/view";
 import { ObservableArray } from "tns-core-modules/data/observable-array";
 import { LayoutBase } from "tns-core-modules/ui/layouts/layout-base";
+import { StackLayout } from "tns-core-modules/ui/layouts/stack-layout";
+import { ProxyViewContainer } from "tns-core-modules/ui/proxy-view-container";
 import { listViewLog } from "../trace";
 
 const NG_VIEW = "_ngViewRef";
@@ -160,6 +162,7 @@ export class ListViewComponent implements DoCheck, OnDestroy, AfterContentInit {
 
         if (args.view && args.view[NG_VIEW]) {
             listViewLog("onItemLoading: " + index + " - Reusing existing view");
+            console.log("onItemLoading: " + index + " - Reusing existing view");
             viewRef = args.view[NG_VIEW];
             // getting angular view from original element (in cases when ProxyViewContainer
             // is used NativeScript internally wraps it in a StackLayout)
@@ -169,6 +172,7 @@ export class ListViewComponent implements DoCheck, OnDestroy, AfterContentInit {
             }
         } else {
             listViewLog("onItemLoading: " + index + " - Creating view from template");
+            console.log("onItemLoading: " + index + " - Creating view from template");
             viewRef = this.loader.createEmbeddedView(this.itemTemplate, new ListItemContext(), 0);
             args.view = getItemViewRoot(viewRef);
             args.view[NG_VIEW] = viewRef;
@@ -242,7 +246,12 @@ export interface ComponentView {
 export type RootLocator = (nodes: Array<any>, nestLevel: number) => View;
 
 export function getItemViewRoot(viewRef: ComponentView, rootLocator: RootLocator = getSingleViewRecursive): View {
-    const rootView = rootLocator(viewRef.rootNodes, 0);
+    let rootView = rootLocator(viewRef.rootNodes, -1);
+    if (rootView instanceof ProxyViewContainer) {
+        const wrapperLayout = new StackLayout();
+        wrapperLayout.addChild(rootView);
+        rootView = wrapperLayout;
+    }
     return rootView;
 }
 
