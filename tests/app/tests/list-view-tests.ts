@@ -3,6 +3,8 @@ import { Component, Input, AfterViewInit } from "@angular/core";
 import { TestApp } from "./test-app";
 import { RootLocator, ComponentView, getItemViewRoot } from "nativescript-angular/directives/list-view-comp";
 import { ProxyViewContainer } from "tns-core-modules/ui/proxy-view-container";
+import { StackLayout } from "tns-core-modules/ui/layouts/stack-layout";
+import { Label } from "tns-core-modules/ui/label";
 
 // import trace = require("trace");
 // trace.setCategories("ns-list-view, " + trace.categories.Navigation);
@@ -119,5 +121,27 @@ describe("ListView-tests", () => {
             }, 1000);
         })
             .catch(done);
+    });
+});
+
+describe("ListView item templates", () => {
+    it("wraps components in StackLayout", () => {
+        const view: ComponentView = {
+            rootNodes: [],
+            destroy: () => {}
+        };
+        const childRoot = new ProxyViewContainer();
+        const itemRoot = getItemViewRoot(view, (_rootNodes, _level) => childRoot);
+        assert.isTrue(itemRoot instanceof StackLayout, "ProxyViewContainer wrapped in StackLayout");
+    });
+
+    it("does not wrap non-component children", () => {
+        const view: ComponentView = {
+            rootNodes: [],
+            destroy: () => {}
+        };
+        const childRoot = new Label();
+        const itemRoot = getItemViewRoot(view, (_rootNodes, _level) => childRoot);
+        assert.isTrue(itemRoot instanceof Label, "'normal' children not wrapped");
     });
 });
