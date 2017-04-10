@@ -23,3 +23,7 @@ export function styleError(message: string): void {
 export function listViewLog(message: string): void {
     write(message, listViewTraceCategory);
 }
+
+export function listViewError(message: string): void {
+    write(message, listViewTraceCategory, messageType.error);
+}
