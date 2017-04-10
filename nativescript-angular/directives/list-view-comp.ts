@@ -19,13 +19,12 @@ import {
     Host,
     ChangeDetectionStrategy
 } from "@angular/core";
-import { isBlank } from "../lang-facade";
 import { isListLikeIterable } from "../collection-facade";
-import { ListView } from "tns-core-modules/ui/list-view";
+import { ListView, ItemEventData } from "tns-core-modules/ui/list-view";
 import { View, KeyedTemplate } from "tns-core-modules/ui/core/view";
 import { ObservableArray } from "tns-core-modules/data/observable-array";
 import { LayoutBase } from "tns-core-modules/ui/layouts/layout-base";
-import { listViewLog } from "../trace";
+import { listViewLog, listViewError } from "../trace";
 
 const NG_VIEW = "_ngViewRef";
 
@@ -147,27 +146,31 @@ export class ListViewComponent implements DoCheck, OnDestroy, AfterContentInit {
         this._templateMap.set(key, keyedTemplate);
     }
 
-    public onItemLoading(args) {
+    public onItemLoading(args: ItemEventData) {
         if (!args.view && !this.itemTemplate) {
             return;
         }
 
-        let index = args.index;
-        let items = args.object.items;
-        let currentItem = typeof (items.getItem) === "function" ?
-            items.getItem(index) : items[index];
+        const index = args.index;
+        const items = (<any>args.object).items;
+        const currentItem = typeof items.getItem === "function" ? items.getItem(index) : items[index];
         let viewRef: EmbeddedViewRef<ListItemContext>;
 
-        if (args.view && args.view[NG_VIEW]) {
+        if (args.view) {
             listViewLog("onItemLoading: " + index + " - Reusing existing view");
             viewRef = args.view[NG_VIEW];
-            // getting angular view from original element (in cases when ProxyViewContainer
+            // Getting angular view from original element (in cases when ProxyViewContainer
             // is used NativeScript internally wraps it in a StackLayout)
-            if (!viewRef) {
-                viewRef = (args.view._subViews && args.view._subViews.length > 0) ?
-                    args.view._subViews[0][NG_VIEW] : undefined;
+            if (!viewRef && args.view instanceof LayoutBase && args.view.getChildrenCount() > 0) {
+                viewRef = args.view.getChildAt(0)[NG_VIEW];
             }
-        } else {
+
+            if (!viewRef) {
+                listViewError("ViewReference not found for item " + index + ". View recycling is not working");
+            }
+        };
+
+        if (!viewRef) {
             listViewLog("onItemLoading: " + index + " - Creating view from template");
             viewRef = this.loader.createEmbeddedView(this.itemTemplate, new ListItemContext(), 0);
             args.view = getItemViewRoot(viewRef);
@@ -180,9 +183,6 @@ export class ListViewComponent implements DoCheck, OnDestroy, AfterContentInit {
     }
 
     public setupViewRef(viewRef: EmbeddedViewRef<ListItemContext>, data: any, index: number): void {
-        if (isBlank(viewRef)) {
-            return;
-        }
         const context = viewRef.context;
         context.$implicit = data;
         context.item = data;
@@ -194,13 +194,9 @@ export class ListViewComponent implements DoCheck, OnDestroy, AfterContentInit {
     }
 
     private detectChangesOnChild(viewRef: EmbeddedViewRef<ListItemContext>, index: number) {
-        // Manually detect changes in child view ref
-        // TODO: Is there a better way of getting viewRef"s change detector
-        const childChangeDetector = <ChangeDetectorRef>(<any>viewRef);
-
         listViewLog("Manually detect changes in child: " + index);
-        childChangeDetector.markForCheck();
-        childChangeDetector.detectChanges();
+        viewRef.markForCheck();
+        viewRef.detectChanges();
     }
 
     ngDoCheck() {
