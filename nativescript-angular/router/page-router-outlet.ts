@@ -1,6 +1,6 @@
 import {
     Attribute, ComponentFactory, ComponentRef, Directive,
-    ViewContainerRef,
+    ViewContainerRef, Type, InjectionToken,
     Inject, ComponentFactoryResolver, Injector
 } from "@angular/core";
 import { RouterOutletMap, ActivatedRoute, PRIMARY_OUTLET } from "@angular/router";
@@ -167,19 +167,22 @@ export class PageRouterOutlet { // tslint:disable-line:directive-class-suffix
         activatedRoute: ActivatedRoute,
         outletMap: RouterOutletMap,
         loadedResolver: ComponentFactoryResolver): void {
-        const factory = this.getComponentFactory(activatedRoute, loadedResolver);
-
         const pageRoute = new PageRoute(activatedRoute);
 
+        let providers = new Map();
+        providers.set(PageRoute, pageRoute);
+        providers.set(ActivatedRoute, activatedRoute);
+        providers.set(RouterOutletMap, outletMap);
+        const childInjector = new ChildInjector(providers, this.location.injector);
+
+        const factory = this.getComponentFactory(activatedRoute, loadedResolver);
         if (this.isInitialPage) {
             log("PageRouterOutlet.activate() initial page - just load component");
 
             this.isInitialPage = false;
 
-            const injector = new OutletInjector(activatedRoute, outletMap, this.location.injector);
             this.currentActivatedComp = this.location.createComponent(
-                factory, this.location.length, injector, []);
-
+                factory, this.location.length, childInjector, []);
             this.currentActivatedComp.changeDetectorRef.detectChanges();
 
             this.refCache.push(this.currentActivatedComp, pageRoute, outletMap, null);
@@ -193,7 +196,7 @@ export class PageRouterOutlet { // tslint:disable-line:directive-class-suffix
                 componentType: factory.componentType
             });
 
-            const childInjector = new ChildInjector(activatedRoute, outletMap, page, this.location.injector);
+            providers.set(Page, page);
 
             const loaderRef = this.location.createComponent(
                 this.detachedLoaderFactory, this.location.length, childInjector, []);
@@ -264,47 +267,23 @@ export class PageRouterOutlet { // tslint:disable-line:directive-class-suffix
     ): ComponentFactory<any> {
         const snapshot = activatedRoute._futureSnapshot;
         const component = <any>snapshot._routeConfig.component;
-        let factory: ComponentFactory<any>;
 
         if (loadedResolver) {
-            factory = loadedResolver.resolveComponentFactory(component);
+            return loadedResolver.resolveComponentFactory(component);
         } else {
-            factory = this.componentFactoryResolver.resolveComponentFactory(component);
+            return this.componentFactoryResolver.resolveComponentFactory(component);
         }
-
-        return factory;
     }
 }
 
-class OutletInjector implements Injector {
+class ChildInjector implements Injector {
     constructor(
-        private route: ActivatedRoute, private map: RouterOutletMap, private parent: Injector) { }
+        private providers: Map<Type<any>|InjectionToken<any>, any>,
+        private parent: Injector
+    ) {}
 
-    get(token: any, notFoundValue?: any): any {
-        if (token === ActivatedRoute) {
-            return this.route;
-        }
-
-        if (token === RouterOutletMap) {
-            return this.map;
-        }
-
-        return this.parent.get(token, notFoundValue);
-    }
-}
-
-class ChildInjector extends OutletInjector {
-    constructor(
-        route: ActivatedRoute, map: RouterOutletMap, private page: Page, parent: Injector) {
-            super(route, map, parent);
-        }
-
-    get(token: any, notFoundValue?: any): any {
-         if (token === Page) {
-            return this.page;
-        }
-
-        return super.get(token, notFoundValue);
+    get<T>(token: Type<T>|InjectionToken<T>, notFoundValue?: T): T {
+        return this.providers.get(token) || this.parent.get(token, notFoundValue);
     }
 }
 
