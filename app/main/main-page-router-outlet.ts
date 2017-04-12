@@ -1,5 +1,4 @@
 import { Component } from "@angular/core";
-import { routes } from "../app.routes";
 import * as platform from "platform";
 
 @Component({

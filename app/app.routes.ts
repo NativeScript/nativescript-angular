@@ -17,6 +17,9 @@ import { ListViewAsyncPipeComponent } from "./listView/asyncPipeTemplate/async-p
 import { ListViewMainPageComponent } from "./listView/listViewMainPage/list-view-main-page";
 import { ListViewWithNestedTemplateComponent } from "./listView/nestedTemplate/list-view-nested-template";
 
+import { ListPickerMainPageComponent } from "./listPicker/list-picker-main-page";
+import { ListPickerComponent } from "./listPicker/list-picker";
+
 import { ModalTest, ModalTestWithPushStrategy, ModalContent } from "./modal/modal-dialogs/modal-dialog.component";
 import { ModalViewMainPageComponent } from "./modal/modal-view-main-page";
 
@@ -26,10 +29,9 @@ import { NavigationOptionsComponent } from "./navigation-options/navigation-opti
 import { NavigationInfoComponent } from "./navigation-options/navigation-info.component";
 import { MainComponent } from "./main/main-page-router-outlet";
 
-
 export var routableComponents = [];
 
-// Set isNavigatable: trueif the page is a mian page to other sub pages
+// Set isNavigatable: true if the page is a mian page to other sub pages
 export const routes = [
     routeEntry({ path: '', component: MainComponent, data: { title: "" } }),
     routeEntry({ path: '', component: ModalContent, data: { title: "" } }),
@@ -50,6 +52,9 @@ export const routes = [
     routeEntry({ path: 'listView/customTemplate', component: ListViewControlComponent, data: { title: "customTemplate" } }),
     routeEntry({ path: 'listView/asyncPipeTemplate', component: ListViewAsyncPipeComponent, data: { title: "asyncPipeTemplate" } }),
     routeEntry({ path: 'listView/nestedTemplate', component: ListViewWithNestedTemplateComponent, data: { title: "nestedTemplate" } }),
+
+    routeEntry({ path: 'listPicker', component: ListPickerMainPageComponent, data: { title: "ListPicker", isNavigatable: true } }),
+    routeEntry({ path: 'listPicker/list-picker', component: ListPickerComponent, data: { title: "ListPicker", isNavigatable: false } }),
 
     routeEntry({ path: 'modal', component: ModalViewMainPageComponent, data: { title: "Modals", isNavigatable: true} }),
     routeEntry({ path: 'modal/modal-dialogs', component: ModalTest, data: { title: "modal" } }),
