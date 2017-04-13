@@ -10,11 +10,11 @@ export class DataItem {
     template: `
     <GridLayout rows='*,60' automationText="mainView">
         <ListView [items]="myItems | async">
-            <template let-item="item" let-i="index" let-odd="odd" let-even="even">
+            <ng-template let-item="item" let-i="index" let-odd="odd" let-even="even">
                 <StackLayout [class.odd]="odd" [class.even]="even">
                     <Label [text]='"index: " + item.name'></Label>
                 </StackLayout>
-            </template>
+            </ng-template>
         </ListView>
         <TextView  row='1' [text]='output' automationText="tvResult" textWrap="true"></TextView>
     </GridLayout>

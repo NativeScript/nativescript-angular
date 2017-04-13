@@ -8,7 +8,8 @@
         "noEmitOnError": true,
         "lib": [
             "es6",
-            "dom"
+            "dom",
+            "es2015.iterable"
         ],
         "baseUrl": ".",
         "paths": {

@@ -18,9 +18,9 @@ export class CustomTemplate {
     template: `
         <GridLayout rows="*" automationText="mainView"> 
             <ListView [items]="myItems">
-                <template let-item="item">
+                <ng-template let-item="item">
                     <custom-template [data]="item"></custom-template>
-                </template>
+                </ng-template>
             </ListView>
         </GridLayout>
     `,

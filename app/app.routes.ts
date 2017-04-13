@@ -48,10 +48,10 @@ export const routes = [
     routeEntry({ path: 'binding', component: BindingComponent, data: { title: "Binding", isNavigatable: true} }),
 
     routeEntry({ path: 'ListViewExamples', component: ListViewMainPageComponent, data: { title: "ListViewExamples", isNavigatable: true} }),
-    routeEntry({ path: 'listView/commonTemplate', component: ListViewComponent, data: { title: "commonTemplate" } }),
-    routeEntry({ path: 'listView/customTemplate', component: ListViewControlComponent, data: { title: "customTemplate" } }),
-    routeEntry({ path: 'listView/asyncPipeTemplate', component: ListViewAsyncPipeComponent, data: { title: "asyncPipeTemplate" } }),
-    routeEntry({ path: 'listView/nestedTemplate', component: ListViewWithNestedTemplateComponent, data: { title: "nestedTemplate" } }),
+    routeEntry({ path: "ListViewExamples/commonTemplate", component: ListViewComponent, data: { title: "commonTemplate" } }),
+    routeEntry({ path: "ListViewExamples/customTemplate", component: ListViewControlComponent, data: { title: "customTemplate" } }),
+    routeEntry({ path: "listView/asyncPipeTemplate", component: ListViewAsyncPipeComponent, data: { title: "asyncPipeTemplate" } }),
+    routeEntry({ path: "listView/nestedTemplate", component: ListViewWithNestedTemplateComponent, data: { title: "nestedTemplate" } }),
 
     routeEntry({ path: 'listPicker', component: ListPickerMainPageComponent, data: { title: "ListPicker", isNavigatable: true } }),
     routeEntry({ path: 'listPicker/list-picker', component: ListPickerComponent, data: { title: "ListPicker", isNavigatable: false } }),
