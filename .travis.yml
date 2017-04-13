@@ -36,12 +36,11 @@ before_script:
 - echo no | android create avd --force -n test -t android-19 -b armeabi-v7a
 - emulator -memory 1024 -avd test -no-audio -no-window &
 script:
--
--
+- cd tests/tns
 - tns build android
-- npm run test
 - android-wait-for-emulator
 - npm run run-appium-android
+- npm run test
 before_deploy:
 - cd ../nativescript-angular
 - npm install -g nativescript --ignore-scripts
