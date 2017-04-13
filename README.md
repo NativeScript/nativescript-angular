@@ -1,6 +1,6 @@
 [![Build Status](https://travis-ci.org/NativeScript/nativescript-angular.svg?branch=master)](https://travis-ci.org/NativeScript/nativescript-angular)
 
-Integrating NativeScript with Angular 2.
+Integrating NativeScript with Angular.
 
 # Running locally
 
@@ -68,7 +68,7 @@ npm link nativescript-angular
 1. Make changes to the `test`, `ng-sample` projects or in `nativescript-angular` folder.
 2. Run the `tests` or `ng-sample` using as shown above.
 
-# Watch the video explaining Angular 2 and NativeScript
+# Watch the video explaining Angular and NativeScript
 [NativeScript session on AngularConnect conference](https://www.youtube.com/watch?v=4SbiiyRSIwo)
 
 # Explore the examples

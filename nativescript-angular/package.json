@@ -39,8 +39,8 @@
     "update-app-ng-deps": "./bin/update-app-ng-deps"
   },
   "dependencies": {
-    "nativescript-intl": "~0.0.8",
-    "reflect-metadata": "~0.1.8"
+    "nativescript-intl": "^0.0.8",
+    "reflect-metadata": "^0.1.8"
   },
   "peerDependencies": {
     "@angular/core": "~4.0.0",
@@ -66,12 +66,10 @@
     "@angular/forms": "~4.0.0",
     "@angular/http": "~4.0.0",
     "codelyzer": "~3.0.0-beta.4",
-    "nativescript-intl": "^0.0.8",
     "tns-core-modules": "internal-preview",
     "tslint": "~4.5.0",
     "typescript": "~2.2.1",
     "rxjs": "^5.0.1",
-    "reflect-metadata": "^0.1.8",
     "zone.js": "^0.8.4"
   }
 }

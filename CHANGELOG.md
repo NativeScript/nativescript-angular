@@ -1,6 +1,3 @@
-# 3.0.0 (2017-xx-xx)
-- Compatible with Angular 4 and NativeScript 3.0
-
 <a name="1.5.1"></a>
 ## [1.5.1](https://github.com/NativeScript/nativescript-angular/compare/v1.5.0...v1.5.1) (2017-03-30)
 
