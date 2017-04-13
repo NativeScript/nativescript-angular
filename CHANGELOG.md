@@ -1,3 +1,6 @@
+# 3.0.0 (2017-xx-xx)
+- Compatible with Angular 4 and NativeScript 3.0
+
 # 1.1.2 (2016-10-28)
 - Angular 2.1.2 compatibility release
 
