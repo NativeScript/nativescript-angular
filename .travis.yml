@@ -1,43 +1,81 @@
+os: osx
+osx_image: xcode8.3
+sudo: false
+language: objective-c
+
 env:
   global:
-  - NODE_VERSION=6.9.1
-  - DATE=$(date +%Y-%m-%d)
-  - PACKAGE_VERSION=$DATE-$TRAVIS_BUILD_NUMBER
-language: android
-jdk:
-- oraclejdk8
-android:
-  components:
-  - platform-tools
-  - build-tools-23.0.1
-  - android-23
-  - extra-android-m2repository
-  - sys-img-armeabi-v7a-android-19
+    - NODE_VERSION=6.9.1
+    - DATE=$(date +%Y-%m-%d)
+    - PACKAGE_VERSION=$DATE-$TRAVIS_BUILD_NUMBER
+  matrix:
+    - NODE_VERSION="6" NPM_VERSION="3" TNS_VERSION="rc"
+    - NODE_VERSION="7" NPM_VERSION="3" TNS_VERSION="rc"
+
+
 before_cache:
 - rm -f $HOME/.gradle/caches/modules-2/modules-2.lock
 cache:
   directories:
   - "$HOME/.gradle/caches/"
   - "$HOME/.gradle/wrapper/"
+
+before_install:
+  - export ANDROID_HOME=/usr/local/share/android-sdk
+  - export PATH=$PATH:$ANDROID_HOME/tools:$ANDROID_HOME/platform-tools
+  - wget -qO- https://raw.githubusercontent.com/creationix/nvm/v0.31.0/install.sh | bash
+  - source ~/.nvm/nvm.sh && nvm install $NODE_VERSION && nvm use $NODE_VERSION
+  - PATH="`npm bin`:`npm bin -g`:$PATH"
+  - brew update > /dev/null;
+  - brew install Caskroom/cask/android-sdk
+  - echo y | sdkmanager 'tools'
+  - echo y | sdkmanager 'platform-tools'
+  - echo y | sdkmanager 'build-tools;25.0.2'
+  - echo y | sdkmanager 'platforms;android-25'
+  - echo y | sdkmanager 'extras;android;m2repository'
+  - echo y | sdkmanager 'extras;google;google_play_services'
+  - echo y | sdkmanager 'extras;google;m2repository'
+  - mkdir "$ANDROID_HOME/licenses" || true
+  - echo -e "\n8933bad161af4178b1185d1a37fbf41ea5269c55" > "$ANDROID_HOME/licenses/android-sdk-license"
+  - echo -e "\n84831b9409646a918e30573bab4c9c91346d8abd" > "$ANDROID_HOME/licenses/android-sdk-preview-license" 
+  - npm install -g npm@$NPM_VERSION
+  - npm install -g nativescript@$TNS_VERSION
+  - npm install
+  # CocoaPods
+  - gem install cocoapods --pre --no-rdoc --no-ri --no-document --quiet
+  - gem install xcpretty --no-rdoc --no-ri --no-document --quiet
+  - pod --version
+  - pod setup --silent
+  - pod repo update --silent
+  # Show environment invo
+  - node --version
+  - npm --version
+  - xcpretty --version
+  - xcodebuild -version
+  - xcodebuild -showsdks
+  - echo $ANDROID_HOME
+
 install:
-- nvm install $NODE_VERSION
-- npm install -g typings
-- wget -O ./nativescript.tgz "https://s3.amazonaws.com/nativescript-ci/build_result/nativescript.tgz"
-- npm install -g nativescript.tgz --ignore-scripts
-- tns usage-reporting disable
-- tns error-reporting disable
-- cd nativescript-angular
-- npm install
-- npm run tslint
-- cd ../tests
-- npm install
-- tns platform add android
+  - nvm install $NODE_VERSION
+  - npm install -g typings
+  - wget -O ./nativescript.tgz "https://s3.amazonaws.com/nativescript-ci/build_result/nativescript.tgz"
+  - npm install -g nativescript.tgz --ignore-scripts
+  - tns usage-reporting disable
+  - tns error-reporting disable
+  - cd nativescript-angular
+  - npm install
+  - npm run tslint
+  - cd ../tests
+  - npm install
+  - tns platform add android
+  - tns platform add ios
 before_script:
 - echo no | android create avd --force -n test -t android-19 -b armeabi-v7a
 - emulator -memory 1024 -avd test -no-audio -no-window &
 script:
 - 
 - 
+- tns build ios
 - tns build android
 - android-wait-for-emulator
 - npm run run-appium-android
