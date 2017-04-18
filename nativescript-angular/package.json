@@ -45,7 +45,7 @@
     "typescript": "~2.1.1",
     "tslint": "~4.0.1",
     "codelyzer": "~2.0.0",
-    "tns-core-modules": ">=2.5.0 || >=2.5.0-2016",
+    "tns-core-modules": "~2.5.0",
     "zone.js": "^0.8.2"
   },
   "nativescript": {}
