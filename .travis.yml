@@ -8,11 +8,10 @@ env:
     - API=19 # Google API 19 by default
     - TAG=google_apis # Google APIs by default, alternatively use default
     - ABI=armeabi-v7a # ARM ABI v7a by default
-    - NODE_VERSION=6.9.1
     - DATE=$(date +%Y-%m-%d)
     - PACKAGE_VERSION=$DATE-$TRAVIS_BUILD_NUMBER
   matrix:
-    - NODE_VERSION="6" NPM_VERSION="3"
+    - NODE_VERSION="6.9.1" NPM_VERSION="3"
     - NODE_VERSION="7" NPM_VERSION="3"
 
 
@@ -86,8 +85,12 @@ install:
   - tns platform add ios
 
 before_script:
-  - echo no | avdmanager create avd --name test -k "$EMULATOR" -f --abi "$ABI" --tag "$TAG"
+  - echo no | avdmanager create avd --name test -k "$EMULATOR" -f
+  --abi "$ABI" --tag "$TAG"
   - emulator -memory 1024 -avd test -no-audio -no-window &
+  - wget https://raw.githubusercontent.com/travis-ci/travis-cookbooks/master/community-cookbooks/android-sdk/files/default/android-wait-for-emulator
+  - chmod a+x ./android-wait-for-emulator
+  - ./android-wait-for-emulator
 
 script:
   - 
