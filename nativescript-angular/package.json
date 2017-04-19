@@ -39,7 +39,7 @@
     "update-app-ng-deps": "./bin/update-app-ng-deps"
   },
   "dependencies": {
-    "nativescript-intl": "^0.0.8",
+    "nativescript-intl": "^3.0.0",
     "reflect-metadata": "^0.1.8"
   },
   "peerDependencies": {
@@ -47,7 +47,6 @@
     "@angular/common": "~4.0.0",
     "@angular/compiler": "~4.0.0",
     "@angular/platform-browser": "~4.0.0",
-    "@angular/animations": "~4.0.0",
     "@angular/router": "~4.0.0",
     "@angular/forms": "~4.0.0",
     "@angular/http": "~4.0.0",
