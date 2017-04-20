@@ -5,7 +5,7 @@ language: objective-c
 
 env:
   global:
-    - API=19 # Google API 19 by default
+    - API=21 # Google API 19 by default
     - TAG=google_apis # Google APIs by default, alternatively use default
     - ABI=armeabi-v7a # ARM ABI v7a by default
     - DATE=$(date +%Y-%m-%d)
@@ -25,7 +25,7 @@ cache:
 before_install:
   - export EMULATOR="system-images;android-${API};${TAG};${ABI}" # Used to install/create emulator
   - export ANDROID_HOME=/usr/local/share/android-sdk
-  - export PATH=$PATH:$ANDROID_HOME/tools:$ANDROID_HOME/platform-tools
+  - export PATH=$ANDROID_HOME/emulator:$ANDROID_HOME/tools:$ANDROID_HOME/platform-tools:$PATH
   - wget -qO- https://raw.githubusercontent.com/creationix/nvm/v0.31.0/install.sh | bash
   - source ~/.nvm/nvm.sh && nvm install $NODE_VERSION && nvm use $NODE_VERSION
   - PATH="`npm bin`:`npm bin -g`:$PATH"
@@ -43,8 +43,7 @@ before_install:
   - echo y | sdkmanager 'system-images;android-24;default;armeabi-v7a'
   - echo y | sdkmanager 'system-images;android-22;default;armeabi-v7a'
   - echo y | sdkmanager 'system-images;android-21;default;armeabi-v7a'
-  - echo y | sdkmanager 'system-images;android-19;default;armeabi-v7a'
-  - echo y | sdkmanager 'system-images;android-19;google_apis;armeabi-v7a'
+  - echo y | sdkmanager 'system-images;android-21;google_apis;armeabi-v7a'
   # Extras
   - echo y | sdkmanager 'extras;android;m2repository'
   - echo y | sdkmanager 'extras;google;google_play_services'
@@ -54,6 +53,10 @@ before_install:
   - mkdir "$ANDROID_HOME/licenses" || true
   - echo -e "\n8933bad161af4178b1185d1a37fbf41ea5269c55" > "$ANDROID_HOME/licenses/android-sdk-license"
   - echo -e "\n84831b9409646a918e30573bab4c9c91346d8abd" > "$ANDROID_HOME/licenses/android-sdk-preview-license" 
+  # create and start emulator
+  - echo no | avdmanager create avd --name test -k "$EMULATOR" -f --abi "$ABI" --tag "$TAG"
+  - emulator -avd test -gpu off -skin 768x1280 -no-audio -no-window &
+  # frontend libs
   - npm install -g npm@$NPM_VERSION
   # CocoaPods
   - gem install cocoapods --pre --no-rdoc --no-ri --no-document --quiet
@@ -85,18 +88,17 @@ install:
   - tns platform add ios
 
 before_script:
-  - echo no | avdmanager create avd --name test -k "$EMULATOR" -f --abi "$ABI" --tag "$TAG"
-  - emulator -memory 1024 -avd test -no-audio -no-window &
-  - wget https://raw.githubusercontent.com/travis-ci/travis-cookbooks/master/community-cookbooks/android-sdk/files/default/android-wait-for-emulator
+  # lets wait for the android emulator
+  - wget "https://raw.githubusercontent.com/travis-ci/travis-cookbooks/master/community-cookbooks/android-sdk/files/default/android-wait-for-emulator"
   - chmod a+x ./android-wait-for-emulator
   - ./android-wait-for-emulator
+  - adb shell input keyevent 82 &
 
 script:
   - 
   - 
   - tns build ios
   - tns build android
-  - android-wait-for-emulator
   - npm run run-appium-android
   - npm run test
 
