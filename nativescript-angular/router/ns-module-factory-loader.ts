@@ -37,7 +37,8 @@ export class NSModuleFactoryLoader implements NgModuleFactoryLoader {
         return this.loadAndCompile(path, true);
     }
 
-    private loadAndCompile(path: string, includeComponents?: boolean): Promise<NgModuleFactory<any> | ModuleWithComponentFactories<any>> {
+    private loadAndCompile(path: string, includeComponents?: boolean):
+        Promise<NgModuleFactory<any> | ModuleWithComponentFactories<any>> {
         let {modulePath, exportName} = splitPath(path);
 
         let loadedModule = global.require(modulePath)[exportName];
@@ -47,7 +48,7 @@ export class NSModuleFactoryLoader implements NgModuleFactoryLoader {
             return Promise.resolve(this.compiler.compileModuleAndAllComponentsAsync(loadedModule));
         } else {
             return Promise.resolve(this.compiler.compileModuleAsync(loadedModule));
-        }      
+        }
     }
 
 }
