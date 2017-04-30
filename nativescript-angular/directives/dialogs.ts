@@ -1,5 +1,5 @@
 import {
-    ReflectiveInjector, ComponentFactoryResolver, ViewContainerRef,
+    ReflectiveInjector, ComponentFactoryResolver, ViewContainerRef, NgModuleRef,
     Type, Injectable, ComponentRef, Directive
 } from "@angular/core";
 import { Page } from "tns-core-modules/ui/page";
@@ -11,6 +11,7 @@ export interface ModalDialogOptions {
     context?: any;
     fullscreen?: boolean;
     viewContainerRef?: ViewContainerRef;
+    moduleRef?: NgModuleRef<any>;
 }
 
 export class ModalDialogParams {
@@ -30,7 +31,9 @@ export class ModalDialogService {
 
         const viewContainerRef = options.viewContainerRef;
         const parentPage: Page = viewContainerRef.injector.get(Page);
-        const resolver: ComponentFactoryResolver = viewContainerRef.injector.get(
+        // resolve from particular module (moduleRef)
+        // or from same module as parentPage (viewContainerRef)
+        const resolver: ComponentFactoryResolver = (options.moduleRef || viewContainerRef).injector.get(
             ComponentFactoryResolver);
         const pageFactory: PageFactory = viewContainerRef.injector.get(PAGE_FACTORY);
 

@@ -49,7 +49,7 @@ const singlePageHooksLogProvider = { provide: HOOKS_LOG, useValue: singlePageHoo
 const multiPageHooksLog = new BehaviorSubject([]);
 const multiPageHooksLogProvider = { provide: HOOKS_LOG, useValue: multiPageHooksLog };
 const lazyLoadHooksLog = new BehaviorSubject([]);
-const lazyLoadHooksLogProvider = { provide: HOOKS_LOG, useValue: lazyLoadHooksLog };
+export const lazyLoadHooksLogProvider = { provide: HOOKS_LOG, useValue: lazyLoadHooksLog };
 
 @NgModule({
     bootstrap: [

@@ -3,6 +3,7 @@ import {
     Compiler,
     NgModuleFactory,
     NgModuleFactoryLoader,
+    ModuleWithComponentFactories,
     SystemJsNgModuleLoader,
 } from "@angular/core";
 
@@ -26,13 +27,27 @@ export class NSModuleFactoryLoader implements NgModuleFactoryLoader {
         }
     }
 
-    private loadAndCompile(path: string): Promise<NgModuleFactory<any>> {
+    /**
+     * When needing the module with component factories
+     * Example: lazy loading on demand via user actions instead of routing
+     * Provides access to components in the lazy loaded module right away
+     * @param path module path
+     */
+    public loadAndCompileComponents(path: string): Promise<any> {
+        return this.loadAndCompile(path, true);
+    }
+
+    private loadAndCompile(path: string, includeComponents?: boolean): Promise<NgModuleFactory<any> | ModuleWithComponentFactories<any>> {
         let {modulePath, exportName} = splitPath(path);
 
         let loadedModule = global.require(modulePath)[exportName];
         checkNotEmpty(loadedModule, modulePath, exportName);
 
-        return Promise.resolve(this.compiler.compileModuleAsync(loadedModule));
+        if (includeComponents) {
+            return Promise.resolve(this.compiler.compileModuleAndAllComponentsAsync(loadedModule));
+        } else {
+            return Promise.resolve(this.compiler.compileModuleAsync(loadedModule));
+        }      
     }
 
 }

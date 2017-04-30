@@ -1,10 +1,17 @@
 // make sure you import mocha-config before @angular/core
 import { assert } from "./test-config";
-import { TestApp } from "./test-app";
-import { Component, ViewContainerRef } from "@angular/core";
+import { TestApp, bootstrapTestApp } from "./test-app";
+import { Location, LocationStrategy } from "@angular/common";
+import { Component, ViewContainerRef, NgModuleFactoryLoader, ModuleWithComponentFactories, ComponentFactory, Compiler, Injector, Optional } from "@angular/core";
+import { NoPreloading, PreloadingStrategy, ROUTES, Route, Router, RouterModule, RouterOutletMap, Routes, UrlHandlingStrategy, UrlSerializer, provideRoutes, ɵROUTER_PROVIDERS as ROUTER_PROVIDERS, ɵflatten as flatten } from '@angular/router';
+import { BehaviorSubject } from "rxjs/BehaviorSubject";
 import { Page } from "ui/page";
 import { topmost } from "ui/frame";
 import { ModalDialogParams, ModalDialogService } from "nativescript-angular/directives/dialogs";
+import { NSModuleFactoryLoader } from "nativescript-angular/router";
+import { HOOKS_LOG } from "../base.component";
+const lazyLoadHooksLog = new BehaviorSubject([]);
+const lazyLoadHooksLogProvider = { provide: HOOKS_LOG, useValue: lazyLoadHooksLog };
 
 import { device, platformNames } from "platform";
 const CLOSE_WAIT = (device.os === platformNames.ios) ? 1000 : 0;
@@ -33,16 +40,41 @@ export class FailComponent {
     }
 }
 
+// TODO: this is done temporarily since the SecondModule is used to lazily load on demand here in the tests
+// could create module specificly to test this
+export function setupTestingRouter(
+    urlSerializer: UrlSerializer, outletMap: RouterOutletMap, location: Location,
+    loader: NgModuleFactoryLoader, compiler: Compiler, injector: Injector, routes: Route[][],
+    urlHandlingStrategy?: UrlHandlingStrategy) {
+  const router = new Router(
+      null !, urlSerializer, outletMap, location, injector, loader, compiler, flatten(routes));
+  if (urlHandlingStrategy) {
+    router.urlHandlingStrategy = urlHandlingStrategy;
+  }
+  return router;
+}
+
 @Component({
     selector: "sucess-comp",
-    providers: [ModalDialogService],
+    providers: [
+        ModalDialogService,
+        {
+            provide: Router, useFactory: setupTestingRouter,
+            deps: [
+                UrlSerializer, RouterOutletMap, Location, NgModuleFactoryLoader, Compiler, Injector, ROUTES,
+                [UrlHandlingStrategy, new Optional()]
+            ]
+        },
+        lazyLoadHooksLogProvider,
+        { provide: NgModuleFactoryLoader, useClass: NSModuleFactoryLoader }
+    ],
     template: `
     <GridLayout margin="20">
         <Label text="Modal dialogs"></Label>
     </GridLayout>`
 })
 export class SuccessComponent {
-    constructor(public service: ModalDialogService, public vcRef: ViewContainerRef) {
+    constructor(public service: ModalDialogService, public vcRef: ViewContainerRef, public moduleLoader: NgModuleFactoryLoader) {
     }
 }
 
@@ -108,5 +140,37 @@ describe("modal-dialog", () => {
                 assert.strictEqual(res, context);
                 setTimeout(done, CLOSE_WAIT); // wait for the dialog to close in IOS
             }, err => done(err));
+    });
+
+    it("showModal provides module reference option when opening modal component which comes from lazy loaded module", (done) => {
+        const context = { property: "I was lazy loaded from another module on demand!" };
+        let service, comp;
+        testApp.loadComponent(SuccessComponent)
+            .then((ref) => {
+                service = <ModalDialogService>ref.instance.service;
+                comp = <SuccessComponent>ref.instance;
+                return (<NSModuleFactoryLoader>comp.moduleLoader).loadAndCompileComponents("./lazy-loaded.module#SecondModule");
+            }).then((mod: any) => {
+                const moduleRef = (<ModuleWithComponentFactories<any>>mod).ngModuleFactory.create(comp.vcRef.parentInjector);
+                // find component factory to ref the correct componentType
+                let lazyModalCmpFactory: ComponentFactory<any>;
+                for (let cmp of mod.componentFactories) {
+                    if (cmp.selector === "modal-lazy-comp") { // find by selector
+                        lazyModalCmpFactory = cmp;
+                        break;
+                    }
+                }
+                    
+                return service.showModal(lazyModalCmpFactory.componentType, {
+                    moduleRef,
+                    viewContainerRef: comp.vcRef,
+                    context: context
+                });
+            })
+            .then((res) => {
+                assert.strictEqual(res, context);
+                setTimeout(done, CLOSE_WAIT); // wait for the dialog to close in IOS
+            }, err => done(err));
+        
     });
 });
