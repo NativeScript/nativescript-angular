@@ -129,7 +129,7 @@ export class NativeScriptPlatformRef extends PlatformRef {
 
     get injector(): Injector {
         return this.platform.injector;
-    };
+    }
 
     destroy(): void {
         this.platform.destroy();

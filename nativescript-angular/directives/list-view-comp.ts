@@ -168,7 +168,7 @@ export class ListViewComponent implements DoCheck, OnDestroy, AfterContentInit {
             if (!viewRef) {
                 listViewError("ViewReference not found for item " + index + ". View recycling is not working");
             }
-        };
+        }
 
         if (!viewRef) {
             listViewLog("onItemLoading: " + index + " - Creating view from template");
@@ -234,7 +234,8 @@ function getSingleViewRecursive(nodes: Array<any>, nestLevel: number): View {
 export interface ComponentView {
     rootNodes: Array<any>;
     destroy(): void;
-};
+}
+
 export type RootLocator = (nodes: Array<any>, nestLevel: number) => View;
 
 export function getItemViewRoot(viewRef: ComponentView, rootLocator: RootLocator = getSingleViewRecursive): View {
