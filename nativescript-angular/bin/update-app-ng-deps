@@ -1,33 +1,43 @@
 #!/usr/bin/env node
 
-var path = require("path");
-var fs = require("fs");
+const path = require("path");
+const fs = require("fs");
 
-var binPath = __dirname;
-var pluginPath = path.dirname(binPath);
-var pluginPackageJsonPath = path.join(pluginPath, "package.json");
-var projectPath = path.dirname(path.dirname(pluginPath));
-var appPackageJsonPath = path.join(projectPath, "package.json");
+const binPath = __dirname;
+const pluginPath = path.dirname(binPath);
+const pluginPackageJsonPath = path.join(pluginPath, "package.json");
+const pluginPackageJson = JSON.parse(fs.readFileSync(pluginPackageJsonPath, "utf8"));
+const pluginPeerDeps = pluginPackageJson.peerDependencies;
 
-var appPackageJson = JSON.parse(fs.readFileSync(appPackageJsonPath, "utf8"));
-var pluginPackageJson = JSON.parse(fs.readFileSync(pluginPackageJsonPath, "utf8"));
+const projectPath = path.dirname(path.dirname(pluginPath));
+const appPackageJsonPath = path.join(projectPath, "package.json");
+const appPackageJson = JSON.parse(fs.readFileSync(appPackageJsonPath, "utf8"));
 
-Object.keys(pluginPackageJson.dependencies).forEach(function(dependencyName) {
-    var version = pluginPackageJson.dependencies[dependencyName];
-    if (dependencyName.startsWith("@angular") || dependencyName === "rxjs") {
-        appPackageJson.dependencies[dependencyName] = version;
-        console.log("Updated dependency '" + dependencyName + "' to version: " + version + ".");
-    }
-});
+const shouldUpdateDependency = name => name.startsWith("@angular") ||
+    name === "rxjs" ||
+    name === "zone.js";
 
-Object.keys(pluginPackageJson.devDependencies).forEach(function(dependencyName) {
-    var version = pluginPackageJson.devDependencies[dependencyName];
-    if (dependencyName.startsWith("@angular") || dependencyName === "zone.js") {
-        appPackageJson.devDependencies[dependencyName] = version;
-        console.log("Updated dev dependency '" + dependencyName + "' to version: " + version + ".");
-    }
-});
+let updatedDependencies = appPackageJson.dependencies;
 
-fs.writeFileSync(appPackageJsonPath, JSON.stringify(appPackageJson, null, 2));
+// set app dependencies to ones required from plugin (peer)
+Object.keys(pluginPeerDeps)
+    .filter(shouldUpdateDependency)
+    .forEach(dependencyName => {
+        const version = pluginPackageJson.peerDependencies[dependencyName];
+        updatedDependencies[dependencyName] = version;
+        console.log(`Updated dependency ${dependencyName} to version: ${version}.`);
+    });
+
+// remove platform-browser-dynamic if present
+const browserDynamicDependency = "@angular/platform-browser-dynamic";
+if (updatedDependencies.hasOwnProperty(browserDynamicDependency)) {
+    delete updatedDependencies[browserDynamicDependency];
+    console.log(`Removed ${browserDynamicDependency}`);
+}
+
+let updatedPackageJson = appPackageJson;
+updatedPackageJson.dependencies = updatedDependencies;
+
+fs.writeFileSync(appPackageJsonPath, JSON.stringify(updatedPackageJson, null, 2));
 
 console.log("\nAngular dependencies updated. Don't forget to run `npm install`.");

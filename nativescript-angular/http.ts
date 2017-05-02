@@ -11,11 +11,11 @@ export { NSHttp } from "./http/ns-http";
 
 export function nsHttpFactory(backend, options, nsFileSystem) {
     return new NSHttp(backend, options, nsFileSystem);
-};
+}
 
 export function nsXSRFStrategyFactory() {
     return new NSXSRFStrategy();
-};
+}
 
 @NgModule({
     providers: [
