@@ -48,7 +48,12 @@ export class ViewUtil {
     }
 
     public insertChild(parent: any, child: NgView, atIndex: number = -1) {
-        if (!parent || child.meta.skipAddToDom) {
+        if (!parent) {
+            return;
+        }
+
+        if (child.meta.skipAddToDom) {
+            child.templateParent = parent;
             return;
         }
 
