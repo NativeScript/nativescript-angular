@@ -43,6 +43,7 @@ export class NativeScriptRendererFactory implements RendererFactory2 {
         if (!rootView) {
             rootView = getRootPage() || topmost().currentPage;
         }
+
         rootView.nodeName = "NONE";
         this.rootNgView = rootView;
     }
@@ -83,26 +84,17 @@ export class NativeScriptRenderer extends Renderer2 {
 
     appendChild(parent: any, newChild: NgView): void {
         traceLog(`NativeScriptRenderer.appendChild child: ${newChild} parent: ${parent}`);
-
-        if (parent) {
-            this.viewUtil.insertChild(parent, newChild);
-        }
+        this.viewUtil.insertChild(parent, newChild);
     }
 
     insertBefore(parent: NgView, newChild: NgView, refChildIndex: number): void {
         traceLog(`NativeScriptRenderer.insertBefore child: ${newChild} parent: ${parent}`);
-
-        if (parent) {
-            this.viewUtil.insertChild(parent, newChild, refChildIndex);
-        }
+        this.viewUtil.insertChild(parent, newChild, refChildIndex);
     }
 
     removeChild(parent: any, oldChild: NgView): void {
         traceLog(`NativeScriptRenderer.removeChild child: ${oldChild} parent: ${parent}`);
-
-        if (parent) {
-            this.viewUtil.removeChild(parent, oldChild);
-        }
+        this.viewUtil.removeChild(parent, oldChild);
     }
 
     selectRootElement(selector: string): NgView {
@@ -111,7 +103,7 @@ export class NativeScriptRenderer extends Renderer2 {
     }
 
     parentNode(node: NgView): any {
-        return node.parent;
+        return node.parent || node.templateParent;
     }
 
     nextSibling(node: NgView): number {
