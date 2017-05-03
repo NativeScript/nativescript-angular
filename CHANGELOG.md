@@ -1,3 +1,57 @@
+<a name="3.0.0"></a>
+# [3.0.0](https://github.com/NativeScript/nativescript-angular/compare/v1.5.2..v3.0.0) (2017-05-03)
+
+
+### Bug Fixes
+
+* **action-bar:** Don't remove action items twice. ([b96b61f](https://github.com/NativeScript/nativescript-angular/commit/b96b61f))
+* **animations:** add onDestroy method to NativeScriptAnimationPlayer ([ec07ec3](https://github.com/NativeScript/nativescript-angular/commit/ec07ec3))
+* **animations:** set nodeType 'element' to newly created views ([#720](https://github.com/NativeScript/nativescript-angular/issues/720)) ([8af20ad](https://github.com/NativeScript/nativescript-angular/commit/8af20ad))
+* **gitignore:** Add editor files into gitignore ([9beea98](https://github.com/NativeScript/nativescript-angular/commit/9beea98))
+* **init:** Bootstrap Angular on page "navigatingTo" event. ([85b9d01](https://github.com/NativeScript/nativescript-angular/commit/85b9d01))
+* **list-view:** Destroy item views on unload ([71301aa](https://github.com/NativeScript/nativescript-angular/commit/71301aa))
+* **list-view:** Do not access destroyed items' ng views. ([c6f7549](https://github.com/NativeScript/nativescript-angular/commit/c6f7549))
+* **list-view-comp:** IterableDiffer is now parameterized on <KeyedTemplate> ([f692c5f](https://github.com/NativeScript/nativescript-angular/commit/f692c5f))
+* **ns-http:** make defaultOptions of type RequestOptions ([073c95d](https://github.com/NativeScript/nativescript-angular/commit/073c95d))
+* **action bar:** attach #comment nodes with _addView ([#729](https://github.com/NativeScript/nativescript-angular/issues/729)) ([0490605](https://github.com/NativeScript/nativescript-angular/commit/0490605)), closes [#725](https://github.com/NativeScript/nativescript-angular/issues/725)
+* **ns-router-link:** navigate with urlTree ([#728](https://github.com/NativeScript/nativescript-angular/issues/728)) ([3c6f5ab](https://github.com/NativeScript/nativescript-angular/commit/3c6f5ab)), closes [#724](https://github.com/NativeScript/nativescript-angular/issues/724)
+* use providers' map for injectors in page-router-outlet ([#744](https://github.com/NativeScript/nativescript-angular/issues/744)) ([07fe66c](https://github.com/NativeScript/nativescript-angular/commit/07fe66c)), closes [#741](https://github.com/NativeScript/nativescript-angular/issues/741)
+
+
+### Code Refactoring
+
+* stop exporting NativeScriptModule from platform ([#701](https://github.com/NativeScript/nativescript-angular/issues/701)) ([0bd2ba5](https://github.com/NativeScript/nativescript-angular/commit/0bd2ba5))
+
+
+### Features
+
+* **animations:** introduce NativeScriptAnimationsModule ([#704](https://github.com/NativeScript/nativescript-angular/issues/704)) ([f9ad6a5](https://github.com/NativeScript/nativescript-angular/commit/f9ad6a5))
+* **renderer:** use EmulatedRenderer to scope component styles ([70603c4](https://github.com/NativeScript/nativescript-angular/commit/70603c4))
+* **renderer:** implement createComment and createText methods using ([0f128ad](https://github.com/NativeScript/nativescript-angular/commit/0f128ad))
+* **renderer:** support namespaced attributes ([#719](https://github.com/NativeScript/nativescript-angular/issues/719)) ([9b5b413](https://github.com/NativeScript/nativescript-angular/commit/9b5b413))
+
+
+### BREAKING CHANGES
+
+* **animations:** To use animations, you need to import the
+NativeScriptAnimationsModule from "nativescript-angular/animations" in
+your root NgModule.
+* User applications cannot import NativeScriptModule from
+"nativescript-angular/platform" anymore.
+Migration:
+Before:
+```
+import { NativeScriptModule } from "nativescript-angular/platform";
+```
+After
+```
+import { NativeScriptModule } from
+"nativescript-angular/nativescript.module";
+```
+
+
+
+
 <a name="1.5.2"></a>
 ## [1.5.2](https://github.com/NativeScript/nativescript-angular/compare/v1.5.1...v1.5.2) (2017-04-18)
 
