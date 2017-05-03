@@ -26,7 +26,7 @@ import { NS_DIRECTIVES } from "./directives";
 
 export function errorHandlerFactory() {
     return new ErrorHandler(true);
-};
+}
 
 @NgModule({
     declarations: [
