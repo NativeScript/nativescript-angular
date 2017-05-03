@@ -1,52 +1,114 @@
+os: osx
+osx_image: xcode8.3
+sudo: false
+language: objective-c
+
 env:
   global:
-  - NODE_VERSION=6.9.1
-  - DATE=$(date +%Y-%m-%d)
-  - PACKAGE_VERSION=$DATE-$TRAVIS_BUILD_NUMBER
-language: android
-jdk:
-- oraclejdk8
-android:
-  components:
-  - platform-tools
-  - build-tools-23.0.1
-  - android-23
-  - extra-android-m2repository
-  - sys-img-armeabi-v7a-android-19
+    - API=21 # Google API 19 by default
+    - TAG=google_apis # Google APIs by default, alternatively use default
+    - ABI=armeabi-v7a # ARM ABI v7a by default
+    - DATE=$(date +%Y-%m-%d)
+    - PACKAGE_VERSION=$DATE-$TRAVIS_BUILD_NUMBER
+  matrix:
+    - NODE_VERSION="6.9.1" NPM_VERSION="3"
+    - NODE_VERSION="7" NPM_VERSION="3"
+
+
 before_cache:
 - rm -f $HOME/.gradle/caches/modules-2/modules-2.lock
 cache:
   directories:
   - "$HOME/.gradle/caches/"
   - "$HOME/.gradle/wrapper/"
+
+before_install:
+  - export EMULATOR="system-images;android-${API};${TAG};${ABI}" # Used to install/create emulator
+  - export ANDROID_HOME=/usr/local/share/android-sdk
+  - export PATH=$ANDROID_HOME/emulator:$ANDROID_HOME/tools:$ANDROID_HOME/platform-tools:$PATH
+  - wget -qO- https://raw.githubusercontent.com/creationix/nvm/v0.31.0/install.sh | bash
+  - source ~/.nvm/nvm.sh && nvm install $NODE_VERSION && nvm use $NODE_VERSION
+  - PATH="`npm bin`:`npm bin -g`:$PATH"
+  - brew update > /dev/null;
+  - brew install Caskroom/cask/android-sdk
+  # Tools
+  - echo y | sdkmanager 'tools'
+  # Platform tools
+  - echo y | sdkmanager 'platform-tools'
+  # SDKs
+  - echo y | sdkmanager 'platforms;android-25'
+  # build tools
+  - echo y | sdkmanager 'build-tools;25.0.2'
+  # Android System Images, for emulators
+  - echo y | sdkmanager 'system-images;android-24;default;armeabi-v7a'
+  - echo y | sdkmanager 'system-images;android-22;default;armeabi-v7a'
+  - echo y | sdkmanager 'system-images;android-21;default;armeabi-v7a'
+  - echo y | sdkmanager 'system-images;android-21;google_apis;armeabi-v7a'
+  # Extras
+  - echo y | sdkmanager 'extras;android;m2repository'
+  - echo y | sdkmanager 'extras;google;google_play_services'
+  - echo y | sdkmanager 'extras;google;m2repository'
+  # google apis
+  - echo y | sdkmanager 'add-ons;addon-google_apis-google-23'
+  - mkdir "$ANDROID_HOME/licenses" || true
+  - echo -e "\n8933bad161af4178b1185d1a37fbf41ea5269c55" > "$ANDROID_HOME/licenses/android-sdk-license"
+  - echo -e "\n84831b9409646a918e30573bab4c9c91346d8abd" > "$ANDROID_HOME/licenses/android-sdk-preview-license" 
+  # create and start emulator
+  - echo no | avdmanager create avd --name test -k "$EMULATOR" -f --abi "$ABI" --tag "$TAG"
+  - emulator -avd test -gpu off -skin 768x1280 -no-audio -no-window &
+  # frontend libs
+  - npm install -g npm@$NPM_VERSION
+  # CocoaPods
+  - gem install cocoapods --pre --no-rdoc --no-ri --no-document --quiet
+  - gem install xcpretty --no-rdoc --no-ri --no-document --quiet
+  - pod --version
+  - pod setup --silent
+  - pod repo update --silent
+  # Show environment info
+  - node --version
+  - npm --version
+  - xcpretty --version
+  - xcodebuild -version
+  - xcodebuild -showsdks
+  - echo $ANDROID_HOME
+
 install:
-- nvm install $NODE_VERSION
-- npm install -g typings
-- wget -O ./nativescript.tgz "https://s3.amazonaws.com/nativescript-ci/build_result/nativescript.tgz"
-- npm install -g nativescript.tgz --ignore-scripts
-- tns usage-reporting disable
-- tns error-reporting disable
-- cd nativescript-angular
-- npm install
-- npm run tslint
-- cd ../tests
-- npm install
-- tns platform add android
+  - nvm install $NODE_VERSION
+  - npm install -g typings
+  - wget -O ./nativescript.tgz "https://s3.amazonaws.com/nativescript-ci/build_result/nativescript.tgz"
+  - npm install -g nativescript.tgz --ignore-scripts
+  - tns usage-reporting disable
+  - tns error-reporting disable
+  - cd nativescript-angular
+  - npm install
+  - npm run tslint
+  - cd ../tests
+  - npm install
+  - tns platform add android
+  - tns platform add ios
+
 before_script:
-- echo no | android create avd --force -n test -t android-19 -b armeabi-v7a
-- emulator -memory 1024 -avd test -no-audio -no-window &
+  # lets wait for the android emulator
+  - wget "https://raw.githubusercontent.com/travis-ci/travis-cookbooks/master/community-cookbooks/android-sdk/files/default/android-wait-for-emulator"
+  - chmod a+x ./android-wait-for-emulator
+  - ./android-wait-for-emulator
+  - adb shell input keyevent 82 &
+
 script:
-- 
-- 
-- tns build android
-- android-wait-for-emulator
-- npm run run-appium-android
+  - 
+  - 
+  - tns build ios
+  - tns build android
+  - npm run run-appium-android
+  - npm run test
+
 before_deploy:
-- cd ../nativescript-angular
-- npm install -g nativescript --ignore-scripts
-- tns usage-reporting disable
-- tns error-reporting disable
-- node ../build/travis-scripts/add-publishConfig.js internal-preview $PACKAGE_VERSION
+  - cd ../nativescript-angular
+  - npm install -g nativescript --ignore-scripts
+  - tns usage-reporting disable
+  - tns error-reporting disable
+  - node ../build/travis-scripts/add-publishConfig.js internal-preview $PACKAGE_VERSION
+
 deploy:
   provider: npm
   email: nativescript@telerik.com

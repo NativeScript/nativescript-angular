@@ -65,6 +65,9 @@
     "wd": "0.4.0"
   },
   "scripts": {
+    "test": "npm run test-android",
+    "test-android": "tns test android --emulator --justlaunch",
+    "test-ios": "tns test ios --emulator --justlaunch",
     "updateTests": "grunt updateTests",
     "appium-android": "tns build android && npm run run-appium-android",
     "run-appium-android": "nativescript-dev-appium android",
