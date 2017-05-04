@@ -4,7 +4,7 @@ import {SecondComponent} from "../components/second.component";
 
 @Component({
     selector: 'navigation-test',
-    styleUrls: ['./router/router-outlet.css'],
+    styleUrls: ['./router-outlet.css'],
     template: `
         <StackLayout>
             <StackLayout class="nav">

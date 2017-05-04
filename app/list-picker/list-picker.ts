@@ -2,7 +2,7 @@ import { Component,Input, ChangeDetectionStrategy } from '@angular/core';
 
 @Component({
     selector: 'list',
-    styleUrls: ['./listPicker/list-picker.css'],
+    styleUrls: ['./list-picker.css'],
     template: ` 
                 <StackLayout automationText="listPicker" >
                     <ListPicker #picker class="listPicker"
@@ -17,6 +17,7 @@ import { Component,Input, ChangeDetectionStrategy } from '@angular/core';
 export class ListPickerComponent {
     public pokemons: Array<string>;
     public picked: string;
+    public selectedIndex: number;
 
     private pokemonList = ["Bulbasaur", "Parasect", "Venonat", "Venomoth", "Diglett",
 "Dugtrio", "Meowth", "Persian", "Psyduck", "Arcanine", "Poliwrath", "Machoke"];

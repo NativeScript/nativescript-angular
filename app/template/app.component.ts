@@ -3,7 +3,7 @@ import {Component} from "@angular/core";
 @Component({
     selector: "my-app",
     styles: ["button {color: lime}"],
-    styleUrls: ["./template/app.component.css"],  
+    styleUrls: ["./app.component.css"],  
     template: `
 <StackLayout>
     <Label text="Tap the button" class="title"></Label>

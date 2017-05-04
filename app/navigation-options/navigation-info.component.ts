@@ -16,8 +16,8 @@ import {Frame} from "ui/frame";
   `
 })
 export class NavigationInfoComponent {
-    private frameStack: number = -1;
-    private locationStack: number = -1;
+    public frameStack: number = -1;
+    public locationStack: number = -1;
 
     constructor(private frame: Frame, private strategy: NSLocationStrategy) { }
 

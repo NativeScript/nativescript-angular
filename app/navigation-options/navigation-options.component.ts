@@ -6,7 +6,7 @@ import {RouterExtensions} from "nativescript-angular/router";
     template: `
     <StackLayout>
         <Button text="clear-history" [nsRouterLink]="['/nav-info']" [clearHistory]="true"></Button>
-        <Button text="page-trasnitions" (tap)="flipToNextPage()"></Button> 
+        <Button text="page-transitions" (tap)="flipToNextPage()"></Button> 
     </StackLayout>
   `
 })

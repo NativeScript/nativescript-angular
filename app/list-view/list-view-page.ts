@@ -2,7 +2,7 @@ import { Component, Input, ChangeDetectionStrategy } from '@angular/core';
 
 @Component({
     selector: 'list-test',
-    styleUrls: ['./listView/commonTemplate/list-view-page.css'],
+    styleUrls: ['./list-view-page.css'],
     template: ` 
                 <StackLayout automationText="mainView">
                     <ListView [items]="myItems" (itemTap)="onItemTap($event)">
