@@ -95,6 +95,48 @@ export class NgIfLabel {
 }
 
 @Component({
+    selector: "ng-if-else",
+    template: `
+        <StackLayout>
+            <Label *ngIf="show; else elseClause" text="If"></Label>
+
+            <ng-template #elseClause>
+                <Label text="Else"></Label>
+            </ng-template>
+        </StackLayout>
+    `
+})
+export class NgIfElseComponent {
+    public show: boolean = true;
+    constructor(public elementRef: ElementRef) {
+    }
+}
+
+
+@Component({
+    selector: "ng-if-then-else",
+    template: `
+        <StackLayout>
+            <Placeholder *ngIf="show; then thenTemplate else elseTemplate">
+            </Placeholder>
+
+            <ng-template #thenTemplate>
+                <Label text="Then"></Label>
+            </ng-template>
+
+            <ng-template #elseTemplate>
+                <Label text="Else"></Label>
+            </ng-template>
+        </StackLayout>
+    `
+})
+export class NgIfThenElseComponent {
+    public show: boolean = true;
+    constructor(public elementRef: ElementRef) {
+    }
+}
+
+@Component({
     selector: "ng-for-label",
     template: `<Label *ngFor="let item of items" [text]="item"></Label>`
 })
@@ -112,10 +154,10 @@ describe("Renderer E2E", () => {
             LayoutWithLabel, LabelCmp, LabelContainer,
             ProjectableCmp, ProjectionContainer,
             StyledLabelCmp, StyledLabelCmp2,
-            NgIfLabel, NgForLabel,
+            NgIfLabel, NgIfElseComponent, NgIfThenElseComponent,
+            NgForLabel,
         ]).then((app) => {
             testApp = app;
-
         });
     });
 
@@ -226,6 +268,74 @@ describe("Renderer E2E", () => {
                 component.show = true;
                 testApp.appRef.tick();
                 assert.equal("(ProxyViewContainer (#comment), (Label))", dumpView(componentRoot));
+            });
+        });
+
+        it("ngIfElse show 'if' template when condition is true", () => {
+            return testApp.loadComponent(NgIfElseComponent).then(componentRef => {
+                const component = <NgIfElseComponent>componentRef.instance;
+                const componentRoot = component.elementRef.nativeElement;
+
+                testApp.appRef.tick();
+                assert.equal(
+                    "(ProxyViewContainer " +
+                        "(StackLayout " +
+                            "(#comment), " + // ng-reflect comment
+                            "(Label[text=If]), (#comment)))", // the content to be displayed and its anchor
+
+                     dumpView(componentRoot, true));
+            });
+        });
+
+        it("ngIfElse show 'else' template when condition is false", () => {
+            return testApp.loadComponent(NgIfElseComponent).then(componentRef => {
+                const component = <NgIfElseComponent>componentRef.instance;
+                const componentRoot = component.elementRef.nativeElement;
+
+                component.show = false;
+                testApp.appRef.tick();
+                assert.equal(
+                    "(ProxyViewContainer " +
+                        "(StackLayout " +
+                            "(#comment), " + // ng-reflect comment
+                            "(Label[text=Else]), (#comment)))", // the content to be displayed and its anchor
+
+                     dumpView(componentRoot, true));
+            });
+        });
+
+        it("ngIfThenElse show 'then' template when condition is true", () => {
+            return testApp.loadComponent(NgIfThenElseComponent).then(componentRef => {
+                const component = <NgIfThenElseComponent>componentRef.instance;
+                const componentRoot = component.elementRef.nativeElement;
+
+                testApp.appRef.tick();
+                assert.equal(
+                    "(ProxyViewContainer " +
+                        "(StackLayout " +
+                            "(#comment), " + // ng-reflect comment
+                            "(Label[text=Then]), (#comment), " + // the content to be displayed and its anchor
+                            "(#comment)))", // the anchor for the else template
+                     dumpView(componentRoot, true));
+            });
+        });
+
+
+        it("ngIfThenElse show 'else' template when condition is false", () => {
+            return testApp.loadComponent(NgIfThenElseComponent).then(componentRef => {
+                const component = <NgIfThenElseComponent>componentRef.instance;
+                const componentRoot = component.elementRef.nativeElement;
+
+                component.show = false;
+                testApp.appRef.tick();
+                assert.equal(
+                    "(ProxyViewContainer " +
+                        "(StackLayout " +
+                            "(#comment), " + // ng-reflect comment
+                            "(Label[text=Else]), (#comment), " + // the content to be displayed and its anchor
+                            "(#comment)))", // the anchor for the else template
+
+                     dumpView(componentRoot, true));
             });
         });
 
