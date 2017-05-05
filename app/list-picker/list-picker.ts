@@ -1,6 +1,7 @@
 import { Component,Input, ChangeDetectionStrategy } from '@angular/core';
 
 @Component({
+    moduleId: module.id,
     selector: 'list',
     styleUrls: ['./list-picker.css'],
     template: ` 
