@@ -7,7 +7,7 @@ import { registerElement, ViewClassMeta, NgView } from "../element-registry";
 
 const actionBarMeta: ViewClassMeta = {
     skipAddToDom: true,
-    insertChild: (parent: NgView, child: NgView, atIndex: number) => {
+    insertChild: (parent: NgView, child: NgView) => {
         const bar = <ActionBar>(<any>parent);
         const childView = <any>child;
 
@@ -17,8 +17,6 @@ const actionBarMeta: ViewClassMeta = {
         } else if (child instanceof ActionItem) {
             bar.actionItems.addItem(childView);
             childView.parent = bar;
-        } else if (child.nodeName === "#comment") {
-            bar._addView(childView, atIndex);
         } else if (child instanceof View) {
             bar.titleView = childView;
         }

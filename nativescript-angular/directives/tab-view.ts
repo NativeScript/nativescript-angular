@@ -1,5 +1,15 @@
-import { ElementRef, Directive, Input, TemplateRef, ViewContainerRef, OnInit, AfterViewInit } from "@angular/core";
+import {
+    AfterViewInit,
+    Directive,
+    ElementRef,
+    Input,
+    OnInit,
+    TemplateRef,
+    ViewContainerRef,
+} from "@angular/core";
 import { TabView, TabViewItem } from "tns-core-modules/ui/tab-view";
+
+import { DetachedElement } from "../element-registry";
 import { convertToInt } from "../common/utils";
 import { rendererLog } from "../trace";
 import { isBlank } from "../lang-facade";
@@ -94,9 +104,9 @@ export class TabViewItemDirective implements OnInit {
         }
 
         const viewRef = this.viewContainer.createEmbeddedView(this.templateRef);
-        // Filter out text nodes, etc
-        const realViews = viewRef.rootNodes.filter((node) =>
-                            node.nodeName && node.nodeName !== "#text");
+        // Filter out text nodes and comments
+        const realViews = viewRef.rootNodes.filter(node =>
+                            !(node instanceof DetachedElement));
 
         if (realViews.length > 0) {
             this.item.view = realViews[0];

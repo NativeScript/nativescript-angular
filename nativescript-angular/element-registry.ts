@@ -1,7 +1,8 @@
 import { View } from "tns-core-modules/ui/core/view";
 
 export type ViewResolver = () => ViewClass;
-export type NgView = View & ViewExtensions;
+export type NgView = (View & ViewExtensions);
+export type NgElement = NgView | DetachedElement;
 export interface ViewClassMeta {
     skipAddToDom?: boolean;
     insertChild?: (parent: NgView, child: NgView, atIndex: number) => void;
@@ -18,6 +19,11 @@ export interface ViewExtensions {
 
 export interface ViewClass {
     new (): View;
+}
+
+export class DetachedElement {
+    templateParent: NgView;
+    meta: { skipAddToDom: true };
 }
 
 const defaultViewMeta: ViewClassMeta = {
@@ -110,10 +116,3 @@ registerElement("Span", () => require("tns-core-modules/text/span").Span);
 
 registerElement("DetachedContainer", () => require("tns-core-modules/ui/proxy-view-container").ProxyViewContainer,
     { skipAddToDom: true });
-
-registerElement("DetachedText", () => require("ui/placeholder").Placeholder,
-    { skipAddToDom: true });
-
-registerElement("Comment", () => require("ui/placeholder").Placeholder,
-    { skipAddToDom: true });
-

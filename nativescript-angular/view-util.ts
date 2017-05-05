@@ -8,6 +8,8 @@ import {
     getViewMeta,
     isKnownView,
     ViewExtensions,
+    DetachedElement,
+    NgElement,
     NgView,
 } from "./element-registry";
 import { platformNames, Device } from "tns-core-modules/platform";
@@ -47,13 +49,13 @@ export class ViewUtil {
         this.isAndroid = device.os === platformNames.android;
     }
 
-    public insertChild(parent: any, child: NgView, atIndex: number = -1) {
-        if (!parent) {
+    public insertChild(parent: any, child: NgElement, atIndex: number = -1) {
+        if (child instanceof DetachedElement) {
+            child.templateParent = parent;
             return;
         }
 
-        if (child.meta.skipAddToDom) {
-            child.templateParent = parent;
+        if (!parent || child.meta.skipAddToDom) {
             return;
         }
 
@@ -61,7 +63,7 @@ export class ViewUtil {
             parent.meta.insertChild(parent, child, atIndex);
         } else if (isLayout(parent)) {
             if (child.parent === parent) {
-                let index = (<LayoutBase>parent).getChildIndex(child);
+                const index = (<LayoutBase>parent).getChildIndex(child);
                 if (index !== -1) {
                     parent.removeChild(child);
                 }
@@ -72,12 +74,7 @@ export class ViewUtil {
                 parent.addChild(child);
             }
         } else if (isContentView(parent)) {
-            // Explicit handling of template anchors inside ContentView
-            if (child.nodeName === "#comment") {
-                parent._addView(child, atIndex);
-            } else {
-                parent.content = child;
-            }
+            parent.content = child;
         } else if (parent && parent._addChildFromBuilder) {
             parent._addChildFromBuilder(child.nodeName, child);
         } else {
@@ -85,8 +82,8 @@ export class ViewUtil {
         }
     }
 
-    public removeChild(parent: any, child: NgView) {
-        if (!parent || child.meta.skipAddToDom) {
+    public removeChild(parent: any, child: NgElement) {
+        if (!parent || child instanceof DetachedElement || child.meta.skipAddToDom) {
             return;
         }
 
@@ -97,11 +94,6 @@ export class ViewUtil {
         } else if (isContentView(parent)) {
             if (parent.content === child) {
                 parent.content = null;
-            }
-
-            // Explicit handling of template anchors inside ContentView
-            if (child.nodeName === "#comment") {
-                parent._removeView(child);
             }
         } else if (isView(parent)) {
             parent._removeView(child);
@@ -120,20 +112,12 @@ export class ViewUtil {
         }
     }
 
-    public createComment(): NgView {
-        const commentView = this.createView("Comment");
-        commentView.nodeName = "#comment";
-        commentView.visibility = "collapse";
-
-        return commentView;
+    public createComment(): DetachedElement {
+        return new DetachedElement();
     }
 
-    public createText(): NgView {
-        const detachedText = this.createView("DetachedText");
-        detachedText.nodeName = "#text";
-        detachedText.visibility = "collapse";
-
-        return detachedText;
+    public createText(): DetachedElement {
+        return new DetachedElement();
     }
 
     public createView(name: string): NgView {
@@ -142,6 +126,7 @@ export class ViewUtil {
         if (!isKnownView(name)) {
             name = "ProxyViewContainer";
         }
+
         const viewClass = getViewClass(name);
         let view = <NgView>new viewClass();
         view.nodeName = name;
