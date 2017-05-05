@@ -3,6 +3,7 @@ import {FirstComponent} from "../components/first.component";
 import {SecondComponent} from "../components/second.component";
 
 @Component({
+    moduleId: module.id,
     selector: 'navigation-test',
     styleUrls: ['./router-outlet.css'],
     template: `

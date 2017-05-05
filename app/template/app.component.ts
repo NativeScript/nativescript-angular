@@ -1,6 +1,7 @@
 import {Component} from "@angular/core";
 
 @Component({
+    moduleId: module.id,
     selector: "my-app",
     styles: ["button {color: lime}"],
     styleUrls: ["./app.component.css"],  

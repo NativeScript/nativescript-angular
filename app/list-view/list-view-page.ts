@@ -1,6 +1,7 @@
 import { Component, Input, ChangeDetectionStrategy } from '@angular/core';
 
 @Component({
+    moduleId: module.id,
     selector: 'list-test',
     styleUrls: ['./list-view-page.css'],
     template: ` 
