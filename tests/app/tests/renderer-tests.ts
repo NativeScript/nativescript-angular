@@ -256,7 +256,7 @@ describe("Renderer E2E", () => {
         it("ngIf hides component when false", () => {
             return testApp.loadComponent(NgIfLabel).then((componentRef) => {
                 const componentRoot = componentRef.instance.elementRef.nativeElement;
-                assert.equal("(ProxyViewContainer (#comment))", dumpView(componentRoot));
+                assert.equal("(ProxyViewContainer)", dumpView(componentRoot));
             });
         });
 
@@ -267,7 +267,7 @@ describe("Renderer E2E", () => {
 
                 component.show = true;
                 testApp.appRef.tick();
-                assert.equal("(ProxyViewContainer (#comment), (Label))", dumpView(componentRoot));
+                assert.equal("(ProxyViewContainer (Label))", dumpView(componentRoot));
             });
         });
 
@@ -280,8 +280,7 @@ describe("Renderer E2E", () => {
                 assert.equal(
                     "(ProxyViewContainer " +
                         "(StackLayout " +
-                            "(#comment), " + // ng-reflect comment
-                            "(Label[text=If]), (#comment)))", // the content to be displayed and its anchor
+                            "(Label[text=If])))", // the content to be displayed
 
                      dumpView(componentRoot, true));
             });
@@ -297,8 +296,7 @@ describe("Renderer E2E", () => {
                 assert.equal(
                     "(ProxyViewContainer " +
                         "(StackLayout " +
-                            "(#comment), " + // ng-reflect comment
-                            "(Label[text=Else]), (#comment)))", // the content to be displayed and its anchor
+                            "(Label[text=Else])))", // the content to be displayed
 
                      dumpView(componentRoot, true));
             });
@@ -313,9 +311,7 @@ describe("Renderer E2E", () => {
                 assert.equal(
                     "(ProxyViewContainer " +
                         "(StackLayout " +
-                            "(#comment), " + // ng-reflect comment
-                            "(Label[text=Then]), (#comment), " + // the content to be displayed and its anchor
-                            "(#comment)))", // the anchor for the else template
+                            "(Label[text=Then])))", // the content to be displayed
                      dumpView(componentRoot, true));
             });
         });
@@ -331,9 +327,7 @@ describe("Renderer E2E", () => {
                 assert.equal(
                     "(ProxyViewContainer " +
                         "(StackLayout " +
-                            "(#comment), " + // ng-reflect comment
-                            "(Label[text=Else]), (#comment), " + // the content to be displayed and its anchor
-                            "(#comment)))", // the anchor for the else template
+                            "(Label[text=Else])))", // the content to be displayed
 
                      dumpView(componentRoot, true));
             });
@@ -343,7 +337,7 @@ describe("Renderer E2E", () => {
             return testApp.loadComponent(NgForLabel).then((componentRef) => {
                 const componentRoot = componentRef.instance.elementRef.nativeElement;
                 assert.equal(
-                    "(ProxyViewContainer (#comment), (Label[text=one]), (Label[text=two]), (Label[text=three]))",
+                    "(ProxyViewContainer (Label[text=one]), (Label[text=two]), (Label[text=three]))",
                     dumpView(componentRoot, true));
             });
         });
@@ -357,7 +351,7 @@ describe("Renderer E2E", () => {
                 testApp.appRef.tick();
 
                 assert.equal(
-                    "(ProxyViewContainer (#comment), (Label[text=one]), (Label[text=three]))",
+                    "(ProxyViewContainer (Label[text=one]), (Label[text=three]))",
                     dumpView(componentRoot, true));
             });
         });
@@ -371,7 +365,7 @@ describe("Renderer E2E", () => {
                 testApp.appRef.tick();
 
                 assert.equal(
-                    "(ProxyViewContainer (#comment), " +
+                    "(ProxyViewContainer " +
                     "(Label[text=one]), (Label[text=new]), (Label[text=two]), (Label[text=three]))",
                     dumpView(componentRoot, true));
             });

@@ -115,5 +115,5 @@ registerElement("DetachedText", () => require("ui/placeholder").Placeholder,
     { skipAddToDom: true });
 
 registerElement("Comment", () => require("ui/placeholder").Placeholder,
-    { skipAddToDom: false });
+    { skipAddToDom: true });
 
