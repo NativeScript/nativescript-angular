@@ -2,10 +2,10 @@
   "nativescript": {
     "id": "org.nativescript.ngtests",
     "tns-android": {
-      "version": "2.5.0"
+      "version": "3.0.0"
     },
     "tns-ios": {
-      "version": "2.5.0"
+      "version": "3.0.0"
     }
   },
   "name": "ngtests",
@@ -67,8 +67,11 @@
   "scripts": {
     "updateTests": "grunt updateTests",
     "appium-android": "tns build android && npm run run-appium-android",
-    "run-appium-android": "nativescript-dev-appium android",
-    "appium-ios-simulator": "tns build ios && nativescript-dev-appium ios-simulator",
+    "appium-ios": "tns build ios && npm run run-appium-ios",
+    "run-appium-android-19": "nativescript-dev-appium appium-android-19",
+    "run-appium-android-23": "nativescript-dev-appium appium-android-23",
+    "run-appium-ios-simulator": "nativescript-dev-appium appium-ios-simulator",
+    "run-appium-ios": "nativescript-dev-appium appium-ios",
     "tslint": "tslint --project tsconfig.json --config tslint.json"
   }
 }
