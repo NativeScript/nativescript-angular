@@ -1,4 +1,4 @@
-import "application";
+import "tns-core-modules/application";
 
 export * from "./platform-common";
 export * from "./platform";
@@ -15,13 +15,18 @@ export * from "./modal-dialog";
 export * from "./renderer";
 export * from "./view-util";
 export * from "./resource-loader";
+
 export {
     ViewResolver,
-    ViewClass,
-    ViewClassMeta,
     registerElement,
     getViewClass,
     getViewMeta,
     isKnownView,
 } from "./element-registry";
+
+export {
+    ViewClass,
+    ViewClassMeta,
+} from "./element-types";
+
 export * from "./value-accessors/base-value-accessor";

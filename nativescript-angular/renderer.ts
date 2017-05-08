@@ -12,7 +12,7 @@ import { topmost } from "tns-core-modules/ui/frame";
 import { APP_ROOT_VIEW, DEVICE, getRootPage } from "./platform-providers";
 import { isBlank } from "./lang-facade";
 import { ViewUtil } from "./view-util";
-import { NgView, DetachedElement } from "./element-registry";
+import { NgView, CommentNode } from "./element-types";
 import { rendererLog as traceLog } from "./trace";
 
 // CONTENT_ATTR not exported from NativeScript_renderer - we need it for styles application.
@@ -111,7 +111,7 @@ export class NativeScriptRenderer extends Renderer2 {
         return this.viewUtil.nextSiblingIndex(node);
     }
 
-    createComment(_value: any): DetachedElement {
+    createComment(_value: any): CommentNode {
         traceLog(`NativeScriptRenderer.createComment ${_value}`);
         return this.viewUtil.createComment();
     }
@@ -121,7 +121,7 @@ export class NativeScriptRenderer extends Renderer2 {
         return this.viewUtil.createView(name);
     }
 
-    createText(_value: string): DetachedElement {
+    createText(_value: string): CommentNode {
         traceLog(`NativeScriptRenderer.createText ${_value}`);
         return this.viewUtil.createText();
     }

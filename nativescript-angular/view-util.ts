@@ -7,11 +7,15 @@ import {
     getViewClass,
     getViewMeta,
     isKnownView,
+} from "./element-registry";
+
+import {
+    CommentNode,
     ViewExtensions,
-    DetachedElement,
     NgElement,
     NgView,
-} from "./element-registry";
+    isDetachedElement,
+} from "./element-types";
 import { platformNames, Device } from "tns-core-modules/platform";
 import { rendererLog as traceLog } from "./trace";
 
@@ -50,12 +54,12 @@ export class ViewUtil {
     }
 
     public insertChild(parent: any, child: NgElement, atIndex: number = -1) {
-        if (child instanceof DetachedElement) {
+        if (child instanceof CommentNode) {
             child.templateParent = parent;
             return;
         }
 
-        if (!parent || child.meta.skipAddToDom) {
+        if (!parent || isDetachedElement(child)) {
             return;
         }
 
@@ -83,7 +87,10 @@ export class ViewUtil {
     }
 
     public removeChild(parent: any, child: NgElement) {
-        if (!parent || child instanceof DetachedElement || child.meta.skipAddToDom) {
+        if (!parent ||
+            child instanceof CommentNode ||
+            isDetachedElement(child)) {
+
             return;
         }
 
@@ -112,12 +119,12 @@ export class ViewUtil {
         }
     }
 
-    public createComment(): DetachedElement {
-        return new DetachedElement();
+    public createComment(): CommentNode {
+        return new CommentNode();
     }
 
-    public createText(): DetachedElement {
-        return new DetachedElement();
+    public createText(): CommentNode {
+        return new CommentNode();
     }
 
     public createView(name: string): NgView {
