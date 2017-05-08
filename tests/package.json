@@ -66,7 +66,8 @@
   },
   "scripts": {
     "updateTests": "grunt updateTests",
-    "appium-android": "tns build android && npm run run-appium-android",
+    "appium-android-19": "tns build android && npm run run-appium-android-19",
+    "appium-android-23": "tns build android && npm run run-appium-android-23",
     "appium-ios": "tns build ios && npm run run-appium-ios",
     "run-appium-android-19": "nativescript-dev-appium appium-android-19",
     "run-appium-android-23": "nativescript-dev-appium appium-android-23",
