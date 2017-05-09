@@ -1,13 +1,15 @@
 import { Directive, Component, ElementRef, Optional, OnDestroy } from "@angular/core";
 import { ActionItem, ActionBar, NavigationButton } from "tns-core-modules/ui/action-bar";
-import { isBlank } from "../lang-facade";
 import { Page } from "tns-core-modules/ui/page";
 import { View } from "tns-core-modules/ui/core/view";
-import { registerElement, ViewClassMeta, NgView } from "../element-registry";
+
+import { isBlank } from "../lang-facade";
+import { registerElement } from "../element-registry";
+import { ViewClassMeta, NgView } from "../element-types";
 
 const actionBarMeta: ViewClassMeta = {
     skipAddToDom: true,
-    insertChild: (parent: NgView, child: NgView, atIndex: number) => {
+    insertChild: (parent: NgView, child: NgView) => {
         const bar = <ActionBar>(<any>parent);
         const childView = <any>child;
 
@@ -17,8 +19,6 @@ const actionBarMeta: ViewClassMeta = {
         } else if (child instanceof ActionItem) {
             bar.actionItems.addItem(childView);
             childView.parent = bar;
-        } else if (child.nodeName === "#comment") {
-            bar._addView(childView, atIndex);
         } else if (child instanceof View) {
             bar.titleView = childView;
         }

@@ -1,6 +1,6 @@
 import { AnimationPlayer } from "@angular/animations";
-import { NgView } from "../element-registry";
 
+import { NgView } from "../element-types";
 import { NativeScriptAnimationPlayer } from "./animation-player";
 import { Keyframe } from "./utils";
 

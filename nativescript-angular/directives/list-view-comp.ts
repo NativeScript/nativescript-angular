@@ -1,29 +1,31 @@
 import {
-    Component,
-    Directive,
-    Input,
-    DoCheck,
-    OnDestroy,
     AfterContentInit,
-    ElementRef,
-    ViewContainerRef,
-    TemplateRef,
-    ContentChild,
-    EmbeddedViewRef,
-    IterableDiffers,
-    IterableDiffer,
+    ChangeDetectionStrategy,
     ChangeDetectorRef,
+    Component,
+    ContentChild,
+    Directive,
+    DoCheck,
+    ElementRef,
+    EmbeddedViewRef,
     EventEmitter,
-    ViewChild,
-    Output,
     Host,
-    ChangeDetectionStrategy
+    Input,
+    IterableDiffer,
+    IterableDiffers,
+    OnDestroy,
+    Output,
+    TemplateRef,
+    ViewChild,
+    ViewContainerRef,
 } from "@angular/core";
-import { isListLikeIterable } from "../collection-facade";
 import { ListView, ItemEventData } from "tns-core-modules/ui/list-view";
 import { View, KeyedTemplate } from "tns-core-modules/ui/core/view";
 import { ObservableArray } from "tns-core-modules/data/observable-array";
 import { LayoutBase } from "tns-core-modules/ui/layouts/layout-base";
+
+import { CommentNode } from "../element-types";
+import { isListLikeIterable } from "../collection-facade";
 import { listViewLog, listViewError } from "../trace";
 
 const NG_VIEW = "_ngViewRef";
@@ -212,23 +214,27 @@ export class ListViewComponent implements DoCheck, OnDestroy, AfterContentInit {
 }
 
 function getSingleViewRecursive(nodes: Array<any>, nestLevel: number): View {
-    const actualNodes = nodes.filter((n) => !!n && n.nodeName !== "#text");
+    const actualNodes = nodes.filter(node => !(node instanceof CommentNode));
 
     if (actualNodes.length === 0) {
-        throw new Error("No suitable views found in list template! Nesting level: " + nestLevel);
+        throw new Error(`No suitable views found in list template! ` +
+            `Nesting level: ${nestLevel}`);
     } else if (actualNodes.length > 1) {
-        throw new Error("More than one view found in list template! Nesting level: " + nestLevel);
-    } else {
-        if (actualNodes[0]) {
-            let parentLayout = actualNodes[0].parent;
-            if (parentLayout instanceof LayoutBase) {
-                parentLayout.removeChild(actualNodes[0]);
-            }
-            return actualNodes[0];
-        } else {
-            return getSingleViewRecursive(actualNodes[0].children, nestLevel + 1);
-        }
+        throw new Error(`More than one view found in list template!` +
+            `Nesting level: ${nestLevel}`);
     }
+
+    const rootLayout = actualNodes[0];
+    if (!rootLayout) {
+        return getSingleViewRecursive(rootLayout.children, nestLevel + 1);
+    }
+
+    let parentLayout = rootLayout.parent;
+    if (parentLayout instanceof LayoutBase) {
+        parentLayout.removeChild(rootLayout);
+    }
+
+    return rootLayout;
 }
 
 export interface ComponentView {
