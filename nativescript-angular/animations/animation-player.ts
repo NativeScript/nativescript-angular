@@ -4,7 +4,7 @@ import {
     KeyframeAnimationInfo,
 } from "tns-core-modules/ui/animation/keyframe-animation";
 
-import { NgView } from "../element-registry";
+import { NgView } from "../element-types";
 import { Keyframe, getAnimationCurve, parseAnimationKeyframe } from "./utils";
 
 export class NativeScriptAnimationPlayer implements AnimationPlayer {

@@ -1,31 +1,10 @@
-import { View } from "tns-core-modules/ui/core/view";
+import { ViewClass, ViewClassMeta } from "./element-types";
 
 export type ViewResolver = () => ViewClass;
-export type NgView = View & ViewExtensions;
-export interface ViewClassMeta {
-    skipAddToDom?: boolean;
-    insertChild?: (parent: NgView, child: NgView, atIndex: number) => void;
-    removeChild?: (parent: NgView, child: NgView) => void;
-}
-
-export interface ViewExtensions {
-    nodeType: number;
-    nodeName: string;
-    templateParent: NgView;
-    ngCssClasses: Map<string, boolean>;
-    meta: ViewClassMeta;
-}
-
-export interface ViewClass {
-    new (): View;
-}
-
-const defaultViewMeta: ViewClassMeta = {
-    skipAddToDom: false,
-};
 
 const elementMap = new Map<string, { resolver: ViewResolver, meta?: ViewClassMeta }>();
 const camelCaseSplit = /([a-z0-9])([A-Z])/g;
+const defaultViewMeta: ViewClassMeta = { skipAddToDom: false };
 
 export function registerElement(
     elementName: string,
@@ -48,6 +27,7 @@ export function getViewClass(elementName: string): ViewClass {
     if (!entry) {
         throw new TypeError(`No known component for element ${elementName}.`);
     }
+
     try {
         return entry.resolver();
     } catch (e) {
@@ -56,12 +36,8 @@ export function getViewClass(elementName: string): ViewClass {
 }
 
 export function getViewMeta(nodeName: string): ViewClassMeta {
-    let meta = defaultViewMeta;
     const entry = elementMap.get(nodeName) || elementMap.get(nodeName.toLowerCase());
-    if (entry && entry.meta) {
-        meta = entry.meta;
-    }
-    return meta;
+    return (entry && entry.meta) || defaultViewMeta;
 }
 
 export function isKnownView(elementName: string): boolean {
@@ -110,10 +86,3 @@ registerElement("Span", () => require("tns-core-modules/text/span").Span);
 
 registerElement("DetachedContainer", () => require("tns-core-modules/ui/proxy-view-container").ProxyViewContainer,
     { skipAddToDom: true });
-
-registerElement("DetachedText", () => require("ui/placeholder").Placeholder,
-    { skipAddToDom: true });
-
-registerElement("Comment", () => require("ui/placeholder").Placeholder,
-    { skipAddToDom: false });
-

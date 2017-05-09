@@ -7,7 +7,7 @@ import {
 } from "@angular/animations";
 import { unsetValue } from "tns-core-modules/ui/core/view";
 
-import { NgView } from "../element-registry";
+import { NgView } from "../element-types";
 
 // overriden to use the default 'unsetValue'
 // instead of empty string ''
