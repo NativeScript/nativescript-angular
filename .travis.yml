@@ -3,10 +3,11 @@ env:
   - NODE_VERSION=6.9.1
   - DATE=$(date +%Y-%m-%d)
   - PACKAGE_VERSION=$DATE-$TRAVIS_BUILD_NUMBER
-  - ANDROID_API_LEVEL=23
-  - EMULATOR_API_LEVEL=21
-  - ANDROID_BUILD_TOOLS_VERSION=23.0.2
-  - ANDROID_ABI=default/x86_64
+  - ANDROID_API_LEVEL=24
+  - EMULATOR_API_LEVEL=24
+  - ANDROID_BUILD_TOOLS_VERSION=23.0.3
+  - ANDROID_ABI=armeabi-v7a
+  - ANDROID_TAG=google_apis
 language: android
 jdk:
 - oraclejdk8
@@ -39,7 +40,7 @@ install:
 - npm install
 - tns platform add android
 before_script:
-  - echo no | android create avd --force -n test -t android-$EMULATOR_API_LEVEL -b $ANDROID_ABI
+  - echo no | android create avd --force -n test -t android-$EMULATOR_API_LEVEL --abi $ANDROID_ABI --tag $ANDROID_TAG
   - emulator -memory 1024 -avd test -no-audio -no-window &  
   - android-wait-for-emulator
 script:
