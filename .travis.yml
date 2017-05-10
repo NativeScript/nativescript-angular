@@ -39,7 +39,7 @@ install:
 - npm install
 - tns platform add android
 before_script:
-  - echo no | android create avd --force -n test -t "android-"$EMULATOR_API_LEVEL --abi $ANDROID_ABI
+  - echo no | android create avd --force -n test -t android-$EMULATOR_API_LEVEL -b $ANDROID_ABI
   - emulator -memory 1024 -avd test -no-audio -no-window &  
   - android-wait-for-emulator
 script:
