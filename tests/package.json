@@ -69,6 +69,7 @@
     "appium-android": "tns build android && npm run run-appium-android",
     "run-appium-android": "nativescript-dev-appium android",
     "appium-ios-simulator": "tns build ios && nativescript-dev-appium ios-simulator",
-    "tslint": "tslint --project tsconfig.json --config tslint.json"
+    "tslint": "tslint --project tsconfig.json --config tslint.json",
+    "appium": "nativescript-dev-appium"
   }
 }
