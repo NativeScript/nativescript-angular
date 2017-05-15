@@ -3,9 +3,8 @@ env:
   - NODE_VERSION=6.9.1
   - DATE=$(date +%Y-%m-%d)
   - PACKAGE_VERSION=$DATE-$TRAVIS_BUILD_NUMBER
-  - ANDROID_API_LEVEL=24
   - EMULATOR_API_LEVEL=24
-  - ANDROID_BUILD_TOOLS_VERSION=23.0.3
+  - ANDROID_BUILD_TOOLS_VERSION=25.2.5
   - ANDROID_ABI=armeabi-v7a
   - ANDROID_TAG=google_apis
 language: android
@@ -16,7 +15,6 @@ android:
   - platform-tools
   - tools
   - build-tools-$ANDROID_BUILD_TOOLS_VERSION
-  - android-$ANDROID_API_LEVEL
   - android-$EMULATOR_API_LEVEL
   - extra-android-m2repository
   - sys-img-armeabi-v7a-android-$EMULATOR_API_LEVEL
@@ -46,7 +44,7 @@ script:
 -  
 - tns build android
 - android-wait-for-emulator
-- npm run appium --runtype=android$EMULATOR_API_LEVEL
+- npm run appium --runtype=android$EMULATOR_API_LEVEL --loglevel=verbose
 before_deploy:
 - cd ../nativescript-angular
 - npm install -g nativescript --ignore-scripts
