@@ -45,7 +45,7 @@ script:
 -  
 - tns build android
 - android-wait-for-emulator
-- npm run appium --runtype=android$EMULATOR_API_LEVEL --loglevel=verbose
+- npm run appium --runtype=android$EMULATOR_API_LEVEL
 before_deploy:
 - cd ../nativescript-angular
 - npm install -g nativescript --ignore-scripts
