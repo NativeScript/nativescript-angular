@@ -2,7 +2,6 @@ import { Directive, ElementRef, forwardRef, AfterViewInit, HostListener } from "
 import { NG_VALUE_ACCESSOR } from "@angular/forms";
 import { BaseValueAccessor } from "./base-value-accessor";
 import { View } from "tns-core-modules/ui/core/view";
-import { convertToInt } from "../common/utils";
 
 const SELECTED_INDEX_VALUE_ACCESSOR = {provide: NG_VALUE_ACCESSOR,
     useExisting: forwardRef(() => SelectedIndexValueAccessor), multi: true};
@@ -35,19 +34,19 @@ export class SelectedIndexValueAccessor extends BaseValueAccessor<SelectableView
         super(elementRef.nativeElement);
     }
 
-    private _normalizedValue: number;
+    private value: number;
     private viewInitialized: boolean;
 
     writeValue(value: any): void {
-        this._normalizedValue = convertToInt(value);
+        this.value = value;
         if (this.viewInitialized) {
-            this.view.selectedIndex = this._normalizedValue;
+            this.view.selectedIndex = this.value;
         }
     }
 
     ngAfterViewInit() {
         this.viewInitialized = true;
-        this.view.selectedIndex = this._normalizedValue;
+        this.view.selectedIndex = this.value;
     }
 
     registerOnTouched(fn: () => void): void { this.onTouched = fn; }

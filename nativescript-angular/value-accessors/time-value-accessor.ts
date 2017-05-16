@@ -1,6 +1,5 @@
 import { Directive, ElementRef, forwardRef, HostListener } from "@angular/core";
 import { NG_VALUE_ACCESSOR } from "@angular/forms";
-import { isBlank, isDate } from "../lang-facade";
 import { BaseValueAccessor } from "./base-value-accessor";
 import { TimePicker } from "tns-core-modules/ui/time-picker";
 
@@ -34,18 +33,7 @@ export class TimeValueAccessor extends BaseValueAccessor<TimePicker> { // tslint
     }
 
     writeValue(value: any): void {
-        let normalizedValue = isBlank(value) ? new Date() : value;
-        if (!isDate(normalizedValue)) {
-            if (typeof normalizedValue === "string") {
-                normalizedValue = new Date(normalizedValue);
-            } else if (typeof normalizedValue === "number") {
-                normalizedValue = new Date(normalizedValue);
-            }
-            if (!isDate(normalizedValue)) {
-                normalizedValue = new Date();
-            }
-        }
-        this.view.time = normalizedValue;
+        this.view.time = value;
     }
 
     registerOnTouched(fn: () => void): void { this.onTouched = fn; }

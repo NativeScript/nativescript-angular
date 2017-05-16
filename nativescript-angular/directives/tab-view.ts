@@ -10,7 +10,6 @@ import {
 import { TabView, TabViewItem } from "tns-core-modules/ui/tab-view";
 
 import { CommentNode } from "../element-types";
-import { convertToInt } from "../common/utils";
 import { rendererLog } from "../trace";
 import { isBlank } from "../lang-facade";
 
@@ -28,7 +27,7 @@ export class TabViewDirective implements AfterViewInit {
     }
 
     set selectedIndex(value) {
-        this._selectedIndex = convertToInt(value);
+        this._selectedIndex = value;
         if (this.viewInitialized) {
             this.tabView.selectedIndex = this._selectedIndex;
         }
