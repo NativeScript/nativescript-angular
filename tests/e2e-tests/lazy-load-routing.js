@@ -1,6 +1,6 @@
 "use strict";
 var nsAppium = require("nativescript-dev-appium");
-
+var defaultWaitTime = 300000;
 describe("lazy load routing", function () {
     this.timeout(360000);
     var driver;
@@ -19,7 +19,7 @@ describe("lazy load routing", function () {
 
     it("loads default path", function () {
         return driver
-            .waitForElementByAccessibilityId("first-lazy-load", 300000)
+            .waitForElementByAccessibilityId("first-lazy-load", defaultWaitTime)
             .elementByAccessibilityId("first-lazy-load")
                 .should.eventually.exist
             .text().should.eventually.equal("First: lazy-load")
@@ -32,10 +32,11 @@ describe("lazy load routing", function () {
             "second.destroy"] // <-- back (first component is reused)
             .join(",");
         return driver
-            .waitForElementByAccessibilityId("first-navigate-lazy-load", 300000)
+            .waitForElementByAccessibilityId("first-navigate-lazy-load", defaultWaitTime)
             .elementByAccessibilityId("first-navigate-lazy-load")
                 .should.eventually.exist
             .tap()
+            .waitForElementByAccessibilityId("second-lazy-load", defaultWaitTime)
             .elementByAccessibilityId("second-lazy-load")
                 .should.eventually.exist
                 .text().should.eventually.equal("Second: lazy-load")
@@ -44,6 +45,7 @@ describe("lazy load routing", function () {
             .elementByAccessibilityId("second-navigate-back-lazy-load")
                 .should.eventually.exist
             .tap()
+             .waitForElementByAccessibilityId("first-lazy-load", defaultWaitTime)
             .elementByAccessibilityId("first-lazy-load")
                 .should.eventually.exist
                 .text().should.eventually.equal("First: lazy-load")
@@ -53,10 +55,11 @@ describe("lazy load routing", function () {
 
     it("navigates and clear history", function() {
         return driver
-            .waitForElementByAccessibilityId("first-navigate-lazy-load", 300000)
+            .waitForElementByAccessibilityId("first-navigate-lazy-load", defaultWaitTime)
             .elementByAccessibilityId("first-navigate-clear-history-lazy-load")
                 .should.eventually.exist
             .tap()
+            .waitForElementByAccessibilityId("second-lazy-load", defaultWaitTime)            
             .elementByAccessibilityId("second-lazy-load")
                 .should.eventually.exist
                 .text().should.eventually.equal("Second: lazy-load")

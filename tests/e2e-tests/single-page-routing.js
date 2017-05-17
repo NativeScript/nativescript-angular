@@ -1,5 +1,6 @@
 "use strict";
 var nsAppium = require("nativescript-dev-appium");
+var defaultWaitTime = 300000;
 
 describe("single page routing", function () {
     this.timeout(360000);
@@ -19,7 +20,7 @@ describe("single page routing", function () {
 
     it("loads default path", function () {
         return driver
-            .waitForElementByAccessibilityId("first-single-page", 300000)
+            .waitForElementByAccessibilityId("first-single-page", defaultWaitTime)
             .elementByAccessibilityId("first-single-page")
                 .should.eventually.exist
             .text().should.eventually.equal("First: single-page")
@@ -34,16 +35,18 @@ describe("single page routing", function () {
             "first.init"].join(",");
 
         return driver
-            .waitForElementByAccessibilityId("first-single-page", 300000)
+            .waitForElementByAccessibilityId("first-single-page", defaultWaitTime)
             .elementByAccessibilityId("first-navigate-single-page")
                 .should.eventually.exist
             .tap()
+            .waitForElementByAccessibilityId("second-single-page", defaultWaitTime)
             .elementByAccessibilityId("second-single-page")
                 .should.eventually.exist
             .text().should.eventually.equal("Second: single-page")
             .elementByAccessibilityId("second-navigate-back-single-page")
                 .should.eventually.exist
             .tap()
+            .waitForElementByAccessibilityId("first-single-page", defaultWaitTime)
             .elementByAccessibilityId("first-single-page")
                 .should.eventually.exist
             .text().should.eventually.equal("First: single-page")
