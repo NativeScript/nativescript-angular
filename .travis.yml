@@ -40,7 +40,7 @@ install:
 - npm install
 before_script:
   - echo no | android create avd --force -n test -t android-$EMULATOR_API_LEVEL --abi $ANDROID_ABI
-  - emulator -memory 1024 -avd test -no-audio
+  - emulator -memory 1024 -avd test
   - android-wait-for-emulator
 script:
 -  
