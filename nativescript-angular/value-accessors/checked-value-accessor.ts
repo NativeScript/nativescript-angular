@@ -1,6 +1,5 @@
 import { Directive, ElementRef, forwardRef, HostListener } from "@angular/core";
 import { NG_VALUE_ACCESSOR } from "@angular/forms";
-import { isBlank } from "../lang-facade";
 import { BaseValueAccessor } from "./base-value-accessor";
 import { Switch } from "tns-core-modules/ui/switch";
 
@@ -34,15 +33,7 @@ export class CheckedValueAccessor extends BaseValueAccessor<Switch> { // tslint:
     }
 
     writeValue(value: any): void {
-        let normalizedValue = false;
-        if (!isBlank(value)) {
-            if (typeof value === "string") {
-                normalizedValue = value.toLowerCase() === "true" ? true : false;
-            } else {
-                normalizedValue = !!value;
-            }
-        }
-        this.view.checked = normalizedValue;
+        this.view.checked = value;
     }
 
     registerOnTouched(fn: () => void): void { this.onTouched = fn; }

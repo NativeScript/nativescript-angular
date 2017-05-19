@@ -11,10 +11,6 @@ export function isBlank(obj: any): boolean {
   return obj === undefined || obj === null;
 }
 
-export function isNumber(obj: any): boolean {
-  return typeof obj === 'number';
-}
-
 export function isDate(obj: any): obj is Date {
   return obj instanceof Date && !isNaN(obj.valueOf());
 }

@@ -78,20 +78,19 @@ describe("two-way binding via ng-model", () => {
         assert.strictEqual(42, accessor.view.value);
 
         accessor.writeValue("blah");
-        assert.strictEqual(0, accessor.view.value, "default to 0 on parse errors");
+        assert.notEqual(accessor.view.value, accessor.view.value, "defaults to NaN on parse errors");
     });
 
     it("converts strings to bools", () => {
         const accessor = new TestCheckedValueAccessor();
 
         accessor.writeValue(null);
-        assert.strictEqual(false, accessor.view.checked, "default to false on empty");
+        assert.strictEqual(null, accessor.view.checked, "default to null on empty");
 
         accessor.writeValue("true");
         assert.strictEqual(true, accessor.view.checked);
 
-        accessor.writeValue("blah");
-        assert.strictEqual(false, accessor.view.checked, "default to false on parse errors");
+        assert.throws(() => accessor.writeValue("blah"));
     });
 
     it("converts strings to dates", () => {
@@ -99,13 +98,10 @@ describe("two-way binding via ng-model", () => {
         const accessor = new TestDateValueAccessor();
 
         accessor.writeValue(null);
-        assert.equal(formatDate(now), formatDate(accessor.view.date), "default to now on empty");
+        assert.equal(null, accessor.view.date, "default to null on empty");
 
         accessor.writeValue("2010-03-17");
         assert.equal(formatDate(new Date(2010, 2, 17)), formatDate(accessor.view.date));
-
-        accessor.writeValue("a fortnight ago");
-        assert.equal(formatDate(now), formatDate(accessor.view.date), "default to now on parse error");
     });
 
     it("converts strings to int selection", () => {
@@ -113,7 +109,7 @@ describe("two-way binding via ng-model", () => {
 
         accessor.writeValue(null);
         accessor.ngAfterViewInit();
-        assert.strictEqual(0, accessor.view.selectedIndex, "default to 0 on empty");
+        assert.strictEqual(null, accessor.view.selectedIndex, "default to null on empty");
 
         accessor.writeValue("3");
         accessor.ngAfterViewInit();
@@ -121,29 +117,23 @@ describe("two-way binding via ng-model", () => {
 
         accessor.writeValue("blah");
         accessor.ngAfterViewInit();
-        assert.strictEqual(0, accessor.view.selectedIndex, "default to 0 on parse errors");
+        assert.notEqual(accessor.view.selectedIndex, accessor.view.selectedIndex,
+            "default to NaN on parse errors");
     });
 
     it("converts strings to times", () => {
-        const now = new Date();
         const accessor = new TestTimeValueAccessor();
 
-        accessor.writeValue(null);
-        assert.equal(formatTime(now), formatTime(accessor.view.time), "default to now on empty");
-
-        accessor.writeValue("2010/03/17 12:54");
-        assert.equal(formatTime(new Date(2010, 2, 17, 12, 54)), formatTime(accessor.view.time));
-
-        accessor.writeValue("three hours from now");
-        assert.equal(formatTime(now), formatTime(accessor.view.time), "default to now on parse error");
+        assert.throws(() => accessor.writeValue(null));
+        assert.throws(() => accessor.writeValue("2010/03/17 12:54"));
+        assert.throws(() => accessor.writeValue("three hours from now"));
     });
 
     it("converts values to text", () => {
-        const now = new Date();
         const accessor = new TestTextValueAccessor();
 
         accessor.writeValue(null);
-        assert.equal("", accessor.view.text);
+        assert.equal(null, accessor.view.text, "defaults to null on empty");
 
         accessor.writeValue("blah");
         assert.equal("blah", accessor.view.text);
