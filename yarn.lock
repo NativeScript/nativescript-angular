@@ -1614,9 +1614,9 @@ nan@^2.3.0:
   version "2.6.2"
   resolved "https://registry.yarnpkg.com/nan/-/nan-2.6.2.tgz#e4ff34e6c95fdfb5aecc08de6596f43605a7db45"
 
-nativescript-angular@next:
-  version "3.1.0-2017-05-10-1537"
-  resolved "https://registry.yarnpkg.com/nativescript-angular/-/nativescript-angular-3.1.0-2017-05-10-1537.tgz#ca40b1fbb2f5029960184db686b09815f40b24fb"
+nativescript-angular@~3.0.0:
+  version "3.0.0"
+  resolved "https://registry.yarnpkg.com/nativescript-angular/-/nativescript-angular-3.0.0.tgz#401c5eae895c22a44010c16f443910d2aa5af6ee"
   dependencies:
     nativescript-intl "^3.0.0"
     reflect-metadata "^0.1.8"
@@ -1644,9 +1644,9 @@ nativescript-dev-typescript@~0.4.2:
   dependencies:
     nativescript-hook "^0.2.0"
 
-nativescript-dev-webpack@^0.5.0:
-  version "0.5.0"
-  resolved "https://registry.yarnpkg.com/nativescript-dev-webpack/-/nativescript-dev-webpack-0.5.0.tgz#b439853be73f0776ff1b60b883dee4afbda551cd"
+nativescript-dev-webpack@^0.4.1:
+  version "0.4.1"
+  resolved "https://registry.yarnpkg.com/nativescript-dev-webpack/-/nativescript-dev-webpack-0.4.1.tgz#be1a96a866be21d245c1d7d8b2a3c23c4f08936f"
 
 nativescript-hook@^0.2.0:
   version "0.2.1"
@@ -2628,15 +2628,15 @@ timers-browserify@^2.0.2:
   dependencies:
     setimmediate "^1.0.4"
 
-tns-core-modules-widgets@next:
-  version "3.1.0-2017-05-17-291"
-  resolved "https://registry.yarnpkg.com/tns-core-modules-widgets/-/tns-core-modules-widgets-3.1.0-2017-05-17-291.tgz#d3d6df5c75b58ba4b8737aa4ee47ae7375fd26d3"
+tns-core-modules-widgets@3.0.0:
+  version "3.0.0"
+  resolved "https://registry.yarnpkg.com/tns-core-modules-widgets/-/tns-core-modules-widgets-3.0.0.tgz#503c762819c936ce51e0b6025c776ae42a4500fb"
 
-tns-core-modules@next:
-  version "3.1.0-2017-05-19-6648"
-  resolved "https://registry.yarnpkg.com/tns-core-modules/-/tns-core-modules-3.1.0-2017-05-19-6648.tgz#ce49b16419cb5695f7854a1a4d1ec6b7632002e5"
+tns-core-modules@~3.0.0:
+  version "3.0.0"
+  resolved "https://registry.yarnpkg.com/tns-core-modules/-/tns-core-modules-3.0.0.tgz#be0a538d3924a48320e9a875a1d351c664a3c9ab"
   dependencies:
-    tns-core-modules-widgets next
+    tns-core-modules-widgets "3.0.0"
 
 to-arraybuffer@^1.0.0:
   version "1.0.1"
@@ -2675,7 +2675,7 @@ tweetnacl@^0.14.3, tweetnacl@~0.14.0:
   version "0.14.5"
   resolved "https://registry.yarnpkg.com/tweetnacl/-/tweetnacl-0.14.5.tgz#5ae68177f192d4456269d108afa93ff8743f4f64"
 
-typescript@~2.3.2:
+typescript@~2.3.1:
   version "2.3.2"
   resolved "https://registry.yarnpkg.com/typescript/-/typescript-2.3.2.tgz#f0f045e196f69a72f06b25fd3bd39d01c3ce9984"
 
@@ -2784,9 +2784,9 @@ webpack-sources@^0.2.3, webpack-sources@~0.2.3:
     source-list-map "^1.1.1"
     source-map "~0.5.3"
 
-webpack@~2.5.1:
-  version "2.5.1"
-  resolved "https://registry.yarnpkg.com/webpack/-/webpack-2.5.1.tgz#61742f0cf8af555b87460a9cd8bba2f1e3ee2fce"
+webpack@~2.4.1:
+  version "2.4.1"
+  resolved "https://registry.yarnpkg.com/webpack/-/webpack-2.4.1.tgz#15a91dbe34966d8a4b99c7d656efd92a2e5a6f6a"
   dependencies:
     acorn "^5.0.0"
     acorn-dynamic-import "^2.0.0"
