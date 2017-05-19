@@ -1,9 +1,17 @@
 import {
-    ReflectiveInjector, ComponentFactoryResolver, ViewContainerRef, NgModuleRef,
-    Type, Injectable, ComponentRef, Directive
+    ComponentFactoryResolver,
+    ComponentRef,
+    Directive,
+    Injectable,
+    NgModuleRef,
+    ReflectiveInjector,
+    Type,
+    ViewContainerRef,
 } from "@angular/core";
+
 import { Page } from "tns-core-modules/ui/page";
 import { View } from "tns-core-modules/ui/core/view";
+
 import { DetachedLoader } from "../common/detached-loader";
 import { PageFactory, PAGE_FACTORY } from "../platform-providers";
 
@@ -21,44 +29,61 @@ export class ModalDialogParams {
     }
 }
 
+interface ShowDialogOptions {
+    containerRef: ViewContainerRef;
+    context: any;
+    doneCallback;
+    fullscreen: boolean;
+    pageFactory: PageFactory;
+    parentPage: Page;
+    resolver: ComponentFactoryResolver;
+    type: Type<any>;
+}
+
 @Injectable()
 export class ModalDialogService {
-    public showModal(type: Type<any>, options: ModalDialogOptions): Promise<any> {
-        if (!options.viewContainerRef) {
+    public showModal(type: Type<any>,
+        {viewContainerRef, moduleRef, context, fullscreen}: ModalDialogOptions
+    ): Promise<any> {
+        if (!viewContainerRef) {
             throw new Error(
-                "No viewContainerRef: Make sure you pass viewContainerRef in ModalDialogOptions.");
+                "No viewContainerRef: " +
+                "Make sure you pass viewContainerRef in ModalDialogOptions."
+            );
         }
 
-        const viewContainerRef = options.viewContainerRef;
         const parentPage: Page = viewContainerRef.injector.get(Page);
-        // resolve from particular module (moduleRef)
-        // or from same module as parentPage (viewContainerRef)
-        const resolver: ComponentFactoryResolver = (options.moduleRef || viewContainerRef).injector.get(
-            ComponentFactoryResolver);
         const pageFactory: PageFactory = viewContainerRef.injector.get(PAGE_FACTORY);
 
-        return new Promise((resolve) => {
-            setTimeout(() => ModalDialogService.showDialog(
-                type,
-                options,
-                resolve,
-                viewContainerRef,
-                resolver,
+        // resolve from particular module (moduleRef)
+        // or from same module as parentPage (viewContainerRef)
+        const componentContainer = moduleRef || viewContainerRef;
+        const resolver = componentContainer.injector.get(ComponentFactoryResolver);
+
+        return new Promise(resolve => {
+            setTimeout(() => ModalDialogService.showDialog({
+                containerRef: viewContainerRef,
+                context,
+                doneCallback: resolve,
+                fullscreen,
+                pageFactory,
                 parentPage,
-                pageFactory
-            ), 10);
+                resolver,
+                type,
+            }), 10);
         });
     }
 
-    private static showDialog(
-        type: Type<any>,
-        options: ModalDialogOptions,
+    private static showDialog({
+        containerRef,
+        context,
         doneCallback,
-        containerRef: ViewContainerRef,
-        resolver: ComponentFactoryResolver,
-        parentPage: Page,
-        pageFactory: PageFactory): void {
-
+        fullscreen,
+        pageFactory,
+        parentPage,
+        resolver,
+        type,
+    }: ShowDialogOptions): void {
         const page = pageFactory({ isModal: true, componentType: type });
 
         let detachedLoaderRef: ComponentRef<DetachedLoader>;
@@ -69,7 +94,7 @@ export class ModalDialogService {
             detachedLoaderRef.destroy();
         };
 
-        const modalParams = new ModalDialogParams(options.context, closeCallback);
+        const modalParams = new ModalDialogParams(context, closeCallback);
 
         const providers = ReflectiveInjector.resolve([
             { provide: Page, useValue: page },
@@ -88,7 +113,7 @@ export class ModalDialogService {
             }
 
             page.content = componentView;
-            parentPage.showModal(page, options.context, closeCallback, options.fullscreen);
+            parentPage.showModal(page, context, closeCallback, fullscreen);
         });
     }
 }
@@ -99,7 +124,9 @@ export class ModalDialogService {
 })
 export class ModalDialogHost { // tslint:disable-line:directive-class-suffix
     constructor() {
-        throw new Error("ModalDialogHost is deprecated. Call ModalDialogService.showModal() " +
-            "by passing ViewContainerRef in the options instead.");
+        throw new Error("ModalDialogHost is deprecated. " +
+            "Call ModalDialogService.showModal() " +
+            "by passing ViewContainerRef in the options instead."
+        );
     }
 }
