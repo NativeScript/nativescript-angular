@@ -1,4 +1,6 @@
-﻿button {
+﻿@import '~/nativescript-theme-core/css/core.light.css';
+
+button {
     font-size: 13;
 }
 
@@ -9,4 +11,5 @@ label {
 .tab-view-container { 
     font-family: 'Courier'; /* Enabling this results in the error and shows a blank TabView */
 }
+
 

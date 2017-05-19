@@ -22,6 +22,7 @@
     "@angular/router": "~4.1.0",
     "nativescript-angular": "next",
     "nativescript-intl": "~3.0.0",
+    "nativescript-theme-core": "^1.0.4",
     "reflect-metadata": "~0.1.8",
     "rxjs": "^5.0.1",
     "tns-core-modules": "next",
