@@ -1,12 +1,11 @@
 import {
-    Injectable,
     Compiler,
+    Injectable,
     NgModuleFactory,
     NgModuleFactoryLoader,
-    ModuleWithComponentFactories,
     SystemJsNgModuleLoader,
+    Type,
 } from "@angular/core";
-
 import { path, knownFolders } from "tns-core-modules/file-system";
 
 const SEPARATOR = "#";
@@ -15,63 +14,50 @@ const SEPARATOR = "#";
 export class NSModuleFactoryLoader implements NgModuleFactoryLoader {
     private offlineMode: boolean;
 
-    constructor(private compiler: Compiler, private ngModuleLoader: SystemJsNgModuleLoader) {
+    constructor(
+        private compiler: Compiler,
+        private ngModuleLoader: SystemJsNgModuleLoader,
+    ) {
         this.offlineMode = compiler instanceof Compiler;
     }
 
     load(path: string): Promise<NgModuleFactory<any>> {
-        if (this.offlineMode) {
-            return this.ngModuleLoader.load(path);
-        } else {
-            return this.loadAndCompile(path);
-        }
+        return this.offlineMode ?
+            this.ngModuleLoader.load(path) :
+            this.loadAndCompile(path);
     }
 
-    /**
-     * When needing the module with component factories
-     * Example: lazy loading on demand via user actions instead of routing
-     * Provides access to components in the lazy loaded module right away
-     * @param path module path
-     */
-    public loadAndCompileComponents(path: string): Promise<any> {
-        return this.loadAndCompile(path, true);
+    private loadAndCompile(path: string): Promise<NgModuleFactory<any>> {
+        const module = requireModule(path);
+        return Promise.resolve(this.compiler.compileModuleAsync(module));
     }
+}
 
-    private loadAndCompile(path: string, includeComponents?: boolean):
-        Promise<NgModuleFactory<any> | ModuleWithComponentFactories<any>> {
-        let {modulePath, exportName} = splitPath(path);
+function requireModule(path: string): Type<any> {
+    const {modulePath, exportName} = splitPath(path);
 
-        let loadedModule = global.require(modulePath)[exportName];
-        checkNotEmpty(loadedModule, modulePath, exportName);
+    const loadedModule = global.require(modulePath)[exportName];
+    checkNotEmpty(loadedModule, modulePath, exportName);
 
-        if (includeComponents) {
-            return Promise.resolve(this.compiler.compileModuleAndAllComponentsAsync(loadedModule));
-        } else {
-            return Promise.resolve(this.compiler.compileModuleAsync(loadedModule));
-        }
-    }
-
+    return loadedModule;
 }
 
 function splitPath(path: string): {modulePath: string, exportName: string} {
-    let [modulePath, exportName] = path.split(SEPARATOR);
-    modulePath = getAbsolutePath(modulePath);
+    const [relativeModulePath, exportName = "default"] = path.split(SEPARATOR);
+    const absoluteModulePath = getAbsolutePath(relativeModulePath);
 
-    if (typeof exportName === "undefined") {
-        exportName = "default";
-    }
-
-    return {modulePath, exportName};
+    return {modulePath: absoluteModulePath, exportName};
 }
 
 function getAbsolutePath(relativePath: string) {
-    return path.normalize(path.join(knownFolders.currentApp().path, relativePath));
+    const projectPath = knownFolders.currentApp().path;
+    const absolutePath = path.join(projectPath, relativePath);
+
+    return path.normalize(absolutePath);
 }
 
-function checkNotEmpty(value: any, modulePath: string, exportName: string): any {
+function checkNotEmpty(value: any, modulePath: string, exportName: string): void {
     if (!value) {
         throw new Error(`Cannot find '${exportName}' in '${modulePath}'`);
     }
-
-    return value;
 }
