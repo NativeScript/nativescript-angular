@@ -102,7 +102,7 @@ describe("two-way binding via ng-model", () => {
         assert.equal(formatDate(now), formatDate(accessor.view.date), "default to now on empty");
 
         accessor.writeValue("2010-03-17");
-        assert.equal(formatDate(new Date(2010, 2, 16)), formatDate(accessor.view.date));
+        assert.equal(formatDate(new Date(2010, 2, 17)), formatDate(accessor.view.date));
 
         accessor.writeValue("a fortnight ago");
         assert.equal(formatDate(now), formatDate(accessor.view.date), "default to now on parse error");
