@@ -1,11 +1,11 @@
-import { Component } from "@angular/core";
-import { FirstComponent } from "./first.component";
-import { SecondComponent } from "./second.component";
+import {Component} from "@angular/core";
+import {FirstComponent} from "../components/first.component";
+import {SecondComponent} from "../components/second.component";
 
 @Component({
     moduleId: module.id,
-    selector: "navigation-test",
-    styleUrls: ["./navigation.component.css"],
+    selector: 'navigation-test',
+    styleUrls: ['./router-outlet.css'],
     template: `
         <StackLayout>
             <StackLayout class="nav">
@@ -19,10 +19,10 @@ import { SecondComponent } from "./second.component";
         </StackLayout>
     `
 })
-export class NavigationComponent { }
+export class NavigationTestRouter { }
 
 export var NavigationSubRoutes = [
-    { path: "", redirectTo: "first", pathMatch: "full" },
-    { path: "first", component: FirstComponent },
-    { path: "second", component: SecondComponent },
+    { path: '', redirectTo: 'first', pathMatch: "full" },
+    { path: 'first', component: FirstComponent },
+    { path: 'second', component: SecondComponent },
 ];

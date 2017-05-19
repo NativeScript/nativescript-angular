@@ -16,7 +16,7 @@ export class MainComponent {
 
     constructor() {
         let navigatableRoutes = this._routes.filter((item) => {
-            return item.data && item.data.isNavigatable && item.path;
+            return item.data.isNavigatable == true && item.path != '';
         });
 
         this._pages = navigatableRoutes;

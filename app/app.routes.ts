@@ -5,10 +5,9 @@ import { SecondComponentActionBar } from "./action-bar/action-bar-second.compone
 
 import { AppComponent } from "./template/app.component";
 
-import { FirstComponent } from "./router/router-outlet/first.component";
-import { SecondComponent } from "./router/router-outlet/second.component";
-import { NavigationComponent, NavigationSubRoutes } from "./router/router-outlet/navigation.component";
-import { LazyNavigationComponent } from "./router/lazy-module-navigation/lazy-navigation.component";
+import { FirstComponent } from "./components/first.component";
+import { SecondComponent } from "./components/second.component";
+import { NavigationTestRouter, NavigationSubRoutes } from "./router/router-outlet";
 
 import { BindingComponent } from "./binding/binding-page";
 
@@ -23,7 +22,6 @@ import { ListPickerComponent } from "./list-picker/list-picker";
 
 import { ModalTest, ModalTestWithPushStrategy, ModalContent } from "./modal/modal-dialogs/modal-dialog.component";
 import { ModalViewMainPageComponent } from "./modal/modal-view-main-page";
-import { LazyLoadModalComponent } from "./modal/lazy/lazy-load-modal.component";
 
 import { TabViewComponent } from "./tab-view/tab-view.component";
 
@@ -36,8 +34,7 @@ export const routableComponents = [
     ModalContent,
     AppComponent,
 
-    NavigationComponent,
-    LazyNavigationComponent,
+    NavigationTestRouter,
 
     FirstComponent,
     SecondComponent,
@@ -59,7 +56,6 @@ export const routableComponents = [
     ModalViewMainPageComponent,
     ModalTest,
     ModalTestWithPushStrategy,
-    LazyLoadModalComponent,
 
     TabViewComponent,
 
@@ -73,8 +69,7 @@ export const routes = [
     { path: '', component: ModalContent, data: { title: "" } },
     { path: 'template', component: AppComponent, data: { title: "Template", isNavigatable: true} },
 
-    { path: 'router', component: NavigationComponent, children: NavigationSubRoutes, data: { title: "Router", isNavigatable: true} },
-    { path: 'lazy-router', component: LazyNavigationComponent, data: { title: "Lazy Router", isNavigatable: true} },
+    { path: 'router', component: NavigationTestRouter, children: NavigationSubRoutes, data: { title: "Router", isNavigatable: true} },
 
     { path: 'first', component: FirstComponent, data: { title: "First", isNavigatable: true} },
     { path: 'second', component: SecondComponent, data: { title: "Second", isNavigatable: true} },
@@ -96,17 +91,10 @@ export const routes = [
     { path: 'modal', component: ModalViewMainPageComponent, data: { title: "Modals", isNavigatable: true} },
     { path: 'modal/modal-dialogs', component: ModalTest, data: { title: "modal" } },
     { path: 'modal/modal-dialogs-push', component: ModalTestWithPushStrategy, data: { title: "modal(onPush)" } },
-    { path: 'modal/lazy', component: LazyLoadModalComponent, data: { title: "modal(lazy)" } },
 
     { path: 'tab-view', component: TabViewComponent, data: { title: "tab-view", isNavigatable: true } },
 
     { path: 'nav-options', component: NavigationOptionsComponent, data: { title: "nav-options", isNavigatable: true} },
     { path: 'nav-info', component: NavigationInfoComponent, data: { title: "nav-info" } },
-
-    // Needed for AoT compilation
-    { 
-        path: "lazy",
-        loadChildren: "./lazy/lazy.module#LazyModule"
-    },
 ];
 
