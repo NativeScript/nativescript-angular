@@ -58,11 +58,12 @@ export class NativeScriptRendererFactory implements RendererFactory2 {
             return renderer;
         }
 
-        if (type.encapsulation === ViewEncapsulation.Emulated) {
+        if (type.encapsulation === ViewEncapsulation.None) {
+            type.styles.map(s => s.toString()).forEach(addStyleToCss);
+            renderer = this.defaultRenderer;
+        } else {
             renderer = new EmulatedRenderer(type, this.rootNgView, this.zone, this.viewUtil);
             (<EmulatedRenderer>renderer).applyToHost(element);
-        } else {
-            renderer = this.defaultRenderer;
         }
 
         this.componentRenderers.set(type.id, renderer);
@@ -253,9 +254,12 @@ class EmulatedRenderer extends NativeScriptRenderer {
     private addStyles(styles: (string | any[])[], componentId: string) {
         styles.map(s => s.toString())
             .map(s => replaceNgAttribute(s, componentId))
-            .forEach(addCss);
+            .forEach(addStyleToCss);
     }
+}
 
+function addStyleToCss(style: string): void {
+    addCss(style);
 }
 
 function replaceNgAttribute(input: string, componentId: string): string {
