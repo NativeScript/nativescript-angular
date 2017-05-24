@@ -1,6 +1,5 @@
 import { Directive, ElementRef, forwardRef, HostListener } from "@angular/core";
 import { NG_VALUE_ACCESSOR } from "@angular/forms";
-import { isBlank, isNumber } from "../lang-facade";
 import { BaseValueAccessor } from "./base-value-accessor";
 import { Slider } from "tns-core-modules/ui/slider";
 
@@ -34,18 +33,7 @@ export class NumberValueAccessor extends BaseValueAccessor<Slider> { // tslint:d
     }
 
     writeValue(value: any): void {
-        let normalizedValue;
-        if (isBlank(value)) {
-            normalizedValue = 0;
-        } else {
-            if (isNumber(value)) {
-                normalizedValue = value;
-            } else {
-                let parsedValue = Number(value);
-                normalizedValue = isNaN(parsedValue) ? 0 : parsedValue;
-            }
-        }
-        this.view.value = normalizedValue;
+        this.view.value = value;
     }
 
     registerOnTouched(fn: () => void): void { this.onTouched = fn; }

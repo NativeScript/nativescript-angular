@@ -1,6 +1,5 @@
 import { Directive, ElementRef, forwardRef, HostListener } from "@angular/core";
 import { NG_VALUE_ACCESSOR } from "@angular/forms";
-import { isBlank } from "../lang-facade";
 import { BaseValueAccessor } from "./base-value-accessor";
 import { View } from "tns-core-modules/ui/core/view";
 
@@ -36,8 +35,7 @@ export class TextValueAccessor extends BaseValueAccessor<TextView> { // tslint:d
     }
 
     writeValue(value: any): void {
-        let normalizedValue = isBlank(value) ? "" : value.toString();
-        this.view.text = normalizedValue;
+        this.view.text = value;
     }
 
     registerOnTouched(fn: () => void): void { this.onTouched = fn; }

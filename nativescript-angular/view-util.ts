@@ -207,41 +207,32 @@ export class ViewUtil {
 
 
     private setPropertyInternal(view: NgView, attributeName: string, value: any): void {
-        traceLog("Setting attribute: " + attributeName);
-
-        let propMap = this.getProperties(view);
+        traceLog(`Setting attribute: ${attributeName}=${value} to ${view}`);
 
         if (attributeName === "class") {
             this.setClasses(view, value);
-        } else if (XML_ATTRIBUTES.indexOf(attributeName) !== -1) {
+            return;
+        }
+
+        if (XML_ATTRIBUTES.indexOf(attributeName) !== -1) {
             view._applyXmlAttribute(attributeName, value);
-        } else if (propMap.has(attributeName)) {
+            return;
+        }
+
+        const propMap = this.getProperties(view);
+        const propertyName = propMap.get(attributeName);
+        if (propertyName) {
             // We have a lower-upper case mapped property.
-            let propertyName = propMap.get(attributeName);
-            view[propertyName] = this.convertValue(value);
-        } else {
-            // Unknown attribute value -- just set it to our object as is.
-            view[attributeName] = this.convertValue(value);
-        }
-    }
-
-    private convertValue(value: any): any {
-        if (typeof (value) !== "string" || value === "") {
-            return value;
+            view[propertyName] = value;
+            return;
         }
 
-        let valueAsNumber = +value;
-        if (!isNaN(valueAsNumber)) {
-            return valueAsNumber;
-        } else if (value && (value.toLowerCase() === "true" || value.toLowerCase() === "false")) {
-            return value.toLowerCase() === "true" ? true : false;
-        } else {
-            return value;
-        }
+        // Unknown attribute value -- just set it to our object as is.
+        view[attributeName] = value;
     }
 
     private getProperties(instance: any): Map<string, string> {
-        let type = instance && instance.constructor;
+        const type = instance && instance.constructor;
         if (!type) {
             return new Map<string, string>();
         }
@@ -253,6 +244,7 @@ export class ViewUtil {
             }
             propertyMaps.set(type, propMap);
         }
+
         return propertyMaps.get(type);
     }
 

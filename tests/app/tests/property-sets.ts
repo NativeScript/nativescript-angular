@@ -36,20 +36,24 @@ describe("setting View properties", () => {
         assert.equal("blah", view.stringValue);
     });
 
-    it("converts number values", () => {
+    it("doesn\'t convert number values", () => {
         let view = new TestView();
         viewUtil.setProperty(view, "numValue", "42");
-        assert.strictEqual(42, view.numValue);
+        assert.strictEqual("42", view.numValue);
+
+        viewUtil.setProperty(view, "numValue", "42.");
+        assert.strictEqual("42.", view.numValue);
+
         viewUtil.setProperty(view, "numValue", 0);
         assert.strictEqual(0, view.numValue);
     });
 
-    it("converts boolean values", () => {
+    it("doesn\'t convert boolean values", () => {
         let view = new TestView();
         viewUtil.setProperty(view, "boolValue", "true");
-        assert.strictEqual(true, view.boolValue);
+        assert.strictEqual("true", view.boolValue);
         viewUtil.setProperty(view, "boolValue", "false");
-        assert.strictEqual(false, view.boolValue);
+        assert.strictEqual("false", view.boolValue);
     });
 
     it("sets style values", () => {
