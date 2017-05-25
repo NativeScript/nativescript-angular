@@ -1,12 +1,12 @@
 <!-- >> icon-font-sample -->
 <GridLayout>
     <ListView [items]="glyphs">
-        <template let-item="item">
+        <ng-template let-item="item">
             <StackLayout orientation="horizontal">
                 <Label [text]="item.icon" class="icon"></Label>
                 <Label [text]="item.code"></Label>
             </StackLayout>
-        </template>
+        </ng-template>
     </ListView>
 </GridLayout>
 <!-- << icon-font-sample -->

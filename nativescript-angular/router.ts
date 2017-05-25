@@ -4,7 +4,6 @@ import {
     NO_ERRORS_SCHEMA,
     Optional,
     SkipSelf,
-    SystemJsNgModuleLoader,
 } from "@angular/core";
 import { RouterModule, Routes, ExtraOptions } from "@angular/router";
 import { LocationStrategy, PlatformLocation } from "@angular/common";
@@ -38,7 +37,6 @@ export type LocationState = LocationState;
         NativescriptPlatformLocation,
         { provide: PlatformLocation, useClass: NativescriptPlatformLocation },
         RouterExtensions,
-        SystemJsNgModuleLoader,
     ],
     imports: [
         RouterModule,
