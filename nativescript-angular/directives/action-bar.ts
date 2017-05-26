@@ -4,8 +4,11 @@ import { Page } from "tns-core-modules/ui/page";
 import { View } from "tns-core-modules/ui/core/view";
 
 import { isBlank } from "../lang-facade";
-import { registerElement } from "../element-registry";
-import { ViewClassMeta, NgView } from "../element-types";
+import {
+    NgView,
+    ViewClassMeta,
+    registerElement,
+} from "../element-registry";
 
 const actionBarMeta: ViewClassMeta = {
     skipAddToDom: true,

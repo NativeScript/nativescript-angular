@@ -12,7 +12,7 @@ import { topmost } from "tns-core-modules/ui/frame";
 import { APP_ROOT_VIEW, DEVICE, getRootPage } from "./platform-providers";
 import { isBlank } from "./lang-facade";
 import { ViewUtil } from "./view-util";
-import { NgView, CommentNode } from "./element-types";
+import { NgView, CommentNode } from "./element-registry";
 import { rendererLog as traceLog } from "./trace";
 
 // CONTENT_ATTR not exported from NativeScript_renderer - we need it for styles application.

@@ -9,7 +9,7 @@ import {
 } from "@angular/core";
 import { TabView, TabViewItem } from "tns-core-modules/ui/tab-view";
 
-import { CommentNode } from "../element-types";
+import { CommentNode } from "../element-registry";
 import { rendererLog } from "../trace";
 import { isBlank } from "../lang-facade";
 

@@ -24,7 +24,7 @@ import { View, KeyedTemplate } from "tns-core-modules/ui/core/view";
 import { ObservableArray } from "tns-core-modules/data/observable-array";
 import { LayoutBase } from "tns-core-modules/ui/layouts/layout-base";
 
-import { CommentNode } from "../element-types";
+import { CommentNode } from "../element-registry";
 import { isListLikeIterable } from "../collection-facade";
 import { listViewLog, listViewError } from "../trace";
 

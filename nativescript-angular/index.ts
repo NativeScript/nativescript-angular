@@ -17,16 +17,13 @@ export * from "./view-util";
 export * from "./resource-loader";
 
 export {
+    ViewClass,
+    ViewClassMeta,
     ViewResolver,
-    registerElement,
     getViewClass,
     getViewMeta,
     isKnownView,
+    registerElement,
 } from "./element-registry";
-
-export {
-    ViewClass,
-    ViewClassMeta,
-} from "./element-types";
 
 export * from "./value-accessors/base-value-accessor";
