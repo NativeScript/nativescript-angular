@@ -1,7 +1,7 @@
 import { ɵDomAnimationEngine as DomAnimationEngine } from "@angular/animations/browser";
 import { AnimationEvent, AnimationPlayer } from "@angular/animations";
 
-import { NgView } from "../element-types";
+import { NgView } from "../element-registry";
 import {
     copyArray,
     cssClasses,

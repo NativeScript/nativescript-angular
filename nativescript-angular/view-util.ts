@@ -4,18 +4,16 @@ import { Placeholder } from "tns-core-modules/ui/placeholder";
 import { ContentView } from "tns-core-modules/ui/content-view";
 import { LayoutBase } from "tns-core-modules/ui/layouts/layout-base";
 import {
+    CommentNode,
+    NgElement,
+    NgView,
+    ViewExtensions,
     getViewClass,
     getViewMeta,
+    isDetachedElement,
     isKnownView,
 } from "./element-registry";
 
-import {
-    CommentNode,
-    ViewExtensions,
-    NgElement,
-    NgView,
-    isDetachedElement,
-} from "./element-types";
 import { platformNames, Device } from "tns-core-modules/platform";
 import { rendererLog as traceLog } from "./trace";
 
