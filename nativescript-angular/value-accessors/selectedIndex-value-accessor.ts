@@ -1,10 +1,13 @@
-import { Directive, ElementRef, forwardRef, AfterViewInit, HostListener } from "@angular/core";
+import { Directive, ElementRef, forwardRef, AfterViewInit } from "@angular/core";
 import { NG_VALUE_ACCESSOR } from "@angular/forms";
 import { BaseValueAccessor } from "./base-value-accessor";
 import { View } from "tns-core-modules/ui/core/view";
 
-const SELECTED_INDEX_VALUE_ACCESSOR = {provide: NG_VALUE_ACCESSOR,
-    useExisting: forwardRef(() => SelectedIndexValueAccessor), multi: true};
+const SELECTED_INDEX_VALUE_ACCESSOR = {
+    provide: NG_VALUE_ACCESSOR,
+    useExisting: forwardRef(() => SelectedIndexValueAccessor),
+    multi: true,
+};
 
 export type SelectableView = {selectedIndex: number} & View;
 
@@ -18,17 +21,30 @@ export type SelectableView = {selectedIndex: number} & View;
  *  ```
  */
 @Directive({
-    // tslint:disable-next-line:max-line-length directive-selector
-    selector: "SegmentedBar[ngModel], SegmentedBar[formControlName], segmentedBar[ngModel], segmentedBar[formControlName], segmented-bar[ngModel], segmented-bar[formControlName], ListPicker[ngModel], ListPicker[formControlName], listPicker[ngModel], listPicker[formControlName], list-picker[ngModel], list-picker[formControlName], TabView[ngModel], TabView[formControlName], tabView[ngModel], tabView[formControlName], tab-view[ngModel], tab-view[formControlName]",
-    providers: [SELECTED_INDEX_VALUE_ACCESSOR]
+    selector:
+        "SegmentedBar[ngModel],SegmentedBar[formControlName]," +
+        "segmentedBar[ngModel],segmentedBar[formControlName]," +
+        "segmentedbar[ngModel],segmentedbar[formControlName]," +
+        "segmented-bar[ngModel],segmented-bar[formControlName]," +
+
+        "ListPicker[ngModel],ListPicker[formControlName]," +
+        "listPicker[ngModel],listPicker[formControlName]," +
+        "listpicker[ngModel],listpicker[formControlName]," +
+        "list-picker[ngModel],list-picker[formControlName]," +
+
+        "TabView[ngModel],TabView[formControlName]," +
+        "tabView[ngModel],tabView[formControlName]," +
+        "tabview[ngModel],tabview[formControlName]," +
+        "tab-view[ngModel],tab-view[formControlName]",
+    providers: [SELECTED_INDEX_VALUE_ACCESSOR],
+    host: {
+        "(touch)": "onTouched()",
+        "(selectedIndexChange)": "onChange($event.value)",
+    },
 })
 export class SelectedIndexValueAccessor extends BaseValueAccessor<SelectableView> implements AfterViewInit { // tslint:disable-line:max-line-length directive-class-suffix
-    @HostListener("selectedIndexChange", ["$event"])
-    selectedIndexChangeListener(event: any) {
-        this.onChange(event.value);
-    }
-
-    onTouched = () => { };
+    onChange = (_: any) => {};
+    onTouched = () => {};
 
     constructor(elementRef: ElementRef) {
         super(elementRef.nativeElement);
@@ -49,5 +65,6 @@ export class SelectedIndexValueAccessor extends BaseValueAccessor<SelectableView
         this.view.selectedIndex = this.value;
     }
 
+    registerOnChange(fn: (_: any) => {}): void { this.onChange = fn; }
     registerOnTouched(fn: () => void): void { this.onTouched = fn; }
 }

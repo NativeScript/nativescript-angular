@@ -1,10 +1,13 @@
-import { Directive, ElementRef, forwardRef, HostListener } from "@angular/core";
+import { Directive, ElementRef, forwardRef } from "@angular/core";
 import { NG_VALUE_ACCESSOR } from "@angular/forms";
 import { BaseValueAccessor } from "./base-value-accessor";
 import { View } from "tns-core-modules/ui/core/view";
 
-const TEXT_VALUE_ACCESSOR = {provide: NG_VALUE_ACCESSOR,
-    useExisting: forwardRef(() => TextValueAccessor), multi: true};
+const TEXT_VALUE_ACCESSOR = {
+    provide: NG_VALUE_ACCESSOR,
+    useExisting: forwardRef(() => TextValueAccessor),
+    multi: true,
+};
 
 export type TextView = {text: string} & View;
 
@@ -18,17 +21,30 @@ export type TextView = {text: string} & View;
  *  ```
  */
 @Directive({
-    // tslint:disable-next-line:max-line-length directive-selector
-    selector: "TextField[ngModel], TextField[formControlName], textField[ngModel], textField[formControlName], text-field[ngModel], text-field[formControlName], TextView[ngModel], TextView[formControlName], textView[ngModel], textView[formControlName], text-view[ngModel], text-view[formControlName], SearchBar[ngModel], SearchBar[formControlName], searchBar[ngModel], searchBar[formControlName], search-bar[ngModel], search-bar[formControlName]",
-    providers: [TEXT_VALUE_ACCESSOR]
+    selector:
+        "TextField[ngModel],TextField[formControlName]," +
+        "textField[ngModel],textField[formControlName]," +
+        "textfield[ngModel],textfield[formControlName]," +
+        "text-field[ngModel],text-field[formControlName]," +
+
+        "TextView[ngModel],TextView[formControlName]," +
+        "textView[ngModel],textView[formControlName]," +
+        "textview[ngModel],textview[formControlName]," +
+        "text-view[ngModel],text-view[formControlName]," +
+
+        "SearchBar[ngModel],SearchBar[formControlName]," +
+        "searchBar[ngModel],searchBar[formControlName]," +
+        "searchbar[ngModel],searchbar[formControlName]," +
+        "search-bar[ngModel], search-bar[formControlName]",
+    providers: [TEXT_VALUE_ACCESSOR],
+    host: {
+        "(touch)": "onTouch()",
+        "(textChange)": "onChange(event.value)",
+    },
 })
 export class TextValueAccessor extends BaseValueAccessor<TextView> { // tslint:disable-line:directive-class-suffix
-    @HostListener("textChange", ["$event"])
-    textChangeListener(event: any) {
-        this.onChange(event.value);
-    }
-
-    onTouched = () => { };
+    onChange = (_: any) => {};
+    onTouched = () => {};
 
     constructor(elementRef: ElementRef) {
         super(elementRef.nativeElement);
@@ -38,5 +54,6 @@ export class TextValueAccessor extends BaseValueAccessor<TextView> { // tslint:d
         this.view.text = value;
     }
 
+    registerOnChange(fn: (_: any) => {}): void { this.onChange = fn; }
     registerOnTouched(fn: () => void): void { this.onTouched = fn; }
 }
