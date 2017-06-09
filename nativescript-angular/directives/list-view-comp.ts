@@ -23,6 +23,7 @@ import { ListView, ItemEventData } from "tns-core-modules/ui/list-view";
 import { View, KeyedTemplate } from "tns-core-modules/ui/core/view";
 import { ObservableArray } from "tns-core-modules/data/observable-array";
 import { LayoutBase } from "tns-core-modules/ui/layouts/layout-base";
+import { profile } from "tns-core-modules/profiling";
 
 import { CommentNode } from "../element-registry";
 import { isListLikeIterable } from "../collection-facade";
@@ -148,6 +149,7 @@ export class ListViewComponent implements DoCheck, OnDestroy, AfterContentInit {
         this._templateMap.set(key, keyedTemplate);
     }
 
+    @profile
     public onItemLoading(args: ItemEventData) {
         if (!args.view && !this.itemTemplate) {
             return;
@@ -195,6 +197,7 @@ export class ListViewComponent implements DoCheck, OnDestroy, AfterContentInit {
         this.setupItemView.next({ view: viewRef, data: data, index: index, context: context });
     }
 
+    @profile
     private detectChangesOnChild(viewRef: EmbeddedViewRef<ListItemContext>, index: number) {
         listViewLog("Manually detect changes in child: " + index);
         viewRef.markForCheck();
