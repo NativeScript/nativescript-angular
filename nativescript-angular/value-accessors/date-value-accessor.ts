@@ -1,10 +1,13 @@
-import { Directive, ElementRef, forwardRef, HostListener } from "@angular/core";
+import { Directive, ElementRef, forwardRef } from "@angular/core";
 import { NG_VALUE_ACCESSOR } from "@angular/forms";
 import { BaseValueAccessor } from "./base-value-accessor";
 import { DatePicker } from "tns-core-modules/ui/date-picker";
 
-const DATE_VALUE_ACCESSOR = {provide: NG_VALUE_ACCESSOR,
-    useExisting: forwardRef(() => DateValueAccessor), multi: true};
+const DATE_VALUE_ACCESSOR = {
+    provide: NG_VALUE_ACCESSOR,
+    useExisting: forwardRef(() => DateValueAccessor),
+    multi: true,
+};
 
 /**
  * The accessor for setting a date and listening to changes that is used by the
@@ -16,18 +19,17 @@ const DATE_VALUE_ACCESSOR = {provide: NG_VALUE_ACCESSOR,
  *  ```
  */
 @Directive({
-    // tslint:disable-next-line:max-line-length directive-selector
-    selector: "DatePicker[ngModel], DatePicker[formControlName], datePicker[ngModel], datePicker[formControlName], date-picker[ngModel], date-picker[formControlName]",
-    providers: [DATE_VALUE_ACCESSOR]
+    selector: "DatePicker[ngModel],DatePicker[formControlName]," +
+        "datepicker[ngModel],datepicker[formControlName]," +
+        "datePicker[ngModel],datePicker[formControlName]," +
+        "date-picker[ngModel],date-picker[formControlName]",
+    providers: [DATE_VALUE_ACCESSOR],
+    host: {
+        "(touch)": "onTouched()",
+        "(dateChange)": "onChange($event.value)",
+    },
 })
 export class DateValueAccessor extends BaseValueAccessor<DatePicker> { // tslint:disable-line:directive-class-suffix
-    @HostListener("dateChange", ["$event"])
-    dateChangeListener(event: any) {
-        this.onChange(event.value);
-    }
-
-    onTouched = () => { };
-
     constructor(elementRef: ElementRef) {
         super(elementRef.nativeElement);
     }
@@ -35,6 +37,4 @@ export class DateValueAccessor extends BaseValueAccessor<DatePicker> { // tslint
     writeValue(value: any): void {
         this.view.date = value;
     }
-
-    registerOnTouched(fn: () => void): void { this.onTouched = fn; }
 }
