@@ -13,45 +13,46 @@
     }
   },
   "dependencies": {
-    "@angular/common": "~4.1.0",
-    "@angular/compiler": "~4.1.0",
-    "@angular/core": "~4.1.0",
-    "@angular/forms": "~4.1.0",
-    "@angular/http": "~4.1.0",
-    "@angular/platform-browser": "~4.1.0",
-    "@angular/router": "~4.1.0",
+    "@angular/common": "~4.1.3",
+    "@angular/compiler": "~4.1.3",
+    "@angular/core": "~4.1.3",
+    "@angular/forms": "~4.1.3",
+    "@angular/http": "~4.1.3",
+    "@angular/platform-browser": "~4.1.3",
+    "@angular/router": "~4.1.3",
     "nativescript-angular": "next",
     "nativescript-intl": "~3.0.0",
     "nativescript-theme-core": "^1.0.4",
     "reflect-metadata": "~0.1.8",
-    "rxjs": "^5.0.1",
+    "rxjs": "^5.4.0",
     "tns-core-modules": "next",
-    "zone.js": "^0.8.4"
+    "zone.js": "^0.8.12"
   },
   "devDependencies": {
-    "@angular/compiler-cli": "~4.1.0",
-    "@ngtools/webpack": "1.3.1",
+    "@angular/compiler-cli": "~4.1.3",
+    "@ngtools/webpack": "~1.4.1",
     "babel-traverse": "6.24.1",
     "babel-types": "6.24.1",
     "babylon": "6.17.0",
     "copy-webpack-plugin": "~4.0.1",
-    "extract-text-webpack-plugin": "~2.1.0",
+    "extract-text-webpack-plugin": "^2.1.2",
     "filewalker": "^0.1.3",
     "lazy": "1.0.11",
     "nativescript-css-loader": "~0.26.0",
-    "nativescript-dev-typescript": "~0.4.2",
-    "nativescript-dev-webpack": "^0.5.0",
+    "nativescript-dev-typescript": "^0.4.5",
+    "nativescript-dev-webpack": "^0.6.2",
     "raw-loader": "~0.5.1",
     "resolve-url-loader": "~2.0.2",
-    "typescript": "~2.3.2",
-    "webpack": "~2.5.1",
-    "webpack-sources": "~0.2.3"
+    "typescript": "^2.3.4",
+    "webpack": "^2.6.1",
+    "webpack-sources": "^1.0.1"
   },
   "scripts": {
     "ns-bundle": "ns-bundle",
     "start-android-bundle": "npm run ns-bundle --android --start-app",
     "start-ios-bundle": "npm run ns-bundle --ios --start-app",
-    "build-android-bundle": "npm run ns-bundle --android --build-app",
-    "build-ios-bundle": "npm run ns-bundle --ios --build-app"
+    "build-android-bundle": "npm run ns-bundle --android --run-app",
+    "build-ios-bundle": "npm run ns-bundle --ios --run-app",
+    "publish-ios-bundle": "npm run ns-bundle --ios --publish-app"
   }
 }

@@ -158,7 +158,7 @@ function getPlugins(platform, env) {
         }),
 
         // Resolve .ios.css and .android.css component stylesheets
-        new nsWebpack.StyleUrlResolvePlugin({platform}),
+        new nsWebpack.UrlResolvePlugin({platform}),
 
     ];
     
