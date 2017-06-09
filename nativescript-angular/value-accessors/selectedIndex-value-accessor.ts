@@ -43,9 +43,6 @@ export type SelectableView = {selectedIndex: number} & View;
     },
 })
 export class SelectedIndexValueAccessor extends BaseValueAccessor<SelectableView> implements AfterViewInit { // tslint:disable-line:max-line-length directive-class-suffix
-    onChange = (_: any) => {};
-    onTouched = () => {};
-
     constructor(elementRef: ElementRef) {
         super(elementRef.nativeElement);
     }
@@ -55,6 +52,7 @@ export class SelectedIndexValueAccessor extends BaseValueAccessor<SelectableView
 
     writeValue(value: any): void {
         this.value = value;
+
         if (this.viewInitialized) {
             this.view.selectedIndex = this.value;
         }
@@ -64,7 +62,4 @@ export class SelectedIndexValueAccessor extends BaseValueAccessor<SelectableView
         this.viewInitialized = true;
         this.view.selectedIndex = this.value;
     }
-
-    registerOnChange(fn: (_: any) => {}): void { this.onChange = fn; }
-    registerOnTouched(fn: () => void): void { this.onTouched = fn; }
 }

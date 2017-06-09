@@ -31,9 +31,6 @@ const TIME_VALUE_ACCESSOR = {
     },
 })
 export class TimeValueAccessor extends BaseValueAccessor<TimePicker> { // tslint:disable-line:directive-class-suffix
-    onChange = (_: any) => {};
-    onTouched = () => { };
-
     constructor(elementRef: ElementRef) {
         super(elementRef.nativeElement);
     }
@@ -41,7 +38,4 @@ export class TimeValueAccessor extends BaseValueAccessor<TimePicker> { // tslint
     writeValue(value: any): void {
         this.view.time = value;
     }
-
-    registerOnChange(fn: (_: any) => {}): void { this.onChange = fn; }
-    registerOnTouched(fn: () => void): void { this.onTouched = fn; }
 }

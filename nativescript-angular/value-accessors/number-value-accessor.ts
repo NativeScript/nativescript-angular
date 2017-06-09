@@ -29,9 +29,6 @@ const NUMBER_VALUE_ACCESSOR = {
     },
 })
 export class NumberValueAccessor extends BaseValueAccessor<Slider> { // tslint:disable-line:directive-class-suffix
-    onChange = (_: any) => {};
-    onTouched = () => {};
-
     constructor(elementRef: ElementRef) {
         super(elementRef.nativeElement);
     }
@@ -39,7 +36,4 @@ export class NumberValueAccessor extends BaseValueAccessor<Slider> { // tslint:d
     writeValue(value: any): void {
         this.view.value = value;
     }
-
-    registerOnChange(fn: (_: any) => {}): void { this.onChange = fn; }
-    registerOnTouched(fn: () => void): void { this.onTouched = fn; }
 }

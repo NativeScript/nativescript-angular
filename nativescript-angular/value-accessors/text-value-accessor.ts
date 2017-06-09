@@ -38,14 +38,11 @@ export type TextView = {text: string} & View;
         "search-bar[ngModel], search-bar[formControlName]",
     providers: [TEXT_VALUE_ACCESSOR],
     host: {
-        "(touch)": "onTouch()",
-        "(textChange)": "onChange(event.value)",
+        "(touch)": "onTouched()",
+        "(textChange)": "onChange($event.value)",
     },
 })
 export class TextValueAccessor extends BaseValueAccessor<TextView> { // tslint:disable-line:directive-class-suffix
-    onChange = (_: any) => {};
-    onTouched = () => {};
-
     constructor(elementRef: ElementRef) {
         super(elementRef.nativeElement);
     }
@@ -53,7 +50,4 @@ export class TextValueAccessor extends BaseValueAccessor<TextView> { // tslint:d
     writeValue(value: any): void {
         this.view.text = value;
     }
-
-    registerOnChange(fn: (_: any) => {}): void { this.onChange = fn; }
-    registerOnTouched(fn: () => void): void { this.onTouched = fn; }
 }

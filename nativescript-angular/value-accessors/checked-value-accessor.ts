@@ -29,9 +29,6 @@ const CHECKED_VALUE_ACCESSOR = {
     },
 })
 export class CheckedValueAccessor extends BaseValueAccessor<Switch> { // tslint:disable-line:directive-class-suffix
-    onChange = (_: any) => {};
-    onTouched = () => {};
-
     constructor(elementRef: ElementRef) {
         super(elementRef.nativeElement);
     }
@@ -39,7 +36,4 @@ export class CheckedValueAccessor extends BaseValueAccessor<Switch> { // tslint:
     writeValue(value: any): void {
         this.view.checked = value;
     }
-
-    registerOnChange(fn: (_: any) => {}): void { this.onChange = fn; }
-    registerOnTouched(fn: () => void): void { this.onTouched = fn; }
 }
