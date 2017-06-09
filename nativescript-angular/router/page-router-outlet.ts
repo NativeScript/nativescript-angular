@@ -3,6 +3,7 @@ import {
     ViewContainerRef, Type, InjectionToken,
     Inject, ComponentFactoryResolver, Injector
 } from "@angular/core";
+import { profile } from "tns-core-modules/profiling";
 import { RouterOutletMap, ActivatedRoute, PRIMARY_OUTLET } from "@angular/router";
 import { Device } from "tns-core-modules/platform";
 import { Frame } from "tns-core-modules/ui/frame";
@@ -148,6 +149,7 @@ export class PageRouterOutlet { // tslint:disable-line:directive-class-suffix
      * Called by the Router to instantiate a new component during the commit phase of a navigation.
      * This method in turn is responsible for calling the `routerOnActivate` hook of its child.
      */
+    @profile
     activateWith(
         activatedRoute: ActivatedRoute, resolver: ComponentFactoryResolver|null,
         outletMap: RouterOutletMap): void {
@@ -231,6 +233,7 @@ export class PageRouterOutlet { // tslint:disable-line:directive-class-suffix
         this.currentActivatedComp = cacheItem.componentRef;
     }
 
+    @profile
     private loadComponentInPage(page: Page, componentRef: ComponentRef<any>): void {
         // Component loaded. Find its root native view.
         const componentView = componentRef.location.nativeElement;
