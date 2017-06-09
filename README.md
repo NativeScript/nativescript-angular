@@ -1,3 +1,5 @@
+This is a test.
+
 [![Build Status](https://travis-ci.org/NativeScript/nativescript-angular.svg?branch=master)](https://travis-ci.org/NativeScript/nativescript-angular)
 
 Integrating NativeScript with Angular.
