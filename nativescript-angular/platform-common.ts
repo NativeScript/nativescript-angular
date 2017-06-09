@@ -155,20 +155,25 @@ export class NativeScriptPlatformRef extends PlatformRef {
 
         const navEntry: NavigationEntry = {
             create: (): Page => {
-                let page = pageFactory({ isBootstrap: true, isLivesync });
+                const page = pageFactory({ isBootstrap: true, isLivesync });
                 setRootPage(page);
                 if (this.appOptions) {
                     page.actionBarHidden = this.appOptions.startPageActionBarHidden;
                 }
 
-                let initHandler = profile("nativescript-angular/platform-common.initHandler", function () {
+                const initHandlerMethodName =
+                    "nativescript-angular/platform-common.initHandler";
+                const initHandler = profile(initHandlerMethodName, () => {
                     page.off(Page.navigatingToEvent, initHandler);
                     // profiling.stop("application-start");
                     rendererLog("Page loaded");
 
                     // profiling.start("ng-bootstrap");
                     rendererLog("BOOTSTRAPPING...");
-                    bootstrapAction().then(profile("nativescript-angular/platform-common.postBootstrapAction", (moduleRef) => {
+
+                    const bootstrapMethodName =
+                        "nativescript-angular/platform-common.postBootstrapAction";
+                    bootstrapAction().then(profile(bootstrapMethodName, moduleRef => {
                         // profiling.stop("ng-bootstrap");
                         rendererLog("ANGULAR BOOTSTRAP DONE.");
                         lastBootstrappedModule = new WeakRef(moduleRef);
@@ -177,9 +182,9 @@ export class NativeScriptPlatformRef extends PlatformRef {
                             resolve(moduleRef);
                         }
                         return moduleRef;
-                    }), (err) => {
+                    }), err => {
                         rendererError("ERROR BOOTSTRAPPING ANGULAR");
-                        let errorMessage = err.message + "\n\n" + err.stack;
+                        const errorMessage = err.message + "\n\n" + err.stack;
                         rendererError(errorMessage);
 
                         let view = new TextView();
