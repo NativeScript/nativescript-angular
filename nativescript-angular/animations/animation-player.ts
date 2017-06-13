@@ -17,12 +17,14 @@ export class NativeScriptAnimationPlayer implements AnimationPlayer {
     constructor(
         private target: NgView,
         keyframes: Keyframe[],
-        duration: number,
-        delay: number,
+        private duration: number,
+        private delay: number,
         easing: string
     ) {
         this.initKeyframeAnimation(keyframes, duration, delay, easing);
     }
+
+    get totalTime(): number { return this.delay + this.duration; }
 
     init(): void {
     }
