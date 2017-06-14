@@ -26,7 +26,7 @@ const TIME_VALUE_ACCESSOR = {
         "time-picker[ngModel], time-picker[formControlName]",
     providers: [TIME_VALUE_ACCESSOR],
     host: {
-        "(touch)": "onTouch()",
+        "(touch)": "onTouched()",
         "(timeChange)": "onChange($event.value)",
     },
 })
