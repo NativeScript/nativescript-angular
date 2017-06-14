@@ -48,6 +48,7 @@ export class TextValueAccessor extends BaseValueAccessor<TextView> { // tslint:d
     }
 
     writeValue(value: any): void {
-        this.view.text = value;
+        const normalized = super.normalizeValue(value);
+        this.view.text = normalized;
     }
 }

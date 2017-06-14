@@ -34,6 +34,7 @@ export class DateValueAccessor extends BaseValueAccessor<DatePicker> { // tslint
     }
 
     writeValue(value: any): void {
-        this.view.date = value;
+        const normalized = super.normalizeValue(value);
+        this.view.date = normalized;
     }
 }

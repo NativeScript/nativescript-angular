@@ -36,6 +36,7 @@ export class TimeValueAccessor extends BaseValueAccessor<TimePicker> { // tslint
     }
 
     writeValue(value: any): void {
-        this.view.time = value;
+        const normalized = super.normalizeValue(value);
+        this.view.time = normalized;
     }
 }
