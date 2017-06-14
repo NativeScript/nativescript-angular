@@ -15,7 +15,7 @@ export class MainComponent {
     private _orientation: string = "vertical";
 
     constructor() {
-        let navigatableRoutes = this._routes.filter((item) => {
+        const navigatableRoutes = this._routes.filter((item) => {
             return item.data && item.data.isNavigatable && item.path;
         });
 

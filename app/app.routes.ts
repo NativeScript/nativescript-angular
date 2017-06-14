@@ -29,6 +29,10 @@ import { TabViewComponent } from "./tab-view/tab-view.component";
 
 import { NavigationOptionsComponent } from "./navigation-options/navigation-options.component";
 import { NavigationInfoComponent } from "./navigation-options/navigation-info.component";
+
+import { SegmentedBarMainPageComponent } from "./segmented-bar/segmented-bar-main-page.component"
+import { SegmentedBarIssue649Component } from "./segmented-bar/issue-649.component"
+
 import { MainComponent } from "./main/main-page-router-outlet";
 
 export const routableComponents = [
@@ -65,26 +69,28 @@ export const routableComponents = [
 
     NavigationOptionsComponent,
     NavigationInfoComponent,
+    SegmentedBarMainPageComponent,
+    SegmentedBarIssue649Component,
 ];
 
 // Set isNavigatable: true if the page is a mian page to other sub pages
 export const routes = [
     { path: '', component: MainComponent, data: { title: "" } },
     { path: '', component: ModalContent, data: { title: "" } },
-    { path: 'template', component: AppComponent, data: { title: "Template", isNavigatable: true} },
+    { path: 'template', component: AppComponent, data: { title: "Template", isNavigatable: true } },
 
-    { path: 'router', component: NavigationComponent, children: NavigationSubRoutes, data: { title: "Router", isNavigatable: true} },
-    { path: 'lazy-router', component: LazyNavigationComponent, data: { title: "Lazy Router", isNavigatable: true} },
+    { path: 'router', component: NavigationComponent, children: NavigationSubRoutes, data: { title: "Router", isNavigatable: true } },
+    { path: 'lazy-router', component: LazyNavigationComponent, data: { title: "Lazy Router", isNavigatable: true } },
 
-    { path: 'first', component: FirstComponent, data: { title: "First", isNavigatable: true} },
-    { path: 'second', component: SecondComponent, data: { title: "Second", isNavigatable: true} },
+    { path: 'first', component: FirstComponent, data: { title: "First", isNavigatable: true } },
+    { path: 'second', component: SecondComponent, data: { title: "Second", isNavigatable: true } },
 
-    { path: 'first-action-bar', component: FirstComponentActionBar, data: { title: "ActionBar1", isNavigatable: true} },
-    { path: 'second-action-bar', component: SecondComponentActionBar, data: { title: "ActionBar2", isNavigatable: true} },
+    { path: 'first-action-bar', component: FirstComponentActionBar, data: { title: "ActionBar1", isNavigatable: true } },
+    { path: 'second-action-bar', component: SecondComponentActionBar, data: { title: "ActionBar2", isNavigatable: true } },
 
-    { path: 'binding', component: BindingComponent, data: { title: "Binding", isNavigatable: true} },
+    { path: 'binding', component: BindingComponent, data: { title: "Binding", isNavigatable: true } },
 
-    { path: 'ListViewExamples', component: ListViewMainPageComponent, data: { title: "ListViewExamples", isNavigatable: true} },
+    { path: 'ListViewExamples', component: ListViewMainPageComponent, data: { title: "ListViewExamples", isNavigatable: true } },
     { path: "ListViewExamples/commonTemplate", component: ListViewComponent, data: { title: "commonTemplate" } },
     { path: "ListViewExamples/customTemplate", component: ListViewControlComponent, data: { title: "customTemplate" } },
     { path: "listView/asyncPipeTemplate", component: ListViewAsyncPipeComponent, data: { title: "asyncPipeTemplate" } },
@@ -93,18 +99,21 @@ export const routes = [
     { path: 'listPicker', component: ListPickerMainPageComponent, data: { title: "ListPicker", isNavigatable: true } },
     { path: 'listPicker/list-picker', component: ListPickerComponent, data: { title: "ListPicker", isNavigatable: false } },
 
-    { path: 'modal', component: ModalViewMainPageComponent, data: { title: "Modals", isNavigatable: true} },
+    { path: 'modal', component: ModalViewMainPageComponent, data: { title: "Modals", isNavigatable: true } },
     { path: 'modal/modal-dialogs', component: ModalTest, data: { title: "modal" } },
     { path: 'modal/modal-dialogs-push', component: ModalTestWithPushStrategy, data: { title: "modal(onPush)" } },
     { path: 'modal/lazy', component: LazyLoadModalComponent, data: { title: "modal(lazy)" } },
 
     { path: 'tab-view', component: TabViewComponent, data: { title: "tab-view", isNavigatable: true } },
 
-    { path: 'nav-options', component: NavigationOptionsComponent, data: { title: "nav-options", isNavigatable: true} },
+    { path: 'nav-options', component: NavigationOptionsComponent, data: { title: "nav-options", isNavigatable: true } },
     { path: 'nav-info', component: NavigationInfoComponent, data: { title: "nav-info" } },
 
+    { path: 'segmented-bar', component: SegmentedBarMainPageComponent, data: { title: "SegmentedBar", isNavigatable: true } },
+    { path: 'segmented-bar/issue-649', component: SegmentedBarIssue649Component, data: { title: "issue-649" } },
+
     // Needed for AoT compilation
-    { 
+    {
         path: "lazy",
         loadChildren: "./lazy/lazy.module#LazyModule"
     },
