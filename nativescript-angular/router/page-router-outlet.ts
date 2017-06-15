@@ -63,6 +63,7 @@ export class PageRouterOutlet { // tslint:disable-line:directive-class-suffix
     private refCache: RefCache = new RefCache();
     private isInitialPage: boolean = true;
     private detachedLoaderFactory: ComponentFactory<DetachedLoader>;
+    private itemsToDestroy: CacheItem[] = [];
 
     private currentActivatedComp: ComponentRef<any>;
     private currentActivatedRoute: ActivatedRoute;
@@ -131,7 +132,12 @@ export class PageRouterOutlet { // tslint:disable-line:directive-class-suffix
 
     private clearRefCache() {
         while (this.refCache.length > 0) {
-            this.destroyCacheItem(this.refCache.pop());
+            this.itemsToDestroy.push(this.refCache.pop());
+        }
+    }
+    private destroyQueuedCacheItems() {
+        while(this.itemsToDestroy.length > 0) {
+            this.destroyCacheItem(this.itemsToDestroy.pop());
         }
     }
     private destroyCacheItem(poppedItem: CacheItem) {
@@ -244,6 +250,7 @@ export class PageRouterOutlet { // tslint:disable-line:directive-class-suffix
                 this.locationStrategy._beginBackPageNavigation();
                 this.locationStrategy.back();
             }
+            setTimeout(() => this.destroyQueuedCacheItems());
         }));
 
         const navOptions = this.locationStrategy._beginPageNavigation();
