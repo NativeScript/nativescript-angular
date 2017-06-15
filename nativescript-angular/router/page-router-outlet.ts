@@ -136,7 +136,7 @@ export class PageRouterOutlet { // tslint:disable-line:directive-class-suffix
         }
     }
     private destroyQueuedCacheItems() {
-        while(this.itemsToDestroy.length > 0) {
+        while (this.itemsToDestroy.length > 0) {
             this.destroyCacheItem(this.itemsToDestroy.pop());
         }
     }
