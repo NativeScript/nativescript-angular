@@ -1,11 +1,9 @@
 import { AnimationPlayer } from "@angular/animations";
-import {
-    KeyframeAnimation,
-    KeyframeAnimationInfo,
-} from "tns-core-modules/ui/animation/keyframe-animation";
+import { KeyframeAnimation }
+    from "tns-core-modules/ui/animation/keyframe-animation";
 
 import { NgView } from "../element-registry";
-import { Keyframe, getAnimationCurve, parseAnimationKeyframe } from "./utils";
+import { Keyframe, createKeyframeAnimation } from "./utils";
 
 export class NativeScriptAnimationPlayer implements AnimationPlayer {
     public parentPlayer: AnimationPlayer = null;
@@ -86,15 +84,7 @@ export class NativeScriptAnimationPlayer implements AnimationPlayer {
     }
 
     private initKeyframeAnimation(keyframes: Keyframe[], duration: number, delay: number, easing: string) {
-        let info = new KeyframeAnimationInfo();
-        info.isForwards = true;
-        info.iterations = 1;
-        info.duration = duration === 0 ? 0.01 : duration;
-        info.delay = delay;
-        info.curve = getAnimationCurve(easing);
-        info.keyframes = keyframes.map(parseAnimationKeyframe);
-
-        this.animation = KeyframeAnimation.keyframeAnimationFromInfo(info);
+        this.animation = createKeyframeAnimation(keyframes, duration, delay, easing);
     }
 
     private onFinish() {
