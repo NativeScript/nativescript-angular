@@ -31,7 +31,7 @@ module.exports = env => {
     const plugins = getPlugins(platform, env);
     const extensions = getExtensions(platform);
 
-    return {
+    const config = {
         context: resolve("./app"),
         target: nativescriptTarget,
         entry,
@@ -60,6 +60,19 @@ module.exports = env => {
         module: { rules },
         plugins,
     };
+
+    if (env.snapshot) {
+        plugins.push(new nsWebpack.NativeScriptSnapshotPlugin({
+            chunk: "vendor",
+            projectRoot: __dirname,
+            webpackConfig: config,
+            targetArchs: ["arm", "arm64"],
+            tnsJavaClassesOptions: { packages: ["tns-core-modules" ] },
+            useLibs: false
+        }));
+    }
+
+    return config;
 };
 
 
