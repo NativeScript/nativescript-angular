@@ -30,8 +30,11 @@ import { TabViewComponent } from "./tab-view/tab-view.component";
 import { NavigationOptionsComponent } from "./navigation-options/navigation-options.component";
 import { NavigationInfoComponent } from "./navigation-options/navigation-info.component";
 
-import { SegmentedBarMainPageComponent } from "./segmented-bar/segmented-bar-main-page.component"
-import { SegmentedBarIssue649Component } from "./segmented-bar/issue-649.component"
+import { SegmentedBarMainPageComponent } from "./segmented-bar/segmented-bar-main-page.component";
+import { SegmentedBarIssue649Component } from "./segmented-bar/issue-649.component";
+
+import { DatePickerMainPageComponent } from "./date-picker/date-picker-main-page.component";
+import { DatePickerIssue324Component } from "./date-picker/issue-324.component";
 
 import { MainComponent } from "./main/main-page-router-outlet";
 
@@ -71,6 +74,8 @@ export const routableComponents = [
     NavigationInfoComponent,
     SegmentedBarMainPageComponent,
     SegmentedBarIssue649Component,
+    DatePickerMainPageComponent,
+    DatePickerIssue324Component,
 ];
 
 // Set isNavigatable: true if the page is a mian page to other sub pages
@@ -111,6 +116,9 @@ export const routes = [
 
     { path: 'segmented-bar', component: SegmentedBarMainPageComponent, data: { title: "SegmentedBar", isNavigatable: true } },
     { path: 'segmented-bar/issue-649', component: SegmentedBarIssue649Component, data: { title: "issue-649" } },
+
+    { path: 'date-picker', component: DatePickerMainPageComponent, data: { title: "DatePicker", isNavigatable: true } },
+    { path: 'date-picker/issue-324', component: DatePickerIssue324Component, data: { title: "issue-324" } },
 
     // Needed for AoT compilation
     {
