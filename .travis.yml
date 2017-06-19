@@ -8,7 +8,7 @@ env:
   - ANDROID_BUILD_TOOLS_VERSION=23.0.1
   - ANDROID_ABI=armeabi-v7a
   - ANDROID_TAG=google_apis
-  - APPIUM_VERSION=1.6.3
+  - APPIUM_VERSION=1.6.5
 language: android
 jdk:
 - oraclejdk8
@@ -43,11 +43,9 @@ before_script:
   - emulator -memory 1024 -avd test -no-audio -no-window & 
   - android-wait-for-emulator
 script:
--  
--
 - tns build android
 - android-wait-for-emulator
-- npm run appium --runtype=android19
+- npm run appium --runtype=android19 --appium=$APPIUM_VERSION
 before_deploy:
 - cd ../nativescript-angular
 - npm install -g nativescript --ignore-scripts
