@@ -37,8 +37,8 @@ install:
 - npm install
 - npm run tslint
 - cd ../tests
-- npm i appium@$APPIUM_VERSION
 - npm install
+- npm i appium@$APPIUM_VERSION
 before_script:
   - echo no | android create avd --force -n test -t android-$EMULATOR_API_LEVEL --abi $ANDROID_ABI
   - emulator -memory 1024 -avd test -no-audio -no-window & 
