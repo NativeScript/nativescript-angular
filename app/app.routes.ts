@@ -10,19 +10,20 @@ import { SecondComponent } from "./router/router-outlet/second.component";
 import { NavigationComponent, NavigationSubRoutes } from "./router/router-outlet/navigation.component";
 import { LazyNavigationComponent } from "./router/lazy-module-navigation/lazy-navigation.component";
 
-import { BindingComponent } from "./binding/binding-page";
+import { BindingComponent } from "./binding/binding-page.component";
 
-import { ListViewComponent } from "./list-view/list-view-page";
-import { ListViewControlComponent } from "./list-view/list-view-item-template";
-import { ListViewAsyncPipeComponent } from "./list-view/async-pipe-template";
-import { ListViewMainPageComponent } from "./list-view/list-view-main-page";
-import { ListViewWithNestedTemplateComponent } from "./list-view/list-view-nested-template";
+import { ListViewComponent } from "./list-view/list-view-page.component";
+import { ListViewControlComponent } from "./list-view/list-view-item-template.component";
+import { ListViewAsyncPipeComponent } from "./list-view/async-pipe-template.component";
+import { ListViewMainPageComponent } from "./list-view/list-view-main-page.component";
+import { ListViewWithNestedTemplateComponent } from "./list-view/list-view-nested-template.component";
+import { ListViewMultipleTemplatesComponent } from "./list-view/multiple-templates.component";
 
-import { ListPickerMainPageComponent } from "./list-picker/list-picker-main-page";
-import { ListPickerComponent } from "./list-picker/list-picker";
+import { ListPickerMainPageComponent } from "./list-picker/list-picker-main-page.component";
+import { ListPickerComponent } from "./list-picker/list-picker.component";
 
 import { ModalTest, ModalTestWithPushStrategy, ModalContent } from "./modal/modal-dialogs/modal-dialog.component";
-import { ModalViewMainPageComponent } from "./modal/modal-view-main-page";
+import { ModalViewMainPageComponent } from "./modal/modal-view-main-page.component";
 import { LazyLoadModalComponent } from "./modal/lazy/lazy-load-modal.component";
 
 import { TabViewComponent } from "./tab-view/tab-view.component";
@@ -59,6 +60,7 @@ export const routableComponents = [
     ListViewControlComponent,
     ListViewAsyncPipeComponent,
     ListViewWithNestedTemplateComponent,
+    ListViewMultipleTemplatesComponent,
 
     ListPickerComponent,
     ListPickerMainPageComponent,
@@ -100,6 +102,7 @@ export const routes = [
     { path: "ListViewExamples/customTemplate", component: ListViewControlComponent, data: { title: "customTemplate" } },
     { path: "listView/asyncPipeTemplate", component: ListViewAsyncPipeComponent, data: { title: "asyncPipeTemplate" } },
     { path: "listView/nestedTemplate", component: ListViewWithNestedTemplateComponent, data: { title: "nestedTemplate" } },
+    { path: "listView/multiple-templates", component: ListViewMultipleTemplatesComponent, data: { title: "multipleTemplates" } },
 
     { path: 'listPicker', component: ListPickerMainPageComponent, data: { title: "ListPicker", isNavigatable: true } },
     { path: 'listPicker/list-picker', component: ListPickerComponent, data: { title: "ListPicker", isNavigatable: false } },

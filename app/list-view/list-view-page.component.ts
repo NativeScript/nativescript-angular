@@ -1,4 +1,5 @@
 import { Component, Input, ChangeDetectionStrategy } from '@angular/core';
+import { DataItem } from './data-item';
 
 @Component({
     moduleId: module.id,
@@ -16,8 +17,7 @@ import { Component, Input, ChangeDetectionStrategy } from '@angular/core';
                     </ListView>
                     <TextView [text]="results" automationText="tvResults" textWrap="true"></TextView>
                 </StackLayout>
-            `,
-    changeDetection: ChangeDetectionStrategy.OnPush
+            `
 })
 
 export class ListViewComponent {
@@ -38,9 +38,4 @@ export class ListViewComponent {
     public onItemTap(args) {
         this.results += "ItemTapped: " + args.index + "; \n";
     }
-}
-
-
-class DataItem {
-    constructor(public id: number, public name: string) { }
 }

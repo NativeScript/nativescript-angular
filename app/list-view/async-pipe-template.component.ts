@@ -1,9 +1,6 @@
 import { Observable as RxObservable } from 'rxjs/Observable';
 import { Component, Input, ChangeDetectionStrategy } from '@angular/core';
-
-export class DataItem {
-    constructor(public id: number, public name: string) { }
-}
+import { DataItem } from './data-item';
 
 @Component({
     selector: 'list-test-async',

@@ -7,7 +7,7 @@ import { routableComponents, routes } from "./app.routes";
 import { NativeScriptRouterModule } from "nativescript-angular/router";
 import { NativeScriptFormsModule } from "nativescript-angular/forms";
 import { NestedComponent } from "./action-bar/action-bar-nested.component";
-import { CustomTemplate } from "./list-view/list-view-item-template";
+import { CustomTemplate } from "./list-view/list-view-item-template.component";
 
 @NgModule({
     declarations: [

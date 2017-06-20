@@ -8,6 +8,7 @@ import { Component } from "@angular/core";
         <Button text="ListViewCustomTemplate" [nsRouterLink]="'customTemplate'"></Button>
         <Button text="ListViewAsyncPipe" [nsRouterLink]="['/listView','asyncPipeTemplate']"></Button>
         <Button text="NestedTemplate" [nsRouterLink]="['/listView','nestedTemplate']"></Button>
+        <Button text="MultipleTemplates" [nsRouterLink]="['/listView','multiple-templates']"></Button>
      </StackLayout>
     `,
 })
