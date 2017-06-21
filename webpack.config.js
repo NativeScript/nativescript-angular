@@ -66,7 +66,7 @@ module.exports = env => {
             chunk: "vendor",
             projectRoot: __dirname,
             webpackConfig: config,
-            targetArchs: ["arm", "arm64"],
+            targetArchs: ["arm", "arm64", "ia32"],
             tnsJavaClassesOptions: { packages: ["tns-core-modules" ] },
             useLibs: false
         }));
@@ -98,7 +98,10 @@ function getRules() {
                     loader: "resolve-url-loader",
                     options: { silent: true },
                 },
-                "nativescript-css-loader",
+                {
+                    loader: "nativescript-css-loader",
+                    options: { minimize: false }
+                },
                 "nativescript-dev-webpack/platform-css-loader",
             ]),
         },
@@ -170,11 +173,15 @@ function getPlugins(platform, env) {
             typeChecking: false
         }),
 
-        // Resolve .ios.css and .android.css component stylesheets
-        new nsWebpack.UrlResolvePlugin({platform}),
+        // Resolve .ios.css and .android.css component stylesheets, and .ios.html and .android component views
+        new nsWebpack.UrlResolvePlugin({
+            platform: platform,
+            resolveStylesUrls: true,
+            resolveTemplateUrl: true
+        }),
 
     ];
-    
+
     if (env.uglify) {
         plugins.push(new webpack.LoaderOptionsPlugin({ minimize: true }));
 
