@@ -1,8 +1,17 @@
-import { Component, ChangeDetectionStrategy, ViewContainerRef, ChangeDetectorRef } from '@angular/core';
-import { ModalDialogService, ModalDialogOptions, ModalDialogParams } from "nativescript-angular/directives/dialogs";
+import {
+    Component,
+    ChangeDetectionStrategy,
+    ViewContainerRef,
+    ChangeDetectorRef
+} from "@angular/core";
+import {
+    ModalDialogService,
+    ModalDialogOptions,
+    ModalDialogParams
+} from "nativescript-angular/directives/dialogs";
 
 @Component({
-    selector: 'modal-content',
+    selector: "modal-content",
     template: `
     <StackLayout margin="24" horizontalAlignment="center" verticalAlignment="center">
         <Label [text]="prompt"></Label>
@@ -13,7 +22,7 @@ import { ModalDialogService, ModalDialogOptions, ModalDialogParams } from "nativ
     </StackLayout>
     `
 })
-export class ModalContent {
+export class ModalContentComponent {
     public prompt: string;
     constructor(private params: ModalDialogParams) {
         this.prompt = params.context.message;
@@ -28,17 +37,16 @@ const TEMPLATE = `
 <GridLayout rows="auto, auto, *">
     <Button text="show component" (tap)="showModal()"></Button>
     <Button text="show component (async)" (tap)="showModalAsync()" row="1"></Button>
-    
     <Label [text]="'RESULT: ' + result" row="2" margin="12"></Label>
 </GridLayout>
 `;
 
 @Component({
-    selector: 'modal-test',
+    selector: "modal-test",
     providers: [ModalDialogService],
     template: TEMPLATE
 })
-export class ModalTest {
+export class ModalTestComponent {
     public result: string = "---";
 
     constructor(private modal: ModalDialogService, private vcRef: ViewContainerRef) { }
@@ -50,7 +58,7 @@ export class ModalTest {
             fullscreen: true
         };
 
-        this.modal.showModal(ModalContent, options).then((res: string) => {
+        this.modal.showModal(ModalContentComponent, options).then((res: string) => {
             this.result = res || "empty result";
         });
     }
@@ -63,11 +71,11 @@ export class ModalTest {
 }
 
 @Component({
-    selector: 'modal-test-on-push',
+    selector: "modal-test-on-push",
     changeDetection: ChangeDetectionStrategy.OnPush,
     template: TEMPLATE
 })
-export class ModalTestWithPushStrategy {
+export class ModalTestWithPushStrategyComponent {
     public result: string = "---";
 
     constructor(
@@ -82,7 +90,7 @@ export class ModalTestWithPushStrategy {
             fullscreen: true
         };
 
-        this.modal.showModal(ModalContent, options).then((res: string) => {
+        this.modal.showModal(ModalContentComponent, options).then((res: string) => {
             this.result = res || "empty result";
             this.cdRef.markForCheck();
         });

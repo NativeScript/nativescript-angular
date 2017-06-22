@@ -3,15 +3,25 @@ import * as platform from "platform";
 
 @Component({
     selector: "main",
+    styles: [
+        ".main-btn{" +
+        "margin-right:5; margin-bottom:5;" +
+        "padding-left:5; padding-right:5;" +
+        "background-color:#28a745;color:white;" +
+        "border-radius:5;}"],
     template: `
     <WrapLayout id='mainView' [orientation]="orientation">
-        <Button *ngFor="let page of pages" [text]="page.data.title" [nsRouterLink]="page.path" color="red" height="40"></Button>  
+        <Button class="main-btn"
+             *ngFor="let page of pages"
+            [text]="page.data.title"
+            [nsRouterLink]="page.path" height="40">
+        </Button>
     </WrapLayout>
     `,
 })
 export class MainComponent {
     private _pages = [];
-    private _routes = require("../app.routes").routes
+    private _routes = require("../app.routes").routes;
     private _orientation: string = "vertical";
 
     constructor() {
@@ -19,7 +29,19 @@ export class MainComponent {
             return item.data && item.data.isNavigatable && item.path;
         });
 
-        this._pages = navigatableRoutes;
+        const examples = navigatableRoutes.sort((a, b) => {
+            if (a.data.title > b.data.title) {
+                return 1;
+            }
+
+            if (a.data.title < b.data.title) {
+                return -1;
+            }
+
+            return 0;
+        });
+
+        this._pages = examples;
         if (platform.isAndroid) {
             this._orientation = "horizontal";
         }
@@ -35,7 +57,7 @@ export class MainComponent {
 }
 
 @Component({
-    selector: 'navigation-main',
+    selector: "navigation-main",
     template: `<page-router-outlet></page-router-outlet>`
 })
-export class NavigationMainPageRouter { }
+export class NavigationMainPageRouterComponent { }

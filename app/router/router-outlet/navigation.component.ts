@@ -9,7 +9,7 @@ import { SecondComponent } from "./second.component";
     template: `
         <StackLayout>
             <StackLayout class="nav">
-                <Button text="First" 
+                <Button text="First"
                     [nsRouterLink]="['/router','first']"></Button>
                 <Button text="Second"
                     [nsRouterLink]="['/router','second']"></Button>
@@ -21,7 +21,7 @@ import { SecondComponent } from "./second.component";
 })
 export class NavigationComponent { }
 
-export var NavigationSubRoutes = [
+export const NAVIGATION_SUBROUTES = [
     { path: "", redirectTo: "first", pathMatch: "full" },
     { path: "first", component: FirstComponent },
     { path: "second", component: SecondComponent },

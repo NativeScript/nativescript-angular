@@ -1,9 +1,9 @@
-import { Component, ChangeDetectionStrategy } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from "@angular/core";
 
 @Component({
-    selector: 'list-test',
+    selector: "list-test",
     template: `
-        <GridLayout rows="* auto" automationText="mainView"> 
+        <GridLayout rows="* auto" automationText="mainView">
             <ListView [items]="myItems">
                 <ng-template let-item="item">
                     <GridLayout>
@@ -12,7 +12,6 @@ import { Component, ChangeDetectionStrategy } from '@angular/core';
                     </GridLayout>
                 </ng-template>
             </ListView>
-
             <Button text="navigate" row="1" [nsRouterLink]="['/first']"></Button>
         </GridLayout>
     `,
@@ -20,7 +19,4 @@ import { Component, ChangeDetectionStrategy } from '@angular/core';
 })
 export class ListViewWithNestedTemplateComponent {
     public myItems: string[] = ["one", "two"];
-
-    constructor() {
-    }
 }

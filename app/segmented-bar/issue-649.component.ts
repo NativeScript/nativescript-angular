@@ -2,10 +2,19 @@ import { Component } from "@angular/core";
 import { SegmentedBar, SegmentedBarItem } from "ui/segmented-bar";
 
 @Component({
-    styles: ['#second { margin: 5; color: blue; background-color: yellow; font-weight: bold; font-size: 20; font-style: italic; font-family: monospace; height: 72; border-width: 2; border-radius: 7; border-color:green; selected-background-color: red; }'],
+    styles: ["#second { margin: 5; color: blue;" +
+        "background-color: yellow;" +
+        "font-weight: bold; font-size: 20;" +
+        "font-style: italic; font-family: monospace;" +
+        "height: 72; border-width: 2; border-radius: 7;" +
+        "border-color:green; selected-background-color: red; }"],
     template: `
                 <StackLayout>
-                    <SegmentedBar selectedIndex="2" [items]="firstSegmentedBarItems" style="color: yellow; background-color: blue; font-weight: bold; font-size: 20; font-style: italic; font-family: monospace; selected-background-color: red;"></SegmentedBar>
+                    <SegmentedBar selectedIndex="2" [items]="firstSegmentedBarItems"
+                        style="color: yellow; background-color: blue; font-weight: bold;
+                        font-size: 20; font-style: italic; font-family: monospace;
+                        selected-background-color: red;">
+                    </SegmentedBar>
                     <SegmentedBar id="second" [items]="secondSegmentedBarItems" selectedIndex="2"></SegmentedBar>
                 </StackLayout>
             `

@@ -1,15 +1,16 @@
-import {Component} from '@angular/core';
-import {RouterExtensions} from "nativescript-angular/router";
+import { Component } from "@angular/core";
+import { RouterExtensions } from "nativescript-angular/router";
 
 @Component({
-    selector: 'nav-options',
+    selector: "nav-options",
     template: `
     <StackLayout>
         <Button text="clear-history" [nsRouterLink]="['/nav-info']" [clearHistory]="true"></Button>
-        <Button text="page-transitions" (tap)="flipToNextPage()"></Button> 
+        <Button text="page-transitions" (tap)="flipToNextPage()"></Button>
     </StackLayout>
   `
 })
+
 export class NavigationOptionsComponent {
 
     constructor(private routerExtensions: RouterExtensions) { }

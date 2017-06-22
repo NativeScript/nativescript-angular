@@ -30,7 +30,7 @@ const routes: Routes = [
     LazyComponent
   ],
   providers: [
-    // allows same component to be routed to 
+    // allows same component to be routed to
     // or lazily loaded via modal
     { provide: ModalDialogParams, useFactory: modalParamsFactory }
   ],

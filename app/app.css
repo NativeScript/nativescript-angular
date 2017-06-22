@@ -1,5 +1,5 @@
 ﻿@import '~/nativescript-theme-core/css/core.light.css';
-
+@import url(~/resources/fonts/FontAwesome);
 button {
     font-size: 13;
 }
@@ -12,4 +12,8 @@ label {
     font-family: 'Courier'; /* Enabling this results in the error and shows a blank TabView */
 }
 
+.btnIcon {
+    font-family: 'FontAwesome';
+    font-size: 30 
+}
 

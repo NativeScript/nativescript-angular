@@ -1,4 +1,4 @@
-import {Component} from '@angular/core';
+import { Component } from "@angular/core";
 
 @Component({
     selector: "nested-component",
@@ -21,7 +21,7 @@ export class NestedComponent {
     public show: boolean = true;
 
     public get message(): string {
-        if (this.counter == 1) {
+        if (this.counter === 1) {
             return this.counter + " custom tap";
         } else {
             return this.counter + " custom taps";

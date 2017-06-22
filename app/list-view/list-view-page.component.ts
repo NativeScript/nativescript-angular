@@ -1,11 +1,11 @@
-import { Component, Input, ChangeDetectionStrategy } from '@angular/core';
-import { DataItem } from './data-item';
+import { Component, Input, ChangeDetectionStrategy } from "@angular/core";
+import { DataItem } from "./data-item";
 
 @Component({
     moduleId: module.id,
-    selector: 'list-test',
-    styleUrls: ['./list-view-page.css'],
-    template: ` 
+    selector: "list-test",
+    styleUrls: ["./list-view-page.css"],
+    template: `
                 <StackLayout automationText="mainView">
                     <ListView [items]="myItems" (itemTap)="onItemTap($event)">
                         <ng-template let-item="item" let-i="index" let-odd="odd" let-even="even">
@@ -26,10 +26,10 @@ export class ListViewComponent {
     private counter: number;
 
     constructor() {
-        this.results = '';
+        this.results = "";
         this.myItems = [];
         this.counter = 0;
-        for (var i = 0; i < 5; i++) {
+        for (let i = 0; i < 5; i++) {
             this.myItems.push(new DataItem(i, "data item " + i));
             this.counter = i;
         }

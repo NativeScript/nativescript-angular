@@ -1,7 +1,7 @@
-import { Component } from '@angular/core';
+import { Component } from "@angular/core";
 
 @Component({
-    template: ` 
+    template: `
             <Grid class="tab-view-container">
                 <TabView>
                     <StackLayout *tabItem="{title: 'no scroll'}">

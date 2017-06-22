@@ -1,13 +1,17 @@
-import { Component,Input, ChangeDetectionStrategy } from '@angular/core';
+import {
+    Component,
+    Input,
+    ChangeDetectionStrategy
+} from "@angular/core";
 
 @Component({
     moduleId: module.id,
-    selector: 'list',
-    styleUrls: ['./list-picker.css'],
-    template: ` 
+    selector: "list",
+    styleUrls: ["./list-picker.css"],
+    template: `
                 <StackLayout automationText="listPicker" >
                     <ListPicker #picker class="listPicker"
-                        [items]="pokemons" [selectedIndex]="selectedIndex" 
+                        [items]="pokemons" [selectedIndex]="selectedIndex"
                         (selectedIndexChange)="selectedIndexChanged(picker)">
                     </ListPicker>
                 </StackLayout>
@@ -21,7 +25,7 @@ export class ListPickerComponent {
     public selectedIndex: number;
 
     private pokemonList = ["Bulbasaur", "Parasect", "Venonat", "Venomoth", "Diglett",
-"Dugtrio", "Meowth", "Persian", "Psyduck", "Arcanine", "Poliwrath", "Machoke"];
+        "Dugtrio", "Meowth", "Persian", "Psyduck", "Arcanine", "Poliwrath", "Machoke"];
 
     constructor() {
         this.pokemons = [];

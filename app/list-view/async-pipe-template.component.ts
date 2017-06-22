@@ -1,9 +1,9 @@
-import { Observable as RxObservable } from 'rxjs/Observable';
-import { Component, Input, ChangeDetectionStrategy } from '@angular/core';
-import { DataItem } from './data-item';
+import { Observable as RxObservable } from "rxjs/Observable";
+import { Component, Input, ChangeDetectionStrategy } from "@angular/core";
+import { DataItem } from "./data-item";
 
 @Component({
-    selector: 'list-test-async',
+    selector: "list-test-async",
     template: `
     <GridLayout rows='*,60' automationText="mainView">
         <ListView [items]="myItems | async">
@@ -23,23 +23,23 @@ export class ListViewAsyncPipeComponent {
     public output: string;
 
     constructor() {
-        var items = [];
-        for (var i = 0; i < 3; i++) {
+        let items = [];
+        for (let i = 0; i < 3; i++) {
             items.push(new DataItem(i, "data item " + i));
         }
 
-        var subscr;
+        let subscr;
         this.myItems = RxObservable.create(subscriber => {
             subscr = subscriber;
             subscriber.next(items);
             return function () {
                 console.log("Unsubscribe called!!!");
                 this.output = "Unsubscribe called!!!";
-            }
+            };
         });
 
         let counter = 2;
-        let intervalId = setInterval(() => {
+        const intervalId = setInterval(() => {
             counter++;
             items.push(new DataItem(counter, "data item " + counter));
             subscr.next(items);

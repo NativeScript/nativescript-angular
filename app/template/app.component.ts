@@ -1,16 +1,14 @@
-import {Component} from "@angular/core";
+import { Component } from "@angular/core";
 
 @Component({
     moduleId: module.id,
     selector: "my-app",
     styles: ["button {color: lime}"],
-    styleUrls: ["./app.component.css"],  
+    styleUrls: ["./app.component.css"],
     template: `
 <StackLayout>
     <Label text="Tap the button" class="title"></Label>
-    
     <Button text="TAP" (tap)="onTap()"></Button>
-
     <Label [text]="message" class="message" textWrap="true"></Label>
 </StackLayout>
 `,
@@ -25,7 +23,7 @@ export class AppComponent {
             return "Hoorraaay! \nYou are ready to start building!";
         }
     }
-    
+
     public onTap() {
         this.counter--;
     }

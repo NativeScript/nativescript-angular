@@ -17,7 +17,7 @@ export class LazyComponent {
     ) {
         if (params.context.isModal) {
             this.isModal = true;
-        }   
+        }
     }
 
     public close() {

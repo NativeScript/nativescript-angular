@@ -1,13 +1,13 @@
 import { Component } from "@angular/core";
 
-import { FirstComponentActionBar } from "./action-bar/action-bar-first.component";
-import { SecondComponentActionBar } from "./action-bar/action-bar-second.component";
+import { FirstActionBarComponent } from "./action-bar/action-bar-first.component";
+import { SecondActionBarComponent } from "./action-bar/action-bar-second.component";
 
 import { AppComponent } from "./template/app.component";
 
 import { FirstComponent } from "./router/router-outlet/first.component";
 import { SecondComponent } from "./router/router-outlet/second.component";
-import { NavigationComponent, NavigationSubRoutes } from "./router/router-outlet/navigation.component";
+import { NavigationComponent, NAVIGATION_SUBROUTES } from "./router/router-outlet/navigation.component";
 import { LazyNavigationComponent } from "./router/lazy-module-navigation/lazy-navigation.component";
 
 import { BindingComponent } from "./binding/binding-page.component";
@@ -22,7 +22,11 @@ import { ListViewMultipleTemplatesComponent } from "./list-view/multiple-templat
 import { ListPickerMainPageComponent } from "./list-picker/list-picker-main-page.component";
 import { ListPickerComponent } from "./list-picker/list-picker.component";
 
-import { ModalTest, ModalTestWithPushStrategy, ModalContent } from "./modal/modal-dialogs/modal-dialog.component";
+import {
+    ModalTestComponent,
+    ModalTestWithPushStrategyComponent,
+    ModalContentComponent
+} from "./modal/modal-dialogs/modal-dialog.component";
 import { ModalViewMainPageComponent } from "./modal/modal-view-main-page.component";
 import { LazyLoadModalComponent } from "./modal/lazy/lazy-load-modal.component";
 
@@ -36,12 +40,14 @@ import { SegmentedBarIssue649Component } from "./segmented-bar/issue-649.compone
 
 import { DatePickerMainPageComponent } from "./date-picker/date-picker-main-page.component";
 import { DatePickerIssue324Component } from "./date-picker/issue-324.component";
+import { ButtonMainPageComponent } from "./button/button-main-page.component";
+import { ButtonTextAlignmentComponent } from "./button/button-text-alignment.component";
 
 import { MainComponent } from "./main/main-page-router-outlet";
 
 export const routableComponents = [
     MainComponent,
-    ModalContent,
+    ModalContentComponent,
     AppComponent,
 
     NavigationComponent,
@@ -50,8 +56,8 @@ export const routableComponents = [
     FirstComponent,
     SecondComponent,
 
-    FirstComponentActionBar,
-    SecondComponentActionBar,
+    FirstActionBarComponent,
+    SecondActionBarComponent,
 
     BindingComponent,
 
@@ -66,8 +72,8 @@ export const routableComponents = [
     ListPickerMainPageComponent,
 
     ModalViewMainPageComponent,
-    ModalTest,
-    ModalTestWithPushStrategy,
+    ModalTestComponent,
+    ModalTestWithPushStrategyComponent,
     LazyLoadModalComponent,
 
     TabViewComponent,
@@ -78,50 +84,98 @@ export const routableComponents = [
     SegmentedBarIssue649Component,
     DatePickerMainPageComponent,
     DatePickerIssue324Component,
+    ButtonMainPageComponent,
+    ButtonTextAlignmentComponent,
 ];
 
 // Set isNavigatable: true if the page is a mian page to other sub pages
 export const routes = [
-    { path: '', component: MainComponent, data: { title: "" } },
-    { path: '', component: ModalContent, data: { title: "" } },
-    { path: 'template', component: AppComponent, data: { title: "Template", isNavigatable: true } },
+    { path: "", component: MainComponent, data: { title: "" } },
+    { path: "", component: ModalContentComponent, data: { title: "" } },
+    { path: "template", component: AppComponent, data: { title: "Template", isNavigatable: true } },
 
-    { path: 'router', component: NavigationComponent, children: NavigationSubRoutes, data: { title: "Router", isNavigatable: true } },
-    { path: 'lazy-router', component: LazyNavigationComponent, data: { title: "Lazy Router", isNavigatable: true } },
+    {
+        path: "router",
+        component: NavigationComponent,
+        children: NAVIGATION_SUBROUTES,
+        data: { title: "Router", isNavigatable: true }
+    },
+    { path: "lazy-router", component: LazyNavigationComponent, data: { title: "Lazy Router", isNavigatable: true } },
 
-    { path: 'first', component: FirstComponent, data: { title: "First", isNavigatable: true } },
-    { path: 'second', component: SecondComponent, data: { title: "Second", isNavigatable: true } },
+    { path: "first", component: FirstComponent, data: { title: "First", isNavigatable: true } },
+    { path: "second", component: SecondComponent, data: { title: "Second", isNavigatable: true } },
 
-    { path: 'first-action-bar', component: FirstComponentActionBar, data: { title: "ActionBar1", isNavigatable: true } },
-    { path: 'second-action-bar', component: SecondComponentActionBar, data: { title: "ActionBar2", isNavigatable: true } },
+    {
+        path: "first-action-bar",
+        component: FirstActionBarComponent,
+        data: { title: "ActionBar1", isNavigatable: true }
+    },
+    {
+        path: "second-action-bar",
+        component: SecondActionBarComponent,
+        data: { title: "ActionBar2", isNavigatable: true }
+    },
 
-    { path: 'binding', component: BindingComponent, data: { title: "Binding", isNavigatable: true } },
+    { path: "binding", component: BindingComponent, data: { title: "Binding", isNavigatable: true } },
 
-    { path: 'ListViewExamples', component: ListViewMainPageComponent, data: { title: "ListViewExamples", isNavigatable: true } },
+    {
+        path: "ListViewExamples",
+        component: ListViewMainPageComponent,
+        data: { title: "ListViewExamples", isNavigatable: true }
+    },
     { path: "ListViewExamples/commonTemplate", component: ListViewComponent, data: { title: "commonTemplate" } },
     { path: "ListViewExamples/customTemplate", component: ListViewControlComponent, data: { title: "customTemplate" } },
     { path: "listView/asyncPipeTemplate", component: ListViewAsyncPipeComponent, data: { title: "asyncPipeTemplate" } },
-    { path: "listView/nestedTemplate", component: ListViewWithNestedTemplateComponent, data: { title: "nestedTemplate" } },
-    { path: "listView/multiple-templates", component: ListViewMultipleTemplatesComponent, data: { title: "multipleTemplates" } },
+    {
+        path: "listView/nestedTemplate",
+        component: ListViewWithNestedTemplateComponent,
+        data: { title: "nestedTemplate" }
+    },
+    {
+        path: "listView/multiple-templates",
+        component: ListViewMultipleTemplatesComponent,
+        data: { title: "multipleTemplates" }
+    },
+    {
+        path: "listPicker",
+        component: ListPickerMainPageComponent,
+        data: { title: "ListPicker", isNavigatable: true }
+    },
+    {
+        path: "listPicker/list-picker",
+        component: ListPickerComponent,
+        data: { title: "ListPicker", isNavigatable: false }
+    },
+    { path: "modal", component: ModalViewMainPageComponent, data: { title: "Modals", isNavigatable: true } },
+    { path: "modal/modal-dialogs", component: ModalTestComponent, data: { title: "modal" } },
+    {
+        path: "modal/modal-dialogs-push",
+        component: ModalTestWithPushStrategyComponent,
+        data: { title: "modal(onPush)" }
+    },
+    { path: "modal/lazy", component: LazyLoadModalComponent, data: { title: "modal(lazy)" } },
 
-    { path: 'listPicker', component: ListPickerMainPageComponent, data: { title: "ListPicker", isNavigatable: true } },
-    { path: 'listPicker/list-picker', component: ListPickerComponent, data: { title: "ListPicker", isNavigatable: false } },
+    { path: "tab-view", component: TabViewComponent, data: { title: "tab-view", isNavigatable: true } },
 
-    { path: 'modal', component: ModalViewMainPageComponent, data: { title: "Modals", isNavigatable: true } },
-    { path: 'modal/modal-dialogs', component: ModalTest, data: { title: "modal" } },
-    { path: 'modal/modal-dialogs-push', component: ModalTestWithPushStrategy, data: { title: "modal(onPush)" } },
-    { path: 'modal/lazy', component: LazyLoadModalComponent, data: { title: "modal(lazy)" } },
+    { path: "nav-options", component: NavigationOptionsComponent, data: { title: "nav-options", isNavigatable: true } },
+    { path: "nav-info", component: NavigationInfoComponent, data: { title: "nav-info" } },
 
-    { path: 'tab-view', component: TabViewComponent, data: { title: "tab-view", isNavigatable: true } },
+    {
+        path: "segmented-bar",
+        component: SegmentedBarMainPageComponent,
+        data: { title: "SegmentedBar", isNavigatable: true }
+    },
+    { path: "segmented-bar/issue-649", component: SegmentedBarIssue649Component, data: { title: "issue-649" } },
 
-    { path: 'nav-options', component: NavigationOptionsComponent, data: { title: "nav-options", isNavigatable: true } },
-    { path: 'nav-info', component: NavigationInfoComponent, data: { title: "nav-info" } },
+    { path: "date-picker", component: DatePickerMainPageComponent, data: { title: "DatePicker", isNavigatable: true } },
+    { path: "date-picker/issue-324", component: DatePickerIssue324Component, data: { title: "issue-324" } },
 
-    { path: 'segmented-bar', component: SegmentedBarMainPageComponent, data: { title: "SegmentedBar", isNavigatable: true } },
-    { path: 'segmented-bar/issue-649', component: SegmentedBarIssue649Component, data: { title: "issue-649" } },
-
-    { path: 'date-picker', component: DatePickerMainPageComponent, data: { title: "DatePicker", isNavigatable: true } },
-    { path: 'date-picker/issue-324', component: DatePickerIssue324Component, data: { title: "issue-324" } },
+    { path: "button", component: ButtonMainPageComponent, data: { title: "Button", isNavigatable: true } },
+    {
+        path: "button/button-text-alignment",
+        component: ButtonTextAlignmentComponent,
+        data: { title: "button-text-alignment" }
+    },
 
     // Needed for AoT compilation
     {
@@ -129,4 +183,3 @@ export const routes = [
         loadChildren: "./lazy/lazy.module#LazyModule"
     },
 ];
-

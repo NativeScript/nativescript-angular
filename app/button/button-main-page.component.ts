@@ -4,8 +4,8 @@ import { Component } from "@angular/core";
     selector: "main",
     template: `
     <StackLayout>
-        <Button text="ListPicker" [nsRouterLink]="['/listPicker','list-picker']"></Button>
+        <Button text="text-alignment" [nsRouterLink]="['button-text-alignment']"></Button>
      </StackLayout>
     `,
 })
-export class ListPickerMainPageComponent { }
+export class ButtonMainPageComponent { }

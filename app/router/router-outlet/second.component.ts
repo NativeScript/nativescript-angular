@@ -1,4 +1,4 @@
-import {Component} from "@angular/core";
+import { Component } from "@angular/core";
 
 @Component({
     selector: "second",
@@ -8,4 +8,5 @@ import {Component} from "@angular/core";
         <Button text="GO TO FIRST" [nsRouterLink]="['../first']" class="link"></Button>
     </StackLayout>`
 })
-export class SecondComponent {}
+export class SecondComponent { }
+

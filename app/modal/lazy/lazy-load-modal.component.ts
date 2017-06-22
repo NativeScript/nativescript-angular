@@ -24,7 +24,7 @@ export class LazyLoadModalComponent {
     ) { }
 
     public openModal() {
-        this.moduleLoader.load('./lazy/lazy.module#LazyModule')
+        this.moduleLoader.load("./lazy/lazy.module#LazyModule")
             .then((module: NgModuleFactory<any>) => {
                 const moduleRef = module.create(this.vcRef.parentInjector);
 

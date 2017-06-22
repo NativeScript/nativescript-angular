@@ -1,11 +1,11 @@
-import {Component} from '@angular/core';
+import { Component } from "@angular/core";
 
 @Component({
     selector: "second-action-bar",
     template: `
     <ActionBar title="Title 2">
         <NavigationButton text="First" android.systemIcon="ic_menu_back"></NavigationButton>
-        <ActionItem [text]="message"></ActionItem>      
+        <ActionItem [text]="message"></ActionItem>
         <ActionItem text="TAP" (tap)="onTap()"></ActionItem>
     </ActionBar>
 
@@ -14,12 +14,12 @@ import {Component} from '@angular/core';
     </StackLayout>
     `,
 })
-export class SecondComponentActionBar {
+export class SecondActionBarComponent {
 
     public counter: number = 0;
 
     public get message(): string {
-        if (this.counter == 1) {
+        if (this.counter === 1) {
             return this.counter + " tap";
         } else {
             return this.counter + " taps";
