@@ -20,8 +20,8 @@ const CHECKED_VALUE_ACCESSOR = {
  */
 @Directive({
     selector:
-        "Switch[ngModel],Switch[formControlName]," +
-        "switch[ngModel],switch[formControlName]",
+        "Switch[ngModel],Switch[formControlName],Switch[formControl]," +
+        "switch[ngModel],switch[formControlName],switch[formControl]",
     providers: [CHECKED_VALUE_ACCESSOR],
     host: {
         "(touch)": "onTouched()",

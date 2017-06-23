@@ -20,10 +20,10 @@ const TIME_VALUE_ACCESSOR = {
  */
 @Directive({
     selector:
-        "TimePicker[ngModel],TimePicker[formControlName]," +
-        "timepicker[ngModel],timepicker[formControlName]," +
-        "timePicker[ngModel],timePicker[formControlName]," +
-        "time-picker[ngModel], time-picker[formControlName]",
+        "TimePicker[ngModel],TimePicker[formControlName],TimePicker[formControl]," +
+        "timepicker[ngModel],timepicker[formControlName],timepicker[formControl]," +
+        "timePicker[ngModel],timePicker[formControlName],timePicker[formControl]," +
+        "time-picker[ngModel],time-picker[formControlName],time-picker[formControl]",
     providers: [TIME_VALUE_ACCESSOR],
     host: {
         "(touch)": "onTouched()",

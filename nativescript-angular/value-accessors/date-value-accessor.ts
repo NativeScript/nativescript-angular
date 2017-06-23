@@ -19,10 +19,10 @@ const DATE_VALUE_ACCESSOR = {
  *  ```
  */
 @Directive({
-    selector: "DatePicker[ngModel],DatePicker[formControlName]," +
-        "datepicker[ngModel],datepicker[formControlName]," +
-        "datePicker[ngModel],datePicker[formControlName]," +
-        "date-picker[ngModel],date-picker[formControlName]",
+    selector: "DatePicker[ngModel],DatePicker[formControlName],DatePicker[formControl]," +
+        "datepicker[ngModel],datepicker[formControlName],datepicker[formControl]," +
+        "datePicker[ngModel],datePicker[formControlName],datePicker[formControl]," +
+        "date-picker[ngModel],date-picker[formControlName],date-picker[formControl]",
     providers: [DATE_VALUE_ACCESSOR],
     host: {
         "(touch)": "onTouched()",
