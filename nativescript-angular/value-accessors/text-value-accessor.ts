@@ -22,20 +22,20 @@ export type TextView = {text: string} & View;
  */
 @Directive({
     selector:
-        "TextField[ngModel],TextField[formControlName]," +
-        "textField[ngModel],textField[formControlName]," +
-        "textfield[ngModel],textfield[formControlName]," +
-        "text-field[ngModel],text-field[formControlName]," +
+        "TextField[ngModel],TextField[formControlName],TextField[formControl]," +
+        "textField[ngModel],textField[formControlName],textField[formControl]," +
+        "textfield[ngModel],textfield[formControlName],textfield[formControl]," +
+        "text-field[ngModel],text-field[formControlName],text-field[formControl]," +
 
-        "TextView[ngModel],TextView[formControlName]," +
-        "textView[ngModel],textView[formControlName]," +
-        "textview[ngModel],textview[formControlName]," +
-        "text-view[ngModel],text-view[formControlName]," +
+        "TextView[ngModel],TextView[formControlName],TextView[formControl]," +
+        "textView[ngModel],textView[formControlName],textView[formControl]," +
+        "textview[ngModel],textview[formControlName],textview[formControl]," +
+        "text-view[ngModel],text-view[formControlName],text-view[formControl]," +
 
-        "SearchBar[ngModel],SearchBar[formControlName]," +
-        "searchBar[ngModel],searchBar[formControlName]," +
-        "searchbar[ngModel],searchbar[formControlName]," +
-        "search-bar[ngModel], search-bar[formControlName]",
+        "SearchBar[ngModel],SearchBar[formControlName],SearchBar[formControl]," +
+        "searchBar[ngModel],searchBar[formControlName],searchBar[formControl]," +
+        "searchbar[ngModel],searchbar[formControlName],searchbar[formControl]," +
+        "search-bar[ngModel], search-bar[formControlName],search-bar[formControl]",
     providers: [TEXT_VALUE_ACCESSOR],
     host: {
         "(touch)": "onTouched()",
