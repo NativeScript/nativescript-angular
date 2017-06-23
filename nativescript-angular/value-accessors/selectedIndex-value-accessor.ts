@@ -22,20 +22,20 @@ export type SelectableView = {selectedIndex: number} & View;
  */
 @Directive({
     selector:
-        "SegmentedBar[ngModel],SegmentedBar[formControlName]," +
-        "segmentedBar[ngModel],segmentedBar[formControlName]," +
-        "segmentedbar[ngModel],segmentedbar[formControlName]," +
-        "segmented-bar[ngModel],segmented-bar[formControlName]," +
+        "SegmentedBar[ngModel],SegmentedBar[formControlName],SegmentedBar[formControl]," +
+        "segmentedBar[ngModel],segmentedBar[formControlName],segmentedBar[formControl]," +
+        "segmentedbar[ngModel],segmentedbar[formControlName],segmentedbar[formControl]," +
+        "segmented-bar[ngModel],segmented-bar[formControlName],segmented-bar[formControl]," +
 
-        "ListPicker[ngModel],ListPicker[formControlName]," +
-        "listPicker[ngModel],listPicker[formControlName]," +
-        "listpicker[ngModel],listpicker[formControlName]," +
-        "list-picker[ngModel],list-picker[formControlName]," +
+        "ListPicker[ngModel],ListPicker[formControlName],ListPicker[formControl]," +
+        "listPicker[ngModel],listPicker[formControlName],listPicker[formControl]," +
+        "listpicker[ngModel],listpicker[formControlName],listpicker[formControl]," +
+        "list-picker[ngModel],list-picker[formControlName],list-picker[formControl]," +
 
-        "TabView[ngModel],TabView[formControlName]," +
-        "tabView[ngModel],tabView[formControlName]," +
-        "tabview[ngModel],tabview[formControlName]," +
-        "tab-view[ngModel],tab-view[formControlName]",
+        "TabView[ngModel],TabView[formControlName],TabView[formControl]," +
+        "tabView[ngModel],tabView[formControlName],tabView[formControl]," +
+        "tabview[ngModel],tabview[formControlName],tabview[formControl]," +
+        "tab-view[ngModel],tab-view[formControlName],tab-view[formControl]",
     providers: [SELECTED_INDEX_VALUE_ACCESSOR],
     host: {
         "(touch)": "onTouched()",
