@@ -27,12 +27,14 @@ tests/test-output.txt
 tests/platforms
 tests/lib
 tests/node_modules
+tests/hooks
 
 ng-sample/app/**/*.js
 ng-sample/app/global.d.ts
 ng-sample/platforms
 ng-sample/lib
 ng-sample/node_modules
+ng-sample/hooks
 ng-sample/app/nativescript-angular
 
 startup-test/platforms
