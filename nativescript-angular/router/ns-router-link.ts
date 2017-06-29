@@ -107,7 +107,7 @@ export class NSRouterLink implements OnChanges { // tslint:disable-line:directiv
         } else {
             return {
                 animated: true,
-                transition: this.pageTransition
+                transition: <NavigationTransition>this.pageTransition
             };
         }
     }
