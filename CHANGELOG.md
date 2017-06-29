@@ -1,3 +1,13 @@
+<a name="3.1.1"></a>
+## [3.1.1](https://github.com/NativeScript/nativescript-angular/compare/3.1.0...3.1.1) (2017-06-29)
+
+
+### Bug Fixes
+
+* **forms:** add directives for formControl ([#861](https://github.com/NativeScript/nativescript-angular/issues/861)) ([#864](https://github.com/NativeScript/nativescript-angular/issues/864)) ([d29c8e1](https://github.com/NativeScript/nativescript-angular/commit/d29c8e1))
+
+
+
 <a name="3.1.0"></a>
 # [3.1.0](https://github.com/NativeScript/nativescript-angular/compare/3.0.0...3.1.0) (2017-06-19)
 
