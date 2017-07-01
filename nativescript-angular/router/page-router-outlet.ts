@@ -245,12 +245,14 @@ export class PageRouterOutlet { // tslint:disable-line:directive-class-suffix
         // Add it to the new page
         page.content = componentView;
 
-        page.on("navigatedFrom", (<any>global).Zone.current.wrap((args: NavigatedData) => {
+        page.on(Page.navigatedToEvent, () => setTimeout(() => {
+            this.destroyQueuedCacheItems();
+        }));
+        page.on(Page.navigatedFromEvent, (<any>global).Zone.current.wrap((args: NavigatedData) => {
             if (args.isBackNavigation) {
                 this.locationStrategy._beginBackPageNavigation();
                 this.locationStrategy.back();
             }
-            setTimeout(() => this.destroyQueuedCacheItems());
         }));
 
         const navOptions = this.locationStrategy._beginPageNavigation();
