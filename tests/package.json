@@ -2,10 +2,10 @@
   "nativescript": {
     "id": "org.nativescript.ngtests",
     "tns-android": {
-      "version": "2.5.0"
+      "version": "3.0.0"
     },
     "tns-ios": {
-      "version": "2.5.0"
+      "version": "3.0.0"
     }
   },
   "name": "ngtests",
@@ -38,7 +38,7 @@
     "nativescript-angular": "../nativescript-angular",
     "nativescript-unit-test-runner": "^0.3.4",
     "rxjs": "^5.2.0",
-    "tns-core-modules": "internal-preview",
+    "tns-core-modules": "^3.0.0",
     "zone.js": "^0.8.2"
   },
   "devDependencies": {
@@ -56,19 +56,15 @@
     "karma-nativescript-launcher": "^0.4.0",
     "lazy": "1.0.11",
     "mocha": "^2.4.5",
-    "nativescript-dev-appium": "0.0.14",
+    "nativescript-dev-appium": "^0.4.0",
     "nativescript-dev-typescript": "^0.4.0",
     "socket.io": "1.4.8",
     "socket.io-client": "1.4.8",
     "tslint": "^4.5.1",
     "typescript": "~2.2.0",
-    "wd": "0.4.0"
+    "wd": "^1.2.0"
   },
   "scripts": {
-    "updateTests": "grunt updateTests",
-    "appium-android": "tns build android && npm run run-appium-android",
-    "run-appium-android": "nativescript-dev-appium android",
-    "appium-ios-simulator": "tns build ios && nativescript-dev-appium ios-simulator",
-    "tslint": "tslint --project tsconfig.json --config tslint.json"
+    "appium": "nativescript-dev-appium"
   }
 }

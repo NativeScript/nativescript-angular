@@ -1,6 +1,15 @@
-import { ElementRef, Directive, Input, TemplateRef, ViewContainerRef, OnInit, AfterViewInit } from "@angular/core";
+import {
+    AfterViewInit,
+    Directive,
+    ElementRef,
+    Input,
+    OnInit,
+    TemplateRef,
+    ViewContainerRef,
+} from "@angular/core";
 import { TabView, TabViewItem } from "tns-core-modules/ui/tab-view";
-import { convertToInt } from "../common/utils";
+
+import { CommentNode } from "../element-registry";
 import { rendererLog } from "../trace";
 import { isBlank } from "../lang-facade";
 
@@ -18,7 +27,7 @@ export class TabViewDirective implements AfterViewInit {
     }
 
     set selectedIndex(value) {
-        this._selectedIndex = convertToInt(value);
+        this._selectedIndex = value;
         if (this.viewInitialized) {
             this.tabView.selectedIndex = this._selectedIndex;
         }
@@ -94,9 +103,9 @@ export class TabViewItemDirective implements OnInit {
         }
 
         const viewRef = this.viewContainer.createEmbeddedView(this.templateRef);
-        // Filter out text nodes, etc
-        const realViews = viewRef.rootNodes.filter((node) =>
-                            node.nodeName && node.nodeName !== "#text");
+        // Filter out text nodes and comments
+        const realViews = viewRef.rootNodes.filter(node =>
+                            !(node instanceof CommentNode));
 
         if (realViews.length > 0) {
             this.item.view = realViews[0];

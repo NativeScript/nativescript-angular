@@ -1,139 +1,54 @@
 import {
+    KeyframeAnimation,
+    KeyframeAnimationInfo,
     KeyframeDeclaration,
     KeyframeInfo,
 } from "tns-core-modules/ui/animation/keyframe-animation";
-import { CssAnimationProperty } from "tns-core-modules/ui/core/properties";
-import { AnimationCurve } from "tns-core-modules/ui/enums";
+import { parseKeyframeDeclarations } from "tns-core-modules/ui/styling/css-animation-parser";
+import { animationTimingFunctionConverter } from "tns-core-modules/ui/styling/converters";
 
 export interface Keyframe {
     [key: string]: string | number;
+    offset: number;
 }
 
-interface Transformation {
-    property: string;
-    value: number | { x: number, y: number };
+export function createKeyframeAnimation(
+    styles: Keyframe[],
+    duration: number,
+    delay: number,
+    easing: string)
+    : KeyframeAnimation {
+
+    const info = createKeyframeAnimationInfo(styles, duration, delay, easing);
+    return KeyframeAnimation.keyframeAnimationFromInfo(info);
 }
 
-const TRANSFORM_MATCHER = new RegExp(/(.+)\((.+)\)/);
-const TRANSFORM_SPLITTER = new RegExp(/[\s,]+/);
+const createKeyframeAnimationInfo = (
+    styles: Keyframe[],
+    duration: number,
+    delay: number,
+    easing: string
+    ): KeyframeAnimationInfo => ({
+        isForwards: true,
+        duration: duration || 0.01,
+        delay,
+        curve: getCurve(easing),
+        keyframes: styles.map(parseAnimationKeyframe),
+    }
+);
 
-const STYLE_TRANSFORMATION_MAP = Object.freeze({
-    "scale": value => ({ property: "scale", value }),
-    "scale3d": value => ({ property: "scale", value }),
-    "scaleX": value => ({ property: "scale", value: { x: value, y: 1 } }),
-    "scaleY": value => ({ property: "scale", value: { x: 1, y: value } }),
+const getCurve = (value: string) => animationTimingFunctionConverter(value);
 
-    "translate": value => ({ property: "translate", value }),
-    "translate3d": value => ({ property: "translate", value }),
-    "translateX": value => ({ property: "translate", value: { x: value, y: 0 } }),
-    "translateY": value => ({ property: "translate", value: { x: 0, y: value } }),
-
-    "rotate": value => ({ property: "rotate", value }),
-
-    "none": _value => [
-        { property: "scale", value: { x: 1, y: 1 } },
-        { property: "translate", value: { x: 0, y: 0 } },
-        { property: "rotate", value: 0 },
-    ],
+const parseAnimationKeyframe = (styles: Keyframe): KeyframeInfo => ({
+    duration: getKeyframeDuration(styles),
+    declarations: getDeclarations(styles),
 });
 
-const STYLE_CURVE_MAP = Object.freeze({
-    "ease": AnimationCurve.ease,
-    "linear": AnimationCurve.linear,
-    "ease-in": AnimationCurve.easeIn,
-    "ease-out": AnimationCurve.easeOut,
-    "ease-in-out": AnimationCurve.easeInOut,
-    "spring": AnimationCurve.spring,
-});
+const getKeyframeDuration = (styles: Keyframe): number => styles.offset;
 
-export function getAnimationCurve(value: string): any {
-    if (!value) {
-        return AnimationCurve.ease;
-    }
+function getDeclarations(styles: Keyframe): KeyframeDeclaration[] {
+    const unparsedDeclarations: KeyframeDeclaration[] =
+        Object.keys(styles).map(property => ({ property, value: styles[property] }));
 
-    const curve = STYLE_CURVE_MAP[value];
-    if (curve) {
-        return curve;
-    }
-
-    const [, property = "", pointsString = ""] = TRANSFORM_MATCHER.exec(value) || [];
-    const coords = pointsString.split(TRANSFORM_SPLITTER).map(stringToBezieCoords);
-
-    if (property !== "cubic-bezier" || coords.length !== 4) {
-        throw new Error(`Invalid value for animation: ${value}`);
-    } else {
-        return (<any>AnimationCurve).cubicBezier(...coords);
-    }
-}
-
-export function parseAnimationKeyframe(styles: Keyframe) {
-    let keyframeInfo = <KeyframeInfo>{};
-    keyframeInfo.duration = <number>styles.offset;
-    keyframeInfo.declarations = Object.keys(styles).reduce((declarations, prop) => {
-        let value = styles[prop];
-
-        const property = CssAnimationProperty._getByCssName(prop);
-        if (property) {
-            if (typeof value === "string" && property._valueConverter) {
-                value = property._valueConverter(<string>value);
-            }
-            declarations.push({ property: property.name, value });
-        } else if (typeof value === "string" && prop === "transform") {
-            declarations.push(...parseTransformation(<string>value));
-        }
-
-        return declarations;
-    }, new Array<KeyframeDeclaration>());
-
-    return keyframeInfo;
-}
-
-function stringToBezieCoords(value: string): number {
-    let result = parseFloat(value);
-    if (result < 0) {
-        return 0;
-    } else if (result > 1) {
-        return 1;
-    }
-
-    return result;
-}
-
-function parseTransformation(styleString: string): KeyframeDeclaration[] {
-    return parseStyle(styleString)
-        .reduce((transformations, style) => {
-            const transform = STYLE_TRANSFORMATION_MAP[style.property](style.value);
-
-            if (Array.isArray(transform)) {
-                transformations.push(...transform);
-            } else if (typeof transform !== "undefined") {
-                transformations.push(transform);
-            }
-
-            return transformations;
-        }, new Array<Transformation>());
-}
-
-function parseStyle(text: string): Transformation[] {
-    return text.split(TRANSFORM_SPLITTER).map(stringToTransformation).filter(t => !!t);
-}
-
-function stringToTransformation(text: string): Transformation {
-    const [, property = "", stringValue = ""] = TRANSFORM_MATCHER.exec(text) || [];
-    if (!property) {
-        return;
-    }
-
-    const [x, y] = stringValue.split(",").map(parseFloat);
-    if (x && y) {
-        return { property, value: {x, y} };
-    } else {
-        let value: number = x;
-
-        if (stringValue.slice(-3) === "rad") {
-            value *= 180.0 / Math.PI;
-        }
-
-        return { property, value };
-     }
+    return parseKeyframeDeclarations(unparsedDeclarations);
 }

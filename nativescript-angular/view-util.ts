@@ -4,12 +4,16 @@ import { Placeholder } from "tns-core-modules/ui/placeholder";
 import { ContentView } from "tns-core-modules/ui/content-view";
 import { LayoutBase } from "tns-core-modules/ui/layouts/layout-base";
 import {
+    CommentNode,
+    NgElement,
+    NgView,
+    ViewExtensions,
     getViewClass,
     getViewMeta,
+    isDetachedElement,
     isKnownView,
-    ViewExtensions,
-    NgView,
 } from "./element-registry";
+
 import { platformNames, Device } from "tns-core-modules/platform";
 import { rendererLog as traceLog } from "./trace";
 
@@ -47,8 +51,13 @@ export class ViewUtil {
         this.isAndroid = device.os === platformNames.android;
     }
 
-    public insertChild(parent: any, child: NgView, atIndex: number = -1) {
-        if (!parent || child.meta.skipAddToDom) {
+    public insertChild(parent: any, child: NgElement, atIndex: number = -1) {
+        if (child instanceof CommentNode) {
+            child.templateParent = parent;
+            return;
+        }
+
+        if (!parent || isDetachedElement(child)) {
             return;
         }
 
@@ -56,7 +65,7 @@ export class ViewUtil {
             parent.meta.insertChild(parent, child, atIndex);
         } else if (isLayout(parent)) {
             if (child.parent === parent) {
-                let index = (<LayoutBase>parent).getChildIndex(child);
+                const index = (<LayoutBase>parent).getChildIndex(child);
                 if (index !== -1) {
                     parent.removeChild(child);
                 }
@@ -67,12 +76,7 @@ export class ViewUtil {
                 parent.addChild(child);
             }
         } else if (isContentView(parent)) {
-            // Explicit handling of template anchors inside ContentView
-            if (child.nodeName === "#comment") {
-                parent._addView(child, atIndex);
-            } else {
-                parent.content = child;
-            }
+            parent.content = child;
         } else if (parent && parent._addChildFromBuilder) {
             parent._addChildFromBuilder(child.nodeName, child);
         } else {
@@ -80,8 +84,11 @@ export class ViewUtil {
         }
     }
 
-    public removeChild(parent: any, child: NgView) {
-        if (!parent || child.meta.skipAddToDom) {
+    public removeChild(parent: any, child: NgElement) {
+        if (!parent ||
+            child instanceof CommentNode ||
+            isDetachedElement(child)) {
+
             return;
         }
 
@@ -92,11 +99,6 @@ export class ViewUtil {
         } else if (isContentView(parent)) {
             if (parent.content === child) {
                 parent.content = null;
-            }
-
-            // Explicit handling of template anchors inside ContentView
-            if (child.nodeName === "#comment") {
-                parent._removeView(child);
             }
         } else if (isView(parent)) {
             parent._removeView(child);
@@ -115,20 +117,12 @@ export class ViewUtil {
         }
     }
 
-    public createComment(): NgView {
-        const commentView = this.createView("Comment");
-        commentView.nodeName = "#comment";
-        commentView.visibility = "collapse";
-
-        return commentView;
+    public createComment(): CommentNode {
+        return new CommentNode();
     }
 
-    public createText(): NgView {
-        const detachedText = this.createView("DetachedText");
-        detachedText.nodeName = "#text";
-        detachedText.visibility = "collapse";
-
-        return detachedText;
+    public createText(): CommentNode {
+        return new CommentNode();
     }
 
     public createView(name: string): NgView {
@@ -137,6 +131,7 @@ export class ViewUtil {
         if (!isKnownView(name)) {
             name = "ProxyViewContainer";
         }
+
         const viewClass = getViewClass(name);
         let view = <NgView>new viewClass();
         view.nodeName = name;
@@ -210,41 +205,32 @@ export class ViewUtil {
 
 
     private setPropertyInternal(view: NgView, attributeName: string, value: any): void {
-        traceLog("Setting attribute: " + attributeName);
-
-        let propMap = this.getProperties(view);
+        traceLog(`Setting attribute: ${attributeName}=${value} to ${view}`);
 
         if (attributeName === "class") {
             this.setClasses(view, value);
-        } else if (XML_ATTRIBUTES.indexOf(attributeName) !== -1) {
+            return;
+        }
+
+        if (XML_ATTRIBUTES.indexOf(attributeName) !== -1) {
             view._applyXmlAttribute(attributeName, value);
-        } else if (propMap.has(attributeName)) {
+            return;
+        }
+
+        const propMap = this.getProperties(view);
+        const propertyName = propMap.get(attributeName);
+        if (propertyName) {
             // We have a lower-upper case mapped property.
-            let propertyName = propMap.get(attributeName);
-            view[propertyName] = this.convertValue(value);
-        } else {
-            // Unknown attribute value -- just set it to our object as is.
-            view[attributeName] = this.convertValue(value);
-        }
-    }
-
-    private convertValue(value: any): any {
-        if (typeof (value) !== "string" || value === "") {
-            return value;
+            view[propertyName] = value;
+            return;
         }
 
-        let valueAsNumber = +value;
-        if (!isNaN(valueAsNumber)) {
-            return valueAsNumber;
-        } else if (value && (value.toLowerCase() === "true" || value.toLowerCase() === "false")) {
-            return value.toLowerCase() === "true" ? true : false;
-        } else {
-            return value;
-        }
+        // Unknown attribute value -- just set it to our object as is.
+        view[attributeName] = value;
     }
 
     private getProperties(instance: any): Map<string, string> {
-        let type = instance && instance.constructor;
+        const type = instance && instance.constructor;
         if (!type) {
             return new Map<string, string>();
         }
@@ -256,6 +242,7 @@ export class ViewUtil {
             }
             propertyMaps.set(type, propMap);
         }
+
         return propertyMaps.get(type);
     }
 

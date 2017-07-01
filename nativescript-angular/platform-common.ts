@@ -6,6 +6,7 @@ import "./zone-js/dist/zone-nativescript";
 import "reflect-metadata";
 import "./polyfills/array";
 import "./polyfills/console";
+import { profile } from "tns-core-modules/profiling";
 
 import {
     Type,
@@ -68,6 +69,7 @@ export class NativeScriptPlatformRef extends PlatformRef {
         super();
     }
 
+    @profile
     bootstrapModuleFactory<M>(moduleFactory: NgModuleFactory<M>): Promise<NgModuleRef<M>> {
         this._bootstrapper = () => this.platform.bootstrapModuleFactory(moduleFactory);
 
@@ -76,6 +78,7 @@ export class NativeScriptPlatformRef extends PlatformRef {
         return null; // Make the compiler happy
     }
 
+    @profile
     bootstrapModule<M>(
         moduleType: Type<M>,
         compilerOptions: CompilerOptions | CompilerOptions[] = []
@@ -87,6 +90,7 @@ export class NativeScriptPlatformRef extends PlatformRef {
         return null; // Make the compiler happy
     }
 
+    @profile
     private bootstrapApp() {
         (<any>global).__onLiveSyncCore = () => this.livesyncModule();
 
@@ -139,6 +143,7 @@ export class NativeScriptPlatformRef extends PlatformRef {
         return this.platform.destroyed;
     }
 
+    @profile
     private createNavigationEntry(
         bootstrapAction: BootstrapperAction,
         resolve?: (comp: NgModuleRef<any>) => void,
@@ -150,20 +155,25 @@ export class NativeScriptPlatformRef extends PlatformRef {
 
         const navEntry: NavigationEntry = {
             create: (): Page => {
-                let page = pageFactory({ isBootstrap: true, isLivesync });
+                const page = pageFactory({ isBootstrap: true, isLivesync });
                 setRootPage(page);
                 if (this.appOptions) {
                     page.actionBarHidden = this.appOptions.startPageActionBarHidden;
                 }
 
-                let initHandler = function () {
+                const initHandlerMethodName =
+                    "nativescript-angular/platform-common.initHandler";
+                const initHandler = profile(initHandlerMethodName, () => {
                     page.off(Page.navigatingToEvent, initHandler);
                     // profiling.stop("application-start");
                     rendererLog("Page loaded");
 
                     // profiling.start("ng-bootstrap");
                     rendererLog("BOOTSTRAPPING...");
-                    bootstrapAction().then((moduleRef) => {
+
+                    const bootstrapMethodName =
+                        "nativescript-angular/platform-common.postBootstrapAction";
+                    bootstrapAction().then(profile(bootstrapMethodName, moduleRef => {
                         // profiling.stop("ng-bootstrap");
                         rendererLog("ANGULAR BOOTSTRAP DONE.");
                         lastBootstrappedModule = new WeakRef(moduleRef);
@@ -172,9 +182,9 @@ export class NativeScriptPlatformRef extends PlatformRef {
                             resolve(moduleRef);
                         }
                         return moduleRef;
-                    }, (err) => {
+                    }), err => {
                         rendererError("ERROR BOOTSTRAPPING ANGULAR");
-                        let errorMessage = err.message + "\n\n" + err.stack;
+                        const errorMessage = err.message + "\n\n" + err.stack;
                         rendererError(errorMessage);
 
                         let view = new TextView();
@@ -185,7 +195,7 @@ export class NativeScriptPlatformRef extends PlatformRef {
                             reject(err);
                         }
                     });
-                };
+                });
 
                 page.on(Page.navigatingToEvent, initHandler);
 

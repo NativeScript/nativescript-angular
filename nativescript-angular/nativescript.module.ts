@@ -8,19 +8,25 @@ import "./polyfills/array";
 import "./polyfills/console";
 
 import { CommonModule } from "@angular/common";
-import { NativeScriptRendererFactory } from "./renderer";
-import { DetachedLoader } from "./common/detached-loader";
-import { ModalDialogHost, ModalDialogService } from "./directives/dialogs";
 import {
     ApplicationModule,
     ErrorHandler,
+    NO_ERRORS_SCHEMA,
+    NgModule,
     RendererFactory2,
-    NgModule, NO_ERRORS_SCHEMA,
+    SystemJsNgModuleLoader,
 } from "@angular/core";
+
+import { NativeScriptRendererFactory } from "./renderer";
+import { DetachedLoader } from "./common/detached-loader";
 import {
-    defaultPageProvider,
+    ModalDialogHost,
+    ModalDialogService,
+} from "./directives/dialogs";
+import {
+    defaultDeviceProvider,
     defaultFrameProvider,
-    defaultDeviceProvider
+    defaultPageProvider,
 } from "./platform-providers";
 import { NS_DIRECTIVES } from "./directives";
 
@@ -35,13 +41,14 @@ export function errorHandlerFactory() {
         ...NS_DIRECTIVES,
     ],
     providers: [
-        { provide: ErrorHandler, useFactory: errorHandlerFactory },
+        ModalDialogService,
+        NativeScriptRendererFactory,
+        SystemJsNgModuleLoader,
+        defaultDeviceProvider,
         defaultFrameProvider,
         defaultPageProvider,
-        defaultDeviceProvider,
-        NativeScriptRendererFactory,
+        { provide: ErrorHandler, useFactory: errorHandlerFactory },
         { provide: RendererFactory2, useClass: NativeScriptRendererFactory },
-        ModalDialogService
     ],
     entryComponents: [
         DetachedLoader,

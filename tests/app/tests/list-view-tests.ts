@@ -26,9 +26,9 @@ let testTemplates: { first: number, second: number };
     template: `
     <GridLayout>
         <ListView [items]="myItems" (setupItemView)="onSetupItemView($event)">
-            <template let-item="item">
+            <ng-template let-item="item">
                 <Label [text]='"[" + item.id +"] " + item.name'></Label>
-            </template>
+            </ng-template>
         </ListView>
     </GridLayout>
     `
@@ -60,12 +60,12 @@ export class ItemTemplateComponent {
     template: `
     <GridLayout>
         <ListView [items]="myItems" [itemTemplateSelector]="templateSelector">
-            <template nsTemplateKey="first">
+            <ng-template nsTemplateKey="first">
                 <item-component templateName="first"></item-component>
-            </template>
-            <template nsTemplateKey="second" let-item="item">
+            </ng-template>
+            <ng-template nsTemplateKey="second" let-item="item">
                 <item-component templateName="second"></item-component>
-            </template>
+            </ng-template>
         </ListView>
     </GridLayout>
   `

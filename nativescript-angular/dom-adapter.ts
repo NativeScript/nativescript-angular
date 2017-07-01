@@ -167,7 +167,7 @@ export class NativeScriptDomAdapter implements ɵDomAdapter {
   getLocation(): Location { throw new Error("Not implemented!") }
   getBaseHref(): string { throw new Error("Not implemented!") }
   resetBaseElement(): void { throw new Error("Not implemented!") }
-  getUserAgent(): string { throw new Error("Not implemented!") }
+  getUserAgent(): string { return "Fake user agent"; }
   setData(_element: any /** TODO #9100 */, _name: string, _value: string): any
       /** TODO #9100 */ { throw new Error("Not implemented!") }
   getComputedStyle(_element: any /** TODO #9100 */): any { throw new Error("Not implemented!") }
@@ -179,7 +179,7 @@ export class NativeScriptDomAdapter implements ɵDomAdapter {
   getTransitionEnd(): string { throw new Error("Not implemented!") }
   supportsAnimation(): boolean { throw new Error("Not implemented!") }
 
-  supportsCookies(): boolean { throw new Error("Not implemented!") }
+  supportsCookies(): boolean { return false;  }
   getCookie(_name: string): string { throw new Error("Not implemented!") }
   setCookie(_name: string, _value: string): any /** TODO #9100 */ { throw new Error("Not implemented!") }
 }
