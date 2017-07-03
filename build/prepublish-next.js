@@ -2,7 +2,6 @@
 const fs = require("fs");
 const path = require("path");
 
-// helpers start
 const getPackageJson = projectDir => {
     const packageJsonPath = getPackageJsonPath(projectDir);
     return JSON.parse(fs.readFileSync(packageJsonPath, "utf8"));
@@ -14,7 +13,6 @@ const writePackageJson = (content, projectDir) => {
 }
 
 const getPackageJsonPath = projectDir => path.resolve(projectDir, "package.json");
-// helpers end
 
 const tag = "next";
 const projectDir = "nativescript-angular";
