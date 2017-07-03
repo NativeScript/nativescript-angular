@@ -2,8 +2,6 @@
 const fs = require("fs");
 const path = require("path");
 
-const { dirname: pathDirname, join } = require("path");
-
 // helpers start
 const getPackageJson = projectDir => {
     const packageJsonPath = getPackageJsonPath(projectDir);
@@ -19,7 +17,7 @@ const getPackageJsonPath = projectDir => path.resolve(projectDir, "package.json"
 // helpers end
 
 const tag = "next";
-const projectDir = pathDirname(join("nativescript-angular","nativescript-angular"));
+const projectDir = "nativescript-angular";
 const packageJson = getPackageJson(projectDir);
 const [, , packageVersion = new Date() ] = process.argv;
 
