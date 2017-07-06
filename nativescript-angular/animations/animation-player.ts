@@ -2,8 +2,8 @@ import { AnimationPlayer } from "@angular/animations";
 import { KeyframeAnimation }
     from "tns-core-modules/ui/animation/keyframe-animation";
 
-import { NgView } from "../element-registry";
 import { Keyframe, createKeyframeAnimation } from "./utils";
+import { NgView } from "../element-registry";
 
 export class NativeScriptAnimationPlayer implements AnimationPlayer {
     public parentPlayer: AnimationPlayer = null;
@@ -24,7 +24,9 @@ export class NativeScriptAnimationPlayer implements AnimationPlayer {
         this.initKeyframeAnimation(keyframes, duration, delay, easing);
     }
 
-    get totalTime(): number { return this.delay + this.duration; }
+    get totalTime(): number {
+        return this.delay + this.duration;
+    }
 
     init(): void {
     }
@@ -50,7 +52,7 @@ export class NativeScriptAnimationPlayer implements AnimationPlayer {
 
         this.animation.play(this.target)
             .then(() => this.onFinish())
-            .catch((_e) => { });
+            .catch((_e) => {});
     }
 
     pause(): void {
@@ -90,11 +92,13 @@ export class NativeScriptAnimationPlayer implements AnimationPlayer {
     }
 
     private onFinish() {
-        if (!this._finished) {
-            this._finished = true;
-            this._started = false;
-            this._doneSubscriptions.forEach(fn => fn());
-            this._doneSubscriptions = [];
+        if (this._finished) {
+            return;
         }
+
+        this._finished = true;
+        this._started = false;
+        this._doneSubscriptions.forEach(fn => fn());
+        this._doneSubscriptions = [];
     }
 }
