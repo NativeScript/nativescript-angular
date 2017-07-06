@@ -4,7 +4,6 @@ import { AnimationBuilder } from "@angular/animations";
 
 import {
     AnimationDriver,
-    ɵAnimationEngine as AnimationEngine,
     ɵAnimationStyleNormalizer as AnimationStyleNormalizer,
     ɵWebAnimationsStyleNormalizer as WebAnimationsStyleNormalizer,
 } from "@angular/animations/browser";
@@ -14,12 +13,13 @@ import {
     ɵBrowserAnimationBuilder as BrowserAnimationBuilder,
 } from "@angular/platform-browser/animations";
 
+import { NativeScriptAnimationEngine } from "./animations/animation-engine";
 import { NativeScriptAnimationDriver } from "./animations/animation-driver";
 import { NativeScriptModule } from "./nativescript.module";
 import { NativeScriptRendererFactory } from "./renderer";
 
 @Injectable()
-export class InjectableAnimationEngine extends AnimationEngine {
+export class InjectableAnimationEngine extends NativeScriptAnimationEngine {
     constructor(driver: AnimationDriver, normalizer: AnimationStyleNormalizer) {
         super(driver, normalizer);
     }
@@ -30,7 +30,7 @@ export function instantiateSupportedAnimationDriver() {
 }
 
 export function instantiateRendererFactory(
-        renderer: NativeScriptRendererFactory, engine: AnimationEngine, zone: NgZone) {
+        renderer: NativeScriptRendererFactory, engine: NativeScriptAnimationEngine, zone: NgZone) {
     return new AnimationRendererFactory(renderer, engine, zone);
 }
 
@@ -42,11 +42,11 @@ export const NATIVESCRIPT_ANIMATIONS_PROVIDERS: Provider[] = [
     {provide: AnimationBuilder, useClass: BrowserAnimationBuilder},
     {provide: AnimationDriver, useFactory: instantiateSupportedAnimationDriver},
     {provide: AnimationStyleNormalizer, useFactory: instantiateDefaultStyleNormalizer},
-    {provide: AnimationEngine, useClass: InjectableAnimationEngine},
+    {provide: NativeScriptAnimationEngine, useClass: InjectableAnimationEngine},
     {
         provide: RendererFactory2,
         useFactory: instantiateRendererFactory,
-        deps: [NativeScriptRendererFactory, AnimationEngine, NgZone]
+        deps: [NativeScriptRendererFactory, NativeScriptAnimationEngine, NgZone]
     }
 ];
 
