@@ -34,15 +34,16 @@ export function instantiateRendererFactory(
     return new AnimationRendererFactory(renderer, engine, zone);
 }
 
-export function instanciateDefaultStyleNormalizer() {
+export function instantiateDefaultStyleNormalizer() {
     return new WebAnimationsStyleNormalizer();
 }
 
 export const NATIVESCRIPT_ANIMATIONS_PROVIDERS: Provider[] = [
     {provide: AnimationBuilder, useClass: BrowserAnimationBuilder},
     {provide: AnimationDriver, useFactory: instantiateSupportedAnimationDriver},
-    {provide: AnimationStyleNormalizer, useFactory: instanciateDefaultStyleNormalizer},
-    {provide: AnimationEngine, useClass: InjectableAnimationEngine}, {
+    {provide: AnimationStyleNormalizer, useFactory: instantiateDefaultStyleNormalizer},
+    {provide: AnimationEngine, useClass: InjectableAnimationEngine},
+    {
         provide: RendererFactory2,
         useFactory: instantiateRendererFactory,
         deps: [NativeScriptRendererFactory, AnimationEngine, NgZone]
