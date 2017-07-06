@@ -4,6 +4,7 @@ import { KeyframeAnimation }
 
 import { Keyframe, createKeyframeAnimation } from "./utils";
 import { NgView } from "../element-registry";
+import { animationsLog as traceLog } from "../trace";
 
 export class NativeScriptAnimationPlayer implements AnimationPlayer {
     public parentPlayer: AnimationPlayer = null;
@@ -40,6 +41,8 @@ export class NativeScriptAnimationPlayer implements AnimationPlayer {
     onDestroy(fn: Function): void { this._doneSubscriptions.push(fn); }
 
     play(): void {
+        traceLog(`NativeScriptAnimationPlayer.play`);
+
         if (!this.animation) {
             return;
         }
@@ -64,17 +67,23 @@ export class NativeScriptAnimationPlayer implements AnimationPlayer {
     }
 
     reset(): void {
+        traceLog(`NativeScriptAnimationPlayer.reset`);
+
         if (this.animation && this.animation.isPlaying) {
             this.animation.cancel();
         }
     }
 
     restart(): void {
+        traceLog(`NativeScriptAnimationPlayer.restart`);
+
         this.reset();
         this.play();
     }
 
     destroy(): void {
+        traceLog(`NativeScriptAnimationPlayer.destroy`);
+
         this.reset();
         this.onFinish();
     }
@@ -88,10 +97,14 @@ export class NativeScriptAnimationPlayer implements AnimationPlayer {
     }
 
     private initKeyframeAnimation(keyframes: Keyframe[], duration: number, delay: number, easing: string) {
+        traceLog(`NativeScriptAnimationPlayer.initKeyframeAnimation`);
+
         this.animation = createKeyframeAnimation(keyframes, duration, delay, easing);
     }
 
     private onFinish() {
+        traceLog(`NativeScriptAnimationPlayer.onFinish`);
+
         if (this._finished) {
             return;
         }
