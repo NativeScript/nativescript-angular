@@ -1,5 +1,6 @@
 import { AnimationPlayer } from "@angular/animations";
 import { AnimationDriver } from "@angular/animations/browser";
+import { eachDescendant } from "tns-core-modules/ui/core/view";
 
 import { NativeScriptAnimationPlayer } from "./animation-player";
 import { Keyframe } from "./utils";
@@ -8,12 +9,7 @@ import { animationsLog as traceLog } from "../trace";
 
 export class NativeScriptAnimationDriver implements AnimationDriver {
     matchesElement(_element: any, _selector: string): boolean {
-        traceLog(
-            `NativeScriptAnimationDriver.matchesElement ` +
-            `element: ${_element}, selector: ${_selector}`
-        );
-
-        // this method is never called since ng 4.2.5
+        // this method is never called since NG 4.2.5
         throw new Error("Method not implemented.");
     }
 
@@ -24,7 +20,7 @@ export class NativeScriptAnimationDriver implements AnimationDriver {
         );
 
         let found = false;
-        elm1.eachChild(child => {
+        eachDescendant(elm1, child => {
             if (child === elm2) {
                 found = true;
             }
@@ -38,7 +34,7 @@ export class NativeScriptAnimationDriver implements AnimationDriver {
     // traverse children and check if they have the provided class
     query(element: any, selector: string, multi: boolean): any[] {
         traceLog(
-            `NativeScriptAnimationDriver.query` +
+            `NativeScriptAnimationDriver.query ` +
             `element: ${element}, selector: ${selector} ` +
             `multi: ${multi}`
         );
