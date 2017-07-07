@@ -4,19 +4,19 @@ import {
     QueuedTransition,
     ElementAnimationState,
     REMOVAL_FLAG,
-} from "@angular/animations/browser/src/render/transition_animation_engine";
+} from "./private-imports/render/transition_animation_engine";
 import { AUTO_STYLE, ɵPRE_STYLE as PRE_STYLE, AnimationPlayer, ɵStyleData } from "@angular/animations";
 import { AnimationDriver } from "@angular/animations/browser";
 
-import { ElementInstructionMap } from "@angular/animations/browser/src/dsl/element_instruction_map";
+import { ElementInstructionMap } from "./private-imports/dsl/element_instruction_map";
 import { AnimationTransitionInstruction } from "@angular/animations/browser/src/dsl/animation_transition_instruction";
 import {
     ENTER_CLASSNAME,
     LEAVE_CLASSNAME,
     NG_ANIMATING_SELECTOR,
     setStyles,
-} from "@angular/animations/browser/src/util";
-import { getOrSetAsInMap, optimizeGroupPlayer } from "@angular/animations/browser/src/render/shared";
+} from "./private-imports/util";
+import { getOrSetAsInMap, optimizeGroupPlayer } from "./private-imports/render/shared";
 import { unsetValue } from "tns-core-modules/ui/core/view";
 
 import { NgView } from "../element-registry";
@@ -121,7 +121,7 @@ export class NSTransitionAnimationEngine extends TransitionAnimationEngine {
 
                 const element = entry.element;
 
-                // the below check is skipped, because it"s
+                // the below check is skipped, because it's
                 // irrelevant in the NativeScript context
                 // if (!bodyNode || !this.driver.containsElement(bodyNode, element)) {
                 //     player.destroy();
