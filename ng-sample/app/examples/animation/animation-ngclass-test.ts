@@ -1,5 +1,4 @@
-import {Component} from "@angular/core";
-import {Observable} from "data/observable";
+import { Component } from "@angular/core";
 
 @Component({
     selector: "main-component",
