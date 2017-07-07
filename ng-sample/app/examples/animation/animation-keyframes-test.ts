@@ -4,7 +4,8 @@ import {
     state,
     style,
     animate,
-    transition
+    transition,
+    keyframes,
 } from '@angular/animations';
 
 @Component({
