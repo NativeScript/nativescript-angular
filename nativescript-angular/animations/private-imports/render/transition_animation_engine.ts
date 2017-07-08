@@ -5,7 +5,6 @@
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-
 /* tslint:disable */
 import {AUTO_STYLE, AnimationOptions, AnimationPlayer, NoopAnimationPlayer, ɵPRE_STYLE as PRE_STYLE, ɵStyleData} from '@angular/animations';
 
@@ -22,6 +21,11 @@ import {ENTER_CLASSNAME, LEAVE_CLASSNAME, NG_ANIMATING_CLASSNAME, NG_ANIMATING_S
 import {AnimationDriver} from '@angular/animations/browser/src/render/animation_driver';
 
 import {getOrSetAsInMap, listenOnPlayer, makeAnimationEvent, normalizeKeyframes, optimizeGroupPlayer} from "../render/shared";
+
+const QUEUED_CLASSNAME = 'ng-animate-queued';
+const QUEUED_SELECTOR = '.ng-animate-queued';
+const DISABLED_CLASSNAME = 'ng-animate-disabled';
+const DISABLED_SELECTOR = '.ng-animate-disabled';
 
 const EMPTY_PLAYER_ARRAY: TransitionAnimationPlayer[] = [];
 const NULL_REMOVAL_STATE: ElementAnimationState = {
@@ -205,6 +209,16 @@ export class AnimationTransitionNamespace {
       return player;
     }
 
+    const isRemoval = toState.value === VOID_VALUE;
+
+    // normally this isn't reached by here, however, if an object expression
+    // is passed in then it may be a new object each time. Comparing the value
+    // is important since that will stay the same despite there being a new object.
+    // The removal arc here is special cased because the same element is triggered
+    // twice in the event that it contains animations on the outer/inner portions
+    // of the host container
+    if (!isRemoval && fromState.value === toState.value) return;
+
     const playersOnElement: TransitionAnimationPlayer[] =
         getOrSetAsInMap(this._engine.playersByElement, element, []);
     playersOnElement.forEach(player => {
@@ -230,12 +244,11 @@ export class AnimationTransitionNamespace {
         {element, triggerName, transition, fromState, toState, player, isFallbackTransition});
 
     if (!isFallbackTransition) {
-      addClass(element, NG_ANIMATING_CLASSNAME);
+      addClass(element, QUEUED_CLASSNAME);
+      player.onStart(() => { removeClass(element, QUEUED_CLASSNAME); });
     }
 
     player.onDone(() => {
-      removeClass(element, NG_ANIMATING_CLASSNAME);
-
       let index = this.players.indexOf(player);
       if (index >= 0) {
         this.players.splice(index, 1);
@@ -259,7 +272,7 @@ export class AnimationTransitionNamespace {
   deregister(name: string) {
     delete this._triggers[name];
 
-    this._engine.statesByElement.forEach((stateMap, _element) => { delete stateMap[name]; });
+    this._engine.statesByElement.forEach((stateMap, element) => { delete stateMap[name]; });
 
     this._elementListeners.forEach((listeners, element) => {
       this._elementListeners.set(
@@ -392,7 +405,7 @@ export class AnimationTransitionNamespace {
     }
   }
 
-  insertNode(element: any, _parent: any): void { addClass(element, this._hostClassName); }
+  insertNode(element: any, parent: any): void { addClass(element, this._hostClassName); }
 
   drainQueuedTransitions(microtaskId: number): QueueInstruction[] {
     const instructions: QueueInstruction[] = [];
@@ -464,6 +477,8 @@ export class TransitionAnimationEngine {
   public playersByElement = new Map<any, TransitionAnimationPlayer[]>();
   public playersByQueriedElement = new Map<any, TransitionAnimationPlayer[]>();
   public statesByElement = new Map<any, {[triggerName: string]: StateValue}>();
+  public disabledNodes = new Set<any>();
+
   public totalAnimations = 0;
   public totalQueuedPlayers = 0;
 
@@ -477,7 +492,7 @@ export class TransitionAnimationEngine {
   public collectedLeaveElements: any[] = [];
 
   // this method is designed to be overridden by the code that uses this engine
-  public onRemovalComplete = (_element: any, _context: any) => {};
+  public onRemovalComplete = (element: any, context: any) => {};
 
   _onRemovalComplete(element: any, context: any) { this.onRemovalComplete(element, context); }
 
@@ -605,6 +620,18 @@ export class TransitionAnimationEngine {
 
   collectEnterElement(element: any) { this.collectedEnterElements.push(element); }
 
+  markElementAsDisabled(element: any, value: boolean) {
+    if (value) {
+      if (!this.disabledNodes.has(element)) {
+        this.disabledNodes.add(element);
+        addClass(element, DISABLED_CLASSNAME);
+      }
+    } else if (this.disabledNodes.has(element)) {
+      this.disabledNodes.delete(element);
+      removeClass(element, DISABLED_CLASSNAME);
+    }
+  }
+
   removeNode(namespaceId: string, element: any, context: any, doNotRecurse?: boolean): void {
     if (!isElementNode(element)) {
       this._onRemovalComplete(element, context);
@@ -702,6 +729,14 @@ export class TransitionAnimationEngine {
       }
       this._onRemovalComplete(element, details.setForRemoval);
     }
+
+    if (this.driver.matchesElement(element, DISABLED_SELECTOR)) {
+      this.markElementAsDisabled(element, false);
+    }
+
+    this.driver.query(element, DISABLED_SELECTOR, true).forEach(node => {
+      this.markElementAsDisabled(element, false);
+    });
   }
 
   flush(microtaskId: number = -1) {
@@ -759,6 +794,14 @@ export class TransitionAnimationEngine {
     const allPreStyleElements = new Map<any, Set<string>>();
     const allPostStyleElements = new Map<any, Set<string>>();
 
+    const disabledElementsSet = new Set<any>();
+    this.disabledNodes.forEach(node => {
+      const nodesThatAreDisabled = this.driver.query(node, QUEUED_SELECTOR, true);
+      for (let i = 0; i < nodesThatAreDisabled.length; i++) {
+        disabledElementsSet.add(nodesThatAreDisabled[i]);
+      }
+    });
+
     const bodyNode = getBodyNode();
     const allEnterNodes: any[] = this.collectedEnterElements.length ?
         this.collectedEnterElements.filter(createIsRootFilterFn(this.collectedEnterElements)) :
@@ -808,7 +851,7 @@ export class TransitionAnimationEngine {
         }
 
         const instruction = this._buildInstruction(entry, subTimelines) !;
-        if ((<any>instruction).errors && (<any>instruction).errors.length) {
+        if (instruction.errors && instruction.errors.length) {
           erroneousTransitions.push(instruction);
           return;
         }
@@ -864,7 +907,7 @@ export class TransitionAnimationEngine {
       let msg = `Unable to process animations due to the following failed trigger transitions\n`;
       erroneousTransitions.forEach(instruction => {
         msg += `@${instruction.triggerName} has failed due to:\n`;
-        (<any>instruction).errors !.forEach(error => { msg += `- ${error}\n`; });
+        instruction.errors !.forEach(error => { msg += `- ${error}\n`; });
       });
 
       allPlayers.forEach(player => player.destroy());
@@ -919,6 +962,11 @@ export class TransitionAnimationEngine {
       // this means that it was never consumed by a parent animation which
       // means that it is independent and therefore should be set for animation
       if (subTimelines.has(element)) {
+        if (disabledElementsSet.has(element)) {
+          skippedPlayers.push(player);
+          return;
+        }
+
         const innerPlayer = this._buildAnimation(
             player.namespaceId, instruction, allPreviousPlayersMap, skippedPlayersMap, preStylesMap,
             postStylesMap);

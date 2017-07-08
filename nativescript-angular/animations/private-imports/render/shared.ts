@@ -5,8 +5,8 @@
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-
 /* tslint:disable */
+
 import {AUTO_STYLE, AnimationEvent, AnimationPlayer, NoopAnimationPlayer, ɵAnimationGroupPlayer, ɵPRE_STYLE as PRE_STYLE, ɵStyleData} from '@angular/animations';
 
 import {AnimationStyleNormalizer} from "@angular/animations/browser/src/dsl/style_normalization/animation_style_normalizer";
@@ -24,7 +24,7 @@ export function optimizeGroupPlayer(players: AnimationPlayer[]): AnimationPlayer
 }
 
 export function normalizeKeyframes(
-    _driver: AnimationDriver, normalizer: AnimationStyleNormalizer, _element: any,
+    driver: AnimationDriver, normalizer: AnimationStyleNormalizer, element: any,
     keyframes: ɵStyleData[], preStyles: ɵStyleData = {},
     postStyles: ɵStyleData = {}): ɵStyleData[] {
   const errors: string[] = [];
@@ -122,11 +122,11 @@ export function parseTimelineCommand(command: string): [string, string] {
   return [id, action];
 }
 
-let _contains: (elm1: any, elm2: any) => boolean = (_elm1: any, _elm2: any) => false;
-let _matches: (element: any, selector: string) => boolean = (_element: any, _selector: string) =>
+let _contains: (elm1: any, elm2: any) => boolean = (elm1: any, elm2: any) => false;
+let _matches: (element: any, selector: string) => boolean = (element: any, selector: string) =>
     false;
 let _query: (element: any, selector: string, multi: boolean) => any[] =
-    (_element: any, _selector: string, _multi: boolean) => {
+    (element: any, selector: string, multi: boolean) => {
       return [];
     };
 
