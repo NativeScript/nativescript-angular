@@ -11,8 +11,6 @@
     "declaration": true,
     "removeComments": false,
     "noEmitOnError": true,
-    "noUnusedLocals": true,
-    "noUnusedParameters": true,
     "noImplicitAny": false,
     "lib": [
         "dom",
