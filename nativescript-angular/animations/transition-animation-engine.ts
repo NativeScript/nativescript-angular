@@ -21,13 +21,6 @@ import {
 import { dashCaseToCamelCase } from "./utils";
 import { NgView } from "../element-registry";
 
-const NULL_REMOVED_QUERIED_STATE: ElementAnimationState = {
-  namespaceId: "",
-  setForRemoval: null,
-  hasAnimation: false,
-  removedBeforeQueried: true
-};
-
 function eraseStylesOverride(element: NgView, styles: ɵStyleData) {
     if (!element.style) {
         return;
@@ -46,7 +39,7 @@ function setStylesOverride(element: NgView, styles: ɵStyleData) {
 
     Object.keys(styles).forEach(prop => {
         const camelCaseProp = dashCaseToCamelCase(prop);
-        element.style[camelCaseProp] = styles[prop];
+        element.style[camelCaseProp] = styles[camelCaseProp];
     });
 }
 
@@ -428,13 +421,7 @@ function cloakAndComputeStyles(
     elementPropsMap.forEach((props: Set<string>, element: any) => {
         const styles: ɵStyleData = {};
         props.forEach(prop => {
-            const value = styles[prop] = driver.computeStyle(element, prop, defaultStyle);
-
-            // there is no easy way to detect this because a sub element could be removed
-            // by a parent animation element being detached.
-            if (!value || value.length === 0) {
-                element[REMOVAL_FLAG] = NULL_REMOVED_QUERIED_STATE;
-            }
+            styles[prop] = driver.computeStyle(element, prop, defaultStyle);
         });
         valuesMap.set(element, styles);
     });
