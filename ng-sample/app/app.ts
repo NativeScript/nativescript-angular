@@ -49,6 +49,7 @@ import { AnimationEnterLeaveTest } from "./examples/animation/animation-enter-le
 import { AnimationKeyframesTest } from "./examples/animation/animation-keyframes-test";
 import { AnimationNgClassTest } from "./examples/animation/animation-ngclass-test";
 import { AnimationStatesTest } from "./examples/animation/animation-states-test";
+import { AnimationStatesMultiTest } from "./examples/animation/animation-states-multi-test";
 
 @NgModule({
     declarations: [
@@ -139,6 +140,7 @@ const customPageFactoryProvider = {
 
 // animations
 platformNativeScriptDynamic().bootstrapModule(makeExampleModule(AnimationStatesTest));
+// platformNativeScriptDynamic().bootstrapModule(makeExampleModule(AnimationStatesMultiTest));
 // platformNativeScriptDynamic().bootstrapModule(makeExampleModule(AnimationNgClassTest));
 // platformNativeScriptDynamic().bootstrapModule(makeExampleModule(AnimationKeyframesTest));
 // platformNativeScriptDynamic().bootstrapModule(makeExampleModule(AnimationEnterLeaveTest));

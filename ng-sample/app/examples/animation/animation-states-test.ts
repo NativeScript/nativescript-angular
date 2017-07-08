@@ -17,7 +17,7 @@ import {
         trigger("state", [
 
             state("inactive", style({ "background-color": "red" })),
-            state("active", style({ "background-color": "green" })),
+            state("active", style({ "backgroundColor": "green" })),
 
             transition("* => active", [ animate("600ms ease-out") ]),
             transition("* => inactive", [ animate("600ms ease-out") ]),

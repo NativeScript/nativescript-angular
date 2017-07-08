@@ -47,7 +47,7 @@ function setStylesOverride(element: NgView, styles: ɵStyleData) {
     Object.keys(styles).forEach(prop => {
         const camelCaseProp = dashCaseToCamelCase(prop);
         element.style[camelCaseProp] = styles[prop];
-    })
+    });
 }
 
 // extending Angular's TransitionAnimationEngine
