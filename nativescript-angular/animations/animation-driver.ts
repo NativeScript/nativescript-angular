@@ -3,7 +3,10 @@ import { AnimationDriver } from "@angular/animations/browser";
 import { eachDescendant } from "tns-core-modules/ui/core/view";
 
 import { NativeScriptAnimationPlayer } from "./animation-player";
-import { Keyframe } from "./utils";
+import {
+    Keyframe,
+    dashCaseToCamelCase,
+} from "./utils";
 import { NgView } from "../element-registry";
 import { animationsLog as traceLog } from "../trace";
 
@@ -59,7 +62,8 @@ export class NativeScriptAnimationDriver implements AnimationDriver {
             `element: ${element}, prop: ${prop}`
         );
 
-        return element.style[`css-${prop}`];
+        const camelCaseProp = dashCaseToCamelCase(prop);
+        return element.style[camelCaseProp];
     }
 
     animate(

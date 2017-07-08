@@ -1,3 +1,8 @@
+import { AUTO_STYLE, ɵPRE_STYLE as PRE_STYLE, AnimationPlayer, ɵStyleData } from "@angular/animations";
+import { AnimationDriver } from "@angular/animations/browser";
+import { AnimationTransitionInstruction } from "@angular/animations/browser/src/dsl/animation_transition_instruction";
+import { unsetValue } from "tns-core-modules/ui/core/view";
+
 import {
     TransitionAnimationEngine,
     TransitionAnimationPlayer,
@@ -5,20 +10,15 @@ import {
     ElementAnimationState,
     REMOVAL_FLAG,
 } from "./private-imports/render/transition_animation_engine";
-import { AUTO_STYLE, ɵPRE_STYLE as PRE_STYLE, AnimationPlayer, ɵStyleData } from "@angular/animations";
-import { AnimationDriver } from "@angular/animations/browser";
-
 import { ElementInstructionMap } from "./private-imports/dsl/element_instruction_map";
-import { AnimationTransitionInstruction } from "@angular/animations/browser/src/dsl/animation_transition_instruction";
+import { getOrSetAsInMap, optimizeGroupPlayer } from "./private-imports/render/shared";
 import {
     ENTER_CLASSNAME,
     LEAVE_CLASSNAME,
     NG_ANIMATING_SELECTOR,
-    setStyles,
 } from "./private-imports/util";
-import { getOrSetAsInMap, optimizeGroupPlayer } from "./private-imports/render/shared";
-import { unsetValue } from "tns-core-modules/ui/core/view";
 
+import { dashCaseToCamelCase } from "./utils";
 import { NgView } from "../element-registry";
 
 const NULL_REMOVED_QUERIED_STATE: ElementAnimationState = {
@@ -29,11 +29,25 @@ const NULL_REMOVED_QUERIED_STATE: ElementAnimationState = {
 };
 
 function eraseStylesOverride(element: NgView, styles: ɵStyleData) {
-    if (element["style"]) {
-        Object.keys(styles).forEach(prop => {
-            element.style[prop] = unsetValue;
-        });
+    if (!element.style) {
+        return;
     }
+
+    Object.keys(styles).forEach(prop => {
+        const camelCaseProp = dashCaseToCamelCase(prop);
+        element.style[camelCaseProp] = unsetValue;
+    });
+}
+
+function setStylesOverride(element: NgView, styles: ɵStyleData) {
+    if (!element.style) {
+        return;
+    }
+
+    Object.keys(styles).forEach(prop => {
+        const camelCaseProp = dashCaseToCamelCase(prop);
+        element.style[camelCaseProp] = styles[prop];
+    })
 }
 
 // extending Angular's TransitionAnimationEngine
@@ -137,7 +151,7 @@ export class NSTransitionAnimationEngine extends TransitionAnimationEngine {
                 // an animation and cancel the previously running animations.
                 if (entry.isFallbackTransition) {
                     player.onStart(() => eraseStylesOverride(element, instruction.fromStyles));
-                    player.onDestroy(() => setStyles(element, instruction.toStyles));
+                    player.onDestroy(() => setStylesOverride(element, instruction.toStyles));
                     skippedPlayers.push(player);
                     return;
                 }
@@ -261,7 +275,7 @@ export class NSTransitionAnimationEngine extends TransitionAnimationEngine {
                 }
             } else {
                 eraseStylesOverride(element, instruction.fromStyles);
-                player.onDestroy(() => setStyles(element, instruction.toStyles));
+                player.onDestroy(() => setStylesOverride(element, instruction.toStyles));
                 subPlayers.push(player);
             }
         });
