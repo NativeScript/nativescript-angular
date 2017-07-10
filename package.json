@@ -46,7 +46,7 @@
     "resolve-url-loader": "~2.0.2",
     "tslint": "^5.4.3",
     "typescript": "~2.3.4",
-    "webpack": "~2.6.1",
+    "webpack": "~3.0.0",
     "webpack-sources": "~1.0.1",
     "webpack-bundle-analyzer": "^2.8.2"
   },

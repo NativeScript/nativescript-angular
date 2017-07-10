@@ -5,6 +5,7 @@ const nsWebpack = require("nativescript-dev-webpack");
 const nativescriptTarget = require("nativescript-dev-webpack/nativescript-target");
 const CopyWebpackPlugin = require("copy-webpack-plugin");
 const ExtractTextPlugin = require("extract-text-webpack-plugin");
+const { BundleAnalyzerPlugin } = require("webpack-bundle-analyzer");
 
 const { AotPlugin } = require("@ngtools/webpack");
 
@@ -48,7 +49,11 @@ module.exports = env => {
             modules: [
                 "node_modules/tns-core-modules",
                 "node_modules",
-            ]
+            ],
+
+            alias: {
+                '~': resolve("./app")
+            },
         },
         node: {
             // Disable node shims that conflict with NativeScript
@@ -165,6 +170,15 @@ function getPlugins(platform, env) {
             "./vendor",
             "./bundle",
         ]),
+
+        // Generate report files for bundles content
+        new BundleAnalyzerPlugin({
+            analyzerMode: "static",
+            openAnalyzer: false,
+            generateStatsFile: true,
+            reportFilename: join(__dirname, "report", `report.html`),
+            statsFilename: join(__dirname, "report", `stats.json`),
+        }),
 
         // Angular AOT compiler
         new AotPlugin({
