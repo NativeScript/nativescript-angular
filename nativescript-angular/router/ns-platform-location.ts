@@ -7,7 +7,7 @@ import { routerLog } from "../trace";
 @Injectable()
 export class NativescriptPlatformLocation extends PlatformLocation {
 
-    constructor(private locationStartegy: NSLocationStrategy) {
+    constructor(private locationStrategy: NSLocationStrategy) {
         super();
         routerLog("NativescriptPlatformLocation.constructor()");
     }
@@ -17,7 +17,7 @@ export class NativescriptPlatformLocation extends PlatformLocation {
     }
 
     onPopState(fn: LocationChangeListener): void {
-        this.locationStartegy.onPopState(fn);
+        this.locationStrategy.onPopState(fn);
     }
 
     onHashChange(_fn: LocationChangeListener): void {
@@ -30,18 +30,18 @@ export class NativescriptPlatformLocation extends PlatformLocation {
         return "";
     }
     get pathname(): string {
-        return this.locationStartegy.path();
+        return this.locationStrategy.path();
     }
     set pathname(_newPath: string) {
         throw new Error("NativescriptPlatformLocation set pathname - not implemented");
     }
 
     pushState(state: any, title: string, url: string): void {
-        this.locationStartegy.pushState(state, title, url, null);
+        this.locationStrategy.pushState(state, title, url, null);
     }
 
     replaceState(state: any, title: string, url: string): void {
-        this.locationStartegy.replaceState(state, title, url, null);
+        this.locationStrategy.replaceState(state, title, url, null);
     }
 
     forward(): void {
@@ -49,6 +49,6 @@ export class NativescriptPlatformLocation extends PlatformLocation {
     }
 
     back(): void {
-        this.locationStartegy.back();
+        this.locationStrategy.back();
     }
 }

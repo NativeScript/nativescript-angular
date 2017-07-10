@@ -45,6 +45,7 @@ export class NSRouterLink implements OnChanges { // tslint:disable-line:directiv
     urlTree: UrlTree;
 
     private usePageRoute: boolean;
+    private currentPath: string;
 
     private get currentRoute(): ActivatedRoute {
         return this.usePageRoute ? this.pageRoute.activatedRoute.getValue() : this.route;
@@ -56,6 +57,7 @@ export class NSRouterLink implements OnChanges { // tslint:disable-line:directiv
         private route: ActivatedRoute,
         @Optional() private pageRoute: PageRoute) {
 
+        this.currentPath = this.router.url;
         this.usePageRoute = (this.pageRoute && this.route === this.pageRoute.activatedRoute.getValue());
     }
 
@@ -71,6 +73,8 @@ export class NSRouterLink implements OnChanges { // tslint:disable-line:directiv
 
     @HostListener("tap")
     onTap() {
+        this.clearHistory = !this.clearHistory ? this.clearHistory : this.hasPathChanged();
+
         routerLog("nsRouterLink.tapped: " + this.commands + " usePageRoute: " +
             this.usePageRoute + " clearHistory: " + this.clearHistory + " transition: " +
             JSON.stringify(this.pageTransition));
@@ -93,6 +97,10 @@ export class NSRouterLink implements OnChanges { // tslint:disable-line:directiv
 
     private convertClearHistory(value: boolean | string): boolean {
         return value === true || value === "true";
+    }
+
+    private hasPathChanged(): boolean {
+        return this.currentPath !== this.urlTree.toString();
     }
 
     private getTransition(): { animated: boolean, transition?: NavigationTransition } {
