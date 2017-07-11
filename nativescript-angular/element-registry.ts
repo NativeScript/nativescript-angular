@@ -1,4 +1,5 @@
 import { View } from "tns-core-modules/ui/core/view";
+import { LayoutBase } from "tns-core-modules/ui/layouts/layout-base";
 
 export type NgView = (View & ViewExtensions);
 export type NgElement = NgView | InvisibleNode;
@@ -117,6 +118,30 @@ export function getViewMeta(nodeName: string): ViewClassMeta {
 export function isKnownView(elementName: string): boolean {
     return elementMap.has(elementName) ||
         elementMap.has(elementName.toLowerCase());
+}
+
+export function getSingleViewRecursive(nodes: Array<any>, nestLevel: number): View {
+    const actualNodes = nodes.filter(node => !(node instanceof InvisibleNode));
+
+    if (actualNodes.length === 0) {
+        throw new Error(`No suitable views found in list template! ` +
+            `Nesting level: ${nestLevel}`);
+    } else if (actualNodes.length > 1) {
+        throw new Error(`More than one view found in list template!` +
+            `Nesting level: ${nestLevel}`);
+    }
+
+    const rootLayout = actualNodes[0];
+    if (!rootLayout) {
+        return getSingleViewRecursive(rootLayout.children, nestLevel + 1);
+    }
+
+    const parentLayout = rootLayout.parent;
+    if (parentLayout instanceof LayoutBase) {
+        parentLayout.removeChild(rootLayout);
+    }
+
+    return rootLayout;
 }
 
 // Register default NativeScript components
