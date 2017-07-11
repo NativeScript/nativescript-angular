@@ -1,3 +1,4 @@
+/* tslint:disable */
 import { ɵDomAnimationEngine as DomAnimationEngine } from "@angular/animations/browser";
 import { AnimationEvent, AnimationPlayer } from "@angular/animations";
 

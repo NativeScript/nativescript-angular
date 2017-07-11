@@ -284,6 +284,7 @@ class EmulatedRenderer extends NativeScriptRenderer {
     }
 }
 
+// tslint:disable-next-line
 const addStyleToCss = profile('"renderer".addStyleToCss', function addStyleToCss(style: string): void {
     addCss(style);
 });
