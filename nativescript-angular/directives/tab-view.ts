@@ -9,7 +9,7 @@ import {
 } from "@angular/core";
 import { TabView, TabViewItem } from "tns-core-modules/ui/tab-view";
 
-import { CommentNode } from "../element-registry";
+import { InvisibleNode } from "../element-registry";
 import { rendererLog } from "../trace";
 import { isBlank } from "../lang-facade";
 
@@ -105,7 +105,7 @@ export class TabViewItemDirective implements OnInit {
         const viewRef = this.viewContainer.createEmbeddedView(this.templateRef);
         // Filter out text nodes and comments
         const realViews = viewRef.rootNodes.filter(node =>
-                            !(node instanceof CommentNode));
+                            !(node instanceof InvisibleNode));
 
         if (realViews.length > 0) {
             this.item.view = realViews[0];

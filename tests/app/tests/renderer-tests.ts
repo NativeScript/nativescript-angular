@@ -95,6 +95,39 @@ export class NgIfLabel {
 }
 
 @Component({
+    selector: "ng-if-two-elements",
+    template: `
+        <StackLayout>
+            <Label *ngIf="show" text="label"></Label>
+            <Button text="button"></Button>
+        </StackLayout>
+    `
+})
+export class NgIfTwoElements {
+    public show: boolean = false;
+    constructor(public elementRef: ElementRef) {
+    }
+}
+
+@Component({
+    selector: "ng-if-multiple",
+    template: `
+        <StackLayout>
+            <Label text="1"></Label>
+            <Label text="2"></Label>
+            <Label text="3"></Label>
+            <Label *ngIf="true" text="4"></Label>
+            <Label text="5"></Label>
+        </StackLayout>
+    `
+})
+export class NgIfMultiple {
+    public show: boolean = false;
+    constructor(public elementRef: ElementRef) {
+    }
+}
+
+@Component({
     selector: "ng-if-else",
     template: `
         <StackLayout>
@@ -154,7 +187,9 @@ describe("Renderer E2E", () => {
             LayoutWithLabel, LabelCmp, LabelContainer,
             ProjectableCmp, ProjectionContainer,
             StyledLabelCmp, StyledLabelCmp2,
-            NgIfLabel, NgIfElseComponent, NgIfThenElseComponent,
+            NgIfLabel, NgIfThenElseComponent, NgIfMultiple,
+            NgIfTwoElements, NgIfMultiple,
+            NgIfElseComponent, NgIfThenElseComponent,
             NgForLabel,
         ]).then((app) => {
             testApp = app;
@@ -256,7 +291,7 @@ describe("Renderer E2E", () => {
         it("ngIf hides component when false", () => {
             return testApp.loadComponent(NgIfLabel).then((componentRef) => {
                 const componentRoot = componentRef.instance.elementRef.nativeElement;
-                assert.equal("(ProxyViewContainer)", dumpView(componentRoot));
+                assert.equal("(ProxyViewContainer (CommentNode))", dumpView(componentRoot));
             });
         });
 
@@ -267,7 +302,43 @@ describe("Renderer E2E", () => {
 
                 component.show = true;
                 testApp.appRef.tick();
-                assert.equal("(ProxyViewContainer (Label))", dumpView(componentRoot));
+                assert.equal("(ProxyViewContainer (CommentNode), (Label))", dumpView(componentRoot));
+            });
+        });
+
+        it("ngIf shows elements in correct order when two are rendered", () => {
+            return testApp.loadComponent(NgIfTwoElements).then((componentRef) => {
+                const component = <NgIfTwoElements>componentRef.instance;
+                const componentRoot = component.elementRef.nativeElement;
+
+                component.show = true;
+                testApp.appRef.tick();
+                assert.equal(
+                    "(ProxyViewContainer (StackLayout (CommentNode), (Label), (Button)))",
+                    dumpView(componentRoot));
+            });
+        });
+
+
+        it("ngIf shows elements in correct order when multiple are rendered and there's *ngIf", () => {
+            return testApp.loadComponent(NgIfMultiple).then((componentRef) => {
+                const component = <NgIfMultiple>componentRef.instance;
+                const componentRoot = component.elementRef.nativeElement;
+
+                component.show = true;
+                testApp.appRef.tick();
+                assert.equal(
+                    "(ProxyViewContainer " +
+                        "(StackLayout " +
+                            "(Label[text=1]), " +
+                            "(Label[text=2]), " +
+                            "(Label[text=3]), " +
+                            "(CommentNode), " + // ng-reflect comment
+                            "(Label[text=4]), " + // the content to be displayed and its anchor
+                            "(Label[text=5])" +
+                        ")" +
+                    ")",
+                    dumpView(componentRoot, true));
             });
         });
 
@@ -280,7 +351,8 @@ describe("Renderer E2E", () => {
                 assert.equal(
                     "(ProxyViewContainer " +
                         "(StackLayout " +
-                            "(Label[text=If])))", // the content to be displayed
+                            "(CommentNode), " + // ng-reflect comment
+                            "(Label[text=If]), (CommentNode)))", // the content to be displayed and its anchor
 
                      dumpView(componentRoot, true));
             });
@@ -296,7 +368,8 @@ describe("Renderer E2E", () => {
                 assert.equal(
                     "(ProxyViewContainer " +
                         "(StackLayout " +
-                            "(Label[text=Else])))", // the content to be displayed
+                            "(CommentNode), " + // ng-reflect comment
+                            "(Label[text=Else]), (CommentNode)))", // the content to be displayed and its anchor
 
                      dumpView(componentRoot, true));
             });
@@ -311,7 +384,10 @@ describe("Renderer E2E", () => {
                 assert.equal(
                     "(ProxyViewContainer " +
                         "(StackLayout " +
-                            "(Label[text=Then])))", // the content to be displayed
+                            "(CommentNode), " + // ng-reflect comment
+                            "(Label[text=Then]), (CommentNode), " + // the content to be displayed and its anchor
+                            "(CommentNode)))", // the anchor for the else template
+
                      dumpView(componentRoot, true));
             });
         });
@@ -327,7 +403,9 @@ describe("Renderer E2E", () => {
                 assert.equal(
                     "(ProxyViewContainer " +
                         "(StackLayout " +
-                            "(Label[text=Else])))", // the content to be displayed
+                            "(CommentNode), " + // the content to be displayed
+                            "(Label[text=Else]), (CommentNode), " + // the content to be displayed
+                            "(CommentNode)))", // the content to be displayed
 
                      dumpView(componentRoot, true));
             });
@@ -337,7 +415,7 @@ describe("Renderer E2E", () => {
             return testApp.loadComponent(NgForLabel).then((componentRef) => {
                 const componentRoot = componentRef.instance.elementRef.nativeElement;
                 assert.equal(
-                    "(ProxyViewContainer (Label[text=one]), (Label[text=two]), (Label[text=three]))",
+                    "(ProxyViewContainer (CommentNode), (Label[text=one]), (Label[text=two]), (Label[text=three]))",
                     dumpView(componentRoot, true));
             });
         });
@@ -351,7 +429,7 @@ describe("Renderer E2E", () => {
                 testApp.appRef.tick();
 
                 assert.equal(
-                    "(ProxyViewContainer (Label[text=one]), (Label[text=three]))",
+                    "(ProxyViewContainer (CommentNode), (Label[text=one]), (Label[text=three]))",
                     dumpView(componentRoot, true));
             });
         });
@@ -365,7 +443,7 @@ describe("Renderer E2E", () => {
                 testApp.appRef.tick();
 
                 assert.equal(
-                    "(ProxyViewContainer " +
+                    "(ProxyViewContainer (CommentNode), " +
                     "(Label[text=one]), (Label[text=new]), (Label[text=two]), (Label[text=three]))",
                     dumpView(componentRoot, true));
             });
@@ -463,20 +541,6 @@ describe("Renderer attach/detach", () => {
 
         assert.equal(parent.getChildrenCount(), 0);
         assert.isUndefined(button.parent);
-    });
-
-    it("attaching and detaching comment anchor to content view does not affect its content", () => {
-        const parent = <ContentView>renderer.createElement("ContentView");
-        const button = <Button>renderer.createElement("Button");
-        renderer.appendChild(parent, button);
-        const anchor = <NgView>renderer.createComment("anchor");
-        assert.equal(parent.content, button, "parent has button as initial content");
-
-        renderer.appendChild(parent, anchor);
-        assert.equal(parent.content, button, "parent still has button as content after inserting anchor");
-
-        renderer.removeChild(parent, anchor);
-        assert.equal(parent.content, button, "parent has button as content even after removing anchor");
     });
 });
 

@@ -6,7 +6,10 @@ import {
     SystemJsNgModuleLoader,
     Type,
 } from "@angular/core";
-import { path, knownFolders } from "tns-core-modules/file-system";
+import {
+    path as fileSystemPath,
+    knownFolders
+} from "tns-core-modules/file-system";
 
 const SEPARATOR = "#";
 
@@ -51,9 +54,9 @@ function splitPath(path: string): {modulePath: string, exportName: string} {
 
 function getAbsolutePath(relativePath: string) {
     const projectPath = knownFolders.currentApp().path;
-    const absolutePath = path.join(projectPath, relativePath);
+    const absolutePath = fileSystemPath.join(projectPath, relativePath);
 
-    return path.normalize(absolutePath);
+    return fileSystemPath.normalize(absolutePath);
 }
 
 function checkNotEmpty(value: any, modulePath: string, exportName: string): void {

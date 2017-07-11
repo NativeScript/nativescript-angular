@@ -2,7 +2,7 @@ import { ControlValueAccessor } from "@angular/forms";
 import { View } from "tns-core-modules/ui/core/view";
 
 export class BaseValueAccessor<TView extends View> implements ControlValueAccessor {
-    private pendingChangeNotification: number = 0;
+    private pendingChangeNotification: any = 0;
     onChange = (_) => { };
     onTouched = () => {};
 

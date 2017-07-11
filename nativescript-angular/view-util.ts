@@ -5,8 +5,10 @@ import { ContentView } from "tns-core-modules/ui/content-view";
 import { LayoutBase } from "tns-core-modules/ui/layouts/layout-base";
 import {
     CommentNode,
+    InvisibleNode,
     NgElement,
     NgView,
+    TextNode,
     ViewExtensions,
     getViewClass,
     getViewMeta,
@@ -52,9 +54,8 @@ export class ViewUtil {
     }
 
     public insertChild(parent: any, child: NgElement, atIndex: number = -1) {
-        if (child instanceof CommentNode) {
+        if (child instanceof InvisibleNode) {
             child.templateParent = parent;
-            return;
         }
 
         if (!parent || isDetachedElement(child)) {
@@ -79,16 +80,11 @@ export class ViewUtil {
             parent.content = child;
         } else if (parent && parent._addChildFromBuilder) {
             parent._addChildFromBuilder(child.nodeName, child);
-        } else {
-            // throw new Error("Parent can"t contain children: " + parent.nodeName + ", " + parent);
         }
     }
 
     public removeChild(parent: any, child: NgElement) {
-        if (!parent ||
-            child instanceof CommentNode ||
-            isDetachedElement(child)) {
-
+        if (!parent || isDetachedElement(child)) {
             return;
         }
 
@@ -102,8 +98,6 @@ export class ViewUtil {
             }
         } else if (isView(parent)) {
             parent._removeView(child);
-        } else {
-            // throw new Error("Unknown parent type: " + parent);
         }
     }
 
@@ -112,17 +106,15 @@ export class ViewUtil {
             return parent.getChildIndex(child);
         } else if (isContentView(parent)) {
             return child === parent.content ? 0 : -1;
-        } else {
-            // throw new Error("Parent can"t contain children: " + parent);
         }
     }
 
-    public createComment(): CommentNode {
+    public createComment(): InvisibleNode {
         return new CommentNode();
     }
 
-    public createText(): CommentNode {
-        return new CommentNode();
+    public createText(): InvisibleNode {
+        return new TextNode();
     }
 
     public createView(name: string): NgView {
