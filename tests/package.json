@@ -2,10 +2,10 @@
   "nativescript": {
     "id": "org.nativescript.ngtests",
     "tns-android": {
-      "version": "3.0.0"
+      "version": "3.1.0"
     },
     "tns-ios": {
-      "version": "3.0.0"
+      "version": "3.1.0"
     }
   },
   "name": "ngtests",
@@ -38,7 +38,7 @@
     "nativescript-angular": "../nativescript-angular",
     "nativescript-unit-test-runner": "^0.3.4",
     "rxjs": "^5.2.0",
-    "tns-core-modules": "^3.0.0",
+    "tns-core-modules": "next",
     "zone.js": "^0.8.2"
   },
   "devDependencies": {
