@@ -1,7 +1,7 @@
 import { View } from "tns-core-modules/ui/core/view";
 
 export type NgView = (View & ViewExtensions);
-export type NgElement = NgView | CommentNode;
+export type NgElement = NgView | InvisibleNode;
 
 export interface ViewExtensions {
     nodeType: number;
@@ -15,11 +15,54 @@ export interface ViewClass {
     new (): View;
 }
 
-// used for creating comments and text nodes in the renderer
-export class CommentNode {
-    meta: { skipAddToDom: true };
+export abstract class InvisibleNode extends View implements ViewExtensions {
+    meta: { skipAddToDom: boolean };
     templateParent: NgView;
+    nodeType: number;
+    nodeName: string;
+    ngCssClasses: Map<string, boolean>;
+
+    constructor() {
+        super();
+
+        this.nodeType = 1;
+        this.nodeName = getClassName(this);
+    }
+
+    toString() {
+        return `${this.nodeName}(${this.id})`;
+    }
 }
+
+export class CommentNode extends InvisibleNode {
+    protected static id = 0;
+
+    constructor() {
+        super();
+
+        this.meta = {
+            skipAddToDom: false,
+        };
+        this.id = CommentNode.id.toString();
+        CommentNode.id += 1;
+    }
+}
+
+export class TextNode extends InvisibleNode {
+    protected static id = 0;
+
+    constructor() {
+        super();
+
+        this.meta = {
+            skipAddToDom: true,
+        };
+        this.id = TextNode.id.toString();
+        TextNode.id += 1;
+    }
+}
+
+const getClassName = instance => instance.constructor.name;
 
 export interface ViewClassMeta {
     skipAddToDom?: boolean;

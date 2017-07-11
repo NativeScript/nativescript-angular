@@ -25,7 +25,7 @@ import { ObservableArray } from "tns-core-modules/data/observable-array";
 import { LayoutBase } from "tns-core-modules/ui/layouts/layout-base";
 import { profile } from "tns-core-modules/profiling";
 
-import { CommentNode } from "../element-registry";
+import { InvisibleNode } from "../element-registry";
 import { isListLikeIterable } from "../collection-facade";
 import { listViewLog, listViewError } from "../trace";
 
@@ -217,7 +217,7 @@ export class ListViewComponent implements DoCheck, OnDestroy, AfterContentInit {
 }
 
 function getSingleViewRecursive(nodes: Array<any>, nestLevel: number): View {
-    const actualNodes = nodes.filter(node => !(node instanceof CommentNode));
+    const actualNodes = nodes.filter(node => !(node instanceof InvisibleNode));
 
     if (actualNodes.length === 0) {
         throw new Error(`No suitable views found in list template! ` +

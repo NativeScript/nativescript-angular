@@ -13,7 +13,7 @@ import { profile } from "tns-core-modules/profiling";
 import { APP_ROOT_VIEW, DEVICE, getRootPage } from "./platform-providers";
 import { isBlank } from "./lang-facade";
 import { ViewUtil } from "./view-util";
-import { NgView, CommentNode } from "./element-registry";
+import { NgView, InvisibleNode } from "./element-registry";
 import { rendererLog as traceLog } from "./trace";
 
 // CONTENT_ATTR not exported from NativeScript_renderer - we need it for styles application.
@@ -120,7 +120,7 @@ export class NativeScriptRenderer extends Renderer2 {
     }
 
     @profile
-    createComment(_value: any): CommentNode {
+    createComment(_value: any): InvisibleNode {
         traceLog(`NativeScriptRenderer.createComment ${_value}`);
         return this.viewUtil.createComment();
     }
@@ -132,7 +132,7 @@ export class NativeScriptRenderer extends Renderer2 {
     }
 
     @profile
-    createText(_value: string): CommentNode {
+    createText(_value: string): InvisibleNode {
         traceLog(`NativeScriptRenderer.createText ${_value}`);
         return this.viewUtil.createText();
     }
