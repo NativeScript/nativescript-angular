@@ -1,3 +1,13 @@
+<a name="3.1.2"></a>
+## [3.1.2](https://github.com/NativeScript/nativescript-angular/compare/3.1.1...3.1.2) (2017-07-12)
+
+
+### Bug Fixes
+
+* **renderer:** attach `CommentNode`s to visual tree ([#888](https://github.com/NativeScript/nativescript-angular/issues/888)) ([65359fa](https://github.com/NativeScript/nativescript-angular/commit/65359fa)), closes [#872](https://github.com/NativeScript/nativescript-angular/issues/872)
+
+
+
 <a name="3.1.1"></a>
 ## [3.1.1](https://github.com/NativeScript/nativescript-angular/compare/3.1.0...3.1.1) (2017-06-29)
 
