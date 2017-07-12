@@ -51,7 +51,7 @@
     "@angular/platform-browser": "~4.0.0 || ~4.1.0",
     "@angular/router": "~4.0.0 || ~4.1.0",
     "rxjs": "^5.0.1",
-    "tns-core-modules": "^3.1.0",
+    "tns-core-modules": "^3.1.0 || >3.2.0-",
     "zone.js": "^0.8.4"
   },
   "devDependencies": {
@@ -64,11 +64,11 @@
     "@angular/http": "~4.0.0 || ~4.1.0",
     "@angular/platform-browser": "~4.0.0 || ~4.1.0",
     "@angular/router": "~4.0.0 || ~4.1.0",
-    "codelyzer": "^3.0.1",
-    "rxjs": "^5.0.1",
-    "tns-core-modules": "^3.1.0",
+    "codelyzer": "^3.1.2",
+    "rxjs": "^5.4.2",
+    "tns-core-modules": "next",
     "tslint": "^5.1.0",
-    "typescript": "~2.3.2",
+    "typescript": "^2.4.0",
     "zone.js": "^0.8.4"
   }
 }

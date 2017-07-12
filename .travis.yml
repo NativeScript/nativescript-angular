@@ -1,8 +1,6 @@
 env:
   global:
   - NODE_VERSION=6.9.1
-  - DATE=$(date +%Y-%m-%d)
-  - PACKAGE_VERSION=$DATE-$TRAVIS_BUILD_NUMBER
   - EMULATOR_API_LEVEL=19
   - ANDROID_VERSION=23
   - ANDROID_BUILD_TOOLS_VERSION=23.0.1
@@ -47,17 +45,3 @@ script:
 - tns build android
 - android-wait-for-emulator
 - npm run appium --runtype=android19 --appium=$APPIUM_VERSION
-before_deploy:
-- cd ../nativescript-angular
-- npm install -g nativescript --ignore-scripts
-- tns usage-reporting disable
-- tns error-reporting disable
-- node ../build/travis-scripts/add-publishConfig.js next $PACKAGE_VERSION
-deploy:
-  provider: npm
-  email: nativescript@telerik.com
-  skip_cleanup: true
-  api_key:
-    secure: J88MqLAoZStZZ77AAf+wgaoZp+8zG3fOUHRneSe4x/yEzyUShS9SlGuq0TSkm9sJVX94iHJl1BQ4yjLshOPV9dkOg1+BB4PbsDTKPCAhPCZgpW7WKz6iImmuWHArchLIRtI1fp+UYi1+V6c7gLALQPY7qR2QJcDJdq1tdgORAyGySMis95ttVhnn6DWTBbs/ocu+IzgOyBSkIiZR0mGk7q/pmVQPy+XL5PQoyUOhD4MmvAAIeVr+XoZ5I8pAUwhi1/bZijXrzWe7LbXh8pTDlEWvYduzYYjJZqUrHiE/e1e8/DIPXGaBUQBj7LRxSqqO8AJXGeCg4DF1R9j4CSG5c0pAwQ/U6vOGu8duPEGaoKG5+HlrTav7gI/YbwFA5HKyh1uzQ5trZDJ4mMKUoB1+8/eL2cjLudtyBB2Kg28wH6f78A9mQC1EJcP7Jz3qJTSUyhczIvwSF8/EkD8xmeaoTi2e+4TNgf7pys1cp6c7m7zKZbvVy25lfyAfG1rCF5+rzKj+GnE9mtLaY6VvlKWjyxklh8hfRBC94TZ8K7PH0tmdgk2Jal+OCdm9FDdmNrBSC1G/gPS8PchtffIRprPhNAUfcVpdg0rlQ4dckbGRbB5UBgwHkpoKasaSTx/nO85AiK6USIYOIod19loXUBvN3QyHUX76w265UhmTnb8iojo=
-  on:
-    branch: master

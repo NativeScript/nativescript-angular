@@ -21,11 +21,11 @@ import {
 } from "@angular/core";
 import { ListView, ItemEventData } from "tns-core-modules/ui/list-view";
 import { View, KeyedTemplate } from "tns-core-modules/ui/core/view";
-import { ObservableArray } from "tns-core-modules/data/observable-array";
 import { LayoutBase } from "tns-core-modules/ui/layouts/layout-base";
+import { ObservableArray } from "tns-core-modules/data/observable-array";
 import { profile } from "tns-core-modules/profiling";
 
-import { CommentNode } from "../element-registry";
+import { getSingleViewRecursive } from "../element-registry";
 import { isListLikeIterable } from "../collection-facade";
 import { listViewLog, listViewError } from "../trace";
 
@@ -214,30 +214,6 @@ export class ListViewComponent implements DoCheck, OnDestroy, AfterContentInit {
             }
         }
     }
-}
-
-function getSingleViewRecursive(nodes: Array<any>, nestLevel: number): View {
-    const actualNodes = nodes.filter(node => !(node instanceof CommentNode));
-
-    if (actualNodes.length === 0) {
-        throw new Error(`No suitable views found in list template! ` +
-            `Nesting level: ${nestLevel}`);
-    } else if (actualNodes.length > 1) {
-        throw new Error(`More than one view found in list template!` +
-            `Nesting level: ${nestLevel}`);
-    }
-
-    const rootLayout = actualNodes[0];
-    if (!rootLayout) {
-        return getSingleViewRecursive(rootLayout.children, nestLevel + 1);
-    }
-
-    let parentLayout = rootLayout.parent;
-    if (parentLayout instanceof LayoutBase) {
-        parentLayout.removeChild(rootLayout);
-    }
-
-    return rootLayout;
 }
 
 export interface ComponentView {

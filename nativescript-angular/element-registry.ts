@@ -1,7 +1,8 @@
 import { View } from "tns-core-modules/ui/core/view";
+import { LayoutBase } from "tns-core-modules/ui/layouts/layout-base";
 
 export type NgView = (View & ViewExtensions);
-export type NgElement = NgView | CommentNode;
+export type NgElement = NgView | InvisibleNode;
 
 export interface ViewExtensions {
     nodeType: number;
@@ -15,11 +16,54 @@ export interface ViewClass {
     new (): View;
 }
 
-// used for creating comments and text nodes in the renderer
-export class CommentNode {
-    meta: { skipAddToDom: true };
+export abstract class InvisibleNode extends View implements ViewExtensions {
+    meta: { skipAddToDom: boolean };
     templateParent: NgView;
+    nodeType: number;
+    nodeName: string;
+    ngCssClasses: Map<string, boolean>;
+
+    constructor() {
+        super();
+
+        this.nodeType = 1;
+        this.nodeName = getClassName(this);
+    }
+
+    toString() {
+        return `${this.nodeName}(${this.id})`;
+    }
 }
+
+export class CommentNode extends InvisibleNode {
+    protected static id = 0;
+
+    constructor() {
+        super();
+
+        this.meta = {
+            skipAddToDom: false,
+        };
+        this.id = CommentNode.id.toString();
+        CommentNode.id += 1;
+    }
+}
+
+export class TextNode extends InvisibleNode {
+    protected static id = 0;
+
+    constructor() {
+        super();
+
+        this.meta = {
+            skipAddToDom: true,
+        };
+        this.id = TextNode.id.toString();
+        TextNode.id += 1;
+    }
+}
+
+const getClassName = instance => instance.constructor.name;
 
 export interface ViewClassMeta {
     skipAddToDom?: boolean;
@@ -74,6 +118,30 @@ export function getViewMeta(nodeName: string): ViewClassMeta {
 export function isKnownView(elementName: string): boolean {
     return elementMap.has(elementName) ||
         elementMap.has(elementName.toLowerCase());
+}
+
+export function getSingleViewRecursive(nodes: Array<any>, nestLevel: number): View {
+    const actualNodes = nodes.filter(node => !(node instanceof InvisibleNode));
+
+    if (actualNodes.length === 0) {
+        throw new Error(`No suitable views found in list template! ` +
+            `Nesting level: ${nestLevel}`);
+    } else if (actualNodes.length > 1) {
+        throw new Error(`More than one view found in list template!` +
+            `Nesting level: ${nestLevel}`);
+    }
+
+    const rootLayout = actualNodes[0];
+    if (!rootLayout) {
+        return getSingleViewRecursive(rootLayout.children, nestLevel + 1);
+    }
+
+    const parentLayout = rootLayout.parent;
+    if (parentLayout instanceof LayoutBase) {
+        parentLayout.removeChild(rootLayout);
+    }
+
+    return rootLayout;
 }
 
 // Register default NativeScript components
