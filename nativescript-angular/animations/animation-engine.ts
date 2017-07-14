@@ -12,5 +12,13 @@ export class NativeScriptAnimationEngine extends AnimationEngine {
     constructor(driver: AnimationDriver, normalizer: AnimationStyleNormalizer) {
         super(driver, normalizer);
         (<any>this)._transitionEngine = new NSTransitionAnimationEngine(driver, normalizer);
+
+        (<any>this)._transitionEngine.onRemovalComplete = (element, delegate) => {
+            const parent = delegate && delegate.parentNode(element);
+            if (parent) {
+                delegate.removeChild(parent, element);
+            }
+        };
+
     }
 }
