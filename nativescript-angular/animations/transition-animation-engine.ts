@@ -38,6 +38,10 @@ function setStylesOverride(element: NgView, styles: ɵStyleData) {
     }
 
     Object.keys(styles).forEach(prop => {
+        if (styles[prop] === "*") {
+            return;
+        }
+
         const camelCaseProp = dashCaseToCamelCase(prop);
         element.style[camelCaseProp] = styles[camelCaseProp];
     });

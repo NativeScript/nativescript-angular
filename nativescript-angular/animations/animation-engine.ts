@@ -19,6 +19,5 @@ export class NativeScriptAnimationEngine extends AnimationEngine {
                 delegate.removeChild(parent, element);
             }
         };
-
     }
 }
