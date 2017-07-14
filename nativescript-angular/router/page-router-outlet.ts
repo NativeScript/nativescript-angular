@@ -103,9 +103,6 @@ export class PageRouterOutlet implements OnDestroy, OnInit { // tslint:disable-l
     private detachedLoaderFactory: ComponentFactory<DetachedLoader>;
     private itemsToDestroy: CacheItem[] = [];
 
-    private currentActivatedComp: ComponentRef<any>;
-    private currentActivatedRoute: ActivatedRoute;
-
     private name: string;
     private viewUtil: ViewUtil;
 
