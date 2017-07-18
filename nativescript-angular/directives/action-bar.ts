@@ -5,6 +5,7 @@ import { View } from "tns-core-modules/ui/core/view";
 
 import { isBlank } from "../lang-facade";
 import {
+    InvisibleNode,
     NgView,
     ViewClassMeta,
     registerElement,
@@ -16,7 +17,9 @@ const actionBarMeta: ViewClassMeta = {
         const bar = <ActionBar>(<any>parent);
         const childView = <any>child;
 
-        if (child instanceof NavigationButton) {
+        if (child instanceof InvisibleNode) {
+            return;
+        } else if (child instanceof NavigationButton) {
             bar.navigationButton = childView;
             childView.parent = bar;
         } else if (child instanceof ActionItem) {
@@ -30,7 +33,9 @@ const actionBarMeta: ViewClassMeta = {
         const bar = <ActionBar>(<any>parent);
         const childView = <any>child;
 
-        if (child instanceof NavigationButton) {
+        if (child instanceof InvisibleNode) {
+            return;
+        } else if (child instanceof NavigationButton) {
             if (bar.navigationButton === childView) {
                 bar.navigationButton = null;
             }
