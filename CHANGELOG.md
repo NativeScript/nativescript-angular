@@ -1,3 +1,14 @@
+<a name="3.1.3"></a>
+## [3.1.3](https://github.com/NativeScript/nativescript-angular/compare/3.1.2...3.1.3) (2017-07-19)
+
+
+### Bug Fixes
+
+* **action-bar:** ignore InvisibleNodes when adding title ([#903](https://github.com/NativeScript/nativescript-angular/issues/903)) ([8308e45](https://github.com/NativeScript/nativescript-angular/commit/8308e45)), closes [#897](https://github.com/NativeScript/nativescript-angular/issues/897)
+* asynchronously destroy items evicted on clearHistory navigation ([#847](https://github.com/NativeScript/nativescript-angular/issues/847)) ([448412a](https://github.com/NativeScript/nativescript-angular/commit/448412a)), closes [#829](https://github.com/NativeScript/nativescript-angular/issues/829)
+
+
+
 <a name="3.1.2"></a>
 ## [3.1.2](https://github.com/NativeScript/nativescript-angular/compare/3.1.1...3.1.2) (2017-07-12)
 
