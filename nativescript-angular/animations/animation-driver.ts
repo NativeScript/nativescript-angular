@@ -7,7 +7,7 @@ import {
     Keyframe,
     dashCaseToCamelCase,
 } from "./utils";
-import { NgView } from "../element-registry";
+import { NgView, InvisibleNode } from "../element-registry";
 import { animationsLog as traceLog } from "../trace";
 
 import { createSelector, SelectorCore } from "tns-core-modules/ui/styling/css-selector";
@@ -61,8 +61,13 @@ export class NativeScriptAnimationDriver implements AnimationDriver {
 
         let results = [];
         eachDescendant(element, child => {
+            if (child instanceof InvisibleNode) {
+                return true;
+            }
+
             if (nsSelectors.some(s => s.match(child)) ||
                 classSelectors.some(s => this.hasClass(child, s))) {
+
                 results.push(child);
                 return multi;
             }
