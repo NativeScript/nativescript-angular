@@ -10,6 +10,8 @@ import {
 import { NgView } from "../element-registry";
 import { animationsLog as traceLog } from "../trace";
 
+import { createSelector, SelectorCore } from "tns-core-modules/ui/styling/css-selector";
+
 export class NativeScriptAnimationDriver implements AnimationDriver {
     matchesElement(_element: any, _selector: string): boolean {
         // this method is never called since NG 4.2.5
@@ -34,26 +36,48 @@ export class NativeScriptAnimationDriver implements AnimationDriver {
         return found;
     }
 
-    // traverse children and check if they have the provided class
-    query(element: any, selector: string, multi: boolean): any[] {
+    query(element: NgView, selector: string, multi: boolean): NgView[] {
         traceLog(
             `NativeScriptAnimationDriver.query ` +
             `element: ${element}, selector: ${selector} ` +
             `multi: ${multi}`
         );
 
-        let results = [];
-        element.eachChild(child => {
-            if (child[selector]) {
-                results.push(child);
+        const selectors = selector.split(",").map(s => s.trim());
 
-                return !multi;
+        const nsSelectors: SelectorCore[] = selectors.map(createSelector);
+        const classSelectors = selectors
+            .filter(s => s.startsWith("."))
+            .map(s => s.substring(1));
+
+        return this.visitDescendants(element, nsSelectors, classSelectors, multi);
+    }
+
+    private visitDescendants(
+        element: NgView,
+        nsSelectors: SelectorCore[],
+        classSelectors: string[],
+        multi: boolean): NgView[] {
+
+        let results = [];
+        eachDescendant(element, child => {
+            if (nsSelectors.some(s => s.match(child)) ||
+                classSelectors.some(s => this.hasClass(child, s))) {
+                results.push(child);
+                return multi;
             }
 
-            return false;
+            return true;
         });
 
         return results;
+    }
+
+    // we're using that instead of match for classes
+    // that are dynamically added by the animation engine
+    // such as .ng-trigger, that's added for every :enter view
+    private hasClass(element: any, cls: string) {
+        return element["$$classes"][cls];
     }
 
     computeStyle(element: NgView, prop: string): string {
