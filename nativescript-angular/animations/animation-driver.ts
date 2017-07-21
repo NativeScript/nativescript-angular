@@ -12,11 +12,71 @@ import { animationsLog as traceLog } from "../trace";
 
 import { createSelector, SelectorCore } from "tns-core-modules/ui/styling/css-selector";
 
-export class NativeScriptAnimationDriver implements AnimationDriver {
-    matchesElement(_element: any, _selector: string): boolean {
-        // this method is never called since NG 4.2.5
-        throw new Error("Method not implemented.");
+interface ViewMatchResult {
+    found: boolean;
+}
+
+interface ViewMatchParams {
+    originalView: NgView;
+}
+
+interface QueryParams {
+    selector: Selector;
+    multi: boolean;
+}
+
+interface QueryResult {
+    matches: NgView[];
+}
+
+class Selector {
+    private nsSelectors: SelectorCore[];
+    private classSelectors: string[];
+
+    constructor(rawSelector: string) {
+        this.parse(rawSelector);
     }
+
+    match(element: NgView): boolean {
+        return this.nsSelectorMatch(element) || this.classSelectorsMatch(element);
+    }
+
+    private parse(rawSelector: string) {
+        const selectors = rawSelector.split(",").map(s => s.trim());
+
+        this.nsSelectors = selectors.map(createSelector);
+        this.classSelectors = selectors
+            .filter(s => s.startsWith("."))
+            .map(s => s.substring(1));
+    }
+
+    private nsSelectorMatch(element: NgView) {
+        return this.nsSelectors.some(s => s.match(element));
+    }
+
+    private classSelectorsMatch(element: NgView) {
+        return this.classSelectors.some(s => this.hasClass(element, s));
+    }
+
+    // we're using that instead of match for classes
+    // that are dynamically added by the animation engine
+    // such as .ng-trigger, that's added for every :enter view
+    private hasClass(element: NgView, cls: string) {
+        return element && element["$$classes"] && element["$$classes"][cls];
+    }
+}
+
+export class NativeScriptAnimationDriver implements AnimationDriver {
+    matchesElement(element: NgView, rawSelector: string): boolean {
+        traceLog(
+            `NativeScriptAnimationDriver.matchesElement ` +
+            `element: ${element}, selector: ${rawSelector}`
+        );
+
+        const selector = this.makeSelector(rawSelector);
+        return selector.match(element);
+    }
+
 
     containsElement(elm1: NgView, elm2: NgView): boolean {
         traceLog(
@@ -24,65 +84,24 @@ export class NativeScriptAnimationDriver implements AnimationDriver {
             `element1: ${elm1}, element2: ${elm2}`
         );
 
-        let found = false;
-        eachDescendant(elm1, child => {
-            if (child === elm2) {
-                found = true;
-            }
+        const params: ViewMatchParams = { originalView: elm2 };
+        const result: ViewMatchResult = this.visitDescendants(elm1, viewMatches, params);
 
-            return !found;
-        });
-
-        return found;
+        return result.found;
     }
 
-    query(element: NgView, selector: string, multi: boolean): NgView[] {
+    query(element: NgView, rawSelector: string, multi: boolean): NgView[] {
         traceLog(
             `NativeScriptAnimationDriver.query ` +
-            `element: ${element}, selector: ${selector} ` +
+            `element: ${element}, selector: ${rawSelector} ` +
             `multi: ${multi}`
         );
 
-        const selectors = selector.split(",").map(s => s.trim());
+        const selector = this.makeSelector(rawSelector);
+        const params: QueryParams = { selector, multi };
+        const result: QueryResult = this.visitDescendants(element, queryDescendants, params);
 
-        const nsSelectors: SelectorCore[] = selectors.map(createSelector);
-        const classSelectors = selectors
-            .filter(s => s.startsWith("."))
-            .map(s => s.substring(1));
-
-        return this.visitDescendants(element, nsSelectors, classSelectors, multi);
-    }
-
-    private visitDescendants(
-        element: NgView,
-        nsSelectors: SelectorCore[],
-        classSelectors: string[],
-        multi: boolean): NgView[] {
-
-        let results = [];
-        eachDescendant(element, child => {
-            if (child instanceof InvisibleNode) {
-                return true;
-            }
-
-            if (nsSelectors.some(s => s.match(child)) ||
-                classSelectors.some(s => this.hasClass(child, s))) {
-
-                results.push(child);
-                return multi;
-            }
-
-            return true;
-        });
-
-        return results;
-    }
-
-    // we're using that instead of match for classes
-    // that are dynamically added by the animation engine
-    // such as .ng-trigger, that's added for every :enter view
-    private hasClass(element: any, cls: string) {
-        return element["$$classes"][cls];
+        return result.matches || [];
     }
 
     computeStyle(element: NgView, prop: string): string {
@@ -112,4 +131,60 @@ export class NativeScriptAnimationDriver implements AnimationDriver {
         return new NativeScriptAnimationPlayer(
             element, keyframes, duration, delay, easing);
     }
+
+    private makeSelector(rawSelector: string): Selector {
+        return new Selector(rawSelector);
+    }
+
+    private visitDescendants(
+        element: NgView,
+        cb: (child: NgView, result: any, params: any) => boolean,
+        cbParams: any): any {
+
+        const result = {};
+        // fill the result obj with the result from the callback function
+        eachDescendant(element, (child: NgView) => cb(child, result, cbParams));
+
+        return result;
+    }
+}
+
+function viewMatches(
+    element: NgView,
+    result: ViewMatchResult,
+    params: ViewMatchParams
+): boolean {
+
+    if (element === params.originalView) {
+        result.found = true;
+    }
+
+    return !result.found;
+}
+
+function queryDescendants(
+    element: NgView,
+    result: QueryResult,
+    params: QueryParams
+): boolean {
+
+    if (!result.matches) {
+        result.matches = [];
+    }
+
+    const { selector, multi } = params;
+
+    // skip comment and text nodes
+    // because they are not actual Views
+    // and cannot be animated
+    if (element instanceof InvisibleNode) {
+        return true;
+    }
+
+    if (selector.match(element)) {
+        result.matches.push(element);
+        return multi;
+    }
+
+    return true;
 }
