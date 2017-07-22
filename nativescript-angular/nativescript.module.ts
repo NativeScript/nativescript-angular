@@ -7,7 +7,6 @@ import "reflect-metadata";
 import "./polyfills/array";
 import "./polyfills/console";
 
-import { CommonModule } from "@angular/common";
 import {
     ApplicationModule,
     ErrorHandler,
@@ -17,18 +16,9 @@ import {
     SystemJsNgModuleLoader,
 } from "@angular/core";
 
+import { NativeScriptCommonModule } from "./common";
 import { NativeScriptRendererFactory } from "./renderer";
 import { DetachedLoader } from "./common/detached-loader";
-import {
-    ModalDialogHost,
-    ModalDialogService,
-} from "./directives/dialogs";
-import {
-    defaultDeviceProvider,
-    defaultFrameProvider,
-    defaultPageProvider,
-} from "./platform-providers";
-import { NS_DIRECTIVES } from "./directives";
 
 export function errorHandlerFactory() {
     return new ErrorHandler(true);
@@ -37,32 +27,24 @@ export function errorHandlerFactory() {
 @NgModule({
     declarations: [
         DetachedLoader,
-        ModalDialogHost,
-        ...NS_DIRECTIVES,
     ],
     providers: [
-        ModalDialogService,
         NativeScriptRendererFactory,
         SystemJsNgModuleLoader,
-        defaultDeviceProvider,
-        defaultFrameProvider,
-        defaultPageProvider,
         { provide: ErrorHandler, useFactory: errorHandlerFactory },
-        { provide: RendererFactory2, useClass: NativeScriptRendererFactory },
+        { provide: RendererFactory2, useExisting: NativeScriptRendererFactory },
     ],
     entryComponents: [
         DetachedLoader,
     ],
     imports: [
-        CommonModule,
         ApplicationModule,
+        NativeScriptCommonModule,
     ],
     exports: [
-        CommonModule,
         ApplicationModule,
+        NativeScriptCommonModule,
         DetachedLoader,
-        ModalDialogHost,
-        ...NS_DIRECTIVES,
     ],
     schemas: [NO_ERRORS_SCHEMA]
 })

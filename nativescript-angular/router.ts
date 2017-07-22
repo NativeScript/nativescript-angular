@@ -14,7 +14,7 @@ import { PageRouterOutlet } from "./router/page-router-outlet";
 import { NSLocationStrategy, LocationState } from "./router/ns-location-strategy";
 import { NativescriptPlatformLocation } from "./router/ns-platform-location";
 import { RouterExtensions } from "./router/router-extensions";
-import { NativeScriptModule } from "./nativescript.module";
+import { NativeScriptCommonModule } from "./common";
 
 export { PageRoute } from "./router/page-router-outlet";
 export { RouterExtensions } from "./router/router-extensions";
@@ -40,7 +40,7 @@ export type LocationState = LocationState;
     ],
     imports: [
         RouterModule,
-        NativeScriptModule
+        NativeScriptCommonModule,
     ],
     exports: [
         RouterModule,
