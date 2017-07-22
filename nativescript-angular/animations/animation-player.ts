@@ -59,11 +59,10 @@ export class NativeScriptAnimationPlayer implements AnimationPlayer {
     }
 
     pause(): void {
-        throw new Error("AnimationPlayer.pause method is not supported!");
     }
 
     finish(): void {
-        throw new Error("AnimationPlayer.finish method is not supported!");
+        this.onFinish();
     }
 
     reset(): void {
@@ -83,8 +82,6 @@ export class NativeScriptAnimationPlayer implements AnimationPlayer {
 
     destroy(): void {
         traceLog(`NativeScriptAnimationPlayer.destroy`);
-
-        this.reset();
         this.onFinish();
     }
 
