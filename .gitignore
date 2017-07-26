@@ -3,6 +3,7 @@ node_modules
 platforms
 lib
 tags
+report
 
 app/**/*.js
 app/**/*.map
