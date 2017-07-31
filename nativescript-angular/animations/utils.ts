@@ -12,6 +12,11 @@ export interface Keyframe {
     offset: number;
 }
 
+const DASH_CASE_REGEXP = /-+([a-z0-9])/g;
+export function dashCaseToCamelCase(input: string): string {
+  return input.replace(DASH_CASE_REGEXP, (...m: any[]) => m[1].toUpperCase());
+}
+
 export function createKeyframeAnimation(
     styles: Keyframe[],
     duration: number,

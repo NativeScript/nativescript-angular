@@ -104,12 +104,13 @@ export class NativeScriptRenderer extends Renderer2 {
 
     @profile
     selectRootElement(selector: string): NgView {
-        traceLog("selectRootElement: " + selector);
+        traceLog("NativeScriptRenderer.selectRootElement: " + selector);
         return this.rootView;
     }
 
     @profile
     parentNode(node: NgView): any {
+        traceLog("NativeScriptRenderer.parentNode for node: " + node);
         return node.parent || node.templateParent;
     }
 
@@ -217,7 +218,10 @@ export class NativeScriptRenderer extends Renderer2 {
 
     @profile
     setValue(_renderNode: any, _value: string) {
-        traceLog("NativeScriptRenderer.setValue");
+        traceLog(
+            `NativeScriptRenderer.setValue ` +
+            `renderNode: ${_renderNode}, value: ${_value}`
+        );
     }
 
     @profile

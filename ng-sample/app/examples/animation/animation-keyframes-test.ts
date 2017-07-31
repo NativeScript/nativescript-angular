@@ -1,4 +1,12 @@
-import {Component, trigger, style, animate, state, transition, keyframes } from "@angular/core";
+import { Component } from '@angular/core';
+import {
+    trigger,
+    state,
+    style,
+    animate,
+    transition,
+    keyframes,
+} from '@angular/animations';
 
 @Component({
     selector: "animation-states",

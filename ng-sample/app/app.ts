@@ -7,12 +7,19 @@ import { Router } from "@angular/router";
 import { NativeScriptRouterModule } from "nativescript-angular/router";
 import { NativeScriptFormsModule } from "nativescript-angular/forms";
 import { NativeScriptHttpModule } from "nativescript-angular/http";
-import { rendererTraceCategory, routerTraceCategory, listViewTraceCategory } from "nativescript-angular/trace";
+import {
+    rendererTraceCategory,
+    routerTraceCategory,
+    listViewTraceCategory,
+    animationsTraceCategory,
+} from "nativescript-angular/trace";
 import { PAGE_FACTORY, PageFactory, PageFactoryOptions } from "nativescript-angular/platform-providers";
 import { Page } from "ui/page";
 import { Color } from "color";
 import { setCategories, enable } from "trace";
-// setCategories(rendererTraceCategory);
+setCategories(
+    `${animationsTraceCategory},${rendererTraceCategory}`
+);
 // setCategories(routerTraceCategory);
 // setCategories(listViewTraceCategory);
 enable();
@@ -42,6 +49,7 @@ import { AnimationEnterLeaveTest } from "./examples/animation/animation-enter-le
 import { AnimationKeyframesTest } from "./examples/animation/animation-keyframes-test";
 import { AnimationNgClassTest } from "./examples/animation/animation-ngclass-test";
 import { AnimationStatesTest } from "./examples/animation/animation-states-test";
+import { AnimationStatesMultiTest } from "./examples/animation/animation-states-multi-test";
 
 @NgModule({
     declarations: [
@@ -128,10 +136,11 @@ const customPageFactoryProvider = {
 // platformNativeScriptDynamic().bootstrapModule(makeExampleModule(PageRouterOutletAppComponent));
 // platformNativeScriptDynamic().bootstrapModule(makeExampleModule(PageRouterOutletNestedAppComponent));
 // platformNativeScriptDynamic().bootstrapModule(makeExampleModule(ClearHistoryAppComponent));
-//platformNativeScriptDynamic().bootstrapModule(makeExampleModule(LoginAppComponent));
+// platformNativeScriptDynamic().bootstrapModule(makeExampleModule(LoginAppComponent));
 
 // animations
-// platformNativeScriptDynamic().bootstrapModule(makeExampleModule(AnimationStatesTest));
+platformNativeScriptDynamic().bootstrapModule(makeExampleModule(AnimationStatesTest));
+// platformNativeScriptDynamic().bootstrapModule(makeExampleModule(AnimationStatesMultiTest));
 // platformNativeScriptDynamic().bootstrapModule(makeExampleModule(AnimationNgClassTest));
 // platformNativeScriptDynamic().bootstrapModule(makeExampleModule(AnimationKeyframesTest));
 // platformNativeScriptDynamic().bootstrapModule(makeExampleModule(AnimationEnterLeaveTest));

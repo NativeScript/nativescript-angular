@@ -1,8 +1,13 @@
 import { write, categories, messageType } from "tns-core-modules/trace";
 
+export const animationsTraceCategory = "ns-animations";
 export const rendererTraceCategory = "ns-renderer";
 export const routerTraceCategory = "ns-router";
 export const listViewTraceCategory = "ns-list-view";
+
+export function animationsLog(message: string): void {
+    write(message, animationsTraceCategory);
+}
 
 export function rendererLog(msg): void {
     write(msg, rendererTraceCategory);

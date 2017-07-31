@@ -1,13 +1,17 @@
 import { NgModule, Injectable, NgZone, Provider, RendererFactory2 } from "@angular/core";
 
+import { AnimationBuilder } from "@angular/animations";
+
 import {
     AnimationDriver,
-    ɵAnimationEngine as AnimationEngine,
     ɵAnimationStyleNormalizer as AnimationStyleNormalizer,
-    ɵWebAnimationsStyleNormalizer as WebAnimationsStyleNormalizer
+    ɵWebAnimationsStyleNormalizer as WebAnimationsStyleNormalizer,
 } from "@angular/animations/browser";
 
-import { ɵAnimationRendererFactory as AnimationRendererFactory } from "@angular/platform-browser/animations";
+import {
+    ɵAnimationRendererFactory as AnimationRendererFactory,
+    ɵBrowserAnimationBuilder as BrowserAnimationBuilder,
+} from "@angular/platform-browser/animations";
 
 import { NativeScriptAnimationEngine } from "./animations/animation-engine";
 import { NativeScriptAnimationDriver } from "./animations/animation-driver";
@@ -26,21 +30,23 @@ export function instantiateSupportedAnimationDriver() {
 }
 
 export function instantiateRendererFactory(
-        renderer: NativeScriptRendererFactory, engine: AnimationEngine, zone: NgZone) {
+        renderer: NativeScriptRendererFactory, engine: NativeScriptAnimationEngine, zone: NgZone) {
     return new AnimationRendererFactory(renderer, engine, zone);
 }
 
-export function instanciateDefaultStyleNormalizer() {
+export function instantiateDefaultStyleNormalizer() {
     return new WebAnimationsStyleNormalizer();
 }
 
 export const NATIVESCRIPT_ANIMATIONS_PROVIDERS: Provider[] = [
+    {provide: AnimationBuilder, useClass: BrowserAnimationBuilder},
     {provide: AnimationDriver, useFactory: instantiateSupportedAnimationDriver},
-    {provide: AnimationStyleNormalizer, useFactory: instanciateDefaultStyleNormalizer},
-    {provide: AnimationEngine, useClass: InjectableAnimationEngine}, {
+    {provide: AnimationStyleNormalizer, useFactory: instantiateDefaultStyleNormalizer},
+    {provide: NativeScriptAnimationEngine, useClass: InjectableAnimationEngine},
+    {
         provide: RendererFactory2,
         useFactory: instantiateRendererFactory,
-        deps: [NativeScriptRendererFactory, AnimationEngine, NgZone]
+        deps: [NativeScriptRendererFactory, NativeScriptAnimationEngine, NgZone]
     }
 ];
 

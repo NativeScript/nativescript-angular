@@ -2,8 +2,9 @@ import { AnimationPlayer } from "@angular/animations";
 import { KeyframeAnimation }
     from "tns-core-modules/ui/animation/keyframe-animation";
 
-import { NgView } from "../element-registry";
 import { Keyframe, createKeyframeAnimation } from "./utils";
+import { NgView } from "../element-registry";
+import { animationsLog as traceLog } from "../trace";
 
 export class NativeScriptAnimationPlayer implements AnimationPlayer {
     public parentPlayer: AnimationPlayer = null;
@@ -17,11 +18,15 @@ export class NativeScriptAnimationPlayer implements AnimationPlayer {
     constructor(
         private target: NgView,
         keyframes: Keyframe[],
-        duration: number,
-        delay: number,
+        private duration: number,
+        private delay: number,
         easing: string
     ) {
         this.initKeyframeAnimation(keyframes, duration, delay, easing);
+    }
+
+    get totalTime(): number {
+        return this.delay + this.duration;
     }
 
     init(): void {
@@ -36,6 +41,8 @@ export class NativeScriptAnimationPlayer implements AnimationPlayer {
     onDestroy(fn: Function): void { this._doneSubscriptions.push(fn); }
 
     play(): void {
+        traceLog(`NativeScriptAnimationPlayer.play`);
+
         if (!this.animation) {
             return;
         }
@@ -48,30 +55,33 @@ export class NativeScriptAnimationPlayer implements AnimationPlayer {
 
         this.animation.play(this.target)
             .then(() => this.onFinish())
-            .catch((_e) => { });
+            .catch((_e) => {});
     }
 
     pause(): void {
-        throw new Error("AnimationPlayer.pause method is not supported!");
     }
 
     finish(): void {
-        throw new Error("AnimationPlayer.finish method is not supported!");
+        this.onFinish();
     }
 
     reset(): void {
+        traceLog(`NativeScriptAnimationPlayer.reset`);
+
         if (this.animation && this.animation.isPlaying) {
             this.animation.cancel();
         }
     }
 
     restart(): void {
+        traceLog(`NativeScriptAnimationPlayer.restart`);
+
         this.reset();
         this.play();
     }
 
     destroy(): void {
-        this.reset();
+        traceLog(`NativeScriptAnimationPlayer.destroy`);
         this.onFinish();
     }
 
@@ -84,15 +94,21 @@ export class NativeScriptAnimationPlayer implements AnimationPlayer {
     }
 
     private initKeyframeAnimation(keyframes: Keyframe[], duration: number, delay: number, easing: string) {
+        traceLog(`NativeScriptAnimationPlayer.initKeyframeAnimation`);
+
         this.animation = createKeyframeAnimation(keyframes, duration, delay, easing);
     }
 
     private onFinish() {
-        if (!this._finished) {
-            this._finished = true;
-            this._started = false;
-            this._doneSubscriptions.forEach(fn => fn());
-            this._doneSubscriptions = [];
+        traceLog(`NativeScriptAnimationPlayer.onFinish`);
+
+        if (this._finished) {
+            return;
         }
+
+        this._finished = true;
+        this._started = false;
+        this._doneSubscriptions.forEach(fn => fn());
+        this._doneSubscriptions = [];
     }
 }
