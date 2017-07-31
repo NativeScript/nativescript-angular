@@ -1,4 +1,4 @@
-import { NativeScriptModule } from "nativescript-angular/nativescript.module";
+import { NativeScriptCommonModule } from "nativescript-angular/common";
 import { NativeScriptRouterModule } from "nativescript-angular/router";
 import { ModalDialogParams } from "nativescript-angular/directives/dialogs";
 
@@ -20,7 +20,7 @@ const routes: Routes = [
 
 @NgModule({
   imports: [
-    NativeScriptModule,
+    NativeScriptCommonModule,
     NativeScriptRouterModule.forChild(routes),
   ],
   declarations: [
