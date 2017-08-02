@@ -1,5 +1,6 @@
 import { AnimationPlayer } from "@angular/animations";
 import { AnimationDriver } from "@angular/animations/browser";
+import { ProxyViewContainer } from "tns-core-modules/ui/proxy-view-container";
 import { eachDescendant } from "tns-core-modules/ui/core/view";
 
 import { NativeScriptAnimationPlayer } from "./animation-player";
@@ -177,14 +178,18 @@ function queryDescendants(
     // skip comment and text nodes
     // because they are not actual Views
     // and cannot be animated
-    if (element instanceof InvisibleNode) {
+    if (element instanceof InvisibleNode || !selector.match(element)) {
         return true;
     }
 
-    if (selector.match(element)) {
+    if (element instanceof ProxyViewContainer) {
+        element.eachChild((child: NgView) => {
+            result.matches.push(child);
+            return true;
+        });
+    } else {
         result.matches.push(element);
-        return multi;
     }
 
-    return true;
+    return multi;
 }
