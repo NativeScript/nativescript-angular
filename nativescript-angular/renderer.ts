@@ -13,7 +13,7 @@ import { profile } from "tns-core-modules/profiling";
 import { APP_ROOT_VIEW, DEVICE, getRootPage } from "./platform-providers";
 import { isBlank } from "./lang-facade";
 import { ViewUtil } from "./view-util";
-import { NgView, InvisibleNode } from "./element-registry";
+import { NgView, NgElement, InvisibleNode } from "./element-registry";
 import { rendererLog as traceLog } from "./trace";
 
 // CONTENT_ATTR not exported from NativeScript_renderer - we need it for styles application.
@@ -91,9 +91,9 @@ export class NativeScriptRenderer extends Renderer2 {
     }
 
     @profile
-    insertBefore(parent: NgView, newChild: NgView, refChildIndex: number): void {
+    insertBefore(parent: NgView, newChild: NgView, refChild: NgElement): void {
         traceLog(`NativeScriptRenderer.insertBefore child: ${newChild} parent: ${parent}`);
-        this.viewUtil.insertChild(parent, newChild, refChildIndex);
+        this.viewUtil.insertChild(parent, newChild, refChild);
     }
 
     @profile
@@ -115,9 +115,9 @@ export class NativeScriptRenderer extends Renderer2 {
     }
 
     @profile
-    nextSibling(node: NgView): number {
+    nextSibling(node: NgView): NgElement {
         traceLog(`NativeScriptRenderer.nextSibling ${node}`);
-        return this.viewUtil.nextSiblingIndex(node);
+        return node.nextSibling;
     }
 
     @profile

@@ -8,6 +8,9 @@ export interface ViewExtensions {
     nodeType: number;
     nodeName: string;
     templateParent: NgView;
+    previousSibling: NgElement;
+    nextSibling: NgElement;
+    lastChild: NgElement;
     ngCssClasses: Map<string, boolean>;
     meta: ViewClassMeta;
 }
@@ -22,6 +25,9 @@ export abstract class InvisibleNode extends View implements ViewExtensions {
     nodeType: number;
     nodeName: string;
     ngCssClasses: Map<string, boolean>;
+    previousSibling: NgElement;
+    nextSibling: NgElement;
+    lastChild: NgElement;
 
     constructor() {
         super();
@@ -42,7 +48,7 @@ export class CommentNode extends InvisibleNode {
         super();
 
         this.meta = {
-            skipAddToDom: false,
+            skipAddToDom: true,
         };
         this.id = CommentNode.id.toString();
         CommentNode.id += 1;
@@ -67,7 +73,7 @@ const getClassName = instance => instance.constructor.name;
 
 export interface ViewClassMeta {
     skipAddToDom?: boolean;
-    insertChild?: (parent: NgView, child: NgView, atIndex: number) => void;
+    insertChild?: (parent: NgView, child: NgView, atIndex?: number) => void;
     removeChild?: (parent: NgView, child: NgView) => void;
 }
 
