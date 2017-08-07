@@ -6,12 +6,16 @@ import {
     NgView,
     ViewExtensions,
     ViewClassMeta,
+    NgElement,
 } from "nativescript-angular/element-registry";
 import {Red} from "color/known-colors";
 import {device, platformNames} from "platform";
 import {createDevice} from "./test-utils";
 
 class TestView extends View implements ViewExtensions {
+    public previousSibling: NgElement;
+    public nextSibling: NgElement;
+    public lastChild: NgElement;
     public nodeName: string = "TestView";
     public nodeType: number = 1;
     public templateParent: NgView = null;
