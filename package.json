@@ -7,6 +7,9 @@
     "id": "org.nativescript.nsroanimations",
     "tns-android": {
       "version": "3.2.0-next-2017-06-28-1901"
+    },
+    "tns-ios": {
+      "version": "3.1.0"
     }
   },
   "dependencies": {
@@ -22,7 +25,7 @@
     "nativescript-theme-core": "~1.0.2",
     "reflect-metadata": "~0.1.8",
     "rxjs": "~5.4.0",
-    "tns-core-modules": "next",
+    "tns-core-modules": "3.1.1",
     "zone.js": "~0.8.2"
   },
   "devDependencies": {

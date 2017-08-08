@@ -1,4 +1,5 @@
 <StackLayout>
-    <Label text="support works!" ></Label>
-    <Button [nsRouterLink]="'/'" text="Home"></Button>
+    <Label text="Support Page" class="h1 text-center" ></Label>
+
+    <Button (tap)="router.back()" text="Go Back"></Button>
 </StackLayout>

@@ -12,10 +12,11 @@ import {
 const slideLeft = [
     query(':leave', style({ transform: 'translateX(0)' })),
     query(':enter', style({ transform: 'translateX(-400)' })),
+
     group([
-        query(':leave', animate(1000, style({ transform: 'translateX(400)' }))),
-        query(':enter', animate(2000, style({ transform: 'translateX(0)' }))),
-    ])
+        query(':leave', animate(500, style({ transform: 'translateX(400)' }))),
+        query(':enter', animate(500, style({ transform: 'translateX(0)' }))),
+    ], { delay: 10 }) // Needed because a wierd animation scheduling bug in IOS
 ]
 
 const slideRight = [
@@ -23,16 +24,16 @@ const slideRight = [
     query(':enter', style({ transform: 'translateX(400)'})),
 
     group([
-        query(':leave', animate(2000, style({ transform: 'translateX(-400)' }))),
-        query(':enter', animate(2000, style({ transform: 'translateX(0)' }))),
-    ])
+        query(':leave', animate(500, style({ transform: 'translateX(-400)' })), { delay: 100 }),
+        query(':enter', animate(500, style({ transform: 'translateX(0)' })), { delay: 100 }),
+    ], { delay: 10 }) // Needed because a wierd animation scheduling bug in IOS
 ]
 
 @Component({
     template: `
-        <div [@routeAnimation]="prepRouteState(routerOutlet)">
+        <GridLayout [@routeAnimation]="prepRouteState(routerOutlet)">
             <router-outlet #routerOutlet="outlet"></router-outlet>
-        </div>
+        </GridLayout>
     `,
     animations: [
         trigger('routeAnimation', [
@@ -45,7 +46,6 @@ export class AppComponent {
     prepRouteState(outlet: any) {
         return outlet.activatedRouteData['animation'] || 'firstPage'; 
     }
-
 }
 
 

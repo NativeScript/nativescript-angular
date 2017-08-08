@@ -7,7 +7,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { HomeComponent } from './home/home.component';
 import { SupportComponent } from './support/support.component';
 
-import { animationsTraceCategory, } from "nativescript-angular/trace";
+import { animationsTraceCategory } from "nativescript-angular/trace";
 import { setCategories, enable } from "trace";
 setCategories(animationsTraceCategory);
 enable();
@@ -20,10 +20,10 @@ enable();
   ],
   bootstrap: [AppComponent],
   imports: [
-      NativeScriptModule,
-      NativeScriptAnimationsModule,
-      AppRoutingModule,
+    NativeScriptModule,
+    NativeScriptAnimationsModule,
+    AppRoutingModule,
   ],
   schemas: [NO_ERRORS_SCHEMA],
 })
-export class AppModule {}
+export class AppModule { }
