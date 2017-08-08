@@ -25,7 +25,7 @@
     "nativescript-theme-core": "~1.0.2",
     "reflect-metadata": "~0.1.8",
     "rxjs": "~5.3.0",
-    "tns-core-modules": "next",
+    "tns-core-modules": "3.1.1",
     "zone.js": "~0.8.2"
   },
   "devDependencies": {

@@ -1,13 +1,13 @@
 import {
-     animate,
-     query,
-     stagger,
-     style,
-     transition,
-     trigger,
- } from "@angular/animations";
+    animate,
+    query,
+    stagger,
+    style,
+    transition,
+    trigger,
+} from "@angular/animations";
 import { Component } from "@angular/core";
- 
+
 @Component({
     moduleId: module.id,
     animations: [
@@ -15,11 +15,11 @@ import { Component } from "@angular/core";
             transition("* => *", [
                 // this hides everything right away
                 query(":enter", style({ opacity: 0 })),
- 
+
                 // starts to animate things with a stagger in between
-                query(":enter", stagger("200ms", [
-                    animate("1s", style({ opacity: 1 }))
-                ]))
+                query(":enter", stagger(200, [
+                    animate(1000, style({ opacity: 1 }))
+                ]), { delay: 200 })
             ])
         ])
     ],
@@ -28,21 +28,18 @@ import { Component } from "@angular/core";
             <Button (tap)="add()" text="ADD" backgroundColor="hotpink"></Button>		
  		
             <StackLayout [@listAnimation]="items.length"> 		
-                <ng-template ngFor let-item let-i="index" [ngForOf]="items"> 		
-                    <Button
-                      [text]="item"		
-                      class="ani-button"		
-                    ></Button>		
-                </ng-template>		
- 		
+                <Button *ngFor="let item of items" [text]="item" class="ani-button"></Button>		
             </StackLayout>		
         </StackLayout>		
     `
 })
 export class QueryStaggerComponent {
     public items = [
-        "Enter",
+        "Dramatic",
+        "Entrance",
         "With",
+        "Really",
+        "Cool",
         "Stagger",
     ];
 

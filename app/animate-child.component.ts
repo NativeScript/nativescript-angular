@@ -18,17 +18,16 @@ import { Component } from "@angular/core";
         trigger("parent", [
             transition("* => *", [
                 style({ transform: "translate(200px)" }),
-                animate(1000,
-                        style({ transform: "translate(0px)" })),
-                        query("@child", animateChild())
+                animate(1000, style({ transform: "translate(0px)" })),
+                query("@child", animateChild())
             ])
         ]),
         trigger("child", [
             transition("* => *", [
-                style({ opacity:0 }),
-                animate(400, style({ opacity:1 }))
+                style({ opacity: 0 }),
+                animate(400, style({ opacity: 1 }))
             ])
-        ])     
+        ])
     ],
     styles: [
         `.parent {
