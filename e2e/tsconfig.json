@@ -1,0 +1,14 @@
+{
+    "extends": "../tsconfig",
+    "compilerOptions": {
+        "noEmitHelpers": false,
+        "importHelpers": true,
+        "noEmitOnError": true,
+        "sourceMap": true,
+        "types": [
+            "node",
+            "mocha",
+            "chai"
+        ]
+    }
+}

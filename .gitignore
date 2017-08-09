@@ -1,6 +1,9 @@
+hooks
 node_modules
 platforms
-hooks
 report
 
 app/**/*.js
+e2e/**/*.js
+e2e/**/*.map
+test-results.xml
