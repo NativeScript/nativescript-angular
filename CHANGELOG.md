@@ -1,3 +1,46 @@
+<a name="4.2.0"></a>
+# [4.2.0](https://github.com/NativeScript/nativescript-angular/compare/3.1.3...4.2.0) (2017-08-09)
+
+### Features
+
+* Angular 4.2 support ([#842](https://github.com/NativeScript/nativescript-angular/issues/842)) ([eb3fd81](https://github.com/NativeScript/nativescript-angular/commit/eb3fd81))
+
+
+### BREAKING CHANGES
+
+* `NativeScriptModule` should be imported only in the root application
+module (usually named `AppModule`).
+All other NgModules in the app (both feature and lazy-loaded ones)
+should import the `NativeScriptCommonModule` instead.
+The behaviour is alligned with `BrowserModule` and `CommonModule` in web
+Angular apps described in [this](https://angular.io/guide/ngmodule-faq#q-browser-vs-common-module) guide.
+
+Migration steps:
+In all NgModules, except the root one (`AppModule`), replace:
+```
+import { NativeScriptModule } from "nativescript-angular/nativescript.module";
+…
+@NgModule({
+    imports: [
+        NativeScriptModule,
+    ]
+…
+})
+```
+with:
+```
+import { NativeScriptCommonModule } from "nativescript-angular/common";
+…
+@NgModule({
+    imports: [
+        NativeScriptCommonModule,
+    ]
+…
+})
+```
+
+
+
 <a name="3.1.3"></a>
 ## [3.1.3](https://github.com/NativeScript/nativescript-angular/compare/3.1.2...3.1.3) (2017-07-19)
 
