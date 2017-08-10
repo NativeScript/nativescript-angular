@@ -12,7 +12,7 @@
 module (usually named `AppModule`).
 All other NgModules in the app (both feature and lazy-loaded ones)
 should import the `NativeScriptCommonModule` instead.
-The behaviour is alligned with `BrowserModule` and `CommonModule` in web
+The behavior is aligned with `BrowserModule` and `CommonModule` in web
 Angular apps described in [this](https://angular.io/guide/ngmodule-faq#q-browser-vs-common-module) guide.
 
 Migration steps:
