@@ -8,11 +8,15 @@ export interface ViewExtensions {
     nodeType: number;
     nodeName: string;
     templateParent: NgView;
-    previousSibling: NgElement;
     nextSibling: NgElement;
     lastChild: NgElement;
     ngCssClasses: Map<string, boolean>;
     meta: ViewClassMeta;
+}
+
+export interface ElementReference {
+    previous: NgElement;
+    next: NgElement;
 }
 
 export interface ViewClass {
@@ -73,7 +77,7 @@ const getClassName = instance => instance.constructor.name;
 
 export interface ViewClassMeta {
     skipAddToDom?: boolean;
-    insertChild?: (parent: NgView, child: NgView, atIndex?: number) => void;
+    insertChild?: (parent: NgView, child: NgView) => void;
     removeChild?: (parent: NgView, child: NgView) => void;
 }
 

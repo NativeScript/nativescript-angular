@@ -5,6 +5,7 @@ import { ContentView } from "tns-core-modules/ui/content-view";
 import { LayoutBase } from "tns-core-modules/ui/layouts/layout-base";
 import {
     CommentNode,
+    ElementReference,
     InvisibleNode,
     NgElement,
     NgView,
@@ -53,35 +54,35 @@ export class ViewUtil {
         this.isAndroid = device.os === platformNames.android;
     }
 
-    public insertChild(parent: NgView, child: NgElement, refChild?: NgElement) {
+    public insertChild(parent: NgView, child: NgElement, previous?: NgElement, next?: NgElement) {
         // handle invisible nodes..
+        if (!parent) {
+            return;
+        }
+
         if (child instanceof InvisibleNode) {
             child.templateParent = parent;
         }
 
-        // add to queue
-        const previousView = refChild || (parent && parent.lastChild);
-        if (previousView) {
-            previousView.nextSibling = child;
-            child.previousSibling = previousView;
-        }
-
-        if (!refChild && parent) {
+        // add to end of queue if no next
+        if (parent && !next) {
+            if (parent.lastChild) {
+                parent.lastChild.nextSibling = child;
+            }
             parent.lastChild = child;
         }
 
-        // skip invisible elements ...
-        while (isDetachedElement(refChild)) {
-            refChild = refChild.previousSibling;
-            previousView.nextSibling = child;
-            child.previousSibling = previousView;
+        // update queue if there is next
+        if (next) {
+            previous.nextSibling = child;
+            child.nextSibling = next;
         }
 
-        // create actual view
-        if (!parent || isDetachedElement(child)) {
+        if (isDetachedElement(child)) {
             return;
         }
 
+        // create actual view
         if (parent.meta && parent.meta.insertChild) {
             parent.meta.insertChild(parent, child);
         } else if (isLayout(parent)) {
@@ -95,12 +96,13 @@ export class ViewUtil {
 
             // insert child
 
-            if (refChild) {
-                const atIndex = parent.getChildIndex(refChild);
+            if (next) {
+                const atIndex = parent.getChildIndex(next);
                 parent.insertChild(child, atIndex);
             } else {
                 parent.addChild(child);
             }
+
         } else if (isContentView(parent)) {
             parent.content = child;
         } else if (parent && (<any>parent)._addChildFromBuilder) {
@@ -109,29 +111,34 @@ export class ViewUtil {
     }
 
     public removeChild(parent: NgView, child: NgElement) {
-        // remove from qeueue
-        if (child.previousSibling) {
-            child.previousSibling.nextSibling = child.nextSibling;
-        }
-
-        if (child.nextSibling) {
-            child.nextSibling.previousSibling = child.previousSibling;
-        }
-
-        // actual desctructuring
         if (!parent || isDetachedElement(child)) {
+            console.log("skip the removal of detached element")
             return;
         }
 
         if (parent.meta && parent.meta.removeChild) {
             parent.meta.removeChild(parent, child);
         } else if (isLayout(parent)) {
+            console.log("remove child from layout")
+            const atIndex = parent.getChildIndex(child);
+            if (atIndex === -1) {
+                return;
+            }
+
+            if (atIndex !== 0) {
+                const previous = parent.getChildAt(atIndex - 1) as NgElement;
+                previous.nextSibling = child.nextSibling;
+            }
+
             parent.removeChild(child);
+
         } else if (isContentView(parent)) {
+            console.log("remove child from content view");
             if (parent.content === child) {
                 parent.content = null;
             }
         } else if (isView(parent)) {
+            console.log("remove child from view element");
             parent._removeView(child);
         }
     }

@@ -13,7 +13,7 @@ import { profile } from "tns-core-modules/profiling";
 import { APP_ROOT_VIEW, DEVICE, getRootPage } from "./platform-providers";
 import { isBlank } from "./lang-facade";
 import { ViewUtil } from "./view-util";
-import { NgView, NgElement, InvisibleNode } from "./element-registry";
+import { NgView, NgElement, InvisibleNode, ElementReference, isDetachedElement } from "./element-registry";
 import { rendererLog as traceLog } from "./trace";
 
 // CONTENT_ATTR not exported from NativeScript_renderer - we need it for styles application.
@@ -22,6 +22,7 @@ export const COMPONENT_VARIABLE = "%COMP%";
 export const HOST_ATTR = `_nghost-${COMPONENT_VARIABLE}`;
 export const CONTENT_ATTR = `_ngcontent-${COMPONENT_VARIABLE}`;
 const ATTR_SANITIZER = /-/g;
+
 
 @Injectable()
 export class NativeScriptRendererFactory implements RendererFactory2 {
@@ -91,10 +92,10 @@ export class NativeScriptRenderer extends Renderer2 {
     }
 
     @profile
-    insertBefore(parent: NgView, newChild: NgView, refChild: NgElement): void {
-        traceLog(`NativeScriptRenderer.insertBefore ` +
-             `child: ${newChild} parent: ${parent} refChild: ${refChild}`);
-        this.viewUtil.insertChild(parent, newChild, refChild);
+    insertBefore(parent: NgView, newChild: NgView, { previous, next }: ElementReference): void {
+        traceLog(`NativeScriptRenderer.insertBefore child: ${newChild} ` +
+        `parent: ${parent} previous: ${previous} next: ${next}`);
+        this.viewUtil.insertChild(parent, newChild, previous, next);
     }
 
     @profile
@@ -116,9 +117,18 @@ export class NativeScriptRenderer extends Renderer2 {
     }
 
     @profile
-    nextSibling(node: NgView): NgElement {
-        traceLog(`NativeScriptRenderer.nextSibling ${node}`);
-        return node.nextSibling;
+    nextSibling(node: NgView): ElementReference {
+        traceLog(`NativeScriptRenderer.nextSibling of ${node} is ${node.nextSibling}`);
+
+        let next = node.nextSibling;
+        while (next && isDetachedElement(next)) {
+            next = next.nextSibling;
+        }
+
+        return {
+            previous: node,
+            next,
+        };
     }
 
     @profile
