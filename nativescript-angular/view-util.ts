@@ -66,9 +66,15 @@ export class ViewUtil {
             child.previousSibling = previousView;
         }
 
-        // TODO: check number of parent's children
         if (!refChild && parent) {
             parent.lastChild = child;
+        }
+
+        // skip invisible elements ...
+        while (isDetachedElement(refChild)) {
+            refChild = refChild.previousSibling;
+            previousView.nextSibling = child;
+            child.previousSibling = previousView;
         }
 
         // create actual view
@@ -88,6 +94,7 @@ export class ViewUtil {
             }
 
             // insert child
+
             if (refChild) {
                 const atIndex = parent.getChildIndex(refChild);
                 parent.insertChild(child, atIndex);
