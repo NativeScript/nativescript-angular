@@ -60,14 +60,14 @@ export class ViewUtil {
         }
 
         // add to queue
-        if (!parent) {
-            return;
-        }
-        const previousView = refChild || parent.lastChild;
+        const previousView = refChild || (parent && parent.lastChild);
         if (previousView) {
             previousView.nextSibling = child;
             child.previousSibling = previousView;
-        } else {
+        }
+
+        // TODO: check number of parent's children
+        if (!refChild && parent) {
             parent.lastChild = child;
         }
 

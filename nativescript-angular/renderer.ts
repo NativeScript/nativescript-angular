@@ -92,7 +92,8 @@ export class NativeScriptRenderer extends Renderer2 {
 
     @profile
     insertBefore(parent: NgView, newChild: NgView, refChild: NgElement): void {
-        traceLog(`NativeScriptRenderer.insertBefore child: ${newChild} parent: ${parent}`);
+        traceLog(`NativeScriptRenderer.insertBefore ` +
+             `child: ${newChild} parent: ${parent} refChild: ${refChild}`);
         this.viewUtil.insertChild(parent, newChild, refChild);
     }
 
@@ -110,7 +111,7 @@ export class NativeScriptRenderer extends Renderer2 {
 
     @profile
     parentNode(node: NgView): any {
-        traceLog("NativeScriptRenderer.parentNode for node: " + node);
+        traceLog(`NativeScriptRenderer.parentNode for node: ${node}`);
         return node.parent || node.templateParent;
     }
 
