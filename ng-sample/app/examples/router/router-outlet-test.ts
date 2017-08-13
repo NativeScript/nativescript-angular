@@ -49,14 +49,14 @@ class SecondComponent implements OnInit, OnDestroy {
     template: `
         <StackLayout>
             <StackLayout class="nav">
-                <Button text="First" nsRouterLinkActive="active" nsRouterLink="/first"></Button>
-                <Button text="Second(1)" nsRouterLinkActive="active" nsRouterLink="/second/1"></Button>           
+                <Button text="First" [class.rlaActive]="rla.isActive" nsRouterLinkActive="active" nsRouterLink="/first" #rla="routerLinkActive"></Button>
+                <Button text="Second(1)" nsRouterLinkActive="active" nsRouterLink="/second/1"></Button>
                 <Button text="Second(2)"
                     nsRouterLinkActive="active"
                     [nsRouterLink]="['/second', '2' ]">
                 </Button>
             </StackLayout>
-            
+
             <router-outlet></router-outlet>
         </StackLayout>
     `

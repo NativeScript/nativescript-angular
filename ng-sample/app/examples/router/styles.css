@@ -5,8 +5,8 @@
 }
 
 .subtitle {
-    font-size: 20; 
-    horizontal-align: center; 
+    font-size: 20;
+    horizontal-align: center;
     margin: 10;
 }
 
@@ -53,17 +53,21 @@ button {
     horizontal-align: center;
 }
 
-.odd { 
-    background-color: white; 
+.odd {
+    background-color: white;
     margin: 2;
 }
 
-.even { 
-    background-color: whitesmoke; 
-    margin: 2; 
+.even {
+    background-color: whitesmoke;
+    margin: 2;
 }
 
 .stretch {
     horizontal-align: stretch;
     margin: 0 10;
+}
+
+.rlaActive {
+    color:blue;
 }
