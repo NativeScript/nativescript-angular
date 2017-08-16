@@ -23,7 +23,6 @@ export const HOST_ATTR = `_nghost-${COMPONENT_VARIABLE}`;
 export const CONTENT_ATTR = `_ngcontent-${COMPONENT_VARIABLE}`;
 const ATTR_SANITIZER = /-/g;
 
-
 @Injectable()
 export class NativeScriptRendererFactory implements RendererFactory2 {
     private componentRenderers = new Map<string, NativeScriptRenderer>();

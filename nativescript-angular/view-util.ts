@@ -65,9 +65,11 @@ export class ViewUtil {
 
         this.addToQueue(parent, child, previous, next);
 
-        if (isDetachedElement(child)) {
+        if (child instanceof InvisibleNode) {
             child.templateParent = parent;
-        } else {
+        }
+
+        if (!isDetachedElement(child)) {
             this.addToVisualTree(parent, child, next);
         }
     }
