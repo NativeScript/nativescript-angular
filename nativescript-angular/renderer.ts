@@ -77,7 +77,7 @@ export class NativeScriptRenderer extends Renderer2 {
     data: { [key: string]: any } = Object.create(null);
 
     constructor(
-        private rootView: NgView,
+        private rootView: NgElement,
         private zone: NgZone,
         private viewUtil: ViewUtil
     ) {
@@ -86,20 +86,20 @@ export class NativeScriptRenderer extends Renderer2 {
     }
 
     @profile
-    appendChild(parent: any, newChild: NgView): void {
+    appendChild(parent: NgElement, newChild: NgElement): void {
         traceLog(`NativeScriptRenderer.appendChild child: ${newChild} parent: ${parent}`);
         this.viewUtil.insertChild(parent, newChild);
     }
 
     @profile
-    insertBefore(parent: NgView, newChild: NgView, { previous, next }: ElementReference): void {
+    insertBefore(parent: NgElement, newChild: NgElement, { previous, next }: ElementReference): void {
         traceLog(`NativeScriptRenderer.insertBefore child: ${newChild} ` +
         `parent: ${parent} previous: ${previous} next: ${next}`);
         this.viewUtil.insertChild(parent, newChild, previous, next);
     }
 
     @profile
-    removeChild(parent: any, oldChild: NgView): void {
+    removeChild(parent: any, oldChild: NgElement): void {
         traceLog(`NativeScriptRenderer.removeChild child: ${oldChild} parent: ${parent}`);
         this.viewUtil.removeChild(parent, oldChild);
     }
@@ -117,7 +117,7 @@ export class NativeScriptRenderer extends Renderer2 {
     }
 
     @profile
-    nextSibling(node: NgView): ElementReference {
+    nextSibling(node: NgElement): ElementReference {
         traceLog(`NativeScriptRenderer.nextSibling of ${node} is ${node.nextSibling}`);
 
         let next = node.nextSibling;
@@ -138,7 +138,7 @@ export class NativeScriptRenderer extends Renderer2 {
     }
 
     @profile
-    createElement(name: any, _namespace: string): NgView {
+    createElement(name: any, _namespace: string): NgElement {
         traceLog(`NativeScriptRenderer.createElement: ${name}`);
         return this.viewUtil.createView(name);
     }
@@ -156,7 +156,7 @@ export class NativeScriptRenderer extends Renderer2 {
     }
 
     @profile
-    projectNodes(parentElement: NgView, nodes: NgView[]): void {
+    projectNodes(parentElement: NgElement, nodes: NgElement[]): void {
         traceLog("NativeScriptRenderer.projectNodes");
         nodes.forEach((node) => this.viewUtil.insertChild(parentElement, node));
     }
@@ -169,13 +169,13 @@ export class NativeScriptRenderer extends Renderer2 {
     }
 
     @profile
-    setAttribute(view: NgView, name: string, value: string, namespace?: string) {
+    setAttribute(view: NgElement, name: string, value: string, namespace?: string) {
         traceLog(`NativeScriptRenderer.setAttribute ${view} : ${name} = ${value}, namespace: ${namespace}`);
         return this.viewUtil.setProperty(view, name, value, namespace);
     }
 
     @profile
-    removeAttribute(_el: NgView, _name: string): void {
+    removeAttribute(_el: NgElement, _name: string): void {
         traceLog(`NativeScriptRenderer.removeAttribute ${_el}: ${_name}`);
     }
 
@@ -186,25 +186,25 @@ export class NativeScriptRenderer extends Renderer2 {
     }
 
     @profile
-    addClass(view: NgView, name: string): void {
+    addClass(view: NgElement, name: string): void {
         traceLog(`NativeScriptRenderer.addClass ${name}`);
         this.viewUtil.addClass(view, name);
     }
 
     @profile
-    removeClass(view: NgView, name: string): void {
+    removeClass(view: NgElement, name: string): void {
         traceLog(`NativeScriptRenderer.removeClass ${name}`);
         this.viewUtil.removeClass(view, name);
     }
 
     @profile
-    setStyle(view: NgView, styleName: string, value: any, _flags?: RendererStyleFlags2): void {
+    setStyle(view: NgElement, styleName: string, value: any, _flags?: RendererStyleFlags2): void {
         traceLog(`NativeScriptRenderer.setStyle: ${styleName} = ${value}`);
         this.viewUtil.setStyle(view, styleName, value);
     }
 
     @profile
-    removeStyle(view: NgView, styleName: string, _flags?: RendererStyleFlags2): void {
+    removeStyle(view: NgElement, styleName: string, _flags?: RendererStyleFlags2): void {
         traceLog("NativeScriptRenderer.removeStyle: ${styleName}");
         this.viewUtil.removeStyle(view, styleName);
     }
@@ -212,7 +212,7 @@ export class NativeScriptRenderer extends Renderer2 {
     // Used only in debug mode to serialize property changes to comment nodes,
     // such as <template> placeholders.
     @profile
-    setBindingDebugInfo(renderElement: NgView, propertyName: string, propertyValue: string): void {
+    setBindingDebugInfo(renderElement: NgElement, propertyName: string, propertyValue: string): void {
         traceLog("NativeScriptRenderer.setBindingDebugInfo: " + renderElement + ", " +
             propertyName + " = " + propertyValue);
     }
@@ -223,7 +223,7 @@ export class NativeScriptRenderer extends Renderer2 {
     }
 
     @profile
-    invokeElementMethod(_renderElement: NgView, methodName: string, args: Array<any>) {
+    invokeElementMethod(_renderElement: NgElement, methodName: string, args: Array<any>) {
         traceLog("NativeScriptRenderer.invokeElementMethod " + methodName + " " + args);
     }
 
@@ -273,15 +273,15 @@ class EmulatedRenderer extends NativeScriptRenderer {
         this.addStyles(component.styles, componentId);
     }
 
-    applyToHost(view: NgView) {
+    applyToHost(view: NgElement) {
         super.setAttribute(view, this.hostAttr, "");
     }
 
-    appendChild(parent: any, newChild: NgView): void {
+    appendChild(parent: any, newChild: NgElement): void {
         super.appendChild(parent, newChild);
     }
 
-    createElement(parent: any, name: string): NgView {
+    createElement(parent: any, name: string): NgElement {
         const view = super.createElement(parent, name);
 
         // Set an attribute to the view to scope component-specific css.

@@ -5,7 +5,6 @@ import { ContentView } from "tns-core-modules/ui/content-view";
 import { LayoutBase } from "tns-core-modules/ui/layouts/layout-base";
 import {
     CommentNode,
-    ElementReference,
     InvisibleNode,
     NgElement,
     NgView,
