@@ -245,28 +245,6 @@ export class ViewUtil {
         }
     }
 
-    // finds the node in the parent's views and returns the next index
-    // returns -1 if the node has no parent or next sibling
-    // public nextSiblingIndex(node: NgView): number {
-    //     const parent = node.parent;
-    //     if (!parent) {
-    //         return -1;
-    //     }
-
-    //     let index = 0;
-    //     let found = false;
-    //     parent.eachChild(child => {
-    //         if (child === node) {
-    //             found = true;
-    //         }
-
-    //         index += 1;
-    //         return !found;
-    //     });
-
-    //     return found ? index : -1;
-    // }
-
     private runsIn(platform: string): boolean {
         return (platform === "ios" && this.isIos) ||
             (platform === "android" && this.isAndroid);
