@@ -54,7 +54,12 @@ export class ViewUtil {
         this.isAndroid = device.os === platformNames.android;
     }
 
-    public insertChild(parent: NgView, child: NgElement, previous?: NgElement, next?: NgElement) {
+    public insertChild(
+        parent: NgView,
+        child: NgElement,
+        previous: NgElement = parent.lastChild,
+        next?: NgElement
+    ) {
         if (!parent) {
             return;
         }
@@ -68,21 +73,23 @@ export class ViewUtil {
         }
     }
 
-    private addToQueue(parent: NgElement, child: NgElement, previous: NgElement, next: NgElement) {
-        if (next) {
-            this.insertBetween(child, previous, next);
-        } else {
-            this.appendToQueue(parent, child);
-        }
-    }
-
-    private insertBetween(
-        view: NgElement,
+    private addToQueue(
+        parent: NgElement,
+        child: NgElement,
         previous: NgElement,
         next: NgElement
     ): void {
-        previous.nextSibling = view;
-        view.nextSibling = next;
+        if (previous) {
+            previous.nextSibling = child;
+        } else {
+            parent.firstChild = child;
+        }
+
+        if (next) {
+            child.nextSibling = next;
+        } else {
+            this.appendToQueue(parent, child);
+        }
     }
 
     private appendToQueue(parent: NgElement, view: NgElement) {
@@ -133,6 +140,8 @@ export class ViewUtil {
             this.removeLayoutChild(parent, child);
         } else if (isContentView(parent) && parent.content === child) {
             parent.content = null;
+            parent.lastChild = null;
+            parent.firstChild = null;
         } else if (isView(parent)) {
             parent._removeView(child);
         }
@@ -140,28 +149,34 @@ export class ViewUtil {
 
     private removeLayoutChild(parent: NgLayoutBase, child: NgView): void {
         const index = parent.getChildIndex(child);
+        this.removeFromQueue(parent, child, index);
         if (index === -1) {
             return;
         }
 
-        this.removeFromQueue(parent, child, index);
         parent.removeChild(child);
     }
 
     private removeFromQueue(parent: NgLayoutBase, child: NgView, index: number) {
-        let previous = parent.getChildAt(index - 1) as NgElement;
-        if (!previous) {
-            return;
+        if (parent.firstChild === child) {
+            parent.firstChild = child.nextSibling;
+        }
+
+        let previous = (parent.getChildAt(index - 1) || parent.firstChild) as NgElement;
+        if (parent.lastChild === child) {
+            parent.lastChild = previous;
         }
 
         // since detached elements are not added to the visual tree,
         // we need to find the actual previous sibling of the view,
-        // which may be an invisible node
-        while (previous && previous !== child && isDetachedElement(previous.nextSibling)) {
+        // which may as well be an invisible node
+        while ( previous && previous !== child && isDetachedElement(previous.nextSibling)) {
             previous = previous.nextSibling;
         }
 
-        previous.nextSibling = child.nextSibling;
+        if (previous) {
+            previous.nextSibling = child.nextSibling;
+        }
     }
 
     public getChildIndex(parent: any, child: NgView) {

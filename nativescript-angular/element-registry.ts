@@ -5,13 +5,14 @@ export type NgView = (View & ViewExtensions);
 export type NgElement = NgView | InvisibleNode;
 
 export interface ViewExtensions {
+    meta: ViewClassMeta;
     nodeType: number;
     nodeName: string;
     templateParent: NgView;
     nextSibling: NgElement;
+    firstChild: NgElement;
     lastChild: NgElement;
     ngCssClasses: Map<string, boolean>;
-    meta: ViewClassMeta;
 }
 
 export interface ElementReference {
@@ -25,13 +26,13 @@ export interface ViewClass {
 
 export abstract class InvisibleNode extends View implements ViewExtensions {
     meta: { skipAddToDom: boolean };
-    templateParent: NgView;
     nodeType: number;
     nodeName: string;
-    ngCssClasses: Map<string, boolean>;
-    previousSibling: NgElement;
+    templateParent: NgView;
     nextSibling: NgElement;
+    firstChild: NgElement;
     lastChild: NgElement;
+    ngCssClasses: Map<string, boolean>;
 
     constructor() {
         super();
