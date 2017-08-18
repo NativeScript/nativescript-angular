@@ -125,8 +125,7 @@ export class NSRouterLinkActive implements OnChanges, OnDestroy, AfterContentIni
     }
 
     private hasActiveLinks(): boolean {
-        return this.links.some(this.isLinkActive(this.router)) ||
-            this.links.some(this.isLinkActive(this.router));
+        return this.links.some(this.isLinkActive(this.router));
     }
 
 }
