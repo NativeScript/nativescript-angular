@@ -53,12 +53,16 @@ import { NSRouterLink } from "./ns-router-link";
  *
  * @stable
  */
-@Directive({ selector: "[nsRouterLinkActive]" })
+@Directive({
+    selector: "[nsRouterLinkActive]",
+    exportAs: "routerLinkActive",
+})
 export class NSRouterLinkActive implements OnChanges, OnDestroy, AfterContentInit { // tslint:disable-line:max-line-length directive-class-suffix
     @ContentChildren(NSRouterLink) links: QueryList<NSRouterLink>;
 
     private classes: string[] = [];
     private subscription: Subscription;
+    private active: boolean = false;
 
     @Input() nsRouterLinkActiveOptions: { exact: boolean } = { exact: false };
 
@@ -68,6 +72,10 @@ export class NSRouterLinkActive implements OnChanges, OnDestroy, AfterContentIni
                 this.update();
             }
         });
+    }
+
+    get isActive(): boolean {
+        return this.active;
     }
 
     ngAfterContentInit(): void {
@@ -91,12 +99,16 @@ export class NSRouterLinkActive implements OnChanges, OnDestroy, AfterContentIni
         if (!this.links) {
             return;
         }
-
-        const currentUrlTree = this.router.parseUrl(this.router.url);
-        const isActiveLinks = this.reduceList(currentUrlTree, this.links);
-        this.classes.forEach(
-            c => this.renderer.setElementClass(
-                this.element.nativeElement, c, isActiveLinks));
+        const hasActiveLinks = this.hasActiveLinks();
+        // react only when status has changed to prevent unnecessary dom updates
+        if (this.active !== hasActiveLinks) {
+            const currentUrlTree = this.router.parseUrl(this.router.url);
+            const isActiveLinks = this.reduceList(currentUrlTree, this.links);
+            this.classes.forEach(
+                c => this.renderer.setElementClass(
+                    this.element.nativeElement, c, isActiveLinks));
+        }
+        Promise.resolve(hasActiveLinks).then(active => this.active = active);
     }
 
     private reduceList(currentUrlTree: UrlTree, q: QueryList<any>): boolean {
@@ -106,4 +118,14 @@ export class NSRouterLinkActive implements OnChanges, OnDestroy, AfterContentIni
                     this.nsRouterLinkActiveOptions.exact);
             }, false);
     }
+
+    private isLinkActive(router: Router): (link: NSRouterLink) => boolean {
+        return (link: NSRouterLink) =>
+            router.isActive(link.urlTree, this.nsRouterLinkActiveOptions.exact);
+    }
+
+    private hasActiveLinks(): boolean {
+        return this.links.some(this.isLinkActive(this.router));
+    }
+
 }
