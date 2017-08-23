@@ -1,5 +1,8 @@
+import { Injectable } from "@angular/core";
 import { ResourceLoader } from "@angular/compiler";
-import { File, knownFolders, path } from "tns-core-modules/file-system";
+import { path } from "tns-core-modules/file-system";
+
+import { NSFileSystem } from "./file-system/ns-file-system";
 
 const extensionsFallbacks = [
     [".scss", ".css"],
@@ -7,29 +10,34 @@ const extensionsFallbacks = [
     [".less", ".css"]
 ];
 
+@Injectable()
 export class FileSystemResourceLoader extends ResourceLoader {
+    constructor(private fs: NSFileSystem) {
+        super();
+    }
+
     get(url: string): Promise<string> {
         const resolvedPath = this.resolve(url);
 
-        const templateFile = File.fromPath(resolvedPath);
+        const templateFile = this.fs.fileFromPath(resolvedPath);
 
         return templateFile.readText();
     }
 
-    private handleAbsoluteUrls(url: string): string {
+    resolveRelativeUrls(url: string): string {
         // Angular assembles absolute URLs and prefixes them with //
         if (url.indexOf("/") !== 0) {
             // Resolve relative URLs based on the app root.
-            return path.join(knownFolders.currentApp().path, url);
+            return path.join(this.fs.currentApp().path, url);
         } else {
             return url;
         }
     }
 
-    private resolve(url: string) {
-        const normalizedUrl = this.handleAbsoluteUrls(url);
+    resolve(url: string) {
+        const normalizedUrl = this.resolveRelativeUrls(url);
 
-        if (File.exists(normalizedUrl)) {
+        if (this.fs.fileExists(normalizedUrl)) {
             return normalizedUrl;
         }
 
@@ -41,7 +49,7 @@ export class FileSystemResourceLoader extends ResourceLoader {
         });
 
         for (let i = 0; i < fallbackCandidates.length; i++) {
-            if (File.exists(fallbackCandidates[i])) {
+            if (this.fs.fileExists(fallbackCandidates[i])) {
                 return fallbackCandidates[i];
             }
         }
