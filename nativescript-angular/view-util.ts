@@ -17,7 +17,8 @@ import {
 } from "./element-registry";
 
 import { platformNames, Device } from "tns-core-modules/platform";
-import { rendererLog as traceLog } from "./trace";
+import { rendererLog as log, isEnabled as isLogEnabled } from "./trace";
+import { profile } from "tns-core-modules/profiling";
 
 const XML_ATTRIBUTES = Object.freeze(["style", "rows", "columns", "fontAttributes"]);
 const ELEMENT_NODE_TYPE = 1;
@@ -118,7 +119,9 @@ export class ViewUtil {
     }
 
     public createView(name: string): NgView {
-        traceLog(`Creating view: ${name}`);
+        if (isLogEnabled()) {
+            log(`Creating view: ${name}`);
+        }
 
         if (!isKnownView(name)) {
             name = "ProxyViewContainer";
@@ -197,7 +200,9 @@ export class ViewUtil {
 
 
     private setPropertyInternal(view: NgView, attributeName: string, value: any): void {
-        traceLog(`Setting attribute: ${attributeName}=${value} to ${view}`);
+        if (isLogEnabled()) {
+            log(`Setting attribute: ${attributeName}=${value} to ${view}`);
+        }
 
         if (attributeName === "class") {
             this.setClasses(view, value);
