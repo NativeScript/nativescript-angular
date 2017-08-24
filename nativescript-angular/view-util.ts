@@ -17,7 +17,7 @@ import {
 } from "./element-registry";
 
 import { platformNames, Device } from "tns-core-modules/platform";
-import { rendererLog as traceLog } from "./trace";
+import { viewUtilLog as traceLog } from "./trace";
 
 const ELEMENT_NODE_TYPE = 1;
 const XML_ATTRIBUTES = Object.freeze(["style", "rows", "columns", "fontAttributes"]);
@@ -94,6 +94,7 @@ export class ViewUtil {
     }
 
     private appendToQueue(parent: NgElement, view: NgElement) {
+        traceLog(`ViewUtil.appendToQueue parent: ${parent} view: ${view}`);
         if (parent.lastChild) {
             parent.lastChild.nextSibling = view;
         }
@@ -159,24 +160,46 @@ export class ViewUtil {
     }
 
     private removeFromQueue(parent: NgLayoutBase, child: NgView, index: number) {
+        traceLog(`ViewUtil.removeFromQueue ` +
+            `parent: ${parent} child: ${child} index: ${index}`);
+
+        if (parent.firstChild === child && parent.lastChild === child) {
+            parent.firstChild = null;
+            parent.lastChild = null;
+            return;
+        }
+
         if (parent.firstChild === child) {
             parent.firstChild = child.nextSibling;
         }
 
-        let previous = (parent.getChildAt(index - 1) || parent.firstChild) as NgElement;
+        const previous = this.findPreviousElement(parent, child, index);
         if (parent.lastChild === child) {
             parent.lastChild = previous;
         }
 
+        if (previous) {
+            previous.nextSibling = child.nextSibling;
+        }
+    }
+
+    private findPreviousElement(parent: NgLayoutBase, child: NgView, elementIndex: number): NgElement {
+        const previousVisual = this.getPreviousVisualElement(parent, elementIndex);
+        let previous = previousVisual || parent.firstChild;
+
         // since detached elements are not added to the visual tree,
         // we need to find the actual previous sibling of the view,
         // which may as well be an invisible node
-        while ( previous && previous !== child && isDetachedElement(previous.nextSibling)) {
+        while (previous && previous !== child && previous.nextSibling !== child) {
             previous = previous.nextSibling;
         }
 
-        if (previous) {
-            previous.nextSibling = child.nextSibling;
+        return previous;
+    }
+
+    private getPreviousVisualElement(parent: NgLayoutBase, elementIndex: number): NgElement {
+        if (elementIndex > 0) {
+            return parent.getChildAt(elementIndex - 1) as NgElement;
         }
     }
 
