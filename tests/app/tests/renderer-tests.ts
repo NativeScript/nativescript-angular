@@ -291,7 +291,7 @@ describe("Renderer E2E", () => {
         it("ngIf hides component when false", () => {
             return testApp.loadComponent(NgIfLabel).then((componentRef) => {
                 const componentRoot = componentRef.instance.elementRef.nativeElement;
-                assert.equal("(ProxyViewContainer (CommentNode))", dumpView(componentRoot));
+                assert.equal("(ProxyViewContainer)", dumpView(componentRoot));
             });
         });
 
@@ -302,7 +302,7 @@ describe("Renderer E2E", () => {
 
                 component.show = true;
                 testApp.appRef.tick();
-                assert.equal("(ProxyViewContainer (CommentNode), (Label))", dumpView(componentRoot));
+                assert.equal("(ProxyViewContainer (Label))", dumpView(componentRoot));
             });
         });
 
@@ -314,11 +314,10 @@ describe("Renderer E2E", () => {
                 component.show = true;
                 testApp.appRef.tick();
                 assert.equal(
-                    "(ProxyViewContainer (StackLayout (CommentNode), (Label), (Button)))",
+                    "(ProxyViewContainer (StackLayout (Label), (Button)))",
                     dumpView(componentRoot));
             });
         });
-
 
         it("ngIf shows elements in correct order when multiple are rendered and there's *ngIf", () => {
             return testApp.loadComponent(NgIfMultiple).then((componentRef) => {
@@ -333,8 +332,7 @@ describe("Renderer E2E", () => {
                             "(Label[text=1]), " +
                             "(Label[text=2]), " +
                             "(Label[text=3]), " +
-                            "(CommentNode), " + // ng-reflect comment
-                            "(Label[text=4]), " + // the content to be displayed and its anchor
+                            "(Label[text=4]), " + // the content to be conditionally displayed
                             "(Label[text=5])" +
                         ")" +
                     ")",
@@ -348,13 +346,15 @@ describe("Renderer E2E", () => {
                 const componentRoot = component.elementRef.nativeElement;
 
                 testApp.appRef.tick();
+
                 assert.equal(
                     "(ProxyViewContainer " +
                         "(StackLayout " +
-                            "(CommentNode), " + // ng-reflect comment
-                            "(Label[text=If]), (CommentNode)))", // the content to be displayed and its anchor
+                            "(Label[text=If])" +
+                        ")" +
+                    ")",
 
-                     dumpView(componentRoot, true));
+                    dumpView(componentRoot, true));
             });
         });
 
@@ -368,10 +368,11 @@ describe("Renderer E2E", () => {
                 assert.equal(
                     "(ProxyViewContainer " +
                         "(StackLayout " +
-                            "(CommentNode), " + // ng-reflect comment
-                            "(Label[text=Else]), (CommentNode)))", // the content to be displayed and its anchor
+                            "(Label[text=Else])" +
+                        ")" +
+                    ")",
 
-                     dumpView(componentRoot, true));
+                    dumpView(componentRoot, true));
             });
         });
 
@@ -384,11 +385,11 @@ describe("Renderer E2E", () => {
                 assert.equal(
                     "(ProxyViewContainer " +
                         "(StackLayout " +
-                            "(CommentNode), " + // ng-reflect comment
-                            "(Label[text=Then]), (CommentNode), " + // the content to be displayed and its anchor
-                            "(CommentNode)))", // the anchor for the else template
+                            "(Label[text=Then])" +
+                        ")" +
+                    ")",
 
-                     dumpView(componentRoot, true));
+                    dumpView(componentRoot, true));
             });
         });
 
@@ -403,11 +404,11 @@ describe("Renderer E2E", () => {
                 assert.equal(
                     "(ProxyViewContainer " +
                         "(StackLayout " +
-                            "(CommentNode), " + // the content to be displayed
-                            "(Label[text=Else]), (CommentNode), " + // the content to be displayed
-                            "(CommentNode)))", // the content to be displayed
+                            "(Label[text=Else])" +
+                        ")" +
+                    ")",
 
-                     dumpView(componentRoot, true));
+                    dumpView(componentRoot, true));
             });
         });
 
@@ -415,7 +416,7 @@ describe("Renderer E2E", () => {
             return testApp.loadComponent(NgForLabel).then((componentRef) => {
                 const componentRoot = componentRef.instance.elementRef.nativeElement;
                 assert.equal(
-                    "(ProxyViewContainer (CommentNode), (Label[text=one]), (Label[text=two]), (Label[text=three]))",
+                    "(ProxyViewContainer (Label[text=one]), (Label[text=two]), (Label[text=three]))",
                     dumpView(componentRoot, true));
             });
         });
@@ -429,7 +430,7 @@ describe("Renderer E2E", () => {
                 testApp.appRef.tick();
 
                 assert.equal(
-                    "(ProxyViewContainer (CommentNode), (Label[text=one]), (Label[text=three]))",
+                    "(ProxyViewContainer (Label[text=one]), (Label[text=three]))",
                     dumpView(componentRoot, true));
             });
         });
@@ -443,7 +444,7 @@ describe("Renderer E2E", () => {
                 testApp.appRef.tick();
 
                 assert.equal(
-                    "(ProxyViewContainer (CommentNode), " +
+                    "(ProxyViewContainer " +
                     "(Label[text=one]), (Label[text=new]), (Label[text=two]), (Label[text=three]))",
                     dumpView(componentRoot, true));
             });
