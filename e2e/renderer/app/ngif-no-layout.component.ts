@@ -8,7 +8,7 @@ import { Component } from "@angular/core";
             </ActionItem>
         </ActionBar>
 
-        <Button text="false"></Button>
+        <Button *ngIf="!show" text="false"></Button>
         <ng-template [ngIf]="show">
             <Button text="true"></Button>
         </ng-template>

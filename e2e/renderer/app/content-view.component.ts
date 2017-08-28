@@ -9,18 +9,16 @@ import { Component } from "@angular/core";
         </ActionItem>
     </ActionBar>
 
-    <Placeholder *ngIf="show; then thenTemplate else elseTemplate">
-    </Placeholder>
+    <StackLayout *ngIf="show; then thenTemplate else elseTemplate">
+    </StackLayout>
 
-    <ContentView>
-        <ng-template #thenTemplate>
-            <Label text="Then"></Label>
-        </ng-template>
+    <ng-template #thenTemplate>
+        <Label text="Then"></Label>
+    </ng-template>
 
-        <ng-template #elseTemplate>
-            <Label text="Else"></Label>
-        </ng-template>
-    </ContentView>
+    <ng-template #elseTemplate>
+        <Label text="Else"></Label>
+    </ng-template>
   `
 })
 export class ContentViewComponent {
