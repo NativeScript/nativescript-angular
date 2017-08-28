@@ -40,10 +40,10 @@ class LocationLogService {
                 (service.routerEvents$ | async)"
                 margin="10">
 
-            <template let-data="item" let-odd="odd" let-even="even">
+            <ng-template let-data="item" let-odd="odd" let-even="even">
                 <Label [text]="data" textWrap="true"
                     [class.odd]="odd" [class.even]="even"></Label>
-            </template>
+            </ng-template>
 
         </ListView>
     </GridLayout>

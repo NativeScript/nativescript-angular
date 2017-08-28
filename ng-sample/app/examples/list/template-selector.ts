@@ -43,13 +43,13 @@ export class HeaderComponent implements DoCheck {
                 row="1" margin="10"
                 [itemTemplateSelector]="templateSelector">
                 
-                <template nsTemplateKey="header" let-item="item" let-i="index" let-odd="odd" let-even="even">
+                <ng-template nsTemplateKey="header" let-item="item" let-i="index" let-odd="odd" let-even="even">
                     <header-component [data]="item"></header-component>
-                </template>
+                </ng-template>
                 
-                <template nsTemplateKey="item" let-item="item" let-i="index" let-odd="odd" let-even="even">
+                <ng-template nsTemplateKey="item" let-item="item" let-i="index" let-odd="odd" let-even="even">
                     <item-component [data]="item"></item-component>
-                </template>
+                </ng-template>
             </ListView>
 
             <Button text="add item" (tap)="addItem()" row="2" ></Button>
