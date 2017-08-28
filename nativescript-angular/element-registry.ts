@@ -2,36 +2,35 @@ import { View } from "tns-core-modules/ui/core/view";
 import { LayoutBase } from "tns-core-modules/ui/layouts/layout-base";
 
 export type NgView = (View & ViewExtensions);
-export type NgElement = NgView | InvisibleNode;
 
 export interface ViewExtensions {
     meta: ViewClassMeta;
     nodeType: number;
     nodeName: string;
     templateParent: NgView;
-    nextSibling: NgElement;
-    firstChild: NgElement;
-    lastChild: NgElement;
+    nextSibling: NgView;
+    firstChild: NgView;
+    lastChild: NgView;
     ngCssClasses: Map<string, boolean>;
 }
 
 export interface ElementReference {
-    previous: NgElement;
-    next: NgElement;
+    previous: NgView;
+    next: NgView;
 }
 
 export interface ViewClass {
     new (): View;
 }
 
-export abstract class InvisibleNode extends View implements ViewExtensions {
+export abstract class InvisibleNode extends View implements NgView {
     meta: { skipAddToDom: boolean };
     nodeType: number;
     nodeName: string;
     templateParent: NgView;
-    nextSibling: NgElement;
-    firstChild: NgElement;
-    lastChild: NgElement;
+    nextSibling: NgView;
+    firstChild: NgView;
+    lastChild: NgView;
     ngCssClasses: Map<string, boolean>;
 
     constructor() {

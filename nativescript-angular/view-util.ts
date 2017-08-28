@@ -6,7 +6,6 @@ import { LayoutBase } from "tns-core-modules/ui/layouts/layout-base";
 import {
     CommentNode,
     InvisibleNode,
-    NgElement,
     NgView,
     TextNode,
     ViewExtensions,
@@ -55,9 +54,9 @@ export class ViewUtil {
 
     public insertChild(
         parent: NgView,
-        child: NgElement,
-        previous: NgElement = parent.lastChild,
-        next?: NgElement
+        child: NgView,
+        previous: NgView = parent.lastChild,
+        next?: NgView
     ) {
         if (!parent) {
             return;
@@ -75,10 +74,10 @@ export class ViewUtil {
     }
 
     private addToQueue(
-        parent: NgElement,
-        child: NgElement,
-        previous: NgElement,
-        next: NgElement
+        parent: NgView,
+        child: NgView,
+        previous: NgView,
+        next: NgView
     ): void {
         if (previous) {
             previous.nextSibling = child;
@@ -93,7 +92,7 @@ export class ViewUtil {
         }
     }
 
-    private appendToQueue(parent: NgElement, view: NgElement) {
+    private appendToQueue(parent: NgView, view: NgView) {
         traceLog(`ViewUtil.appendToQueue parent: ${parent} view: ${view}`);
         if (parent.lastChild) {
             parent.lastChild.nextSibling = view;
@@ -131,7 +130,7 @@ export class ViewUtil {
         }
     }
 
-    public removeChild(parent: NgView, child: NgElement) {
+    public removeChild(parent: NgView, child: NgView) {
         if (!parent) {
             return;
         }
@@ -183,7 +182,8 @@ export class ViewUtil {
         }
     }
 
-    private findPreviousElement(parent: NgLayoutBase, child: NgView, elementIndex: number): NgElement {
+    // NOTE: This one is O(n) - use carefully
+    private findPreviousElement(parent: NgLayoutBase, child: NgView, elementIndex: number): NgView {
         const previousVisual = this.getPreviousVisualElement(parent, elementIndex);
         let previous = previousVisual || parent.firstChild;
 
@@ -197,12 +197,13 @@ export class ViewUtil {
         return previous;
     }
 
-    private getPreviousVisualElement(parent: NgLayoutBase, elementIndex: number): NgElement {
+    private getPreviousVisualElement(parent: NgLayoutBase, elementIndex: number): NgView {
         if (elementIndex > 0) {
-            return parent.getChildAt(elementIndex - 1) as NgElement;
+            return parent.getChildAt(elementIndex - 1) as NgView;
         }
     }
 
+    // NOTE: This one is O(n) - use carefully
     public getChildIndex(parent: any, child: NgView) {
         if (isLayout(parent)) {
             return parent.getChildIndex(child);
