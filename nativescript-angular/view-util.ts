@@ -122,17 +122,22 @@ export class ViewUtil {
             this.removeLayoutChild(parent, child);
         }
 
-        // Find next actual element
-        while (next && isDetachedElement(next)) {
-            next = next.nextSibling;
-        }
-
-        if (next) {
-            const index = parent.getChildIndex(next);
+        const nextVisual = this.findNextVisual(next);
+        if (nextVisual) {
+            const index = parent.getChildIndex(nextVisual);
             parent.insertChild(child, index);
         } else {
             parent.addChild(child);
         }
+    }
+
+    private findNextVisual(view: NgView) {
+        let next = view;
+        while (next && isDetachedElement(next)) {
+            next = next.nextSibling;
+        }
+
+        return next;
     }
 
     public removeChild(parent: NgView, child: NgView) {
