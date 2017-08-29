@@ -14,11 +14,6 @@ export interface ViewExtensions {
     ngCssClasses: Map<string, boolean>;
 }
 
-export interface ElementReference {
-    previous: NgView;
-    next: NgView;
-}
-
 export interface ViewClass {
     new (): View;
 }

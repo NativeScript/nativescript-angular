@@ -9,6 +9,7 @@ import { Component } from "@angular/core";
             <Button text="NgIf inbetween" [nsRouterLink]="['/ngif-inbetween']"></Button>
             <Button text="NgIfElse" [nsRouterLink]="['/ngifelse']"></Button>
             <Button text="NgIf Then Else" [nsRouterLink]="['/ngif-then-else']"></Button>
+            <Button text="NgIf Subsequent Ifs" [nsRouterLink]="['/ngif-subsequent']"></Button>
             <Button text="Content view" [nsRouterLink]="['/content-view']"></Button>
         </FlexboxLayout>
     `

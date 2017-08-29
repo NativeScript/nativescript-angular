@@ -89,7 +89,7 @@ describe("ngIf scenario", () => {
 
                 try {
                     await driverWrapper.findElementByText("Label", SearchOptions.exact);
-                } catch(e) {
+                } catch (e) {
                     done();
                 }
             })();
@@ -152,7 +152,7 @@ describe("ngIf scenario", () => {
 
                 try {
                     await driverWrapper.findElementByText("Else", SearchOptions.exact);
-                } catch(e) {
+                } catch (e) {
                     done();
                 }
             })();
@@ -215,7 +215,7 @@ describe("ngIf scenario", () => {
 
                 try {
                     await driverWrapper.findElementByText("Else", SearchOptions.exact);
-                } catch(e) {
+                } catch (e) {
                     done();
                 }
             })();
@@ -269,7 +269,7 @@ describe("ngIf scenario", () => {
                 .then(_ => { throw new Error("Then template found!"); })
                 .catch(() => done());
         });
-        
+
         it("should swap the content when condition is changed", done => {
             (async () => {
                 toggleButton = await toggleButton.refetch();
@@ -278,10 +278,136 @@ describe("ngIf scenario", () => {
 
                 try {
                     await driverWrapper.findElementByText("Else", SearchOptions.exact);
-                } catch(e) {
+                } catch (e) {
                     done();
                 }
             })();
         });
     });
+
+    describe("subsequent ifs", async () => {
+        let firstButton: ExtendedUIElement;
+        let secondButton: ExtendedUIElement;
+        let firstLabel: ExtendedUIElement;
+        let secondLabel: ExtendedUIElement;
+
+        before(async () => {
+            driver = await createDriver();
+            driverWrapper = new DriverWrapper(driver);
+        });
+
+        after(async () => {
+            await driver.quit();
+            console.log("Driver quits!");
+        });
+
+        it("should navigate to page", async () => {
+            const navigationButton =
+                await driverWrapper.findElementByText("NgIf Subsequent Ifs", SearchOptions.exact);
+            await navigationButton.click();
+        });
+
+        it("should find elements", async () => {
+            firstButton = await driverWrapper.findElementByText("Toggle first", SearchOptions.exact);
+            secondButton = await driverWrapper.findElementByText("Toggle second", SearchOptions.exact);
+
+            firstLabel = await driverWrapper.findElementByText("== 1 ==", SearchOptions.exact);
+            secondLabel = await driverWrapper.findElementByText("== 2 ==", SearchOptions.exact);
+
+            assert.isDefined(firstButton);
+            assert.isDefined(secondButton);
+            assert.isDefined(firstLabel);
+            assert.isDefined(secondLabel);
+        });
+
+        it("should toggle on first view", async () => {
+            await firstButton.click();
+
+            let conditional = await driverWrapper.findElementByText("first", SearchOptions.exact);
+
+            await isAbove(firstLabel, conditional);
+            await isAbove(conditional, secondLabel);
+        });
+
+        it("should toggle off first view", done => {
+            (async () => {
+                await firstButton.click();
+
+                driverWrapper.findElementByText("first", SearchOptions.exact, 500)
+                    .then(_ => { throw new Error("first label found!"); })
+                    .catch(() => done());
+            })();
+        });
+
+        it("should toggle on second view", async () => {
+            await secondButton.click();
+
+            let conditional = await driverWrapper.findElementByText("second", SearchOptions.exact);
+            await isAbove(firstLabel, conditional);
+            await isAbove(conditional, secondLabel);
+        });
+
+        it("should toggle off second view", done => {
+            (async () => {
+                await secondButton.click();
+
+                driverWrapper.findElementByText("first", SearchOptions.exact, 500)
+                    .then(_ => { throw new Error("first label found!"); })
+                    .catch(() => done());
+            })();
+        });
+
+        it("should toggle on both views", async () => {
+            await firstButton.click();
+            await secondButton.click();
+
+            let conditional1 = await driverWrapper.findElementByText("first", SearchOptions.exact);
+            let conditional2 = await driverWrapper.findElementByText("second", SearchOptions.exact);
+            await isAbove(firstLabel, conditional1);
+            await isAbove(conditional1, conditional2);
+            await isAbove(conditional2, secondLabel);
+        });
+
+        it("should toggle off both views", done => {
+            (async () => {
+                await firstButton.click();
+                await secondButton.click();
+
+                driverWrapper.findElementByText("first", SearchOptions.exact, 500)
+                    .then(_ => { throw new Error("first label found!"); })
+                    .catch(() => {
+                        driverWrapper.findElementByText("second", SearchOptions.exact, 500)
+                            .then(_ => { throw new Error("second label found!"); })
+                            .catch(() => done());
+                    });
+            })();
+        });
+
+        it("should toggle on both views in reverse", async () => {
+            await secondButton.click();
+            await firstButton.click();
+
+            let conditional1 = await driverWrapper.findElementByText("first", SearchOptions.exact);
+            let conditional2 = await driverWrapper.findElementByText("second", SearchOptions.exact);
+            await isAbove(firstLabel, conditional1);
+            await isAbove(conditional1, conditional2);
+            await isAbove(conditional2, secondLabel);
+        });
+
+        it("should toggle off both views in reverse", done => {
+            (async () => {
+                await secondButton.click();
+                await firstButton.click();
+
+                driverWrapper.findElementByText("first", SearchOptions.exact, 500)
+                    .then(_ => { throw new Error("first label found!"); })
+                    .catch(() => {
+                        driverWrapper.findElementByText("second", SearchOptions.exact, 500)
+                            .then(_ => { throw new Error("second label found!"); })
+                            .catch(() => done());
+                    });
+            })();
+        });
+    });
+
 });

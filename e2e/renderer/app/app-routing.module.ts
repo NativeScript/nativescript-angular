@@ -8,6 +8,7 @@ import { NgIfNoLayoutComponent } from "./ngif-no-layout.component";
 import { NgIfInbetweenComponent } from "./ngif-inbetween.component";
 import { NgIfElseComponent } from "./ngifelse.component";
 import { NgIfThenElseComponent } from "./ngif-then-else.component";
+import { NgIfSubsequent } from "./ngif-subsequent.component";
 import { ContentViewComponent } from "./content-view.component";
 
 export const routes = [
@@ -45,6 +46,10 @@ export const routes = [
         component: NgIfThenElseComponent,
     },
     {
+        path: "ngif-subsequent",
+        component: NgIfSubsequent,
+    },
+    {
         path: "content-view",
         component: ContentViewComponent,
     },
@@ -58,6 +63,7 @@ export const navigatableComponents = [
     NgIfInbetweenComponent,
     NgIfElseComponent,
     NgIfThenElseComponent,
+    NgIfSubsequent,
     ContentViewComponent,
 ];
 

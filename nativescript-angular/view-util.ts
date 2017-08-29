@@ -122,6 +122,11 @@ export class ViewUtil {
             this.removeLayoutChild(parent, child);
         }
 
+        // Find next actual element
+        while (next && isDetachedElement(next)) {
+            next = next.nextSibling;
+        }
+
         if (next) {
             const index = parent.getChildIndex(next);
             parent.insertChild(child, index);
