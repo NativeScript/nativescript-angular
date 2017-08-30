@@ -15,7 +15,7 @@ class NSFileSystemMock {
     }
 
     public fileExists(path: string): boolean {
-        // mycomponent.html aways exists
+        // mycomponent.html always exists
         // mycomponent.css is the other file
         return path.indexOf("mycomponent.html") >= 0 || path === "/app/dir/mycomponent.css";
     }
@@ -64,5 +64,9 @@ describe("XHR name resolution", () => {
         assert.strictEqual(
             "/app/dir/mycomponent.css",
             resourceLoader.resolve("mycomponent.less"));
+    });
+
+    it("throws for non-existing file that has no fallbacks", () => {
+        assert.throws(() => resourceLoader.resolve("does-not-exist.css"));
     });
 });

@@ -24,7 +24,24 @@ export class FileSystemResourceLoader extends ResourceLoader {
         return templateFile.readText();
     }
 
-    resolveRelativeUrls(url: string): string {
+    resolve(url: string): string {
+        const normalizedUrl = this.resolveRelativeUrls(url);
+
+        if (this.fs.fileExists(normalizedUrl)) {
+            return normalizedUrl;
+        }
+
+        const { candidates: fallbackCandidates, resource: fallbackResource } =
+            this.fallbackResolve(normalizedUrl);
+
+        if (fallbackResource) {
+            return fallbackResource;
+        }
+
+        throw new Error(`Could not resolve ${url}. Looked for: ${normalizedUrl}, ${fallbackCandidates}`);
+    }
+
+    private resolveRelativeUrls(url: string): string {
         // Angular assembles absolute URLs and prefixes them with //
         if (url.indexOf("/") !== 0) {
             // Resolve relative URLs based on the app root.
@@ -34,26 +51,22 @@ export class FileSystemResourceLoader extends ResourceLoader {
         }
     }
 
-    resolve(url: string) {
-        const normalizedUrl = this.resolveRelativeUrls(url);
+    private fallbackResolve(url: string):
+        ({ resource: string, candidates: string[] }) {
 
-        if (this.fs.fileExists(normalizedUrl)) {
-            return normalizedUrl;
-        }
+        const candidates = extensionsFallbacks
+            .filter(([extension]) => url.endsWith(extension))
+            .map(([extension, fallback]) =>
+                 this.replaceExtension(url, extension, fallback));
 
-        const fallbackCandidates = [];
-        extensionsFallbacks.forEach(([extension, fallback]) => {
-            if (normalizedUrl.endsWith(extension)) {
-                fallbackCandidates.push(normalizedUrl.substr(0, normalizedUrl.length - extension.length) + fallback);
-            }
-        });
+        const resource = candidates.find(candidate => this.fs.fileExists(candidate));
 
-        for (let i = 0; i < fallbackCandidates.length; i++) {
-            if (this.fs.fileExists(fallbackCandidates[i])) {
-                return fallbackCandidates[i];
-            }
-        }
+        return { candidates, resource };
+    }
 
-        throw new Error(`Could not resolve ${url}. Looked for: ${normalizedUrl}, ${fallbackCandidates}`);
+    private replaceExtension(fileName: string, oldExtension: string, newExtension: string): string {
+        const baseName = fileName.substr(0, fileName.length - oldExtension.length);
+        return baseName + newExtension;
     }
 }
+
