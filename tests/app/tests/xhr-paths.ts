@@ -15,7 +15,7 @@ class NSFileSystemMock {
     }
 
     public fileExists(path: string): boolean {
-        // mycomponent.html aways exists
+        // mycomponent.html always exists
         // mycomponent.css is the other file
         return path.indexOf("mycomponent.html") >= 0 || path === "/app/dir/mycomponent.css";
     }
