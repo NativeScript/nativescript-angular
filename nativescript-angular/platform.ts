@@ -35,6 +35,7 @@ if ((<any>global).___TS_UNUSED) {
 import "./dom-adapter";
 
 import { NativeScriptElementSchemaRegistry } from "./schema-registry";
+import { NSFileSystem } from "./file-system/ns-file-system";
 import { FileSystemResourceLoader } from "./resource-loader";
 
 export const NS_COMPILER_PROVIDERS = [
@@ -43,6 +44,7 @@ export const NS_COMPILER_PROVIDERS = [
         provide: COMPILER_OPTIONS,
         useValue: {
             providers: [
+                NSFileSystem,
                 { provide: ResourceLoader, useClass: FileSystemResourceLoader },
                 { provide: ElementSchemaRegistry, useClass: NativeScriptElementSchemaRegistry },
             ]
