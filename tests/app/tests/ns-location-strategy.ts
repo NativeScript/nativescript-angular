@@ -19,7 +19,7 @@ class FakeFrame extends View implements Frame {
         }
     }
 
-    navigate(entry: NavigationEntry) { }
+    navigate(entry: any) { }
 
     constructor(private backCB?: () => void) {
         super();

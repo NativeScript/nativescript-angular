@@ -2,6 +2,7 @@ import { write, categories, messageType } from "tns-core-modules/trace";
 
 export const animationsTraceCategory = "ns-animations";
 export const rendererTraceCategory = "ns-renderer";
+export const viewUtilCategory = "ns-view-util";
 export const routerTraceCategory = "ns-router";
 export const listViewTraceCategory = "ns-list-view";
 
@@ -15,6 +16,10 @@ export function rendererLog(msg): void {
 
 export function rendererError(message: string): void {
     write(message, rendererTraceCategory, messageType.error);
+}
+
+export function viewUtilLog(msg): void {
+    write(msg, viewUtilCategory);
 }
 
 export function routerLog(message: string): void {

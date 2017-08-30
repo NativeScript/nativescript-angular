@@ -6,7 +6,6 @@ import { LayoutBase } from "tns-core-modules/ui/layouts/layout-base";
 import {
     CommentNode,
     InvisibleNode,
-    NgElement,
     NgView,
     TextNode,
     ViewExtensions,
@@ -17,10 +16,10 @@ import {
 } from "./element-registry";
 
 import { platformNames, Device } from "tns-core-modules/platform";
-import { rendererLog as traceLog } from "./trace";
+import { viewUtilLog as traceLog } from "./trace";
 
-const XML_ATTRIBUTES = Object.freeze(["style", "rows", "columns", "fontAttributes"]);
 const ELEMENT_NODE_TYPE = 1;
+const XML_ATTRIBUTES = Object.freeze(["style", "rows", "columns", "fontAttributes"]);
 const whiteSpaceSplitter = /\s+/;
 
 export type ViewExtensions = ViewExtensions;
@@ -53,54 +52,168 @@ export class ViewUtil {
         this.isAndroid = device.os === platformNames.android;
     }
 
-    public insertChild(parent: any, child: NgElement, atIndex: number = -1) {
+    public insertChild(
+        parent: NgView,
+        child: NgView,
+        previous: NgView = parent.lastChild,
+        next?: NgView
+    ) {
+        if (!parent) {
+            return;
+        }
+
+        this.addToQueue(parent, child, previous, next);
+
         if (child instanceof InvisibleNode) {
             child.templateParent = parent;
         }
 
-        if (!parent || isDetachedElement(child)) {
-            return;
-        }
-
-        if (parent.meta && parent.meta.insertChild) {
-            parent.meta.insertChild(parent, child, atIndex);
-        } else if (isLayout(parent)) {
-            if (child.parent === parent) {
-                const index = (<LayoutBase>parent).getChildIndex(child);
-                if (index !== -1) {
-                    parent.removeChild(child);
-                }
-            }
-            if (atIndex !== -1) {
-                parent.insertChild(child, atIndex);
-            } else {
-                parent.addChild(child);
-            }
-        } else if (isContentView(parent)) {
-            parent.content = child;
-        } else if (parent && parent._addChildFromBuilder) {
-            parent._addChildFromBuilder(child.nodeName, child);
+        if (!isDetachedElement(child)) {
+            this.addToVisualTree(parent, child, next);
         }
     }
 
-    public removeChild(parent: any, child: NgElement) {
-        if (!parent || isDetachedElement(child)) {
+    private addToQueue(
+        parent: NgView,
+        child: NgView,
+        previous: NgView,
+        next: NgView
+    ): void {
+        if (previous) {
+            previous.nextSibling = child;
+        } else {
+            parent.firstChild = child;
+        }
+
+        if (next) {
+            child.nextSibling = next;
+        } else {
+            this.appendToQueue(parent, child);
+        }
+    }
+
+    private appendToQueue(parent: NgView, view: NgView) {
+        traceLog(`ViewUtil.appendToQueue parent: ${parent} view: ${view}`);
+        if (parent.lastChild) {
+            parent.lastChild.nextSibling = view;
+        }
+
+        parent.lastChild = view;
+    }
+
+    private addToVisualTree(parent: NgView, child: NgView, next: NgView): void {
+        if (parent.meta && parent.meta.insertChild) {
+            parent.meta.insertChild(parent, child);
+        } else if (isLayout(parent)) {
+            this.insertToLayout(parent, child, next);
+        } else if (isContentView(parent)) {
+            parent.content = child;
+        } else if (parent && (<any>parent)._addChildFromBuilder) {
+            (<any>parent)._addChildFromBuilder(child.nodeName, child);
+        }
+    }
+
+    private insertToLayout(
+        parent: NgLayoutBase,
+        child: NgView,
+        next: NgView
+    ): void {
+        if (child.parent === parent) {
+            this.removeLayoutChild(parent, child);
+        }
+
+        const nextVisual = this.findNextVisual(next);
+        if (nextVisual) {
+            const index = parent.getChildIndex(nextVisual);
+            parent.insertChild(child, index);
+        } else {
+            parent.addChild(child);
+        }
+    }
+
+    private findNextVisual(view: NgView) {
+        let next = view;
+        while (next && isDetachedElement(next)) {
+            next = next.nextSibling;
+        }
+
+        return next;
+    }
+
+    public removeChild(parent: NgView, child: NgView) {
+        if (!parent) {
             return;
         }
 
         if (parent.meta && parent.meta.removeChild) {
             parent.meta.removeChild(parent, child);
         } else if (isLayout(parent)) {
-            parent.removeChild(child);
-        } else if (isContentView(parent)) {
-            if (parent.content === child) {
-                parent.content = null;
-            }
+            this.removeLayoutChild(parent, child);
+        } else if (isContentView(parent) && parent.content === child) {
+            parent.content = null;
+            parent.lastChild = null;
+            parent.firstChild = null;
         } else if (isView(parent)) {
             parent._removeView(child);
         }
     }
 
+    private removeLayoutChild(parent: NgLayoutBase, child: NgView): void {
+        const index = parent.getChildIndex(child);
+        this.removeFromQueue(parent, child, index);
+        if (index === -1) {
+            return;
+        }
+
+        parent.removeChild(child);
+    }
+
+    private removeFromQueue(parent: NgLayoutBase, child: NgView, index: number) {
+        traceLog(`ViewUtil.removeFromQueue ` +
+            `parent: ${parent} child: ${child} index: ${index}`);
+
+        if (parent.firstChild === child && parent.lastChild === child) {
+            parent.firstChild = null;
+            parent.lastChild = null;
+            return;
+        }
+
+        if (parent.firstChild === child) {
+            parent.firstChild = child.nextSibling;
+        }
+
+        const previous = this.findPreviousElement(parent, child, index);
+        if (parent.lastChild === child) {
+            parent.lastChild = previous;
+        }
+
+        if (previous) {
+            previous.nextSibling = child.nextSibling;
+        }
+    }
+
+    // NOTE: This one is O(n) - use carefully
+    private findPreviousElement(parent: NgLayoutBase, child: NgView, elementIndex: number): NgView {
+        const previousVisual = this.getPreviousVisualElement(parent, elementIndex);
+        let previous = previousVisual || parent.firstChild;
+
+        // since detached elements are not added to the visual tree,
+        // we need to find the actual previous sibling of the view,
+        // which may as well be an invisible node
+        while (previous && previous !== child && previous.nextSibling !== child) {
+            previous = previous.nextSibling;
+        }
+
+        return previous;
+    }
+
+    private getPreviousVisualElement(parent: NgLayoutBase, elementIndex: number): NgView {
+        if (elementIndex > 0) {
+            return parent.getChildAt(elementIndex - 1) as NgView;
+        }
+    }
+
+    // NOTE: This one is O(n) - use carefully
     public getChildIndex(parent: any, child: NgView) {
         if (isLayout(parent)) {
             return parent.getChildIndex(child);
@@ -131,9 +244,7 @@ export class ViewUtil {
 
         // we're setting the node type of the view
         // to 'element' because of checks done in the
-        // dom animation engine:
-        // tslint:disable-next-line:max-line-length
-        // https://github.com/angular/angular/blob/master/packages/animations/browser/src/render/dom_animation_engine.ts#L70-L81
+        // dom animation engine
         view.nodeType = ELEMENT_NODE_TYPE;
 
         return view;
@@ -168,33 +279,10 @@ export class ViewUtil {
         }
     }
 
-    // finds the node in the parent's views and returns the next index
-    // returns -1 if the node has no parent or next sibling
-    public nextSiblingIndex(node: NgView): number {
-        const parent = node.parent;
-        if (!parent) {
-            return -1;
-        }
-
-        let index = 0;
-        let found = false;
-        parent.eachChild(child => {
-            if (child === node) {
-                found = true;
-            }
-
-            index += 1;
-            return !found;
-        });
-
-        return found ? index : -1;
-    }
-
     private runsIn(platform: string): boolean {
         return (platform === "ios" && this.isIos) ||
             (platform === "android" && this.isAndroid);
     }
-
 
     private setPropertyInternal(view: NgView, attributeName: string, value: any): void {
         traceLog(`Setting attribute: ${attributeName}=${value} to ${view}`);

@@ -23,6 +23,11 @@ export const HOST_ATTR = `_nghost-${COMPONENT_VARIABLE}`;
 export const CONTENT_ATTR = `_ngcontent-${COMPONENT_VARIABLE}`;
 const ATTR_SANITIZER = /-/g;
 
+export interface ElementReference {
+    previous: NgView;
+    next: NgView;
+}
+
 @Injectable()
 export class NativeScriptRendererFactory implements RendererFactory2 {
     private componentRenderers = new Map<string, NativeScriptRenderer>();
@@ -85,15 +90,16 @@ export class NativeScriptRenderer extends Renderer2 {
     }
 
     @profile
-    appendChild(parent: any, newChild: NgView): void {
+    appendChild(parent: NgView, newChild: NgView): void {
         traceLog(`NativeScriptRenderer.appendChild child: ${newChild} parent: ${parent}`);
         this.viewUtil.insertChild(parent, newChild);
     }
 
     @profile
-    insertBefore(parent: NgView, newChild: NgView, refChildIndex: number): void {
-        traceLog(`NativeScriptRenderer.insertBefore child: ${newChild} parent: ${parent}`);
-        this.viewUtil.insertChild(parent, newChild, refChildIndex);
+    insertBefore(parent: NgView, newChild: NgView, { previous, next }: ElementReference): void {
+        traceLog(`NativeScriptRenderer.insertBefore child: ${newChild} ` +
+            `parent: ${parent} previous: ${previous} next: ${next}`);
+        this.viewUtil.insertChild(parent, newChild, previous, next);
     }
 
     @profile
@@ -110,14 +116,18 @@ export class NativeScriptRenderer extends Renderer2 {
 
     @profile
     parentNode(node: NgView): any {
-        traceLog("NativeScriptRenderer.parentNode for node: " + node);
+        traceLog(`NativeScriptRenderer.parentNode for node: ${node}`);
         return node.parent || node.templateParent;
     }
 
     @profile
-    nextSibling(node: NgView): number {
-        traceLog(`NativeScriptRenderer.nextSibling ${node}`);
-        return this.viewUtil.nextSiblingIndex(node);
+    nextSibling(node: NgView): ElementReference {
+        traceLog(`NativeScriptRenderer.nextSibling of ${node} is ${node.nextSibling}`);
+
+        return {
+            previous: node,
+            next: node.nextSibling,
+        };
     }
 
     @profile

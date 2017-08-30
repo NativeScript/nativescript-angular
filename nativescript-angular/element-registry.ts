@@ -2,25 +2,30 @@ import { View } from "tns-core-modules/ui/core/view";
 import { LayoutBase } from "tns-core-modules/ui/layouts/layout-base";
 
 export type NgView = (View & ViewExtensions);
-export type NgElement = NgView | InvisibleNode;
 
 export interface ViewExtensions {
+    meta: ViewClassMeta;
     nodeType: number;
     nodeName: string;
     templateParent: NgView;
+    nextSibling: NgView;
+    firstChild: NgView;
+    lastChild: NgView;
     ngCssClasses: Map<string, boolean>;
-    meta: ViewClassMeta;
 }
 
 export interface ViewClass {
     new (): View;
 }
 
-export abstract class InvisibleNode extends View implements ViewExtensions {
+export abstract class InvisibleNode extends View implements NgView {
     meta: { skipAddToDom: boolean };
-    templateParent: NgView;
     nodeType: number;
     nodeName: string;
+    templateParent: NgView;
+    nextSibling: NgView;
+    firstChild: NgView;
+    lastChild: NgView;
     ngCssClasses: Map<string, boolean>;
 
     constructor() {
@@ -42,7 +47,7 @@ export class CommentNode extends InvisibleNode {
         super();
 
         this.meta = {
-            skipAddToDom: false,
+            skipAddToDom: true,
         };
         this.id = CommentNode.id.toString();
         CommentNode.id += 1;
@@ -67,7 +72,7 @@ const getClassName = instance => instance.constructor.name;
 
 export interface ViewClassMeta {
     skipAddToDom?: boolean;
-    insertChild?: (parent: NgView, child: NgView, atIndex: number) => void;
+    insertChild?: (parent: NgView, child: NgView) => void;
     removeChild?: (parent: NgView, child: NgView) => void;
 }
 
