@@ -51,7 +51,7 @@
     "@angular/platform-browser": "~4.2.5",
     "@angular/router": "~4.2.5",
     "rxjs": "^5.0.1",
-    "tns-core-modules": "^3.1.0 || >3.2.0-",
+    "tns-core-modules": "^3.1.0 || >3.3.0-",
     "zone.js": "^0.8.4"
   },
   "devDependencies": {
