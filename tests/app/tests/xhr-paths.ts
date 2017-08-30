@@ -65,4 +65,8 @@ describe("XHR name resolution", () => {
             "/app/dir/mycomponent.css",
             resourceLoader.resolve("mycomponent.less"));
     });
+
+    it("throws for non-existing file that has no fallbacks", () => {
+        assert.throws(() => resourceLoader.resolve("does-not-exist.css"));
+    });
 });
