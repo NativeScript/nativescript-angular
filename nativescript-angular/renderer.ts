@@ -14,7 +14,7 @@ import { APP_ROOT_VIEW, DEVICE, getRootPage } from "./platform-providers";
 import { isBlank } from "./lang-facade";
 import { ViewUtil } from "./view-util";
 import { NgView, InvisibleNode } from "./element-registry";
-import { rendererLog as traceLog } from "./trace";
+import { rendererLog as log, isEnabled as isLogEnabled } from "./trace";
 
 // CONTENT_ATTR not exported from NativeScript_renderer - we need it for styles application.
 const COMPONENT_REGEX = /%COMP%/g;
@@ -81,120 +81,160 @@ export class NativeScriptRenderer extends Renderer2 {
         private viewUtil: ViewUtil
     ) {
         super();
-        traceLog("NativeScriptRenderer created");
+        if (isLogEnabled()) {
+            log("NativeScriptRenderer created");
+        }
     }
 
     @profile
     appendChild(parent: any, newChild: NgView): void {
-        traceLog(`NativeScriptRenderer.appendChild child: ${newChild} parent: ${parent}`);
+        if (isLogEnabled()) {
+            log(`NativeScriptRenderer.appendChild child: ${newChild} parent: ${parent}`);
+        }
         this.viewUtil.insertChild(parent, newChild);
     }
 
     @profile
     insertBefore(parent: NgView, newChild: NgView, refChildIndex: number): void {
-        traceLog(`NativeScriptRenderer.insertBefore child: ${newChild} parent: ${parent}`);
+        if (isLogEnabled()) {
+            log(`NativeScriptRenderer.insertBefore child: ${newChild} parent: ${parent}`);
+        }
         this.viewUtil.insertChild(parent, newChild, refChildIndex);
     }
 
     @profile
     removeChild(parent: any, oldChild: NgView): void {
-        traceLog(`NativeScriptRenderer.removeChild child: ${oldChild} parent: ${parent}`);
+        if (isLogEnabled()) {
+            log(`NativeScriptRenderer.removeChild child: ${oldChild} parent: ${parent}`);
+        }
         this.viewUtil.removeChild(parent, oldChild);
     }
 
     @profile
     selectRootElement(selector: string): NgView {
-        traceLog("NativeScriptRenderer.selectRootElement: " + selector);
+        if (isLogEnabled()) {
+            log("NativeScriptRenderer.selectRootElement: " + selector);
+        }
         return this.rootView;
     }
 
     @profile
     parentNode(node: NgView): any {
-        traceLog("NativeScriptRenderer.parentNode for node: " + node);
+        if (isLogEnabled()) {
+            log("NativeScriptRenderer.parentNode for node: " + node);
+        }
         return node.parent || node.templateParent;
     }
 
     @profile
     nextSibling(node: NgView): number {
-        traceLog(`NativeScriptRenderer.nextSibling ${node}`);
+        if (isLogEnabled()) {
+            log(`NativeScriptRenderer.nextSibling ${node}`);
+        }
         return this.viewUtil.nextSiblingIndex(node);
     }
 
     @profile
     createComment(_value: any): InvisibleNode {
-        traceLog(`NativeScriptRenderer.createComment ${_value}`);
+        if (isLogEnabled()) {
+            log(`NativeScriptRenderer.createComment ${_value}`);
+        }
         return this.viewUtil.createComment();
     }
 
     @profile
     createElement(name: any, _namespace: string): NgView {
-        traceLog(`NativeScriptRenderer.createElement: ${name}`);
+        if (isLogEnabled()) {
+            log(`NativeScriptRenderer.createElement: ${name}`);
+        }
         return this.viewUtil.createView(name);
     }
 
     @profile
     createText(_value: string): InvisibleNode {
-        traceLog(`NativeScriptRenderer.createText ${_value}`);
+        if (isLogEnabled()) {
+            log(`NativeScriptRenderer.createText ${_value}`);
+        }
         return this.viewUtil.createText();
     }
 
     @profile
     createViewRoot(hostElement: NgView): NgView {
-        traceLog(`NativeScriptRenderer.createViewRoot ${hostElement.nodeName}`);
+        if (isLogEnabled()) {
+            log(`NativeScriptRenderer.createViewRoot ${hostElement.nodeName}`);
+        }
         return hostElement;
     }
 
     @profile
     projectNodes(parentElement: NgView, nodes: NgView[]): void {
-        traceLog("NativeScriptRenderer.projectNodes");
+        if (isLogEnabled()) {
+            log("NativeScriptRenderer.projectNodes");
+        }
         nodes.forEach((node) => this.viewUtil.insertChild(parentElement, node));
     }
 
     @profile
     destroy() {
-        traceLog("NativeScriptRenderer.destroy");
+        if (isLogEnabled()) {
+            log("NativeScriptRenderer.destroy");
+        }
         // Seems to be called on component dispose only (router outlet)
         // TODO: handle this when we resolve routing and navigation.
     }
 
     @profile
     setAttribute(view: NgView, name: string, value: string, namespace?: string) {
-        traceLog(`NativeScriptRenderer.setAttribute ${view} : ${name} = ${value}, namespace: ${namespace}`);
+        if (isLogEnabled()) {
+            log(`NativeScriptRenderer.setAttribute ${view} : ${name} = ${value}, namespace: ${namespace}`);
+        }
         return this.viewUtil.setProperty(view, name, value, namespace);
     }
 
     @profile
     removeAttribute(_el: NgView, _name: string): void {
-        traceLog(`NativeScriptRenderer.removeAttribute ${_el}: ${_name}`);
+        if (isLogEnabled()) {
+            log(`NativeScriptRenderer.removeAttribute ${_el}: ${_name}`);
+        }
     }
 
     @profile
     setProperty(view: any, name: string, value: any) {
-        traceLog(`NativeScriptRenderer.setProperty ${view} : ${name} = ${value}`);
+        if (isLogEnabled()) {
+            log(`NativeScriptRenderer.setProperty ${view} : ${name} = ${value}`);
+        }
         return this.viewUtil.setProperty(view, name, value);
     }
 
     @profile
     addClass(view: NgView, name: string): void {
-        traceLog(`NativeScriptRenderer.addClass ${name}`);
+        if (isLogEnabled()) {
+            log(`NativeScriptRenderer.addClass ${name}`);
+        }
         this.viewUtil.addClass(view, name);
     }
 
     @profile
     removeClass(view: NgView, name: string): void {
-        traceLog(`NativeScriptRenderer.removeClass ${name}`);
+        if (isLogEnabled()) {
+            log(`NativeScriptRenderer.removeClass ${name}`);
+        }
         this.viewUtil.removeClass(view, name);
     }
 
     @profile
     setStyle(view: NgView, styleName: string, value: any, _flags?: RendererStyleFlags2): void {
-        traceLog(`NativeScriptRenderer.setStyle: ${styleName} = ${value}`);
+        if (isLogEnabled()) {
+            log(`NativeScriptRenderer.setStyle: ${styleName} = ${value}`);
+        }
         this.viewUtil.setStyle(view, styleName, value);
     }
 
     @profile
     removeStyle(view: NgView, styleName: string, _flags?: RendererStyleFlags2): void {
-        traceLog("NativeScriptRenderer.removeStyle: ${styleName}");
+        if (isLogEnabled()) {
+            log("NativeScriptRenderer.removeStyle: ${styleName}");
+        }
         this.viewUtil.removeStyle(view, styleName);
     }
 
@@ -202,32 +242,41 @@ export class NativeScriptRenderer extends Renderer2 {
     // such as <template> placeholders.
     @profile
     setBindingDebugInfo(renderElement: NgView, propertyName: string, propertyValue: string): void {
-        traceLog("NativeScriptRenderer.setBindingDebugInfo: " + renderElement + ", " +
-            propertyName + " = " + propertyValue);
+        if (isLogEnabled()) {
+            log("NativeScriptRenderer.setBindingDebugInfo: " + renderElement + ", " +
+                propertyName + " = " + propertyValue);
+        }
     }
 
     @profile
     setElementDebugInfo(renderElement: any, _info: any /*RenderDebugInfo*/): void {
-        traceLog("NativeScriptRenderer.setElementDebugInfo: " + renderElement);
+        if (isLogEnabled()) {
+            log("NativeScriptRenderer.setElementDebugInfo: " + renderElement);
+        }
     }
 
     @profile
     invokeElementMethod(_renderElement: NgView, methodName: string, args: Array<any>) {
-        traceLog("NativeScriptRenderer.invokeElementMethod " + methodName + " " + args);
+        if (isLogEnabled()) {
+            log("NativeScriptRenderer.invokeElementMethod " + methodName + " " + args);
+        }
     }
 
     @profile
     setValue(_renderNode: any, _value: string) {
-        traceLog(
-            `NativeScriptRenderer.setValue ` +
-            `renderNode: ${_renderNode}, value: ${_value}`
-        );
+        if (isLogEnabled()) {
+            log(
+                `NativeScriptRenderer.setValue ` +
+                `renderNode: ${_renderNode}, value: ${_value}`
+            );
+        }
     }
 
     @profile
-    listen(renderElement: any, eventName: string, callback: (event: any) => boolean):
-        () => void {
-        traceLog("NativeScriptRenderer.listen: " + eventName);
+    listen(renderElement: any, eventName: string, callback: (event: any) => boolean): () => void {
+        if (isLogEnabled()) {
+            log("NativeScriptRenderer.listen: " + eventName);
+        }
         // Explicitly wrap in zone
         let zonedCallback = (...args) => {
             this.zone.run(() => {

@@ -20,7 +20,7 @@ import { BehaviorSubject } from "rxjs/BehaviorSubject";
 
 import { isPresent } from "../lang-facade";
 import { DEVICE, PAGE_FACTORY, PageFactory } from "../platform-providers";
-import { routerLog } from "../trace";
+import { routerLog as log, isEnabled as isLogEnabled } from "../trace";
 import { DetachedLoader } from "../common/detached-loader";
 import { ViewUtil } from "../view-util";
 import { NSLocationStrategy } from "./ns-location-strategy";
@@ -89,10 +89,7 @@ interface CacheItem {
     loaderRef?: ComponentRef<any>;
 }
 
-
 type ProviderMap = Map<Type<any>|InjectionToken<any>, any>;
-
-const log = (msg: string) => routerLog(msg);
 
 @Directive({ selector: "page-router-outlet" }) // tslint:disable-line:directive-selector
 export class PageRouterOutlet implements OnDestroy, OnInit { // tslint:disable-line:directive-class-suffix
@@ -148,7 +145,9 @@ export class PageRouterOutlet implements OnDestroy, OnInit { // tslint:disable-l
 
         this.viewUtil = new ViewUtil(device);
         this.detachedLoaderFactory = resolver.resolveComponentFactory(DetachedLoader);
-        log("DetachedLoaderFactory loaded");
+        if (isLogEnabled()) {
+            log("DetachedLoaderFactory loaded");
+        }
     }
 
     ngOnDestroy(): void {
@@ -178,7 +177,9 @@ export class PageRouterOutlet implements OnDestroy, OnInit { // tslint:disable-l
 
     deactivate(): void {
         if (this.locationStrategy._isPageNavigatingBack()) {
-            log("PageRouterOutlet.deactivate() while going back - should destroy");
+            if (isLogEnabled()) {
+                log("PageRouterOutlet.deactivate() while going back - should destroy");
+            }
             if (!this.isActivated) {
                 return;
             }
@@ -193,7 +194,9 @@ export class PageRouterOutlet implements OnDestroy, OnInit { // tslint:disable-l
             RefCache.destroyItem(poppedItem);
             this.activated = null;
         } else {
-            log("PageRouterOutlet.deactivate() while going forward - do nothing");
+            if (isLogEnabled()) {
+                log("PageRouterOutlet.deactivate() while going forward - do nothing");
+            }
         }
     }
 
@@ -232,9 +235,11 @@ export class PageRouterOutlet implements OnDestroy, OnInit { // tslint:disable-l
      * Called when the `RouteReuseStrategy` instructs to re-attach a previously detached subtree
      */
     attach(ref: ComponentRef<any>, activatedRoute: ActivatedRoute) {
-        log("PageRouterOutlet.attach()" +
-            "when RouteReuseStrategy instructs to re-attach " +
-            "previously detached subtree");
+        if (isLogEnabled()) {
+            log("PageRouterOutlet.attach()" +
+                "when RouteReuseStrategy instructs to re-attach " +
+                "previously detached subtree");
+        }
 
         this.activated = ref;
         this._activatedRoute = activatedRoute;
@@ -250,9 +255,10 @@ export class PageRouterOutlet implements OnDestroy, OnInit { // tslint:disable-l
         activatedRoute: ActivatedRoute,
         resolver: ComponentFactoryResolver|null
     ): void {
-
-        log("PageRouterOutlet.activateWith() - " +
-            "instanciating new component during commit phase of a navigation");
+        if (isLogEnabled()) {
+            log("PageRouterOutlet.activateWith() - " +
+                "instanciating new component during commit phase of a navigation");
+        }
 
         this._activatedRoute = activatedRoute;
         resolver = resolver || this.resolver;
@@ -275,7 +281,9 @@ export class PageRouterOutlet implements OnDestroy, OnInit { // tslint:disable-l
         const factory = this.getComponentFactory(activatedRoute, loadedResolver);
 
         if (this.isInitialPage) {
-            log("PageRouterOutlet.activate() initial page - just load component");
+            if (isLogEnabled()) {
+                log("PageRouterOutlet.activate() initial page - just load component");
+            }
 
             this.isInitialPage = false;
 
@@ -289,8 +297,10 @@ export class PageRouterOutlet implements OnDestroy, OnInit { // tslint:disable-l
                 loaderRef: null,
             });
         } else {
-            log("PageRouterOutlet.activate() forward navigation - " +
-                "create detached loader in the loader container");
+            if (isLogEnabled()) {
+                log("PageRouterOutlet.activate() forward navigation - " +
+                    "create detached loader in the loader container");
+            }
 
             const page = this.pageFactory({
                 isNavigation: true,
@@ -330,7 +340,9 @@ export class PageRouterOutlet implements OnDestroy, OnInit { // tslint:disable-l
     }
 
     private activateOnGoBack(activatedRoute: ActivatedRoute): void {
-        log("PageRouterOutlet.activate() - Back navigation, so load from cache");
+        if (isLogEnabled()) {
+            log("PageRouterOutlet.activate() - Back navigation, so load from cache");
+        }
 
         this.locationStrategy._finishBackPageNavigation();
 

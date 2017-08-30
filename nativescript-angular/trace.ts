@@ -1,4 +1,5 @@
 import { write, categories, messageType } from "tns-core-modules/trace";
+export { isEnabled } from "tns-core-modules/trace";
 
 export const animationsTraceCategory = "ns-animations";
 export const rendererTraceCategory = "ns-renderer";
