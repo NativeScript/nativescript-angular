@@ -72,12 +72,20 @@ const getClassName = instance => instance.constructor.name;
 
 export interface ViewClassMeta {
     skipAddToDom?: boolean;
-    insertChild?: (parent: NgView, child: NgView) => void;
-    removeChild?: (parent: NgView, child: NgView) => void;
+    insertChild?: (parent: any, child: any, previous?: any, next?: any) => void;
+    removeChild?: (parent: any, child: any) => void;
 }
 
 export function isDetachedElement(element): boolean {
     return (element && element.meta && element.meta.skipAddToDom);
+}
+
+export function isView(view: any): view is NgView {
+    return view instanceof View;
+}
+
+export function isInvisibleNode(view: any): view is InvisibleNode {
+    return view instanceof InvisibleNode;
 }
 
 export type ViewResolver = () => ViewClass;
