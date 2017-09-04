@@ -4,6 +4,7 @@ import { Component } from "@angular/core";
     template: `
         <FlexboxLayout flexDirection="column">
             <Button text="ActionBar dynamic" [nsRouterLink]="['/action-bar-dynamic']"></Button>
+            <Button text="ActionBarExtension" [nsRouterLink]="['/action-bar-extension']"></Button>
             <Button text="NgFor" [nsRouterLink]="['/ngfor']"></Button>
             <Button text="NgForOf" [nsRouterLink]="['/ngforof']"></Button>
             <Button text="NgIf no layout" [nsRouterLink]="['/ngif-no-layout']"></Button>

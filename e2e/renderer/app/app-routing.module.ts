@@ -2,6 +2,7 @@ import { NgModule, NO_ERRORS_SCHEMA } from "@angular/core";
 import { NativeScriptRouterModule } from "nativescript-angular/router";
 
 import { ActionBarDynamicItemsComponent } from "./action-bar/action-bar-dynamic-items.component";
+import { ActionBarExtensionComponent } from "./action-bar/action-bar-extension.component";
 
 import { ListComponent } from "./list.component";
 import { NgForComponent } from "./ngfor.component";
@@ -22,6 +23,10 @@ export const routes = [
     {
         path: "action-bar-dynamic",
         component: ActionBarDynamicItemsComponent,
+    },
+    {
+        path: "action-bar-extension",
+        component: ActionBarExtensionComponent,
     },
     {
         path: "list",
@@ -63,6 +68,8 @@ export const routes = [
 
 export const navigatableComponents = [
     ActionBarDynamicItemsComponent,
+    ActionBarExtensionComponent,
+
     ListComponent,
     NgForComponent,
     NgForOfComponent,
