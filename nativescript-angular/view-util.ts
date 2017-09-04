@@ -12,7 +12,9 @@ import {
     getViewClass,
     getViewMeta,
     isDetachedElement,
+    isInvisibleNode,
     isKnownView,
+    isView,
 } from "./element-registry";
 
 import { platformNames, Device } from "tns-core-modules/platform";
@@ -28,10 +30,6 @@ export type NgLayoutBase = LayoutBase & ViewExtensions;
 export type NgContentView = ContentView & ViewExtensions;
 export type NgPlaceholder = Placeholder & ViewExtensions;
 export type BeforeAttachAction = (view: View) => void;
-
-export function isView(view: any): view is NgView {
-    return view instanceof View;
-}
 
 export function isLayout(view: any): view is NgLayoutBase {
     return view instanceof LayoutBase;
@@ -64,7 +62,7 @@ export class ViewUtil {
 
         this.addToQueue(parent, child, previous, next);
 
-        if (child instanceof InvisibleNode) {
+        if (isInvisibleNode(child)) {
             child.templateParent = parent;
         }
 

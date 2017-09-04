@@ -5,46 +5,53 @@ import { View } from "tns-core-modules/ui/core/view";
 
 import { isBlank } from "../lang-facade";
 import {
-    InvisibleNode,
     NgView,
     ViewClassMeta,
+    ViewExtensions,
+    isInvisibleNode,
+    isView,
     registerElement,
 } from "../element-registry";
 
+export function isActionItem(view: any): view is ActionItem {
+    return view instanceof ActionItem;
+}
+
+export function isNavigationButton(view: any): view is NavigationButton {
+    return view instanceof NavigationButton;
+}
+
+type NgActionBar = (ActionBar & ViewExtensions);
+
 const actionBarMeta: ViewClassMeta = {
     skipAddToDom: true,
-    insertChild: (parent: NgView, child: NgView) => {
-        const bar = <ActionBar>(<any>parent);
-        const childView = <any>child;
-
-        if (child instanceof InvisibleNode) {
+    insertChild: (parent: NgActionBar, child: NgView, previous: NgView) => {
+        if (isInvisibleNode(child)) {
             return;
-        } else if (child instanceof NavigationButton) {
-            bar.navigationButton = childView;
-            childView.parent = bar;
-        } else if (child instanceof ActionItem) {
-            bar.actionItems.addItem(childView);
-            childView.parent = bar;
-        } else if (child instanceof View) {
-            bar.titleView = childView;
+        } else if (isNavigationButton(child)) {
+            parent.navigationButton = child;
+            child.templateParent = parent;
+        } else if (isActionItem(child)) {
+            parent.actionItems.addItem(child);
+            child.templateParent = parent;
+        } else if (isView(child)) {
+            parent.titleView = child;
         }
     },
-    removeChild: (parent: NgView, child: NgView) => {
-        const bar = <ActionBar>(<any>parent);
-        const childView = <any>child;
-
-        if (child instanceof InvisibleNode) {
+    removeChild: (parent: NgActionBar, child: NgView) => {
+        if (isInvisibleNode(child)) {
             return;
-        } else if (child instanceof NavigationButton) {
-            if (bar.navigationButton === childView) {
-                bar.navigationButton = null;
+        } else if (isNavigationButton(child)) {
+            if (parent.navigationButton === child) {
+                parent.navigationButton = null;
             }
-            childView.parent = null;
-        } else if (child instanceof ActionItem) {
-            bar.actionItems.removeItem(childView);
-            childView.parent = null;
-        } else if (child instanceof View && bar.titleView && bar.titleView === childView) {
-            bar.titleView = null;
+
+            child.templateParent = null;
+        } else if (isActionItem(child)) {
+            parent.actionItems.removeItem(child);
+            child.templateParent = null;
+        } else if (isView(child) && parent.titleView && parent.titleView === child) {
+            parent.titleView = null;
         }
     },
 };
