@@ -51,24 +51,30 @@ export class ViewUtil {
     }
 
     public insertChild(
-        parent: NgView,
-        child: NgView,
-        previous: NgView = parent.lastChild,
+        parent: View,
+        child: View,
+        previous?: NgView,
         next?: NgView
     ) {
         if (!parent) {
             return;
         }
 
-        this.addToQueue(parent, child, previous, next);
+        const extendedParent = this.ensureNgViewExtensions(parent);
+        const extendedChild = this.ensureNgViewExtensions(child);
+
+        if (!previous) {
+            previous = extendedParent.lastChild;
+        }
+        this.addToQueue(extendedParent, extendedChild, previous, next);
 
         if (isInvisibleNode(child)) {
-            child.templateParent = parent;
+            extendedChild.templateParent = extendedParent;
         }
 
         if (!isDetachedElement(child)) {
             const nextVisual = this.findNextVisual(next);
-            this.addToVisualTree(parent, child, nextVisual);
+            this.addToVisualTree(extendedParent, extendedChild, nextVisual);
         }
     }
 
@@ -145,15 +151,18 @@ export class ViewUtil {
         return next;
     }
 
-    public removeChild(parent: NgView, child: NgView) {
+    public removeChild(parent: View, child: View) {
        traceLog(`ViewUtil.removeChild parent: ${parent} child: ${child}`);
 
         if (!parent) {
             return;
         }
 
-        this.removeFromQueue(parent, child);
-        this.removeFromVisualTree(parent, child);
+        const extendedParent = this.ensureNgViewExtensions(parent);
+        const extendedChild = this.ensureNgViewExtensions(child);
+
+        this.removeFromQueue(extendedParent, extendedChild);
+        this.removeFromVisualTree(extendedParent, extendedChild);
     }
 
     private removeFromQueue(parent: NgView, child: NgView) {
@@ -257,16 +266,34 @@ export class ViewUtil {
         }
 
         const viewClass = getViewClass(name);
-        let view = <NgView>new viewClass();
-        view.nodeName = name;
-        view.meta = getViewMeta(name);
+        const view = <NgView>new viewClass();
+        const ngView = this.setNgViewExtensions(view, name);
+
+        return ngView;
+    }
+
+    private ensureNgViewExtensions(view: View): NgView {
+        if (view.hasOwnProperty("meta")) {
+            return view as NgView;
+        } else {
+            const name = view.typeName;
+            const ngView = this.setNgViewExtensions(view, name);
+
+            return ngView;
+        }
+    }
+
+    private setNgViewExtensions(view: View, name: string): NgView {
+        const ngView = view as NgView;
+        ngView.nodeName = name;
+        ngView.meta = getViewMeta(name);
 
         // we're setting the node type of the view
         // to 'element' because of checks done in the
         // dom animation engine
-        view.nodeType = ELEMENT_NODE_TYPE;
+        ngView.nodeType = ELEMENT_NODE_TYPE;
 
-        return view;
+        return ngView;
     }
 
     public setProperty(view: NgView, attributeName: string, value: any, namespace?: string): void {
@@ -382,4 +409,3 @@ export class ViewUtil {
         view.style[styleName] = unsetValue;
     }
 }
-
