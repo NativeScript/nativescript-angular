@@ -72,7 +72,7 @@ const getClassName = instance => instance.constructor.name;
 
 export interface ViewClassMeta {
     skipAddToDom?: boolean;
-    insertChild?: (parent: any, child: any, previous?: any, next?: any) => void;
+    insertChild?: (parent: any, child: any, next?: any) => void;
     removeChild?: (parent: any, child: any) => void;
 }
 

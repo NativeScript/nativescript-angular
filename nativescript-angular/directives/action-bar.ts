@@ -1,5 +1,10 @@
 import { Directive, Component, ElementRef, Optional, OnDestroy } from "@angular/core";
-import { ActionItem, ActionBar, NavigationButton } from "tns-core-modules/ui/action-bar";
+import {
+    ActionBar,
+    ActionItem,
+    ActionItems,
+    NavigationButton,
+} from "tns-core-modules/ui/action-bar";
 import { Page } from "tns-core-modules/ui/page";
 import { View } from "tns-core-modules/ui/core/view";
 
@@ -25,14 +30,14 @@ type NgActionBar = (ActionBar & ViewExtensions);
 
 const actionBarMeta: ViewClassMeta = {
     skipAddToDom: true,
-    insertChild: (parent: NgActionBar, child: NgView, previous: NgView) => {
+    insertChild: (parent: NgActionBar, child: NgView, next: any) => {
         if (isInvisibleNode(child)) {
             return;
         } else if (isNavigationButton(child)) {
             parent.navigationButton = child;
             child.templateParent = parent;
         } else if (isActionItem(child)) {
-            parent.actionItems.addItem(child);
+            addActionItem(parent, child, next);
             child.templateParent = parent;
         } else if (isView(child)) {
             parent.titleView = child;
@@ -54,6 +59,28 @@ const actionBarMeta: ViewClassMeta = {
             parent.titleView = null;
         }
     },
+};
+
+const addActionItem = (bar: NgActionBar, item: ActionItem, next: ActionItem) => {
+    if (next) {
+        insertActionItemBefore(bar, item, next);
+    } else {
+        appendActionItem(bar, item);
+    }
+};
+
+const insertActionItemBefore = (bar: NgActionBar, item: ActionItem, next: ActionItem) => {
+    const actionItems: ActionItems = bar.actionItems;
+    const actionItemsCollection: ActionItem[] = actionItems.getItems();
+
+    const indexToInsert = actionItemsCollection.indexOf(next);
+    actionItemsCollection.splice(indexToInsert, 0, item);
+
+    (<any>actionItems).setItems(actionItemsCollection);
+};
+
+const appendActionItem = (bar: NgActionBar, item: ActionItem) => {
+    bar.actionItems.addItem(item);
 };
 
 registerElement("ActionBar", () => require("ui/action-bar").ActionBar, actionBarMeta);

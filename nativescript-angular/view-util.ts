@@ -67,7 +67,8 @@ export class ViewUtil {
         }
 
         if (!isDetachedElement(child)) {
-            this.addToVisualTree(parent, child, next);
+            const nextVisual = this.findNextVisual(next);
+            this.addToVisualTree(parent, child, nextVisual);
         }
     }
 
@@ -104,10 +105,10 @@ export class ViewUtil {
     }
 
     private addToVisualTree(parent: NgView, child: NgView, next: NgView): void {
-        traceLog(`ViewUtil.addToVisualTreee parent: ${parent}, view: ${child}, next: ${next}`);
+        traceLog(`ViewUtil.addToVisualTree parent: ${parent}, view: ${child}, next: ${next}`);
 
         if (parent.meta && parent.meta.insertChild) {
-            parent.meta.insertChild(parent, child);
+            parent.meta.insertChild(parent, child, next);
         } else if (isLayout(parent)) {
             this.insertToLayout(parent, child, next);
         } else if (isContentView(parent)) {
@@ -135,7 +136,7 @@ export class ViewUtil {
         }
     }
 
-    private findNextVisual(view: NgView) {
+    private findNextVisual(view: NgView): NgView {
         let next = view;
         while (next && isDetachedElement(next)) {
             next = next.nextSibling;
