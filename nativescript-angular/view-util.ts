@@ -79,6 +79,9 @@ export class ViewUtil {
         previous: NgView,
         next: NgView
     ): void {
+        traceLog(`ViewUtil.addToQueue parent: ${parent}, view: ${child}, ` +
+            `previous: ${previous}, next: ${next}`);
+
         if (previous) {
             previous.nextSibling = child;
         } else {
@@ -94,6 +97,7 @@ export class ViewUtil {
 
     private appendToQueue(parent: NgView, view: NgView) {
         traceLog(`ViewUtil.appendToQueue parent: ${parent} view: ${view}`);
+
         if (parent.lastChild) {
             parent.lastChild.nextSibling = view;
         }
@@ -102,6 +106,8 @@ export class ViewUtil {
     }
 
     private addToVisualTree(parent: NgView, child: NgView, next: NgView): void {
+        traceLog(`ViewUtil.addToVisualTreee parent: ${parent}, view: ${child}, next: ${next}`);
+
         if (parent.meta && parent.meta.insertChild) {
             parent.meta.insertChild(parent, child);
         } else if (isLayout(parent)) {
@@ -141,9 +147,79 @@ export class ViewUtil {
     }
 
     public removeChild(parent: NgView, child: NgView) {
+       traceLog(`ViewUtil.removeChild parent: ${parent} child: ${child}`);
+
         if (!parent) {
             return;
         }
+
+        this.removeFromQueue(parent, child);
+        this.removeFromVisualTree(parent, child);
+    }
+
+    private removeFromQueue(parent: NgView, child: NgView) {
+        traceLog(`ViewUtil.removeFromQueue parent: ${parent} child: ${child}`);
+
+        if (parent.firstChild === child && parent.lastChild === child) {
+            parent.firstChild = null;
+            parent.lastChild = null;
+            return;
+        }
+
+        if (parent.firstChild === child) {
+            parent.firstChild = child.nextSibling;
+        }
+
+        const previous = this.findPreviousElement(parent, child);
+        if (parent.lastChild === child) {
+            parent.lastChild = previous;
+        }
+
+        if (previous) {
+            previous.nextSibling = child.nextSibling;
+        }
+    }
+
+    // NOTE: This one is O(n) - use carefully
+    private findPreviousElement(parent: NgView, child: NgView): NgView {
+        traceLog(`ViewUtil.findPreviousElement parent: ${parent} child: ${child}`);
+
+        let previousVisual;
+        if (isLayout(parent)) {
+            previousVisual = this.getPreviousVisualElement(parent, child);
+        }
+
+        let previous = previousVisual || parent.firstChild;
+
+        // since detached elements are not added to the visual tree,
+        // we need to find the actual previous sibling of the view,
+        // which may as well be an invisible node
+        while (previous && previous !== child && previous.nextSibling !== child) {
+            previous = previous.nextSibling;
+        }
+
+        return previous;
+    }
+
+    private getPreviousVisualElement(parent: NgLayoutBase, child: NgView): NgView {
+        const elementIndex = parent.getChildIndex(child);
+
+        if (elementIndex > 0) {
+            return parent.getChildAt(elementIndex - 1) as NgView;
+        }
+    }
+
+    // NOTE: This one is O(n) - use carefully
+    private getChildIndex(parent: any, child: NgView) {
+        if (isLayout(parent)) {
+            return parent.getChildIndex(child);
+        } else if (isContentView(parent)) {
+            return child === parent.content ? 0 : -1;
+        }
+    }
+
+    private removeFromVisualTree(parent: NgView, child: NgView) {
+        traceLog(`ViewUtil.findPreviousElement parent: ${parent} child: ${child}`);
 
         if (parent.meta && parent.meta.removeChild) {
             parent.meta.removeChild(parent, child);
@@ -160,65 +236,9 @@ export class ViewUtil {
 
     private removeLayoutChild(parent: NgLayoutBase, child: NgView): void {
         const index = parent.getChildIndex(child);
-        this.removeFromQueue(parent, child, index);
-        if (index === -1) {
-            return;
-        }
 
-        parent.removeChild(child);
-    }
-
-    private removeFromQueue(parent: NgLayoutBase, child: NgView, index: number) {
-        traceLog(`ViewUtil.removeFromQueue ` +
-            `parent: ${parent} child: ${child} index: ${index}`);
-
-        if (parent.firstChild === child && parent.lastChild === child) {
-            parent.firstChild = null;
-            parent.lastChild = null;
-            return;
-        }
-
-        if (parent.firstChild === child) {
-            parent.firstChild = child.nextSibling;
-        }
-
-        const previous = this.findPreviousElement(parent, child, index);
-        if (parent.lastChild === child) {
-            parent.lastChild = previous;
-        }
-
-        if (previous) {
-            previous.nextSibling = child.nextSibling;
-        }
-    }
-
-    // NOTE: This one is O(n) - use carefully
-    private findPreviousElement(parent: NgLayoutBase, child: NgView, elementIndex: number): NgView {
-        const previousVisual = this.getPreviousVisualElement(parent, elementIndex);
-        let previous = previousVisual || parent.firstChild;
-
-        // since detached elements are not added to the visual tree,
-        // we need to find the actual previous sibling of the view,
-        // which may as well be an invisible node
-        while (previous && previous !== child && previous.nextSibling !== child) {
-            previous = previous.nextSibling;
-        }
-
-        return previous;
-    }
-
-    private getPreviousVisualElement(parent: NgLayoutBase, elementIndex: number): NgView {
-        if (elementIndex > 0) {
-            return parent.getChildAt(elementIndex - 1) as NgView;
-        }
-    }
-
-    // NOTE: This one is O(n) - use carefully
-    public getChildIndex(parent: any, child: NgView) {
-        if (isLayout(parent)) {
-            return parent.getChildIndex(child);
-        } else if (isContentView(parent)) {
-            return child === parent.content ? 0 : -1;
+        if (index !== -1) {
+            parent.removeChild(child);
         }
     }
 
