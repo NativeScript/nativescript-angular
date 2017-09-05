@@ -6,7 +6,6 @@ import {
     NavigationButton,
 } from "tns-core-modules/ui/action-bar";
 import { Page } from "tns-core-modules/ui/page";
-import { View } from "tns-core-modules/ui/core/view";
 
 import { isBlank } from "../lang-facade";
 import {

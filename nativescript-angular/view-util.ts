@@ -218,7 +218,7 @@ export class ViewUtil {
     }
 
     // NOTE: This one is O(n) - use carefully
-    private getChildIndex(parent: any, child: NgView) {
+    public getChildIndex(parent: any, child: NgView) {
         if (isLayout(parent)) {
             return parent.getChildIndex(child);
         } else if (isContentView(parent)) {
