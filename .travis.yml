@@ -25,6 +25,7 @@ cache:
   - "$HOME/.gradle/caches/"
   - "$HOME/.gradle/wrapper/"
 install:
+- echo "android-$EMULATOR_API_LEVEL"
 - nvm install $NODE_VERSION
 - npm install -g typings
 - wget -O ./nativescript.tgz "https://s3.amazonaws.com/nativescript-ci/build_result/nativescript.tgz"
@@ -38,7 +39,6 @@ install:
 - npm install
 - npm i appium@$APPIUM_VERSION
 before_script:
-  - echo "Emulator Name: android-$EMULATOR_API_LEVEL"
   - android list targets
   - echo no | android create avd --force -n test -t android-$EMULATOR_API_LEVEL --abi $ANDROID_ABI
   - emulator -memory 1024 -avd test -no-audio -no-window & 
