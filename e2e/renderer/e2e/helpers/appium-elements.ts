@@ -38,4 +38,25 @@ export class DriverWrapper {
 
         return result;
     }
+
+    @refetchable()
+    async findElementByXPath(...args: any[]): Promise<ExtendedUIElement> {
+        const result = await (<any>this.driver).findElementByXPath(...args);
+
+        return result;
+    }
+
+    @refetchable()
+    async findElementsByXPath(...args: any[]): Promise<ExtendedUIElement[]> {
+        const result = await (<any>this.driver).findElementsByXPath(...args);
+
+        return result || [];
+    }
+
+    @refetchable()
+    async findElementsByClassName(...args: any[]): Promise<ExtendedUIElement[]> {
+        const result = await (<any>this.driver).findElementsByClassName(...args);
+
+        return result || [];
+    }
 }

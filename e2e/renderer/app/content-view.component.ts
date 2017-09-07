@@ -1,7 +1,6 @@
 import { Component } from "@angular/core";
 
 @Component({
-  selector: "my-app",
   template: `
     <ActionBar title="Content View">
         <ActionItem (tap)="toggle()">
