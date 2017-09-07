@@ -5,7 +5,7 @@ import {
     Optional,
     SkipSelf,
 } from "@angular/core";
-import { RouterModule, Routes, ExtraOptions } from "@angular/router";
+import { RouterModule, Routes, ExtraOptions, RouteReuseStrategy } from "@angular/router";
 import { LocationStrategy, PlatformLocation } from "@angular/common";
 import { Frame } from "tns-core-modules/ui/frame";
 import { NSRouterLink } from "./router/ns-router-link";
@@ -13,6 +13,7 @@ import { NSRouterLinkActive } from "./router/ns-router-link-active";
 import { PageRouterOutlet } from "./router/page-router-outlet";
 import { NSLocationStrategy, LocationState } from "./router/ns-location-strategy";
 import { NativescriptPlatformLocation } from "./router/ns-platform-location";
+import { NSRouteReuseStrategy } from "./router/ns-route-reuse-strategy";
 import { RouterExtensions } from "./router/router-extensions";
 import { NativeScriptCommonModule } from "./common";
 
@@ -37,6 +38,8 @@ export type LocationState = LocationState;
         NativescriptPlatformLocation,
         { provide: PlatformLocation, useClass: NativescriptPlatformLocation },
         RouterExtensions,
+        NSRouteReuseStrategy,
+        { provide: RouteReuseStrategy, useExisting: NSRouteReuseStrategy }
     ],
     imports: [
         RouterModule,
