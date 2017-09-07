@@ -13,7 +13,7 @@ import { NSRouterLinkActive } from "./router/ns-router-link-active";
 import { PageRouterOutlet } from "./router/page-router-outlet";
 import { NSLocationStrategy, LocationState } from "./router/ns-location-strategy";
 import { NativescriptPlatformLocation } from "./router/ns-platform-location";
-import { NsRouteReuseStrategy } from "./router/ns-route-reuse-strategy";
+import { NSRouteReuseStrategy } from "./router/ns-route-reuse-strategy";
 import { RouterExtensions } from "./router/router-extensions";
 import { NativeScriptCommonModule } from "./common";
 
@@ -38,8 +38,8 @@ export type LocationState = LocationState;
         NativescriptPlatformLocation,
         { provide: PlatformLocation, useClass: NativescriptPlatformLocation },
         RouterExtensions,
-        NsRouteReuseStrategy,
-        { provide: RouteReuseStrategy, useExisting: NsRouteReuseStrategy }
+        NSRouteReuseStrategy,
+        { provide: RouteReuseStrategy, useExisting: NSRouteReuseStrategy }
     ],
     imports: [
         RouterModule,

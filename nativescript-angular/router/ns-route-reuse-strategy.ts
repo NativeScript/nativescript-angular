@@ -50,7 +50,7 @@ class DetachedStateCache {
  * Does not detach any subtrees. Reuses routes as long as their route config is the same.
  */
 @Injectable()
-export class NsRouteReuseStrategy implements RouteReuseStrategy {
+export class NSRouteReuseStrategy implements RouteReuseStrategy {
     private cache: DetachedStateCache = new DetachedStateCache();
 
     constructor(private location: NSLocationStrategy) { }
@@ -69,11 +69,11 @@ export class NsRouteReuseStrategy implements RouteReuseStrategy {
     shouldAttach(route: ActivatedRouteSnapshot): boolean {
         const key = getSnapshotKey(route);
         const isBack = this.location._isPageNavigatingBack();
-        const shouldDetach = isBack && this.cache.peek().key === key;
+        const shouldAttach = isBack && this.cache.peek().key === key;
 
-        log(`shouldAttach isBack: ${isBack} key: ${key} result: ${shouldDetach}`);
+        log(`shouldAttach isBack: ${isBack} key: ${key} result: ${shouldAttach}`);
 
-        return shouldDetach;
+        return shouldAttach;
     }
 
 
@@ -114,7 +114,7 @@ export class NsRouteReuseStrategy implements RouteReuseStrategy {
 
         if (shouldReuse && curr && curr[pageRouterActivatedSymbol]) {
             // When reusing route - copy the pageRouterActivated to the new snapshot
-            // Its needed in shouldDetach to determine if the route should be detached.
+            // It's needed in shouldDetach to determine if the route should be detached.
             future[pageRouterActivatedSymbol] = curr[pageRouterActivatedSymbol];
         }
 
