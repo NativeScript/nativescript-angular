@@ -24,7 +24,7 @@ import { routerLog } from "../trace";
 import { DetachedLoader } from "../common/detached-loader";
 import { ViewUtil } from "../view-util";
 import { NSLocationStrategy } from "./ns-location-strategy";
-import { NsRouteReuseStrategy } from "./ns-route-reuse-strategy";
+import { NSRouteReuseStrategy } from "./ns-route-reuse-strategy";
 
 export class PageRoute {
     activatedRoute: BehaviorSubject<ActivatedRoute>;
@@ -117,7 +117,7 @@ export class PageRouterOutlet implements OnDestroy, OnInit { // tslint:disable-l
         private changeDetector: ChangeDetectorRef,
         @Inject(DEVICE) device: Device,
         @Inject(PAGE_FACTORY) private pageFactory: PageFactory,
-        private routeReuseStrategy: NsRouteReuseStrategy
+        private routeReuseStrategy: NSRouteReuseStrategy
     ) {
 
         this.name = name || PRIMARY_OUTLET;
