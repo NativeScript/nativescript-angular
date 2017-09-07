@@ -38,7 +38,9 @@ install:
 - npm install
 - npm i appium@$APPIUM_VERSION
 before_script:
-  - echo no | $ANDROID_HOME/tools/bin/avdmanager create avd -n test -k "system-images;android-$EMULATOR_API_LEVEL;default;armeabi-v7a" -b default/armeabi-v7a -f
+  - echo "Emulator Name: android-$EMULATOR_API_LEVEL"
+  - android list targets
+  - echo no | android create avd --force -n test -t android-$EMULATOR_API_LEVEL --abi $ANDROID_ABI
   - emulator -memory 1024 -avd test -no-audio -no-window & 
   - android-wait-for-emulator
 script:
