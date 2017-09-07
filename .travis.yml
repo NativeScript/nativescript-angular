@@ -19,7 +19,6 @@ android:
   - android-$EMULATOR_API_LEVEL
   - extra-android-m2repository
   - sys-img-armeabi-v7a-android-$EMULATOR_API_LEVEL
-  - sys-img-armeabi-v7a-android-$EMULATOR_API_LEVEL
 before_cache:
 - rm -f $HOME/.gradle/caches/modules-2/modules-2.lock
 cache:
@@ -27,8 +26,6 @@ cache:
   - "$HOME/.gradle/caches/"
   - "$HOME/.gradle/wrapper/"
 install:
-- echo "android-$EMULATOR_API_LEVEL"
-- android list targets
 - nvm install $NODE_VERSION
 - npm install -g typings
 - wget -O ./nativescript.tgz "https://s3.amazonaws.com/nativescript-ci/build_result/nativescript.tgz"
@@ -42,7 +39,6 @@ install:
 - npm install
 - npm i appium@$APPIUM_VERSION
 before_script:
-  - android list targets
   - echo no | android create avd --force -n test -t android-$EMULATOR_API_LEVEL --abi $ANDROID_ABI
   - emulator -memory 1024 -avd test -no-audio -no-window & 
   - android-wait-for-emulator
