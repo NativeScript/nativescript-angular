@@ -5,9 +5,19 @@ import { Component } from "@angular/core";
     template: `
     <ActionBar title="Title 1" automationText="title">
         <ActionItem *ngIf="show" text="action" (tap)="onTap()" [nsRouterLink]="['/second']"></ActionItem>
-        <ActionItem (tap)="onShare()" ios.systemIcon="9"
-            ios.position="left" android.systemIcon="ic_menu_share_holo_light" android.position="actionBar"></ActionItem>
-        <ActionItem text="delete" (tap)="onDelete()"
+
+        <ActionItem
+            text="share"
+            (tap)="onShare()"
+            ios.systemIcon="9"
+            ios.position="left"
+            android.systemIcon="ic_menu_share_holo_light"
+            android.position="actionBar"
+        ></ActionItem>
+
+        <ActionItem
+            text="delete"
+            (tap)="onDelete()"
             ios.systemIcon="16" ios.position="right" android.position="popup"></ActionItem>
     </ActionBar>
     <StackLayout verticalAlignment="center">
