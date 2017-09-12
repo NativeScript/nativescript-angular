@@ -7,30 +7,28 @@ import { Page } from "ui/page";
 import { Observable } from "rxjs/Observable";
 
 @Component({
-    selector: "first",
+    selector: "lazy",
     template: `
     <StackLayout>
-        <Label text="FirstComponent" class="header"></Label>
+        <Label text="LazyComponent" class="header"></Label>
 
-        <Button text="GO TO SECOND" [nsRouterLink]="['/second','1']"></Button>
-        <Button text="GO TO LAZY" [nsRouterLink]="['/lazy','home']"></Button>
-        
+        <Button text="GO TO FIRST" [nsRouterLink]="['/first']"></Button>
         <Button text="BACK" (tap)="goBack()"></Button>
         <Label [text]="message"></Label>
     </StackLayout>`
 })
-export class FirstComponent implements OnInit, OnDestroy {
+export class LazyComponent implements OnInit, OnDestroy {
     public message: string = "";
     constructor(private routerExt: RouterExtensions, page: Page) {
-        console.log("FirstComponent - constructor() page: " + page);
+        console.log("LazyComponent - constructor() page: " + page);
     }
 
     ngOnInit() {
-        console.log("FirstComponent - ngOnInit()");
+        console.log("LazyComponent - ngOnInit()");
     }
 
     ngOnDestroy() {
-        console.log("FirstComponent - ngOnDestroy()");
+        console.log("LazyComponent - ngOnDestroy()");
     }
 
     goBack() {

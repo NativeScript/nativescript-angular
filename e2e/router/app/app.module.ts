@@ -1,5 +1,6 @@
-import { NgModule, NO_ERRORS_SCHEMA } from "@angular/core";
+import { NgModule, NgModuleFactoryLoader, NO_ERRORS_SCHEMA } from "@angular/core";
 import { NativeScriptModule } from "nativescript-angular/nativescript.module";
+import { NSModuleFactoryLoader } from "nativescript-angular/router";
 
 import "./rxjs-operators";
 
@@ -21,7 +22,9 @@ enable();
         ...navigatableComponents,
     ],
     bootstrap: [AppComponent],
-    providers: [],
+    providers: [
+        { provide: NgModuleFactoryLoader, useClass: NSModuleFactoryLoader }
+    ],
     imports: [
         NativeScriptModule,
         AppRoutingModule,

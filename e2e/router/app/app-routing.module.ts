@@ -23,6 +23,10 @@ export const routes = [
             { path: "detail/:id", component: DetailComponent }
         ]
     },
+    {
+        path: "lazy",
+        loadChildren: "./lazy/lazy.module#LazyModule",
+    }
 ];
 
 export const navigatableComponents = [
