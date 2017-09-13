@@ -24,7 +24,6 @@ const NUMBER_VALUE_ACCESSOR = {
         "slider[ngModel],slider[formControlName],slider[formControl]",
     providers: [NUMBER_VALUE_ACCESSOR],
     host: {
-        "(touch)": "onTouched()",
         "(valueChange)": "onChange($event.value)",
     },
 })

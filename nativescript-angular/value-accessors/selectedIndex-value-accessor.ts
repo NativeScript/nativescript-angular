@@ -38,7 +38,6 @@ export type SelectableView = {selectedIndex: number} & View;
         "tab-view[ngModel],tab-view[formControlName],tab-view[formControl]",
     providers: [SELECTED_INDEX_VALUE_ACCESSOR],
     host: {
-        "(touch)": "onTouched()",
         "(selectedIndexChange)": "onChange($event.value)",
     },
 })

@@ -25,7 +25,6 @@ const DATE_VALUE_ACCESSOR = {
         "date-picker[ngModel],date-picker[formControlName],date-picker[formControl]",
     providers: [DATE_VALUE_ACCESSOR],
     host: {
-        "(touch)": "onTouched()",
         "(dateChange)": "onChange($event.value)",
     },
 })
