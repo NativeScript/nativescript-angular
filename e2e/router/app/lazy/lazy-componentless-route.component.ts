@@ -7,34 +7,30 @@ import { Page } from "ui/page";
 import { Observable } from "rxjs/Observable";
 
 @Component({
-    selector: "first",
+    selector: "lazy",
     template: `
     <StackLayout>
-        <Label text="FirstComponent" class="header"></Label>
-
-        <Button text="GO TO SECOND" [nsRouterLink]="['/second','1']"></Button>
-        <Button text="GO TO C-LESS SECOND" [nsRouterLink]="['/c-less', 'deep', '100', 'detail', '200']"></Button>
-        
+        <Label text="Lazy Componentless Route" class="header"></Label>
 
         <Button text="GO TO LAZY HOME" [nsRouterLink]="['/lazy','home']"></Button>
-        <Button text="GO TO C-LESS LAZY" [nsRouterLink]="['/lazy','nest','more']"></Button>
-        
+
+        <Button text="GO TO FIRST" [nsRouterLink]="['/first']"></Button>
         <Button text="BACK" (tap)="goBack()"></Button>
         <Label [text]="message"></Label>
     </StackLayout>`
 })
-export class FirstComponent implements OnInit, OnDestroy {
+export class LazyComponentlessRouteComponent implements OnInit, OnDestroy {
     public message: string = "";
     constructor(private routerExt: RouterExtensions, page: Page) {
-        console.log("FirstComponent - constructor() page: " + page);
+        console.log("LazyNestedRouteComponent - constructor() page: " + page);
     }
 
     ngOnInit() {
-        console.log("FirstComponent - ngOnInit()");
+        console.log("LazyNestedRouteComponent - ngOnInit()");
     }
 
     ngOnDestroy() {
-        console.log("FirstComponent - ngOnDestroy()");
+        console.log("LazyNestedRouteComponent - ngOnDestroy()");
     }
 
     goBack() {

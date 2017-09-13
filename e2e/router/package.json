@@ -7,6 +7,9 @@
     "id": "org.nativescript.router",
     "tns-android": {
       "version": "3.2.0-2017-9-4-1"
+    },
+    "tns-ios": {
+      "version": "3.2.0"
     }
   },
   "dependencies": {

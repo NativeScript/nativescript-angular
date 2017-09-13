@@ -11,9 +11,9 @@ import {
 
 import { AppComponent } from "./app.component";
 
-import { rendererTraceCategory, viewUtilCategory } from "nativescript-angular/trace";
+import { rendererTraceCategory, viewUtilCategory, routeReuseStrategyTraceCategory, routerTraceCategory } from "nativescript-angular/trace";
 import { setCategories, enable } from "trace";
-setCategories(rendererTraceCategory + "," + viewUtilCategory);
+setCategories(routerTraceCategory + "," + routeReuseStrategyTraceCategory);
 enable();
 
 @NgModule({

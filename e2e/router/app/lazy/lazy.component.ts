@@ -12,6 +12,8 @@ import { Observable } from "rxjs/Observable";
     <StackLayout>
         <Label text="LazyComponent" class="header"></Label>
 
+        <Button text="GO TO C-LESS LAZY" [nsRouterLink]="['/lazy','nest','more']"></Button>
+
         <Button text="GO TO FIRST" [nsRouterLink]="['/first']"></Button>
         <Button text="BACK" (tap)="goBack()"></Button>
         <Label [text]="message"></Label>

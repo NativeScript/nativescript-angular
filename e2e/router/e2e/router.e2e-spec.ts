@@ -25,7 +25,7 @@ describe("Simple navigate and back", () => {
     });
 
     it("should navigate to Second(1)/master", async () => {
-        await goFromFirstToSecond(driverWrapper);
+        await findAndClick(driverWrapper, "GO TO SECOND");
 
         await assureSecondComponent(driverWrapper, 1);
         await assureNestedMasterComponent(driverWrapper);
@@ -56,7 +56,7 @@ describe("Navigate inside nested outlet", () => {
     });
 
     it("should navigate to Second(1)/master", async () => {
-        await goFromFirstToSecond(driverWrapper);
+        await findAndClick(driverWrapper, "GO TO SECOND");
 
         await assureSecondComponent(driverWrapper, 1)
         await assureNestedMasterComponent(driverWrapper);
@@ -109,7 +109,7 @@ describe("Navigate to same component with different param", () => {
     });
 
     it("should navigate to Second(1)/master", async () => {
-        await goFromFirstToSecond(driverWrapper);
+        await findAndClick(driverWrapper, "GO TO SECOND");
 
         await assureSecondComponent(driverWrapper, 1)
         await assureNestedMasterComponent(driverWrapper);
@@ -156,7 +156,7 @@ describe("Nested navigation + page navigation", () => {
     });
 
     it("should navigate to Second(1)/master", async () => {
-        await goFromFirstToSecond(driverWrapper);
+        await findAndClick(driverWrapper, "GO TO SECOND");
 
         await assureSecondComponent(driverWrapper, 1)
         await assureNestedMasterComponent(driverWrapper);
@@ -188,9 +188,7 @@ describe("Nested navigation + page navigation", () => {
     });
 
     it("should navigate to First", async () => {
-        const navigationButton =
-            await driverWrapper.findElementByText("GO TO FIRST", SearchOptions.exact);
-        navigationButton.click();
+        await findAndClick(driverWrapper, "GO TO FIRST");
 
         await assureFirstComponent(driverWrapper);
     });
@@ -260,16 +258,15 @@ describe("Shouldn't be able to navigate back after cleared history", () => {
     });
 
     it("should navigate to Second(1)/master", async () => {
-        await goFromFirstToSecond(driverWrapper);
+        await findAndClick(driverWrapper, "GO TO SECOND");
 
         await assureSecondComponent(driverWrapper, 1)
         await assureNestedMasterComponent(driverWrapper);
     });
 
     it("should navigate to Second(1)/master", async () => {
-        const navigationButton =
-            await driverWrapper.findElementByText("GO TO FIRST(CLEAR)", SearchOptions.exact);
-        navigationButton.click();
+        await findAndClick(driverWrapper, "GO TO FIRST(CLEAR)");
+
         await assureFirstComponent(driverWrapper);
     });
 
@@ -279,8 +276,155 @@ describe("Shouldn't be able to navigate back after cleared history", () => {
     });
 });
 
+describe("Navigate to componentless route", () => {
+    let driver: AppiumDriver;
+    let driverWrapper: DriverWrapper;
+
+    before(async () => {
+        driver = await createDriver();
+        driverWrapper = new DriverWrapper(driver);
+    });
+
+    after(async () => {
+        await driver.quit();
+        console.log("Driver quits!");
+    });
+
+    it("should find First", async () => {
+        await assureFirstComponent(driverWrapper);
+    });
+
+    it("should navigate to ComponentlessSecond(100)/detail(200)", async () => {
+        const navigationButton =
+            await driverWrapper.findElementByText("GO TO C-LESS SECOND", SearchOptions.exact);
+        navigationButton.click();
+
+        await assureSecondComponent(driverWrapper, 100)
+        await assureNestedDetailComponent(driverWrapper, 200);
+    });
+
+    it("should navigate to First", async () => {
+        await findAndClick(driverWrapper, "GO TO FIRST");
+
+        await assureFirstComponent(driverWrapper);
+    });
+
+    it("should navigate the whole stack", async () => {
+        await goBack(driverWrapper);
+        await assureSecondComponent(driverWrapper, 100)
+        await assureNestedDetailComponent(driverWrapper, 200);
+
+        await goBack(driverWrapper);
+        await assureFirstComponent(driverWrapper);
+    });
+});
+
+describe("Navigate to lazy module", () => {
+    let driver: AppiumDriver;
+    let driverWrapper: DriverWrapper;
+
+    before(async () => {
+        driver = await createDriver();
+        driverWrapper = new DriverWrapper(driver);
+    });
+
+    after(async () => {
+        await driver.quit();
+        console.log("Driver quits!");
+    });
+
+    it("should find First", async () => {
+        await assureFirstComponent(driverWrapper);
+    });
+
+    it("should navigate to lazy/home", async () => {
+        await findAndClick(driverWrapper, "GO TO LAZY HOME");
+
+        await assureLazyComponent(driverWrapper);
+    });
+
+    it("should navigate to First", async () => {
+        await findAndClick(driverWrapper, "GO TO FIRST");
+        await assureFirstComponent(driverWrapper);
+    });
+
+    it("should navigate back to lazy/home", async () => {
+        await goBack(driverWrapper);
+        await assureLazyComponent(driverWrapper);
+    });
+
+    it("should navigate to First again", async () => {
+        await findAndClick(driverWrapper, "GO TO FIRST");
+        await assureFirstComponent(driverWrapper);
+    });
+
+    it("should navigate the whole stack", async () => {
+        await goBack(driverWrapper);
+        await assureLazyComponent(driverWrapper);
+
+        await goBack(driverWrapper);
+        await assureFirstComponent(driverWrapper);
+    });
+});
+
+describe("Navigate to componentless lazy module route", () => {
+    let driver: AppiumDriver;
+    let driverWrapper: DriverWrapper;
+
+    before(async () => {
+        driver = await createDriver();
+        driverWrapper = new DriverWrapper(driver);
+    });
+
+    after(async () => {
+        await driver.quit();
+        console.log("Driver quits!");
+    });
+
+    it("should find First", async () => {
+        await assureFirstComponent(driverWrapper);
+    });
+
+    it("should navigate to nest/more (componentless lazy route)", async () => {
+        await findAndClick(driverWrapper, "GO TO C-LESS LAZY");
+
+        await assureComponentlessLazyComponent(driverWrapper);
+    });
+
+    it("should navigate to lazy/home", async () => {
+        await findAndClick(driverWrapper, "GO TO LAZY HOME");
+
+        await assureLazyComponent(driverWrapper);
+    });
+    
+    it("should navigate to First", async () => {
+        await findAndClick(driverWrapper, "GO TO FIRST");
+
+        await assureFirstComponent(driverWrapper);
+    });
+
+    it("should navigate the whole stack", async () => {
+        await goBack(driverWrapper);
+        await assureLazyComponent(driverWrapper);
+
+        await goBack(driverWrapper);
+        await assureComponentlessLazyComponent(driverWrapper);
+
+        await goBack(driverWrapper);
+        await assureFirstComponent(driverWrapper);
+    });
+});
+
 async function assureFirstComponent(driverWrapper: DriverWrapper) {
     await driverWrapper.findElementByText("FirstComponent", SearchOptions.exact);
+}
+
+async function assureLazyComponent(driverWrapper: DriverWrapper) {
+    await driverWrapper.findElementByText("LazyComponent", SearchOptions.exact);
+}
+
+async function assureComponentlessLazyComponent(driverWrapper: DriverWrapper) {
+    await driverWrapper.findElementByText("Lazy Componentless Route", SearchOptions.exact);
 }
 
 async function assureSecondComponent(driverWrapper: DriverWrapper, param: number) {
@@ -302,8 +446,8 @@ async function goBack(driverWrapper: DriverWrapper) {
     await backButton.click();
 }
 
-async function goFromFirstToSecond(driverWrapper: DriverWrapper) {
+async function findAndClick(driverWrapper: DriverWrapper, text: string) {
     const navigationButton =
-        await driverWrapper.findElementByText("GO TO SECOND", SearchOptions.exact);
+        await driverWrapper.findElementByText(text, SearchOptions.exact);
     navigationButton.click();
 }

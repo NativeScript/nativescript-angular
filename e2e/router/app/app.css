@@ -1,5 +1,6 @@
 .header {
     font-size: 32;
+    white-space: normal;
 }
 
 .nested-header {

@@ -24,6 +24,19 @@ export const routes = [
         ]
     },
     {
+        path: "c-less",
+        children: [
+            {
+                path: "deep/:depth",
+                component: SecondComponent,
+                children: [
+                    { path: "", component: MasterComponent },
+                    { path: "detail/:id", component: DetailComponent }
+                ]
+            }
+        ]
+    },
+    {
         path: "lazy",
         loadChildren: "./lazy/lazy.module#LazyModule",
     }
