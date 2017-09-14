@@ -12,18 +12,16 @@ import {
     routerTraceCategory,
     listViewTraceCategory,
     animationsTraceCategory,
-    routeReuseStrategyTraceCategory,
 } from "nativescript-angular/trace";
 import { PAGE_FACTORY, PageFactory, PageFactoryOptions } from "nativescript-angular/platform-providers";
 import { Page } from "ui/page";
 import { Color } from "color";
 import { setCategories, enable } from "trace";
-// setCategories(
-//     `${animationsTraceCategory},${rendererTraceCategory}`
-// );
+setCategories(
+    `${animationsTraceCategory},${rendererTraceCategory}`
+);
 // setCategories(routerTraceCategory);
 // setCategories(listViewTraceCategory);
-setCategories(`${routeReuseStrategyTraceCategory}`);
 enable();
 
 import { RendererTest } from "./examples/renderer-test";
@@ -134,10 +132,10 @@ const customPageFactoryProvider = {
 // platformNativeScriptDynamic().bootstrapModule(makeExampleModule(ActionBarTest));
 
 // router
-// platformNativeScriptDynamic().bootstrapModule(makeExampleModule(RouterOutletAppComponent));
+platformNativeScriptDynamic().bootstrapModule(makeExampleModule(RouterOutletAppComponent));
 // platformNativeScriptDynamic().bootstrapModule(makeExampleModule(PageRouterOutletAppComponent));
 // platformNativeScriptDynamic().bootstrapModule(makeExampleModule(PageRouterOutletNestedAppComponent));
-platformNativeScriptDynamic().bootstrapModule(makeExampleModule(ClearHistoryAppComponent));
+// platformNativeScriptDynamic().bootstrapModule(makeExampleModule(ClearHistoryAppComponent));
 // platformNativeScriptDynamic().bootstrapModule(makeExampleModule(LoginAppComponent));
 
 // animations

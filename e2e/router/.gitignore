@@ -1,8 +1,0 @@
-platforms
-node_modules
-hooks
-
-app/**/*.js
-e2e/**/*.js
-test-results.xml
-
