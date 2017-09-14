@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy } from "@angular/core";
-import { ActivatedRoute, Router, Route } from "@angular/router";
+import { ActivatedRoute, Router } from "@angular/router";
 import { Location } from "@angular/common";
 import { Page } from "ui/page";
 import { Observable } from "rxjs/Observable";
@@ -12,8 +12,8 @@ import "rxjs/add/operator/map";
     <StackLayout>
         <Label text="First component" class="title"></Label>
         <StackLayout class="nav">
-            <Button class="link" text="Start" [nsRouterLink]="['/second','1']"></Button>
-            <Button class="link" text="Detail" [nsRouterLink]="['/second','1','detail','3']"></Button>
+            <Button class="link" text="Start" [nsRouterLink]="['second','1']"></Button>
+            <Button class="link" text="Detail" [nsRouterLink]="['second','1','detail','3']"></Button>
         </StackLayout>
     </StackLayout>`
 })
@@ -70,14 +70,6 @@ class DetailComponent {
         console.log("DetailComponent.constructor()");
         this.id$ = route.params.map(r => r["id"]);
     }
-
-    ngOnInit() {
-        console.log("DetailComponent - ngOnInit()");
-    }
-
-    ngOnDestroy() {
-        console.log("DetailComponent - ngOnDestroy()");
-    }
 }
 
 @Component({
@@ -87,7 +79,7 @@ class DetailComponent {
     <StackLayout>
         <Label [text]="'Second component: ' + (depth$ | async)" class="title"></Label>
 
-        <Button class="link" text="Nav to First" [nsRouterLink]="['/first']"></Button>
+        <Button class="link" text="Nav to First" [nsRouterLink]="['/']"></Button>
 
         <StackLayout class="nav">
             <Button class="link" text="< BACK" (tap)="goBack()"></Button>
@@ -129,11 +121,8 @@ class SecondComponent implements OnInit, OnDestroy {
     template: `<page-router-outlet></page-router-outlet>`
 })
 export class PageRouterOutletNestedAppComponent {
-    static routes: Route[] = [
-        { path: "", redirectTo: "/second/1/detail/3", pathMatch: "full" },
-        {
-            path: "first", component: FirstComponent,
-        },
+    static routes = [
+        { path: "", component: FirstComponent },
         {
             path: "second/:depth", component: SecondComponent,
             children: [

@@ -67,7 +67,7 @@ export class NSLocationStrategy extends LocationStrategy {
 
     replaceState(state: any, title: string, url: string, queryParams: string): void {
         if (this.states.length > 0) {
-            routerLog("NSLocationStrategy.replaceState changing existing state: " +
+            routerLog("NSLocationStrategy.replaceState changing exisitng state: " +
                 `${state}, title: ${title}, url: ${url}, queryParams: ${queryParams}`);
             const topState = this.peekState();
             topState.state = state;
@@ -104,7 +104,7 @@ export class NSLocationStrategy extends LocationStrategy {
             if (state.isPageNavigation) {
                 // This was a page navigation - so navigate through frame.
                 routerLog("NSLocationStrategy.back() while not navigating back but top" +
-                    " state is page - will call frame.goBack()");
+                    " state is page - will call frame.goback()");
                 this.frame.goBack();
             } else {
                 // Nested navigation - just pop the state

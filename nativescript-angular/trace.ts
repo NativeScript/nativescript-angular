@@ -4,7 +4,6 @@ export const animationsTraceCategory = "ns-animations";
 export const rendererTraceCategory = "ns-renderer";
 export const viewUtilCategory = "ns-view-util";
 export const routerTraceCategory = "ns-router";
-export const routeReuseStrategyTraceCategory = "ns-route-reuse-strategy";
 export const listViewTraceCategory = "ns-list-view";
 
 export function animationsLog(message: string): void {
@@ -25,10 +24,6 @@ export function viewUtilLog(msg): void {
 
 export function routerLog(message: string): void {
     write(message, routerTraceCategory);
-}
-
-export function routeReuseStrategyLog(message: string): void {
-    write(message, routeReuseStrategyTraceCategory);
 }
 
 export function styleError(message: string): void {
