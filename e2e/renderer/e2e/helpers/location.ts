@@ -1,10 +1,7 @@
 import { assert } from "chai";
+import { UIElement } from "nativescript-dev-appium";
 
-import { ExtendedUIElement } from "./appium-elements";
-
-export const isAbove = async (first: ExtendedUIElement, second: ExtendedUIElement) => {
-    first = await first.refetch();
-    second = await second.refetch();
+export const isAbove = async (first: UIElement, second: UIElement) => {
 
     const { y: firstY } = await first.location();
     const { y: secondY } = await second.location();
@@ -12,9 +9,7 @@ export const isAbove = async (first: ExtendedUIElement, second: ExtendedUIElemen
     assert.isTrue(firstY < secondY);
 }
 
-export const isOnTheLeft = async (first: ExtendedUIElement, second: ExtendedUIElement) => {
-    first = await first.refetch();
-    second = await second.refetch();
+export const isOnTheLeft = async (first: UIElement, second: UIElement) => {
 
     const { x: firstX } = await first.location();
     const { x: secondX } = await second.location();

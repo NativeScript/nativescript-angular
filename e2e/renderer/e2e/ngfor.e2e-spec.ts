@@ -2,22 +2,20 @@ import {
     AppiumDriver,
     createDriver,
     SearchOptions,
+    UIElement
 } from "nativescript-dev-appium";
 
 import { isAbove } from "./helpers/location";
-import { DriverWrapper, ExtendedUIElement } from "./helpers/appium-elements";
 
 describe("ngFor scenario", () => {
     let driver: AppiumDriver;
-    let driverWrapper: DriverWrapper;
-    let addButton: ExtendedUIElement;
-    let removeButton: ExtendedUIElement;
-    let elements: ExtendedUIElement[] = [];
+    let addButton: UIElement;
+    let removeButton: UIElement;
+    let elements: UIElement[] = [];
     let lastAddedElementId = 0;
 
     before(async () => {
         driver = await createDriver();
-        driverWrapper = new DriverWrapper(driver);
     });
 
     after(async () => {
@@ -25,22 +23,28 @@ describe("ngFor scenario", () => {
         console.log("Driver quits!");
     });
 
+    afterEach(async function () {
+        if (this.currentTest.state === "failed") {
+            await driver.logScreenshoot(this.currentTest.title);
+        }
+    });
+
     it("should navigate to page", async () => {
         const navigationButton =
-            await driverWrapper.findElementByText("NgFor", SearchOptions.exact);
+            await driver.findElementByText("NgFor", SearchOptions.exact);
         await navigationButton.click();
 
         const actionBar =
-            await driverWrapper.findElementByText("ngFor", SearchOptions.exact);
+            await driver.findElementByText("ngFor", SearchOptions.exact);
     });
 
     it("should find elements", async () => {
-        const first = await driverWrapper.findElementByText(
+        const first = await driver.findElementByText(
             lastAddedElementId.toString(), SearchOptions.exact);
         elements.push(first);
 
-        addButton = await driverWrapper.findElementByText("add", SearchOptions.exact);
-        removeButton = await driverWrapper.findElementByText("remove", SearchOptions.exact);
+        addButton = await driver.findElementByText("add", SearchOptions.exact);
+        removeButton = await driver.findElementByText("remove", SearchOptions.exact);
 
         await isAbove(first, addButton);
     });
@@ -78,11 +82,10 @@ describe("ngFor scenario", () => {
     });
 
     const addElement = async () => {
-        addButton = await addButton.refetch();
         await addButton.click();
 
         lastAddedElementId += 1;
-        const newElement = await driverWrapper.findElementByText(
+        const newElement = await driver.findElementByText(
             lastAddedElementId.toString(), SearchOptions.exact);
 
         elements.push(newElement);
@@ -92,11 +95,9 @@ describe("ngFor scenario", () => {
         index;
         if (index) {
             let element = await elements[index];
-            element = await element.refetch();
             await element.click();
         } else {
             index = elements.length - 1;
-            removeButton = await removeButton.refetch();
             await removeButton.click();
         }
 
@@ -105,7 +106,7 @@ describe("ngFor scenario", () => {
     };
 
     const checkAppendedCorrectly = async () => {
-        const lastAdded = await driverWrapper.findElementByText(
+        const lastAdded = await driver.findElementByText(
             lastAddedElementId.toString(), SearchOptions.exact);
 
         await isAbove(elements.slice(-2)[0], lastAdded);
