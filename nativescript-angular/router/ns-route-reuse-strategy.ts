@@ -3,7 +3,11 @@ import { RouteReuseStrategy, ActivatedRouteSnapshot, DetachedRouteHandle } from 
 
 import { routeReuseStrategyLog as log } from "../trace";
 import { NSLocationStrategy } from "./ns-location-strategy";
-import { pageRouterActivatedSymbol, destroyComponentRef } from "./page-router-outlet";
+import {
+    destroyComponentRef,
+    findTopActivatedRouteNodeForOutlet,
+    pageRouterActivatedSymbol
+} from "./page-router-outlet";
 
 interface CacheItem {
     key: string;
@@ -47,7 +51,9 @@ class DetachedStateCache {
 }
 
 /**
- * Does not detach any subtrees. Reuses routes as long as their route config is the same.
+ * Detaches subtrees loaded inside PageRouterOutlet in forward navigation
+ * and reattaches them on back.
+ * Reuses routes as long as their route config is the same.
  */
 @Injectable()
 export class NSRouteReuseStrategy implements RouteReuseStrategy {
@@ -56,6 +62,8 @@ export class NSRouteReuseStrategy implements RouteReuseStrategy {
     constructor(private location: NSLocationStrategy) { }
 
     shouldDetach(route: ActivatedRouteSnapshot): boolean {
+        route = findTopActivatedRouteNodeForOutlet(route);
+
         const key = getSnapshotKey(route);
         const isPageActivated = route[pageRouterActivatedSymbol];
         const isBack = this.location._isPageNavigatingBack();
@@ -67,6 +75,8 @@ export class NSRouteReuseStrategy implements RouteReuseStrategy {
     }
 
     shouldAttach(route: ActivatedRouteSnapshot): boolean {
+        route = findTopActivatedRouteNodeForOutlet(route);
+
         const key = getSnapshotKey(route);
         const isBack = this.location._isPageNavigatingBack();
         const shouldAttach = isBack && this.cache.peek().key === key;
@@ -76,8 +86,9 @@ export class NSRouteReuseStrategy implements RouteReuseStrategy {
         return shouldAttach;
     }
 
-
     store(route: ActivatedRouteSnapshot, state: DetachedRouteHandle): void {
+        route = findTopActivatedRouteNodeForOutlet(route);
+
         const key = getSnapshotKey(route);
         log(`store key: ${key}, state: ${state}`);
 
@@ -95,6 +106,8 @@ export class NSRouteReuseStrategy implements RouteReuseStrategy {
     }
 
     retrieve(route: ActivatedRouteSnapshot): DetachedRouteHandle | null {
+        route = findTopActivatedRouteNodeForOutlet(route);
+
         const key = getSnapshotKey(route);
         const isBack = this.location._isPageNavigatingBack();
         const cachedItem = this.cache.peek();

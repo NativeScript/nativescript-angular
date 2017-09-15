@@ -7,6 +7,7 @@ import {
 } from "@angular/core";
 import {
     ActivatedRoute,
+    ActivatedRouteSnapshot,
     ChildrenOutletContexts,
     PRIMARY_OUTLET,
 } from "@angular/router";
@@ -20,7 +21,7 @@ import { BehaviorSubject } from "rxjs/BehaviorSubject";
 
 import { isPresent } from "../lang-facade";
 import { DEVICE, PAGE_FACTORY, PageFactory } from "../platform-providers";
-import { routerLog } from "../trace";
+import { routerLog as log } from "../trace";
 import { DetachedLoader } from "../common/detached-loader";
 import { ViewUtil } from "../view-util";
 import { NSLocationStrategy } from "./ns-location-strategy";
@@ -66,7 +67,40 @@ class ChildInjector implements Injector {
 
 type ProviderMap = Map<Type<any> | InjectionToken<any>, any>;
 
-const log = (msg: string) => routerLog(msg);
+/**
+ * There are cases where multiple activatedRoute nodes should be associated/handled by the same PageRouterOutlet.
+ * We can gat additional ActivatedRoutes nodes when there is:
+ *  - Lazy loading - there is an additional ActivatedRoute node for the RouteConfig with the `loadChildren` setup
+ *  - Componentless routes - there is an additional ActivatedRoute node for the componentless RouteConfig
+ *
+ * Example:
+ *   R  <-- root
+ *   |
+ * feature (lazy module) <-- RouteConfig: { path: "lazy", loadChildren: "./feature/feature.module#FeatureModule" }
+ *   |
+ * module (componentless route) <-- RouteConfig: { path: "module", children: [...] } // Note: No 'component'
+ *   |
+ *  home <-- RouteConfig: { path: "module", component: MyComponent } - this is what we get as activatedRoute param
+ *
+ *  In these cases we will mark the top-most node (feature). NSRouteReuseStrategy will detach the tree there and
+ *  use this ActivateRoute as a kay for caching.
+ */
+export function findTopActivatedRouteNodeForOutlet(activatedRoute: ActivatedRouteSnapshot): ActivatedRouteSnapshot {
+    let outletActivatedRoute = activatedRoute;
+
+    while (outletActivatedRoute.parent &&
+        outletActivatedRoute.parent.routeConfig &&
+        !outletActivatedRoute.parent.routeConfig.component) {
+
+        outletActivatedRoute = outletActivatedRoute.parent;
+    }
+
+    return outletActivatedRoute;
+}
+
+function routeToString(activatedRoute: ActivatedRoute | ActivatedRouteSnapshot): string {
+    return activatedRoute.pathFromRoot.join("->");
+}
 
 @Directive({ selector: "page-router-outlet" }) // tslint:disable-line:directive-selector
 export class PageRouterOutlet implements OnDestroy, OnInit { // tslint:disable-line:directive-class-suffix
@@ -181,6 +215,8 @@ export class PageRouterOutlet implements OnDestroy, OnInit { // tslint:disable-l
             throw new Error("Outlet is not activated");
         }
 
+        log("PageRouterOutlet.detach() - " + routeToString(this._activatedRoute));
+
         const component = this.activated;
         this.activated = null;
         this._activatedRoute = null;
@@ -191,13 +227,12 @@ export class PageRouterOutlet implements OnDestroy, OnInit { // tslint:disable-l
      * Called when the `RouteReuseStrategy` instructs to re-attach a previously detached subtree
      */
     attach(ref: ComponentRef<any>, activatedRoute: ActivatedRoute) {
-        log("PageRouterOutlet.attach()" +
-            "when RouteReuseStrategy instructs to re-attach " +
-            "previously detached subtree");
+        log("PageRouterOutlet.attach() - " + routeToString(activatedRoute));
 
         this.activated = ref;
         this._activatedRoute = activatedRoute;
-        this._activatedRoute.snapshot[pageRouterActivatedSymbol] = true;
+
+        this.markActivatedRoute(activatedRoute);
 
         this.locationStrategy._finishBackPageNavigation();
     }
@@ -215,10 +250,11 @@ export class PageRouterOutlet implements OnDestroy, OnInit { // tslint:disable-l
             throw new Error("Currently in page back navigation - component should be reattached instead of activated.");
         }
 
-        log("PageRouterOutlet.activateWith() - instantiating new component");
+        log("PageRouterOutlet.activateWith() - " + routeToString(activatedRoute));
 
         this._activatedRoute = activatedRoute;
-        this._activatedRoute.snapshot[pageRouterActivatedSymbol] = true;
+
+        this.markActivatedRoute(activatedRoute);
 
         resolver = resolver || this.resolver;
 
@@ -316,6 +352,12 @@ export class PageRouterOutlet implements OnDestroy, OnInit { // tslint:disable-l
             animated: navOptions.animated,
             transition: navOptions.transition
         });
+    }
+
+    private markActivatedRoute(activatedRoute: ActivatedRoute) {
+        const nodeToMark = findTopActivatedRouteNodeForOutlet(activatedRoute.snapshot);
+        nodeToMark[pageRouterActivatedSymbol] = true;
+        log("Activated route marked as page: " + routeToString(nodeToMark));
     }
 
     // NOTE: Using private APIs - potential break point!
