@@ -18,18 +18,17 @@ import {
     EventEmitter,
     Provider,
     Sanitizer,
-    OpaqueToken
+    InjectionToken
 } from "@angular/core";
 
-// Work around a TS bug requiring an import of OpaqueToken without using it
-if ((<any>global).___TS_UNUSED) {
-    (() => {
-        return OpaqueToken;
-    })();
-}
-
 import { rendererLog, rendererError } from "./trace";
-import { PAGE_FACTORY, PageFactory, defaultPageFactoryProvider, setRootPage } from "./platform-providers";
+import {
+    PAGE_FACTORY,
+    PageFactory,
+    defaultPageFactoryProvider,
+    setRootPage,
+    PageFactoryOptions
+} from "./platform-providers";
 
 import { start, setCssFileName } from "tns-core-modules/application";
 import { topmost, NavigationEntry } from "tns-core-modules/ui/frame";
@@ -82,7 +81,7 @@ export class NativeScriptPlatformRef extends PlatformRef {
     bootstrapModule<M>(
         moduleType: Type<M>,
         compilerOptions: CompilerOptions | CompilerOptions[] = []
-    ): Promise<NgModuleRef<M>> {
+        ): Promise<NgModuleRef<M>> {
         this._bootstrapper = () => this.platform.bootstrapModule(moduleType, compilerOptions);
 
         this.bootstrapApp();
