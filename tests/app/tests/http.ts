@@ -5,7 +5,7 @@ import {
     inject,
 } from "@angular/core/testing";
 import {ReflectiveInjector} from "@angular/core";
-import {BaseRequestOptions, ConnectionBackend, Http, Response, ResponseOptions} from "@angular/http";
+import {Request, BaseRequestOptions, ConnectionBackend, Http, Response, ResponseOptions} from "@angular/http";
 import "rxjs/add/operator/map";
 import {MockBackend} from "@angular/http/testing";
 import {NSHttp} from "nativescript-angular/http/ns-http";
@@ -40,6 +40,25 @@ describe("Http", () => {
 
     it("should work with local files prefixed with '~'", () => {
         http.get("~/test.json").map(res => res.json()).subscribe((response: any) => {
+            assert.strictEqual(3, response.length);
+            assert.strictEqual("Alex", response[0].name);
+        });
+    });
+
+    it("request method should work with local files prefixed with '~'", () => {
+        http.request("~/test.json").map(res => res.json()).subscribe((response: any) => {
+            assert.strictEqual(3, response.length);
+            assert.strictEqual("Alex", response[0].name);
+        });
+    });
+
+    it("request method using Request type should work with local files prefixed with '~'", () => {
+        const url = "~/test.json";
+        const req = new Request({
+            method: 'GET',
+            url
+        });
+        http.request(req).map(res => res.json()).subscribe((response: any) => {
             assert.strictEqual(3, response.length);
             assert.strictEqual("Alex", response[0].name);
         });
