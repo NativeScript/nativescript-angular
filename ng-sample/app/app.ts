@@ -3,10 +3,13 @@ import { platformNativeScriptDynamic } from "nativescript-angular/platform";
 import { NativeScriptAnimationsModule } from "nativescript-angular/animations";
 import { onAfterLivesync, onBeforeLivesync } from "nativescript-angular/platform-common";
 import { NgModule } from "@angular/core";
+import { DOCUMENT } from '@angular/common';
 import { Router } from "@angular/router";
 import { NativeScriptRouterModule } from "nativescript-angular/router";
 import { NativeScriptFormsModule } from "nativescript-angular/forms";
 import { NativeScriptHttpModule } from "nativescript-angular/http";
+import { NativeScriptHttpClientModule } from "nativescript-angular/http-client";
+
 import {
     rendererTraceCategory,
     routerTraceCategory,
@@ -34,6 +37,7 @@ import { ListTemplateSelectorTest } from "./examples/list/template-selector";
 import { ListTestAsync, ListTestFilterAsync } from "./examples/list/list-test-async";
 import { ImageTest } from "./examples/image/image-test";
 import { HttpTest } from "./examples/http/http-test";
+import { HttpClientTest } from "./examples/http-client/http-client-test";
 import { ActionBarTest } from "./examples/action-bar/action-bar-test";
 import { ModalTest } from "./examples/modal/modal-test";
 import { PlatfromDirectivesTest } from "./examples/platform-directives/platform-directives-test";
@@ -53,6 +57,7 @@ import { AnimationNgClassTest } from "./examples/animation/animation-ngclass-tes
 import { AnimationStatesTest } from "./examples/animation/animation-states-test";
 import { AnimationStatesMultiTest } from "./examples/animation/animation-states-multi-test";
 
+
 @NgModule({
     declarations: [
     ],
@@ -60,12 +65,14 @@ import { AnimationStatesMultiTest } from "./examples/animation/animation-states-
         NativeScriptModule,
         NativeScriptFormsModule,
         NativeScriptHttpModule,
+        NativeScriptHttpClientModule,
         NativeScriptRouterModule,
     ],
     exports: [
         NativeScriptModule,
         NativeScriptFormsModule,
         NativeScriptHttpModule,
+        NativeScriptHttpClientModule,
         NativeScriptRouterModule,
     ],
     providers: []
@@ -130,6 +137,7 @@ const customPageFactoryProvider = {
 // platformNativeScriptDynamic().bootstrapModule(makeExampleModule(ImageTest));
 // platformNativeScriptDynamic().bootstrapModule(makeExampleModule(ModalTest));
 // platformNativeScriptDynamic().bootstrapModule(makeExampleModule(HttpTest));
+platformNativeScriptDynamic().bootstrapModule(makeExampleModule(HttpClientTest));
 // platformNativeScriptDynamic().bootstrapModule(makeExampleModule(PlatfromDirectivesTest));
 // platformNativeScriptDynamic().bootstrapModule(makeExampleModule(ActionBarTest));
 
@@ -137,7 +145,7 @@ const customPageFactoryProvider = {
 // platformNativeScriptDynamic().bootstrapModule(makeExampleModule(RouterOutletAppComponent));
 // platformNativeScriptDynamic().bootstrapModule(makeExampleModule(PageRouterOutletAppComponent));
 // platformNativeScriptDynamic().bootstrapModule(makeExampleModule(PageRouterOutletNestedAppComponent));
-platformNativeScriptDynamic().bootstrapModule(makeExampleModule(ClearHistoryAppComponent));
+// platformNativeScriptDynamic().bootstrapModule(makeExampleModule(ClearHistoryAppComponent));
 // platformNativeScriptDynamic().bootstrapModule(makeExampleModule(LoginAppComponent));
 
 // animations

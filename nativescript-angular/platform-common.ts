@@ -20,6 +20,7 @@ import {
     Sanitizer,
     InjectionToken
 } from "@angular/core";
+import { DOCUMENT } from "@angular/common";
 
 import { rendererLog, rendererError } from "./trace";
 import {
@@ -56,9 +57,16 @@ export class NativeScriptSanitizer extends Sanitizer {
     }
 }
 
+export class NativeScriptDocument {
+    createElement(tag: string) {
+        throw new Error("NativeScriptDocument is not DOM Document. There is no createElement() method.");
+    }
+}
+
 export const COMMON_PROVIDERS = [
     defaultPageFactoryProvider,
     { provide: Sanitizer, useClass: NativeScriptSanitizer },
+    { provide: DOCUMENT, useClass: NativeScriptDocument },
 ];
 
 export class NativeScriptPlatformRef extends PlatformRef {
