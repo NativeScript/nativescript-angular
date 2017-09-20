@@ -9,6 +9,8 @@ global.__extends = cachedExtends;
 import { NSFileSystem } from "../file-system/ns-file-system";
 import { NsHttpBackEnd } from "./ns-http-backend";
 
+export { NsHttpBackEnd } from "./ns-http-backend";
+
 @NgModule({
     providers: [
         NSFileSystem,
