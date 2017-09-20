@@ -1,9 +1,11 @@
+**/.DS_Store
+
 hooks
 node_modules
 platforms
-report
 
 app/**/*.js
 e2e/**/*.js
 e2e/**/*.map
+e2e/reports/
 test-results.xml
