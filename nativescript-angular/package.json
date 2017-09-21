@@ -65,6 +65,7 @@
     "@angular/platform-browser": "~4.2.5",
     "@angular/router": "~4.2.5",
     "codelyzer": "^3.1.2",
+    "mocha-junit-reporter": "^1.13.0",
     "rxjs": "^5.4.2",
     "tns-core-modules": "next",
     "tslint": "^5.5.0",
