@@ -1,0 +1,17 @@
+.header {
+    font-size: 32;
+    white-space: normal;
+}
+
+.nested-header {
+    font-size: 26;
+}
+
+.nested-outlet {
+    margin: 20;
+    background-color: lightgreen;
+}
+
+Label {
+    text-align: center;
+}

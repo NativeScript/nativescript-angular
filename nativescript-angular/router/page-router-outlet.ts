@@ -2,11 +2,12 @@ import {
     Attribute, ChangeDetectorRef,
     ComponentFactory, ComponentFactoryResolver, ComponentRef,
     Directive, Inject, InjectionToken, Injector,
-    OnDestroy, OnInit,
+    OnDestroy, OnInit, EventEmitter, Output,
     Type, ViewContainerRef,
 } from "@angular/core";
 import {
     ActivatedRoute,
+    ActivatedRouteSnapshot,
     ChildrenOutletContexts,
     PRIMARY_OUTLET,
 } from "@angular/router";
@@ -20,10 +21,11 @@ import { BehaviorSubject } from "rxjs/BehaviorSubject";
 
 import { isPresent } from "../lang-facade";
 import { DEVICE, PAGE_FACTORY, PageFactory } from "../platform-providers";
-import { routerLog } from "../trace";
+import { routerLog as log } from "../trace";
 import { DetachedLoader } from "../common/detached-loader";
 import { ViewUtil } from "../view-util";
 import { NSLocationStrategy } from "./ns-location-strategy";
+import { NSRouteReuseStrategy } from "./ns-route-reuse-strategy";
 
 export class PageRoute {
     activatedRoute: BehaviorSubject<ActivatedRoute>;
@@ -33,78 +35,86 @@ export class PageRoute {
     }
 }
 
+// Used to "mark" ActivatedRoute snapshots that are handled in PageRouterOutlet
+export const pageRouterActivatedSymbol = Symbol("page-router-activated");
+export const loaderRefSymbol = Symbol("loader-ref");
+
+export function destroyComponentRef(componentRef: ComponentRef<any>) {
+    if (isPresent(componentRef)) {
+        const loaderRef = componentRef[loaderRefSymbol];
+        if (isPresent(loaderRef)) {
+            loaderRef.destroy();
+        }
+        componentRef.destroy();
+    }
+}
+
 class ChildInjector implements Injector {
     constructor(
         private providers: ProviderMap,
         private parent: Injector
-    ) {}
+    ) { }
 
-    get<T>(token: Type<T>|InjectionToken<T>, notFoundValue?: T): T {
-        return this.providers.get(token) || this.parent.get(token, notFoundValue);
+    get<T>(token: Type<T> | InjectionToken<T>, notFoundValue?: T): T {
+        let localValue = this.providers.get(token);
+        if (localValue) {
+            return localValue;
+        }
+
+        return this.parent.get(token, notFoundValue);
     }
 }
+
+type ProviderMap = Map<Type<any> | InjectionToken<any>, any>;
 
 /**
- * Reference Cache
+ * There are cases where multiple activatedRoute nodes should be associated/handled by the same PageRouterOutlet.
+ * We can gat additional ActivatedRoutes nodes when there is:
+ *  - Lazy loading - there is an additional ActivatedRoute node for the RouteConfig with the `loadChildren` setup
+ *  - Componentless routes - there is an additional ActivatedRoute node for the componentless RouteConfig
+ *
+ * Example:
+ *   R  <-- root
+ *   |
+ * feature (lazy module) <-- RouteConfig: { path: "lazy", loadChildren: "./feature/feature.module#FeatureModule" }
+ *   |
+ * module (componentless route) <-- RouteConfig: { path: "module", children: [...] } // Note: No 'component'
+ *   |
+ *  home <-- RouteConfig: { path: "module", component: MyComponent } - this is what we get as activatedRoute param
+ *
+ *  In these cases we will mark the top-most node (feature). NSRouteReuseStrategy will detach the tree there and
+ *  use this ActivateRoute as a kay for caching.
  */
-class RefCache {
-    private cache = new Array<CacheItem>();
+export function findTopActivatedRouteNodeForOutlet(activatedRoute: ActivatedRouteSnapshot): ActivatedRouteSnapshot {
+    let outletActivatedRoute = activatedRoute;
 
-    public get length(): number {
-        return this.cache.length;
+    while (outletActivatedRoute.parent &&
+        outletActivatedRoute.parent.routeConfig &&
+        !outletActivatedRoute.parent.routeConfig.component) {
+
+        outletActivatedRoute = outletActivatedRoute.parent;
     }
 
-    public push(cacheItem: CacheItem) {
-        this.cache.push(cacheItem);
-    }
-
-    public pop(): CacheItem {
-        return this.cache.pop();
-    }
-
-    public peek(): CacheItem {
-        return this.cache[this.cache.length - 1];
-    }
-
-    public clear(): void {
-        while (this.length) {
-            RefCache.destroyItem(this.pop());
-        }
-    }
-
-    public static destroyItem(item: CacheItem) {
-        if (isPresent(item.componentRef)) {
-            item.componentRef.destroy();
-        }
-
-        if (isPresent(item.loaderRef)) {
-            item.loaderRef.destroy();
-        }
-    }
+    return outletActivatedRoute;
 }
 
-interface CacheItem {
-    componentRef: ComponentRef<any>;
-    reusedRoute: PageRoute;
-    loaderRef?: ComponentRef<any>;
+function routeToString(activatedRoute: ActivatedRoute | ActivatedRouteSnapshot): string {
+    return activatedRoute.pathFromRoot.join("->");
 }
-
-
-type ProviderMap = Map<Type<any>|InjectionToken<any>, any>;
-
-const log = (msg: string) => routerLog(msg);
 
 @Directive({ selector: "page-router-outlet" }) // tslint:disable-line:directive-selector
 export class PageRouterOutlet implements OnDestroy, OnInit { // tslint:disable-line:directive-class-suffix
-    private activated: ComponentRef<any>|null = null;
-    private _activatedRoute: ActivatedRoute|null = null;
-    private refCache: RefCache = new RefCache();
+    private activated: ComponentRef<any> | null = null;
+    private _activatedRoute: ActivatedRoute | null = null;
+
     private isInitialPage: boolean = true;
     private detachedLoaderFactory: ComponentFactory<DetachedLoader>;
-    private itemsToDestroy: CacheItem[] = [];
 
     private name: string;
     private viewUtil: ViewUtil;
+
+    @Output("activate") activateEvents = new EventEmitter<any>(); // tslint:disable-line:no-output-rename
+    @Output("deactivate") deactivateEvents = new EventEmitter<any>(); // tslint:disable-line:no-output-rename
 
     /** @deprecated from Angular since v4 */
     get locationInjector(): Injector { return this.location.injector; }
@@ -140,7 +150,8 @@ export class PageRouterOutlet implements OnDestroy, OnInit { // tslint:disable-l
         private frame: Frame,
         private changeDetector: ChangeDetectorRef,
         @Inject(DEVICE) device: Device,
-        @Inject(PAGE_FACTORY) private pageFactory: PageFactory
+        @Inject(PAGE_FACTORY) private pageFactory: PageFactory,
+        private routeReuseStrategy: NSRouteReuseStrategy
     ) {
 
         this.name = name || PRIMARY_OUTLET;
@@ -148,11 +159,6 @@ export class PageRouterOutlet implements OnDestroy, OnInit { // tslint:disable-l
 
         this.viewUtil = new ViewUtil(device);
         this.detachedLoaderFactory = resolver.resolveComponentFactory(DetachedLoader);
-        log("DetachedLoaderFactory loaded");
-    }
-
-    ngOnDestroy(): void {
-        this.parentContexts.onChildOutletDestroyed(this.name);
     }
 
     ngOnInit(): void {
@@ -176,41 +182,29 @@ export class PageRouterOutlet implements OnDestroy, OnInit { // tslint:disable-l
         }
     }
 
+    ngOnDestroy(): void {
+        this.parentContexts.onChildOutletDestroyed(this.name);
+    }
+
     deactivate(): void {
-        if (this.locationStrategy._isPageNavigatingBack()) {
-            log("PageRouterOutlet.deactivate() while going back - should destroy");
-            if (!this.isActivated) {
-                return;
-            }
-
-            const poppedItem = this.refCache.pop();
-            const poppedRef = poppedItem.componentRef;
-
-            if (this.activated !== poppedRef) {
-                throw new Error("Current componentRef is different for cached componentRef");
-            }
-
-            RefCache.destroyItem(poppedItem);
-            this.activated = null;
-        } else {
-            log("PageRouterOutlet.deactivate() while going forward - do nothing");
-        }
-    }
-
-    private destroyQueuedCacheItems() {
-        while (this.itemsToDestroy.length > 0) {
-            this.destroyCacheItem(this.itemsToDestroy.pop());
-        }
-    }
-
-    private destroyCacheItem(poppedItem: CacheItem) {
-        if (isPresent(poppedItem.componentRef)) {
-            poppedItem.componentRef.destroy();
+        if (!this.locationStrategy._isPageNavigatingBack()) {
+            throw new Error("Currently not in page back navigation" +
+                " - component should be detached instead of deactivated.");
         }
 
-        if (isPresent(poppedItem.loaderRef)) {
-            poppedItem.loaderRef.destroy();
+        log("PageRouterOutlet.deactivate() while going back - should destroy");
+
+        if (!this.isActivated) {
+            return;
         }
+
+        const c = this.activated.instance;
+        destroyComponentRef(this.activated);
+
+        this.activated = null;
+        this._activatedRoute = null;
+
+        this.deactivateEvents.emit(c);
     }
 
     /**
@@ -221,24 +215,26 @@ export class PageRouterOutlet implements OnDestroy, OnInit { // tslint:disable-l
             throw new Error("Outlet is not activated");
         }
 
-        this.location.detach();
-        const cmp = this.activated;
+        log("PageRouterOutlet.detach() - " + routeToString(this._activatedRoute));
+
+        const component = this.activated;
         this.activated = null;
         this._activatedRoute = null;
-        return cmp;
+        return component;
     }
 
     /**
      * Called when the `RouteReuseStrategy` instructs to re-attach a previously detached subtree
      */
     attach(ref: ComponentRef<any>, activatedRoute: ActivatedRoute) {
-        log("PageRouterOutlet.attach()" +
-            "when RouteReuseStrategy instructs to re-attach " +
-            "previously detached subtree");
+        log("PageRouterOutlet.attach() - " + routeToString(activatedRoute));
 
         this.activated = ref;
         this._activatedRoute = activatedRoute;
-        this.location.insert(ref.hostView);
+
+        this.markActivatedRoute(activatedRoute);
+
+        this.locationStrategy._finishBackPageNavigation();
     }
 
     /**
@@ -248,20 +244,22 @@ export class PageRouterOutlet implements OnDestroy, OnInit { // tslint:disable-l
     @profile
     activateWith(
         activatedRoute: ActivatedRoute,
-        resolver: ComponentFactoryResolver|null
-    ): void {
-
-        log("PageRouterOutlet.activateWith() - " +
-            "instanciating new component during commit phase of a navigation");
-
-        this._activatedRoute = activatedRoute;
-        resolver = resolver || this.resolver;
+        resolver: ComponentFactoryResolver | null): void {
 
         if (this.locationStrategy._isPageNavigatingBack()) {
-            this.activateOnGoBack(activatedRoute);
-        } else {
-            this.activateOnGoForward(activatedRoute, resolver);
+            throw new Error("Currently in page back navigation - component should be reattached instead of activated.");
         }
+
+        log("PageRouterOutlet.activateWith() - " + routeToString(activatedRoute));
+
+        this._activatedRoute = activatedRoute;
+
+        this.markActivatedRoute(activatedRoute);
+
+        resolver = resolver || this.resolver;
+
+        this.activateOnGoForward(activatedRoute, resolver);
+        this.activateEvents.emit(this.activated.instance);
     }
 
     private activateOnGoForward(
@@ -271,6 +269,7 @@ export class PageRouterOutlet implements OnDestroy, OnInit { // tslint:disable-l
 
         const pageRoute = new PageRoute(activatedRoute);
         const providers = this.initProvidersMap(activatedRoute, pageRoute);
+
         const childInjector = new ChildInjector(providers, this.location.injector);
         const factory = this.getComponentFactory(activatedRoute, loadedResolver);
 
@@ -282,12 +281,6 @@ export class PageRouterOutlet implements OnDestroy, OnInit { // tslint:disable-l
             this.activated = this.location.createComponent(
                 factory, this.location.length, childInjector, []);
             this.changeDetector.markForCheck();
-
-            this.refCache.push({
-                componentRef: this.activated,
-                reusedRoute: pageRoute,
-                loaderRef: null,
-            });
         } else {
             log("PageRouterOutlet.activate() forward navigation - " +
                 "create detached loader in the loader container");
@@ -306,11 +299,7 @@ export class PageRouterOutlet implements OnDestroy, OnInit { // tslint:disable-l
             this.activated = loaderRef.instance.loadWithFactory(factory);
             this.loadComponentInPage(page, this.activated);
 
-            this.refCache.push({
-                componentRef: this.activated,
-                reusedRoute: pageRoute,
-                loaderRef,
-            });
+            this.activated[loaderRefSymbol] = loaderRef;
         }
     }
 
@@ -329,17 +318,6 @@ export class PageRouterOutlet implements OnDestroy, OnInit { // tslint:disable-l
         return providers;
     }
 
-    private activateOnGoBack(activatedRoute: ActivatedRoute): void {
-        log("PageRouterOutlet.activate() - Back navigation, so load from cache");
-
-        this.locationStrategy._finishBackPageNavigation();
-
-        const cacheItem = this.refCache.peek();
-        cacheItem.reusedRoute.activatedRoute.next(activatedRoute);
-
-        this.activated = cacheItem.componentRef;
-    }
-
     @profile
     private loadComponentInPage(page: Page, componentRef: ComponentRef<any>): void {
         // Component loaded. Find its root native view.
@@ -349,9 +327,6 @@ export class PageRouterOutlet implements OnDestroy, OnInit { // tslint:disable-l
         // Add it to the new page
         page.content = componentView;
 
-        page.on(Page.navigatedToEvent, () => setTimeout(() => {
-            this.destroyQueuedCacheItems();
-        }));
         page.on(Page.navigatedFromEvent, (<any>global).Zone.current.wrap((args: NavigatedData) => {
             if (args.isBackNavigation) {
                 this.locationStrategy._beginBackPageNavigation();
@@ -360,17 +335,29 @@ export class PageRouterOutlet implements OnDestroy, OnInit { // tslint:disable-l
         }));
 
         const navOptions = this.locationStrategy._beginPageNavigation();
+
+        // Clear refCache if navigation with clearHistory
+        if (navOptions.clearHistory) {
+            const clearCallback = () => setTimeout(() => {
+                this.routeReuseStrategy.clearCache();
+                page.off(Page.navigatedToEvent, clearCallback);
+            });
+
+            page.on(Page.navigatedToEvent, clearCallback);
+        }
+
         this.frame.navigate({
             create: () => { return page; },
             clearHistory: navOptions.clearHistory,
             animated: navOptions.animated,
             transition: navOptions.transition
         });
+    }
 
-        // Clear refCache if navigation with clearHistory
-        if (navOptions.clearHistory) {
-            this.refCache.clear();
-        }
+    private markActivatedRoute(activatedRoute: ActivatedRoute) {
+        const nodeToMark = findTopActivatedRouteNodeForOutlet(activatedRoute.snapshot);
+        nodeToMark[pageRouterActivatedSymbol] = true;
+        log("Activated route marked as page: " + routeToString(nodeToMark));
     }
 
     // NOTE: Using private APIs - potential break point!

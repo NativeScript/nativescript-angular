@@ -1,0 +1,11 @@
+{
+    "extends": "../tsconfig",
+    "compilerOptions": {
+        "importHelpers": true,
+        "types": [
+            "node",
+            "mocha",
+            "chai"
+        ]
+    }
+}
