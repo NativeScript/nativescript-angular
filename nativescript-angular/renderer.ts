@@ -11,7 +11,6 @@ import { topmost } from "tns-core-modules/ui/frame";
 import { profile } from "tns-core-modules/profiling";
 
 import { APP_ROOT_VIEW, DEVICE, getRootPage } from "./platform-providers";
-import { isBlank } from "./lang-facade";
 import { ViewUtil } from "./view-util";
 import { NgView, InvisibleNode } from "./element-registry";
 import { rendererLog as traceLog } from "./trace";
@@ -60,7 +59,7 @@ export class NativeScriptRendererFactory implements RendererFactory2 {
         }
 
         let renderer: NativeScriptRenderer = this.componentRenderers.get(type.id);
-        if (!isBlank(renderer)) {
+        if (renderer) {
             return renderer;
         }
 
