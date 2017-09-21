@@ -68,7 +68,7 @@
     "rxjs": "^5.4.2",
     "tns-core-modules": "next",
     "tslint": "^5.5.0",
-    "typescript": "^2.4.1",
+    "typescript": "^2.5.1",
     "zone.js": "^0.8.12"
   }
 }

@@ -27,8 +27,7 @@ import {
     PAGE_FACTORY,
     PageFactory,
     defaultPageFactoryProvider,
-    setRootPage,
-    PageFactoryOptions
+    setRootPage
 } from "./platform-providers";
 
 import { start, setCssFileName } from "tns-core-modules/application";
@@ -43,6 +42,12 @@ export const onAfterLivesync = new EventEmitter<NgModuleRef<any>>();
 let lastBootstrappedModule: WeakRef<NgModuleRef<any>>;
 type BootstrapperAction = () => Promise<NgModuleRef<any>>;
 
+// Work around a TS bug requiring an import of OpaqueToken without using it
+if ((<any>global).___TS_UNUSED) {
+    (() => {
+        return InjectionToken;
+    })();
+}
 export interface AppOptions {
     bootInExistingPage?: boolean;
     cssFile?: string;

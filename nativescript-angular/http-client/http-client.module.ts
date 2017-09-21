@@ -1,4 +1,4 @@
-import { NgModule, Optional, Inject, Injectable } from "@angular/core";
+import { NgModule } from "@angular/core";
 
 // IMPORTant: Importing "@angular/common/http" for the first time overwrites the
 // global.__extends function.
