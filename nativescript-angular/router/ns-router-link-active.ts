@@ -6,7 +6,7 @@ import {
 import { Subscription } from "rxjs/Subscription";
 
 import { NavigationEnd, Router, UrlTree } from "@angular/router";
-import { containsTree } from "../router-url-tree";
+import { containsTree } from "./private-imports/router-url-tree";
 
 import { NSRouterLink } from "./ns-router-link";
 
@@ -127,5 +127,4 @@ export class NSRouterLinkActive implements OnChanges, OnDestroy, AfterContentIni
     private hasActiveLinks(): boolean {
         return this.links.some(this.isLinkActive(this.router));
     }
-
 }
