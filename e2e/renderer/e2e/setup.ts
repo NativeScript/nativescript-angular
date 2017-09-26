@@ -8,11 +8,12 @@ before("start server", async () => {
 });
 
 after("stop server", async () => {
+    await driver.quit();
     await stopServer();
 });
 
 afterEach(async function () {
     if (this.currentTest.state === "failed") {
-        await driver.logScreenshoot(this.currentTest.title);
+        await driver.logScreenshot(this.currentTest.title);
     }
 });
