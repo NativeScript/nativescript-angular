@@ -21,17 +21,7 @@ describe("ngForOf scenario", () => {
 
     before(async () => {
         driver = await createDriver();
-    });
-
-    after(async () => {
-        await driver.quit();
-        console.log("Driver quits!");
-    });
-
-    afterEach(async function () {
-        if (this.currentTest.state === "failed") {
-            await driver.logScreenshoot(this.currentTest.title);
-        }
+        await driver.driver.resetApp();
     });
 
     it("should navigate to page", async () => {

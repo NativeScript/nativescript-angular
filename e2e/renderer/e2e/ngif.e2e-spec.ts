@@ -13,20 +13,10 @@ describe("ngIf scenario", () => {
     let driver: AppiumDriver;
     let toggleButton: UIElement;
 
-    afterEach(async function () {
-        if (this.currentTest.state === "failed") {
-            await driver.logScreenshoot(this.currentTest.title);
-        }
-    });
-
     describe("without layout", async () => {
         before(async () => {
             driver = await createDriver();
-        });
-
-        after(async () => {
-            await driver.quit();
-            console.log("Driver quits!");
+            await driver.driver.resetApp();
         });
 
         it("should navigate to page", async () => {
@@ -58,11 +48,7 @@ describe("ngIf scenario", () => {
 
         before(async () => {
             driver = await createDriver();
-        });
-
-        after(async () => {
-            await driver.quit();
-            console.log("Driver quits!");
+            await driver.driver.resetApp();            
         });
 
         it("should navigate to page", async () => {
@@ -104,11 +90,7 @@ describe("ngIf scenario", () => {
 
         before(async () => {
             driver = await createDriver();
-        });
-
-        after(async () => {
-            await driver.quit();
-            console.log("Driver quits!");
+            await driver.driver.resetApp();            
         });
 
         it("should navigate to page", async () => {
@@ -163,11 +145,7 @@ describe("ngIf scenario", () => {
 
         before(async () => {
             driver = await createDriver();
-        });
-
-        after(async () => {
-            await driver.quit();
-            console.log("Driver quits!");
+            await driver.driver.resetApp();            
         });
 
         it("should navigate to page", async () => {
@@ -222,11 +200,7 @@ describe("ngIf scenario", () => {
 
         before(async () => {
             driver = await createDriver();
-        });
-
-        after(async () => {
-            await driver.quit();
-            console.log("Driver quits!");
+            await driver.driver.resetApp();            
         });
 
         it("should navigate to page", async () => {
@@ -282,11 +256,7 @@ describe("ngIf scenario", () => {
 
         before(async () => {
             driver = await createDriver();
-        });
-
-        after(async () => {
-            await driver.quit();
-            console.log("Driver quits!");
+            await driver.driver.resetApp();
         });
 
         it("should navigate to page", async () => {
@@ -397,5 +367,4 @@ describe("ngIf scenario", () => {
             })();
         });
     });
-
 });

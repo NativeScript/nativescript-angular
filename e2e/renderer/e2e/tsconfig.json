@@ -1,6 +1,7 @@
 {
     "extends": "../tsconfig",
     "compilerOptions": {
+        "sourceMap": true,
         "importHelpers": true,
         "types": [
             "node",

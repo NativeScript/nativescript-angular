@@ -10,12 +10,6 @@ import { isOnTheLeft } from "./helpers/location";
 describe("Action Bar scenario", () => {
     let driver: AppiumDriver;
 
-    afterEach(async function () {
-        if (this.currentTest.state === "failed") {
-            await driver.logScreenshoot(this.currentTest.title);
-        }
-    });
-
     describe("dynamically add/remove ActionItems", async () => {
         let firstActionItem: UIElement;
         let secondActionItem: UIElement;
@@ -24,11 +18,7 @@ describe("Action Bar scenario", () => {
 
         before(async () => {
             driver = await createDriver();
-        });
-
-        after(async () => {
-            await driver.quit(); 
-            console.log("Driver quits!");
+            await driver.driver.resetApp();
         });
 
         it("should navigate to page", async () => {
@@ -116,11 +106,7 @@ describe("Action Bar scenario", () => {
 
         before(async () => {
             driver = await createDriver();
-        });
-
-        after(async () => {
-            await driver.quit();
-            console.log("Driver quits!");
+            await driver.driver.resetApp();
         });
 
         it("should navigate to page", async () => {

@@ -1,12 +1,10 @@
 {
     "nexus5": {
         "browserName": "",
-        "appium-version": "1.6.5",
         "platformName": "Android",
         "platformVersion": "6.0",
         "deviceName": "device",
         "udid": "077e4a47003b7698",
-        "-lt": 60000,
         "automationName": "Appium",
         "appActivity": "com.tns.NativeScriptActivity",
         "app": ""
@@ -21,7 +19,7 @@
         "appActivity": "com.tns.NativeScriptActivity",
         "newCommandTimeout": 720,
         "noReset": false,
-        "fullReset": true,
+        "fullReset": false,
         "app": ""
     },
     "android21": {
@@ -34,7 +32,7 @@
         "appActivity": "com.tns.NativeScriptActivity",
         "newCommandTimeout": 720,
         "noReset": false,
-        "fullReset": true,
+        "fullReset": false,
         "app": ""
     },
     "android23": {
@@ -47,7 +45,7 @@
         "appActivity": "com.tns.NativeScriptActivity",
         "newCommandTimeout": 720,
         "noReset": false,
-        "fullReset": true,
+        "fullReset": false,
         "app": ""
     },
     "android24": {
@@ -60,7 +58,7 @@
         "appActivity": "com.tns.NativeScriptActivity",
         "newCommandTimeout": 720,
         "noReset": false,
-        "fullReset": true,
+        "fullReset": false,
         "app": ""
     },
     "android25": {
@@ -73,7 +71,7 @@
         "appActivity": "com.tns.NativeScriptActivity",
         "newCommandTimeout": 720,
         "noReset": false,
-        "fullReset": true,
+        "fullReset": false,
         "app": ""
     },
     "android26": {
@@ -86,7 +84,7 @@
         "appActivity": "com.tns.NativeScriptActivity",
         "newCommandTimeout": 720,
         "noReset": false,
-        "fullReset": true,
+        "fullReset": false,
         "app": ""
     },
     "sim.iPhone7.iOS100": {
@@ -94,7 +92,7 @@
         "platformVersion": "10.0",
         "deviceName": "iPhone 7 100",
         "noReset": false,
-        "fullReset": true,
+        "fullReset": false,
         "app": ""
     },
     "sim.iPhone7.iOS110": {
@@ -102,7 +100,7 @@
         "platformVersion": "11.0",
         "deviceName": "iPhone 7 110",
         "noReset": false,
-        "fullReset": true,
+        "fullReset": false,
         "app": ""
     }
 }
