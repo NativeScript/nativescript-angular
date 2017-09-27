@@ -8,7 +8,9 @@ before("start server", async () => {
 
 afterEach(async function () {
     if (this.currentTest.state === "failed") {
-        await driver.logScreenshot(this.currentTest.title);
+        const fullName = await this.currentTest.fullTitle();
+        await driver.logScreenshot(fullName);
+        await driver.logPageSource(fullName);
     }
 });
 

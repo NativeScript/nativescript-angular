@@ -1,51 +1,24 @@
-"use strict";
-var nsAppium = require("nativescript-dev-appium");
+import { AppiumDriver, createDriver } from "nativescript-dev-appium";
+import { assert } from "chai";
+import {  initialDisplayName } from "./const";
 
-describe("multi page routing", function () {
-    this.timeout(360000);
-    var driver;
+describe("multi page routing", async () => {
+    let driver: AppiumDriver;
 
-    before(function () {
-        driver = nsAppium.createDriver();
+    before(async () => {
+        driver = await createDriver();
+        await driver.resetApp();        
     });
 
-    after(function () {
-        return driver
-        .quit()
-        .finally(function () {
-            console.log("Driver quit successfully");
-        });
-    });
+    it("navigates and returns", async () => {
+        let btn = await driver.findElementByAccessibilityId("first-navigate-multi-page");
+        await btn.tap();
+        let result = await driver.compareScreen("multiPage", 1, 0.01);
+        assert.isTrue(result, `Multi page screen is not correct!`);
 
-    it("loads default path", function () {
-        return driver
-            .waitForElementByAccessibilityId("first-multi-page", 300000)
-            .elementByAccessibilityId("first-multi-page")
-                .should.eventually.exist
-            .text().should.eventually.equal("First: multi-page")
-    });
-
-    it("navigates and returns", function () {
-        var expectedHookLog = [
-            "first.init", // <-- load
-            "second.init", // <-- forward (first component is not destroyed)
-            "second.destroy"] // <-- back (first component is reused)
-            .join(",");
-        return driver
-            .waitForElementByAccessibilityId("first-navigate-multi-page", 300000)
-            .elementByAccessibilityId("first-navigate-multi-page")
-                .should.eventually.exist
-            .tap()
-            .elementByAccessibilityId("second-multi-page")
-                .should.eventually.exist
-            .text().should.eventually.equal("Second: multi-page")
-            .elementByAccessibilityId("second-navigate-back-multi-page")
-                .should.eventually.exist
-            .tap()
-            .elementByAccessibilityId("first-multi-page")
-                .should.eventually.exist
-                .text().should.eventually.equal("First: multi-page")
-            .elementByAccessibilityId("hooks-log-multi-page")
-                .text().should.eventually.equal(expectedHookLog)
+        btn = await driver.findElementByAccessibilityId("second-navigate-back-multi-page");
+        await btn.tap();
+        result = await driver.compareScreen("multiPageInitialDisplay",1,0.01);
+        assert.isTrue(result, `Init screen is not correct!!!`);
     });
 });

@@ -1,66 +1,58 @@
-"use strict";
-var nsAppium = require("nativescript-dev-appium");
+import { AppiumDriver, createDriver } from "nativescript-dev-appium";
+import { assert } from "chai";
+import {  initialDisplayName } from "./const";
 
-describe("lazy load routing", function () {
-    this.timeout(360000);
-    var driver;
+describe("lazy load routing", async function () {
+    let driver: AppiumDriver;
+    const imagesResults = new Map<string, boolean>();
+    const lazyLoadedDisplay = "lazyLoadedDisplay";
 
-    before(function () {
-        driver = nsAppium.createDriver();
+    before(async () => {
+        driver = await createDriver();
+        await driver.resetApp();
     });
 
-    after(function () {
-        return driver
-        .quit()
-        .finally(function () {
-            console.log("Driver quit successfully");
-        });
+    afterEach("clear image results", () => {
+        imagesResults.clear();
     });
 
-    it("loads default path", function () {
-        return driver
-            .waitForElementByAccessibilityId("first-lazy-load", 300000)
-            .elementByAccessibilityId("first-lazy-load")
-                .should.eventually.exist
-            .text().should.eventually.equal("First: lazy-load")
+    const loadFirstLazyLoadPage = async () => {
+        await (await driver.findElementByAccessibilityId("first-navigate-lazy-load")).tap();
+    }
+
+    it("loads default path", async () => {
+        const initDisplay = await driver.compareScreen(initialDisplayName, 1, 0.01);
+        assert.isTrue(initDisplay);
     });
 
-    it("navigates and returns", function () {
-        var expectedHookLog = [
-            "first.init", // <-- load
-            "second.init", // <-- forward (first component is not destroyed)
-            "second.destroy"] // <-- back (first component is reused)
-            .join(",");
-        return driver
-            .waitForElementByAccessibilityId("first-navigate-lazy-load", 300000)
-            .elementByAccessibilityId("first-navigate-lazy-load")
-                .should.eventually.exist
-            .tap()
-            .elementByAccessibilityId("second-lazy-load")
-                .should.eventually.exist
-                .text().should.eventually.equal("Second: lazy-load")
-            .elementByAccessibilityId("router-location-strategy-states-lazy-load")
-                .text().should.eventually.equal("/first/lazy-load,/second/lazy-load")
-            .elementByAccessibilityId("second-navigate-back-lazy-load")
-                .should.eventually.exist
-            .tap()
-            .elementByAccessibilityId("first-lazy-load")
-                .should.eventually.exist
-                .text().should.eventually.equal("First: lazy-load")
-            .elementByAccessibilityId("hooks-log-lazy-load")
-                .text().should.eventually.equal(expectedHookLog)
+    it("navigates and returns", async () => {
+        await loadFirstLazyLoadPage();
+        compareScreen(lazyLoadedDisplay);
+        
+        const btn = await driver.findElementByAccessibilityId("second-navigate-back-lazy-load");
+        btn.tap();
+        compareScreen(initialDisplayName);
+        
+        assertImages();
     });
 
-    it("navigates and clear history", function() {
-        return driver
-            .waitForElementByAccessibilityId("first-navigate-lazy-load", 300000)
-            .elementByAccessibilityId("first-navigate-clear-history-lazy-load")
-                .should.eventually.exist
-            .tap()
-            .elementByAccessibilityId("second-lazy-load")
-                .should.eventually.exist
-                .text().should.eventually.equal("Second: lazy-load")
-            .elementByAccessibilityId("router-location-strategy-states-lazy-load")
-            .text().should.eventually.equal("/second/lazy-load")
+    it("navigates and clear history", async () => {
+        await loadFirstLazyLoadPage();
+        compareScreen(lazyLoadedDisplay);
+
+        await driver.navBack();
+        compareScreen(initialDisplayName);
+        
+        assertImages();
     });
+
+    async function compareScreen(imageName){
+        imagesResults.set(lazyLoadedDisplay, await driver.compareScreen("lazyLoaded", 1, 0.01));        
+    }
+
+    function assertImages(){
+        for (let key in imagesResults) {
+            assert.isTrue(imagesResults.get(key), `Image is not correct ${key}`);
+        }
+    }
 });
