@@ -5,13 +5,13 @@
     "vsicons.dontShowNewVersionMessage": true,
     "workbench.colorTheme": "Default Light+",
     "files.exclude": {
-        "**/.git": true,
+        "**/**/*.git": true,
         "**/.svn": true,
         "**/.hg": true,
         "**/CVS": true,
         "**/.DS_Store": true,
-        "**/*.js": true,
-        "**/*.map": true,
+        "**/**/*.js": true,
+        "**/**/*.map": true,
         "node_modules": true,
         "hooks": true, 
         "platforms": true
