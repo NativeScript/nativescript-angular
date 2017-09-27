@@ -4,5 +4,7 @@ hooks
 
 app/**/*.js
 e2e/**/*.js
+e2e/**/*.map
+.vscode
 test-results.xml
-
+e2e/reports

@@ -42,12 +42,13 @@
     "mocha": "~3.5.0",
     "mocha-junit-reporter": "^1.13.0",
     "mocha-multi": "^0.11.0",
-    "nativescript-dev-appium": "2.1.0-2017-8-17",
+    "nativescript-dev-appium": "next",
     "nativescript-dev-typescript": "~0.4.0",
     "tslib": "^1.7.1",
     "typescript": "~2.2.1"
   },
   "scripts": {
-    "e2e": "tsc -p e2e && mocha --opts ./e2e/config/mocha.opts"
+    "e2e": "tsc -p e2e && mocha --opts ./e2e/config/mocha.opts",
+    "compile-tests-w": "tsc -p e2e --watch"
   }
 }
