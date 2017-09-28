@@ -1,24 +1,29 @@
 import { AppiumDriver, createDriver } from "nativescript-dev-appium";
 import { assert } from "chai";
-import {  initialDisplayName } from "./const";
+import { ImageHelper } from "./helpers/image-helper";
 
 describe("multi page routing", async () => {
     let driver: AppiumDriver;
+    let imageHelper: ImageHelper;
 
     before(async () => {
         driver = await createDriver();
-        await driver.resetApp();        
+        await driver.resetApp();
+        imageHelper =  new ImageHelper(driver);
     });
+
+    afterEach(()=>{
+        imageHelper.reset();
+    })
 
     it("navigates and returns", async () => {
         let btn = await driver.findElementByAccessibilityId("first-navigate-multi-page");
         await btn.tap();
-        let result = await driver.compareScreen("multiPage", 1, 0.01);
-        assert.isTrue(result, `Multi page screen is not correct!`);
-
+        await imageHelper.compareScreen("first-navigate-multi-page-screen", 3);
+        
         btn = await driver.findElementByAccessibilityId("second-navigate-back-multi-page");
         await btn.tap();
-        result = await driver.compareScreen("multiPageInitialDisplay",1,0.01);
-        assert.isTrue(result, `Init screen is not correct!!!`);
+        await imageHelper.compareScreen("second-navigate-back-multi-page-screen", 1, 0.01);
+        imageHelper.assertImages();        
     });
 });

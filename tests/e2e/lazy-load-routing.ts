@@ -1,58 +1,40 @@
 import { AppiumDriver, createDriver } from "nativescript-dev-appium";
 import { assert } from "chai";
-import {  initialDisplayName } from "./const";
+import { ImageHelper } from "./helpers/image-helper"
 
 describe("lazy load routing", async function () {
     let driver: AppiumDriver;
-    const imagesResults = new Map<string, boolean>();
+    let imageHelper: ImageHelper;
     const lazyLoadedDisplay = "lazyLoadedDisplay";
 
     before(async () => {
         driver = await createDriver();
         await driver.resetApp();
+        imageHelper = new ImageHelper(driver);
     });
 
     afterEach("clear image results", () => {
-        imagesResults.clear();
-    });
-
-    const loadFirstLazyLoadPage = async () => {
-        await (await driver.findElementByAccessibilityId("first-navigate-lazy-load")).tap();
-    }
-
-    it("loads default path", async () => {
-        const initDisplay = await driver.compareScreen(initialDisplayName, 1, 0.01);
-        assert.isTrue(initDisplay);
+        imageHelper.reset();
     });
 
     it("navigates and returns", async () => {
-        await loadFirstLazyLoadPage();
-        compareScreen(lazyLoadedDisplay);
-        
+        await (await driver.findElementByAccessibilityId("first-navigate-lazy-load")).tap();
+        imageHelper.compareScreen("first-navigate-lazy-load-screen");
+
         const btn = await driver.findElementByAccessibilityId("second-navigate-back-lazy-load");
         btn.tap();
-        compareScreen(initialDisplayName);
-        
-        assertImages();
+        imageHelper.compareScreen("second-navigate-back-lazy-load-screen");
+
+        imageHelper.assertImages();
     });
 
     it("navigates and clear history", async () => {
-        await loadFirstLazyLoadPage();
-        compareScreen(lazyLoadedDisplay);
+        await (await driver.findElementByAccessibilityId("first-navigate-clear-history-lazy-load")).tap();
+        imageHelper.compareScreen("first-navigate-clear-history-lazy-load-screen");
 
         await driver.navBack();
-        compareScreen(initialDisplayName);
-        
-        assertImages();
+        imageHelper.compareScreen("first-navigate-clear-history-lazy-load-nav-back-sceen");
+
+        imageHelper.assertImages();
     });
-
-    async function compareScreen(imageName){
-        imagesResults.set(lazyLoadedDisplay, await driver.compareScreen("lazyLoaded", 1, 0.01));        
-    }
-
-    function assertImages(){
-        for (let key in imagesResults) {
-            assert.isTrue(imagesResults.get(key), `Image is not correct ${key}`);
-        }
-    }
 });
