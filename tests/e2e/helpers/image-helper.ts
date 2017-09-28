@@ -12,7 +12,7 @@ export class ImageHelper {
 
     public assertImages() {
         for (let key in this._imagesResults) {
-            //assert.isTrue(this._imagesResults.get(key), `Image is not correct ${key}`);
+            assert.isTrue(this._imagesResults.get(key), `Image is not correct ${key}`);
         }
     }
 
