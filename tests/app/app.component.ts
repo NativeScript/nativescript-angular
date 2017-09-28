@@ -1,6 +1,6 @@
-import {Component} from "@angular/core";
-import {SinglePageMain} from "./single-page-main.component";
-import {MultiPageMain} from "./multi-page-main.component";
+import { Component } from "@angular/core";
+import { SinglePageMain } from "./single-page-main.component";
+import { MultiPageMain } from "./multi-page-main.component";
 
 @Component({
     selector: "my-app",

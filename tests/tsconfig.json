@@ -22,7 +22,6 @@
     "exclude": [
         "node_modules",
         "platforms",
-        "**/*.aot",
-        "app/tests"
+        "**/*.aot"
     ]
 }
