@@ -6,6 +6,10 @@ typings
 .tscache
 
 app/**/*.js
+e2e/**/*.js
 app/**/*.map
+e2e/**/*.map
+e2e/reports
+test-results.xml
 platforms
 lib
