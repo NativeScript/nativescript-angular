@@ -7,7 +7,7 @@ import {
 import { Observable } from "rxjs/Observable";
 
 import { NSFileSystem } from "../file-system/ns-file-system";
-import { isLocalRequest, handleLocalRequest } from "./http-utils";
+import { isLocalRequest, processLocalFileRequest } from "./http-utils";
 
 @Injectable()
 export class NsHttpBackEnd extends HttpXhrBackend {
@@ -19,7 +19,7 @@ export class NsHttpBackEnd extends HttpXhrBackend {
         let result: Observable<HttpEvent<any>>;
 
         if (isLocalRequest(req.url)) {
-            result = this.handleLocalRequest(req.url);
+            result = this.handleLocalFileRequest(req.url);
         } else {
             result = super.handle(req);
         }
@@ -27,8 +27,8 @@ export class NsHttpBackEnd extends HttpXhrBackend {
         return result;
     }
 
-    private handleLocalRequest(url: string): Observable<HttpEvent<any>> {
-        return handleLocalRequest(
+    private handleLocalFileRequest(url: string): Observable<HttpEvent<any>> {
+        return processLocalFileRequest(
             url,
             this.nsFileSystem,
             createSuccessResponse,

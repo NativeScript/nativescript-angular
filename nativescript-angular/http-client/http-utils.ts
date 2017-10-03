@@ -17,7 +17,7 @@ export function getAbsolutePath(url: string, nsFileSystem: NSFileSystem): string
     return url;
 }
 
-export function handleLocalRequest<T>(
+export function processLocalFileRequest<T>(
     url: string,
     nsFileSystem: NSFileSystem,
     successResponse: httpResponseFactory<T>,

@@ -12,7 +12,7 @@ import {
 import { Observable } from "rxjs/Observable";
 import "rxjs/add/observable/fromPromise";
 
-import { isLocalRequest, handleLocalRequest } from "../http-client/http-utils";
+import { isLocalRequest, processLocalFileRequest } from "../http-client/http-utils";
 
 import { NSFileSystem } from "../file-system/ns-file-system";
 
@@ -34,7 +34,7 @@ export class NSHttp extends Http {
     request(req: string | Request, options?: RequestOptionsArgs): Observable<Response> {
         const urlString = typeof req === "string" ? req : req.url;
         if (isLocalRequest(urlString)) {
-            return this.handleLocalRequest(urlString);
+            return this.requestLocalFile(urlString);
         } else {
             return super.request(req, options);
         }
@@ -45,14 +45,14 @@ export class NSHttp extends Http {
      */
     get(url: string, options?: RequestOptionsArgs): Observable<Response> {
         if (isLocalRequest(url)) {
-            return this.handleLocalRequest(url);
+            return this.requestLocalFile(url);
         } else {
             return super.get(url, options);
         }
     }
 
-    private handleLocalRequest(url: string): Observable<Response> {
-        return handleLocalRequest(
+    private requestLocalFile(url: string): Observable<Response> {
+        return processLocalFileRequest(
             url,
             this.nsFileSystem,
             createResponse,
