@@ -11,6 +11,9 @@ import {
 } from "@angular/http";
 import { Observable } from "rxjs/Observable";
 import "rxjs/add/observable/fromPromise";
+
+import { isLocalRequest, handleLocalRequest } from "../http-client/http-utils";
+
 import { NSFileSystem } from "../file-system/ns-file-system";
 
 export class NSXSRFStrategy {
@@ -31,7 +34,7 @@ export class NSHttp extends Http {
     request(req: string | Request, options?: RequestOptionsArgs): Observable<Response> {
         const urlString = typeof req === "string" ? req : req.url;
         if (isLocalRequest(urlString)) {
-            return this._requestLocalUrl(urlString);
+            return this.handleLocalRequest(urlString);
         } else {
             return super.request(req, options);
         }
@@ -42,45 +45,23 @@ export class NSHttp extends Http {
      */
     get(url: string, options?: RequestOptionsArgs): Observable<Response> {
         if (isLocalRequest(url)) {
-            return this._requestLocalUrl(url);
+            return this.handleLocalRequest(url);
         } else {
             return super.get(url, options);
         }
     }
 
-    /**
-     * Uses a local file if `~/` resource is requested.
-     * @param url
-     */
-    private _requestLocalUrl(url: string): Observable<Response> {
-        url = normalizeLocalUrl(url);
-
-        // request from local app resources
-        return Observable.fromPromise<Response>(new Promise((resolve, reject) => {
-            let app = this.nsFileSystem.currentApp();
-            let localFile = app.getFile(url);
-            if (localFile) {
-                localFile.readText().then((data) => {
-                    resolve(responseOptions(data, 200, url));
-                }, (err: Object) => {
-                    reject(responseOptions(err, 400, url));
-                });
-            } else {
-                reject(responseOptions("Not Found", 404, url));
-            }
-        }));
+    private handleLocalRequest(url: string): Observable<Response> {
+        return handleLocalRequest(
+            url,
+            this.nsFileSystem,
+            createResponse,
+            createResponse
+        );
     }
 }
 
-function isLocalRequest(url: string): boolean {
-    return url.indexOf("~") === 0 || url.indexOf("/") === 0;
-}
-
-function normalizeLocalUrl(url: string): string {
-    return url.replace("~", "").replace("/", "");
-}
-
-function responseOptions(body: string | Object, status: number, url: string): Response {
+function createResponse(url: string, body: string | Object, status: number): Response {
     return new Response(new ResponseOptions({
         body: body,
         status: status,
