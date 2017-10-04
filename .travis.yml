@@ -46,4 +46,5 @@ script:
 - tns build android
 - android-wait-for-emulator
 - echo $PWD
+- ls -la
 - npm run e2e -- --runtype android19 --appiumCapsLocation ./e2e/config/appium.capabilities.json
