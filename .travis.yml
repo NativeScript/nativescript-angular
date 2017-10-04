@@ -43,10 +43,8 @@ before_script:
   - emulator -memory 1024 -avd test -no-audio -no-window & 
   - android-wait-for-emulator
 script:
+- npm un nativescript-dev-appium
 - tns build android
 - android-wait-for-emulator
-- echo $PWD
-- ls -la
-- ls -la e2e 
-- ls -la ./e2e/config
-- npm run e2e -- --runtype android19 --appiumCapsLocation /home/travis/build/NativeScript/nativescript-angular/tests/e2e/config/appium.capabilities.json --verbose
+- npm i nativescript-dev-appium@next
+- npm run e2e -- --runtype android19
