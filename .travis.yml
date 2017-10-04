@@ -36,6 +36,7 @@ install:
 - npm install
 - npm run tslint
 - cd ../tests
+- npm un nativescript-dev-appium
 - npm install
 - npm i appium@$APPIUM_VERSION
 before_script:
@@ -43,7 +44,6 @@ before_script:
   - emulator -memory 1024 -avd test -no-audio -no-window & 
   - android-wait-for-emulator
 script:
-- npm un nativescript-dev-appium
 - tns build android
 - android-wait-for-emulator
 - npm i nativescript-dev-appium@next
