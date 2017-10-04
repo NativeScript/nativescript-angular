@@ -6,7 +6,7 @@ env:
   - ANDROID_BUILD_TOOLS_VERSION=23.0.1
   - ANDROID_ABI=armeabi-v7a
   - ANDROID_TAG=google_apis
-  - APPIUM_VERSION=1.6.5
+  - APPIUM_VERSION=1.7.0
 language: android
 jdk:
 - oraclejdk8
@@ -45,4 +45,4 @@ before_script:
 script:
 - tns build android
 - android-wait-for-emulator
-- npm run appium --runtype=android19 --appium=$APPIUM_VERSION
+- npm run e2e -- --runtype=android19
