@@ -2,49 +2,43 @@ import {
     AppiumDriver,
     createDriver,
     SearchOptions,
+    UIElement
 } from "nativescript-dev-appium";
 
 import { isAbove } from "./helpers/location";
-import { DriverWrapper, ExtendedUIElement } from "./helpers/appium-elements";
 
 interface ElementTuple {
-    label: ExtendedUIElement,
-    button: ExtendedUIElement,
+    label: UIElement,
+    button: UIElement,
 }
 
 describe("ngForOf scenario", () => {
     let driver: AppiumDriver;
-    let driverWrapper: DriverWrapper;
-    let addButton: ExtendedUIElement;
-    let removeButton: ExtendedUIElement;
+    let addButton: UIElement;
+    let removeButton: UIElement;
     let elements: ElementTuple[] = [];
     let lastAddedElementId = 0;
 
     before(async () => {
         driver = await createDriver();
-        driverWrapper = new DriverWrapper(driver);
-    });
-
-    after(async () => {
-        await driver.quit();
-        console.log("Driver quits!");
+        await driver.driver.resetApp();
     });
 
     it("should navigate to page", async () => {
         const navigationButton =
-            await driverWrapper.findElementByText("NgForOf", SearchOptions.exact);
+            await driver.findElementByText("NgForOf", SearchOptions.exact);
         await navigationButton.click();
 
         const actionBar =
-            await driverWrapper.findElementByText("ngForOf", SearchOptions.exact);
+            await driver.findElementByText("ngForOf", SearchOptions.exact);
     });
 
     it("should find elements", async () => {
         const firstElement = await getElement(lastAddedElementId);
         elements.push(firstElement);
 
-        addButton = await driverWrapper.findElementByText("add", SearchOptions.exact);
-        removeButton = await driverWrapper.findElementByText("remove", SearchOptions.exact);
+        addButton = await driver.findElementByText("add", SearchOptions.exact);
+        removeButton = await driver.findElementByText("remove", SearchOptions.exact);
 
         await elementTupleCorrectlyRendered(firstElement);
         await isAbove(firstElement.button, addButton);
@@ -86,7 +80,6 @@ describe("ngForOf scenario", () => {
 
 
     const addElement = async () => {
-        addButton = await addButton.refetch();
         await addButton.click();
 
         lastAddedElementId += 1;
@@ -98,11 +91,9 @@ describe("ngForOf scenario", () => {
     const removeElement = async (index?: number) => {
         if (index) {
             let { button } = await elements[index];
-            button = await button.refetch();
             await button.click();
         } else {
             index = elements.length - 1;
-            removeButton = await removeButton.refetch();
             await removeButton.click();
         }
 
@@ -144,10 +135,10 @@ describe("ngForOf scenario", () => {
     };
 
     const getElement = async (id: number) => {
-        const label = await driverWrapper.findElementByText(
+        const label = await driver.findElementByText(
             "label: " + id.toString(), SearchOptions.exact);
 
-        const button = await driverWrapper.findElementByText(
+        const button = await driver.findElementByText(
             id.toString(), SearchOptions.exact);
 
         return { label, button };
