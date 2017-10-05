@@ -45,4 +45,4 @@ before_script:
 script:
 - tns build android
 - android-wait-for-emulator
-- npm run e2e -- --runType android19
+- npm run e2e -- --runType travis-e2e-tests
