@@ -41,7 +41,7 @@ install:
 - npm i appium@$APPIUM_VERSION
 before_script:
   - echo no | android create avd --force -n $EMULATOR_NAME -t android-$EMULATOR_API_LEVEL --abi $ANDROID_ABI -c 12M
-  - emulator -avd $EMULATOR_NAME-$EMULATOR_API_LEVEL -no-skin -no-audio -no-window &
+  - emulator -avd $EMULATOR_NAME -no-skin -no-audio -no-window &
   - android-wait-for-emulator
 script:
 - tns build android
