@@ -45,6 +45,7 @@ before_script:
   - android-wait-for-emulator
 script:
 - echo $ANDROID_HOME
+- ls -la $ANDROID_HOME
 - tns build android
 - android-wait-for-emulator
 - npm run e2e -- --runType travis-e2e-tests
