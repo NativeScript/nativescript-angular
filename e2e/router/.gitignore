@@ -1,8 +1,10 @@
+.vscode
+
 platforms
 node_modules
 hooks
 
-app/**/*.js
-e2e/**/*.js
+/**/*.js
+/**/*.map
+e2e/reports
 test-results.xml
-
