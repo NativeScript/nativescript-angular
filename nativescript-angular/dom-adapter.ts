@@ -2,7 +2,6 @@
 import { Type } from "@angular/core";
 import { ɵDomAdapter } from "@angular/platform-browser";
 import { rendererLog } from "./trace";
-import { print } from "./lang-facade";
 
 export class NativeScriptDomAdapter implements ɵDomAdapter {
   static makeCurrent() {
@@ -27,15 +26,15 @@ export class NativeScriptDomAdapter implements ɵDomAdapter {
   }
 
   log(arg: any): void {
-    print(arg);
+    console.log(arg);
   }
 
   logError(arg: any): void {
-    print(arg);
+    console.log(arg);
   }
 
   logGroup(arg: any): void {
-    print(arg);
+    console.log(arg);
   }
 
   logGroupEnd(): void {

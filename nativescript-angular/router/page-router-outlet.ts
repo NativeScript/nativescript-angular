@@ -19,7 +19,6 @@ import { profile } from "tns-core-modules/profiling";
 
 import { BehaviorSubject } from "rxjs/BehaviorSubject";
 
-import { isPresent } from "../lang-facade";
 import { DEVICE, PAGE_FACTORY, PageFactory } from "../platform-providers";
 import { routerLog as log } from "../trace";
 import { DetachedLoader } from "../common/detached-loader";
@@ -40,9 +39,9 @@ export const pageRouterActivatedSymbol = Symbol("page-router-activated");
 export const loaderRefSymbol = Symbol("loader-ref");
 
 export function destroyComponentRef(componentRef: ComponentRef<any>) {
-    if (isPresent(componentRef)) {
+    if (componentRef) {
         const loaderRef = componentRef[loaderRefSymbol];
-        if (isPresent(loaderRef)) {
+        if (loaderRef) {
             loaderRef.destroy();
         }
         componentRef.destroy();

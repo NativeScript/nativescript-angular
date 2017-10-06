@@ -1,7 +1,5 @@
 import { Component, Directive, Host, ElementRef, Input } from "@angular/core";
 import { Observable } from "data/observable";
-import { TextValueAccessor } from "nativescript-angular/value-accessors/text-value-accessor";
-import { CheckedValueAccessor } from "nativescript-angular/value-accessors/checked-value-accessor";
 import { SegmentedBarItem } from "ui/segmented-bar";
 
 

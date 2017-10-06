@@ -26,4 +26,4 @@ export {
     registerElement,
 } from "./element-registry";
 
-export * from "./value-accessors/base-value-accessor";
+export * from "./forms/value-accessors/base-value-accessor";

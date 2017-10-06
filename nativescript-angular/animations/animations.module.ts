@@ -13,10 +13,10 @@ import {
     ɵBrowserAnimationBuilder as BrowserAnimationBuilder,
 } from "@angular/platform-browser/animations";
 
-import { NativeScriptAnimationEngine } from "./animations/animation-engine";
-import { NativeScriptAnimationDriver } from "./animations/animation-driver";
-import { NativeScriptModule } from "./nativescript.module";
-import { NativeScriptRendererFactory } from "./renderer";
+import { NativeScriptAnimationEngine } from "./animation-engine";
+import { NativeScriptAnimationDriver } from "./animation-driver";
+import { NativeScriptModule } from "../nativescript.module";
+import { NativeScriptRendererFactory } from "../renderer";
 
 @Injectable()
 export class InjectableAnimationEngine extends NativeScriptAnimationEngine {

@@ -8,18 +8,18 @@ import {
 import { RouterModule, Routes, ExtraOptions, RouteReuseStrategy } from "@angular/router";
 import { LocationStrategy, PlatformLocation } from "@angular/common";
 import { Frame } from "tns-core-modules/ui/frame";
-import { NSRouterLink } from "./router/ns-router-link";
-import { NSRouterLinkActive } from "./router/ns-router-link-active";
-import { PageRouterOutlet } from "./router/page-router-outlet";
-import { NSLocationStrategy, LocationState } from "./router/ns-location-strategy";
-import { NativescriptPlatformLocation } from "./router/ns-platform-location";
-import { NSRouteReuseStrategy } from "./router/ns-route-reuse-strategy";
-import { RouterExtensions } from "./router/router-extensions";
-import { NativeScriptCommonModule } from "./common";
+import { NSRouterLink } from "./ns-router-link";
+import { NSRouterLinkActive } from "./ns-router-link-active";
+import { PageRouterOutlet } from "./page-router-outlet";
+import { NSLocationStrategy, LocationState } from "./ns-location-strategy";
+import { NativescriptPlatformLocation } from "./ns-platform-location";
+import { NSRouteReuseStrategy } from "./ns-route-reuse-strategy";
+import { RouterExtensions } from "./router-extensions";
+import { NativeScriptCommonModule } from "../common";
 
-export { PageRoute } from "./router/page-router-outlet";
-export { RouterExtensions } from "./router/router-extensions";
-export { NSModuleFactoryLoader } from "./router/ns-module-factory-loader";
+export { PageRoute } from "./page-router-outlet";
+export { RouterExtensions } from "./router-extensions";
+export { NSModuleFactoryLoader } from "./ns-module-factory-loader";
 export type LocationState = LocationState;
 
 @NgModule({
