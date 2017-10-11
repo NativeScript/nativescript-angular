@@ -1,3 +1,27 @@
+<a name="4.4.0"></a>
+# [4.4.0](https://github.com/NativeScript/nativescript-angular/compare/4.2.0...4.4.0) (2017-10-11)
+
+
+### Bug Fixes
+
+* **forms:** default to unsetValue for value accessors (#846) ([6940955](https://github.com/NativeScript/nativescript-angular/commit/6940955))
+* **forms:** disable onTouch for date, number and selectedIndex value accessors (#986) ([b4b5ef6](https://github.com/NativeScript/nativescript-angular/commit/b4b5ef6)), closes [#887](https://github.com/NativeScript/nativescript-angular/issues/887)
+
+
+### Features
+
+* add `exportAs` logic for `isActive` on `routerLinkActive` directive (#940) ([147d35a](https://github.com/NativeScript/nativescript-angular/commit/147d35a))
+* **Http:** expand support for request on local files (#982) ([b95184f](https://github.com/NativeScript/nativescript-angular/commit/b95184f))
+* **styling:** Allow loading .css files as a fallback if no .scss file is found(#954) (#955) ([696e914](https://github.com/NativeScript/nativescript-angular/commit/696e914))
+* Angular 4.4 support (#1002) ([c264453](https://github.com/NativeScript/nativescript-angular/commit/c264453))
+
+
+### Reverts
+
+* **router:** page navigation with RouteReuseStrategy (#987) ([421978e](https://github.com/NativeScript/nativescript-angular/commit/421978e))
+
+
+
 <a name="4.2.0"></a>
 # [4.2.0](https://github.com/NativeScript/nativescript-angular/compare/3.1.3...4.2.0) (2017-08-09)
 
