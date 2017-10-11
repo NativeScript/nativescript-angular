@@ -1,5 +1,7 @@
 import { ControlValueAccessor } from "@angular/forms";
-import { View } from "tns-core-modules/ui/core/view";
+import { View, unsetValue } from "tns-core-modules/ui/core/view";
+
+import { isBlank } from "../../lang-facade";
 
 export class BaseValueAccessor<TView extends View> implements ControlValueAccessor {
     private pendingChangeNotification: any = 0;
@@ -28,5 +30,9 @@ export class BaseValueAccessor<TView extends View> implements ControlValueAccess
         this.view.isEnabled = !isDisabled;
     }
 
-    writeValue(_: any) { }
+    writeValue(_: any) {}
+
+    protected normalizeValue(value: any): any {
+        return isBlank(value) ? unsetValue : value;
+    }
 }

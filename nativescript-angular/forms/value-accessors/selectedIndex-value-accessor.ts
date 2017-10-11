@@ -50,7 +50,8 @@ export class SelectedIndexValueAccessor extends BaseValueAccessor<SelectableView
     private viewInitialized: boolean;
 
     writeValue(value: any): void {
-        this.value = value;
+        const normalized = super.normalizeValue(value);
+        this.value = normalized;
 
         if (this.viewInitialized) {
             this.view.selectedIndex = this.value;

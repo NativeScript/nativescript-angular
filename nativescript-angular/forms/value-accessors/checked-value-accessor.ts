@@ -34,6 +34,7 @@ export class CheckedValueAccessor extends BaseValueAccessor<Switch> { // tslint:
     }
 
     writeValue(value: any): void {
-        this.view.checked = value;
+        const normalized = super.normalizeValue(value);
+        this.view.checked = normalized;
     }
 }
