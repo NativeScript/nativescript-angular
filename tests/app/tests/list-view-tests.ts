@@ -100,7 +100,7 @@ describe("ListView-tests", () => {
     });
 
     it("setupItemView is called for every item", (done) => {
-        return testApp.loadComponent(TestListViewComponent).then((componentRef) => {
+        testApp.loadComponent(TestListViewComponent).then((componentRef) => {
             const component = componentRef.instance;
             setTimeout(() => {
                 assert.equal(component.counter, 3);
@@ -112,9 +112,9 @@ describe("ListView-tests", () => {
 
 
     it("itemTemplateSelector selects templates", (done) => {
-        return testApp.loadComponent(TestListViewSelectorComponent).then((componentRef) => {
+        testApp.loadComponent(TestListViewSelectorComponent).then((componentRef) => {
             setTimeout(() => {
-                assert.deepEqual(testTemplates,  { first: 2, second: 1 });
+                assert.deepEqual(testTemplates, { first: 2, second: 1 });
                 done();
             }, 1000);
         })

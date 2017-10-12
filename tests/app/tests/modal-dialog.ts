@@ -50,7 +50,7 @@ describe("modal-dialog", () => {
     let testApp: TestApp = null;
 
     before((done) => {
-        return TestApp.create([], [ModalComponent, FailComponent, SuccessComponent]).then((app) => {
+        TestApp.create([], [ModalComponent, FailComponent, SuccessComponent]).then((app) => {
             testApp = app;
 
             // HACK: Wait for the navigations from the test runner app
