@@ -16,11 +16,6 @@
 * Angular 4.4 support (#1002) ([c264453](https://github.com/NativeScript/nativescript-angular/commit/c264453))
 
 
-### Reverts
-
-* **router:** page navigation with RouteReuseStrategy (#987) ([421978e](https://github.com/NativeScript/nativescript-angular/commit/421978e))
-
-
 
 <a name="4.2.0"></a>
 # [4.2.0](https://github.com/NativeScript/nativescript-angular/compare/3.1.3...4.2.0) (2017-08-09)
