@@ -1,3 +1,13 @@
+<a name="4.4.1"></a>
+# [4.4.1](https://github.com/NativeScript/nativescript-angular/compare/4.4.0...4.4.1) (2017-10-13)
+
+
+### Bug Fixes
+
+* **forms:** add base-value-accessor.ts for <4.4.0 versions compatibility (#1039) ([79e425c](https://github.com/NativeScript/nativescript-angular/commit/79e425c))
+
+
+
 <a name="4.4.0"></a>
 # [4.4.0](https://github.com/NativeScript/nativescript-angular/compare/4.2.0...4.4.0) (2017-10-11)
 
