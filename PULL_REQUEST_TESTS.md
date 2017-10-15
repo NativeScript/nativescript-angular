@@ -4,11 +4,11 @@ Builds distributed between Travis CI and internal Jenkins CI execute on pull req
 
 ### Travis
 
-This build compiles the `nativescript-angular` plugin and builds the [tests](https://github.com/NativeScript/nativescript-angular/tree/master/tests) app for Android. Please, refer to the [.travis.yml](https://github.com/NativeScript/nativescript-angular/blob/master/.travis.yml) config file for complete information.
+This builds the `nativescript-angular` package and the [tests](https://github.com/NativeScript/nativescript-angular/tree/master/tests) app for Android. Please, refer to the [.travis.yml](https://github.com/NativeScript/nativescript-angular/blob/master/.travis.yml) config file for complete information.
 
 ### Jenkins
 
-More extensive tests execute in Jenkins CI. The table below describes how to trigger and the location of the app/tests of all builds available to execute tests on pull requests.
+More extensive tests execute in Jenkins CI. As it is an internal environment, these builds cannot be triggered from people outside the NativeScript organization. In order to trigger a build mannually, you need to comment inside the pull request. The table below describes the comment messages and the locations of the app/tests of all builds available to execute tests on pull requests.
 
 |Comment             |Description|
 |:------------------:|:---------:|
