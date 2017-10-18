@@ -1,6 +1,6 @@
 // make sure you import mocha-config before @angular/core
 import { assert } from "./test-config";
-import { Component, ElementRef, Renderer2, NgZone } from "@angular/core";
+import { Component, ElementRef, Renderer2, NgZone, ViewChild } from "@angular/core";
 import { ProxyViewContainer } from "ui/proxy-view-container";
 import { Red } from "color/known-colors";
 import { dumpView } from "./test-utils";
@@ -10,6 +10,9 @@ import { StackLayout } from "ui/layouts/stack-layout";
 import { ContentView } from "ui/content-view";
 import { Button } from "ui/button";
 import { NgView } from "nativescript-angular/element-registry";
+import { registerElement } from "nativescript-angular/element-registry";
+import * as button from "tns-core-modules/ui/button";
+import * as view from "tns-core-modules/ui/core/view";
 
 @Component({
     template: `<StackLayout><Label text="Layout"></Label></StackLayout>`
@@ -166,6 +169,60 @@ export class NgIfElseComponent {
 export class NgIfThenElseComponent {
     public show: boolean = true;
     constructor(public elementRef: ElementRef) {
+    }
+}
+
+export class ButtonCounter extends button.Button {
+    nativeBackgroundRedraws = 0;
+    backgroundInternalSetNativeCount = 0;
+    fontInternalSetNativeCount = 0;
+
+    [view.backgroundInternalProperty.setNative](value) {
+        this.backgroundInternalSetNativeCount++;
+        return super[view.backgroundInternalProperty.setNative](value);
+    }
+    [view.fontInternalProperty.setNative](value) {
+        this.fontInternalSetNativeCount++;
+        return super[view.fontInternalProperty.setNative](value);
+    }
+    _redrawNativeBackground(value: any): void {
+        this.nativeBackgroundRedraws++;
+        super["_redrawNativeBackground"](value);
+    }
+}
+registerElement("ButtonCounter", () => ButtonCounter);
+
+@Component({
+    selector: "ng-control-setters-count",
+    template: `
+        <StackLayout>
+            <ButtonCounter #btn1 id="btn1" borderWidth="1" borderColor="gray" borderRadius="16" fontWeight="bold" fontSize="16"></ButtonCounter>
+            <ButtonCounter #btn2 id="btn2"></ButtonCounter>
+            <ButtonCounter #btn3 id="btn3" borderWidth="1" borderColor="gray" borderRadius="16" fontWeight="bold" fontSize="16"></ButtonCounter>
+            <ButtonCounter #btn4 id="btn4" borderRadius="3" style="background-image: url('~/logo.png'); background-position: center; background-repeat: no-repeat; background-size: cover;"></ButtonCounter>
+        </StackLayout>
+    `,
+    styles: [`
+        #btn2, #btn3, #btn4 {
+            border-width: 2;
+            border-color: teal;
+            border-radius: 20;
+            font-weight: 400;
+            font-size: 32;
+        }`]
+})
+export class NgControlSettersCount {
+    @ViewChild("btn1") btn1: ElementRef;
+    @ViewChild("btn2") btn2: ElementRef;
+    @ViewChild("btn3") btn3: ElementRef;
+    @ViewChild("btn3") btn4: ElementRef;
+
+    get buttons(): ElementRef[] { return [this.btn1, this.btn2, this.btn3, this.btn4]; }
+
+    isAfterViewInit: boolean = false;
+
+    ngAfterViewInit() {
+        this.isAfterViewInit = true;
     }
 }
 
@@ -488,7 +545,6 @@ describe("Renderer createElement", () => {
     });
 });
 
-
 describe("Renderer attach/detach", () => {
     let testApp: TestApp = null;
     let renderer: Renderer2 = null;
@@ -545,3 +601,36 @@ describe("Renderer attach/detach", () => {
     });
 });
 
+describe("Renderer lifecycle", () => {
+    let testApp: TestApp = null;
+    let renderer: Renderer2 = null;
+
+    before(() => {
+        return TestApp.create([], [NgControlSettersCount]).then((app) => {
+            testApp = app;
+            renderer = testApp.renderer;
+        });
+    });
+
+    after(() => {
+        testApp.dispose();
+    });
+
+    afterEach(() => {
+        testApp.disposeComponents();
+    });
+
+    it("view native setters are called once on startup", () => {
+        return testApp.loadComponent(NgControlSettersCount).then((componentRef) => {
+            assert.isTrue(componentRef.instance.isAfterViewInit, "Expected the NgControlSettersCount to have passed its ngAfterViewInit.");
+            componentRef.instance.buttons.map(btn => btn.nativeElement).forEach(btn => {
+                assert.isTrue(btn.isLoaded, `Expected ${btn.id} to be allready loaded.`);
+                assert.isFalse(btn.isLayoutValid, `Expected ${btn.id}'s layout to be invalid.`);
+
+                assert.equal(btn.backgroundInternalSetNativeCount, 1, `Expected ${btn.id} backgroundInternalSetNativeCount to be called just once.`);
+                assert.equal(btn.fontInternalSetNativeCount, 1, `Expected ${btn.id} fontInternalSetNativeCount to be called just once.`);
+                assert.equal(btn.nativeBackgroundRedraws, 0, `Expected ${btn.id} nativeBackgroundRedraws to be called after its layout pass.`);
+            });
+        });
+    });
+});

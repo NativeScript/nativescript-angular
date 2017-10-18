@@ -30,7 +30,7 @@ export class TestApp {
         registerTestApp(TestApp, this, appRef);
     }
 
-    public loadComponent(componentType: Type<any>): Promise<ComponentRef<any>> {
+    public loadComponent<T>(componentType: Type<T>): Promise<ComponentRef<T>> {
         const factory = this.resolver.resolveComponentFactory(componentType);
         const componentRef = this.containerRef.createComponent(
             factory, this.containerRef.length, this.containerRef.parentInjector);
