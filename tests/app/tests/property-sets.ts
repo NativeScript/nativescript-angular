@@ -11,11 +11,14 @@ import {Red} from "color/known-colors";
 import {device, platformNames} from "platform";
 import {createDevice} from "./test-utils";
 
-class TestView extends View implements ViewExtensions {
-    public nodeName: string = "TestView";
-    public nodeType: number = 1;
-    public templateParent: NgView = null;
+class TestView extends View implements NgView {
     public meta: ViewClassMeta = { skipAddToDom: false };
+    public nodeType: number = 1;
+    public nodeName: string = "TestView";
+    public templateParent: NgView = null;
+    public nextSibling: NgView;
+    public firstChild: NgView;
+    public lastChild: NgView;
     public ngCssClasses: Map<string, boolean> = new Map<string, boolean>();
 
     public stringValue: string = "";
@@ -43,10 +46,10 @@ describe("setting View properties", () => {
     it("doesn\'t convert number values", () => {
         let view = new TestView();
         viewUtil.setProperty(view, "numValue", "42");
-        assert.strictEqual("42", view.numValue);
+        assert.strictEqual(<any>"42", view.numValue);
 
         viewUtil.setProperty(view, "numValue", "42.");
-        assert.strictEqual("42.", view.numValue);
+        assert.strictEqual(<any>"42.", <any>view.numValue);
 
         viewUtil.setProperty(view, "numValue", 0);
         assert.strictEqual(0, view.numValue);
@@ -55,9 +58,9 @@ describe("setting View properties", () => {
     it("doesn\'t convert boolean values", () => {
         let view = new TestView();
         viewUtil.setProperty(view, "boolValue", "true");
-        assert.strictEqual("true", view.boolValue);
+        assert.strictEqual(<any>"true", view.boolValue);
         viewUtil.setProperty(view, "boolValue", "false");
-        assert.strictEqual("false", view.boolValue);
+        assert.strictEqual(<any>"false", view.boolValue);
     });
 
     it("sets style values", () => {

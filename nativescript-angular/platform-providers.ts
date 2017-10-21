@@ -1,19 +1,13 @@
+import { InjectionToken } from "@angular/core";
+
 import { topmost, Frame } from "tns-core-modules/ui/frame";
+import { View } from "tns-core-modules/ui/core/view";
 import { Page } from "tns-core-modules/ui/page";
-import { OpaqueToken } from "@angular/core";
 import { device, Device } from "tns-core-modules/platform";
-import * as platform from "tns-core-modules/platform";
 
-export const APP_ROOT_VIEW = new OpaqueToken("App Root View");
-export const DEVICE = new OpaqueToken("platfrom device");
-export const PAGE_FACTORY = new OpaqueToken("page factory");
-
-// Work around a TS bug requiring an import of platform.Device without using it
-if ((<any>global).___TS_UNUSED) {
-    (() => {
-        return platform;
-    })();
-}
+export const APP_ROOT_VIEW = new InjectionToken<View>("App Root View");
+export const DEVICE = new InjectionToken<Device>("platform device");
+export const PAGE_FACTORY = new InjectionToken<PageFactory>("page factory");
 
 let _rootPageRef: WeakRef<Page>;
 

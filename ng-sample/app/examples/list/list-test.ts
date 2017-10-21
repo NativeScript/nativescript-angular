@@ -42,26 +42,26 @@ export class ItemComponent implements AfterViewChecked, DoCheck {
             <Label text="ListView" class="list-title"></Label>
 
             <ListView [items]="myItems" (itemTap)="onItemTap($event)" row="1" margin="10">
-                <template let-item="item" let-i="index" let-odd="odd" let-even="even">
+                <ng-template let-item="item" let-i="index" let-odd="odd" let-even="even">
                     <item-component [data]="item" [odd]="odd" [even]="even" [index]="i"></item-component>
-                </template>
+                </ng-template>
             </ListView>
 
             <Button text="add item" (tap)="addItem()" row="2" ></Button>
         </GridLayout>
     `
     // TEMPLATE WITH COMPONENT
-    // <template let-item="item" let-i="index" let-odd="odd" let-even="even">
+    // <ng-template let-item="item" let-i="index" let-odd="odd" let-even="even">
     //     <item-component [data]="item" [odd]='odd' [even]='even'></item-component>
-    // </template>
+    // </ng-template>
 
     // IN-PLACE TEMPLATE
-    // <template let-data="item" let-i="index" let-odd="odd" let-even="even">
+    // <ng-template let-data="item" let-i="index" let-odd="odd" let-even="even">
     //     <StackLayout [class.odd]="odd" [class.even]="even">
     //         <Label [text]='"index: " + i'></Label>
     //         <Label [text]='"[" + data.id +"]" + data.name'></Label>
     //     </StackLayout>
-    // </template>
+    // </ng-template>
 })
 export class ListTest {
     public myItems: Array<DataItem>;

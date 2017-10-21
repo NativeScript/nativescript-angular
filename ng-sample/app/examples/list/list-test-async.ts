@@ -15,11 +15,11 @@ import "rxjs/add/operator/combineLatest";
         <Label text="*ngFor" class="list-title" col="1"></Label>
 
         <ListView row="1" [items]="service.items$ | async" (itemTap)="onItemTap($event)" margin="10">
-            <template let-item="item" let-i="index" let-odd="odd" let-even="even">
+            <ng-template let-item="item" let-i="index" let-odd="odd" let-even="even">
                 <StackLayout [class.odd]="odd" [class.even]="even">
                     <Label [text]='"name: " + item.name'></Label>
                 </StackLayout>
-            </template>
+            </ng-template>
         </ListView>
 
         <StackLayout row="1" col="1" margin="10">
@@ -68,11 +68,11 @@ export class ListTestAsync {
         <Label text="*ngFor" class="list-title" col="1"></Label>
 
         <ListView row="1" [items]="filteredItems$ | async" (itemTap)="onItemTap($event)" margin="10">
-            <template let-item="item" let-i="index" let-odd="odd" let-even="even">
+            <ng-template let-item="item" let-i="index" let-odd="odd" let-even="even">
                 <StackLayout [class.odd]="odd" [class.even]="even">
                     <Label [text]='"name: " + item.name'></Label>
                 </StackLayout>
-            </template>
+            </ng-template>
         </ListView>
 
         <StackLayout row="1" col="1" margin="10">

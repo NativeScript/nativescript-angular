@@ -1,16 +1,39 @@
 // make sure you import mocha-config before @angular/core
-import {assert} from "./test-config";
+import { assert } from "./test-config";
 import {
     async,
     inject,
 } from "@angular/core/testing";
-import {ReflectiveInjector} from "@angular/core";
-import {BaseRequestOptions, ConnectionBackend, Http, Response, ResponseOptions} from "@angular/http";
+import { ReflectiveInjector, Injectable } from "@angular/core";
+import { Request, BaseRequestOptions, ConnectionBackend, Http, Response, ResponseOptions } from "@angular/http";
 import "rxjs/add/operator/map";
-import {MockBackend} from "@angular/http/testing";
-import {NSHttp} from "nativescript-angular/http/ns-http";
-import {NSFileSystem} from "nativescript-angular/file-system/ns-file-system";
-import {NSFileSystemMock, FileResponses} from "./mocks/ns-file-system.mock";
+import { MockBackend } from "@angular/http/testing";
+import { NSHttp } from "nativescript-angular/http/ns-http";
+import { NSFileSystem } from "nativescript-angular/file-system/ns-file-system";
+
+const AWESOME_TEAM: string = '[{"name":"Alex"}, {"name":"Rosen"}, {"name":"Panayot"}]';
+
+// Filesystem mock
+@Injectable()
+export class NSFileSystemMock implements NSFileSystem {
+    public currentApp(): any {
+        return { path: "/app/dir" };
+    }
+
+    public fileFromPath(path: string): any {
+        if (path === "/app/dir/test.json") {
+            return {
+                readText: () => { return Promise.resolve(AWESOME_TEAM); }
+            };
+        }
+        throw new Error("Opening non-existing file");
+    }
+
+    public fileExists(path: string): boolean {
+        return path === "/app/dir/test.json";
+    }
+
+}
 
 describe("Http", () => {
     let http: Http;
@@ -22,15 +45,15 @@ describe("Http", () => {
             MockBackend,
             { provide: NSFileSystem, useClass: NSFileSystemMock },
             {
-              provide: Http,
-              useFactory: function (
-                  connectionBackend: ConnectionBackend,
-                  defaultOptions: BaseRequestOptions,
-                  nsFileSystem: NSFileSystem) {
+                provide: Http,
+                useFactory: function (
+                    connectionBackend: ConnectionBackend,
+                    defaultOptions: BaseRequestOptions,
+                    nsFileSystem: NSFileSystem) {
                     // HACK: cast backend to any to work around an angular typings problem
                     return new NSHttp(<any>connectionBackend, defaultOptions, nsFileSystem);
-                  },
-              deps: [MockBackend, BaseRequestOptions, NSFileSystem]
+                },
+                deps: [MockBackend, BaseRequestOptions, NSFileSystem]
             }
         ]);
 
@@ -40,6 +63,25 @@ describe("Http", () => {
 
     it("should work with local files prefixed with '~'", () => {
         http.get("~/test.json").map(res => res.json()).subscribe((response: any) => {
+            assert.strictEqual(3, response.length);
+            assert.strictEqual("Alex", response[0].name);
+        });
+    });
+
+    it("request method should work with local files prefixed with '~'", () => {
+        http.request("~/test.json").map(res => res.json()).subscribe((response: any) => {
+            assert.strictEqual(3, response.length);
+            assert.strictEqual("Alex", response[0].name);
+        });
+    });
+
+    it("request method using Request type should work with local files prefixed with '~'", () => {
+        const url = "~/test.json";
+        const req = new Request({
+            method: 'GET',
+            url
+        });
+        http.request(req).map(res => res.json()).subscribe((response: any) => {
             assert.strictEqual(3, response.length);
             assert.strictEqual("Alex", response[0].name);
         });
@@ -59,6 +101,6 @@ describe("Http", () => {
             assert.strictEqual(3, response.length);
             assert.strictEqual("Rosen", response[1].name);
         });
-        connection.mockRespond(new Response(new ResponseOptions({ body: FileResponses.AWESOME_TEAM })));
+        connection.mockRespond(new Response(new ResponseOptions({ body: AWESOME_TEAM })));
     });
 });

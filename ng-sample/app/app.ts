@@ -3,25 +3,30 @@ import { platformNativeScriptDynamic } from "nativescript-angular/platform";
 import { NativeScriptAnimationsModule } from "nativescript-angular/animations";
 import { onAfterLivesync, onBeforeLivesync } from "nativescript-angular/platform-common";
 import { NgModule, ErrorHandler } from "@angular/core";
+import { DOCUMENT } from '@angular/common';
 import { Router } from "@angular/router";
 import { NativeScriptRouterModule } from "nativescript-angular/router";
 import { NativeScriptFormsModule } from "nativescript-angular/forms";
 import { NativeScriptHttpModule } from "nativescript-angular/http";
+import { NativeScriptHttpClientModule } from "nativescript-angular/http-client";
+
 import {
     rendererTraceCategory,
     routerTraceCategory,
     listViewTraceCategory,
     animationsTraceCategory,
+    routeReuseStrategyTraceCategory,
 } from "nativescript-angular/trace";
 import { PAGE_FACTORY, PageFactory, PageFactoryOptions } from "nativescript-angular/platform-providers";
 import { Page } from "ui/page";
 import { Color } from "color";
 import { setCategories, enable } from "trace";
-setCategories(
-    `${animationsTraceCategory},${rendererTraceCategory}`
-);
+// setCategories(
+//     `${animationsTraceCategory},${rendererTraceCategory}`
+// );
 // setCategories(routerTraceCategory);
 // setCategories(listViewTraceCategory);
+setCategories(`${routeReuseStrategyTraceCategory}`);
 enable();
 
 import { alert } from 'tns-core-modules/ui/dialogs';
@@ -50,6 +55,7 @@ import { ListTemplateSelectorTest } from "./examples/list/template-selector";
 import { ListTestAsync, ListTestFilterAsync } from "./examples/list/list-test-async";
 import { ImageTest } from "./examples/image/image-test";
 import { HttpTest } from "./examples/http/http-test";
+import { HttpClientTest } from "./examples/http-client/http-client-test";
 import { ActionBarTest } from "./examples/action-bar/action-bar-test";
 import { ModalTest } from "./examples/modal/modal-test";
 import { PlatfromDirectivesTest } from "./examples/platform-directives/platform-directives-test";
@@ -79,12 +85,14 @@ import { ErrorHandlerAppComponent } from "./examples/errorhandler/errorhandler.t
         NativeScriptModule,
         NativeScriptFormsModule,
         NativeScriptHttpModule,
+        NativeScriptHttpClientModule,
         NativeScriptRouterModule,
     ],
     exports: [
         NativeScriptModule,
         NativeScriptFormsModule,
         NativeScriptHttpModule,
+        NativeScriptHttpClientModule,
         NativeScriptRouterModule,
     ],
     providers: [
@@ -151,11 +159,12 @@ const customPageFactoryProvider = {
 // platformNativeScriptDynamic().bootstrapModule(makeExampleModule(ImageTest));
 // platformNativeScriptDynamic().bootstrapModule(makeExampleModule(ModalTest));
 // platformNativeScriptDynamic().bootstrapModule(makeExampleModule(HttpTest));
+platformNativeScriptDynamic().bootstrapModule(makeExampleModule(HttpClientTest));
 // platformNativeScriptDynamic().bootstrapModule(makeExampleModule(PlatfromDirectivesTest));
 // platformNativeScriptDynamic().bootstrapModule(makeExampleModule(ActionBarTest));
 
 // router
-platformNativeScriptDynamic().bootstrapModule(makeExampleModule(RouterOutletAppComponent));
+// platformNativeScriptDynamic().bootstrapModule(makeExampleModule(RouterOutletAppComponent));
 // platformNativeScriptDynamic().bootstrapModule(makeExampleModule(PageRouterOutletAppComponent));
 // platformNativeScriptDynamic().bootstrapModule(makeExampleModule(PageRouterOutletNestedAppComponent));
 // platformNativeScriptDynamic().bootstrapModule(makeExampleModule(ClearHistoryAppComponent));

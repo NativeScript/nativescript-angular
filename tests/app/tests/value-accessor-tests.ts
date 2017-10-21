@@ -1,22 +1,24 @@
 // make sure you import mocha-config before @angular/core
-import {assert} from "./test-config";
-import {View} from "ui/core/view";
-import {Slider} from "ui/slider";
-import {Switch} from "ui/switch";
-import {DatePicker} from "ui/date-picker";
-import {TimePicker} from "ui/time-picker";
-import {ListPicker} from "ui/list-picker";
-import {TextField} from "ui/text-field";
-import {NumberValueAccessor} from "nativescript-angular/value-accessors/number-value-accessor";
-import {CheckedValueAccessor} from "nativescript-angular/value-accessors/checked-value-accessor";
-import {DateValueAccessor} from "nativescript-angular/value-accessors/date-value-accessor";
-import {TimeValueAccessor} from "nativescript-angular/value-accessors/time-value-accessor";
-import {SelectedIndexValueAccessor} from "nativescript-angular/value-accessors/selectedIndex-value-accessor";
-import {TextValueAccessor} from "nativescript-angular/value-accessors/text-value-accessor";
-import {ElementRef} from "@angular/core";
+import { assert } from "./test-config";
+import { View } from "ui/core/view";
+import { Slider } from "ui/slider";
+import { Switch } from "ui/switch";
+import { DatePicker } from "ui/date-picker";
+import { TimePicker } from "ui/time-picker";
+import { ListPicker } from "ui/list-picker";
+import { TextField } from "ui/text-field";
+import {
+    NumberValueAccessor,
+    CheckedValueAccessor,
+    DateValueAccessor,
+    TimeValueAccessor,
+    SelectedIndexValueAccessor,
+    TextValueAccessor
+} from "nativescript-angular/forms/value-accessors";
+import { ElementRef } from "@angular/core";
 
 class TestElementRef implements ElementRef {
-    constructor(public nativeElement: View) {};
+    constructor(public nativeElement: View) { };
 }
 
 class TestNumberValueAccessor extends NumberValueAccessor {
@@ -138,7 +140,7 @@ describe("two-way binding via ng-model", () => {
         accessor.writeValue("blah");
         assert.equal("blah", accessor.view.text);
 
-        accessor.writeValue({toString: () => "stringified"});
+        accessor.writeValue({ toString: () => "stringified" });
         assert.equal("stringified", accessor.view.text);
     });
 });

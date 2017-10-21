@@ -2,25 +2,30 @@ import { View } from "tns-core-modules/ui/core/view";
 import { LayoutBase } from "tns-core-modules/ui/layouts/layout-base";
 
 export type NgView = (View & ViewExtensions);
-export type NgElement = NgView | InvisibleNode;
 
 export interface ViewExtensions {
+    meta: ViewClassMeta;
     nodeType: number;
     nodeName: string;
     templateParent: NgView;
+    nextSibling: NgView;
+    firstChild: NgView;
+    lastChild: NgView;
     ngCssClasses: Map<string, boolean>;
-    meta: ViewClassMeta;
 }
 
 export interface ViewClass {
     new (): View;
 }
 
-export abstract class InvisibleNode extends View implements ViewExtensions {
+export abstract class InvisibleNode extends View implements NgView {
     meta: { skipAddToDom: boolean };
-    templateParent: NgView;
     nodeType: number;
     nodeName: string;
+    templateParent: NgView;
+    nextSibling: NgView;
+    firstChild: NgView;
+    lastChild: NgView;
     ngCssClasses: Map<string, boolean>;
 
     constructor() {
@@ -42,7 +47,7 @@ export class CommentNode extends InvisibleNode {
         super();
 
         this.meta = {
-            skipAddToDom: false,
+            skipAddToDom: true,
         };
         this.id = CommentNode.id.toString();
         CommentNode.id += 1;
@@ -67,12 +72,20 @@ const getClassName = instance => instance.constructor.name;
 
 export interface ViewClassMeta {
     skipAddToDom?: boolean;
-    insertChild?: (parent: NgView, child: NgView, atIndex: number) => void;
-    removeChild?: (parent: NgView, child: NgView) => void;
+    insertChild?: (parent: any, child: any, next?: any) => void;
+    removeChild?: (parent: any, child: any) => void;
 }
 
 export function isDetachedElement(element): boolean {
     return (element && element.meta && element.meta.skipAddToDom);
+}
+
+export function isView(view: any): view is NgView {
+    return view instanceof View;
+}
+
+export function isInvisibleNode(view: any): view is InvisibleNode {
+    return view instanceof InvisibleNode;
 }
 
 export type ViewResolver = () => ViewClass;

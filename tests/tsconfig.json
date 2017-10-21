@@ -22,6 +22,7 @@
     "exclude": [
         "node_modules",
         "platforms",
-        "**/*.aot"
+        "**/*.aot",
+        "e2e"
     ]
 }

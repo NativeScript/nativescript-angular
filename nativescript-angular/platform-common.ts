@@ -18,18 +18,17 @@ import {
     EventEmitter,
     Provider,
     Sanitizer,
-    OpaqueToken
+    InjectionToken
 } from "@angular/core";
-
-// Work around a TS bug requiring an import of OpaqueToken without using it
-if ((<any>global).___TS_UNUSED) {
-    (() => {
-        return OpaqueToken;
-    })();
-}
+import { DOCUMENT } from "@angular/common";
 
 import { rendererLog, rendererError } from "./trace";
-import { PAGE_FACTORY, PageFactory, defaultPageFactoryProvider, setRootPage } from "./platform-providers";
+import {
+    PAGE_FACTORY,
+    PageFactory,
+    defaultPageFactoryProvider,
+    setRootPage
+} from "./platform-providers";
 
 import { start, setCssFileName } from "tns-core-modules/application";
 import { topmost, NavigationEntry } from "tns-core-modules/ui/frame";
@@ -43,6 +42,12 @@ export const onAfterLivesync = new EventEmitter<NgModuleRef<any>>();
 let lastBootstrappedModule: WeakRef<NgModuleRef<any>>;
 type BootstrapperAction = () => Promise<NgModuleRef<any>>;
 
+// Work around a TS bug requiring an import of OpaqueToken without using it
+if ((<any>global).___TS_UNUSED) {
+    (() => {
+        return InjectionToken;
+    })();
+}
 export interface AppOptions {
     bootInExistingPage?: boolean;
     cssFile?: string;
@@ -57,9 +62,16 @@ export class NativeScriptSanitizer extends Sanitizer {
     }
 }
 
+export class NativeScriptDocument {
+    createElement(tag: string) {
+        throw new Error("NativeScriptDocument is not DOM Document. There is no createElement() method.");
+    }
+}
+
 export const COMMON_PROVIDERS = [
     defaultPageFactoryProvider,
     { provide: Sanitizer, useClass: NativeScriptSanitizer },
+    { provide: DOCUMENT, useClass: NativeScriptDocument },
 ];
 
 export class NativeScriptPlatformRef extends PlatformRef {
@@ -82,7 +94,7 @@ export class NativeScriptPlatformRef extends PlatformRef {
     bootstrapModule<M>(
         moduleType: Type<M>,
         compilerOptions: CompilerOptions | CompilerOptions[] = []
-    ): Promise<NgModuleRef<M>> {
+        ): Promise<NgModuleRef<M>> {
         this._bootstrapper = () => this.platform.bootstrapModule(moduleType, compilerOptions);
 
         this.bootstrapApp();

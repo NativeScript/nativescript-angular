@@ -1,6 +1,6 @@
 // make sure you import mocha-config before @angular/core
 import { assert } from "./test-config";
-import { Component, ElementRef, Renderer2, NgZone } from "@angular/core";
+import { Component, ElementRef, Renderer2, NgZone, ViewChild } from "@angular/core";
 import { ProxyViewContainer } from "ui/proxy-view-container";
 import { Red } from "color/known-colors";
 import { dumpView } from "./test-utils";
@@ -10,6 +10,9 @@ import { StackLayout } from "ui/layouts/stack-layout";
 import { ContentView } from "ui/content-view";
 import { Button } from "ui/button";
 import { NgView } from "nativescript-angular/element-registry";
+import { registerElement } from "nativescript-angular/element-registry";
+import * as button from "tns-core-modules/ui/button";
+import * as view from "tns-core-modules/ui/core/view";
 
 @Component({
     template: `<StackLayout><Label text="Layout"></Label></StackLayout>`
@@ -169,6 +172,60 @@ export class NgIfThenElseComponent {
     }
 }
 
+export class ButtonCounter extends button.Button {
+    nativeBackgroundRedraws = 0;
+    backgroundInternalSetNativeCount = 0;
+    fontInternalSetNativeCount = 0;
+
+    [view.backgroundInternalProperty.setNative](value) {
+        this.backgroundInternalSetNativeCount++;
+        return super[view.backgroundInternalProperty.setNative](value);
+    }
+    [view.fontInternalProperty.setNative](value) {
+        this.fontInternalSetNativeCount++;
+        return super[view.fontInternalProperty.setNative](value);
+    }
+    _redrawNativeBackground(value: any): void {
+        this.nativeBackgroundRedraws++;
+        super["_redrawNativeBackground"](value);
+    }
+}
+registerElement("ButtonCounter", () => ButtonCounter);
+
+@Component({
+    selector: "ng-control-setters-count",
+    template: `
+        <StackLayout>
+            <ButtonCounter #btn1 id="btn1" borderWidth="1" borderColor="gray" borderRadius="16" fontWeight="bold" fontSize="16"></ButtonCounter>
+            <ButtonCounter #btn2 id="btn2"></ButtonCounter>
+            <ButtonCounter #btn3 id="btn3" borderWidth="1" borderColor="gray" borderRadius="16" fontWeight="bold" fontSize="16"></ButtonCounter>
+            <ButtonCounter #btn4 id="btn4" borderRadius="3" style="background-image: url('~/logo.png'); background-position: center; background-repeat: no-repeat; background-size: cover;"></ButtonCounter>
+        </StackLayout>
+    `,
+    styles: [`
+        #btn2, #btn3, #btn4 {
+            border-width: 2;
+            border-color: teal;
+            border-radius: 20;
+            font-weight: 400;
+            font-size: 32;
+        }`]
+})
+export class NgControlSettersCount {
+    @ViewChild("btn1") btn1: ElementRef;
+    @ViewChild("btn2") btn2: ElementRef;
+    @ViewChild("btn3") btn3: ElementRef;
+    @ViewChild("btn3") btn4: ElementRef;
+
+    get buttons(): ElementRef[] { return [this.btn1, this.btn2, this.btn3, this.btn4]; }
+
+    isAfterViewInit: boolean = false;
+
+    ngAfterViewInit() {
+        this.isAfterViewInit = true;
+    }
+}
+
 @Component({
     selector: "ng-for-label",
     template: `<Label *ngFor="let item of items" [text]="item"></Label>`
@@ -291,7 +348,7 @@ describe("Renderer E2E", () => {
         it("ngIf hides component when false", () => {
             return testApp.loadComponent(NgIfLabel).then((componentRef) => {
                 const componentRoot = componentRef.instance.elementRef.nativeElement;
-                assert.equal("(ProxyViewContainer (CommentNode))", dumpView(componentRoot));
+                assert.equal("(ProxyViewContainer)", dumpView(componentRoot));
             });
         });
 
@@ -302,7 +359,7 @@ describe("Renderer E2E", () => {
 
                 component.show = true;
                 testApp.appRef.tick();
-                assert.equal("(ProxyViewContainer (CommentNode), (Label))", dumpView(componentRoot));
+                assert.equal("(ProxyViewContainer (Label))", dumpView(componentRoot));
             });
         });
 
@@ -314,11 +371,10 @@ describe("Renderer E2E", () => {
                 component.show = true;
                 testApp.appRef.tick();
                 assert.equal(
-                    "(ProxyViewContainer (StackLayout (CommentNode), (Label), (Button)))",
+                    "(ProxyViewContainer (StackLayout (Label), (Button)))",
                     dumpView(componentRoot));
             });
         });
-
 
         it("ngIf shows elements in correct order when multiple are rendered and there's *ngIf", () => {
             return testApp.loadComponent(NgIfMultiple).then((componentRef) => {
@@ -333,8 +389,7 @@ describe("Renderer E2E", () => {
                             "(Label[text=1]), " +
                             "(Label[text=2]), " +
                             "(Label[text=3]), " +
-                            "(CommentNode), " + // ng-reflect comment
-                            "(Label[text=4]), " + // the content to be displayed and its anchor
+                            "(Label[text=4]), " + // the content to be conditionally displayed
                             "(Label[text=5])" +
                         ")" +
                     ")",
@@ -348,13 +403,15 @@ describe("Renderer E2E", () => {
                 const componentRoot = component.elementRef.nativeElement;
 
                 testApp.appRef.tick();
+
                 assert.equal(
                     "(ProxyViewContainer " +
                         "(StackLayout " +
-                            "(CommentNode), " + // ng-reflect comment
-                            "(Label[text=If]), (CommentNode)))", // the content to be displayed and its anchor
+                            "(Label[text=If])" +
+                        ")" +
+                    ")",
 
-                     dumpView(componentRoot, true));
+                    dumpView(componentRoot, true));
             });
         });
 
@@ -368,10 +425,11 @@ describe("Renderer E2E", () => {
                 assert.equal(
                     "(ProxyViewContainer " +
                         "(StackLayout " +
-                            "(CommentNode), " + // ng-reflect comment
-                            "(Label[text=Else]), (CommentNode)))", // the content to be displayed and its anchor
+                            "(Label[text=Else])" +
+                        ")" +
+                    ")",
 
-                     dumpView(componentRoot, true));
+                    dumpView(componentRoot, true));
             });
         });
 
@@ -384,11 +442,11 @@ describe("Renderer E2E", () => {
                 assert.equal(
                     "(ProxyViewContainer " +
                         "(StackLayout " +
-                            "(CommentNode), " + // ng-reflect comment
-                            "(Label[text=Then]), (CommentNode), " + // the content to be displayed and its anchor
-                            "(CommentNode)))", // the anchor for the else template
+                            "(Label[text=Then])" +
+                        ")" +
+                    ")",
 
-                     dumpView(componentRoot, true));
+                    dumpView(componentRoot, true));
             });
         });
 
@@ -403,11 +461,11 @@ describe("Renderer E2E", () => {
                 assert.equal(
                     "(ProxyViewContainer " +
                         "(StackLayout " +
-                            "(CommentNode), " + // the content to be displayed
-                            "(Label[text=Else]), (CommentNode), " + // the content to be displayed
-                            "(CommentNode)))", // the content to be displayed
+                            "(Label[text=Else])" +
+                        ")" +
+                    ")",
 
-                     dumpView(componentRoot, true));
+                    dumpView(componentRoot, true));
             });
         });
 
@@ -415,7 +473,7 @@ describe("Renderer E2E", () => {
             return testApp.loadComponent(NgForLabel).then((componentRef) => {
                 const componentRoot = componentRef.instance.elementRef.nativeElement;
                 assert.equal(
-                    "(ProxyViewContainer (CommentNode), (Label[text=one]), (Label[text=two]), (Label[text=three]))",
+                    "(ProxyViewContainer (Label[text=one]), (Label[text=two]), (Label[text=three]))",
                     dumpView(componentRoot, true));
             });
         });
@@ -429,7 +487,7 @@ describe("Renderer E2E", () => {
                 testApp.appRef.tick();
 
                 assert.equal(
-                    "(ProxyViewContainer (CommentNode), (Label[text=one]), (Label[text=three]))",
+                    "(ProxyViewContainer (Label[text=one]), (Label[text=three]))",
                     dumpView(componentRoot, true));
             });
         });
@@ -443,7 +501,7 @@ describe("Renderer E2E", () => {
                 testApp.appRef.tick();
 
                 assert.equal(
-                    "(ProxyViewContainer (CommentNode), " +
+                    "(ProxyViewContainer " +
                     "(Label[text=one]), (Label[text=new]), (Label[text=two]), (Label[text=three]))",
                     dumpView(componentRoot, true));
             });
@@ -486,7 +544,6 @@ describe("Renderer createElement", () => {
         assert.instanceOf(result, ProxyViewContainer, "Renderer should create ProxyViewContainer form 'unknown-tag'");
     });
 });
-
 
 describe("Renderer attach/detach", () => {
     let testApp: TestApp = null;
@@ -544,3 +601,36 @@ describe("Renderer attach/detach", () => {
     });
 });
 
+describe("Renderer lifecycle", () => {
+    let testApp: TestApp = null;
+    let renderer: Renderer2 = null;
+
+    before(() => {
+        return TestApp.create([], [NgControlSettersCount]).then((app) => {
+            testApp = app;
+            renderer = testApp.renderer;
+        });
+    });
+
+    after(() => {
+        testApp.dispose();
+    });
+
+    afterEach(() => {
+        testApp.disposeComponents();
+    });
+
+    it("view native setters are called once on startup", () => {
+        return testApp.loadComponent(NgControlSettersCount).then((componentRef) => {
+            assert.isTrue(componentRef.instance.isAfterViewInit, "Expected the NgControlSettersCount to have passed its ngAfterViewInit.");
+            componentRef.instance.buttons.map(btn => btn.nativeElement).forEach(btn => {
+                assert.isTrue(btn.isLoaded, `Expected ${btn.id} to be allready loaded.`);
+                assert.isFalse(btn.isLayoutValid, `Expected ${btn.id}'s layout to be invalid.`);
+
+                assert.equal(btn.backgroundInternalSetNativeCount, 1, `Expected ${btn.id} backgroundInternalSetNativeCount to be called just once.`);
+                assert.equal(btn.fontInternalSetNativeCount, 1, `Expected ${btn.id} fontInternalSetNativeCount to be called just once.`);
+                assert.equal(btn.nativeBackgroundRedraws, 0, `Expected ${btn.id} nativeBackgroundRedraws to be called after its layout pass.`);
+            });
+        });
+    });
+});

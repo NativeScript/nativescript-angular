@@ -53,7 +53,7 @@ $ tns test android --emulator
 # Developer workflow:
 
 ## Setup:
-Use `npm link` to link `nativescript-angular` in `tests` and `ng-sample` progects:
+Use `npm link` to link `nativescript-angular` in `tests` and `ng-sample` projects:
 
 ```
 cd nativescript-angular

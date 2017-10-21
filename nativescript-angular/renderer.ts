@@ -11,7 +11,6 @@ import { topmost } from "tns-core-modules/ui/frame";
 import { profile } from "tns-core-modules/profiling";
 
 import { APP_ROOT_VIEW, DEVICE, getRootPage } from "./platform-providers";
-import { isBlank } from "./lang-facade";
 import { ViewUtil } from "./view-util";
 import { NgView, InvisibleNode } from "./element-registry";
 import { rendererLog as traceLog } from "./trace";
@@ -22,6 +21,11 @@ export const COMPONENT_VARIABLE = "%COMP%";
 export const HOST_ATTR = `_nghost-${COMPONENT_VARIABLE}`;
 export const CONTENT_ATTR = `_ngcontent-${COMPONENT_VARIABLE}`;
 const ATTR_SANITIZER = /-/g;
+
+export interface ElementReference {
+    previous: NgView;
+    next: NgView;
+}
 
 @Injectable()
 export class NativeScriptRendererFactory implements RendererFactory2 {
@@ -55,7 +59,7 @@ export class NativeScriptRendererFactory implements RendererFactory2 {
         }
 
         let renderer: NativeScriptRenderer = this.componentRenderers.get(type.id);
-        if (!isBlank(renderer)) {
+        if (renderer) {
             return renderer;
         }
 
@@ -85,15 +89,16 @@ export class NativeScriptRenderer extends Renderer2 {
     }
 
     @profile
-    appendChild(parent: any, newChild: NgView): void {
+    appendChild(parent: NgView, newChild: NgView): void {
         traceLog(`NativeScriptRenderer.appendChild child: ${newChild} parent: ${parent}`);
         this.viewUtil.insertChild(parent, newChild);
     }
 
     @profile
-    insertBefore(parent: NgView, newChild: NgView, refChildIndex: number): void {
-        traceLog(`NativeScriptRenderer.insertBefore child: ${newChild} parent: ${parent}`);
-        this.viewUtil.insertChild(parent, newChild, refChildIndex);
+    insertBefore(parent: NgView, newChild: NgView, { previous, next }: ElementReference): void {
+        traceLog(`NativeScriptRenderer.insertBefore child: ${newChild} ` +
+            `parent: ${parent} previous: ${previous} next: ${next}`);
+        this.viewUtil.insertChild(parent, newChild, previous, next);
     }
 
     @profile
@@ -110,14 +115,18 @@ export class NativeScriptRenderer extends Renderer2 {
 
     @profile
     parentNode(node: NgView): any {
-        traceLog("NativeScriptRenderer.parentNode for node: " + node);
+        traceLog(`NativeScriptRenderer.parentNode for node: ${node}`);
         return node.parent || node.templateParent;
     }
 
     @profile
-    nextSibling(node: NgView): number {
-        traceLog(`NativeScriptRenderer.nextSibling ${node}`);
-        return this.viewUtil.nextSiblingIndex(node);
+    nextSibling(node: NgView): ElementReference {
+        traceLog(`NativeScriptRenderer.nextSibling of ${node} is ${node.nextSibling}`);
+
+        return {
+            previous: node,
+            next: node.nextSibling,
+        };
     }
 
     @profile

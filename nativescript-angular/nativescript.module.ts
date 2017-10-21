@@ -23,7 +23,7 @@ import { NativeScriptRendererFactory } from "./renderer";
 import { DetachedLoader } from "./common/detached-loader";
 
 export function errorHandlerFactory(errorHandler: ErrorHandler) {
-    return errorHandler ? errorHandler : new ErrorHandler(true);
+    return errorHandler ? errorHandler : new ErrorHandler();
 }
 
 @NgModule({
