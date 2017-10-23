@@ -3,7 +3,7 @@ import { assert } from "./test-config";
 
 import { NavigationEnd, NavigationStart } from "@angular/router";
 import { Subscription } from "rxjs/Subscription";
-import { TestApp, bootstrapTestApp, destroyTestApp } from "./test-app";
+import { bootstrapTestApp, destroyTestApp } from "./test-app";
 
 import { GestureComponent } from "../snippets/gestures.component";
 import { LayoutsComponent } from "../snippets/layouts.component";
@@ -21,30 +21,26 @@ import {
 } from "../snippets/list-view/template-selector.component";
 
 import { device, platformNames } from "platform";
+import {nTestBedAfterEach, nTestBedBeforeEach, nTestBedRender} from 'nativescript-angular/testing';
+import {ComponentRef} from '@angular/core';
 const IS_IOS = (device.os === platformNames.ios);
 
 describe("Snippets", () => {
-    let testApp: TestApp = null;
 
-    before(() => {
-        return TestApp.create([], [GestureComponent, LayoutsComponent, IconFontComponent]).then((app) => {
-            testApp = app;
-        });
-    });
-
-    after(() => {
-        testApp.dispose();
-    });
+    beforeEach(nTestBedBeforeEach([GestureComponent, LayoutsComponent, IconFontComponent]));
+    afterEach(nTestBedAfterEach(false));
 
     it("Gesture snippets can be loaded", () => {
-        return testApp.loadComponent(GestureComponent).then((componentRef) => {
+        return nTestBedRender(GestureComponent).then((fixture) => {
+            const componentRef: ComponentRef<GestureComponent> = fixture.componentRef;
             const componentInstance = componentRef.instance;
             assert.instanceOf(componentInstance, GestureComponent);
         });
     });
 
     it("Layouts snippets can be loaded", () => {
-        return testApp.loadComponent(LayoutsComponent).then((componentRef) => {
+        return nTestBedRender(LayoutsComponent).then((fixture) => {
+            const componentRef: ComponentRef<LayoutsComponent> = fixture.componentRef;
             const componentInstance = componentRef.instance;
             assert.instanceOf(componentInstance, LayoutsComponent);
         });
@@ -52,7 +48,8 @@ describe("Snippets", () => {
 
     // TODO: Skip list-view test until karma test launcher double navigate bug is fixed
     (IS_IOS ? it.skip : it)("Icon-font snippets can be loaded", (done) => {
-        testApp.loadComponent(IconFontComponent).then((componentRef) => {
+        return nTestBedRender(IconFontComponent).then((fixture) => {
+            const componentRef: ComponentRef<IconFontComponent> = fixture.componentRef;
             const componentInstance = componentRef.instance;
             assert.instanceOf(componentInstance, IconFontComponent);
             // Works around a "dehydrated change detector" exception.

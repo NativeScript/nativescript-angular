@@ -1,4 +1,4 @@
-import { TestApp, registerTestApp } from "../../tests/test-app";
+import { registerTestApp } from "../../tests/test-app";
 import { ApplicationRef } from "@angular/core";
 import { Router, NavigationStart, NavigationEnd } from "@angular/router";
 // >> page-outlet-example
