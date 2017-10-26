@@ -12,7 +12,8 @@ interface ElementTuple {
     button: UIElement,
 }
 
-describe("ngForOf scenario", () => {
+describe("ngForOf scenario", function () {
+    this.retries(2);
     let driver: AppiumDriver;
     let addButton: UIElement;
     let removeButton: UIElement;
@@ -94,7 +95,11 @@ describe("ngForOf scenario", () => {
             await button.click();
         } else {
             index = elements.length - 1;
-            await removeButton.click();
+            if (driver.platformName.toLowerCase().includes("ios")) {
+                await removeButton.tap();
+            } else {
+                await removeButton.click();
+            }
         }
 
         elements.splice(index, 1);
@@ -135,11 +140,22 @@ describe("ngForOf scenario", () => {
     };
 
     const getElement = async (id: number) => {
-        const label = await driver.findElementByText(
-            "label: " + id.toString(), SearchOptions.exact);
+        let label = null;
+        let button = null;
+        
+        if (driver.platformName.toLowerCase().includes("ios")) {
+            label = await driver.findElementByAccessibilityId(
+                "label: " + id.toString());
 
-        const button = await driver.findElementByText(
-            id.toString(), SearchOptions.exact);
+            button = await driver.findElementByAccessibilityId(
+                id.toString());
+        } else {
+            label = await driver.findElementByText(
+                "label: " + id.toString(), SearchOptions.exact);
+
+            button = await driver.findElementByText(
+                id.toString(), SearchOptions.exact);
+        }
 
         return { label, button };
     };
