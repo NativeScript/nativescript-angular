@@ -6,7 +6,7 @@ import "./zone-js/dist/zone-nativescript";
 import "reflect-metadata";
 import "./polyfills/array";
 import "./polyfills/console";
-import { profile } from "tns-core-modules/profiling";
+import { profile, log, uptime } from "tns-core-modules/profiling";
 
 import {
     Type,
@@ -187,7 +187,7 @@ export class NativeScriptPlatformRef extends PlatformRef {
                         "nativescript-angular/platform-common.postBootstrapAction";
                     bootstrapAction().then(profile(bootstrapMethodName, moduleRef => {
                         // profiling.stop("ng-bootstrap");
-                        rendererLog("ANGULAR BOOTSTRAP DONE.");
+                        log(`ANGULAR BOOTSTRAP DONE. ${uptime()}`);
                         lastBootstrappedModule = new WeakRef(moduleRef);
 
                         if (resolve) {
