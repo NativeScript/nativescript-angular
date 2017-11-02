@@ -24,7 +24,7 @@ import { SinglePageMain, routes as singlePageRoutes } from "./single-page-main.c
 import { LazyLoadMain, routes as lazyLoadRoutes } from "./lazy-load-main";
 import { FirstComponent } from "./first.component";
 import { SecondComponent } from "./second.component";
-import { OpaqueToken, NgModule, NgModuleFactoryLoader } from "@angular/core";
+import { InjectionToken, NgModule, NgModuleFactoryLoader } from "@angular/core";
 
 import { PageNavigationApp } from "./snippets/navigation/page-outlet";
 import { NavigationApp } from "./snippets/navigation/router-outlet";
