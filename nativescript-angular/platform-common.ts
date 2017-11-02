@@ -16,7 +16,6 @@ import {
     NgModuleFactory,
     NgModuleRef,
     EventEmitter,
-    Provider,
     Sanitizer,
     InjectionToken,
     StaticProvider

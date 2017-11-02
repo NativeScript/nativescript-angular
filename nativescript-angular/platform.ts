@@ -42,10 +42,9 @@ if ((<any>global).___TS_UNUSED) {
 import "./dom-adapter";
 
 import { NativeScriptElementSchemaRegistry } from "./schema-registry";
-import { NSFileSystem } from "./file-system/ns-file-system";
 import { FileSystemResourceLoader } from "./resource-loader";
 
-export const NS_COMPILER_PROVIDERS = [
+export const NS_COMPILER_PROVIDERS: StaticProvider[] = [
     INTERNAL_BROWSER_PLATFORM_PROVIDERS,
     {
         provide: COMPILER_OPTIONS,
