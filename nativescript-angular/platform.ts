@@ -51,9 +51,8 @@ export const NS_COMPILER_PROVIDERS = [
         provide: COMPILER_OPTIONS,
         useValue: {
             providers: [
-                NSFileSystem,
-                { provide: ResourceLoader, useClass: FileSystemResourceLoader },
-                { provide: ElementSchemaRegistry, useClass: NativeScriptElementSchemaRegistry },
+                { provide: ResourceLoader, useClass: FileSystemResourceLoader, deps: [] },
+                { provide: ElementSchemaRegistry, useClass: NativeScriptElementSchemaRegistry, deps: [] },
             ]
         },
         multi: true
