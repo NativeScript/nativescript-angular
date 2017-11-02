@@ -143,6 +143,7 @@ export class NativeScriptDomAdapter implements ɵDomAdapter {
   templateAwareRoot(_el: any /** TODO #9100 */): any /** TODO #9100 */ { throw new Error("Not implemented!") }
   createHtmlDocument(): HTMLDocument { throw new Error("Not implemented!") }
   defaultDoc(): HTMLDocument { throw new Error("Not implemented!") }
+  getDefaultDocument(): Document { throw new Error("Not implemented!") }
   getBoundingClientRect(_el: any /** TODO #9100 */): any /** TODO #9100 */ { throw new Error("Not implemented!") }
   getTitle(): string { throw new Error("Not implemented!") }
   setTitle(_doc: Document, _newTitle: string): any /** TODO #9100 */ { throw new Error("Not implemented!") }
