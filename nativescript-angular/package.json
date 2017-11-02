@@ -53,7 +53,8 @@
     "@angular/router": "~5.0.0",
     "rxjs": "^5.5.0",
     "tns-core-modules": "^3.1.0 || >3.4.0-",
-    "zone.js": "^0.8.4"
+    "zone.js": "^0.8.4",
+    "typescript": "~2.4.2"
   },
   "devDependencies": {
     "@angular/platform-browser-dynamic": "~5.0.0",
