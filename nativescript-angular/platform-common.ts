@@ -18,7 +18,8 @@ import {
     EventEmitter,
     Provider,
     Sanitizer,
-    InjectionToken
+    InjectionToken,
+    StaticProvider
 } from "@angular/core";
 import { DOCUMENT } from "@angular/common";
 
@@ -54,7 +55,7 @@ export interface AppOptions {
     startPageActionBarHidden?: boolean;
 }
 
-export type PlatformFactory = (extraProviders?: Provider[]) => PlatformRef;
+export type PlatformFactory = (extraProviders?: StaticProvider[]) => PlatformRef;
 
 export class NativeScriptSanitizer extends Sanitizer {
     sanitize(_context: any, value: string): string {
@@ -70,8 +71,8 @@ export class NativeScriptDocument {
 
 export const COMMON_PROVIDERS = [
     defaultPageFactoryProvider,
-    { provide: Sanitizer, useClass: NativeScriptSanitizer },
-    { provide: DOCUMENT, useClass: NativeScriptDocument },
+    { provide: Sanitizer, useClass: NativeScriptSanitizer, deps: [] },
+    { provide: DOCUMENT, useClass: NativeScriptDocument, deps: [] },
 ];
 
 export class NativeScriptPlatformRef extends PlatformRef {
