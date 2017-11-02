@@ -9,9 +9,15 @@ import {
 import {
     ElementSchemaRegistry,
     ResourceLoader,
-    COMPILER_PROVIDERS,
-    platformCoreDynamic
 } from "@angular/compiler";
+
+import {
+    ɵplatformCoreDynamic as platformCoreDynamic
+} from "@angular/platform-browser-dynamic";
+
+import {
+    ɵINTERNAL_BROWSER_PLATFORM_PROVIDERS as INTERNAL_BROWSER_PLATFORM_PROVIDERS
+} from "@angular/platform-browser";
 
 import {
     COMPILER_OPTIONS,
@@ -19,7 +25,8 @@ import {
     InjectionToken,
     ViewEncapsulation,
     createPlatformFactory,
-    MissingTranslationStrategy
+    MissingTranslationStrategy,
+    StaticProvider,
 } from "@angular/core";
 
 // Work around a TS bug requiring an imports of
@@ -39,7 +46,7 @@ import { NSFileSystem } from "./file-system/ns-file-system";
 import { FileSystemResourceLoader } from "./resource-loader";
 
 export const NS_COMPILER_PROVIDERS = [
-    COMPILER_PROVIDERS,
+    INTERNAL_BROWSER_PLATFORM_PROVIDERS,
     {
         provide: COMPILER_OPTIONS,
         useValue: {
