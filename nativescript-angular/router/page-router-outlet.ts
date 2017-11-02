@@ -359,13 +359,11 @@ export class PageRouterOutlet implements OnDestroy, OnInit { // tslint:disable-l
         log("Activated route marked as page: " + routeToString(nodeToMark));
     }
 
-    // NOTE: Using private APIs - potential break point!
     private getComponentFactory(
-        activatedRoute: any,
+        activatedRoute: ActivatedRoute,
         loadedResolver: ComponentFactoryResolver
     ): ComponentFactory<any> {
-        const snapshot = activatedRoute._futureSnapshot;
-        const component = <any>snapshot._routeConfig.component;
+        const { component } = activatedRoute.routeConfig;
 
         return loadedResolver ?
             loadedResolver.resolveComponentFactory(component) :
