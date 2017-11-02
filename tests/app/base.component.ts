@@ -1,5 +1,5 @@
-import { OpaqueToken, OnInit, OnDestroy } from "@angular/core";
-export const HOOKS_LOG = new OpaqueToken("Hooks log");
+import { InjectionToken, OnInit, OnDestroy } from "@angular/core";
+export const HOOKS_LOG = new InjectionToken("Hooks log");
 import { BehaviorSubject } from "rxjs/BehaviorSubject";
 
 export class BaseComponent implements OnInit, OnDestroy {
