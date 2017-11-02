@@ -11,47 +11,34 @@ const pluginPackageJson = JSON.parse(fs.readFileSync(pluginPackageJsonPath, "utf
 
 const isNgDependency = name => name.startsWith("@angular") ||
     name === "rxjs" ||
-    name === "zone.js";
+    name === "zone.js" ||
+    name === "typescript";
 
-function updateDeps(deps, newDeps) {
-    // set app dependencies to ones required from plugin
+function updateDeps(deps, devDeps, newDeps) {
     Object.keys(newDeps)
         .filter(isNgDependency)
-        .filter(dependencyName => deps.hasOwnProperty(dependencyName))
         .map(dependencyName => ({
             dependencyName,
-            version: pluginPackageJson.peerDependencies[dependencyName]
+            version: newDeps[dependencyName]
         }))
-        .filter(({ dependencyName, version }) => deps[dependencyName] !== version)
         .forEach(({ dependencyName, version }) => {
-            deps[dependencyName] = version;
+            if (devDeps[dependencyName]) {
+                devDeps[dependencyName] = version;
+            } else {
+                deps[dependencyName] = version;
+            }
+
             console.log(`Updated dependency ${dependencyName} to version: ${version}.`);
         });
-    
-    // remove platform-browser-dynamic if present
-    if (deps.hasOwnProperty(browserDynamicDependency)) {
-        delete deps[browserDynamicDependency];
-        console.log(`Removed ${browserDynamicDependency}`);
-    }
-
-
-    return deps;
 }
 
-let pluginDeps = pluginPackageJson.peerDependencies;
-Object.keys(pluginPackageJson.devDependencies)
-    .filter(isNgDependency)
-    .filter(depName => !pluginDeps.hasOwnProperty(depName))
-    .forEach(depName => {
-        pluginDeps[depName] = pluginPackageJson.devDependencies[depName];
-    });
-
-const projectPath = path.dirname(path.dirname(pluginPath));
+const pluginDeps = pluginPackageJson.peerDependencies;
+const projectPath = process.env.INIT_CWD || path.dirname(path.dirname(pluginPath));
 const appPackageJsonPath = path.join(projectPath, "package.json");
 const appPackageJson = JSON.parse(fs.readFileSync(appPackageJsonPath, "utf8"));
 
-appPackageJson.dependencies = updateDeps(appPackageJson.dependencies, pluginDeps);
-appPackageJson.devDependencies = updateDeps(appPackageJson.devDependencies, pluginDeps);
+const { dependencies, devDependencies } = appPackageJson;
+updateDeps(dependencies, devDependencies, pluginDeps);
 
 fs.writeFileSync(appPackageJsonPath, JSON.stringify(appPackageJson, null, 2));
 
