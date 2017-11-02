@@ -88,15 +88,14 @@ export class ListViewComponent implements DoCheck, OnDestroy, AfterContentInit {
         }
         if (needDiffer && !this._differ && isListLikeIterable(value)) {
             this._differ = this._iterableDiffers.find(this._items)
-                .create(this._cdr, (_index, item) => { return item; });
+                .create((_index, item) => { return item; });
         }
 
         this.listView.items = this._items;
     }
 
     constructor(_elementRef: ElementRef,
-        private _iterableDiffers: IterableDiffers,
-        private _cdr: ChangeDetectorRef) {
+        private _iterableDiffers: IterableDiffers) {
         this.listView = _elementRef.nativeElement;
 
         this.listView.on("itemLoading", this.onItemLoading, this);
