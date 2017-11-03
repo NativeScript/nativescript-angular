@@ -1,6 +1,6 @@
 <a name="4.4.1"></a>
 # [4.4.1](https://github.com/NativeScript/nativescript-angular/compare/4.4.0...4.4.1) (2017-10-13)
-
+> This is the last version of NativeScript Angular that supports Angular 4.
 
 ### Bug Fixes
 
