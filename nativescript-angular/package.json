@@ -33,7 +33,7 @@
     "postinstall": "node postinstall.js",
     "tsc": "tsc -p tsconfig.json",
     "ngc": "ngc -p tsconfig.json",
-    "prepublish": "npm run tsc && npm run ngc"
+    "prepare": "npm run ngc && node ./bin/remove-polyfills-metadata.js"
   },
   "bin": {
     "update-app-ng-deps": "./bin/update-app-ng-deps"
