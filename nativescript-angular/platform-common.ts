@@ -6,7 +6,7 @@ import "./zone-js/dist/zone-nativescript";
 import "reflect-metadata";
 import "./polyfills/array";
 import "./polyfills/console";
-import { profile } from "tns-core-modules/profiling";
+import { profile, log, uptime } from "tns-core-modules/profiling";
 
 import {
     Type,
@@ -16,9 +16,9 @@ import {
     NgModuleFactory,
     NgModuleRef,
     EventEmitter,
-    Provider,
     Sanitizer,
-    InjectionToken
+    InjectionToken,
+    StaticProvider
 } from "@angular/core";
 import { DOCUMENT } from "@angular/common";
 
@@ -54,7 +54,7 @@ export interface AppOptions {
     startPageActionBarHidden?: boolean;
 }
 
-export type PlatformFactory = (extraProviders?: Provider[]) => PlatformRef;
+export type PlatformFactory = (extraProviders?: StaticProvider[]) => PlatformRef;
 
 export class NativeScriptSanitizer extends Sanitizer {
     sanitize(_context: any, value: string): string {
@@ -70,8 +70,8 @@ export class NativeScriptDocument {
 
 export const COMMON_PROVIDERS = [
     defaultPageFactoryProvider,
-    { provide: Sanitizer, useClass: NativeScriptSanitizer },
-    { provide: DOCUMENT, useClass: NativeScriptDocument },
+    { provide: Sanitizer, useClass: NativeScriptSanitizer, deps: [] },
+    { provide: DOCUMENT, useClass: NativeScriptDocument, deps: [] },
 ];
 
 export class NativeScriptPlatformRef extends PlatformRef {
@@ -187,7 +187,7 @@ export class NativeScriptPlatformRef extends PlatformRef {
                         "nativescript-angular/platform-common.postBootstrapAction";
                     bootstrapAction().then(profile(bootstrapMethodName, moduleRef => {
                         // profiling.stop("ng-bootstrap");
-                        rendererLog("ANGULAR BOOTSTRAP DONE.");
+                        log(`ANGULAR BOOTSTRAP DONE. ${uptime()}`);
                         lastBootstrappedModule = new WeakRef(moduleRef);
 
                         if (resolve) {

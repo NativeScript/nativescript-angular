@@ -12,8 +12,12 @@ const extensionsFallbacks = [
 
 @Injectable()
 export class FileSystemResourceLoader extends ResourceLoader {
-    constructor(private fs: NSFileSystem) {
+    fs: NSFileSystem;
+
+    constructor() {
         super();
+
+        this.fs = new NSFileSystem();
     }
 
     get(url: string): Promise<string> {
@@ -57,7 +61,7 @@ export class FileSystemResourceLoader extends ResourceLoader {
         const candidates = extensionsFallbacks
             .filter(([extension]) => url.endsWith(extension))
             .map(([extension, fallback]) =>
-                 this.replaceExtension(url, extension, fallback));
+                this.replaceExtension(url, extension, fallback));
 
         const resource = candidates.find(candidate => this.fs.fileExists(candidate));
 
