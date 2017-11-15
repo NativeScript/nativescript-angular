@@ -1,3 +1,12 @@
+<a name="5.0.0-rc.0"></a>
+# [5.0.0-rc.0](https://github.com/NativeScript/nativescript-angular/compare/4.4.1...5.0.0-rc.0) (2017-11-06)
+
+### Features
+
+* Initial Angular 5.0 support ([#1073](https://github.com/NativeScript/nativescript-angular/issues/1073))
+
+
+
 <a name="4.4.1"></a>
 # [4.4.1](https://github.com/NativeScript/nativescript-angular/compare/4.4.0...4.4.1) (2017-10-13)
 > This is the last version of NativeScript Angular that supports Angular 4.
