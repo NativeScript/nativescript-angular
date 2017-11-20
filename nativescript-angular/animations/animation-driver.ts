@@ -69,7 +69,7 @@ class Selector {
 
 export class NativeScriptAnimationDriver implements AnimationDriver {
     validateStyleProperty(prop: string): boolean {
-        throw new Error("Not implemented!");
+        return true;
     }
 
     matchesElement(element: NgView, rawSelector: string): boolean {
