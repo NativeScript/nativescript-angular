@@ -25,8 +25,7 @@ const fsMock = new NSFileSystemMock();
 describe("XHR name resolution", () => {
     let resourceLoader: FileSystemResourceLoader;
     before(() => {
-        resourceLoader = new FileSystemResourceLoader();
-        resourceLoader.fs = new NSFileSystemMock();
+        resourceLoader = new FileSystemResourceLoader(new NSFileSystemMock());
     });
 
     it("resolves relative paths from app root", () => {
