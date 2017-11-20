@@ -6,6 +6,8 @@ import {
     COMMON_PROVIDERS
 } from "./platform-common";
 
+import { NSFileSystem } from "./file-system/ns-file-system";
+
 import {
     ElementSchemaRegistry,
     ResourceLoader,
@@ -50,7 +52,8 @@ export const NS_COMPILER_PROVIDERS: StaticProvider[] = [
         provide: COMPILER_OPTIONS,
         useValue: {
             providers: [
-                { provide: ResourceLoader, useClass: FileSystemResourceLoader, deps: [] },
+                { provide: NSFileSystem, deps: []},
+                { provide: ResourceLoader, useClass: FileSystemResourceLoader, deps: [NSFileSystem] },
                 { provide: ElementSchemaRegistry, useClass: NativeScriptElementSchemaRegistry, deps: [] },
             ]
         },
