@@ -2,7 +2,7 @@ import { NativeScriptModule } from "nativescript-angular/nativescript.module";
 import { platformNativeScriptDynamic } from "nativescript-angular/platform";
 import { NativeScriptAnimationsModule } from "nativescript-angular/animations";
 import { onAfterLivesync, onBeforeLivesync } from "nativescript-angular/platform-common";
-import { NgModule } from "@angular/core";
+import { NgModule, ErrorHandler } from "@angular/core";
 import { DOCUMENT } from '@angular/common';
 import { Router } from "@angular/router";
 import { NativeScriptRouterModule } from "nativescript-angular/router";
@@ -28,6 +28,24 @@ import { setCategories, enable } from "trace";
 // setCategories(listViewTraceCategory);
 setCategories(`${routeReuseStrategyTraceCategory}`);
 enable();
+
+import { alert } from 'tns-core-modules/ui/dialogs';
+
+export class LocalErrorHandler extends ErrorHandler {
+  handleError(error: Error) {
+    super.handleError(error);
+
+    alert({
+      title: 'Error',
+      message: `${error.message}\n${error.stack}`,
+      okButtonText: 'Yeah!!!!',
+    });
+  }
+}
+
+export function localErrorHandlerFactory() {
+  return new LocalErrorHandler();
+}
 
 import { RendererTest } from "./examples/renderer-test";
 import { TabViewTest } from "./examples/tab-view/tab-view-test";
@@ -57,6 +75,8 @@ import { AnimationNgClassTest } from "./examples/animation/animation-ngclass-tes
 import { AnimationStatesTest } from "./examples/animation/animation-states-test";
 import { AnimationStatesMultiTest } from "./examples/animation/animation-states-multi-test";
 
+// ErrorHandler
+import { ErrorHandlerAppComponent } from "./examples/errorhandler/errorhandler.test";
 
 @NgModule({
     declarations: [
@@ -75,7 +95,9 @@ import { AnimationStatesMultiTest } from "./examples/animation/animation-states-
         NativeScriptHttpClientModule,
         NativeScriptRouterModule,
     ],
-    providers: []
+    providers: [
+        { provide: ErrorHandler, useFactory: localErrorHandlerFactory }
+    ]
 })
 class ExampleModule { }
 
@@ -154,6 +176,9 @@ platformNativeScriptDynamic().bootstrapModule(makeExampleModule(HttpClientTest))
 // platformNativeScriptDynamic().bootstrapModule(makeExampleModule(AnimationNgClassTest));
 // platformNativeScriptDynamic().bootstrapModule(makeExampleModule(AnimationKeyframesTest));
 // platformNativeScriptDynamic().bootstrapModule(makeExampleModule(AnimationEnterLeaveTest));
+
+// errorhandler
+// platformNativeScriptDynamic().bootstrapModule(makeExampleModule(ErrorHandlerAppComponent));
 
 // Livesync test
 let cachedUrl: string;
