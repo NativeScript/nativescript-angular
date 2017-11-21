@@ -89,6 +89,10 @@ export class NativeScriptAnimationDriver implements AnimationDriver {
             `element1: ${elm1}, element2: ${elm2}`
         );
 
+        if (elm1["isOverride"]) {
+            return true;
+        }
+
         const params: ViewMatchParams = { originalView: elm2 };
         const result: ViewMatchResult = this.visitDescendants(elm1, viewMatches, params);
 
