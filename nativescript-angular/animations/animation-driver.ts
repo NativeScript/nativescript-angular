@@ -1,7 +1,9 @@
 import { AnimationPlayer } from "@angular/animations";
 import { AnimationDriver } from "@angular/animations/browser";
-import { ProxyViewContainer } from "tns-core-modules/ui/proxy-view-container";
+import { createSelector, SelectorCore } from "tns-core-modules/ui/styling/css-selector";
+import { CssAnimationProperty } from "tns-core-modules/ui/core/properties";
 import { eachDescendant } from "tns-core-modules/ui/core/view";
+import { ProxyViewContainer } from "tns-core-modules/ui/proxy-view-container";
 
 import { NativeScriptAnimationPlayer } from "./animation-player";
 import {
@@ -11,7 +13,6 @@ import {
 import { NgView, InvisibleNode } from "../element-registry";
 import { animationsLog as traceLog } from "../trace";
 
-import { createSelector, SelectorCore } from "tns-core-modules/ui/styling/css-selector";
 
 interface ViewMatchResult {
     found: boolean;
@@ -68,8 +69,9 @@ class Selector {
 }
 
 export class NativeScriptAnimationDriver implements AnimationDriver {
-    validateStyleProperty(prop: string): boolean {
-        return true;
+    validateStyleProperty(property: string): boolean {
+        traceLog(`CssAnimationProperty.validateStyleProperty: ${property}`);
+        return CssAnimationProperty._getPropertyNames().indexOf(property) !== -1;
     }
 
     matchesElement(element: NgView, rawSelector: string): boolean {
