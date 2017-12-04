@@ -1,66 +1,19 @@
 import {
     Compiler,
     Injectable,
-    NgModuleFactory,
-    NgModuleFactoryLoader,
+    Optional,
     SystemJsNgModuleLoader,
-    Type,
+    SystemJsNgModuleLoaderConfig,
 } from "@angular/core";
-import {
-    path as fileSystemPath,
-    knownFolders
-} from "tns-core-modules/file-system";
-
-const SEPARATOR = "#";
 
 @Injectable()
-export class NSModuleFactoryLoader implements NgModuleFactoryLoader {
-    private offlineMode: boolean;
-
+export class NSModuleFactoryLoader extends SystemJsNgModuleLoader {
     constructor(
-        private compiler: Compiler,
-        private ngModuleLoader: SystemJsNgModuleLoader,
+        compiler: Compiler,
+        @Optional() config?: SystemJsNgModuleLoaderConfig
     ) {
-        this.offlineMode = compiler instanceof Compiler;
-    }
-
-    load(path: string): Promise<NgModuleFactory<any>> {
-        return this.offlineMode ?
-            this.ngModuleLoader.load(path) :
-            this.loadAndCompile(path);
-    }
-
-    private loadAndCompile(path: string): Promise<NgModuleFactory<any>> {
-        const module = requireModule(path);
-        return Promise.resolve(this.compiler.compileModuleAsync(module));
-    }
-}
-
-function requireModule(path: string): Type<any> {
-    const {modulePath, exportName} = splitPath(path);
-
-    const loadedModule = global.require(modulePath)[exportName];
-    checkNotEmpty(loadedModule, modulePath, exportName);
-
-    return loadedModule;
-}
-
-function splitPath(path: string): {modulePath: string, exportName: string} {
-    const [relativeModulePath, exportName = "default"] = path.split(SEPARATOR);
-    const absoluteModulePath = getAbsolutePath(relativeModulePath);
-
-    return {modulePath: absoluteModulePath, exportName};
-}
-
-function getAbsolutePath(relativePath: string) {
-    const projectPath = knownFolders.currentApp().path;
-    const absolutePath = fileSystemPath.join(projectPath, relativePath);
-
-    return fileSystemPath.normalize(absolutePath);
-}
-
-function checkNotEmpty(value: any, modulePath: string, exportName: string): void {
-    if (!value) {
-        throw new Error(`Cannot find '${exportName}' in '${modulePath}'`);
+        super(compiler, config);
+        console.log(`NSModuleFactoryLoader is deprecated! ` +
+        `You no longer need to provide it as a module loader.`);
     }
 }
