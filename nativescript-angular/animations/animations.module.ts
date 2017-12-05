@@ -6,6 +6,7 @@ import {
     AnimationDriver,
     ɵAnimationStyleNormalizer as AnimationStyleNormalizer,
     ɵWebAnimationsStyleNormalizer as WebAnimationsStyleNormalizer,
+    ɵAnimationEngine as AnimationEngine,
 } from "@angular/animations/browser";
 
 import {
@@ -13,10 +14,9 @@ import {
     ɵBrowserAnimationBuilder as BrowserAnimationBuilder,
 } from "@angular/platform-browser/animations";
 
-import { NativeScriptAnimationEngine } from "./animation-engine";
-import { NativeScriptAnimationDriver } from "./animation-driver";
 import { NativeScriptModule } from "../nativescript.module";
 import { NativeScriptRendererFactory } from "../renderer";
+import { NativeScriptAnimationDriver } from "./animation-driver";
 
 (<any>global).document = {
     body: {
@@ -25,7 +25,7 @@ import { NativeScriptRendererFactory } from "../renderer";
 };
 
 @Injectable()
-export class InjectableAnimationEngine extends NativeScriptAnimationEngine {
+export class InjectableAnimationEngine extends AnimationEngine {
     constructor(driver: AnimationDriver, normalizer: AnimationStyleNormalizer) {
         super(driver, normalizer);
     }
@@ -36,7 +36,7 @@ export function instantiateSupportedAnimationDriver() {
 }
 
 export function instantiateRendererFactory(
-        renderer: NativeScriptRendererFactory, engine: NativeScriptAnimationEngine, zone: NgZone) {
+        renderer: NativeScriptRendererFactory, engine: AnimationEngine, zone: NgZone) {
     return new AnimationRendererFactory(renderer, engine, zone);
 }
 
@@ -48,11 +48,11 @@ export const NATIVESCRIPT_ANIMATIONS_PROVIDERS: Provider[] = [
     {provide: AnimationBuilder, useClass: BrowserAnimationBuilder},
     {provide: AnimationDriver, useFactory: instantiateSupportedAnimationDriver},
     {provide: AnimationStyleNormalizer, useFactory: instantiateDefaultStyleNormalizer},
-    {provide: NativeScriptAnimationEngine, useClass: InjectableAnimationEngine},
+    {provide: AnimationEngine, useClass: InjectableAnimationEngine},
     {
         provide: RendererFactory2,
         useFactory: instantiateRendererFactory,
-        deps: [NativeScriptRendererFactory, NativeScriptAnimationEngine, NgZone]
+        deps: [NativeScriptRendererFactory, AnimationEngine, NgZone]
     }
 ];
 
