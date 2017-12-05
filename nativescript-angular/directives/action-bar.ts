@@ -34,10 +34,10 @@ const actionBarMeta: ViewClassMeta = {
             return;
         } else if (isNavigationButton(child)) {
             parent.navigationButton = child;
-            child.templateParent = parent;
+            child.parentNode = parent;
         } else if (isActionItem(child)) {
             addActionItem(parent, child, next);
-            child.templateParent = parent;
+            child.parentNode = parent;
         } else if (isView(child)) {
             parent.titleView = child;
         }
@@ -50,10 +50,10 @@ const actionBarMeta: ViewClassMeta = {
                 parent.navigationButton = null;
             }
 
-            child.templateParent = null;
+            child.parentNode = null;
         } else if (isActionItem(child)) {
             parent.actionItems.removeItem(child);
-            child.templateParent = null;
+            child.parentNode = null;
         } else if (isView(child) && parent.titleView && parent.titleView === child) {
             parent.titleView = null;
         }

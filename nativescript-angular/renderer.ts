@@ -116,7 +116,7 @@ export class NativeScriptRenderer extends Renderer2 {
     @profile
     parentNode(node: NgView): any {
         traceLog(`NativeScriptRenderer.parentNode for node: ${node}`);
-        return node.parent || node.templateParent;
+        return node.parentNode;
     }
 
     @profile

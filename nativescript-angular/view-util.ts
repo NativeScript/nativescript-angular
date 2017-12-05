@@ -69,7 +69,7 @@ export class ViewUtil {
         this.addToQueue(extendedParent, extendedChild, previous, next);
 
         if (isInvisibleNode(child)) {
-            extendedChild.templateParent = extendedParent;
+            extendedChild.parentNode = extendedParent;
         }
 
         if (!isDetachedElement(child)) {
