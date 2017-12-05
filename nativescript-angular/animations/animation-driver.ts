@@ -69,9 +69,14 @@ class Selector {
 }
 
 export class NativeScriptAnimationDriver implements AnimationDriver {
+    private static validProperties = [
+        ...CssAnimationProperty._getPropertyNames(),
+        "transform",
+    ];
+
     validateStyleProperty(property: string): boolean {
         traceLog(`CssAnimationProperty.validateStyleProperty: ${property}`);
-        return CssAnimationProperty._getPropertyNames().indexOf(property) !== -1;
+        return NativeScriptAnimationDriver.validProperties.indexOf(property) !== -1;
     }
 
     matchesElement(element: NgView, rawSelector: string): boolean {
