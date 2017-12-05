@@ -8,7 +8,7 @@ const sourceExtensionsMap = {
     ".scss": ".css",
     ".sass": ".css",
     ".less": ".css"
-}
+};
 
 @Injectable()
 export class FileSystemResourceLoader extends ResourceLoader {
@@ -27,7 +27,7 @@ export class FileSystemResourceLoader extends ResourceLoader {
     resolve(url: string): string {
         const normalizedSourceUrl = this.resolveRelativeUrls(url);
         const normalizedCompiledFileUrl = normalizedSourceUrl.replace(/\.\w+$/, ext => sourceExtensionsMap[ext] || ext);
-        if (normalizedCompiledFileUrl != normalizedSourceUrl && this.fs.fileExists(normalizedCompiledFileUrl)) {
+        if (normalizedCompiledFileUrl !== normalizedSourceUrl && this.fs.fileExists(normalizedCompiledFileUrl)) {
             return normalizedCompiledFileUrl;
         }
         if (this.fs.fileExists(normalizedSourceUrl)) {
@@ -37,7 +37,8 @@ export class FileSystemResourceLoader extends ResourceLoader {
         if (normalizedCompiledFileUrl === normalizedSourceUrl) {
             throw new Error(`Could not resolve ${url}. Looked for: ${normalizedSourceUrl}.`);
         } else {
-            throw new Error(`Could not resolve ${url}. Looked for: ${normalizedCompiledFileUrl}, ${normalizedSourceUrl}.`);
+            throw new Error(`Could not resolve ${url}.` +
+                `Looked for: ${normalizedCompiledFileUrl}, ${normalizedSourceUrl}.`);
         }
     }
 
@@ -49,10 +50,5 @@ export class FileSystemResourceLoader extends ResourceLoader {
         } else {
             return url;
         }
-    }
-
-    private replaceExtension(fileName: string, oldExtension: string, newExtension: string): string {
-        const baseName = fileName.substr(0, fileName.length - oldExtension.length);
-        return baseName + newExtension;
     }
 }
