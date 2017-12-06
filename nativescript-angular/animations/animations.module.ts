@@ -45,8 +45,8 @@ export function instantiateDefaultStyleNormalizer() {
 }
 
 export const NATIVESCRIPT_ANIMATIONS_PROVIDERS: Provider[] = [
-    {provide: AnimationBuilder, useClass: BrowserAnimationBuilder},
     {provide: AnimationDriver, useFactory: instantiateSupportedAnimationDriver},
+    {provide: AnimationBuilder, useClass: BrowserAnimationBuilder},
     {provide: AnimationStyleNormalizer, useFactory: instantiateDefaultStyleNormalizer},
     {provide: AnimationEngine, useClass: InjectableAnimationEngine},
     {
