@@ -3,6 +3,7 @@ import { Routes } from "@angular/router";
 import { NativeScriptRouterModule } from "nativescript-angular/router";
 
 import { AnimationsListComponent } from "./animations-list.component";
+import { AnimationBuilderComponent } from "./animation-builder.component";
 import { ExternalAnimationComponent } from "./external-animation.component";
 import { FadeInOutComponent } from "./fade-in-out.component";
 import { OptionsComponent } from "./options.component";
@@ -14,6 +15,7 @@ import { QueryStaggerComponent } from "./query-stagger.component";
 const routes: Routes = [
     { path: "", pathMatch: "full", redirectTo: "list" },
     { path: "list", component: AnimationsListComponent },
+    { path: "builder", component: AnimationBuilderComponent },
     { path: "external", component: ExternalAnimationComponent },
     { path: "fade-in-out", component: FadeInOutComponent },
     { path: "options", component: OptionsComponent },
@@ -32,6 +34,7 @@ export class AppRoutingModule { }
 
 export const routedComponents = [
     AnimationsListComponent,
+    AnimationBuilderComponent,
     ExternalAnimationComponent,
     FadeInOutComponent,
     OptionsComponent,

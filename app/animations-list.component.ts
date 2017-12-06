@@ -18,6 +18,7 @@ class Link {
 })
 export class AnimationsListComponent {
     public links: Link[] = [
+        new Link("Animation builder", "/builder"),
         new Link("External animation", "/external"),
         new Link("Selector", "/selector"),
         new Link("Query with stagger", "/query-stagger"),
