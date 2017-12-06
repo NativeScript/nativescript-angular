@@ -32,6 +32,13 @@ import {
     StaticProvider,
 } from "@angular/core";
 
+// Add a fake polyfill for the document object
+(<any>global).document = (<any>global).document || {};
+const doc = (<any>global).document;
+doc.body = Object.assign((doc.body || {}), {
+    isOverride: true,
+});
+
 // Work around a TS bug requiring an imports of
 // InjectionToken, ViewEncapsulation and MissingTranslationStrategy
 // without using them
@@ -62,7 +69,7 @@ export const NS_COMPILER_PROVIDERS: StaticProvider[] = [
     },
     {
         provide: DOCUMENT,
-        useValue: { body: { isOverride: true } },
+        useValue: doc,
     },
 ];
 

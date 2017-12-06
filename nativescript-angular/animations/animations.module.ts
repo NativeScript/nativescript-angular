@@ -18,12 +18,6 @@ import { NativeScriptModule } from "../nativescript.module";
 import { NativeScriptRendererFactory } from "../renderer";
 import { NativeScriptAnimationDriver } from "./animation-driver";
 
-(<any>global).document = {
-    body: {
-        isOverride: true,
-    }
-};
-
 @Injectable()
 export class InjectableAnimationEngine extends AnimationEngine {
     constructor(driver: AnimationDriver, normalizer: AnimationStyleNormalizer) {
