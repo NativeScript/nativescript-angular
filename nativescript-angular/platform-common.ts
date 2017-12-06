@@ -207,16 +207,18 @@ export class NativeScriptPlatformRef extends PlatformRef {
                             reject(err);
                         }
                     });
+
+                    (<any>global).Zone.drainMicroTaskQueue();
                 });
 
                 page.on(Page.navigatingToEvent, initHandler);
 
                 return page;
-            }
+            },
+            animated: false
         };
 
         if (isReboot) {
-            navEntry.animated = false;
             navEntry.clearHistory = true;
         }
 
