@@ -4,11 +4,11 @@ import { path } from "tns-core-modules/file-system";
 
 import { NSFileSystem } from "./file-system/ns-file-system";
 
-const extensionsFallbacks = [
-    [".scss", ".css"],
-    [".sass", ".css"],
-    [".less", ".css"]
-];
+const sourceExtensionsMap = {
+    ".scss": ".css",
+    ".sass": ".css",
+    ".less": ".css"
+};
 
 @Injectable()
 export class FileSystemResourceLoader extends ResourceLoader {
@@ -25,20 +25,21 @@ export class FileSystemResourceLoader extends ResourceLoader {
     }
 
     resolve(url: string): string {
-        const normalizedUrl = this.resolveRelativeUrls(url);
-
-        if (this.fs.fileExists(normalizedUrl)) {
-            return normalizedUrl;
+        const normalizedSourceUrl = this.resolveRelativeUrls(url);
+        const normalizedCompiledFileUrl = normalizedSourceUrl.replace(/\.\w+$/, ext => sourceExtensionsMap[ext] || ext);
+        if (normalizedCompiledFileUrl !== normalizedSourceUrl && this.fs.fileExists(normalizedCompiledFileUrl)) {
+            return normalizedCompiledFileUrl;
+        }
+        if (this.fs.fileExists(normalizedSourceUrl)) {
+            return normalizedSourceUrl;
         }
 
-        const { candidates: fallbackCandidates, resource: fallbackResource } =
-            this.fallbackResolve(normalizedUrl);
-
-        if (fallbackResource) {
-            return fallbackResource;
+        if (normalizedCompiledFileUrl === normalizedSourceUrl) {
+            throw new Error(`Could not resolve ${url}. Looked for: ${normalizedSourceUrl}.`);
+        } else {
+            throw new Error(`Could not resolve ${url}.` +
+                `Looked for: ${normalizedCompiledFileUrl}, ${normalizedSourceUrl}.`);
         }
-
-        throw new Error(`Could not resolve ${url}. Looked for: ${normalizedUrl}, ${fallbackCandidates}`);
     }
 
     private resolveRelativeUrls(url: string): string {
@@ -50,23 +51,4 @@ export class FileSystemResourceLoader extends ResourceLoader {
             return url;
         }
     }
-
-    private fallbackResolve(url: string):
-        ({ resource: string, candidates: string[] }) {
-
-        const candidates = extensionsFallbacks
-            .filter(([extension]) => url.endsWith(extension))
-            .map(([extension, fallback]) =>
-                 this.replaceExtension(url, extension, fallback));
-
-        const resource = candidates.find(candidate => this.fs.fileExists(candidate));
-
-        return { candidates, resource };
-    }
-
-    private replaceExtension(fileName: string, oldExtension: string, newExtension: string): string {
-        const baseName = fileName.substr(0, fileName.length - oldExtension.length);
-        return baseName + newExtension;
-    }
 }
-
