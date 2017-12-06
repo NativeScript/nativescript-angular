@@ -24,9 +24,6 @@ import { AppComponent } from "./app.component";
         NativeScriptAnimationsModule,
         AppRoutingModule,
     ],
-    providers: [
-        { provide: NgModuleFactoryLoader, useClass: NSModuleFactoryLoader},
-    ],
     schemas: [NO_ERRORS_SCHEMA],
 })
 export class AppModule {}
