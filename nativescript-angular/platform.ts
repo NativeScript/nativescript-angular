@@ -18,6 +18,7 @@ import {
 } from "@angular/platform-browser-dynamic";
 
 import {
+    DOCUMENT,
     ɵINTERNAL_BROWSER_PLATFORM_PROVIDERS as INTERNAL_BROWSER_PLATFORM_PROVIDERS
 } from "@angular/platform-browser";
 
@@ -58,6 +59,10 @@ export const NS_COMPILER_PROVIDERS: StaticProvider[] = [
             ]
         },
         multi: true
+    },
+    {
+        provide: DOCUMENT,
+        useValue: { body: { isOverride: true } },
     },
 ];
 
