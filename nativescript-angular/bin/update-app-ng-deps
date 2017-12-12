@@ -3,7 +3,6 @@
 const path = require("path");
 const fs = require("fs");
 
-const browserDynamicDependency = "@angular/platform-browser-dynamic";
 const binPath = __dirname;
 const pluginPath = path.dirname(binPath);
 const pluginPackageJsonPath = path.join(pluginPath, "package.json");
