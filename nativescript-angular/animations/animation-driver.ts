@@ -96,6 +96,7 @@ export class NativeScriptAnimationDriver implements AnimationDriver {
             `element1: ${elm1}, element2: ${elm2}`
         );
 
+        // Checking if the parent is our fake body object
         if (elm1["isOverride"]) {
             return true;
         }
