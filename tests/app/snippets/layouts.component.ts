@@ -10,7 +10,8 @@ import {Component} from "@angular/core";
         "#main > DockLayout { margin: 10 }",
         "#main > GridLayout { margin: 10 }",
         "#main > StackLayout { margin: 10 }",
-        "#main > WrapLayout { margin: 10 }"
+        "#main > WrapLayout { margin: 10 }",
+        "#main > FlexboxLayout { margin: 10 }"
     ]
 })
 export class LayoutsComponent {

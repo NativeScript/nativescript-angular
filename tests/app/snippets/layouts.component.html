@@ -1,8 +1,8 @@
 <ScrollView orientation="vertical">
     <StackLayout id="main">
         <Label text="Absolute Layout" class="title"></Label>
-        
-        <!-- >> absolute-layout --> 
+
+        <!-- >> absolute-layout -->
         <AbsoluteLayout width="210" height="210" backgroundColor="lightgray">
             <Label text="10, 10" left="10" top="10" width="90" height="90" backgroundColor="red"></Label>
             <Label text="110, 10" left="110" top="10" width="90" height="90" backgroundColor="green"></Label>
@@ -11,16 +11,16 @@
         </AbsoluteLayout>
         <!-- << absolute-layout -->
 
-        <!-- >> absolute-layout-margin -->   
+        <!-- >> absolute-layout-margin -->
         <AbsoluteLayout width="210" height="210" backgroundColor="lightgray">
             <Label text="no margin" left="10" top="10" width="100" height="100" backgroundColor="red"></Label>
             <Label text="margin=`30`" left="10" top="10" margin="30" width="100" height="90" backgroundColor="green"></Label>
         </AbsoluteLayout>
         <!-- << absolute-layout-margin -->
-        
+
         <Label text="Dock Layout" class="title"></Label>
-        
-        <!-- >> dock-layout --> 
+
+        <!-- >> dock-layout -->
         <DockLayout width="210" height="210" backgroundColor="lightgray" stretchLastChild="false">
             <Label text="left" dock="left" width="60" backgroundColor="red"></Label>
             <Label text="top" dock="top" height="60" backgroundColor="green"></Label>
@@ -28,7 +28,7 @@
             <Label text="bottom" dock="bottom" height="60" backgroundColor="yellow"></Label>
         </DockLayout>
         <!-- << dock-layout -->
-        
+
         <!-- >> dock-layout-stretch-last -->
         <DockLayout width="210" height="210" backgroundColor="lightgray" stretchLastChild="true">
             <Label text="left" dock="left" backgroundColor="red"></Label>
@@ -37,7 +37,7 @@
             <Label text="bottom" dock="bottom" backgroundColor="yellow"></Label>
         </DockLayout>
         <!-- << dock-layout-stretch-last -->
-        
+
         <!-- >> dock-layout-one-side -->
         <DockLayout width="210" height="210" backgroundColor="lightgray" stretchLastChild="true">
             <Label text="left1" dock="left" backgroundColor="red"></Label>
@@ -46,11 +46,11 @@
             <Label text="last child" backgroundColor="yellow"></Label>
         </DockLayout>
         <!-- << dock-layout-one-side -->
-        
+
         <Label text="Grid Layout" class="title"></Label>
-        
-        <!-- >> grid-layout-sample --> 
-        <GridLayout columns="50, auto, *" rows="50, auto, *" width="210" height="210" backgroundColor="lightgray" >
+
+        <!-- >> grid-layout-sample -->
+        <GridLayout columns="50, auto, *" rows="50, auto, *" width="210" height="210" backgroundColor="lightgray">
             <Label text="Label 1" row="0" col="0" backgroundColor="red"></Label>
             <Label text="Label 2" row="0" col="1" colSpan="2" backgroundColor="green"></Label>
             <Label text="Label 3" row="1" col="0" rowSpan="2" backgroundColor="blue"></Label>
@@ -60,43 +60,43 @@
             <Label text="Label 7" row="2" col="2" backgroundColor="purple"></Label>
         </GridLayout>
         <!-- << grid-layout-sample -->
-        
-        <!-- >> grid-layout-star --> 
-        <GridLayout columns="*,2*" rows="2*,3*" width="300" height="300" backgroundColor="lightgray" >
+
+        <!-- >> grid-layout-star -->
+        <GridLayout columns="*,2*" rows="2*,3*" width="300" height="300" backgroundColor="lightgray">
             <Label text="Label 1" col="0" row="0" backgroundColor="red"></Label>
             <Label text="Label 2" col="1" row="0" backgroundColor="green"></Label>
             <Label text="Label 3" col="0" row="1" backgroundColor="blue"></Label>
             <Label text="Label 4" col="1" row="1" backgroundColor="yellow"></Label>
         </GridLayout>
         <!-- << grid-layout-star -->
-        
-        <!-- >> grid-layout-fexed-auto --> 
-        <GridLayout columns="100,auto" rows="100,auto" width="210" height="210" backgroundColor="lightgray" >
+
+        <!-- >> grid-layout-fexed-auto -->
+        <GridLayout columns="100,auto" rows="100,auto" width="210" height="210" backgroundColor="lightgray">
             <Label text="Label 1" col="0" row="0" backgroundColor="red"></Label>
             <Label text="Label 2" col="1" row="0" backgroundColor="green"></Label>
             <Label text="Label 3" col="0" row="1" backgroundColor="blue"></Label>
             <Label text="Label 4" col="1" row="1" backgroundColor="yellow"></Label>
         </GridLayout>
         <!-- << grid-layout-fexed-auto -->
-        
-        <!-- >> grid-layout-no-width --> 
+
+        <!-- >> grid-layout-no-width -->
         <StackLayout width="200" height="200" backgroundColor="palegreen">
-            <GridLayout columns="*,2*" horizontalAlignment="left" verticalAlignment="top" backgroundColor="lightgray" >
+            <GridLayout columns="*,2*" horizontalAlignment="left" verticalAlignment="top" backgroundColor="lightgray">
                 <Label text="Label 1" col="0" backgroundColor="red"></Label>
                 <Label text="Label 2" col="1" backgroundColor="green"></Label>
             </GridLayout>
         </StackLayout>
         <!-- << grid-layout-no-width -->
-        
+
         <!-- >> grid-layout-column-stretch -->
-        <GridLayout columns="auto,100" rows="auto,auto" width="300" height="300" backgroundColor="lightgray" >
+        <GridLayout columns="auto,100" rows="auto,auto" width="300" height="300" backgroundColor="lightgray">
             <Label text="Label 1" col="0" row="0" backgroundColor="red"></Label>
             <Label text="Label 2" col="1" row="0" backgroundColor="green"></Label>
             <Label text="Label 3" width="150" col="0" row="1" backgroundColor="blue"></Label>
         </GridLayout>
         <!-- << grid-layout-column-stretch -->
-        
-        <!-- >> grid-layout-complex --> 
+
+        <!-- >> grid-layout-complex -->
         <GridLayout columns="auto, *, auto" rows="auto, 25" verticalAlignment="top" backgroundColor="lightgray">
             <Image src="~/cute.jpg" rowSpan="2" width="72" height="72" margin="3" verticalAlignment="top"></Image>
             <Label text="My cat loves the camera" textWrap="true" col="1" colSpan="2" minHeight="50" fontSize="20" margin="3"></Label>
@@ -104,9 +104,9 @@
             <Label text="comments: 26" col="2" row="1" color="#10C2B0" fontSize="14" verticalAlignment="bottom" margin="3"></Label>
         </GridLayout>
         <!-- << grid-layout-complex -->
-                
+
         <Label text="Stack Layout" class="title"></Label>
-        
+
         <!-- >> stack-layout-vertical -->
         <StackLayout orientation="vertical" width="210" height="210" backgroundColor="lightgray">
             <Label text="Label 1" width="50" height="50" backgroundColor="red"></Label>
@@ -115,17 +115,17 @@
             <Label text="Label 4" width="50" height="50" backgroundColor="yellow"></Label>
         </StackLayout>
         <!-- << stack-layout-vertical -->
-        
+
         <!-- >> stack-layout-horizontal -->
         <StackLayout orientation="vertical" width="210" height="210" backgroundColor="lightgray">
             <Label text="Label 1" width="50" height="50" backgroundColor="red"></Label>
             <Label text="Label 2" width="50" height="50" backgroundColor="green"></Label>
             <Label text="Label 3" width="50" height="50" backgroundColor="blue"></Label>
             <Label text="Label 4" width="50" height="50" backgroundColor="yellow"></Label>
-        </StackLayout> 
+        </StackLayout>
         <!-- << stack-layout-horizontal -->
-        
-        <!-- >> stack-layout-vertical-align --> 
+
+        <!-- >> stack-layout-vertical-align -->
         <StackLayout orientation="vertical" width="210" height="210" backgroundColor="lightgray">
             <Label text="Label 1" horizontalAlignment="left" backgroundColor="red"></Label>
             <Label text="Label 2" horizontalAlignment="center" backgroundColor="green"></Label>
@@ -133,19 +133,19 @@
             <Label text="Label 4" horizontalAlignment="stretch" backgroundColor="yellow"></Label>
         </StackLayout>
         <!-- << stack-layout-vertical-align -->
-        
+
         <!-- >> stack-layout-horizontal-align -->
-          <StackLayout orientation="horizontal" width="210" height="210" backgroundColor="lightgray">
+        <StackLayout orientation="horizontal" width="210" height="210" backgroundColor="lightgray">
             <Label text="Label 1" verticalAlignment="top" backgroundColor="red"></Label>
             <Label text="Label 2" verticalAlignment="center" backgroundColor="green"></Label>
             <Label text="Label 3" verticalAlignment="bottom" backgroundColor="blue"></Label>
             <Label text="Label 4" verticalAlignment="stretch" backgroundColor="yellow"></Label>
-        </StackLayout> 
+        </StackLayout>
         <!-- << stack-layout-horizontal-align -->
-        
+
         <Label text="Wrap Layout" class="title"></Label>
-        
-        <!-- >> wrap-layout-horizontal --> 
+
+        <!-- >> wrap-layout-horizontal -->
         <WrapLayout orientation="horizontal" width="210" height="210" backgroundColor="lightgray">
             <Label text="Label 1" width="70" height="70" backgroundColor="red"></Label>
             <Label text="Label 2" width="70" height="70" backgroundColor="green"></Label>
@@ -153,7 +153,7 @@
             <Label text="Label 4" width="70" height="70" backgroundColor="yellow"></Label>
         </WrapLayout>
         <!-- << wrap-layout-horizontal -->
-        
+
         <!-- >> wrap-layout-vertical -->
         <WrapLayout orientation="vertical" width="210" height="210" backgroundColor="lightgray">
             <Label text="Label 1" width="70" height="70" backgroundColor="red"></Label>
@@ -162,7 +162,7 @@
             <Label text="Label 4" width="70" height="70" backgroundColor="yellow"></Label>
         </WrapLayout>
         <!-- << wrap-layout-vertical -->
-        
+
         <!-- >> wrap-layout-item -->
         <WrapLayout itemWidth="30" itemHeight="30" width="210" height="210" backgroundColor="lightgray">
             <Label text="Label 1" width="70" height="70" backgroundColor="red"></Label>
@@ -171,5 +171,62 @@
             <Label text="Label 4" width="70" height="70" backgroundColor="yellow"></Label>
         </WrapLayout>
         <!-- << wrap-layout-item -->
+
+        <Label text="Flexbox Layout" class="title"></Label>
+
+        <!-- >> flexbox-layout-flexdirection-row -->
+        <FlexboxLayout width="300" height="300" backgroundColor="lightgray">
+            <Label text="Label 1" width="70" height="70" backgroundColor="red" />
+            <Label text="Label 2" width="70" height="70" backgroundColor="green" />
+            <Label text="Label 3" width="70" height="70" backgroundColor="blue" />
+            <Label text="Label 4" width="70" height="70" backgroundColor="yellow" />
+        </FlexboxLayout>
+        <!-- << flexbox-layout-flexdirection-row -->
+
+        <!-- >> flexbox-layout-flexdirection-column -->
+        <FlexboxLayout flexDirection="column" width="300" height="300" backgroundColor="lightgray">
+            <Label text="Label 1" width="70" height="70" backgroundColor="red" />
+            <Label text="Label 2" width="70" height="70" backgroundColor="green" />
+            <Label text="Label 3" width="70" height="70" backgroundColor="blue" />
+            <Label text="Label 4" width="70" height="70" backgroundColor="yellow" />
+        </FlexboxLayout>
+        <!-- << flexbox-layout-flexdirection-column -->
+
+        <!-- >> flexbox-layout-alignItems-flex-start -->
+        <FlexboxLayout alignItems="flex-start" width="300" height="300" backgroundColor="lightgray">
+            <Label text="Label 1" width="70" height="70" backgroundColor="red" />
+            <Label text="Label 2" width="70" height="70" backgroundColor="green" />
+            <Label text="Label 3" width="70" height="70" backgroundColor="blue" />
+            <Label text="Label 4" width="70" height="70" backgroundColor="yellow" />
+        </FlexboxLayout>
+        <!-- << flexbox-layout-alignItems-flex-start -->
+
+        <!-- >> flexbox-layout-order -->
+        <FlexboxLayout alignItems="flex-start" width="300" height="300" backgroundColor="lightgray">
+            <Label order="3" text="Label 1" width="70" height="70" backgroundColor="red" />
+            <Label order="4" text="Label 2" width="70" height="70" backgroundColor="green" />
+            <Label order="2" text="Label 3" width="70" height="70" backgroundColor="blue" />
+            <Label order="1" text="Label 4" width="70" height="70" backgroundColor="yellow" />
+        </FlexboxLayout>
+        <!-- << flexbox-layout-order -->
+
+        <!-- >> flexbox-layout-flexWrap -->
+        <FlexboxLayout flexWrap="wrap" height="300" width="300" backgroundColor="lightgray">
+            <Label text="Label 1" width="100" height="50" backgroundColor="red" />
+            <Label text="Label 2" width="100" height="50" backgroundColor="green" />
+            <Label text="Label 3" width="100" height="50" backgroundColor="blue" />
+            <Label text="Label 4" width="100" height="50" backgroundColor="yellow" />
+        </FlexboxLayout>
+        <!-- << flexbox-layout-flexWrap -->
+
+        <!-- >> flexbox-layout-alignSelf -->
+        <FlexboxLayout flexDirection="column-reverse" justifyContent="space-around" alignItems="stretch" height="300" width="300"
+            backgroundColor="lightgray">
+            <Label text="Label 1" width="50" height="50" backgroundColor="red" />
+            <Label alignSelf="center" text="Label 2" width="50" height="50" backgroundColor="green" />
+            <Label alignSelf="flex-end" text="Label 3" width="50" height="50" backgroundColor="blue" />
+            <Label text="Label 4" width="50" height="50" backgroundColor="yellow" />
+        </FlexboxLayout>
+        <!-- << flexbox-layout-alignSelf -->
     </StackLayout>
 </ScrollView>
