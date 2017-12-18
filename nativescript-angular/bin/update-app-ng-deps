@@ -13,6 +13,13 @@ const isNgDependency = name => name.startsWith("@angular") ||
     name === "zone.js" ||
     name === "typescript";
 
+const update = (deps, dep) => {
+    if (deps[dep.dependencyName]) {
+        deps[dep.dependencyName]=dep.version;
+        console.log(`Updated dependency ${dep.dependencyName} to version: ${dep.version}.`);
+    }
+}
+
 function updateDeps(deps, devDeps, newDeps) {
     Object.keys(newDeps)
         .filter(isNgDependency)
@@ -21,13 +28,8 @@ function updateDeps(deps, devDeps, newDeps) {
             version: newDeps[dependencyName]
         }))
         .forEach(({ dependencyName, version }) => {
-            if (devDeps[dependencyName]) {
-                devDeps[dependencyName] = version;
-            } else {
-                deps[dependencyName] = version;
-            }
-
-            console.log(`Updated dependency ${dependencyName} to version: ${version}.`);
+            update(devDeps, { dependencyName, version });
+            update(deps, { dependencyName, version });
         });
 }
 
