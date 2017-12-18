@@ -14,7 +14,7 @@ const isNgDependency = name => name.startsWith("@angular") ||
     name === "typescript";
 
 const update = (deps, dep) => {
-    if (deps[dep.dependencyName]) {
+    if (deps[dep.dependencyName] || dep.dependencyName === "@angular/platform-browser-dynamic") {
         deps[dep.dependencyName]=dep.version;
         console.log(`Updated dependency ${dep.dependencyName} to version: ${dep.version}.`);
     }
