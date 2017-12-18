@@ -3,7 +3,6 @@
 const path = require("path");
 const fs = require("fs");
 
-const browserDynamicDependency = "@angular/platform-browser-dynamic";
 const binPath = __dirname;
 const pluginPath = path.dirname(binPath);
 const pluginPackageJsonPath = path.join(pluginPath, "package.json");
@@ -33,12 +32,15 @@ function updateDeps(deps, devDeps, newDeps) {
 }
 
 const pluginDeps = pluginPackageJson.peerDependencies;
+const animationDep = { "@angular/animations": pluginDeps["@angular/core"] };
+const depsToUpdate = Object.assign(pluginDeps, animationDep);
+
 const projectPath = process.env.INIT_CWD || path.dirname(path.dirname(pluginPath));
 const appPackageJsonPath = path.join(projectPath, "package.json");
 const appPackageJson = JSON.parse(fs.readFileSync(appPackageJsonPath, "utf8"));
 
 const { dependencies, devDependencies } = appPackageJson;
-updateDeps(dependencies, devDependencies, pluginDeps);
+updateDeps(dependencies, devDependencies, depsToUpdate);
 
 fs.writeFileSync(appPackageJsonPath, JSON.stringify(appPackageJson, null, 2));
 
