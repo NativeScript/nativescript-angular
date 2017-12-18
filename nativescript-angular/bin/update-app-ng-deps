@@ -3,7 +3,6 @@
 const path = require("path");
 const fs = require("fs");
 
-const browserDynamicDependency = "@angular/platform-browser-dynamic";
 const binPath = __dirname;
 const pluginPath = path.dirname(binPath);
 const pluginPackageJsonPath = path.join(pluginPath, "package.json");
@@ -14,6 +13,13 @@ const isNgDependency = name => name.startsWith("@angular") ||
     name === "zone.js" ||
     name === "typescript";
 
+const update = (deps, dep) => {
+    if (deps[dep.dependencyName] || dep.dependencyName === "@angular/platform-browser-dynamic") {
+        deps[dep.dependencyName]=dep.version;
+        console.log(`Updated dependency ${dep.dependencyName} to version: ${dep.version}.`);
+    }
+}
+
 function updateDeps(deps, devDeps, newDeps) {
     Object.keys(newDeps)
         .filter(isNgDependency)
@@ -22,23 +28,21 @@ function updateDeps(deps, devDeps, newDeps) {
             version: newDeps[dependencyName]
         }))
         .forEach(({ dependencyName, version }) => {
-            if (devDeps[dependencyName]) {
-                devDeps[dependencyName] = version;
-            } else {
-                deps[dependencyName] = version;
-            }
-
-            console.log(`Updated dependency ${dependencyName} to version: ${version}.`);
+            update(devDeps, { dependencyName, version });
+            update(deps, { dependencyName, version });
         });
 }
 
 const pluginDeps = pluginPackageJson.peerDependencies;
+const animationDep = { "@angular/animations": pluginDeps["@angular/core"] };
+const depsToUpdate = Object.assign(pluginDeps, animationDep);
+
 const projectPath = process.env.INIT_CWD || path.dirname(path.dirname(pluginPath));
 const appPackageJsonPath = path.join(projectPath, "package.json");
 const appPackageJson = JSON.parse(fs.readFileSync(appPackageJsonPath, "utf8"));
 
 const { dependencies, devDependencies } = appPackageJson;
-updateDeps(dependencies, devDependencies, pluginDeps);
+updateDeps(dependencies, devDependencies, depsToUpdate);
 
 fs.writeFileSync(appPackageJsonPath, JSON.stringify(appPackageJson, null, 2));
 
