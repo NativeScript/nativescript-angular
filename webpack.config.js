@@ -14,7 +14,6 @@ module.exports = env => {
         throw new Error("You need to provide a target platform!");
     }
     const platforms = ["ios", "android"];
-    const mainSheet = "app.css";
     const { snapshot, uglify, report, aot } = env;
     const ngToolsWebpackOptions = { tsConfigPath: aot ? "tsconfig.aot.json" : "tsconfig.json"};
 
@@ -59,14 +58,17 @@ module.exports = env => {
         module: {
             rules: [
                 { test: /\.html$|\.xml$/, use: "raw-loader" },
-                // Root stylesheet gets extracted with bundled dependencies
-                { test: new RegExp(mainSheet), use: "css-loader?url=false" },
-                // Other CSS files get bundled using the raw loader
-                { test: /\.css$/, exclude: new RegExp(mainSheet), use: "raw-loader" },
-                // SASS support
-                { test: /\.scss$/, use: ["raw-loader", "resolve-url-loader", "sass-loader"] },
+
+                // tns-core-modules reads the app.css and its imports using css-loader
+                { test: /\/app\.css$/, use: "css-loader?url=false" },
+                { test: /\/app\.scss$/, use: ["css-loader?url=false", "sass-loader"] },
+
+                // Angular components reference css files and their imports using raw-loader
+                { test: /\.css$/, exclude: /\/app\.css$/, use: "raw-loader" },
+                { test: /\.scss$/, exclude: /\/app\.scss$/, use: ["raw-loader", "resolve-url-loader", "sass-loader"] },
+
                 // Compile TypeScript files with ahead-of-time compiler.
-                { test: /.ts$/, loader: "@ngtools/webpack" },
+                { test: /.ts$/, use: ["nativescript-dev-webpack/moduleid-compat-loader", "@ngtools/webpack"] },
             ],
         },
         plugins: [
