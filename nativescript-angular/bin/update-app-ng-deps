@@ -33,7 +33,7 @@ function updateDeps(deps, devDeps, newDeps) {
 
     if (deps["@angular/animations"]) {
         const ngDep = Object.keys(newDeps).find(dep => dep.startsWith("@angular"));
-        deps["@angular/animations"] = newDeps[ngDep]
+        deps["@angular/animations"] = newDeps[ngDep];
     }
 }
 
