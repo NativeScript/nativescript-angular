@@ -25,7 +25,7 @@
     "nativescript-angular": "file:../../nativescript-angular",
     "nativescript-intl": "^3.0.0",
     "reflect-metadata": "~0.1.8",
-    "rxjs": "5.5.2",
+    "rxjs": "^5.5.4",
     "tns-core-modules": "next",
     "zone.js": "^0.8.4"
   },

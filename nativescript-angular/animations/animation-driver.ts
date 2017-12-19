@@ -1,7 +1,9 @@
 import { AnimationPlayer } from "@angular/animations";
 import { AnimationDriver } from "@angular/animations/browser";
-import { ProxyViewContainer } from "tns-core-modules/ui/proxy-view-container";
+import { createSelector, SelectorCore } from "tns-core-modules/ui/styling/css-selector";
+import { CssAnimationProperty } from "tns-core-modules/ui/core/properties";
 import { eachDescendant } from "tns-core-modules/ui/core/view";
+import { ProxyViewContainer } from "tns-core-modules/ui/proxy-view-container";
 
 import { NativeScriptAnimationPlayer } from "./animation-player";
 import {
@@ -11,7 +13,6 @@ import {
 import { NgView, InvisibleNode } from "../element-registry";
 import { animationsLog as traceLog } from "../trace";
 
-import { createSelector, SelectorCore } from "tns-core-modules/ui/styling/css-selector";
 
 interface ViewMatchResult {
     found: boolean;
@@ -68,8 +69,14 @@ class Selector {
 }
 
 export class NativeScriptAnimationDriver implements AnimationDriver {
-    validateStyleProperty(prop: string): boolean {
-        throw new Error("Not implemented!");
+    private static validProperties = [
+        ...CssAnimationProperty._getPropertyNames(),
+        "transform",
+    ];
+
+    validateStyleProperty(property: string): boolean {
+        traceLog(`CssAnimationProperty.validateStyleProperty: ${property}`);
+        return NativeScriptAnimationDriver.validProperties.indexOf(property) !== -1;
     }
 
     matchesElement(element: NgView, rawSelector: string): boolean {
@@ -88,6 +95,11 @@ export class NativeScriptAnimationDriver implements AnimationDriver {
             `NativeScriptAnimationDriver.containsElement ` +
             `element1: ${elm1}, element2: ${elm2}`
         );
+
+        // Checking if the parent is our fake body object
+        if (elm1["isOverride"]) {
+            return true;
+        }
 
         const params: ViewMatchParams = { originalView: elm2 };
         const result: ViewMatchResult = this.visitDescendants(elm1, viewMatches, params);
