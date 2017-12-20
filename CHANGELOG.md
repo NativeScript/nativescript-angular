@@ -1,3 +1,50 @@
+<a name="5.0.0"></a>
+# [5.0.0](https://github.com/NativeScript/nativescript-angular/compare/5.0.0-rc.0...v5.0.0) (2017-12-20)
+
+
+### Features
+
+* UI must be created before first render, drainMicroTasks when the first page is created.
+This removes the white screen displayed between the launch screen and the initial page view.
+Speeds up roughly 300ms startup times for iOS with Angular. ([#1103](https://github.com/NativeScript/nativescript-angular/pull/1103))
+
+
+* update to Angular 5 animations and add support for AnimationBuilder ([#1114](https://github.com/NativeScript/nativescript-angular/issues/1114)) ([191f2a0](https://github.com/NativeScript/nativescript-angular/commit/191f2a0))
+
+### DEPRECATION
+
+NSModuleFactoryLoader is no longer needed for {N} apps. ([192a3d0](https://github.com/NativeScript/nativescript-angular/commit/192a3d0))
+
+
+Before:
+
+```
+// app.module.ts
+
+@NgModule({
+    providers: [
+        { provide: NgModuleFactoryLoader, useClass: NSModuleFactoryLoader }
+        // ...
+    ],
+    // ...
+})
+class AppModule { }
+```
+
+After:
+
+```
+// app.module.ts
+
+@NgModule({
+    providers: [
+        // ...
+    ],
+    // ...
+})
+class AppModule { }
+```
+
 <a name="5.0.0-rc.0"></a>
 # [5.0.0-rc.0](https://github.com/NativeScript/nativescript-angular/compare/4.4.1...5.0.0-rc.0) (2017-11-06)
 
