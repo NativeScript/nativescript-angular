@@ -1,12 +1,6 @@
 {
   "nativescript": {
-    "id": "org.nativescript.ngtests",
-    "tns-android": {
-      "version": "3.1.0"
-    },
-    "tns-ios": {
-      "version": "3.1.0"
-    }
+    "id": "org.nativescript.ngtests"
   },
   "name": "ngtests",
   "main": "app.js",
@@ -26,7 +20,7 @@
   ],
   "homepage": "http://nativescript.org",
   "dependencies": {
-    "@angular/animations": "~4.4.1",
+    "@angular/animations": "~5.0.0",
     "@angular/common": "~5.0.0",
     "@angular/compiler": "~5.0.0",
     "@angular/core": "~5.0.0",

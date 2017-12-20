@@ -69,7 +69,7 @@ export class ViewUtil {
         this.addToQueue(extendedParent, extendedChild, previous, next);
 
         if (isInvisibleNode(child)) {
-            extendedChild.templateParent = extendedParent;
+            extendedChild.parentNode = extendedParent;
         }
 
         if (!isDetachedElement(child)) {
@@ -297,7 +297,7 @@ export class ViewUtil {
     }
 
     public setProperty(view: NgView, attributeName: string, value: any, namespace?: string): void {
-        if (namespace && !this.runsIn(namespace)) {
+        if (!view || (namespace && !this.runsIn(namespace))) {
             return;
         }
 

@@ -18,6 +18,7 @@ import {
 } from "@angular/platform-browser-dynamic";
 
 import {
+    DOCUMENT,
     ɵINTERNAL_BROWSER_PLATFORM_PROVIDERS as INTERNAL_BROWSER_PLATFORM_PROVIDERS
 } from "@angular/platform-browser";
 
@@ -30,6 +31,13 @@ import {
     MissingTranslationStrategy,
     StaticProvider,
 } from "@angular/core";
+
+// Add a fake polyfill for the document object
+(<any>global).document = (<any>global).document || {};
+const doc = (<any>global).document;
+doc.body = Object.assign((doc.body || {}), {
+    isOverride: true,
+});
 
 // Work around a TS bug requiring an imports of
 // InjectionToken, ViewEncapsulation and MissingTranslationStrategy
@@ -58,6 +66,10 @@ export const NS_COMPILER_PROVIDERS: StaticProvider[] = [
             ]
         },
         multi: true
+    },
+    {
+        provide: DOCUMENT,
+        useValue: doc,
     },
 ];
 
