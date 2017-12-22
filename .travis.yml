@@ -39,6 +39,9 @@ matrix:
         - Build="Android"
       jdk: oraclejdk8
       before_install: 
+        - echo no | android create avd --force -n $EMULATOR_NAME -t android-$EMULATOR_API_LEVEL --abi $ANDROID_ABI -c 12M
+        - emulator -avd $EMULATOR_NAME -no-skin -no-audio -no-window &		
+        - android-wait-for-emulator
         - nvm install $NODE_VERSION
         - cd nativescript-angular
         - npm install
