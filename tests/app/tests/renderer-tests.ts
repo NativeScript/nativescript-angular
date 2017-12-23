@@ -1,18 +1,27 @@
 // make sure you import mocha-config before @angular/core
-import { assert } from "./test-config";
-import { Component, ElementRef, Renderer2, NgZone, ViewChild } from "@angular/core";
-import { ProxyViewContainer } from "ui/proxy-view-container";
-import { Red } from "color/known-colors";
-import { dumpView } from "./test-utils";
-import { TestApp } from "./test-app";
-import { LayoutBase } from "ui/layouts/layout-base";
-import { StackLayout } from "ui/layouts/stack-layout";
-import { ContentView } from "ui/content-view";
-import { Button } from "ui/button";
-import { NgView } from "nativescript-angular/element-registry";
-import { registerElement } from "nativescript-angular/element-registry";
+import {assert} from "./test-config";
+import {Component, ComponentRef, ElementRef, NgZone, Renderer2, ViewChild} from "@angular/core";
+import {ProxyViewContainer} from "ui/proxy-view-container";
+import {Red} from "color/known-colors";
+import {dumpView} from "./test-utils";
+import {LayoutBase} from "ui/layouts/layout-base";
+import {StackLayout} from "ui/layouts/stack-layout";
+import {ContentView} from "ui/content-view";
+import {Button} from "ui/button";
+import {registerElement} from "nativescript-angular/element-registry";
 import * as button from "tns-core-modules/ui/button";
 import * as view from "tns-core-modules/ui/core/view";
+import {nTestBedAfterEach, nTestBedBeforeEach, nTestBedRender} from "nativescript-angular/testing";
+import {ComponentFixture, TestBed} from "@angular/core/testing";
+import {Observable} from "rxjs/Observable";
+import {ReplaySubject} from "rxjs/ReplaySubject";
+
+@Component({
+    template: `<StackLayout><Label text="Layout"></Label></StackLayout>`
+})
+export class ZonedRenderer {
+    constructor(public elementRef: ElementRef, public renderer: Renderer2) { }
+}
 
 @Component({
     template: `<StackLayout><Label text="Layout"></Label></StackLayout>`
@@ -219,10 +228,10 @@ export class NgControlSettersCount {
 
     get buttons(): ElementRef[] { return [this.btn1, this.btn2, this.btn3, this.btn4]; }
 
-    isAfterViewInit: boolean = false;
+    ready$: Observable<boolean> = new ReplaySubject<boolean>(1);
 
     ngAfterViewInit() {
-        this.isAfterViewInit = true;
+        (this.ready$ as ReplaySubject<boolean>).next(true);
     }
 }
 
@@ -237,46 +246,36 @@ export class NgForLabel {
 }
 
 describe("Renderer E2E", () => {
-    let testApp: TestApp = null;
-
-    before(() => {
-        return TestApp.create([], [
-            LayoutWithLabel, LabelCmp, LabelContainer,
-            ProjectableCmp, ProjectionContainer,
-            StyledLabelCmp, StyledLabelCmp2,
-            NgIfLabel, NgIfThenElseComponent, NgIfMultiple,
-            NgIfTwoElements, NgIfMultiple,
-            NgIfElseComponent, NgIfThenElseComponent,
-            NgForLabel,
-        ]).then((app) => {
-            testApp = app;
-        });
-    });
-
-    after(() => {
-        testApp.dispose();
-    });
-
-    afterEach(() => {
-        testApp.disposeComponents();
-    });
+    beforeEach(nTestBedBeforeEach([
+        LayoutWithLabel, LabelCmp, LabelContainer,
+        ProjectableCmp, ProjectionContainer,
+        StyledLabelCmp, StyledLabelCmp2,
+        NgIfLabel, NgIfThenElseComponent, NgIfMultiple,
+        NgIfTwoElements, NgIfMultiple,
+        NgIfElseComponent, NgIfThenElseComponent,
+        NgForLabel, ZonedRenderer
+    ]));
+    afterEach(nTestBedAfterEach(false));
 
     it("component with a layout", () => {
-        return testApp.loadComponent(LayoutWithLabel).then((componentRef) => {
+        return nTestBedRender(LayoutWithLabel).then((fixture) => {
+            const componentRef: ComponentRef<LayoutWithLabel> = fixture.componentRef;
             const componentRoot = componentRef.instance.elementRef.nativeElement;
             assert.equal("(ProxyViewContainer (StackLayout (Label)))", dumpView(componentRoot));
         });
     });
 
     it("component without a layout", () => {
-        return testApp.loadComponent(LabelContainer).then((componentRef) => {
+        return nTestBedRender(LabelContainer).then((fixture) => {
+            const componentRef: ComponentRef<LabelContainer> = fixture.componentRef;
             const componentRoot = componentRef.instance.elementRef.nativeElement;
             assert.equal("(ProxyViewContainer (GridLayout (ProxyViewContainer (Label))))", dumpView(componentRoot));
         });
     });
 
     it("projects content into components", () => {
-        return testApp.loadComponent(ProjectionContainer).then((componentRef) => {
+        return nTestBedRender(ProjectionContainer).then((fixture) => {
+            const componentRef: ComponentRef<ProjectionContainer> = fixture.componentRef;
             const componentRoot = componentRef.instance.elementRef.nativeElement;
             assert.equal(
                 "(ProxyViewContainer (GridLayout (ProxyViewContainer (StackLayout (Button)))))",
@@ -285,7 +284,8 @@ describe("Renderer E2E", () => {
     });
 
     it("applies component styles from single source", () => {
-        return testApp.loadComponent(StyledLabelCmp).then((componentRef) => {
+        return nTestBedRender(StyledLabelCmp).then((fixture) => {
+            const componentRef: ComponentRef<StyledLabelCmp> = fixture.componentRef;
             const componentRoot = componentRef.instance.elementRef.nativeElement;
             const label = (<ProxyViewContainer>componentRoot).getChildAt(0);
             assert.equal(Red, label.style.color.hex);
@@ -293,7 +293,8 @@ describe("Renderer E2E", () => {
     });
 
     it("applies component styles from multiple sources", () => {
-        return testApp.loadComponent(StyledLabelCmp2).then((componentRef) => {
+        return nTestBedRender(StyledLabelCmp2).then((fixture) => {
+            const componentRef: ComponentRef<StyledLabelCmp2> = fixture.componentRef;
             const componentRoot = componentRef.instance.elementRef.nativeElement;
             const layout = (<ProxyViewContainer>componentRoot).getChildAt(0);
 
@@ -316,15 +317,18 @@ describe("Renderer E2E", () => {
             done();
         };
 
-        testApp.zone.run(() => {
-            testApp.renderer.listen(view, eventName, callback);
+        nTestBedRender(ZonedRenderer).then((fixture: ComponentFixture<ZonedRenderer>) => {
+            fixture.ngZone.run(() => {
+                fixture.componentInstance.renderer.listen(view, eventName, callback);
+            });
+
+            setTimeout(() => {
+                fixture.ngZone.runOutsideAngular(() => {
+                    view.notify(eventArg);
+                });
+            }, 10);
         });
 
-        setTimeout(() => {
-            testApp.zone.runOutsideAngular(() => {
-                view.notify(eventArg);
-            });
-        }, 10);
     });
 
     it("executes events inside NgZone when listen is called outside NgZone", (done) => {
@@ -336,40 +340,44 @@ describe("Renderer E2E", () => {
             assert.isTrue(NgZone.isInAngularZone(), "Event should be executed inside NgZone");
             done();
         };
+        nTestBedRender(ZonedRenderer).then((fixture: ComponentFixture<ZonedRenderer>) => {
+            fixture.ngZone.runOutsideAngular(() => {
+                fixture.componentInstance.renderer.listen(view, eventName, callback);
 
-        testApp.zone.runOutsideAngular(() => {
-            testApp.renderer.listen(view, eventName, callback);
-
-            view.notify(eventArg);
+                view.notify(eventArg);
+            });
         });
     });
 
     describe("Structural directives", () => {
         it("ngIf hides component when false", () => {
-            return testApp.loadComponent(NgIfLabel).then((componentRef) => {
+            return nTestBedRender(NgIfLabel).then((fixture) => {
+                const componentRef: ComponentRef<NgIfLabel> = fixture.componentRef;
                 const componentRoot = componentRef.instance.elementRef.nativeElement;
                 assert.equal("(ProxyViewContainer)", dumpView(componentRoot));
             });
         });
 
         it("ngIf show component when true", () => {
-            return testApp.loadComponent(NgIfLabel).then((componentRef) => {
+            return nTestBedRender(NgIfLabel).then((fixture) => {
+                const componentRef: ComponentRef<NgIfLabel> = fixture.componentRef;
                 const component = <NgIfLabel>componentRef.instance;
                 const componentRoot = component.elementRef.nativeElement;
 
                 component.show = true;
-                testApp.appRef.tick();
+                fixture.detectChanges();
                 assert.equal("(ProxyViewContainer (Label))", dumpView(componentRoot));
             });
         });
 
         it("ngIf shows elements in correct order when two are rendered", () => {
-            return testApp.loadComponent(NgIfTwoElements).then((componentRef) => {
+            return nTestBedRender(NgIfTwoElements).then((fixture) => {
+                const componentRef: ComponentRef<NgIfTwoElements> = fixture.componentRef;
                 const component = <NgIfTwoElements>componentRef.instance;
                 const componentRoot = component.elementRef.nativeElement;
 
                 component.show = true;
-                testApp.appRef.tick();
+                fixture.detectChanges();
                 assert.equal(
                     "(ProxyViewContainer (StackLayout (Label), (Button)))",
                     dumpView(componentRoot));
@@ -377,12 +385,13 @@ describe("Renderer E2E", () => {
         });
 
         it("ngIf shows elements in correct order when multiple are rendered and there's *ngIf", () => {
-            return testApp.loadComponent(NgIfMultiple).then((componentRef) => {
+            return nTestBedRender(NgIfMultiple).then((fixture) => {
+                const componentRef: ComponentRef<NgIfMultiple> = fixture.componentRef;
                 const component = <NgIfMultiple>componentRef.instance;
                 const componentRoot = component.elementRef.nativeElement;
 
                 component.show = true;
-                testApp.appRef.tick();
+                fixture.detectChanges();
                 assert.equal(
                     "(ProxyViewContainer " +
                         "(StackLayout " +
@@ -398,11 +407,12 @@ describe("Renderer E2E", () => {
         });
 
         it("ngIfElse show 'if' template when condition is true", () => {
-            return testApp.loadComponent(NgIfElseComponent).then(componentRef => {
+            return nTestBedRender(NgIfElseComponent).then((fixture) => {
+                const componentRef: ComponentRef<NgIfElseComponent> = fixture.componentRef;
                 const component = <NgIfElseComponent>componentRef.instance;
                 const componentRoot = component.elementRef.nativeElement;
 
-                testApp.appRef.tick();
+                fixture.detectChanges();
 
                 assert.equal(
                     "(ProxyViewContainer " +
@@ -416,12 +426,13 @@ describe("Renderer E2E", () => {
         });
 
         it("ngIfElse show 'else' template when condition is false", () => {
-            return testApp.loadComponent(NgIfElseComponent).then(componentRef => {
+            return nTestBedRender(NgIfElseComponent).then((fixture) => {
+                const componentRef: ComponentRef<NgIfElseComponent> = fixture.componentRef;
                 const component = <NgIfElseComponent>componentRef.instance;
                 const componentRoot = component.elementRef.nativeElement;
 
                 component.show = false;
-                testApp.appRef.tick();
+                fixture.detectChanges();
                 assert.equal(
                     "(ProxyViewContainer " +
                         "(StackLayout " +
@@ -434,11 +445,12 @@ describe("Renderer E2E", () => {
         });
 
         it("ngIfThenElse show 'then' template when condition is true", () => {
-            return testApp.loadComponent(NgIfThenElseComponent).then(componentRef => {
+            return nTestBedRender(NgIfThenElseComponent).then((fixture) => {
+                const componentRef: ComponentRef<NgIfThenElseComponent> = fixture.componentRef;
                 const component = <NgIfThenElseComponent>componentRef.instance;
                 const componentRoot = component.elementRef.nativeElement;
 
-                testApp.appRef.tick();
+                fixture.detectChanges();
                 assert.equal(
                     "(ProxyViewContainer " +
                         "(StackLayout " +
@@ -452,12 +464,13 @@ describe("Renderer E2E", () => {
 
 
         it("ngIfThenElse show 'else' template when condition is false", () => {
-            return testApp.loadComponent(NgIfThenElseComponent).then(componentRef => {
+            return nTestBedRender(NgIfThenElseComponent).then((fixture) => {
+                const componentRef: ComponentRef<NgIfThenElseComponent> = fixture.componentRef;
                 const component = <NgIfThenElseComponent>componentRef.instance;
                 const componentRoot = component.elementRef.nativeElement;
 
                 component.show = false;
-                testApp.appRef.tick();
+                fixture.detectChanges();
                 assert.equal(
                     "(ProxyViewContainer " +
                         "(StackLayout " +
@@ -470,7 +483,8 @@ describe("Renderer E2E", () => {
         });
 
         it("ngFor creates element for each item", () => {
-            return testApp.loadComponent(NgForLabel).then((componentRef) => {
+            return nTestBedRender(NgForLabel).then((fixture) => {
+                const componentRef: ComponentRef<NgForLabel> = fixture.componentRef;
                 const componentRoot = componentRef.instance.elementRef.nativeElement;
                 assert.equal(
                     "(ProxyViewContainer (Label[text=one]), (Label[text=two]), (Label[text=three]))",
@@ -479,12 +493,13 @@ describe("Renderer E2E", () => {
         });
 
         it("ngFor updates when item is removed", () => {
-            return testApp.loadComponent(NgForLabel).then((componentRef) => {
+            return nTestBedRender(NgForLabel).then((fixture) => {
+                const componentRef: ComponentRef<NgForLabel> = fixture.componentRef;
                 const component = <NgForLabel>componentRef.instance;
                 const componentRoot = component.elementRef.nativeElement;
 
                 component.items.splice(1, 1);
-                testApp.appRef.tick();
+                fixture.detectChanges();
 
                 assert.equal(
                     "(ProxyViewContainer (Label[text=one]), (Label[text=three]))",
@@ -493,12 +508,13 @@ describe("Renderer E2E", () => {
         });
 
         it("ngFor updates when item is inserted", () => {
-            return testApp.loadComponent(NgForLabel).then((componentRef) => {
+            return nTestBedRender(NgForLabel).then((fixture) => {
+                const componentRef: ComponentRef<NgForLabel> = fixture.componentRef;
                 const component = <NgForLabel>componentRef.instance;
                 const componentRoot = component.elementRef.nativeElement;
 
                 component.items.splice(1, 0, "new");
-                testApp.appRef.tick();
+                fixture.detectChanges();
 
                 assert.equal(
                     "(ProxyViewContainer " +
@@ -510,18 +526,15 @@ describe("Renderer E2E", () => {
 });
 
 describe("Renderer createElement", () => {
-    let testApp: TestApp = null;
     let renderer: Renderer2 = null;
-
-    before(() => {
-        return TestApp.create().then((app) => {
-            testApp = app;
-            renderer = testApp.renderer;
+    beforeEach(nTestBedBeforeEach([ZonedRenderer]));
+    afterEach(nTestBedAfterEach(false));
+    beforeEach(() => {
+        return nTestBedRender(ZonedRenderer).then((fixture: ComponentFixture<ZonedRenderer>) => {
+            fixture.ngZone.run(() => {
+                renderer = fixture.componentInstance.renderer;
+            });
         });
-    });
-
-    after(() => {
-        testApp.dispose();
     });
 
     it("creates element from CamelCase", () => {
@@ -546,18 +559,15 @@ describe("Renderer createElement", () => {
 });
 
 describe("Renderer attach/detach", () => {
-    let testApp: TestApp = null;
     let renderer: Renderer2 = null;
-
-    before(() => {
-        return TestApp.create().then((app) => {
-            testApp = app;
-            renderer = testApp.renderer;
+    beforeEach(nTestBedBeforeEach([ZonedRenderer]));
+    afterEach(nTestBedAfterEach(false));
+    beforeEach(() => {
+        return nTestBedRender(ZonedRenderer).then((fixture: ComponentFixture<ZonedRenderer>) => {
+            fixture.ngZone.run(() => {
+                renderer = fixture.componentInstance.renderer;
+            });
         });
-    });
-
-    after(() => {
-        testApp.dispose();
     });
 
     it("createElement element with parent attaches element to content view", () => {
@@ -602,34 +612,40 @@ describe("Renderer attach/detach", () => {
 });
 
 describe("Renderer lifecycle", () => {
-    let testApp: TestApp = null;
     let renderer: Renderer2 = null;
-
-    before(() => {
-        return TestApp.create([], [NgControlSettersCount]).then((app) => {
-            testApp = app;
-            renderer = testApp.renderer;
+    beforeEach(nTestBedBeforeEach([ZonedRenderer, NgControlSettersCount]));
+    afterEach(nTestBedAfterEach(false));
+    beforeEach(() => {
+        return nTestBedRender(ZonedRenderer).then((fixture: ComponentFixture<ZonedRenderer>) => {
+            fixture.ngZone.run(() => {
+                renderer = fixture.componentInstance.renderer;
+            });
         });
     });
 
-    after(() => {
-        testApp.dispose();
-    });
-
-    afterEach(() => {
-        testApp.disposeComponents();
-    });
-
     it("view native setters are called once on startup", () => {
-        return testApp.loadComponent(NgControlSettersCount).then((componentRef) => {
-            assert.isTrue(componentRef.instance.isAfterViewInit, "Expected the NgControlSettersCount to have passed its ngAfterViewInit.");
-            componentRef.instance.buttons.map(btn => btn.nativeElement).forEach(btn => {
-                assert.isTrue(btn.isLoaded, `Expected ${btn.id} to be allready loaded.`);
-                assert.isFalse(btn.isLayoutValid, `Expected ${btn.id}'s layout to be invalid.`);
+        const fixture = TestBed.createComponent(NgControlSettersCount);
+        const component: NgControlSettersCount = fixture.componentInstance;
+        return component.ready$.subscribe(() => {
+            component.buttons.map(btn => btn.nativeElement).forEach(btn => {
+                assert.isTrue(btn.isLoaded, `Expected ${btn.id} to be loaded.`);
+                assert.isFalse(
+                    btn.isLayoutValid,
+                    `Expected ${btn.id}'s layout to be invalid because it is uninitialized.`
+                );
 
-                assert.equal(btn.backgroundInternalSetNativeCount, 1, `Expected ${btn.id} backgroundInternalSetNativeCount to be called just once.`);
-                assert.equal(btn.fontInternalSetNativeCount, 1, `Expected ${btn.id} fontInternalSetNativeCount to be called just once.`);
-                assert.equal(btn.nativeBackgroundRedraws, 0, `Expected ${btn.id} nativeBackgroundRedraws to be called after its layout pass.`);
+                assert.equal(
+                    btn.backgroundInternalSetNativeCount, 1,
+                    `Expected ${btn.id} backgroundInternalSetNativeCount to be called just once.`
+                );
+                assert.equal(
+                    btn.fontInternalSetNativeCount, 1,
+                    `Expected ${btn.id} fontInternalSetNativeCount to be called just once.`
+                );
+                assert.equal(
+                    btn.nativeBackgroundRedraws, 0,
+                    `Expected ${btn.id} nativeBackgroundRedraws to be called after its layout pass.`
+                );
             });
         });
     });
