@@ -1,9 +1,7 @@
 import { assert } from "./test-config";
-import { Component, Input, AfterViewInit } from "@angular/core";
-import { TestApp } from "./test-app";
-import { RootLocator, ComponentView, getItemViewRoot } from "nativescript-angular/directives/list-view-comp";
-import { ProxyViewContainer } from "tns-core-modules/ui/proxy-view-container";
-
+import { Component, Input } from "@angular/core";
+import { ComponentFixture } from "@angular/core/testing";
+import { nTestBedAfterEach, nTestBedBeforeEach, nTestBedRender } from "nativescript-angular/testing";
 // import trace = require("trace");
 // trace.setCategories("ns-list-view, " + trace.categories.Navigation);
 // trace.enable();
@@ -68,7 +66,7 @@ export class ItemTemplateComponent {
             </ng-template>
         </ListView>
     </GridLayout>
-  `
+    `
 })
 export class TestListViewSelectorComponent {
     public myItems: Array<DataItem> = ITEMS;
@@ -79,45 +77,27 @@ export class TestListViewSelectorComponent {
 }
 
 describe("ListView-tests", () => {
-    let testApp: TestApp = null;
-
-    before(() => {
-        return TestApp.create([], [
-            TestListViewComponent,
-            TestListViewSelectorComponent,
-            ItemTemplateComponent
-        ]).then((app) => {
-            testApp = app;
-        });
-    });
-
-    after(() => {
-        testApp.dispose();
-    });
-
-    afterEach(() => {
-        testApp.disposeComponents();
-    });
+    beforeEach(nTestBedBeforeEach([
+        TestListViewComponent,
+        TestListViewSelectorComponent,
+        ItemTemplateComponent
+    ]));
+    afterEach(nTestBedAfterEach(false));
 
     it("setupItemView is called for every item", (done) => {
-        testApp.loadComponent(TestListViewComponent).then((componentRef) => {
-            const component = componentRef.instance;
-            setTimeout(() => {
+        nTestBedRender(TestListViewComponent)
+            .then((fixture: ComponentFixture<TestListViewComponent>) => {
+                const component = fixture.componentRef.instance;
                 assert.equal(component.counter, 3);
                 done();
-            }, 1000);
-        })
-            .catch(done);
+            });
     });
 
 
     it("itemTemplateSelector selects templates", (done) => {
-        testApp.loadComponent(TestListViewSelectorComponent).then((componentRef) => {
-            setTimeout(() => {
-                assert.deepEqual(testTemplates, { first: 2, second: 1 });
-                done();
-            }, 1000);
-        })
-            .catch(done);
+        nTestBedRender(TestListViewSelectorComponent).then(() => {
+            assert.deepEqual(testTemplates, {first: 2, second: 1});
+            done();
+        });
     });
 });

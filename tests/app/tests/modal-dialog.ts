@@ -1,12 +1,14 @@
 // make sure you import mocha-config before @angular/core
-import { assert } from "./test-config";
-import { TestApp } from "./test-app";
-import { Component, ViewContainerRef } from "@angular/core";
-import { Page } from "ui/page";
-import { topmost } from "ui/frame";
-import { ModalDialogParams, ModalDialogService } from "nativescript-angular/directives/dialogs";
+import {assert} from "./test-config";
+import {Component, ViewContainerRef} from "@angular/core";
+import {Page} from "ui/page";
+import {topmost} from "ui/frame";
+import {ModalDialogParams, ModalDialogService} from "nativescript-angular/directives/dialogs";
 
-import { device, platformNames } from "platform";
+import {device, platformNames} from "platform";
+
+import {ComponentFixture} from "@angular/core/testing";
+import {nTestBedRender, nTestBedAfterEach, nTestBedBeforeEach} from "nativescript-angular/testing";
 const CLOSE_WAIT = (device.os === platformNames.ios) ? 1000 : 0;
 
 @Component({
@@ -47,20 +49,13 @@ export class SuccessComponent {
 }
 
 describe("modal-dialog", () => {
-    let testApp: TestApp = null;
 
+    beforeEach(nTestBedBeforeEach([FailComponent, SuccessComponent], [], [], [ModalComponent]));
+    afterEach(nTestBedAfterEach());
     before((done) => {
-        TestApp.create([], [ModalComponent, FailComponent, SuccessComponent]).then((app) => {
-            testApp = app;
-
-            // HACK: Wait for the navigations from the test runner app
-            // Remove the setTimeout when test runner start tests on page.navigatedTo
-            setTimeout(done, 1000);
-        });
-    });
-
-    after(() => {
-        testApp.dispose();
+        // HACK: Wait for the navigations from the test runner app
+        // Remove the setTimeout when test runner start tests on page.navigatedTo
+        setTimeout(() => done(), 1000);
     });
 
     afterEach(() => {
@@ -69,36 +64,38 @@ describe("modal-dialog", () => {
             console.log("Warning: closing a leftover modal page!");
             page.modal.closeModal();
         }
-        testApp.disposeComponents();
     });
 
 
     it("showModal throws when there is no viewContainer provided", (done) => {
-        testApp.loadComponent(FailComponent)
-            .then((ref) => {
-                const service = <ModalDialogService>ref.instance.service;
+        nTestBedRender(FailComponent)
+            .then((fixture: ComponentFixture<FailComponent>) => {
+                const service = <ModalDialogService>fixture.componentRef.instance.service;
                 assert.throws(() => service.showModal(ModalComponent, {}),
-                              "No viewContainerRef: Make sure you pass viewContainerRef in ModalDialogOptions."
-                             );
-            }).then(() => done(), err => done(err));
+                    "No viewContainerRef: Make sure you pass viewContainerRef in ModalDialogOptions."
+                );
+            })
+            .then(() => done())
+            .catch((e) => done(e));
     });
 
     it("showModal succeeds when there is viewContainer provided", (done) => {
-        testApp.loadComponent(SuccessComponent)
-            .then((ref) => {
-                const service = <ModalDialogService>ref.instance.service;
-                const comp = <SuccessComponent>ref.instance;
-                return service.showModal(ModalComponent, { viewContainerRef: comp.vcRef });
+        nTestBedRender(SuccessComponent)
+            .then((fixture: ComponentFixture<SuccessComponent>) => {
+                const service = <ModalDialogService>fixture.componentRef.instance.service;
+                const comp = <SuccessComponent>fixture.componentRef.instance;
+                return service.showModal(ModalComponent, {viewContainerRef: comp.vcRef});
             })
-            .then((res) => setTimeout(done, CLOSE_WAIT), err => done(err)); // wait for the dialog to close in IOS
+            .then((res) => setTimeout(done, CLOSE_WAIT)) // wait for the dialog to close in IOS
+            .catch((e) => done(e));
     });
 
     it("showModal passes modal params and gets result when resolved", (done) => {
-        const context = { property: "my context" };
-        testApp.loadComponent(SuccessComponent)
-            .then((ref) => {
-                const service = <ModalDialogService>ref.instance.service;
-                const comp = <SuccessComponent>ref.instance;
+        const context = {property: "my context"};
+        nTestBedRender(SuccessComponent)
+            .then((fixture: ComponentFixture<SuccessComponent>) => {
+                const service = <ModalDialogService>fixture.componentRef.instance.service;
+                const comp = <SuccessComponent>fixture.componentRef.instance;
                 return service.showModal(ModalComponent, {
                     viewContainerRef: comp.vcRef,
                     context: context
@@ -107,6 +104,7 @@ describe("modal-dialog", () => {
             .then((res) => {
                 assert.strictEqual(res, context);
                 setTimeout(done, CLOSE_WAIT); // wait for the dialog to close in IOS
-            }, err => done(err));
+            })
+            .catch((e) => done(e));
     });
 });
