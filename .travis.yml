@@ -74,7 +74,6 @@ cache:
 install:
     - nvm install $NODE_VERSION
     - npm install -g typings
-    - echo y | $ANDROID_HOME/tools/android update sdk --filter tools --all --no-ui
     - wget -O ./nativescript.tgz "https://s3.amazonaws.com/nativescript-ci/build_result/nativescript.tgz"
     - npm install -g nativescript.tgz --ignore-scripts
     - tns usage-reporting disable
