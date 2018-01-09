@@ -11,6 +11,16 @@
 	(factory());
 }(this, (function () { 'use strict';
 
+var __values = (undefined && undefined.__values) || function (o) {
+    var m = typeof Symbol === "function" && o[Symbol.iterator], i = 0;
+    if (m) return m.call(o);
+    return {
+        next: function () {
+            if (o && i >= o.length) o = void 0;
+            return { value: o && o[i++], done: !o };
+        }
+    };
+};
 /**
  * @license
  * Copyright Google Inc. All Rights Reserved.
@@ -19,10 +29,18 @@
  * found in the LICENSE file at https://angular.io/license
  */
 Zone.__load_patch('ZoneAwarePromise', function (global, Zone, api) {
+    function readableObjectToString(obj) {
+        if (obj && obj.toString === Object.prototype.toString) {
+            var className = obj.constructor && obj.constructor.name;
+            return (className ? className : '') + ': ' + JSON.stringify(obj);
+        }
+        return obj ? obj.toString() : Object.prototype.toString.call(obj);
+    }
     var __symbol__ = api.symbol;
     var _uncaughtPromiseErrors = [];
     var symbolPromise = __symbol__('Promise');
     var symbolThen = __symbol__('then');
+    var creationTrace = '__creationTrace__';
     api.onUnhandledError = function (e) {
         if (api.showUncaughtError()) {
             var rejection = e && e.rejection;
@@ -106,7 +124,7 @@ Zone.__load_patch('ZoneAwarePromise', function (global, Zone, api) {
     var TYPE_ERROR = 'Promise resolved with itself';
     var OBJECT = 'object';
     var FUNCTION = 'function';
-    var CURRENT_TASK_SYMBOL = __symbol__('currentTask');
+    var CURRENT_TASK_TRACE_SYMBOL = __symbol__('currentTaskTrace');
     // Promise Resolution
     function resolvePromise(promise, state, value) {
         var onceWrapper = once();
@@ -153,7 +171,13 @@ Zone.__load_patch('ZoneAwarePromise', function (global, Zone, api) {
                 // record task information in value when error occurs, so we can
                 // do some additional work such as render longStackTrace
                 if (state === REJECTED && value instanceof Error) {
-                    value[CURRENT_TASK_SYMBOL] = Zone.currentTask;
+                    // check if longStackTraceZone is here
+                    var trace = Zone.currentTask && Zone.currentTask.data &&
+                        Zone.currentTask.data[creationTrace];
+                    if (trace) {
+                        // only keep the long stack trace into error when in longStackTraceZone
+                        Object.defineProperty(value, CURRENT_TASK_TRACE_SYMBOL, { configurable: true, enumerable: false, writable: true, value: trace });
+                    }
                 }
                 for (var i = 0; i < queue.length;) {
                     scheduleResolveOrReject(promise, queue[i++], queue[i++], queue[i++], queue[i++]);
@@ -161,7 +185,8 @@ Zone.__load_patch('ZoneAwarePromise', function (global, Zone, api) {
                 if (queue.length == 0 && state == REJECTED) {
                     promise[symbolState] = REJECTED_NO_CATCH;
                     try {
-                        throw new Error('Uncaught (in promise): ' + value +
+                        // try to print more readable error log
+                        throw new Error('Uncaught (in promise): ' + readableObjectToString(value) +
                             (value && value.stack ? '\n' + value.stack : ''));
                     }
                     catch (err) {
@@ -218,7 +243,7 @@ Zone.__load_patch('ZoneAwarePromise', function (global, Zone, api) {
         });
     }
     var ZONE_AWARE_PROMISE_TO_STRING = 'function ZoneAwarePromise() { [native code] }';
-    var ZoneAwarePromise = (function () {
+    var ZoneAwarePromise = /** @class */ (function () {
         function ZoneAwarePromise(executor) {
             var promise = this;
             if (!(promise instanceof ZoneAwarePromise)) {
@@ -246,8 +271,8 @@ Zone.__load_patch('ZoneAwarePromise', function (global, Zone, api) {
             var resolve;
             var reject;
             var promise = new this(function (res, rej) {
-                _a = [res, rej], resolve = _a[0], reject = _a[1];
-                var _a;
+                resolve = res;
+                reject = rej;
             });
             function onResolve(value) {
                 promise && (promise = null || resolve(value));
@@ -255,14 +280,24 @@ Zone.__load_patch('ZoneAwarePromise', function (global, Zone, api) {
             function onReject(error) {
                 promise && (promise = null || reject(error));
             }
-            for (var _i = 0, values_1 = values; _i < values_1.length; _i++) {
-                var value = values_1[_i];
-                if (!isThenable(value)) {
-                    value = this.resolve(value);
+            try {
+                for (var values_1 = __values(values), values_1_1 = values_1.next(); !values_1_1.done; values_1_1 = values_1.next()) {
+                    var value = values_1_1.value;
+                    if (!isThenable(value)) {
+                        value = this.resolve(value);
+                    }
+                    value.then(onResolve, onReject);
                 }
-                value.then(onResolve, onReject);
+            }
+            catch (e_1_1) { e_1 = { error: e_1_1 }; }
+            finally {
+                try {
+                    if (values_1_1 && !values_1_1.done && (_a = values_1.return)) _a.call(values_1);
+                }
+                finally { if (e_1) throw e_1.error; }
             }
             return promise;
+            var e_1, _a;
         };
         ZoneAwarePromise.all = function (values) {
             var resolve;
@@ -273,23 +308,33 @@ Zone.__load_patch('ZoneAwarePromise', function (global, Zone, api) {
             });
             var count = 0;
             var resolvedValues = [];
-            for (var _i = 0, values_2 = values; _i < values_2.length; _i++) {
-                var value = values_2[_i];
-                if (!isThenable(value)) {
-                    value = this.resolve(value);
-                }
-                value.then((function (index) { return function (value) {
-                    resolvedValues[index] = value;
-                    count--;
-                    if (!count) {
-                        resolve(resolvedValues);
+            try {
+                for (var values_2 = __values(values), values_2_1 = values_2.next(); !values_2_1.done; values_2_1 = values_2.next()) {
+                    var value = values_2_1.value;
+                    if (!isThenable(value)) {
+                        value = this.resolve(value);
                     }
-                }; })(count), reject);
-                count++;
+                    value.then((function (index) { return function (value) {
+                        resolvedValues[index] = value;
+                        count--;
+                        if (!count) {
+                            resolve(resolvedValues);
+                        }
+                    }; })(count), reject);
+                    count++;
+                }
+            }
+            catch (e_2_1) { e_2 = { error: e_2_1 }; }
+            finally {
+                try {
+                    if (values_2_1 && !values_2_1.done && (_a = values_2.return)) _a.call(values_2);
+                }
+                finally { if (e_2) throw e_2.error; }
             }
             if (!count)
                 resolve(resolvedValues);
             return promise;
+            var e_2, _a;
         };
         ZoneAwarePromise.prototype.then = function (onFulfilled, onRejected) {
             var chainPromise = new this.constructor(null);
@@ -414,7 +459,7 @@ var creationTrace = '__creationTrace__';
 var ERROR_TAG = 'STACKTRACE TRACKING';
 var SEP_TAG = '__SEP_TAG__';
 var sepTemplate = SEP_TAG + '@[native]';
-var LongStackTrace = (function () {
+var LongStackTrace = /** @class */ (function () {
     function LongStackTrace() {
         this.error = getStacktrace();
         this.timestamp = new Date();
@@ -477,8 +522,7 @@ Zone['longStackTraceZoneSpec'] = {
         if (!error) {
             return undefined;
         }
-        var task = error[Zone.__symbol__('currentTask')];
-        var trace = task && task.data && task.data[creationTrace];
+        var trace = error[Zone.__symbol__('currentTaskTrace')];
         if (!trace) {
             return error.stack;
         }
@@ -565,7 +609,7 @@ computeIgnoreFrames();
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-var ProxyZoneSpec = (function () {
+var ProxyZoneSpec = /** @class */ (function () {
     function ProxyZoneSpec(defaultSpecDelegate) {
         if (defaultSpecDelegate === void 0) { defaultSpecDelegate = null; }
         this.defaultSpecDelegate = defaultSpecDelegate;
@@ -679,7 +723,7 @@ Zone['ProxyZoneSpec'] = ProxyZoneSpec;
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-var SyncTestZoneSpec = (function () {
+var SyncTestZoneSpec = /** @class */ (function () {
     function SyncTestZoneSpec(namePrefix) {
         this.runZone = Zone.current;
         this.name = 'syncTestZone for ' + namePrefix;
@@ -708,7 +752,7 @@ Zone['SyncTestZoneSpec'] = SyncTestZoneSpec;
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-var AsyncTestZoneSpec = (function () {
+var AsyncTestZoneSpec = /** @class */ (function () {
     function AsyncTestZoneSpec(finishCallback, failCallback, namePrefix) {
         this._pendingMicroTasks = false;
         this._pendingMacroTasks = false;
@@ -776,7 +820,7 @@ Zone['AsyncTestZoneSpec'] = AsyncTestZoneSpec;
  * found in the LICENSE file at https://angular.io/license
  */
 (function (global) {
-    var Scheduler = (function () {
+    var Scheduler = /** @class */ (function () {
         function Scheduler() {
             // Next scheduler id.
             this.nextId = 0;
@@ -905,10 +949,11 @@ Zone['AsyncTestZoneSpec'] = AsyncTestZoneSpec;
         };
         return Scheduler;
     }());
-    var FakeAsyncTestZoneSpec = (function () {
-        function FakeAsyncTestZoneSpec(namePrefix, trackPendingRequestAnimationFrame) {
+    var FakeAsyncTestZoneSpec = /** @class */ (function () {
+        function FakeAsyncTestZoneSpec(namePrefix, trackPendingRequestAnimationFrame, macroTaskOptions) {
             if (trackPendingRequestAnimationFrame === void 0) { trackPendingRequestAnimationFrame = false; }
             this.trackPendingRequestAnimationFrame = trackPendingRequestAnimationFrame;
+            this.macroTaskOptions = macroTaskOptions;
             this._scheduler = new Scheduler();
             this._microtasks = [];
             this._lastError = null;
@@ -917,6 +962,11 @@ Zone['AsyncTestZoneSpec'] = AsyncTestZoneSpec;
             this.pendingTimers = [];
             this.properties = { 'FakeAsyncTestZoneSpec': this };
             this.name = 'fakeAsyncTestZone for ' + namePrefix;
+            // in case user can't access the construction of FakyAsyncTestSpec
+            // user can also define macroTaskOptions by define a global variable.
+            if (!this.macroTaskOptions) {
+                this.macroTaskOptions = global[Zone.__symbol__('FakeAsyncTestMacroTask')];
+            }
         }
         FakeAsyncTestZoneSpec.assertInZone = function () {
             if (Zone.current.get('FakeAsyncTestZoneSpec') == null) {
@@ -1088,6 +1138,24 @@ Zone['AsyncTestZoneSpec'] = AsyncTestZoneSpec;
                             task.data['handleId'] = this._setTimeout(task.invoke, 16, task.data['args'], this.trackPendingRequestAnimationFrame);
                             break;
                         default:
+                            // user can define which macroTask they want to support by passing
+                            // macroTaskOptions
+                            var macroTaskOption = this.findMacroTaskOption(task);
+                            if (macroTaskOption) {
+                                var args_1 = task.data && task.data['args'];
+                                var delay = args_1 && args_1.length > 1 ? args_1[1] : 0;
+                                var callbackArgs = macroTaskOption.callbackArgs ? macroTaskOption.callbackArgs : args_1;
+                                if (!!macroTaskOption.isPeriodic) {
+                                    // periodic macroTask, use setInterval to simulate
+                                    task.data['handleId'] = this._setInterval(task.invoke, delay, callbackArgs);
+                                    task.data.isPeriodic = true;
+                                }
+                                else {
+                                    // not periodic, use setTimout to simulate
+                                    task.data['handleId'] = this._setTimeout(task.invoke, delay, callbackArgs);
+                                }
+                                break;
+                            }
                             throw new Error('Unknown macroTask scheduled in fake async test: ' + task.source);
                     }
                     break;
@@ -1107,8 +1175,28 @@ Zone['AsyncTestZoneSpec'] = AsyncTestZoneSpec;
                 case 'setInterval':
                     return this._clearInterval(task.data['handleId']);
                 default:
+                    // user can define which macroTask they want to support by passing
+                    // macroTaskOptions
+                    var macroTaskOption = this.findMacroTaskOption(task);
+                    if (macroTaskOption) {
+                        var handleId = task.data['handleId'];
+                        return macroTaskOption.isPeriodic ? this._clearInterval(handleId) :
+                            this._clearTimeout(handleId);
+                    }
                     return delegate.cancelTask(target, task);
             }
+        };
+        FakeAsyncTestZoneSpec.prototype.findMacroTaskOption = function (task) {
+            if (!this.macroTaskOptions) {
+                return null;
+            }
+            for (var i = 0; i < this.macroTaskOptions.length; i++) {
+                var macroTaskOption = this.macroTaskOptions[i];
+                if (macroTaskOption.source === task.source) {
+                    return macroTaskOption;
+                }
+            }
+            return null;
         };
         FakeAsyncTestZoneSpec.prototype.onHandleError = function (parentZoneDelegate, currentZone, targetZone, error) {
             this._lastError = error;
@@ -1134,7 +1222,7 @@ Zone['AsyncTestZoneSpec'] = AsyncTestZoneSpec;
  * This is useful in tests. For example to see which tasks are preventing a test from completing
  * or an automated way of releasing all of the event listeners at the end of the test.
  */
-var TaskTrackingZoneSpec = (function () {
+var TaskTrackingZoneSpec = /** @class */ (function () {
     function TaskTrackingZoneSpec() {
         this.name = 'TaskTrackingZone';
         this.microTasks = [];
@@ -1221,7 +1309,7 @@ Zone['TaskTrackingZoneSpec'] = TaskTrackingZoneSpec;
         }
         return false;
     })();
-    var WtfZoneSpec = (function () {
+    var WtfZoneSpec = /** @class */ (function () {
         function WtfZoneSpec() {
             this.name = 'WTF';
         }
@@ -1272,14 +1360,13 @@ Zone['TaskTrackingZoneSpec'] = TaskTrackingZoneSpec;
             instance(zonePathName(targetZone), shallowObj(task.data, 2));
             return retValue;
         };
-        
+        WtfZoneSpec.forkInstance = wtfEnabled && wtfEvents.createInstance('Zone:fork(ascii zone, ascii newZone)');
+        WtfZoneSpec.scheduleInstance = {};
+        WtfZoneSpec.cancelInstance = {};
+        WtfZoneSpec.invokeScope = {};
+        WtfZoneSpec.invokeTaskScope = {};
         return WtfZoneSpec;
     }());
-    WtfZoneSpec.forkInstance = wtfEnabled && wtfEvents.createInstance('Zone:fork(ascii zone, ascii newZone)');
-    WtfZoneSpec.scheduleInstance = {};
-    WtfZoneSpec.cancelInstance = {};
-    WtfZoneSpec.invokeScope = {};
-    WtfZoneSpec.invokeTaskScope = {};
     function shallowObj(obj, depth) {
         if (!depth)
             return null;
@@ -1445,14 +1532,14 @@ Zone['TaskTrackingZoneSpec'] = TaskTrackingZoneSpec;
         };
         Mocha.Runner.prototype.run = function (fn) {
             this.on('test', function (e) {
-                // if (Zone.current !== rootZone) {
-                //     throw new Error('Unexpected zone: ' + Zone.current.name);
-                // }
+                if (Zone.current !== rootZone) {
+                    throw new Error('Unexpected zone: ' + Zone.current.name);
+                }
                 testZone = rootZone.fork(new ProxyZoneSpec());
             });
             return originalRun.call(this, fn);
         };
     })(Mocha.Runner.prototype.runTest, Mocha.Runner.prototype.run);
-})(typeof window !== 'undefined' ? window : global);
+})(typeof window !== 'undefined' && window || typeof self !== 'undefined' && self || global);
 
 })));

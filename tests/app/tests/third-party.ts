@@ -3,7 +3,7 @@ import {assert} from "./test-config";
 import {Component, ComponentRef, Directive, TemplateRef, ViewContainerRef} from "@angular/core";
 import {View} from "ui/core/view";
 import {Label} from "ui/label";
-import {nTestBedAfterEach, nTestBedBeforeEach, nTestBedRender} from "nativescript-angular/testing";
+import {nsTestBedAfterEach, nsTestBedBeforeEach, nsTestBedRender} from "nativescript-angular/testing";
 // >> third-party-simple-view-registration
 import {registerElement} from "nativescript-angular/element-registry";
 registerElement("third-party-view", () => require("./third-party-view").SimpleTag);
@@ -87,16 +87,16 @@ describe("Third party component snippets", () => {
         registerElement("document-form", () => require("ui/layouts/stack-layout").StackLayout);
     });
 
-    beforeEach(nTestBedBeforeEach([
+    beforeEach(nsTestBedBeforeEach([
         DocumentFormContainer,
         DocumentFormComponent,
         SimpleViewContainer,
         DocumentTitleDirective
     ]));
-    afterEach(nTestBedAfterEach());
+    afterEach(nsTestBedAfterEach());
 
     it("instantiates SimpleView from markup", () => {
-        return nTestBedRender(SimpleViewContainer).then((fixture) => {
+        return nsTestBedRender(SimpleViewContainer).then((fixture) => {
             const componentRef: ComponentRef<SimpleViewContainer> = fixture.componentRef;
             const componentInstance = componentRef.instance;
             assert.instanceOf(componentInstance, SimpleViewContainer);
@@ -104,7 +104,7 @@ describe("Third party component snippets", () => {
     });
 
     it("renders DocumentForm with title template", () => {
-        return nTestBedRender(DocumentFormContainer).then(() => {
+        return nsTestBedRender(DocumentFormContainer).then(() => {
             assert.equal("Document1", DocumentFormComponent.titleLabel.text);
         });
     });

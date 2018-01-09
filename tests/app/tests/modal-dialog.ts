@@ -8,7 +8,7 @@ import {ModalDialogParams, ModalDialogService} from "nativescript-angular/direct
 import {device, platformNames} from "platform";
 
 import {ComponentFixture} from "@angular/core/testing";
-import {nTestBedRender, nTestBedAfterEach, nTestBedBeforeEach} from "nativescript-angular/testing";
+import {nsTestBedRender, nsTestBedAfterEach, nsTestBedBeforeEach} from "nativescript-angular/testing";
 const CLOSE_WAIT = (device.os === platformNames.ios) ? 1000 : 0;
 
 @Component({
@@ -50,8 +50,8 @@ export class SuccessComponent {
 
 describe("modal-dialog", () => {
 
-    beforeEach(nTestBedBeforeEach([FailComponent, SuccessComponent], [], [], [ModalComponent]));
-    afterEach(nTestBedAfterEach());
+    beforeEach(nsTestBedBeforeEach([FailComponent, SuccessComponent], [], [], [ModalComponent]));
+    afterEach(nsTestBedAfterEach());
     before((done) => {
         // HACK: Wait for the navigations from the test runner app
         // Remove the setTimeout when test runner start tests on page.navigatedTo
@@ -68,7 +68,7 @@ describe("modal-dialog", () => {
 
 
     it("showModal throws when there is no viewContainer provided", (done) => {
-        nTestBedRender(FailComponent)
+        nsTestBedRender(FailComponent)
             .then((fixture: ComponentFixture<FailComponent>) => {
                 const service = <ModalDialogService>fixture.componentRef.instance.service;
                 assert.throws(() => service.showModal(ModalComponent, {}),
@@ -80,7 +80,7 @@ describe("modal-dialog", () => {
     });
 
     it("showModal succeeds when there is viewContainer provided", (done) => {
-        nTestBedRender(SuccessComponent)
+        nsTestBedRender(SuccessComponent)
             .then((fixture: ComponentFixture<SuccessComponent>) => {
                 const service = <ModalDialogService>fixture.componentRef.instance.service;
                 const comp = <SuccessComponent>fixture.componentRef.instance;
@@ -92,7 +92,7 @@ describe("modal-dialog", () => {
 
     it("showModal passes modal params and gets result when resolved", (done) => {
         const context = {property: "my context"};
-        nTestBedRender(SuccessComponent)
+        nsTestBedRender(SuccessComponent)
             .then((fixture: ComponentFixture<SuccessComponent>) => {
                 const service = <ModalDialogService>fixture.componentRef.instance.service;
                 const comp = <SuccessComponent>fixture.componentRef.instance;

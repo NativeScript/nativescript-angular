@@ -1,3 +1,3 @@
 import "nativescript-angular/zone-js/testing.mocha";
-import {nTestBedInit} from "nativescript-angular/testing";
-nTestBedInit();
+import {nsTestBedInit} from "nativescript-angular/testing";
+nsTestBedInit();

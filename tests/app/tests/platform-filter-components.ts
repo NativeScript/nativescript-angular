@@ -4,7 +4,7 @@ import { Component, ElementRef } from "@angular/core";
 import { dumpView, createDevice } from "./test-utils";
 import { DEVICE } from "nativescript-angular/platform-providers";
 import { platformNames } from "platform";
-import { nTestBedAfterEach, nTestBedBeforeEach, nTestBedRender } from "nativescript-angular/testing";
+import { nsTestBedAfterEach, nsTestBedBeforeEach, nsTestBedRender } from "nativescript-angular/testing";
 
 @Component({
     template: `
@@ -38,27 +38,27 @@ export class PlatformSpecificAttributeComponent {
 
 describe("Platform filter directives", () => {
     describe("on IOS device", () => {
-        beforeEach(nTestBedBeforeEach(
+        beforeEach(nsTestBedBeforeEach(
             [PlatformSpecificAttributeComponent, AndroidSpecificComponent, IosSpecificComponent],
             [{provide: DEVICE, useValue: createDevice(platformNames.ios)}]
         ));
-        afterEach(nTestBedAfterEach());
+        afterEach(nsTestBedAfterEach());
         it("does render ios specific content", () => {
-            return nTestBedRender(IosSpecificComponent).then((fixture) => {
+            return nsTestBedRender(IosSpecificComponent).then((fixture) => {
                 const componentRef = fixture.componentRef;
                 const componentRoot = componentRef.instance.elementRef.nativeElement;
                 assert.isTrue(dumpView(componentRoot, true).indexOf("(Label[text=IOS])") >= 0);
             });
         });
         it("does not render android specific content", () => {
-            return nTestBedRender(AndroidSpecificComponent).then((fixture) => {
+            return nsTestBedRender(AndroidSpecificComponent).then((fixture) => {
                 const componentRef = fixture.componentRef;
                 const componentRoot = componentRef.instance.elementRef.nativeElement;
                 assert.isTrue(dumpView(componentRoot, true).indexOf("Label") < 0);
             });
         });
         it("applies iOS specific attribute", () => {
-            return nTestBedRender(PlatformSpecificAttributeComponent).then((fixture) => {
+            return nsTestBedRender(PlatformSpecificAttributeComponent).then((fixture) => {
                 const componentRef = fixture.componentRef;
                 const componentRoot = componentRef.instance.elementRef.nativeElement;
                 assert.equal(
@@ -69,28 +69,28 @@ describe("Platform filter directives", () => {
     });
 
     describe("on Android device", () => {
-        beforeEach(nTestBedBeforeEach(
+        beforeEach(nsTestBedBeforeEach(
             [PlatformSpecificAttributeComponent, AndroidSpecificComponent, IosSpecificComponent],
             [{provide: DEVICE, useValue: createDevice(platformNames.android)}]
         ));
-        afterEach(nTestBedAfterEach());
+        afterEach(nsTestBedAfterEach());
 
         it("does render android specific content", () => {
-            return nTestBedRender(AndroidSpecificComponent).then((fixture) => {
+            return nsTestBedRender(AndroidSpecificComponent).then((fixture) => {
                 const componentRef = fixture.componentRef;
                 const componentRoot = componentRef.instance.elementRef.nativeElement;
                 assert.isTrue(dumpView(componentRoot, true).indexOf("(Label[text=ANDROID])") >= 0);
             });
         });
         it("does not render ios specific content", () => {
-            return nTestBedRender(IosSpecificComponent).then((fixture) => {
+            return nsTestBedRender(IosSpecificComponent).then((fixture) => {
                 const componentRef = fixture.componentRef;
                 const componentRoot = componentRef.instance.elementRef.nativeElement;
                 assert.isTrue(dumpView(componentRoot, true).indexOf("Label") < 0);
             });
         });
         it("applies Android specific attribute", () => {
-            return nTestBedRender(PlatformSpecificAttributeComponent).then((fixture) => {
+            return nsTestBedRender(PlatformSpecificAttributeComponent).then((fixture) => {
                 const componentRef = fixture.componentRef;
                 const componentRoot = componentRef.instance.elementRef.nativeElement;
                 assert.equal(

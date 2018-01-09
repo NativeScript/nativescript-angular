@@ -1,7 +1,7 @@
 import { assert } from "./test-config";
 import { Component, Input } from "@angular/core";
 import { ComponentFixture } from "@angular/core/testing";
-import { nTestBedAfterEach, nTestBedBeforeEach, nTestBedRender } from "nativescript-angular/testing";
+import { nsTestBedAfterEach, nsTestBedBeforeEach, nsTestBedRender } from "nativescript-angular/testing";
 // import trace = require("trace");
 // trace.setCategories("ns-list-view, " + trace.categories.Navigation);
 // trace.enable();
@@ -77,15 +77,15 @@ export class TestListViewSelectorComponent {
 }
 
 describe("ListView-tests", () => {
-    beforeEach(nTestBedBeforeEach([
+    beforeEach(nsTestBedBeforeEach([
         TestListViewComponent,
         TestListViewSelectorComponent,
         ItemTemplateComponent
     ]));
-    afterEach(nTestBedAfterEach(false));
+    afterEach(nsTestBedAfterEach(false));
 
     it("setupItemView is called for every item", (done) => {
-        nTestBedRender(TestListViewComponent)
+        nsTestBedRender(TestListViewComponent)
             .then((fixture: ComponentFixture<TestListViewComponent>) => {
                 const component = fixture.componentRef.instance;
                 assert.equal(component.counter, 3);
@@ -95,7 +95,7 @@ describe("ListView-tests", () => {
 
 
     it("itemTemplateSelector selects templates", (done) => {
-        nTestBedRender(TestListViewSelectorComponent).then(() => {
+        nsTestBedRender(TestListViewSelectorComponent).then(() => {
             assert.deepEqual(testTemplates, {first: 2, second: 1});
             done();
         });

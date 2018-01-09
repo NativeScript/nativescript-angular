@@ -21,17 +21,17 @@ import {
 } from "../snippets/list-view/template-selector.component";
 
 import { device, platformNames } from "platform";
-import {nTestBedAfterEach, nTestBedBeforeEach, nTestBedRender} from 'nativescript-angular/testing';
-import {ComponentRef} from '@angular/core';
+import {nsTestBedAfterEach, nsTestBedBeforeEach, nsTestBedRender} from "nativescript-angular/testing";
+import {ComponentRef} from "@angular/core";
 const IS_IOS = (device.os === platformNames.ios);
 
 describe("Snippets", () => {
 
-    beforeEach(nTestBedBeforeEach([GestureComponent, LayoutsComponent, IconFontComponent]));
-    afterEach(nTestBedAfterEach(false));
+    beforeEach(nsTestBedBeforeEach([GestureComponent, LayoutsComponent, IconFontComponent]));
+    afterEach(nsTestBedAfterEach(false));
 
     it("Gesture snippets can be loaded", () => {
-        return nTestBedRender(GestureComponent).then((fixture) => {
+        return nsTestBedRender(GestureComponent).then((fixture) => {
             const componentRef: ComponentRef<GestureComponent> = fixture.componentRef;
             const componentInstance = componentRef.instance;
             assert.instanceOf(componentInstance, GestureComponent);
@@ -39,7 +39,7 @@ describe("Snippets", () => {
     });
 
     it("Layouts snippets can be loaded", () => {
-        return nTestBedRender(LayoutsComponent).then((fixture) => {
+        return nsTestBedRender(LayoutsComponent).then((fixture) => {
             const componentRef: ComponentRef<LayoutsComponent> = fixture.componentRef;
             const componentInstance = componentRef.instance;
             assert.instanceOf(componentInstance, LayoutsComponent);
@@ -48,7 +48,7 @@ describe("Snippets", () => {
 
     // TODO: Skip list-view test until karma test launcher double navigate bug is fixed
     (IS_IOS ? it.skip : it)("Icon-font snippets can be loaded", (done) => {
-        return nTestBedRender(IconFontComponent).then((fixture) => {
+        return nsTestBedRender(IconFontComponent).then((fixture) => {
             const componentRef: ComponentRef<IconFontComponent> = fixture.componentRef;
             const componentInstance = componentRef.instance;
             assert.instanceOf(componentInstance, IconFontComponent);

@@ -33,7 +33,7 @@ export function promiseWait(durationMs: number) {
 /**
  * Perform basic TestBed environment initialization. Call this once in the main entry point to your tests.
  */
-export function nTestBedInit() {
+export function nsTestBedInit() {
     TestBed.initTestEnvironment(
         NativeScriptTestingModule,
         platformBrowserDynamicTesting(NS_COMPILER_PROVIDERS)
@@ -50,17 +50,17 @@ export function nTestBedInit() {
  *
  * Use:
  * ```
- *   beforeEach(nTestBedBeforeEach([MyComponent,MyFailComponent]));
+ *   beforeEach(nsTestBedBeforeEach([MyComponent,MyFailComponent]));
  * ```
  *
- * **NOTE*** Remember to pair with {@see nTestBedAfterEach}
+ * **NOTE*** Remember to pair with {@see nsTestBedAfterEach}
  *
  * @param components Any components that you will create during the test
  * @param providers Any services your tests depend on
  * @param imports Any module imports your tests depend on
  * @param entryComponents Any entry components that your tests depend on
  */
-export function nTestBedBeforeEach(
+export function nsTestBedBeforeEach(
     components: any[],
     providers: any[] = [],
     imports: any[] = [],
@@ -114,12 +114,12 @@ export function nTestBedBeforeEach(
  * @param resetEnv When true the testing environment will be reset
  * @param resetFn When resetting the environment, use this init function
  */
-export function nTestBedAfterEach(resetEnv = true, resetFn = nTestBedInit) {
+export function nsTestBedAfterEach(resetEnv = true, resetFn = nsTestBedInit) {
     return () => {
         if (activeTestFixtures.length === 0) {
             throw new Error(
                 `There are no more declared fixtures.` +
-                `Did you call "nTestBedBeforeEach" and "nTestBedAfterEach" an equal number of times?`
+                `Did you call "nsTestBedBeforeEach" and "nsTestBedAfterEach" an equal number of times?`
             );
         }
         const root = testingRootView() as LayoutBase;
@@ -140,7 +140,7 @@ export function nTestBedAfterEach(resetEnv = true, resetFn = nTestBedInit) {
  * Render a component using the TestBed helper, and return a promise that resolves when the
  * ComponentFixture is fully initialized.
  */
-export function nTestBedRender<T>(componentType: Type<T>): Promise<ComponentFixture<T>> {
+export function nsTestBedRender<T>(componentType: Type<T>): Promise<ComponentFixture<T>> {
     const fixture = TestBed.createComponent(componentType);
     fixture.detectChanges();
     return fixture.whenRenderingDone()
@@ -153,7 +153,7 @@ export function nTestBedRender<T>(componentType: Type<T>): Promise<ComponentFixt
             const list = activeTestFixtures[activeTestFixtures.length - 1];
             if (!list) {
                 console.warn(
-                    "nTestBedRender called without nTestBedBeforeEach/nTestBedAfter each. " +
+                    "nsTestBedRender called without nsTestBedBeforeEach/nsTestBedAfter each. " +
                     "You are responsible for calling 'fixture.destroy()' when your test is done " +
                     "in order to clean up the components that are created."
                 );

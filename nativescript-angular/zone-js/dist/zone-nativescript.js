@@ -31,7 +31,7 @@ var Zone$1 = (function (global) {
     if (global['Zone']) {
         throw new Error('Zone already loaded.');
     }
-    var Zone = (function () {
+    var Zone = /** @class */ (function () {
         function Zone(parent, zoneSpec) {
             this._properties = null;
             this._parent = parent;
@@ -67,7 +67,6 @@ var Zone$1 = (function (global) {
             enumerable: true,
             configurable: true
         });
-        
         Object.defineProperty(Zone, "currentTask", {
             get: function () {
                 return _currentTask;
@@ -75,7 +74,6 @@ var Zone$1 = (function (global) {
             enumerable: true,
             configurable: true
         });
-        
         Zone.__load_patch = function (name, fn) {
             if (patches.hasOwnProperty(name)) {
                 throw Error('Already loaded patch: ' + name);
@@ -94,7 +92,6 @@ var Zone$1 = (function (global) {
             enumerable: true,
             configurable: true
         });
-        
         Object.defineProperty(Zone.prototype, "name", {
             get: function () {
                 return this._name;
@@ -102,7 +99,6 @@ var Zone$1 = (function (global) {
             enumerable: true,
             configurable: true
         });
-        
         Zone.prototype.get = function (key) {
             var zone = this.getZoneWith(key);
             if (zone)
@@ -289,9 +285,9 @@ var Zone$1 = (function (global) {
                 zoneDelegates[i]._updateTaskCount(task.type, count);
             }
         };
+        Zone.__symbol__ = __symbol__;
         return Zone;
     }());
-    Zone.__symbol__ = __symbol__;
     var DELEGATE_ZS = {
         name: '',
         onHasTask: function (delegate, _, target, hasTaskState) {
@@ -305,7 +301,7 @@ var Zone$1 = (function (global) {
             return delegate.cancelTask(target, task);
         }
     };
-    var ZoneDelegate = (function () {
+    var ZoneDelegate = /** @class */ (function () {
         function ZoneDelegate(zone, parentDelegate, zoneSpec) {
             this._taskCounts = { 'microTask': 0, 'macroTask': 0, 'eventTask': 0 };
             this.zone = zone;
@@ -467,7 +463,7 @@ var Zone$1 = (function (global) {
         };
         return ZoneDelegate;
     }());
-    var ZoneTask = (function () {
+    var ZoneTask = /** @class */ (function () {
         function ZoneTask(type, source, callback, options, scheduleFn, cancelFn) {
             this._zone = null;
             this.runCount = 0;
@@ -551,11 +547,7 @@ var Zone$1 = (function (global) {
                 state: this.state,
                 source: this.source,
                 zone: this.zone.name,
-                invoke: this.invoke,
-                scheduleFn: this.scheduleFn,
-                cancelFn: this.cancelFn,
-                runCount: this.runCount,
-                callback: this.callback
+                runCount: this.runCount
             };
         };
         return ZoneTask;
@@ -611,6 +603,7 @@ var Zone$1 = (function (global) {
             _isDrainingMicrotaskQueue = false;
         }
     }
+    Zone.drainMicroTaskQueue = drainMicroTaskQueue;
     //////////////////////////////////////////////////////
     //////////////////////////////////////////////////////
     ///  BOOTSTRAP
@@ -630,8 +623,14 @@ var Zone$1 = (function (global) {
         patchEventTarget: function () { return []; },
         patchOnProperties: noop,
         patchMethod: function () { return noop; },
+        patchArguments: function () { return noop; },
         setNativePromise: function (NativePromise) {
-            nativeMicroTaskQueuePromise = NativePromise.resolve(0);
+            // sometimes NativePromise.resolve static function
+            // is not ready yet, (such as core-js/es6.promise)
+            // so we need to check here.
+            if (NativePromise && typeof NativePromise.resolve === FUNCTION) {
+                nativeMicroTaskQueuePromise = NativePromise.resolve(0);
+            }
         },
     };
     var _currentZoneFrame = { parent: null, zone: new Zone(null, null) };
@@ -661,6 +660,8 @@ var zoneSymbol = Zone.__symbol__;
 var _global = typeof window === 'object' && window || typeof self === 'object' && self || global;
 var FUNCTION = 'function';
 var UNDEFINED = 'undefined';
+
+
 
 
 function isPropertyWritable(propertyDesc) {
@@ -756,6 +757,12 @@ function patchTimer(window, setName, cancelName, nameSuffix) {
                 task.invoke.apply(this, arguments);
             }
             finally {
+                if (task.data && task.data.isPeriodic) {
+                    // issue-934, task will be cancelled
+                    // even it is a periodic task such as
+                    // setInterval
+                    return;
+                }
                 if (typeof data.handleId === NUMBER) {
                     // in non-nodejs env, we remove timerId
                     // from local cache
