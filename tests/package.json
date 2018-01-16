@@ -1,6 +1,9 @@
 {
   "nativescript": {
-    "id": "org.nativescript.ngtests"
+    "id": "org.nativescript.ngtests",
+    "tns-ios": {
+      "version": "3.2.0"
+    }
   },
   "name": "ngtests",
   "main": "app.js",
@@ -20,20 +23,20 @@
   ],
   "homepage": "http://nativescript.org",
   "dependencies": {
-    "@angular/animations": "~5.0.0",
-    "@angular/common": "~5.0.0",
-    "@angular/compiler": "~5.0.0",
-    "@angular/core": "~5.0.0",
-    "@angular/forms": "~5.0.0",
-    "@angular/http": "~5.0.0",
-    "@angular/platform-browser": "~5.0.0",
-    "@angular/platform-browser-dynamic": "~5.0.0",
-    "@angular/router": "~5.0.0",
+    "@angular/animations": "~5.1.0",
+    "@angular/common": "~5.1.0",
+    "@angular/compiler": "~5.1.0",
+    "@angular/core": "~5.1.0",
+    "@angular/forms": "~5.1.0",
+    "@angular/http": "~5.1.0",
+    "@angular/platform-browser": "~5.1.0",
+    "@angular/platform-browser-dynamic": "~5.1.0",
+    "@angular/router": "~5.1.0",
     "nativescript-angular": "../nativescript-angular",
     "nativescript-unit-test-runner": "^0.3.4",
     "rxjs": "^5.5.0",
-    "tns-core-modules": "next",
-    "zone.js": "^0.8.4"
+    "tns-core-modules": "^3.1.0 || >3.4.0-",
+    "zone.js": "*"
   },
   "devDependencies": {
     "@types/chai": "^4.0.2",

@@ -1,4 +1,4 @@
-import {TestApp, registerTestApp} from "../../tests/test-app";
+import {registerTestApp} from "../../tests/test-app";
 import { ApplicationRef } from "@angular/core";
 // >> router-outlet-example
 import { Component, NgModule } from "@angular/core";
