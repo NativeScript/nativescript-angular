@@ -54,7 +54,7 @@
     "rxjs": "^5.5.0",
     "tns-core-modules": "^3.1.0 || >3.4.0-",
     "zone.js": "^0.8.4",
-    "typescript": "~2.4.2"
+    "typescript": "~2.6.2"
   },
   "devDependencies": {
     "@angular/platform-browser-dynamic": "~5.2.0",
@@ -71,7 +71,7 @@
     "rxjs": "^5.5.0",
     "tns-core-modules": "next",
     "tslint": "^5.5.0",
-    "typescript": "~2.4.2",
+    "typescript": "~2.6.2",
     "zone.js": "^0.8.12"
   }
 }

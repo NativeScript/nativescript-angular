@@ -32,19 +32,19 @@
   },
   "homepage": "https://github.com/NativeScript/template-hello-world",
   "dependencies": {
-    "@angular/animations": "~5.0.0",
-    "@angular/common": "~5.0.0",
-    "@angular/compiler": "~5.0.0",
-    "@angular/core": "~5.0.0",
-    "@angular/forms": "~5.0.0",
-    "@angular/http": "~5.0.0",
-    "@angular/platform-browser": "~5.0.0",
-    "@angular/platform-browser-dynamic": "~5.0.0",
-    "@angular/router": "~5.0.0",
+    "@angular/animations": "~5.2.0",
+    "@angular/common": "~5.2.0",
+    "@angular/compiler": "~5.2.0",
+    "@angular/core": "~5.2.0",
+    "@angular/forms": "~5.2.0",
+    "@angular/http": "~5.2.0",
+    "@angular/platform-browser": "~5.2.0",
+    "@angular/platform-browser-dynamic": "~5.2.0",
+    "@angular/router": "~5.2.0",
     "nativescript-angular": "file:../nativescript-angular",
-    "rxjs": "^5.5.2",
+    "rxjs": "^5.5.0",
     "tns-core-modules": "next",
-    "zone.js": "~0.8.2"
+    "zone.js": "^0.8.4"
   },
   "devDependencies": {
     "babel-traverse": "6.9.0",
@@ -55,9 +55,10 @@
     "nativescript-dev-typescript": "^0.3.1",
     "shelljs": "^0.7.0",
     "tslint": "^4.5.1",
-    "typescript": "~2.4.2"
+    "typescript": "~2.6.2"
   },
   "scripts": {
-    "tslint": "tslint --project tsconfig.json --config tslint.json"
+    "tslint": "tslint --project tsconfig.json --config tslint.json",
+    "update-app-ng-deps": "update-app-ng-deps"
   }
 }
