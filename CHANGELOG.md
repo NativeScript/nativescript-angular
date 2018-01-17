@@ -1,3 +1,15 @@
+<a name="5.2.0"></a>
+# [5.2.0](https://github.com/NativeScript/nativescript-angular/compare/5.0.0...5.2.0) (2018-01-17)
+
+
+### Features
+
+* add support for Angular 5.2 ([#1154](https://github.com/NativeScript/nativescript-angular/issues/1154)) ([faa690](https://github.com/NativeScript/nativescript-angular/commit/faa690))
+
+* enable typescript 2.6 ([#1156](https://github.com/NativeScript/nativescript-angular/issues/1156)) ([2a5742b](https://github.com/NativeScript/nativescript-angular/commit/2a5742b))
+
+
+
 <a name="5.1.0"></a>
 # [5.1.0](https://github.com/NativeScript/nativescript-angular/compare/5.0.0...5.1.0) (2018-01-10)
 
