@@ -7,6 +7,7 @@ const CopyWebpackPlugin = require("copy-webpack-plugin");
 const ExtractTextPlugin = require("extract-text-webpack-plugin");
 const { BundleAnalyzerPlugin } = require("webpack-bundle-analyzer");
 const { NativeScriptWorkerPlugin } = require("nativescript-worker-loader/NativeScriptWorkerPlugin");
+const UglifyJsPlugin = require("uglifyjs-webpack-plugin");
 
 module.exports = env => {
     const platform = env && (env.android && "android" || env.ios && "ios");
@@ -14,10 +15,8 @@ module.exports = env => {
         throw new Error("You need to provide a target platform!");
     }
     const platforms = ["ios", "android"];
-    const mainSheet = "app.css";
-    let { snapshot, uglify, report, aot } = env;
-    aot = true;
-    const ngToolsWebpackOptions = { tsConfigPath: aot ? "tsconfig.aot.json" : "tsconfig.json"};
+    const { snapshot, uglify, report, aot } = env;
+    const ngToolsWebpackOptions = { tsConfigPath: "tsconfig.json" };
 
     const config = {
         context: resolve("./app"),
@@ -60,14 +59,32 @@ module.exports = env => {
         module: {
             rules: [
                 { test: /\.html$|\.xml$/, use: "raw-loader" },
-                // Root stylesheet gets extracted with bundled dependencies
-                { test: new RegExp(mainSheet), use: "css-loader?url=false" },
-                // Other CSS files get bundled using the raw loader
-                { test: /\.css$/, exclude: new RegExp(mainSheet), use: "raw-loader" },
-                // SASS support
-                { test: /\.scss$/, use: ["raw-loader", "resolve-url-loader", "sass-loader"] },
+
+                // tns-core-modules reads the app.css and its imports using css-loader
+                {
+                    test: /[\/|\\]app\.css$/,
+                    use: {
+                        loader: "css-loader",
+                        options: { minimize: false, url: false },
+                    }
+                },
+                {
+                    test: /[\/|\\]app\.scss$/,
+                    use: [
+                        { loader: "css-loader", options: { minimize: false, url: false } },
+                        "sass-loader"
+                    ]
+                },
+
+                // Angular components reference css files and their imports using raw-loader
+                { test: /\.css$/, exclude: /[\/|\\]app\.css$/, use: "raw-loader" },
+                { test: /\.scss$/, exclude: /[\/|\\]app\.scss$/, use: ["raw-loader", "resolve-url-loader", "sass-loader"] },
+
                 // Compile TypeScript files with ahead-of-time compiler.
-                { test: /.ts$/, loader: "@ngtools/webpack" },
+                { test: /.ts$/, use: [
+                    "nativescript-dev-webpack/moduleid-compat-loader",
+                    { loader: "@ngtools/webpack", options: ngToolsWebpackOptions },
+                ]},
             ],
         },
         plugins: [
@@ -81,6 +98,7 @@ module.exports = env => {
             }),
             // Copy assets to out dir. Add your own globs as needed.
             new CopyWebpackPlugin([
+                { from: "App_Resources/**" },
                 { from: "fonts/**" },
                 { from: "**/*.jpg" },
                 { from: "**/*.png" },
@@ -101,7 +119,7 @@ module.exports = env => {
                     platformOptions: {
                         platform,
                         platforms,
-                        ignore: ["App_Resources"]
+                        // ignore: ["App_Resources"]
                     },
                 }, ngToolsWebpackOptions)
             ),
@@ -134,9 +152,11 @@ module.exports = env => {
 
         // Work around an Android issue by setting compress = false
         const compress = platform !== "android";
-        config.plugins.push(new webpack.optimize.UglifyJsPlugin({
-            mangle: { except: nsWebpack.uglifyMangleExcludes },
-            compress,
+        config.plugins.push(new UglifyJsPlugin({
+            uglifyOptions: {
+                mangle: { reserved: nsWebpack.uglifyMangleExcludes },
+                compress,
+            }
         }));
     }
     return config;
