@@ -62,6 +62,13 @@ export class NativeScriptSanitizer extends Sanitizer {
     }
 }
 
+// Add a fake polyfill for the document object
+(<any>global).document = (<any>global).document || {};
+const doc = (<any>global).document;
+doc.body = Object.assign((doc.body || {}), {
+    isOverride: true,
+});
+
 export class NativeScriptDocument {
     createElement(tag: string) {
         throw new Error("NativeScriptDocument is not DOM Document. There is no createElement() method.");
@@ -71,7 +78,7 @@ export class NativeScriptDocument {
 export const COMMON_PROVIDERS = [
     defaultPageFactoryProvider,
     { provide: Sanitizer, useClass: NativeScriptSanitizer, deps: [] },
-    { provide: DOCUMENT, useClass: NativeScriptDocument, deps: [] },
+    { provide: DOCUMENT, useValue: doc },
 ];
 
 export class NativeScriptPlatformRef extends PlatformRef {
