@@ -8,8 +8,6 @@
     - [Run the sample application (ng-sample)](#run-the-sample-application-ng-sample)
 - [Running the tests](#running-the-tests)
 - [Developer workflow:](#developer-workflow)
-    - [Setup:](#setup)
-    - [Work](#work)
 
 <!-- /TOC -->
 
@@ -35,7 +33,6 @@ Install NPM packages (use the local copy of `nativescript-angular`):
 ```
 $ cd ng-sample
 $ npm install
-$ npm install ../nativescript-angular
 ```
 
 Start the app:
@@ -51,30 +48,16 @@ Install NPM packages (use the local copy of `nativescript-angular`):
 ```
 $ cd tests
 $ npm install
-$ npm install ../nativescript-angular
 ```
 
 Start test run:
 
 ```
-$ tns test ios --emulator
-$ tns test android --emulator
+$ tns test ios
+$ tns test android
 ```
 
 ## Developer workflow:
 
-### Setup:
-Use `npm link` to link `nativescript-angular` in `tests` and `ng-sample` projects:
-
-```
-cd nativescript-angular
-npm link
-cd ../ng-sample
-npm link nativescript-angular
-cd ../tests
-npm link nativescript-angular
-```
-
-### Work
 1. Make changes to the `test`, `ng-sample` projects or in `nativescript-angular` folder.
 2. Run the `tests` or `ng-sample` as shown above.
