@@ -1,7 +1,7 @@
 import { Injectable } from "@angular/core";
 import { LocationStrategy } from "@angular/common";
 import { routerLog } from "../trace";
-import { Frame, NavigationTransition } from "tns-core-modules/ui/frame";
+import { Frame, NavigationTransition, topmost } from "tns-core-modules/ui/frame";
 import { isPresent } from "../lang-facade";
 
 export interface NavigationOptions {
@@ -33,7 +33,7 @@ export class NSLocationStrategy extends LocationStrategy {
 
     constructor(private frame: Frame) {
         super();
-        routerLog("NSLocationStrategy.constructor()");
+        routerLog("NSLocationStrategy.constructor() frame: " + this.frame);
     }
 
     path(): string {
@@ -105,7 +105,8 @@ export class NSLocationStrategy extends LocationStrategy {
                 // This was a page navigation - so navigate through frame.
                 routerLog("NSLocationStrategy.back() while not navigating back but top" +
                     " state is page - will call frame.goBack()");
-                this.frame.goBack();
+                const frame = this.frame || topmost();
+                frame.goBack();
             } else {
                 // Nested navigation - just pop the state
                 routerLog("NSLocationStrategy.back() while not navigating back but top" +

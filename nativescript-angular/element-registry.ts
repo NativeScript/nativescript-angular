@@ -166,6 +166,7 @@ registerElement("Button", () => require("tns-core-modules/ui/button").Button);
 registerElement("ContentView", () => require("tns-core-modules/ui/content-view").ContentView);
 registerElement("DatePicker", () => require("tns-core-modules/ui/date-picker").DatePicker);
 registerElement("DockLayout", () => require("tns-core-modules/ui/layouts/dock-layout").DockLayout);
+registerElement("Frame", () => require("tns-core-modules/ui/frame").Frame);
 registerElement("GridLayout", () => require("tns-core-modules/ui/layouts/grid-layout").GridLayout);
 registerElement("HtmlView", () => require("tns-core-modules/ui/html-view").HtmlView);
 registerElement("Image", () => require("tns-core-modules/ui/image").Image);
@@ -198,3 +199,5 @@ registerElement("Span", () => require("tns-core-modules/text/span").Span);
 
 registerElement("DetachedContainer", () => require("tns-core-modules/ui/proxy-view-container").ProxyViewContainer,
     { skipAddToDom: true });
+
+registerElement("page-router-outlet", () => require("tns-core-modules/ui/frame").Frame);

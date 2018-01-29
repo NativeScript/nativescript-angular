@@ -43,7 +43,8 @@
     "@angular/router": "~5.2.0",
     "nativescript-angular": "file:../nativescript-angular",
     "rxjs": "^5.5.0",
-    "tns-core-modules": "next",
+    "tns-core-modules": "^4.0.0-2018-01-24-02",
+    "tns-platform-declarations": "^3.4.0",
     "zone.js": "^0.8.4"
   },
   "devDependencies": {
