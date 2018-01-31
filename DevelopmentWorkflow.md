@@ -7,7 +7,8 @@
     - [Install dependencies](#install-dependencies)
     - [Run the sample application (ng-sample)](#run-the-sample-application-ng-sample)
 - [Running the tests](#running-the-tests)
-- [Developer workflow:](#developer-workflow)
+- [Testing locally by running e2e tests](#testing-locally-by-running-e2e-tests)
+- [Developer workflow](#developer-workflow)
 
 <!-- /TOC -->
 
@@ -57,7 +58,39 @@ $ tns test ios
 $ tns test android
 ```
 
-## Developer workflow:
+## Testing locally by running e2e tests
+
+NOTE: The steps below describe how to run `renderer` tests, but the same approach can be used to run `router` or any other `e2e` tests.
+
+1. Navigate to `e2e/renderer`
+    ``` bash
+    cd e2e/renderer
+    ```
+
+2. Install dependencies. This also installs your local copy of the nativescript-angular plugin.
+    ``` bash
+    npm install
+    ```
+3. Build the app for Android or iOS
+    ```bash
+    tns run android/ios
+    ```
+
+4. Install [appium](http://appium.io/) globally.
+    ``` bash
+    npm install -g appium
+    ```
+
+5. Create an emulator or connect a physical Android/iOS device.
+
+6. Follow the instructions in the [nativescript-dev-appium](https://github.com/nativescript/nativescript-dev-appium#custom-appium-capabilities) plugin to add an appium capability for your device inside `./e2e/renderer/e2e/config/appium.capabilities.json`.
+
+7. Run the automated tests. The value of the `runType` argument should match the name of the capability that you just added.
+    ``` bash
+    npm run e2e -- --runType capabilityName
+    ```
+
+## Developer workflow
 
 1. Make changes to the `test`, `ng-sample` projects or in `nativescript-angular` folder.
 2. Run the `tests` or `ng-sample` as shown above.
