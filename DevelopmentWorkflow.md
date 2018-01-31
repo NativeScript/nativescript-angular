@@ -71,7 +71,7 @@ NOTE: The steps below describe how to run `renderer` tests, but the same approac
     ``` bash
     npm install
     ```
-3. Make sure to have and emulator set up or connect a physical Android/iOS device.
+3. Make sure to have an emulator set up or connect a physical Android/iOS device.
 
 4. Build the app for Android or iOS
     ```bash
