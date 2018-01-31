@@ -71,17 +71,17 @@ NOTE: The steps below describe how to run `renderer` tests, but the same approac
     ``` bash
     npm install
     ```
-3. Build the app for Android or iOS
+3. Make sure to have and emulator set up or connect a physical Android/iOS device.
+
+4. Build the app for Android or iOS
     ```bash
     tns run android/ios
     ```
 
-4. Install [appium](http://appium.io/) globally.
+5. Install [appium](http://appium.io/) globally.
     ``` bash
     npm install -g appium
     ```
-
-5. Create an emulator or connect a physical Android/iOS device.
 
 6. Follow the instructions in the [nativescript-dev-appium](https://github.com/nativescript/nativescript-dev-appium#custom-appium-capabilities) plugin to add an appium capability for your device inside `./e2e/renderer/e2e/config/appium.capabilities.json`.
 
