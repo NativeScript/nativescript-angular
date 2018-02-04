@@ -1,4 +1,4 @@
-# Contributing to NativeScript
+# Contributing to NativeScript Angular
 
 :+1: First of all, thank you for taking the time to contribute! :+1:
 
