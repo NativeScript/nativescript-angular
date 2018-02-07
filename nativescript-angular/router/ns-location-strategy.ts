@@ -34,7 +34,7 @@ export class NSLocationStrategy extends LocationStrategy {
 
     constructor(private frameService: FrameService) {
         super();
-        routerLog("NSLocationStrategy.constructor() frame: " + this.frame);
+        routerLog("NSLocationStrategy.constructor()");
     }
 
     path(): string {
