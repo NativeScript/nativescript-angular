@@ -182,6 +182,6 @@ onAfterLivesync.subscribe(({ moduleRef, error }) => {
 
 // platformNativeScriptDynamic().bootstrapModule(makeExampleModule(LivesyncApp));
 console.log("APP RESTART!!!!");
-platformNativeScriptDynamic().bootstrapModule(makeExampleModule(RendererTest));
+// platformNativeScriptDynamic().bootstrapModule(makeExampleModule(RendererTest));
 // platformNativeScriptDynamic().bootstrapModule(makeExampleModule(PageRouterOutletAppComponent));
-// platformNativeScriptDynamic().bootstrapModule(makeExampleModule(PageRouterOutletNestedAppComponent));
+platformNativeScriptDynamic().bootstrapModule(makeExampleModule(PageRouterOutletNestedAppComponent));

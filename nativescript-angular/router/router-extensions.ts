@@ -1,7 +1,7 @@
 import { Injectable } from "@angular/core";
 import { Router, UrlTree, NavigationExtras } from "@angular/router";
 import { NSLocationStrategy, NavigationOptions } from "./ns-location-strategy";
-import { Frame } from "tns-core-modules/ui/frame";
+import { FrameService } from "../platform-providers";
 
 export type ExtendedNavigationExtras = NavigationExtras & NavigationOptions;
 
@@ -11,7 +11,7 @@ export class RouterExtensions {
     constructor(
         public router: Router,
         public locationStrategy: NSLocationStrategy,
-        public frame: Frame
+        public frameService: FrameService
     ) { }
 
     public navigate(commands: any[], extras?: ExtendedNavigationExtras): Promise<boolean> {
@@ -37,10 +37,10 @@ export class RouterExtensions {
     }
 
     public backToPreviousPage() {
-        this.frame.goBack();
+        this.frameService.getFrame().goBack();
     }
 
     public canGoBackToPreviousPage(): boolean {
-        return this.frame.canGoBack();
+        return this.frameService.getFrame().canGoBack();
     }
 }
