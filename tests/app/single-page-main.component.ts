@@ -7,20 +7,13 @@ import {SecondComponent} from "./second.component";
 @Component({
     selector: "single-page-main",
     template: `
-    <ListView [items]="['lqlq', 'shalqlq']" class="list-group">
-        <ng-template let-item="item" let-odd="odd" let-even="even">
-          <StackLayout>
-            <Label [text]="item" class="list-group-item"></Label>
-          </StackLayout>
-        </ng-template>
-    </ListView>
-
-    <Label text="Single-page router"></Label>
-    <router-outlet></router-outlet>
+    <StackLayout>
+        <Label text="Single-page router"></Label>
+        <router-outlet></router-outlet>
+    </StackLayout>
     `
-
 })
-export class SinglePageMain {
+export class SinglePageMain { 
     constructor(
         public elementRef: ElementRef,
         public router: Router,
