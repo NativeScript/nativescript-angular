@@ -1,3 +1,4 @@
+// >> list-view-template-selector
 import { Component, Input, Injectable } from "@angular/core";
 
 class DataItem {
@@ -44,7 +45,6 @@ export class DataService {
     selector: "list-test",
     templateUrl: "./template-selector.component.html"
 })
-// >> list-view-template-selector
 export class ListTemplateSelectorTest {
     public myItems: Array<DataItem>;
 
