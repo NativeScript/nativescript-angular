@@ -167,21 +167,25 @@ onBeforeLivesync.subscribe(moduleRef => {
     // if (moduleRef) {
     //     const router = <Router>moduleRef.injector.get(Router);
     //     cachedUrl = router.url;
-    //     log("------- Caching URL: " + cachedUrl);
+    //     log("-------> Caching URL: " + cachedUrl);
     // }
 });
 
 onAfterLivesync.subscribe(({ moduleRef, error }) => {
     console.log(`#### onAfterLivesync moduleRef: ${moduleRef} error: ${error}`);
-    // const router = <Router>moduleRef.injector.get(Router);
-    // router.events.subscribe(e => log(e.toString()));
-    // if (router && cachedUrl) {
-    //     setTimeout(() => { router.navigateByUrl(cachedUrl); }, 0);
+    // if (moduleRef) {
+    //     const router = <Router>moduleRef.injector.get(Router);
+    //     router.events.subscribe(e => log(e.toString()));
+    //     if (router && cachedUrl) {
+    //         setTimeout(() => {
+    //             router.navigateByUrl(cachedUrl);
+    //         }, 0);
+    //     }
     // }
 });
 
 // platformNativeScriptDynamic().bootstrapModule(makeExampleModule(LivesyncApp));
-console.log("APP RESTART!!!!");
+console.log("APP RESTART!!!!  !!!");
 // platformNativeScriptDynamic().bootstrapModule(makeExampleModule(RendererTest));
 // platformNativeScriptDynamic().bootstrapModule(makeExampleModule(PageRouterOutletAppComponent));
 platformNativeScriptDynamic().bootstrapModule(makeExampleModule(PageRouterOutletNestedAppComponent));

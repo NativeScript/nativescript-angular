@@ -28,6 +28,7 @@ import { PAGE_FACTORY, PageFactory, defaultPageFactoryProvider, setRootPage } fr
 import {
     setCssFileName,
     run as applicationRun,
+    _resetRootView as applicationRerun,
     on,
     off,
     launchEvent,
@@ -243,10 +244,9 @@ export class NativeScriptPlatformRef extends PlatformRef {
             onAfterLivesync.next({ error: new Error(errorMessage) });
         }
 
-        // TODO: use application._resetRootView method
-        if (iosApp) {
-            (<any>iosApp).setWindowContent(rootContent);
-        }
+        applicationRerun({
+            create: () => rootContent,
+        });
     }
 
     private createErrorUI(message: string): View {
