@@ -58,6 +58,6 @@ export const NATIVESCRIPT_ANIMATIONS_PROVIDERS: Provider[] = [
 export class NativeScriptAnimationsModule {
     constructor(@Optional() @SkipSelf() parentModule: NativeScriptAnimationsModule) {
         // Prevents NativeScriptAnimationsModule from getting imported multiple times
-        throwIfAlreadyLoaded(parentModule, 'NativeScriptAnimationsModule');
+        throwIfAlreadyLoaded(parentModule, "NativeScriptAnimationsModule");
     }
 }

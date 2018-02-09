@@ -54,6 +54,6 @@ export function errorHandlerFactory() {
 export class NativeScriptModule {
     constructor(@Optional() @SkipSelf() parentModule: NativeScriptModule) {
         // Prevents NativeScriptModule from getting imported multiple times
-        throwIfAlreadyLoaded(parentModule, 'NativeScriptModule');
+        throwIfAlreadyLoaded(parentModule, "NativeScriptModule");
     }
 }
