@@ -1,0 +1,19 @@
+<ActionBar title="Player List" class="action-bar"></ActionBar>
+
+<GridLayout class="page" rows="* auto">
+    <ListView [items]="items" class="list-group">
+        <ng-template let-item="item">
+            <Label [nsRouterLink]="['../player', item.id]" [text]="item.name"
+                class="list-group-item"></Label>
+        </ng-template>
+    </ListView>
+
+    <StackLayout row="1">
+        <Button text="local" nsRouterLink="../player/2">
+        </Button>
+        
+
+        <Button text="absolute" (tap)="navigateAbs()">
+        </Button>
+    </StackLayout>
+</GridLayout>
