@@ -33,8 +33,9 @@ matrix:
         - npm run ngc
         - cd ..
       script: 
+        - cd nativescript-angular
         - tns build ios
-        - cd tests
+        - cd ../tests
         - npm install
     - language: android
       os: linux
@@ -52,8 +53,9 @@ matrix:
         - android-wait-for-emulator
         - adb shell input keyevent 82 &
       script: 
+        - cd nativescript-angular
         - tns build android
-        - cd tests
+        - cd ../tests
         - npm install
 
 android:
