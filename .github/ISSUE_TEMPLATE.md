@@ -4,4 +4,4 @@ PSST! Want to get faster responses to bug reports and important issues? Help us 
 - Proposing features and enhancements.
 - Discussing implementation details.
 
-Please move all other content to the [forums](http://forum.nativescript.org).
+Please move all other content to the [forums](https://discourse.nativescript.org/).
