@@ -5,6 +5,12 @@ import { AppComponent } from "./app.component";
 
 import { DataService } from "./data.service";
 
+import { enable as traceEnable, addCategories } from "tns-core-modules/trace";
+import { routerTraceCategory } from "nativescript-angular/trace";
+
+// addCategories(routerTraceCategory);
+traceEnable();
+
 class MyErrorHandler implements ErrorHandler {
     handleError(error) {
         console.log("### ErrorHandler Error: " + error.toString());

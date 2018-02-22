@@ -16,11 +16,12 @@ export class AppComponent {
 
     constructor(router: Router, location: NSLocationStrategy) {
         router.events.subscribe(e => {
-            console.log("[ROUTER]: " + e.toString());
+            // console.log("[ROUTER]: " + e.toString());
 
             if (e instanceof NavigationEnd) {
                 this.isInitialNavigation = false;
-                console.log("[ROUTER] NAVIGATION END. Location history:");
+                console.log("[ROUTER]: " + e.toString());
+                // console.log("[ROUTER] NAVIGATION END. Location history:");
                 location._getStates().forEach(state => {
                     console.log(`[page: ${state.isPageNavigation}] ${state.url}`);
                 });
@@ -29,10 +30,9 @@ export class AppComponent {
     }
 
     onActivate(tabIndex: number) {
-        console.log(`---> onActivate tabIndex: ${tabIndex} isInitialNavigation: ${this.isInitialNavigation}`);
-
-        if (!this.isInitialNavigation) {
-            this.tabView.selectedIndex = tabIndex;
-        }
+        // if (!this.isInitialNavigation && this.tabView.selectedIndex !== tabIndex) {
+        //     console.log(`---> onActivate changing tabIndex from: ${this.tabView.selectedIndex} to: ${tabIndex}`);
+        //     this.tabView.selectedIndex = tabIndex;
+        // }
     }
 }
