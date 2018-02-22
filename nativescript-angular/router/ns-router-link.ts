@@ -1,6 +1,6 @@
 import { Directive, HostListener, Input } from "@angular/core";
 import { NavigationExtras } from "@angular/router";
-import { ActivatedRoute, Router, UrlTree } from "@angular/router";
+import { ActivatedRoute, Router, UrlTree, } from "@angular/router";
 import { routerLog } from "../trace";
 import { RouterExtensions } from "./router-extensions";
 import { NavigationOptions } from "./ns-location-strategy";
