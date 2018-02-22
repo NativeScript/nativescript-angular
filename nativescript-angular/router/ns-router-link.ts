@@ -1,12 +1,15 @@
 import { Directive, HostListener, Input, Optional, OnChanges } from "@angular/core";
 import { NavigationExtras } from "@angular/router";
-import { ActivatedRoute, Router, UrlTree } from "@angular/router";
+import { ActivatedRoute, Router, UrlTree, } from "@angular/router";
 import { routerLog } from "../trace";
 import { PageRoute } from "./page-router-outlet";
 import { RouterExtensions } from "./router-extensions";
 import { NavigationOptions } from "./ns-location-strategy";
 import { NavigationTransition } from "tns-core-modules/ui/frame";
 import { isString } from "tns-core-modules/utils/types";
+
+// Copied from "@angular/router/src/config"
+export type QueryParamsHandling = 'merge' | 'preserve' | '';
 
 /**
  * The nsRouterLink directive lets you link to specific parts of your app.
@@ -33,30 +36,27 @@ import { isString } from "tns-core-modules/utils/types";
  * And if the segment begins with `../`, the router will go up one level.
  */
 @Directive({ selector: "[nsRouterLink]" })
-export class NSRouterLink implements OnChanges { // tslint:disable-line:directive-class-suffix
-    private commands: any[] = [];
+export class NSRouterLink { // tslint:disable-line:directive-class-suffix
     @Input() target: string;
     @Input() queryParams: { [k: string]: any };
     @Input() fragment: string;
 
+    @Input() queryParamsHandling: QueryParamsHandling;
+    @Input() preserveQueryParams: boolean;
+    @Input() preserveFragment: boolean;
+    @Input() skipLocationChange: boolean;
+    @Input() replaceUrl: boolean;
+
     @Input() clearHistory: boolean;
     @Input() pageTransition: boolean | string | NavigationTransition = true;
+    @Input() pageTransitionDuration;
 
-    urlTree: UrlTree;
-
-    private usePageRoute: boolean;
-
-    private get currentRoute(): ActivatedRoute {
-        return this.usePageRoute ? this.pageRoute.activatedRoute.getValue() : this.route;
-    }
+    private commands: any[] = [];
 
     constructor(
         private router: Router,
         private navigator: RouterExtensions,
-        private route: ActivatedRoute,
-        @Optional() private pageRoute: PageRoute) {
-
-        this.usePageRoute = (this.pageRoute && this.route === this.pageRoute.activatedRoute.getValue());
+        private route: ActivatedRoute) {
     }
 
     @Input("nsRouterLink")
@@ -68,12 +68,9 @@ export class NSRouterLink implements OnChanges { // tslint:disable-line:directiv
         }
     }
 
-
     @HostListener("tap")
     onTap() {
-        routerLog("nsRouterLink.tapped: " + this.commands + " usePageRoute: " +
-            this.usePageRoute + " clearHistory: " + this.clearHistory + " transition: " +
-            JSON.stringify(this.pageTransition));
+        routerLog(`nsRouterLink.tapped: ${this.commands} clear: ${this.clearHistory} transition: ${JSON.stringify(this.pageTransition)} duration: ${this.pageTransitionDuration}`);
 
         const extras = this.getExtras();
         this.navigator.navigateByUrl(this.urlTree, extras);
@@ -82,43 +79,62 @@ export class NSRouterLink implements OnChanges { // tslint:disable-line:directiv
     private getExtras(): NavigationExtras & NavigationOptions {
         const transition = this.getTransition();
         return {
-            queryParams: this.queryParams,
-            fragment: this.fragment,
+            skipLocationChange: attrBoolValue(this.skipLocationChange),
+            replaceUrl: attrBoolValue(this.replaceUrl),
+
             clearHistory: this.convertClearHistory(this.clearHistory),
             animated: transition.animated,
             transition: transition.transition,
-            relativeTo: this.currentRoute,
         };
     }
+
+    get urlTree(): UrlTree {
+        const urlTree = this.router.createUrlTree(this.commands, {
+            relativeTo: this.route,
+            queryParams: this.queryParams,
+            fragment: this.fragment,
+            preserveQueryParams: attrBoolValue(this.preserveQueryParams),
+            queryParamsHandling: this.queryParamsHandling,
+            preserveFragment: attrBoolValue(this.preserveFragment),
+        });
+
+        routerLog(`nsRouterLink urlTree created: ${urlTree}`)
+
+        return urlTree;
+    }
+
 
     private convertClearHistory(value: boolean | string): boolean {
         return value === true || value === "true";
     }
 
     private getTransition(): { animated: boolean, transition?: NavigationTransition } {
+        let transition: NavigationTransition = {};
+        let animated: boolean;
+
         if (typeof this.pageTransition === "boolean") {
-            return { animated: <boolean>this.pageTransition };
+            animated = this.pageTransition;
         } else if (isString(this.pageTransition)) {
             if (this.pageTransition === "none" || this.pageTransition === "false") {
-                return { animated: false };
+                animated = false;
             } else {
-                return { animated: true, transition: { name: <string>this.pageTransition } };
+                animated = true;
+                transition.name = <string>this.pageTransition;
             }
         } else {
-            return {
-                animated: true,
-                transition: <NavigationTransition>this.pageTransition
-            };
+            animated = true;
+            transition = <NavigationTransition>this.pageTransition;
         }
-    }
 
-    ngOnChanges(_: {}): any {
-        this.updateUrlTree();
-    }
+        let duration = +this.pageTransitionDuration;
+        if(!isNaN(duration)) {
+            transition.duration = duration;
+        }
 
-    private updateUrlTree(): void {
-        this.urlTree = this.router.createUrlTree(
-            this.commands,
-            { relativeTo: this.currentRoute, queryParams: this.queryParams, fragment: this.fragment });
+        return { animated, transition };
     }
+}
+
+function attrBoolValue(s: any): boolean {
+    return s === '' || !!s;
 }
