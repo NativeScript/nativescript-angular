@@ -1,13 +1,37 @@
+<!--
 We, the rest of the NativeScript community, thank you for your
-contribution! Because we want to present a really nice, readable changelog with each release, we ask you to provide the following information:
+contribution! 
+To help the rest of the community review your change, please follow the instructions in the template.
+-->
 
-### Create a meaningful title
-Please, make sure your title is less than 50 characters wide and starts with a capital letter. We strive to follow the guidelines in the
-[How to Write a Git Commit Message] (http://chris.beams.io/posts/git-commit/) article for PR titles.
+<!-- PULL REQUEST TEMPLATE -->
+<!-- (Update "[ ]" to "[x]" to check a box) -->
 
-### Reference a specific issue in this repo
-Include the `Fixes/Implements #[Issue Number]` special wording.
+## PR Checklist
 
-### Add [tests](https://github.com/NativeScript/nativescript-angular/tests)
-If not added, tell us why?
-If not possible/feasible, please list all steps needed to manually test your pull request.
+- [ ] The PR title follows our guidelines: https://github.com/NativeScript/NativeScript/blob/master/CONTRIBUTING.md#commit-messages.
+- [ ] There is an issue for the bug/feature this PR is for. To avoid wasting your time, it's best to open a suggestion issue first and wait for approval before working on it.
+- [ ] You have signed the [CLA](http://www.nativescript.org/cla).
+- [ ] All existing tests are passing: https://github.com/NativeScript/nativescript-angular/blob/master/DevelopmentWorkflow.md#running-the-tests
+- [ ] Tests for the changes are included.
+
+## What is the current behavior?
+<!-- Please describe the current behavior that you are modifying, or link to a relevant issue. -->
+
+## What is the new behavior?
+<!-- Describe the changes. -->
+
+Fixes/Implements/Closes #[Issue Number].
+
+<!-- If this PR contains a breaking change, please describe the impact and migration path for existing applications below. -->
+
+<!-- 
+BREAKING CHANGES:
+
+
+[Describe the impact of the changes here.]
+
+Migration steps:
+[Provide a migration path for existing applications.]
+-->
+
