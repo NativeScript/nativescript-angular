@@ -45,13 +45,13 @@ $ tns run ios
 
 ## Running the tests
 
-Install NPM packages (use the local copy of `nativescript-angular`):
+Install the NPM dependencies (use the local copy of `nativescript-angular`):
 ```
 $ cd tests
 $ npm install
 ```
 
-Start test run:
+Run the tests:
 
 ```
 $ tns test ios
