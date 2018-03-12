@@ -1,4 +1,5 @@
-import { ListViewComponent, TemplateKeyDirective } from "./list-view-comp";
+import { ListViewComponent } from "./list-view-comp";
+import { TemplateKeyDirective } from "./templated-items-comp";
 import { TabViewDirective, TabViewItemDirective } from "./tab-view";
 import {
     ActionBarComponent,
@@ -8,11 +9,8 @@ import {
 } from "./action-bar";
 import { AndroidFilterComponent, IosFilterComponent } from "./platform-filters";
 
-export {
-    ListViewComponent,
-    SetupItemViewArgs,
-    TemplateKeyDirective
-} from "./list-view-comp";
+export { ListViewComponent } from "./list-view-comp";
+export { SetupItemViewArgs, TemplateKeyDirective } from "./templated-items-comp";
 
 export { TabViewDirective, TabViewItemDirective } from "./tab-view";
 export {
