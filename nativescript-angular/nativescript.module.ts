@@ -14,11 +14,14 @@ import {
     NgModule,
     RendererFactory2,
     SystemJsNgModuleLoader,
+    Optional,
+    SkipSelf,
 } from "@angular/core";
 
 import { NativeScriptCommonModule } from "./common";
 import { NativeScriptRendererFactory } from "./renderer";
 import { DetachedLoader } from "./common/detached-loader";
+import { throwIfAlreadyLoaded } from "./common/utils";
 
 export function errorHandlerFactory() {
     return new ErrorHandler();
@@ -49,4 +52,8 @@ export function errorHandlerFactory() {
     schemas: [NO_ERRORS_SCHEMA]
 })
 export class NativeScriptModule {
+    constructor(@Optional() @SkipSelf() parentModule: NativeScriptModule) {
+        // Prevents NativeScriptModule from getting imported multiple times
+        throwIfAlreadyLoaded(parentModule, "NativeScriptModule");
+    }
 }

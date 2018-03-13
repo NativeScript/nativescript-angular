@@ -1,5 +1,5 @@
 import { Component, NgModule } from "@angular/core";
-import { NativeScriptModule } from "nativescript-angular/nativescript.module";
+import { NativeScriptCommonModule } from "nativescript-angular/common";
 import { NativeScriptRouterModule } from "nativescript-angular/router";
 import { ModalDialogParams } from "nativescript-angular/directives/dialogs";
 import { Page } from "ui/page";
@@ -31,7 +31,7 @@ export class ModalLazyComponent {
     ],
     entryComponents: [ModalLazyComponent], // when lazily loaded and opened via modal on demand
     imports: [
-        NativeScriptModule,
+        NativeScriptCommonModule,
         NativeScriptRouterModule,
         NativeScriptRouterModule.forChild(routes)
     ],
