@@ -1,7 +1,7 @@
 import { NgModule, NO_ERRORS_SCHEMA } from "@angular/core";
 import { Route } from "@angular/router";
 
-import { NativeScriptModule } from "nativescript-angular/nativescript.module";
+import { NativeScriptCommonModule } from "nativescript-angular/common";
 import { NativeScriptRouterModule } from "nativescript-angular/router";
 
 import { LazyComponent } from "./lazy.component";
@@ -26,7 +26,7 @@ const routes: Route[] = [
 @NgModule({
     schemas: [NO_ERRORS_SCHEMA],
     imports: [
-        NativeScriptModule,
+        NativeScriptCommonModule,
         NativeScriptRouterModule,
         NativeScriptRouterModule.forChild(routes)
     ],
