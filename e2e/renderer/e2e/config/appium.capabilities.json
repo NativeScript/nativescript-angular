@@ -85,15 +85,15 @@
         "platformName": "iOS",
         "platformVersion": "10.0",
         "deviceName": "iPhone 7 100",
-        "noReset": false,
+        "noReset": true,
         "fullReset": false,
         "app": ""
     },
     "sim.iPhone7.iOS110": {
         "platformName": "iOS",
-        "platformVersion": "11.0",
+        "platformVersion": "11.2",
         "deviceName": "iPhone 7 110",
-        "noReset": false,
+        "noReset": true,
         "fullReset": false,
         "app": ""
     }

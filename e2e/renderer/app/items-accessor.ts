@@ -11,7 +11,8 @@ export class ItemsAccessor {
         this.items = this.itemsService.add(this.items);
     }
 
-    remove(item) {
+    remove(item?: number) {
+        item = item || this.items[this.items.length - 1];
         this.items = this.itemsService.remove(this.items, item);
     }
 
