@@ -20,6 +20,12 @@ Install your native toolchain and NativeScript as described in the docs:
 
 https://docs.nativescript.org/setup/quick-setup
 
+### Clone repository
+
+```
+$ git clone git@github.com:NativeScript/nativescript-angular.git
+$ cd nativescript-angular
+```
 
 ### Install dependencies
 
