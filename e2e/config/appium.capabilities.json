@@ -81,6 +81,18 @@
         "fullReset": false,
         "app": ""
     },
+    "android27": {
+        "platformName": "Android",
+        "platformVersion": "27",
+        "deviceName": "Emulator-Api27-Google",
+        "avd": "Emulator-Api27-Google",
+        "lt": 60000,
+        "appActivity": "com.tns.NativeScriptActivity",
+        "newCommandTimeout": 720,
+        "noReset": true,
+        "fullReset": false,
+        "app": ""
+    },
     "sim.iPhone7.iOS100": {
         "platformName": "iOS",
         "platformVersion": "10.0",
@@ -93,6 +105,22 @@
         "platformName": "iOS",
         "platformVersion": "11.2",
         "deviceName": "iPhone 7 110",
+        "noReset": true,
+        "fullReset": false,
+        "app": ""
+    },
+    "sim.iPhone8.iOS112": {
+        "platformName": "iOS",
+        "platformVersion": "11.2",
+        "deviceName": "iPhone 8 112",
+        "noReset": true,
+        "fullReset": false,
+        "app": ""
+    },
+    "sim.iPhoneX.iOS110": {
+        "platformName": "iOS",
+        "platformVersion": "11.2",
+        "deviceName": "iPhone X 110",
         "noReset": true,
         "fullReset": false,
         "app": ""
