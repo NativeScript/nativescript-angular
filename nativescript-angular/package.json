@@ -32,6 +32,7 @@
     "tslint": "tslint --project tsconfig.json --config tslint.json --type-check",
     "postinstall": "node postinstall.js",
     "tsc": "tsc -p tsconfig.json",
+    "tsc-w": "tsc -p tsconfig.json -w",
     "ngc": "ngc -p tsconfig.json",
     "prepare": "npm run ngc"
   },
