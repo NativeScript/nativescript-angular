@@ -69,10 +69,10 @@ export class NSRouterLink { // tslint:disable-line:directive-class-suffix
 
     @HostListener("tap")
     onTap() {
-        routerLog(`nsRouterLink.tapped: ${this.commands}
-                   clear: ${this.clearHistory}
-                   transition: ${JSON.stringify(this.pageTransition)}
-                   duration: ${this.pageTransitionDuration}`);
+        routerLog(`nsRouterLink.tapped: ${this.commands} ` +
+            `clear: ${this.clearHistory} ` +
+            `transition: ${JSON.stringify(this.pageTransition)} ` +
+            `duration: ${this.pageTransitionDuration}`);
 
         const extras = this.getExtras();
         this.navigator.navigateByUrl(this.urlTree, extras);
