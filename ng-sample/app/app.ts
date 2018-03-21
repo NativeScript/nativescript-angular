@@ -46,6 +46,7 @@ import { HttpTest } from "./examples/http/http-test";
 import { HttpClientTest } from "./examples/http-client/http-client-test";
 import { ActionBarTest } from "./examples/action-bar/action-bar-test";
 import { ModalTest } from "./examples/modal/modal-test";
+import { ModalNestedTest } from "./examples/modal/modal-nested-test";
 import { PlatfromDirectivesTest } from "./examples/platform-directives/platform-directives-test";
 import { LivesyncApp } from "./examples/livesync-test/livesync-test-app";
 
@@ -185,7 +186,5 @@ onAfterLivesync.subscribe(({ moduleRef, error }) => {
 });
 
 // platformNativeScriptDynamic().bootstrapModule(makeExampleModule(LivesyncApp));
-console.log("APP RESTART!!!!  !!!");
-// platformNativeScriptDynamic().bootstrapModule(makeExampleModule(RendererTest));
-// platformNativeScriptDynamic().bootstrapModule(makeExampleModule(PageRouterOutletAppComponent));
-platformNativeScriptDynamic().bootstrapModule(makeExampleModule(PageRouterOutletNestedAppComponent));
+// console.log("APP RESTART!!!!  !!!");
+platformNativeScriptDynamic().bootstrapModule(makeExampleModule(ModalTest));

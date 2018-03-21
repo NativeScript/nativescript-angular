@@ -24,6 +24,7 @@ import { DOCUMENT } from "@angular/common";
 
 import { bootstrapLog, bootstrapLogError } from "./trace";
 import { PAGE_FACTORY, PageFactory, defaultPageFactoryProvider, setRootPage } from "./platform-providers";
+import { AppHostView } from "./app-host-view";
 
 import {
     setCssFileName,
@@ -37,11 +38,10 @@ import {
 } from "tns-core-modules/application";
 import { NavigationEntry } from "tns-core-modules/ui/frame";
 import { Page } from "tns-core-modules/ui/page";
-import { ContentView } from "tns-core-modules/ui/content-view";
 import { TextView } from "tns-core-modules/ui/text-view";
 
 import "nativescript-intl";
-import { View, Color } from "tns-core-modules/ui/core/view/view";
+import { Color, View } from "tns-core-modules/ui/core/view/view";
 
 export const onBeforeLivesync = new EventEmitter<NgModuleRef<any>>();
 export const onAfterLivesync = new EventEmitter<{ moduleRef?: NgModuleRef<any>; error?: Error }>();
@@ -147,8 +147,8 @@ export class NativeScriptPlatformRef extends PlatformRef {
     @profile
     private bootstrapNativeScriptApp() {
         // Create a temp page for root of the renderer
-        const tempRootView = new RootView();
-        setRootPage(<any>tempRootView);
+        const tempAppHostView = new AppHostView();
+        setRootPage(<any>tempAppHostView);
         let rootContent: View;
 
         bootstrapLog("NativeScriptPlatform bootstrap started.");
@@ -164,9 +164,10 @@ export class NativeScriptPlatformRef extends PlatformRef {
                         bootstrapPromiseCompleted = true;
 
                         bootstrapLog(`Angular bootstrap bootstrap done. uptime: ${uptime()}`);
-                        rootContent = tempRootView.content;
-                        tempRootView.content = null;
-                        rootContent.parentNode = tempRootView;
+                        rootContent = tempAppHostView.content;
+                        tempAppHostView.content = null;
+                        tempAppHostView.ngAppRoot = rootContent;
+                        rootContent.parentNode = tempAppHostView;
                         lastBootstrappedModule = new WeakRef(moduleRef);
                     },
                     err => {
@@ -204,8 +205,8 @@ export class NativeScriptPlatformRef extends PlatformRef {
 
         onBeforeLivesync.next(lastBootstrappedModule ? lastBootstrappedModule.get() : null);
 
-        const tempRootView = new RootView();
-        setRootPage(<any>tempRootView);
+        const tempAppHostView = new AppHostView();
+        setRootPage(<any>tempAppHostView);
         let rootContent: View;
 
         let bootstrapPromiseCompleted = false;
@@ -215,9 +216,10 @@ export class NativeScriptPlatformRef extends PlatformRef {
                 bootstrapLog("Angular livesync done.");
                 onAfterLivesync.next({ moduleRef });
 
-                rootContent = tempRootView.content;
-                tempRootView.content = null;
-                rootContent.parentNode = tempRootView;
+                rootContent = tempAppHostView.content;
+                tempAppHostView.content = null;
+                tempAppHostView.ngAppRoot = rootContent;
+                rootContent.parentNode = tempAppHostView;
                 lastBootstrappedModule = new WeakRef(moduleRef);
             },
             error => {
@@ -256,5 +258,3 @@ export class NativeScriptPlatformRef extends PlatformRef {
         return errorTextBox;
     }
 }
-
-class RootView extends ContentView {}

@@ -1,5 +1,5 @@
-import {Component, Input} from "@angular/core";
-import {ModalDialogParams} from "nativescript-angular/directives/dialogs";
+import { Component, Input } from "@angular/core";
+import { ModalDialogParams } from "nativescript-angular/directives/dialogs";
 
 @Component({
     selector: "modal-content",
@@ -14,7 +14,9 @@ import {ModalDialogParams} from "nativescript-angular/directives/dialogs";
     `
 })
 export class ModalContent {
+
     @Input() public prompt: string;
+
     constructor(private params: ModalDialogParams) {
         console.log("ModalContent.constructor: " + JSON.stringify(params));
         this.prompt = params.context.promptMsg;
@@ -26,10 +28,10 @@ export class ModalContent {
 
     ngOnInit() {
         console.log("ModalContent.ngOnInit");
-
     }
 
     ngOnDestroy() {
         console.log("ModalContent.ngOnDestroy");
     }
+
 }
