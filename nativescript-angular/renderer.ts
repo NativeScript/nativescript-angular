@@ -9,7 +9,7 @@ import { View } from "tns-core-modules/ui/core/view";
 import { addCss } from "tns-core-modules/application";
 import { profile } from "tns-core-modules/profiling";
 
-import { APP_ROOT_VIEW, DEVICE, getRootPage, FrameService } from "./platform-providers";
+import { APP_ROOT_VIEW, DEVICE, getRootPage } from "./platform-providers";
 import { ViewUtil } from "./view-util";
 import { NgView, InvisibleNode } from "./element-registry";
 import { rendererLog as traceLog } from "./trace";

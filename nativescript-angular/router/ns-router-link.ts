@@ -1,15 +1,14 @@
-import { Directive, HostListener, Input, Optional, OnChanges } from "@angular/core";
+import { Directive, HostListener, Input } from "@angular/core";
 import { NavigationExtras } from "@angular/router";
-import { ActivatedRoute, Router, UrlTree, } from "@angular/router";
+import { ActivatedRoute, Router, UrlTree } from "@angular/router";
 import { routerLog } from "../trace";
-import { PageRoute } from "./page-router-outlet";
 import { RouterExtensions } from "./router-extensions";
 import { NavigationOptions } from "./ns-location-strategy";
 import { NavigationTransition } from "tns-core-modules/ui/frame";
 import { isString } from "tns-core-modules/utils/types";
 
 // Copied from "@angular/router/src/config"
-export type QueryParamsHandling = 'merge' | 'preserve' | '';
+export type QueryParamsHandling = "merge" | "preserve" | "";
 
 /**
  * The nsRouterLink directive lets you link to specific parts of your app.
@@ -70,7 +69,10 @@ export class NSRouterLink { // tslint:disable-line:directive-class-suffix
 
     @HostListener("tap")
     onTap() {
-        routerLog(`nsRouterLink.tapped: ${this.commands} clear: ${this.clearHistory} transition: ${JSON.stringify(this.pageTransition)} duration: ${this.pageTransitionDuration}`);
+        routerLog(`nsRouterLink.tapped: ${this.commands}
+                   clear: ${this.clearHistory}
+                   transition: ${JSON.stringify(this.pageTransition)}
+                   duration: ${this.pageTransitionDuration}`);
 
         const extras = this.getExtras();
         this.navigator.navigateByUrl(this.urlTree, extras);
@@ -98,7 +100,7 @@ export class NSRouterLink { // tslint:disable-line:directive-class-suffix
             preserveFragment: attrBoolValue(this.preserveFragment),
         });
 
-        routerLog(`nsRouterLink urlTree created: ${urlTree}`)
+        routerLog(`nsRouterLink urlTree created: ${urlTree}`);
 
         return urlTree;
     }
@@ -127,7 +129,7 @@ export class NSRouterLink { // tslint:disable-line:directive-class-suffix
         }
 
         let duration = +this.pageTransitionDuration;
-        if(!isNaN(duration)) {
+        if (!isNaN(duration)) {
             transition.duration = duration;
         }
 
@@ -136,5 +138,5 @@ export class NSRouterLink { // tslint:disable-line:directive-class-suffix
 }
 
 function attrBoolValue(s: any): boolean {
-    return s === '' || !!s;
+    return s === "" || !!s;
 }

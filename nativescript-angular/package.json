@@ -29,7 +29,7 @@
     "url": "https://github.com/NativeScript/nativescript-angular.git"
   },
   "scripts": {
-    "tslint": "tslint --project tsconfig.json --config tslint.json --type-check",
+    "tslint": "tslint --project tsconfig.json --config tslint.json",
     "postinstall": "node postinstall.js",
     "tsc": "tsc -p tsconfig.json",
     "tsc-w": "tsc -p tsconfig.json -w",

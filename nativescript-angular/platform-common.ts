@@ -23,7 +23,7 @@ import {
 import { DOCUMENT } from "@angular/common";
 
 import { bootstrapLog, bootstrapLogError } from "./trace";
-import { PAGE_FACTORY, PageFactory, defaultPageFactoryProvider, setRootPage } from "./platform-providers";
+import { defaultPageFactoryProvider, setRootPage } from "./platform-providers";
 import { AppHostView } from "./app-host-view";
 
 import {
@@ -34,10 +34,7 @@ import {
     off,
     launchEvent,
     LaunchEventData,
-    ios as iosApp,
 } from "tns-core-modules/application";
-import { NavigationEntry } from "tns-core-modules/ui/frame";
-import { Page } from "tns-core-modules/ui/page";
 import { TextView } from "tns-core-modules/ui/text-view";
 
 import "nativescript-intl";
