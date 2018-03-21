@@ -291,5 +291,3 @@ export class NativeScriptPlatformRef extends PlatformRef {
         return result;
     }
 }
-
-class RootView extends ContentView {}
