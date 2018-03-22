@@ -3,7 +3,7 @@ import {
     ElementRef, Input, OnChanges, OnDestroy,
     QueryList, Renderer
 } from "@angular/core";
-import { Subscription } from "rxjs/Subscription";
+import { Subscription } from "rxjs";
 
 import { NavigationEnd, Router, UrlTree } from "@angular/router";
 import { containsTree } from "./private-imports/router-url-tree";

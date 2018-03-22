@@ -17,7 +17,7 @@ import { Frame } from "tns-core-modules/ui/frame";
 import { Page, NavigatedData } from "tns-core-modules/ui/page";
 import { profile } from "tns-core-modules/profiling";
 
-import { BehaviorSubject } from "rxjs/BehaviorSubject";
+import { BehaviorSubject } from "rxjs";
 
 import { DEVICE, PAGE_FACTORY, PageFactory } from "../platform-providers";
 import { routerLog as log } from "../trace";
