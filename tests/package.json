@@ -2,10 +2,10 @@
   "nativescript": {
     "id": "org.nativescript.ngtests",
     "tns-ios": {
-      "version": "3.4.1"
+      "version": "next"
     },
     "tns-android": {
-      "version": "3.4.2"
+      "version": "next"
     }
   },
   "name": "ngtests",
