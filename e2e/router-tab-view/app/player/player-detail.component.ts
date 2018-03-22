@@ -2,6 +2,7 @@ import { Component, OnInit } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
 
 import { DataService, DataItem } from "../data.service";
+import { Subscription } from "rxjs/Subscription";
 
 @Component({
     selector: "ns-player-details",
@@ -10,6 +11,7 @@ import { DataService, DataItem } from "../data.service";
 })
 export class PlayerDetailComponent implements OnInit {
     item: DataItem;
+    subscription: Subscription;
 
     constructor(
         private data: DataService,
@@ -17,7 +19,13 @@ export class PlayerDetailComponent implements OnInit {
     ) { }
 
     ngOnInit(): void {
-        const id = +this.route.snapshot.params["id"];
-        this.item = this.data.getPlayer(id);
+        this.subscription = this.route.params.subscribe(params => {
+            const id = +params["id"];
+            this.item = this.data.getPlayer(id);
+        })
+    }
+
+    ngOnDestroy() {
+        this.subscription.unsubscribe();
     }
 }
