@@ -4,7 +4,7 @@ env:
     - NODE_VERSION=8
     - EMULATOR_API_LEVEL=22
     - ANDROID_VERSION=25
-    - ANDROID_BUILD_TOOLS_VERSION=25.0.2
+    - ANDROID_BUILD_TOOLS_VERSION=26.0.2
     - ANDROID_ABI=armeabi-v7a
     - APPIUM_VERSION=1.7.0
     - EMULATOR_NAME=test
@@ -108,6 +108,7 @@ android:
     - tools
     - platform-tools
     - build-tools-25.0.2
+    - build-tools-$ANDROID_BUILD_TOOLS_VERSION
     - android-25
     - android-$EMULATOR_API_LEVEL
     - extra-google-google_play_services
