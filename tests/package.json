@@ -1,6 +1,12 @@
 {
   "nativescript": {
-    "id": "org.nativescript.ngtests"
+    "id": "org.nativescript.ngtests",
+    "tns-ios": {
+      "version": "3.4.1"
+    },
+    "tns-android": {
+      "version": "3.4.2"
+    }
   },
   "name": "ngtests",
   "main": "app.js",
