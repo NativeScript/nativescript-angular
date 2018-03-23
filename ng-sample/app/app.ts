@@ -52,6 +52,7 @@ import { LivesyncApp } from "./examples/livesync-test/livesync-test-app";
 import { ModalTest } from "./examples/modal/modal-test";
 import { ModalNestedTest } from "./examples/modal/modal-nested-test";
 import { ModalRouterOutletTest } from "./examples/modal/modal-router-outlet-test";
+import { ModalPageRouterOutletTest } from "./examples/modal/modal-page-router-outlet-test";
 
 // new router
 import { RouterOutletAppComponent } from "./examples/router/router-outlet-test";
@@ -192,4 +193,5 @@ onAfterLivesync.subscribe(({ moduleRef, error }) => {
 // console.log("APP RESTART!!!!  !!!");
 // platformNativeScriptDynamic().bootstrapModule(makeExampleModule(ModalTest));
 // platformNativeScriptDynamic().bootstrapModule(makeExampleModule(ModalNestedTest));
-platformNativeScriptDynamic().bootstrapModule(makeExampleModule(ModalRouterOutletTest));
+// platformNativeScriptDynamic().bootstrapModule(makeExampleModule(ModalRouterOutletTest));
+platformNativeScriptDynamic().bootstrapModule(makeExampleModule(ModalPageRouterOutletTest));
