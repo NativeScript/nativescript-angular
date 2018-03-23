@@ -1,6 +1,5 @@
 import { ContentView } from "tns-core-modules/ui/content-view";
 import { GridLayout } from "tns-core-modules/ui/layouts/grid-layout";
-import { ViewBase } from "tns-core-modules/ui/core/view/view";
 import { ProxyViewContainer } from "tns-core-modules/ui/proxy-view-container";
 import { View } from "tns-core-modules/ui/core/view";
 
