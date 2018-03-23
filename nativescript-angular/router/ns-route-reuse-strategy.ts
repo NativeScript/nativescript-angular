@@ -79,7 +79,8 @@ export class NSRouteReuseStrategy implements RouteReuseStrategy {
 
         const key = getSnapshotKey(route);
         const isBack = this.location._isPageNavigatingBack();
-        const shouldAttach = isBack && this.cache.peek().key === key;
+        const cachedItem = this.cache.peek();
+        const shouldAttach = isBack && cachedItem && cachedItem.key === key;
 
         log(`shouldAttach isBack: ${isBack} key: ${key} result: ${shouldAttach}`);
 
