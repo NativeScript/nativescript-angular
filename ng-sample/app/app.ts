@@ -45,10 +45,13 @@ import { ImageTest } from "./examples/image/image-test";
 import { HttpTest } from "./examples/http/http-test";
 import { HttpClientTest } from "./examples/http-client/http-client-test";
 import { ActionBarTest } from "./examples/action-bar/action-bar-test";
-import { ModalTest } from "./examples/modal/modal-test";
-import { ModalNestedTest } from "./examples/modal/modal-nested-test";
 import { PlatfromDirectivesTest } from "./examples/platform-directives/platform-directives-test";
 import { LivesyncApp } from "./examples/livesync-test/livesync-test-app";
+
+// modal
+import { ModalTest } from "./examples/modal/modal-test";
+import { ModalNestedTest } from "./examples/modal/modal-nested-test";
+import { ModalRouterOutletTest } from "./examples/modal/modal-router-outlet-test";
 
 // new router
 import { RouterOutletAppComponent } from "./examples/router/router-outlet-test";
@@ -82,7 +85,7 @@ import { AnimationStatesMultiTest } from "./examples/animation/animation-states-
     ],
     providers: [],
 })
-class ExampleModule {}
+class ExampleModule { }
 
 function makeExampleModule(componentType) {
     let imports: any[] = [NativeScriptAnimationsModule, ExampleModule];
@@ -112,7 +115,7 @@ function makeExampleModule(componentType) {
         providers,
         exports,
     })
-    class ExampleModuleForComponent {}
+    class ExampleModuleForComponent { }
 
     return ExampleModuleForComponent;
 }
@@ -188,3 +191,5 @@ onAfterLivesync.subscribe(({ moduleRef, error }) => {
 // platformNativeScriptDynamic().bootstrapModule(makeExampleModule(LivesyncApp));
 // console.log("APP RESTART!!!!  !!!");
 // platformNativeScriptDynamic().bootstrapModule(makeExampleModule(ModalTest));
+// platformNativeScriptDynamic().bootstrapModule(makeExampleModule(ModalNestedTest));
+platformNativeScriptDynamic().bootstrapModule(makeExampleModule(ModalRouterOutletTest));

@@ -11,7 +11,7 @@
             "platform": "ios",
             "appRoot": "${workspaceRoot}",
             "sourceMaps": true,
-            "stopOnEntry": true,
+            "stopOnEntry": false,
             "tnsArgs": [
                 "--syncAllFiles"
             ],

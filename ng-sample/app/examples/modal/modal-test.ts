@@ -31,9 +31,7 @@ export class ModalTest {
         ModalContent
     ];
 
-    static exports = [
-        ModalContent
-    ];
+    static exports = [];
 
     public showModal(fullscreen: boolean) {
         const options: ModalDialogOptions = {

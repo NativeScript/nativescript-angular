@@ -17,7 +17,6 @@ export class ModalNestedTest {
     ];
 
     static exports = [
-        ModalContent,
         ModalTest
     ];
 
