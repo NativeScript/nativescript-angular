@@ -10,6 +10,15 @@
         "fullReset": false,
         "app": ""
     },
+    "nexus5": {
+        "browserName": "",
+        "platformName": "Android",
+        "platformVersion": "6.0",
+        "deviceName": "device",
+        "udid": "077e4a47003b7698",
+        "appActivity": "com.tns.NativeScriptActivity",
+        "app": ""
+    },
     "android19": {
         "platformName": "Android",
         "platformVersion": "4.4",
@@ -18,7 +27,7 @@
         "lt": 60000,
         "appActivity": "com.tns.NativeScriptActivity",
         "newCommandTimeout": 720,
-        "noReset": true,
+        "noReset": false,
         "fullReset": false,
         "app": ""
     },
@@ -30,7 +39,7 @@
         "lt": 60000,
         "appActivity": "com.tns.NativeScriptActivity",
         "newCommandTimeout": 720,
-        "noReset": true,
+        "noReset": false,
         "fullReset": false,
         "app": ""
     },
@@ -42,7 +51,7 @@
         "lt": 60000,
         "appActivity": "com.tns.NativeScriptActivity",
         "newCommandTimeout": 720,
-        "noReset": true,
+        "noReset": false,
         "fullReset": false,
         "app": ""
     },
@@ -54,7 +63,7 @@
         "lt": 60000,
         "appActivity": "com.tns.NativeScriptActivity",
         "newCommandTimeout": 720,
-        "noReset": true,
+        "noReset": false,
         "fullReset": false,
         "app": ""
     },
@@ -66,7 +75,7 @@
         "lt": 60000,
         "appActivity": "com.tns.NativeScriptActivity",
         "newCommandTimeout": 720,
-        "noReset": true,
+        "noReset": false,
         "fullReset": false,
         "app": ""
     },
@@ -75,6 +84,19 @@
         "platformVersion": "8.0",
         "deviceName": "Emulator-Api26-Google",
         "avd": "Emulator-Api26-Google",
+        "lt": 60000,
+        "automationName": "UIAutomator2",
+        "appActivity": "com.tns.NativeScriptActivity",
+        "newCommandTimeout": 720,
+        "noReset": false,
+        "fullReset": false,
+        "app": ""
+    },
+    "android27": {
+        "platformName": "Android",
+        "platformVersion": "27",
+        "deviceName": "Emulator-Api27-Google",
+        "avd": "Emulator-Api27-Google",
         "lt": 60000,
         "appActivity": "com.tns.NativeScriptActivity",
         "newCommandTimeout": 720,
@@ -92,8 +114,24 @@
     },
     "sim.iPhone7.iOS110": {
         "platformName": "iOS",
-        "platformVersion": "11.0",
+        "platformVersion": "11.2",
         "deviceName": "iPhone 7 110",
+        "noReset": true,
+        "fullReset": false,
+        "app": ""
+    },
+    "sim.iPhone8.iOS112": {
+        "platformName": "iOS",
+        "platformVersion": "11.2",
+        "deviceName": "iPhone 8 112",
+        "noReset": true,
+        "fullReset": false,
+        "app": ""
+    },
+    "sim.iPhoneX.iOS110": {
+        "platformName": "iOS",
+        "platformVersion": "11.2",
+        "deviceName": "iPhone X 110",
         "noReset": true,
         "fullReset": false,
         "app": ""
