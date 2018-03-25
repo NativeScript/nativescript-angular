@@ -1,4 +1,15 @@
 {
+    "travis-e2e-tests": {
+        "platformName": "Android",
+        "platformVersion": "4.4",
+        "deviceName": "test",
+        "lt": 60000,
+        "appActivity": "com.tns.NativeScriptActivity",
+        "newCommandTimeout": 720,
+        "noReset": true,
+        "fullReset": false,
+        "app": ""
+    },
     "nexus5": {
         "browserName": "",
         "platformName": "Android",
