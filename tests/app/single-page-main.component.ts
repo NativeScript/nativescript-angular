@@ -7,10 +7,14 @@ import {SecondComponent} from "./second.component";
 @Component({
     selector: "single-page-main",
     template: `
-    <StackLayout>
-        <Label text="Single-page router"></Label>
-        <router-outlet></router-outlet>
-    </StackLayout>
+    <Frame>
+        <Page>
+            <StackLayout>
+                <Label text="Single-page router"></Label>
+                <router-outlet></router-outlet>
+            </StackLayout>
+        </Page>
+    </Frame>
     `
 })
 export class SinglePageMain { 
