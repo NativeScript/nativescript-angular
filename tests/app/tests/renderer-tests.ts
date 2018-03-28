@@ -5,14 +5,15 @@ import { ProxyViewContainer } from "ui/proxy-view-container";
 import { Red } from "color/known-colors";
 import { dumpView } from "./test-utils";
 import { TestApp } from "./test-app";
-import { LayoutBase } from "ui/layouts/layout-base";
-import { StackLayout } from "ui/layouts/stack-layout";
-import { ContentView } from "ui/content-view";
-import { Button } from "ui/button";
+import { isIOS } from "tns-core-modules/platform";
+import { View, fontInternalProperty, backgroundInternalProperty} from "tns-core-modules/ui/core/view"
+import { LayoutBase } from "tns-core-modules/ui/layouts/layout-base";
+import { StackLayout } from "tns-core-modules/ui/layouts/stack-layout";
+import { ContentView } from "tns-core-modules/ui/content-view";
+import { Button } from "tns-core-modules/ui/button";
 import { NgView } from "nativescript-angular/element-registry";
 import { registerElement } from "nativescript-angular/element-registry";
-import * as button from "tns-core-modules/ui/button";
-import * as view from "tns-core-modules/ui/core/view";
+// import * as view from "tns-core-modules/ui/core/view";
 
 @Component({
     template: `<StackLayout><Label text="Layout"></Label></StackLayout>`
@@ -172,18 +173,18 @@ export class NgIfThenElseComponent {
     }
 }
 
-export class ButtonCounter extends button.Button {
+export class ButtonCounter extends Button {
     nativeBackgroundRedraws = 0;
     backgroundInternalSetNativeCount = 0;
     fontInternalSetNativeCount = 0;
 
-    [view.backgroundInternalProperty.setNative](value) {
+    [backgroundInternalProperty.setNative](value) {
         this.backgroundInternalSetNativeCount++;
-        return super[view.backgroundInternalProperty.setNative](value);
+        return super[backgroundInternalProperty.setNative](value);
     }
-    [view.fontInternalProperty.setNative](value) {
+    [fontInternalProperty.setNative](value) {
         this.fontInternalSetNativeCount++;
-        return super[view.fontInternalProperty.setNative](value);
+        return super[fontInternalProperty.setNative](value);
     }
     _redrawNativeBackground(value: any): void {
         this.nativeBackgroundRedraws++;
@@ -624,12 +625,14 @@ describe("Renderer lifecycle", () => {
         return testApp.loadComponent(NgControlSettersCount).then((componentRef) => {
             assert.isTrue(componentRef.instance.isAfterViewInit, "Expected the NgControlSettersCount to have passed its ngAfterViewInit.");
             componentRef.instance.buttons.map(btn => btn.nativeElement).forEach(btn => {
-                assert.isTrue(btn.isLoaded, `Expected ${btn.id} to be allready loaded.`);
+                assert.isTrue(btn.isLoaded, `Expected ${btn.id} to be already loaded.`);
                 assert.isFalse(btn.isLayoutValid, `Expected ${btn.id}'s layout to be invalid.`);
 
                 assert.equal(btn.backgroundInternalSetNativeCount, 1, `Expected ${btn.id} backgroundInternalSetNativeCount to be called just once.`);
                 assert.equal(btn.fontInternalSetNativeCount, 1, `Expected ${btn.id} fontInternalSetNativeCount to be called just once.`);
-                assert.equal(btn.nativeBackgroundRedraws, 0, `Expected ${btn.id} nativeBackgroundRedraws to be called after its layout pass.`);
+
+                const expectedBackgroundRedraws = isIOS ? 0 : 1;
+                assert.equal(btn.nativeBackgroundRedraws, expectedBackgroundRedraws, `Expected ${btn.id} nativeBackgroundRedraws to be called just once`);
             });
         });
     });

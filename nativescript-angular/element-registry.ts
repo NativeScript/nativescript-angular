@@ -170,7 +170,7 @@ const frameMeta: ViewClassMeta = {
             throw new Error("Only a Page can be a child of Frame");
         }
     }
-}
+};
 
 // Register default NativeScript components
 // Note: ActionBar related components are registerd together with action-bar directives.
