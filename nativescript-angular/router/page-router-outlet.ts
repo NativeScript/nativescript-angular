@@ -304,17 +304,17 @@ export class PageRouterOutlet implements OnDestroy, OnInit { // tslint:disable-l
 
         page.on(Page.navigatedFromEvent, (<any>global).Zone.current.wrap((args: NavigatedData) => {
             if (args.isBackNavigation) {
-                this.locationStrategy._beginBackPageNavigation();
+                this.locationStrategy._beginBackPageNavigation(this.name);
                 this.locationStrategy.back();
             }
         }));
 
-        const navOptions = this.locationStrategy._beginPageNavigation();
+        const navOptions = this.locationStrategy._beginPageNavigation(this.name);
 
         // Clear refCache if navigation with clearHistory
         if (navOptions.clearHistory) {
             const clearCallback = () => setTimeout(() => {
-                this.routeReuseStrategy.clearCache();
+                this.routeReuseStrategy.clearCache(this.name);
                 page.off(Page.navigatedToEvent, clearCallback);
             });
 

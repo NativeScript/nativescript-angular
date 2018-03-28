@@ -57,7 +57,7 @@ class DetachedStateCache {
  */
 @Injectable()
 export class NSRouteReuseStrategy implements RouteReuseStrategy {
-    private cache: DetachedStateCache = new DetachedStateCache();
+    private cacheByOutlet: { [key: string]: DetachedStateCache } = {};
 
     constructor(private location: NSLocationStrategy) { }
 
@@ -77,9 +77,14 @@ export class NSRouteReuseStrategy implements RouteReuseStrategy {
     shouldAttach(route: ActivatedRouteSnapshot): boolean {
         route = findTopActivatedRouteNodeForOutlet(route);
 
+        const cache = this.cacheByOutlet[route.outlet];
+        if (!cache) {
+            return false;
+        }
+
         const key = getSnapshotKey(route);
         const isBack = this.location._isPageNavigatingBack();
-        const shouldAttach = isBack && this.cache.peek().key === key;
+        const shouldAttach = isBack && cache.peek().key === key;
 
         log(`shouldAttach isBack: ${isBack} key: ${key} result: ${shouldAttach}`);
 
@@ -92,12 +97,14 @@ export class NSRouteReuseStrategy implements RouteReuseStrategy {
         const key = getSnapshotKey(route);
         log(`store key: ${key}, state: ${state}`);
 
+        const cache = this.cacheByOutlet[route.outlet] = this.cacheByOutlet[route.outlet] || new DetachedStateCache();
+
         if (state) {
-            this.cache.push({ key, state });
+            cache.push({ key, state });
         } else {
-            const topItem = this.cache.peek();
+            const topItem = cache.peek();
             if (topItem.key === key) {
-                this.cache.pop();
+                cache.pop();
             } else {
                 throw new Error("Trying to pop from DetachedStateCache but keys don't match. " +
                     `expected: ${topItem.key} actual: ${key}`);
@@ -108,9 +115,14 @@ export class NSRouteReuseStrategy implements RouteReuseStrategy {
     retrieve(route: ActivatedRouteSnapshot): DetachedRouteHandle | null {
         route = findTopActivatedRouteNodeForOutlet(route);
 
+        const cache = this.cacheByOutlet[route.outlet];
+        if (!cache) {
+            return null;
+        }
+
         const key = getSnapshotKey(route);
         const isBack = this.location._isPageNavigatingBack();
-        const cachedItem = this.cache.peek();
+        const cachedItem = cache.peek();
 
         let state = null;
         if (isBack && cachedItem && cachedItem.key === key) {
@@ -136,8 +148,12 @@ export class NSRouteReuseStrategy implements RouteReuseStrategy {
         return shouldReuse;
     }
 
-    clearCache() {
-        this.cache.clear();
+    clearCache(outletName: string) {
+        const cache = this.cacheByOutlet[outletName];
+
+        if (cache) {
+            cache.clear();
+        }
     }
 }
 
