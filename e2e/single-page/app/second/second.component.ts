@@ -10,14 +10,19 @@ import { Observable } from "rxjs/Observable";
     <ActionBar title="Second Title">
         <ActionItem text="ACTION2"></ActionItem>
     </ActionBar>
+
+    <ActionBarExtension *ngIf="(id$ | async) === 2">
+        <ActionItem text="ADD" ios.position="right"></ActionItem>
+    </ActionBarExtension>
+
     <StackLayout>
-        <Label [text]="'Second component: ' + (id$ | async)" class="title"></Label>
+        <Label [text]="'Second Component: ' + (id$ | async)" class="title"></Label>
     </StackLayout>`
 })
 export class SecondComponent implements OnInit, OnDestroy {
     public id$: Observable<number>;
     constructor(route: ActivatedRoute) {
-        this.id$ = route.params.map(r => r["id"]);
+        this.id$ = route.params.map(r => +r["id"]);
     }
 
     ngOnInit() {

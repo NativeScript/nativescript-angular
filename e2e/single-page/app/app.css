@@ -9,6 +9,8 @@
     vertical-align: bottom;
     padding: 4;
     background-color: lightblue;
+    justify-content: space-around;
+    align-content: center;
 }
 
 .link {
