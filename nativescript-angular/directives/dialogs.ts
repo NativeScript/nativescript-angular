@@ -11,6 +11,7 @@ import {
 
 import { Page } from "tns-core-modules/ui/page";
 import { View, ViewBase } from "tns-core-modules/ui/core/view";
+import { ProxyViewContainer } from "tns-core-modules/ui/proxy-view-container/proxy-view-container";
 
 import { AppHostView } from "../app-host-view";
 import { DetachedLoader } from "../common/detached-loader";
@@ -89,40 +90,42 @@ export class ModalDialogService {
         resolver,
         type,
     }: ShowDialogOptions): void {
-        const page = pageFactory({ isModal: true, componentType: type });
-
+        let componentView: View;
         let detachedLoaderRef: ComponentRef<DetachedLoader>;
+
         const closeCallback = (...args) => {
             doneCallback.apply(undefined, args);
-            page.closeModal();
+            if (componentView) {
+                componentView.closeModal();
+            }
             detachedLoaderRef.instance.detectChanges();
             detachedLoaderRef.destroy();
         };
 
         const modalParams = new ModalDialogParams(context, closeCallback);
-
         const providers = ReflectiveInjector.resolve([
-            { provide: Page, useValue: page },
             { provide: ModalDialogParams, useValue: modalParams },
         ]);
 
-        const childInjector = ReflectiveInjector.fromResolvedProviders(
-            providers, containerRef.parentInjector);
+        const childInjector = ReflectiveInjector.fromResolvedProviders(providers, containerRef.parentInjector);
         const detachedFactory = resolver.resolveComponentFactory(DetachedLoader);
         detachedLoaderRef = containerRef.createComponent(detachedFactory, -1, childInjector, null);
         detachedLoaderRef.instance.loadComponent(type).then((compRef) => {
-            const componentView = <View>compRef.location.nativeElement;
+            const detachedProxy = <ProxyViewContainer>compRef.location.nativeElement;
+
+            if (detachedProxy.getChildrenCount() > 1) {
+                throw new Error("Modal contet has more than one root view.");
+            }
+            componentView = detachedProxy.getChildAt(0);
 
             if (componentView.parent) {
                 (<any>componentView.parent).removeChild(componentView);
             }
 
-            page.content = componentView;
-            parentView.showModal(page, context, closeCallback, fullscreen);
+            parentView.showModal(componentView, context, closeCallback, fullscreen);
         });
     }
 }
-
 
 @Directive({
     selector: "[modal-dialog-host]" // tslint:disable-line:directive-selector
