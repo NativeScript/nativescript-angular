@@ -6,9 +6,9 @@ import { Component } from "@angular/core";
             <router-outlet></router-outlet>
 
             <FlexboxLayout class="nav" row="1">
-                <Button text="First" nsRouterLinkActive="active" nsRouterLink="/first"></Button>
-                <Button text="Second(1)" nsRouterLinkActive="active" nsRouterLink="/second/1"></Button>
-                <Button text="Second(2)" nsRouterLinkActive="active" [nsRouterLink]="['/second', '2' ]">
+                <Button text="FIRST" nsRouterLinkActive="active" nsRouterLink="/first"></Button>
+                <Button text="SECOND(1)" nsRouterLinkActive="active" nsRouterLink="/second/1"></Button>
+                <Button text="SECOND(2)" nsRouterLinkActive="active" [nsRouterLink]="['/second', '2' ]">
                 </Button>
             </FlexboxLayout>
             
