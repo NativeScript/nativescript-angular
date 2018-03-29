@@ -9,9 +9,11 @@ import {
 import { AppComponent } from "./app.component";
 import { ItemsService } from "./items.service";
 
-import { rendererTraceCategory, viewUtilCategory } from "nativescript-angular/trace";
-import { setCategories, enable } from "trace";
-setCategories(rendererTraceCategory + "," + viewUtilCategory);
+import { rendererTraceCategory, viewUtilCategory, bootstrapCategory } from "nativescript-angular/trace";
+import { addCategories, enable } from "trace";
+addCategories(bootstrapCategory);
+// addCategories(rendererTraceCategory);
+// addCategories(viewUtilCategory);
 enable();
 
 @NgModule({

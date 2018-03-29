@@ -29,9 +29,10 @@
     "url": "https://github.com/NativeScript/nativescript-angular.git"
   },
   "scripts": {
-    "tslint": "tslint --project tsconfig.json --config tslint.json --type-check",
+    "tslint": "tslint --project tsconfig.json --config tslint.json",
     "postinstall": "node postinstall.js",
     "tsc": "tsc -p tsconfig.json",
+    "tsc-w": "tsc -p tsconfig.json -w",
     "ngc": "ngc -p tsconfig.json",
     "prepare": "npm run ngc"
   },
@@ -52,7 +53,7 @@
     "@angular/platform-browser": "~5.2.0",
     "@angular/router": "~5.2.0",
     "rxjs": "^5.5.0",
-    "tns-core-modules": "^3.4.0 || >4.0.0-",
+    "tns-core-modules": "^4.0.0 || >4.0.0- || >4.1.0-",
     "zone.js": "^0.8.4",
     "typescript": "~2.6.2"
   },

@@ -1,0 +1,33 @@
+<!--
+The template defines the view of the component - what is actually rendered. 
+In NativeScript applications the template is defined with XML using NativeScript UI elements. 
+It is different from HTML. So instead of <input>, <span>, <div> etc. - we have <TextField>, <Label> and layouts.
+The important thing is that although the elements are different - all of the Angular’s template syntax works exactly the same. 
+So you can still use template expressions, bindings, templates as well as all the built-in directives.
+-->
+
+<!--
+The ActionBar is the NativeScript common abstraction over the Android ActionBar and iOS NavigationBar.
+http://docs.nativescript.org/ui/action-bar
+-->
+<ActionBar title="My App" class="action-bar">
+</ActionBar>
+
+<!--
+The StackLayout stacks UI components on the screen — either vertically or horizontally.
+In this case, the StackLayout does vertical stacking; you can change the stacking to
+horizontal by applying a orientation="horizontal" attribute to the <StackLayout> element.
+You can learn more about NativeScript layouts at https://docs.nativescript.org/ui/layout-containers.
+
+These components make use of several CSS class names that are part of the NativeScript
+core theme, such as p-20, btn, h2, and list-group. You can view a full list of the
+class names available for styling your app at https://docs.nativescript.org/ui/theme.
+-->
+<StackLayout class="page">
+    <ListView [items]="items" class="list-group">
+        <ng-template let-item="item">
+            <Label [nsRouterLink]="['/item', item.id]" [text]="item.name"
+                class="list-group-item"></Label>
+        </ng-template>
+    </ListView>
+</StackLayout>

@@ -10,8 +10,9 @@ import {
 } from "@angular/core";
 
 import { Page } from "tns-core-modules/ui/page";
-import { View } from "tns-core-modules/ui/core/view";
+import { View, ViewBase } from "tns-core-modules/ui/core/view";
 
+import { AppHostView } from "../app-host-view";
 import { DetachedLoader } from "../common/detached-loader";
 import { PageFactory, PAGE_FACTORY } from "../platform-providers";
 
@@ -35,7 +36,7 @@ interface ShowDialogOptions {
     doneCallback;
     fullscreen: boolean;
     pageFactory: PageFactory;
-    parentPage: Page;
+    parentView: ViewBase;
     resolver: ComponentFactoryResolver;
     type: Type<any>;
 }
@@ -43,7 +44,7 @@ interface ShowDialogOptions {
 @Injectable()
 export class ModalDialogService {
     public showModal(type: Type<any>,
-        {viewContainerRef, moduleRef, context, fullscreen}: ModalDialogOptions
+        { viewContainerRef, moduleRef, context, fullscreen }: ModalDialogOptions
     ): Promise<any> {
         if (!viewContainerRef) {
             throw new Error(
@@ -52,11 +53,15 @@ export class ModalDialogService {
             );
         }
 
-        const parentPage: Page = viewContainerRef.injector.get(Page);
+        let parentView = viewContainerRef.element.nativeElement;
+        if (parentView instanceof AppHostView && parentView.ngAppRoot) {
+            parentView = parentView.ngAppRoot;
+        }
+
         const pageFactory: PageFactory = viewContainerRef.injector.get(PAGE_FACTORY);
 
         // resolve from particular module (moduleRef)
-        // or from same module as parentPage (viewContainerRef)
+        // or from same module as parentView (viewContainerRef)
         const componentContainer = moduleRef || viewContainerRef;
         const resolver = componentContainer.injector.get(ComponentFactoryResolver);
 
@@ -67,7 +72,7 @@ export class ModalDialogService {
                 doneCallback: resolve,
                 fullscreen,
                 pageFactory,
-                parentPage,
+                parentView,
                 resolver,
                 type,
             }), 10);
@@ -80,7 +85,7 @@ export class ModalDialogService {
         doneCallback,
         fullscreen,
         pageFactory,
-        parentPage,
+        parentView,
         resolver,
         type,
     }: ShowDialogOptions): void {
@@ -113,7 +118,7 @@ export class ModalDialogService {
             }
 
             page.content = componentView;
-            parentPage.showModal(page, context, closeCallback, fullscreen);
+            parentView.showModal(page, context, closeCallback, fullscreen);
         });
     }
 }

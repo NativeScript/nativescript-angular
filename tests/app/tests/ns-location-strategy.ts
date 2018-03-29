@@ -4,6 +4,19 @@ import { NSLocationStrategy, LocationState } from "nativescript-angular/router/n
 import { Frame, BackstackEntry, NavigationEntry } from "ui/frame";
 import { Page } from "ui/page";
 import { View } from "ui/core/view";
+import { FrameService } from "nativescript-angular/platform-providers";
+
+class FakeFrameService extends FrameService {
+    private frame: Frame;
+    constructor(private backCB?: () => void) {
+        super();
+        this.frame = new FakeFrame(backCB);
+    }
+
+    public getFrame(): Frame {
+        return this.frame;
+    }
+}
 
 class FakeFrame extends View implements Frame {
     backStack: Array<BackstackEntry>;
@@ -11,15 +24,18 @@ class FakeFrame extends View implements Frame {
     currentEntry: NavigationEntry;
     animated: boolean;
     transition: any;
+    _currentEntry: any;
 
-    canGoBack(): boolean { return true; }
+    canGoBack(): boolean {
+        return true;
+    }
     goBack(to?: BackstackEntry) {
         if (this.backCB) {
             this.backCB();
         }
     }
 
-    navigate(entry: any) { }
+    navigate(entry: any) {}
 
     constructor(private backCB?: () => void) {
         super();
@@ -44,10 +60,23 @@ class FakeFrame extends View implements Frame {
     public _getNavBarVisible(page: Page): boolean {
         throw new Error("I am a FakeFrame");
     }
+    public isCurrent(entry: BackstackEntry): boolean {
+        throw new Error("I am a FakeFrame");
+    }
+    setCurrent(entry: BackstackEntry, isBack: boolean): void {
+        throw new Error("I am a FakeFrame");
+    }
+    _findEntryForTag(fragmentTag: string): BackstackEntry {
+        throw new Error("I am a FakeFrame");
+    }
+
+    _updateBackstack(entry: BackstackEntry, isBack: boolean): void {
+        throw new Error("I am a FakeFrame");
+    }
 }
 
 function initStrategy(back?: () => void): NSLocationStrategy {
-    const strategy = new NSLocationStrategy(new FakeFrame(back));
+    const strategy = new NSLocationStrategy(new FakeFrameService(back));
     strategy.pushState(null, null, "/", null); // load initial state
     return strategy;
 }
@@ -59,11 +88,13 @@ function assertStatesEqual(actual: Array<LocationState>, expected: Array<Locatio
 
     for (let i = 0; i < actual.length; i++) {
         assert.deepEqual(
-            actual[i], expected[i],
+            actual[i],
+            expected[i],
             `State[${i}] does not match!
     actual: ${JSON.stringify(actual[i])}
     expected: ${JSON.stringify(expected[i])}
-            `);
+            `
+        );
     }
 }
 
@@ -73,7 +104,7 @@ function createState(url: string, isPageNav: boolean = false) {
         title: null,
         url: url,
         queryParams: null,
-        isPageNavigation: isPageNav
+        isPageNavigation: isPageNav,
     };
 }
 
@@ -89,12 +120,10 @@ function simulatePageBack(strategy: NSLocationStrategy) {
 }
 
 describe("NSLocationStrategy", () => {
-
     it("initial path() value", () => {
-        const strategy = new NSLocationStrategy(new FakeFrame());
+        const strategy = new NSLocationStrategy(new FakeFrameService());
         assert.equal(strategy.path(), "/");
     });
-
 
     it("pushState changes path", () => {
         const strategy = initStrategy();
@@ -120,7 +149,9 @@ describe("NSLocationStrategy", () => {
     it("back() calls onPopState", () => {
         const strategy = initStrategy();
         let popCount = 0;
-        strategy.onPopState(() => { popCount++; });
+        strategy.onPopState(() => {
+            popCount++;
+        });
 
         strategy.pushState(null, "test", "/test", null);
         assert.equal(strategy.path(), "/test");
@@ -134,7 +165,9 @@ describe("NSLocationStrategy", () => {
     it("replaceState() replaces state - doesn't call onPopState", () => {
         const strategy = initStrategy();
         let popCount = 0;
-        strategy.onPopState(() => { popCount++; });
+        strategy.onPopState(() => {
+            popCount++;
+        });
 
         strategy.pushState(null, "test", "/test", null);
         assert.equal(strategy.path(), "/test");
@@ -158,12 +191,15 @@ describe("NSLocationStrategy", () => {
         assertStatesEqual(strategy._getStates(), expectedStates);
     });
 
-
     it("back() when on page-state calls frame.goBack() if no page navigation in progress", () => {
         let frameBackCount = 0;
-        const strategy = initStrategy(() => { frameBackCount++; });
+        const strategy = initStrategy(() => {
+            frameBackCount++;
+        });
         let popCount = 0;
-        strategy.onPopState(() => { popCount++; });
+        strategy.onPopState(() => {
+            popCount++;
+        });
 
         simulatePageNavigation(strategy, "/page");
 
@@ -180,12 +216,15 @@ describe("NSLocationStrategy", () => {
         assert.equal(strategy._getStates().length, 2);
     });
 
-
     it("back() when on page-state navigates back if page navigation is in progress", () => {
         let frameBackCount = 0;
-        const strategy = initStrategy(() => { frameBackCount++; });
+        const strategy = initStrategy(() => {
+            frameBackCount++;
+        });
         let popCount = 0;
-        strategy.onPopState(() => { popCount++; });
+        strategy.onPopState(() => {
+            popCount++;
+        });
 
         simulatePageNavigation(strategy, "/page");
 
@@ -201,7 +240,6 @@ describe("NSLocationStrategy", () => {
         assert.equal(popCount, 1);
         assert.equal(strategy._getStates().length, 1);
     });
-
 
     it("pushState() with clearHistory clears history", () => {
         const strategy = initStrategy();
