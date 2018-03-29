@@ -1,4 +1,4 @@
-import { InjectionToken } from "@angular/core";
+import { InjectionToken, Injectable } from "@angular/core";
 
 import { topmost, Frame } from "tns-core-modules/ui/frame";
 import { View } from "tns-core-modules/ui/core/view";
@@ -53,3 +53,11 @@ export const defaultPageFactory: PageFactory = function (_opts: PageFactoryOptio
     return new Page();
 };
 export const defaultPageFactoryProvider = { provide: PAGE_FACTORY, useValue: defaultPageFactory };
+
+@Injectable()
+export class FrameService {
+    // TODO: Add any methods that are needed to handle frame/page navigation
+    getFrame(): Frame {
+        return topmost();
+    }
+}

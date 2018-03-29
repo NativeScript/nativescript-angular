@@ -7,7 +7,6 @@ import {
 import { Device } from "tns-core-modules/platform";
 import { View } from "tns-core-modules/ui/core/view";
 import { addCss } from "tns-core-modules/application";
-import { topmost } from "tns-core-modules/ui/frame";
 import { profile } from "tns-core-modules/profiling";
 
 import { APP_ROOT_VIEW, DEVICE, getRootPage } from "./platform-providers";
@@ -46,7 +45,7 @@ export class NativeScriptRendererFactory implements RendererFactory2 {
 
     private setRootNgView(rootView: any) {
         if (!rootView) {
-            rootView = getRootPage() || topmost().currentPage;
+            rootView = getRootPage();
         }
 
         rootView.nodeName = "NONE";

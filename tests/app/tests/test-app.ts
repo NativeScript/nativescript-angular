@@ -7,9 +7,11 @@ import {
     ViewContainerRef, NgZone, NgModule,
 } from "@angular/core";
 
-import { GridLayout } from "ui/layouts/grid-layout";
-import { LayoutBase } from "ui/layouts/layout-base";
-import { topmost } from "ui/frame";
+import { getRootView } from "tns-core-modules/application";
+import { Frame } from "tns-core-modules/ui/frame";
+import { GridLayout } from "tns-core-modules/ui/layouts/grid-layout";
+import { LayoutBase } from "tns-core-modules/ui/layouts/layout-base";
+
 import { APP_ROOT_VIEW } from "nativescript-angular/platform-providers";
 
 @Component({
@@ -76,7 +78,7 @@ export function bootstrapTestApp<T>(
     components: any[] = [],
     directives: any[] = []
 ): Promise<T> {
-    const page = topmost().currentPage;
+    const page = (<Frame>getRootView()).currentPage;
     const rootLayout = <LayoutBase>page.content;
     const viewRoot = new GridLayout();
     rootLayout.addChild(viewRoot);

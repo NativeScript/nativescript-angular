@@ -2,7 +2,6 @@ import { Component, Directive, Host, ElementRef, Input } from "@angular/core";
 import { Observable } from "data/observable";
 import { SegmentedBarItem } from "ui/segmented-bar";
 
-
 function createTabItem(title: string) {
     let item = new SegmentedBarItem();
     item.title = title;
@@ -20,11 +19,10 @@ export class TemplatedComponent {
 }
 
 @Directive({
-    selector: "Progress",
+    selector: "Progress"
 })
 export class ProgressDirective {
-    constructor(private element: ElementRef) {
-    }
+    constructor(private element: ElementRef) {}
 
     ngOnInit() {
         this.element.nativeElement.value = 90;
@@ -44,16 +42,13 @@ export class RendererTest {
     public detailLines: Array<string> = [];
     public isValid: boolean = true;
     public model: any;
+    public text: string = "initial";
 
     public testModel = { mydate: new Date() };
 
-    static entries = [
-        TemplatedComponent,
-    ];
+    static entries = [TemplatedComponent];
 
-    static exports = [
-        ProgressDirective
-    ];
+    static exports = [ProgressDirective];
 
     constructor() {
         this.buttonText = "Save...";
@@ -61,18 +56,16 @@ export class RendererTest {
         this.detailsText = "plain ng-if directive \ndetail 1-2-3...";
         this.moreDetailsText = "More details:";
         this.model = {
-            "test": "Jack",
-            "testBoolean": false,
-            "deliveryDate": new Date(),
-            "deliveryTime": new Date(),
-            "mydate": new Date(),
-            "sliderTest": 0,
-            "search": null,
-            "selectedIndex": 0,
-            "listPickerItems": [
-                1, 2, 3, 4
-            ],
-            "segmentedBarItems": [
+            test: "Jack",
+            testBoolean: false,
+            deliveryDate: new Date(),
+            deliveryTime: new Date(),
+            mydate: new Date(),
+            sliderTest: 0,
+            search: null,
+            selectedIndex: 0,
+            listPickerItems: [1, 2, 3, 4],
+            segmentedBarItems: [
                 createTabItem("first"),
                 createTabItem("second"),
                 createTabItem("third"),
@@ -80,10 +73,7 @@ export class RendererTest {
             ]
         };
 
-        this.detailLines = [
-            "ngFor inside a ngIf 1",
-            "ngFor inside a ngIf 2",
-        ];
+        this.detailLines = ["ngFor inside a ngIf 1", "ngFor inside a ngIf 2"];
     }
 
     onSave($event, name, $el) {
@@ -108,5 +98,16 @@ export class RendererTest {
             return $event.toUpperCase();
         }
         return $event;
+    }
+    count = 0;
+    onTap() {
+        console.log("On tap!!! count: " + this.count++);
+        this.text = "tapped ## : " + this.count;
+    }
+
+    public show = true;
+
+    toggle(){
+        this.show = !this.show;
     }
 }

@@ -1,5 +1,7 @@
 import { View } from "tns-core-modules/ui/core/view";
 import { LayoutBase } from "tns-core-modules/ui/layouts/layout-base";
+import { Page } from "tns-core-modules/ui/page";
+import { Frame } from "tns-core-modules/ui/frame";
 
 export type NgView = (View & ViewExtensions);
 
@@ -157,6 +159,19 @@ export function getSingleViewRecursive(nodes: Array<any>, nestLevel: number): Vi
     return rootLayout;
 }
 
+const frameMeta: ViewClassMeta = {
+    insertChild: (parent: Frame, child: NgView, next: any) => {
+        // Page cannot be added to Frame with _addChildFromBuilder (trows "use defaultPage" error)
+        if (isInvisibleNode(child)) {
+            return;
+        } else if (child instanceof Page) {
+            parent.navigate({ create: () => child });
+        } else {
+            throw new Error("Only a Page can be a child of Frame");
+        }
+    }
+};
+
 // Register default NativeScript components
 // Note: ActionBar related components are registerd together with action-bar directives.
 registerElement("AbsoluteLayout", () => require("tns-core-modules/ui/layouts/absolute-layout").AbsoluteLayout);
@@ -166,6 +181,7 @@ registerElement("Button", () => require("tns-core-modules/ui/button").Button);
 registerElement("ContentView", () => require("tns-core-modules/ui/content-view").ContentView);
 registerElement("DatePicker", () => require("tns-core-modules/ui/date-picker").DatePicker);
 registerElement("DockLayout", () => require("tns-core-modules/ui/layouts/dock-layout").DockLayout);
+registerElement("Frame", () => require("tns-core-modules/ui/frame").Frame, frameMeta);
 registerElement("GridLayout", () => require("tns-core-modules/ui/layouts/grid-layout").GridLayout);
 registerElement("HtmlView", () => require("tns-core-modules/ui/html-view").HtmlView);
 registerElement("Image", () => require("tns-core-modules/ui/image").Image);
@@ -198,3 +214,5 @@ registerElement("Span", () => require("tns-core-modules/text/span").Span);
 
 registerElement("DetachedContainer", () => require("tns-core-modules/ui/proxy-view-container").ProxyViewContainer,
     { skipAddToDom: true });
+
+registerElement("page-router-outlet", () => require("tns-core-modules/ui/frame").Frame);

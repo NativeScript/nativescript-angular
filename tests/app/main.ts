@@ -4,7 +4,7 @@
 
 import { NativeScriptModule } from "nativescript-angular/nativescript.module";
 import { platformNativeScriptDynamic } from "nativescript-angular/platform";
-import { NativeScriptRouterModule, NSModuleFactoryLoader } from "nativescript-angular/router";
+import { NativeScriptRouterModule } from "nativescript-angular/router";
 import { NativeScriptFormsModule } from "nativescript-angular/forms";
 
 import { AppComponent } from "./app.component";
@@ -33,17 +33,38 @@ import { rendererTraceCategory, routerTraceCategory } from "nativescript-angular
 
 import { BehaviorSubject } from "rxjs/BehaviorSubject";
 
-import trace = require("trace");
-trace.setCategories(rendererTraceCategory + "," + routerTraceCategory);
+import { GridLayout, ItemSpec } from "tns-core-modules/ui/layouts/grid-layout/grid-layout";
+
+import { enable, addCategories, categories } from "trace";
+import { Color } from "tns-core-modules/color/color";
+
+addCategories(rendererTraceCategory);
+// addCategories(routerTraceCategory);
+addCategories(categories.ViewHierarchy);
+
 // trace.setCategories(routerTraceCategory);
-// trace.enable();
+enable();
 
 // nativeScriptBootstrap(GestureComponent);
 // nativeScriptBootstrap(LayoutsComponent);
 // nativeScriptBootstrap(IconFontComponent);
 const platform = platformNativeScriptDynamic({ bootInExistingPage: true });
-const root = new StackLayout();
-const rootViewProvider = { provide: APP_ROOT_VIEW, useValue: root };
+const root = new GridLayout();
+
+let rootViewsCount = 0;
+let colors = ["lightgreen", "lightblue", "lightpink"];
+function createRootProvider() {
+    root.addRow(new ItemSpec(1, "star"));
+
+    const appRootView = new StackLayout();
+    GridLayout.setRow(appRootView, rootViewsCount);
+    root.addChild(appRootView);
+    appRootView.backgroundColor = new Color(colors[rootViewsCount % colors.length]);
+
+    rootViewsCount++;
+    return { provide: APP_ROOT_VIEW, useValue: appRootView };
+}
+
 const singlePageHooksLog = new BehaviorSubject([]);
 const singlePageHooksLogProvider = { provide: HOOKS_LOG, useValue: singlePageHooksLog };
 const multiPageHooksLog = new BehaviorSubject([]);
@@ -52,108 +73,58 @@ const lazyLoadHooksLog = new BehaviorSubject([]);
 export const lazyLoadHooksLogProvider = { provide: HOOKS_LOG, useValue: lazyLoadHooksLog };
 
 @NgModule({
-    bootstrap: [
-        SinglePageMain
-    ],
-    declarations: [
-        SinglePageMain,
-        FirstComponent,
-        SecondComponent,
-    ],
-    entryComponents: [
-        SinglePageMain,
-        FirstComponent,
-        SecondComponent,
-    ],
+    bootstrap: [SinglePageMain],
+    declarations: [SinglePageMain, FirstComponent, SecondComponent],
+    entryComponents: [SinglePageMain, FirstComponent, SecondComponent],
     imports: [
         NativeScriptModule,
         NativeScriptFormsModule,
         NativeScriptRouterModule,
         NativeScriptRouterModule.forRoot(singlePageRoutes),
     ],
-    exports: [
-        NativeScriptModule,
-        NativeScriptFormsModule,
-        NativeScriptRouterModule,
-    ],
-    providers: [
-        rootViewProvider,
-        singlePageHooksLogProvider,
-    ]
+    exports: [NativeScriptModule, NativeScriptFormsModule, NativeScriptRouterModule],
+    providers: [createRootProvider(), singlePageHooksLogProvider],
 })
-class SinglePageModule { }
+class SinglePageModule {}
 
 @NgModule({
-    bootstrap: [
-        MultiPageMain
-    ],
-    declarations: [
-        MultiPageMain,
-        FirstComponent,
-        SecondComponent,
-    ],
-    entryComponents: [
-        MultiPageMain,
-        FirstComponent,
-        SecondComponent,
-    ],
+    bootstrap: [MultiPageMain],
+    declarations: [MultiPageMain, FirstComponent, SecondComponent],
+    entryComponents: [MultiPageMain, FirstComponent, SecondComponent],
     imports: [
         NativeScriptModule,
         NativeScriptFormsModule,
         NativeScriptRouterModule,
         NativeScriptRouterModule.forRoot(multiPageRoutes),
     ],
-    exports: [
-        NativeScriptModule,
-        NativeScriptFormsModule,
-        NativeScriptRouterModule,
-    ],
-    providers: [
-        rootViewProvider,
-        multiPageHooksLogProvider,
-    ]
+    exports: [NativeScriptModule, NativeScriptFormsModule, NativeScriptRouterModule],
+    providers: [createRootProvider(), multiPageHooksLogProvider],
 })
-class MultiPageModule { }
+class MultiPageModule {}
 
 @NgModule({
-    bootstrap: [
-        LazyLoadMain
-    ],
-    declarations: [
-        LazyLoadMain,
-        FirstComponent,
-    ],
-    entryComponents: [
-        LazyLoadMain,
-    ],
+    bootstrap: [LazyLoadMain],
+    declarations: [LazyLoadMain, FirstComponent],
+    entryComponents: [LazyLoadMain],
     imports: [
         NativeScriptModule,
         NativeScriptFormsModule,
         NativeScriptRouterModule,
         NativeScriptRouterModule.forRoot(lazyLoadRoutes),
     ],
-    exports: [
-        NativeScriptModule,
-        NativeScriptFormsModule,
-        NativeScriptRouterModule,
-    ],
+    exports: [NativeScriptModule, NativeScriptFormsModule, NativeScriptRouterModule],
     providers: [
-        rootViewProvider,
+        createRootProvider(),
         lazyLoadHooksLogProvider,
-        { provide: NgModuleFactoryLoader, useClass: NSModuleFactoryLoader },
-    ]
+    ],
 })
-class LazyLoadModule { }
+class LazyLoadModule {}
 
-application.start({
+application.run({
     create: (): Page => {
-        const page = new Page();
-        page.content = root;
-
-        let onLoadedHandler = function (args) {
-            page.off("loaded", onLoadedHandler);
+        let onLoadedHandler = function(args) {
+            root.off("loaded", onLoadedHandler);
             // profiling.stop('application-start');
-            console.log("Page loaded");
 
             // profiling.start('ng-bootstrap');
             console.log("BOOTSTRAPPING TEST APPS...");
@@ -163,8 +134,8 @@ application.start({
             platform.bootstrapModule(LazyLoadModule);
         };
 
-        page.on("loaded", onLoadedHandler);
+        root.on("loaded", onLoadedHandler);
 
-        return page;
-    }
+        return <any>root;
+    },
 });

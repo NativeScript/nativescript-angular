@@ -72,50 +72,68 @@ class TestTextValueAccessor extends TextValueAccessor {
 describe("two-way binding via ng-model", () => {
     it("converts strings to numbers", () => {
         const accessor = new TestNumberValueAccessor();
+        const defaultValue = accessor.view.value;
 
         accessor.writeValue(null);
-        assert.strictEqual(0, accessor.view.value, "default to 0 on empty");
+        assert.strictEqual(defaultValue, accessor.view.value, "setting null should keep the default value");
 
         accessor.writeValue("42");
         assert.strictEqual(42, accessor.view.value);
 
         accessor.writeValue("blah");
         assert.notEqual(accessor.view.value, accessor.view.value, "defaults to NaN on parse errors");
+        
+        accessor.writeValue(null);
+        assert.strictEqual(defaultValue, accessor.view.value, "setting null should reset the value");
     });
 
     it("converts strings to bools", () => {
         const accessor = new TestCheckedValueAccessor();
+        const defaultValue = accessor.view.checked;
 
         accessor.writeValue(null);
-        assert.strictEqual(null, accessor.view.checked, "default to null on empty");
+        assert.strictEqual(false, accessor.view.checked, "setting null should keep the default value");
 
         accessor.writeValue("true");
         assert.strictEqual(true, accessor.view.checked);
+
+        accessor.writeValue(null);
+        assert.strictEqual(defaultValue, accessor.view.checked, "setting null should reset the value");
 
         assert.throws(() => accessor.writeValue("blah"));
     });
 
     it("converts strings to dates", () => {
-        const now = new Date();
         const accessor = new TestDateValueAccessor();
-
-        accessor.writeValue(null);
-        assert.equal(null, accessor.view.date, "default to null on empty");
+        const defaultDate = accessor.view.date; // current date time
+        
+        assert.instanceOf(accessor.view.date, Date);
+        let diff = Math.abs(accessor.view.date.getTime() - defaultDate.getTime());
+        assert.isTrue(diff < 1000, "setting null should reset the value");
 
         accessor.writeValue("2010-03-17");
         assert.equal(formatDate(new Date(2010, 2, 17)), formatDate(accessor.view.date));
+        
+        accessor.writeValue(null);
+        assert.instanceOf(accessor.view.date, Date);
+        diff = Math.abs(accessor.view.date.getTime() - defaultDate.getTime());
+        assert.isTrue(diff < 1000, "setting null should reset the value");
     });
 
     it("converts strings to int selection", () => {
         const accessor = new TestSelectedIndexValueAccessor();
-
+        const defaultValue = accessor.view.selectedIndex;
+        
         accessor.writeValue(null);
         accessor.ngAfterViewInit();
-        assert.strictEqual(null, accessor.view.selectedIndex, "default to null on empty");
+        assert.strictEqual(defaultValue, accessor.view.selectedIndex, "setting null should keep the default value");
 
         accessor.writeValue("3");
         accessor.ngAfterViewInit();
         assert.strictEqual(3, accessor.view.selectedIndex);
+
+        accessor.writeValue(null);
+        assert.strictEqual(defaultValue, accessor.view.selectedIndex, "setting null should reset the value");
 
         accessor.writeValue("blah");
         accessor.ngAfterViewInit();
@@ -126,19 +144,22 @@ describe("two-way binding via ng-model", () => {
     it("converts strings to times", () => {
         const accessor = new TestTimeValueAccessor();
 
-        assert.throws(() => accessor.writeValue(null));
         assert.throws(() => accessor.writeValue("2010/03/17 12:54"));
         assert.throws(() => accessor.writeValue("three hours from now"));
     });
 
     it("converts values to text", () => {
         const accessor = new TestTextValueAccessor();
+        const defaultValue = accessor.view.text;
 
         accessor.writeValue(null);
-        assert.equal(null, accessor.view.text, "defaults to null on empty");
+        assert.equal(defaultValue, accessor.view.text, "setting null should keep the default value");
 
         accessor.writeValue("blah");
         assert.equal("blah", accessor.view.text);
+
+        accessor.writeValue(null);
+        assert.equal(defaultValue, accessor.view.text, "setting null should reset the value");
 
         accessor.writeValue({ toString: () => "stringified" });
         assert.equal("stringified", accessor.view.text);

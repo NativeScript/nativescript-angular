@@ -20,8 +20,7 @@ import {
     ListTemplateSelectorTest,
 } from "../snippets/list-view/template-selector.component";
 
-import { device, platformNames } from "platform";
-const IS_IOS = (device.os === platformNames.ios);
+import { isIOS } from "platform";
 
 describe("Snippets", () => {
     let testApp: TestApp = null;
@@ -50,8 +49,8 @@ describe("Snippets", () => {
         });
     });
 
-    // TODO: Skip list-view test until karma test launcher double navigate bug is fixed
-    (IS_IOS ? it.skip : it)("Icon-font snippets can be loaded", (done) => {
+    //TODO: Skip list-view test until karma test launcher double navigate bug is fixed
+    (isIOS ? it.skip : it)("Icon-font snippets can be loaded", (done) => {
         testApp.loadComponent(IconFontComponent).then((componentRef) => {
             const componentInstance = componentRef.instance;
             assert.instanceOf(componentInstance, IconFontComponent);
@@ -79,7 +78,11 @@ describe("Snippets Navigation", () => {
     after(cleanup);
 
     it("router-outlet app", (done) => {
-        bootstrapTestApp(NavigationApp, [], routes, [NavigationApp, FirstComponent, SecondComponent]).then((app) => {
+        bootstrapTestApp(NavigationApp, [], routes, [
+            NavigationApp, 
+            FirstComponent, 
+            SecondComponent
+        ]).then((app) => {
             runningApp = app;
 
             return runningApp.done.then(() => {
@@ -95,14 +98,13 @@ describe("Snippets Navigation", () => {
         });
     });
 
-    it("page-router-outlet app", (done) => {
+    //TODO: Skip the page-router-outlet test as it causes a crash in android in the current test-runner setup
+    (isIOS ? it : it.skip)("page-router-outlet app", (done) => {
         bootstrapTestApp(PageNavigationApp, [], routes, [
             PageNavigationApp,
             FirstComponent,
             SecondComponent
         ]).then((app) => {
-
-            console.log("PageNavigationApp instance: " + app);
             runningApp = app;
 
             return runningApp.done.then(() => {
