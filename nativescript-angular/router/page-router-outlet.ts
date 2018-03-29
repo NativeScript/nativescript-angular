@@ -102,6 +102,8 @@ function routeToString(activatedRoute: ActivatedRoute | ActivatedRouteSnapshot):
     return activatedRoute.pathFromRoot.join("->");
 }
 
+const routeTransitionWarning = "This could be due to route transition timing and could be ignored.";
+
 @Directive({ selector: "page-router-outlet" }) // tslint:disable-line:directive-selector
 export class PageRouterOutlet implements OnDestroy { // tslint:disable-line:directive-class-suffix
     private activated: ComponentRef<any> | null = null;
@@ -126,14 +128,16 @@ export class PageRouterOutlet implements OnDestroy { // tslint:disable-line:dire
 
     get component(): Object {
         if (!this.activated) {
-            throw new Error("Outlet is not activated");
+            log("Outlet is not activated");
+            return;
         }
 
         return this.activated.instance;
     }
     get activatedRoute(): ActivatedRoute {
         if (!this.activated) {
-            throw new Error("Outlet is not activated");
+            log("Outlet is not activated");
+            return;
         }
 
         return this._activatedRoute;
@@ -173,8 +177,9 @@ export class PageRouterOutlet implements OnDestroy { // tslint:disable-line:dire
 
     deactivate(): void {
         if (!this.locationStrategy._isPageNavigatingBack()) {
-            throw new Error("Currently not in page back navigation" +
-                " - component should be detached instead of deactivated.");
+          log("Currently not in page back navigation" +
+            " - component should be detached instead of deactivated." + routeTransitionWarning);
+          return;
         }
 
         log("PageRouterOutlet.deactivate() while going back - should destroy");
@@ -197,7 +202,8 @@ export class PageRouterOutlet implements OnDestroy { // tslint:disable-line:dire
      */
     detach(): ComponentRef<any> {
         if (!this.isActivated) {
-            throw new Error("Outlet is not activated");
+            log("Outlet is not activated");
+            return;
         }
 
         log("PageRouterOutlet.detach() - " + routeToString(this._activatedRoute));
@@ -232,7 +238,8 @@ export class PageRouterOutlet implements OnDestroy { // tslint:disable-line:dire
         resolver: ComponentFactoryResolver | null): void {
 
         if (this.locationStrategy._isPageNavigatingBack()) {
-            throw new Error("Currently in page back navigation - component should be reattached instead of activated.");
+            log("Currently in page back navigation - component should be reattached instead of activated. " + routeTransitionWarning);
+            this.locationStrategy._finishBackPageNavigation();
         }
 
         log("PageRouterOutlet.activateWith() - " + routeToString(activatedRoute));
