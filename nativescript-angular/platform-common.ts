@@ -31,7 +31,6 @@ import {
     run as applicationRun,
     _resetRootView as applicationRerun,
     on,
-    off,
     launchEvent,
     LaunchEventData,
 } from "tns-core-modules/application";
@@ -153,7 +152,6 @@ export class NativeScriptPlatformRef extends PlatformRef {
             "nativescript-angular/platform-common.launchCallback",
             (args: LaunchEventData) => {
                 bootstrapLog("Application launch event fired");
-                off(launchEvent, launchCallback);
 
                 let bootstrapPromiseCompleted = false;
                 this._bootstrapper().then(
