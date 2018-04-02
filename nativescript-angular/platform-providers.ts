@@ -21,8 +21,17 @@ export function getRootPage(): Page {
 
 // Use an exported function to make the AoT compiler happy.
 export function getDefaultPage(): Page {
+    const rootPage = getRootPage();
+    if (rootPage instanceof Page) {
+        return rootPage;
+    }
+
     const frame = topmost();
-    return getRootPage() || (frame && frame.currentPage);
+    if (frame && frame.currentPage) {
+        return frame.currentPage;
+    }
+
+    return null;
 }
 
 export const defaultPageProvider = { provide: Page, useFactory: getDefaultPage };

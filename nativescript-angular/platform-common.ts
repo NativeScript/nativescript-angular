@@ -23,7 +23,7 @@ import {
 import { DOCUMENT } from "@angular/common";
 
 import { bootstrapLog, bootstrapLogError } from "./trace";
-import { defaultPageFactoryProvider, setRootPage } from "./platform-providers";
+import { defaultPageFactoryProvider, setRootPage, PageFactory, PAGE_FACTORY } from "./platform-providers";
 import { AppHostView } from "./app-host-view";
 
 import {
@@ -39,6 +39,7 @@ import { TextView } from "tns-core-modules/ui/text-view";
 
 import "nativescript-intl";
 import { Color, View } from "tns-core-modules/ui/core/view/view";
+import { Frame } from "tns-core-modules/ui/frame";
 
 export const onBeforeLivesync = new EventEmitter<NgModuleRef<any>>();
 export const onAfterLivesync = new EventEmitter<{ moduleRef?: NgModuleRef<any>; error?: Error }>();
@@ -55,6 +56,7 @@ export interface AppOptions {
     bootInExistingPage?: boolean;
     cssFile?: string;
     startPageActionBarHidden?: boolean;
+    createFrameOnBootstrap?: boolean;
 }
 
 export type PlatformFactory = (extraProviders?: StaticProvider[]) => PlatformRef;
@@ -143,10 +145,19 @@ export class NativeScriptPlatformRef extends PlatformRef {
 
     @profile
     private bootstrapNativeScriptApp() {
-        // Create a temp page for root of the renderer
-        const tempAppHostView = new AppHostView();
-        setRootPage(<any>tempAppHostView);
+        const autoCreateFrame = !!this.appOptions.createFrameOnBootstrap;
+        let tempAppHostView: AppHostView;
         let rootContent: View;
+
+        if (autoCreateFrame) {
+            const { page, frame } = this.createFrameAndPage(false);
+            setRootPage(page);
+            rootContent = frame;
+        } else {
+            // Create a temp page for root of the renderer
+            tempAppHostView = new AppHostView();
+            setRootPage(<any>tempAppHostView);
+        }
 
         bootstrapLog("NativeScriptPlatform bootstrap started.");
         const launchCallback = profile(
@@ -161,10 +172,11 @@ export class NativeScriptPlatformRef extends PlatformRef {
                         bootstrapPromiseCompleted = true;
 
                         bootstrapLog(`Angular bootstrap bootstrap done. uptime: ${uptime()}`);
-                        rootContent = tempAppHostView.content;
-                        tempAppHostView.content = null;
-                        tempAppHostView.ngAppRoot = rootContent;
-                        rootContent.parentNode = tempAppHostView;
+
+                        if (!autoCreateFrame) {
+                            rootContent = this.extractContentFromHost(tempAppHostView);
+                        }
+
                         lastBootstrappedModule = new WeakRef(moduleRef);
                     },
                     err => {
@@ -199,12 +211,21 @@ export class NativeScriptPlatformRef extends PlatformRef {
     @profile
     private livesync() {
         bootstrapLog("Angular livesync started.");
-
         onBeforeLivesync.next(lastBootstrappedModule ? lastBootstrappedModule.get() : null);
 
-        const tempAppHostView = new AppHostView();
-        setRootPage(<any>tempAppHostView);
+        const autoCreateFrame = !!this.appOptions.createFrameOnBootstrap;
+        let tempAppHostView: AppHostView;
         let rootContent: View;
+
+        if (autoCreateFrame) {
+            const { page, frame } = this.createFrameAndPage(true);
+            setRootPage(page);
+            rootContent = frame;
+        } else {
+            // Create a temp page for root of the renderer
+            tempAppHostView = new AppHostView();
+            setRootPage(<any>tempAppHostView);
+        }
 
         let bootstrapPromiseCompleted = false;
         this._bootstrapper().then(
@@ -213,10 +234,10 @@ export class NativeScriptPlatformRef extends PlatformRef {
                 bootstrapLog("Angular livesync done.");
                 onAfterLivesync.next({ moduleRef });
 
-                rootContent = tempAppHostView.content;
-                tempAppHostView.content = null;
-                tempAppHostView.ngAppRoot = rootContent;
-                rootContent.parentNode = tempAppHostView;
+                if (!autoCreateFrame) {
+                    rootContent = this.extractContentFromHost(tempAppHostView);
+                }
+
                 lastBootstrappedModule = new WeakRef(moduleRef);
             },
             error => {
@@ -236,11 +257,11 @@ export class NativeScriptPlatformRef extends PlatformRef {
         bootstrapLog("livesync bootstrapAction called, draining micro tasks queue finished! Root: " + rootContent);
 
         if (!bootstrapPromiseCompleted) {
-            const errorMessage = "Livesync bootstrap promise didn't resolve";
-            bootstrapLogError(errorMessage);
-            rootContent = this.createErrorUI(errorMessage);
+            const result = "Livesync bootstrap promise didn't resolve";
+            bootstrapLogError(result);
+            rootContent = this.createErrorUI(result);
 
-            onAfterLivesync.next({ error: new Error(errorMessage) });
+            onAfterLivesync.next({ error: new Error(result) });
         }
 
         applicationRerun({
@@ -253,5 +274,22 @@ export class NativeScriptPlatformRef extends PlatformRef {
         errorTextBox.text = message;
         errorTextBox.color = new Color("red");
         return errorTextBox;
+    }
+
+    private createFrameAndPage(isLivesync: boolean) {
+        const frame = new Frame();
+        const pageFactory: PageFactory = this.platform.injector.get(PAGE_FACTORY);
+        const page = pageFactory({ isBootstrap: true, isLivesync });
+
+        frame.navigate({ create: () => { return page; } });
+        return { page, frame };
+    }
+
+    private extractContentFromHost(tempAppHostView: AppHostView) {
+        const result = tempAppHostView.content;
+        tempAppHostView.content = null;
+        tempAppHostView.ngAppRoot = result;
+        result.parentNode = tempAppHostView;
+        return result;
     }
 }
