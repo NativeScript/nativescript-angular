@@ -1,3 +1,91 @@
+<a name="5.3.0"></a>
+# [5.3.0](https://github.com/NativeScript/nativescript-angular/compare/5.2.0...v5.3.0) (2018-04-10)
+
+> This version requires NativeScript 4.0.
+
+### Bug Fixes
+
+* **animations:** provide fake document object in both AoT and JiT mode ([#1164](https://github.com/NativeScript/nativescript-angular/issues/1164)) ([040e0e3](https://github.com/NativeScript/nativescript-angular/commit/040e0e3)), closes [#1163](https://github.com/NativeScript/nativescript-angular/issues/1163)
+* App crashes on restart in android ([#1261](https://github.com/NativeScript/nativescript-angular/issues/1261)) ([331b878](https://github.com/NativeScript/nativescript-angular/commit/331b878))
+
+
+### Features
+
+* NS 4.0 Integration ([#1250](https://github.com/NativeScript/nativescript-angular/issues/1250)) ([f84fbdc](https://github.com/NativeScript/nativescript-angular/commit/f84fbdc))
+* prevent core modules from getting loaded multiple times ([#1196](https://github.com/NativeScript/nativescript-angular/issues/1196)) ([010fed7](https://github.com/NativeScript/nativescript-angular/commit/010fed7))
+
+
+### BREAKING CHANGES
+
+* Importing `NativeScriptModule` and `NativeScriptAnimationsModule` in multiple ngModules is no longer allowed.
+
+To migrate:
+ * in `AppModule`:
+   * import `NativeScriptModule`
+   * import`NativeScriptAnimationsModule` - only if you are planning to use Angular Animations
+ * in the remaining modules:
+   * remove `NativeScriptModule` imports and replace with `NativeScriptCommonModule` import
+   * remove `NativeScriptAnimationsModule` imports
+
+## Example
+    
+Before:
+app.module.ts:
+```
+import { NativeScriptModule } from 'nativescript-angular/nativescript.module';
+import { NativeScriptAnimationsModule } from 'nativescript-angular/animations';
+...
+@NgModule({
+  imports: [
+    NativeScriptModule,
+    NativeScriptAnimationsModule
+  ],
+...
+})
+```
+
+another.module.ts:
+```
+import { NativeScriptModule } from 'nativescript-angular/nativescript.module';
+import { NativeScriptAnimationsModule } from 'nativescript-angular/animations';
+...
+@NgModule({
+  imports: [
+    NativeScriptModule,
+    NativeScriptAnimationsModule
+  ],
+...
+})
+```
+   
+    
+After:
+app.module.ts:
+```
+import { NativeScriptModule } from 'nativescript-angular/nativescript.module';
+import { NativeScriptAnimationsModule } from 'nativescript-angular/animations';
+...
+@NgModule({
+  imports: [
+    NativeScriptModule,
+    NativeScriptAnimationsModule
+  ],
+...
+})
+```
+
+another.module.ts:
+```
+import { NativeScriptCommonModule } from 'nativescript-angular/common';
+...
+@NgModule({
+  imports: [
+    NativeScriptCommonModule
+  ],
+...
+})
+```
+
 <a name="5.2.0"></a>
 # [5.2.0](https://github.com/NativeScript/nativescript-angular/compare/5.0.0...5.2.0) (2018-01-17)
 
