@@ -86,7 +86,7 @@ import { NativeScriptCommonModule } from 'nativescript-angular/common';
 ```
 
 #### NativeScript 4.0 Compatible Bootstrap and Navigation
-NativeScript 4.0 allows you to put any view as the root(not only Frame) of the application. To support in angular projects we had to introduce some changes in how A{N}gular apps are bootstrapped. 
+NativeScript 4.0 allows you to put any view as the root (not only Frame) of the application. To support in angular projects we had to introduce some changes in how A{N}gular apps are bootstrapped. 
     
 PREVIOUS BEHAVIOR
 
