@@ -17,7 +17,7 @@
 
 ### BREAKING CHANGES
 
-* Importing `NativeScriptModule` and `NativeScriptAnimationsModule` in multiple ngModules is no longer allowed.
+#### Importing `NativeScriptModule` and `NativeScriptAnimationsModule` in multiple ngModules is no longer allowed.
 
 To migrate:
  * in `AppModule`:
@@ -27,9 +27,8 @@ To migrate:
    * remove `NativeScriptModule` imports and replace with `NativeScriptCommonModule` import
    * remove `NativeScriptAnimationsModule` imports
 
-## Example
-    
-Before:
+BEFORE:
+
 app.module.ts:
 ```
 import { NativeScriptModule } from 'nativescript-angular/nativescript.module';
@@ -57,9 +56,9 @@ import { NativeScriptAnimationsModule } from 'nativescript-angular/animations';
 ...
 })
 ```
-   
-    
-After:
+ 
+AFTER:
+
 app.module.ts:
 ```
 import { NativeScriptModule } from 'nativescript-angular/nativescript.module';
@@ -85,6 +84,53 @@ import { NativeScriptCommonModule } from 'nativescript-angular/common';
 ...
 })
 ```
+
+#### NativeScript 4.0 Compatible Bootstrap and Navigation
+NativeScript 4.0 allows you to put any view as the root(not only Frame) of the application. To support in angular projects we had to introduce some changes in how A{N}gular apps are bootstrapped. 
+    
+PREVIOUS BEHAVIOR
+
+Bootstrap creates a root `Frame` and initial `Page`. Then it bootstraps the angular application inside this page. Navigation with `<page-router-outlet>` will always navigate in the `Frame` created by the bootstrap.
+
+Limitations:
+- You cannot change the root view of the app (to `RadSideDrawer` for example). It is always the `Frame` created by the bootstrap.
+- You can have only one `<page-router-outlet>` as there is only one `Frame`.
+- You always have a `Page` view wrapping your components and you can always. Because the `ActionBar` is part of that `Page` you can always change it with the `<ActionBar>` component.
+
+NEW BEHAVIOR
+
+Bootstrap will **not** create root view by default. It will use the root view of your main application component as the root view of the application. The `<page-router-outlet>` component will create its own `Frame` and will use it for navigation. It will also wrap the components you navigate to in a `Page` and will navigate to it as it did before.
+
+Which means:
+
+- You can use any view for application root. Finally, you can have application-wide `RadSideDrawer`.
+
+- You have more flexibility over where to place the `<page-router-outlet>`, you can even have more than one for more advanced scenarios.
+
+- If you **don't use `<page-router-outlet>`** in your app you will not get the default `Page` and `Frame`, which means you will not be able to inject them in you components or show the `ActionBar`. There is special `createFrameOnBootstrap` option you can pass on bootstrap to make things as _before_:
+```
+platformNativeScript({ createFrameOnBootstrap: true })
+    .bootstrapModuleFactory(AppModuleNgFactory);
+```
+
+- If you **are using `<page-router-outlet>`** you probably don't have to do any changes. Bootstrap will not create `Frame` and `Page`, but the outlet will do that. It will also take care of providing `Page` and so the `ActionBar` should work as _before_.
+
+
+WORKING WITH FRAMES
+
+There might be multiple frames (if you have multiple `<page-router-outlet>`'s). Angular DI works with singletons, so it will always return one instance of `Frame`. We have introduced `FrameService` (still experimental) which has a `getFrame()` method. It will return the current frame (the one you have navigated last).
+
+#### Signature of `onAfterLivesync` changed
+
+The signature `onAfterLivesync` observable changed form:
+```
+export const onAfterLivesync = new EventEmitter<NgModuleRef<any>>();
+```
+to:
+```
+export const onAfterLivesync = new EventEmitter<{ moduleRef?: NgModuleRef<any>; error?: Error }>();
+```
+
 
 <a name="5.2.0"></a>
 # [5.2.0](https://github.com/NativeScript/nativescript-angular/compare/5.0.0...5.2.0) (2018-01-17)
