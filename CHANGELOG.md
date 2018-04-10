@@ -95,7 +95,7 @@ Bootstrap creates a root `Frame` and initial `Page`. Then it bootstraps the angu
 Limitations:
 - You cannot change the root view of the app (to `RadSideDrawer` for example). It is always the `Frame` created by the bootstrap.
 - You can have only one `<page-router-outlet>` as there is only one `Frame`.
-- You always have a `Page` view wrapping your components and you can always. Because the `ActionBar` is part of that `Page` you can always change it with the `<ActionBar>` component.
+- You always have a `Page` view wrapping your components. Because the `ActionBar` is part of that `Page` you can always change it with the `<ActionBar>` component.
 
 NEW BEHAVIOR
 
@@ -122,7 +122,7 @@ There might be multiple frames (if you have multiple `<page-router-outlet>`'s). 
 
 #### Signature of `onAfterLivesync` changed
 
-The signature `onAfterLivesync` observable changed form:
+The signature `onAfterLivesync` observable changed from:
 ```
 export const onAfterLivesync = new EventEmitter<NgModuleRef<any>>();
 ```
