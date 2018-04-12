@@ -10,7 +10,6 @@ import {
     Response
 } from "@angular/http";
 import { Observable } from "rxjs";
-import "rxjs/add/observable/fromPromise";
 
 import { isLocalRequest, processLocalFileRequest } from "../http-client/http-utils";
 
