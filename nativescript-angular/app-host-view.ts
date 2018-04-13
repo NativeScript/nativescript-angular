@@ -26,7 +26,10 @@ export class AppHostView extends ContentView {
         }
 
         this._content = value;
-        this._content.parentNode = this;
+
+        if (value) {
+            this._content.parentNode = this;
+        }
 
         this.ngAppRoot = value;
 
