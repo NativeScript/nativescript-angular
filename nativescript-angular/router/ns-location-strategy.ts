@@ -24,6 +24,7 @@ export interface LocationState {
     queryParams: string;
     segmentGroup: UrlSegmentGroup;
     isPageNavigation: boolean;
+    isModalNavigation: boolean;
 }
 
 @Injectable()
@@ -33,8 +34,12 @@ export class NSLocationStrategy extends LocationStrategy {
     private currentOutlet: string;
     private popStateCallbacks = new Array<(_: any) => any>();
 
+    private _isModalClosing = false;
     private _isPageNavigationBack = false;
     private _currentNavigationOptions: NavigationOptions;
+
+
+    public _isModalNavigation = false;
 
     constructor(private frameService: FrameService) {
         super();
@@ -87,7 +92,8 @@ export class NSLocationStrategy extends LocationStrategy {
                     url: url,
                     queryParams: queryParams,
                     segmentGroup: rootOutlets[outletName],
-                    isPageNavigation: isNewPage
+                    isPageNavigation: isNewPage,
+                    isModalNavigation: false
                 });
             }
         });
@@ -130,7 +136,22 @@ export class NSLocationStrategy extends LocationStrategy {
     }
 
     back(): void {
-        if (this._isPageNavigationBack) {
+        if (this._isModalClosing) {
+            const states = this.statesByOutlet[this.currentOutlet];
+            // We are closing modal view
+            // clear the stack until we get to the page that opened the modal view
+            let state = states.pop();
+            let count = 1;
+
+            while (!(state.isModalNavigation)) {
+                state = states.pop();
+                count++;
+            }
+
+            states.push(state);
+            routerLog("NSLocationStrategy.back() while closing modal. States popped: " + count);
+            this.callPopState(state, true);
+        } else if (this._isPageNavigationBack) {
             const states = this.statesByOutlet[this.currentOutlet];
             // We are navigating to the previous page
             // clear the stack until we get to a page navigation state
@@ -178,6 +199,7 @@ export class NSLocationStrategy extends LocationStrategy {
 
     private callPopState(state: LocationState, pop: boolean = true) {
         const urlSerializer = new DefaultUrlSerializer();
+        this.currentUrlTree.root.children[this.currentOutlet] = state.segmentGroup;
         const url = urlSerializer.serialize(this.currentUrlTree);
         const change = { url: url, pop: pop };
         for (let fn of this.popStateCallbacks) {
@@ -199,11 +221,12 @@ export class NSLocationStrategy extends LocationStrategy {
         Object.keys(this.statesByOutlet).forEach(outletName => {
             const outletStates = this.statesByOutlet[outletName];
             const outletLog = outletStates
-                .map((v, i) => `${i}.[${v.isPageNavigation ? "PAGE" : "INTERNAL"}] "${v.segmentGroup.toString()}"`)
+                // tslint:disable-next-line:max-line-length
+                .map((v, i) => `${outletName}.${i}.[${v.isPageNavigation ? "PAGE" : "INTERNAL"}].[${v.isModalNavigation ? "MODAL" : "BASE"}] "${v.segmentGroup.toString()}"`)
                 .reverse();
 
-            result.push(`${outletName} :`);
-            result = result.concat(result, outletLog);
+
+            result = result.concat(outletLog);
         });
 
         return result.join("\n");
@@ -229,6 +252,33 @@ export class NSLocationStrategy extends LocationStrategy {
 
     public _isPageNavigatingBack() {
         return this._isPageNavigationBack;
+    }
+
+    public _beginModalNavigation(): void {
+        routerLog("NSLocationStrategy._beginModalNavigation()");
+        const lastState = this.peekState(this.currentOutlet);
+
+        if (lastState) {
+            lastState.isModalNavigation = true;
+        }
+
+        this._isModalNavigation = true;
+    }
+
+    public _beginCloseModalNavigation(): void {
+        routerLog("NSLocationStrategy.startCloseModal()");
+        if (this._isModalClosing) {
+            throw new Error("Calling startCloseModal while closing modal.");
+        }
+        this._isModalClosing = true;
+    }
+
+    public _finishCloseModalNavigation() {
+        routerLog("NSLocationStrategy.finishCloseModalNavigation()");
+        if (!this._isModalClosing) {
+            throw new Error("Calling startCloseModal while not closing modal.");
+        }
+        this._isModalClosing = false;
     }
 
     public _beginPageNavigation(name: string): NavigationOptions {

@@ -9,6 +9,7 @@ import {
     ViewContainerRef,
 } from "@angular/core";
 
+import { NSLocationStrategy } from "../router/ns-location-strategy";
 import { Page } from "tns-core-modules/ui/page";
 import { View, ViewBase } from "tns-core-modules/ui/core/view";
 import { ProxyViewContainer } from "tns-core-modules/ui/proxy-view-container/proxy-view-container";
@@ -44,6 +45,9 @@ interface ShowDialogOptions {
 
 @Injectable()
 export class ModalDialogService {
+    constructor(private location: NSLocationStrategy) {
+    }
+
     public showModal(type: Type<any>,
         { viewContainerRef, moduleRef, context, fullscreen }: ModalDialogOptions
     ): Promise<any> {
@@ -66,8 +70,10 @@ export class ModalDialogService {
         const componentContainer = moduleRef || viewContainerRef;
         const resolver = componentContainer.injector.get(ComponentFactoryResolver);
 
+        this.location._beginModalNavigation();
+
         return new Promise(resolve => {
-            setTimeout(() => ModalDialogService.showDialog({
+            setTimeout(() => this._showDialog({
                 containerRef: viewContainerRef,
                 context,
                 doneCallback: resolve,
@@ -80,7 +86,7 @@ export class ModalDialogService {
         });
     }
 
-    private static showDialog({
+    private _showDialog({
         containerRef,
         context,
         doneCallback,
@@ -98,6 +104,10 @@ export class ModalDialogService {
             if (componentView) {
                 componentView.closeModal();
             }
+
+            this.location._beginCloseModalNavigation();
+            this.location.back();
+            this.location._finishCloseModalNavigation();
             detachedLoaderRef.instance.detectChanges();
             detachedLoaderRef.destroy();
         };

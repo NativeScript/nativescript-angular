@@ -102,7 +102,7 @@ function routeToString(activatedRoute: ActivatedRoute | ActivatedRouteSnapshot):
 }
 
 @Directive({ selector: "page-router-outlet" }) // tslint:disable-line:directive-selector
-export class PageRouterOutlet implements OnDestroy, OnInit { // tslint:disable-line:directive-class-suffix
+export class PageRouterOutlet implements OnDestroy { // tslint:disable-line:directive-class-suffix
     private activated: ComponentRef<any> | null = null;
     private _activatedRoute: ActivatedRoute | null = null;
     private detachedLoaderFactory: ComponentFactory<DetachedLoader>;
@@ -161,28 +161,14 @@ export class PageRouterOutlet implements OnDestroy, OnInit { // tslint:disable-l
         this.detachedLoaderFactory = resolver.resolveComponentFactory(DetachedLoader);
     }
 
-    ngOnInit(): void {
-        if (this.isActivated) {
-            return;
-        }
-
-        // If the outlet was not instantiated at the time the route got activated we need to populate
-        // the outlet when it is initialized (ie inside a NgIf)
-        const context = this.parentContexts.getContext(this.name);
-        if (!context || !context.route) {
-            return;
-        }
-
-        if (context.attachRef) {
-            // `attachRef` is populated when there is an existing component to mount
-            this.attach(context.attachRef, context.route);
-        } else {
-            // otherwise the component defined in the configuration is created
-            this.activateWith(context.route, context.resolver || null);
-        }
-    }
-
     ngOnDestroy(): void {
+
+        // Clear accumulated modal view page cache when page-router-outlet
+        // destroyed on modal view closing
+        if (this.locationStrategy._isModalNavigation) {
+            this.routeReuseStrategy.clearCache(this.name, true);
+            this.locationStrategy._isModalNavigation = false;
+        }
         this.parentContexts.onChildOutletDestroyed(this.name);
     }
 
@@ -267,7 +253,7 @@ export class PageRouterOutlet implements OnDestroy, OnInit { // tslint:disable-l
         loadedResolver: ComponentFactoryResolver
     ): void {
         log("PageRouterOutlet.activate() forward navigation - " +
-        "create detached loader in the loader container");
+            "create detached loader in the loader container");
 
         const factory = this.getComponentFactory(activatedRoute, loadedResolver);
         const page = this.pageFactory({

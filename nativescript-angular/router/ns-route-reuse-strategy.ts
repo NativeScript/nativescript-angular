@@ -12,6 +12,7 @@ import {
 interface CacheItem {
     key: string;
     state: DetachedRouteHandle;
+    isModal: boolean;
 }
 
 /**
@@ -47,6 +48,27 @@ class DetachedStateCache {
 
             destroyComponentRef(state.componentRef);
         }
+    }
+
+    public clearModalCache() {
+        let removedItemsCount = 0;
+        this.cache = this.cache.filter(cacheItem => {
+
+            if (cacheItem.isModal) {
+                const state = <any>cacheItem.state;
+
+                if (!state.componentRef) {
+                    throw new Error("No componentRed found in DetachedRouteHandle");
+                }
+
+                destroyComponentRef(state.componentRef);
+                removedItemsCount++;
+            }
+
+            return !cacheItem.isModal;
+        });
+
+        log(`DetachedStateCache.clearModalCache() ${removedItemsCount} items will be destroyed`);
     }
 }
 
@@ -100,7 +122,7 @@ export class NSRouteReuseStrategy implements RouteReuseStrategy {
         const cache = this.cacheByOutlet[route.outlet] = this.cacheByOutlet[route.outlet] || new DetachedStateCache();
 
         if (state) {
-            cache.push({ key, state });
+            cache.push({ key, state, isModal: this.location._isModalNavigation });
         } else {
             const topItem = cache.peek();
             if (topItem.key === key) {
@@ -148,11 +170,15 @@ export class NSRouteReuseStrategy implements RouteReuseStrategy {
         return shouldReuse;
     }
 
-    clearCache(outletName: string) {
+    clearCache(outletName: string, modalItemsOnly?: boolean) {
         const cache = this.cacheByOutlet[outletName];
 
         if (cache) {
-            cache.clear();
+            if (modalItemsOnly) {
+                cache.clearModalCache();
+            } else {
+                cache.clear();
+            }
         }
     }
 }
