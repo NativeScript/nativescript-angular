@@ -10,7 +10,7 @@ import { LayoutBase } from "tns-core-modules/ui/layouts/layout-base";
 import { StackLayout } from "tns-core-modules/ui/layouts/stack-layout";
 import { ContentView } from "tns-core-modules/ui/content-view";
 import { NgView, registerElement } from "nativescript-angular/element-registry";
-import * as button from "tns-core-modules/ui/button";
+import { Button } from "tns-core-modules/ui/button";
 import * as view from "tns-core-modules/ui/core/view";
 import { isIOS } from "tns-core-modules/platform";
 import { View, fontInternalProperty, backgroundInternalProperty } from "tns-core-modules/ui/core/view"
