@@ -22,7 +22,8 @@
       "sourceMaps": true,
       "diagnosticLogging": false,
       "emulator": false,
-      "rebuild": true
+      "rebuild": true,
+      "stopOnEntry": true
     },
     {
       "name": "Attach on iOS",
@@ -54,7 +55,8 @@
       "sourceMaps": true,
       "diagnosticLogging": false,
       "emulator": false,
-      "rebuild": true
+      "rebuild": true,
+      "stopOnEntry": true
     },
     {
       "name": "Attach on Android",

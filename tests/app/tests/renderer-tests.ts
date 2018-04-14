@@ -1,20 +1,23 @@
 // make sure you import mocha-config before @angular/core
-import {assert} from "./test-config";
-import {Component, ComponentRef, ElementRef, NgZone, Renderer2, ViewChild} from "@angular/core";
-import {ProxyViewContainer} from "ui/proxy-view-container";
-import {Red} from "color/known-colors";
-import {dumpView} from "./test-utils";
-import {LayoutBase} from "ui/layouts/layout-base";
-import {StackLayout} from "ui/layouts/stack-layout";
-import {ContentView} from "ui/content-view";
-import {Button} from "ui/button";
-import {registerElement} from "nativescript-angular/element-registry";
+
+import { assert } from "./test-config";
+import { Component, ComponentRef, ElementRef, NgZone, Renderer2, ViewChild } from "@angular/core";
+import { ProxyViewContainer } from "ui/proxy-view-container";
+import { Red } from "color/known-colors";
+import { dumpView } from "./test-utils";
+import { TestApp } from "./test-app";
+import { LayoutBase } from "tns-core-modules/ui/layouts/layout-base";
+import { StackLayout } from "tns-core-modules/ui/layouts/stack-layout";
+import { ContentView } from "tns-core-modules/ui/content-view";
+import { NgView, registerElement } from "nativescript-angular/element-registry";
 import * as button from "tns-core-modules/ui/button";
 import * as view from "tns-core-modules/ui/core/view";
-import {nsTestBedAfterEach, nsTestBedBeforeEach, nsTestBedRender} from "nativescript-angular/testing";
-import {ComponentFixture, TestBed} from "@angular/core/testing";
-import {Observable} from "rxjs/Observable";
-import {ReplaySubject} from "rxjs/ReplaySubject";
+import { isIOS } from "tns-core-modules/platform";
+import { View, fontInternalProperty, backgroundInternalProperty } from "tns-core-modules/ui/core/view"
+import { nsTestBedAfterEach, nsTestBedBeforeEach, nsTestBedRender } from "nativescript-angular/testing";
+import { ComponentFixture, TestBed } from "@angular/core/testing";
+import { Observable } from "rxjs/Observable";
+import { ReplaySubject } from "rxjs/ReplaySubject";
 
 @Component({
     template: `<StackLayout><Label text="Layout"></Label></StackLayout>`
@@ -181,18 +184,18 @@ export class NgIfThenElseComponent {
     }
 }
 
-export class ButtonCounter extends button.Button {
+export class ButtonCounter extends Button {
     nativeBackgroundRedraws = 0;
     backgroundInternalSetNativeCount = 0;
     fontInternalSetNativeCount = 0;
 
-    [view.backgroundInternalProperty.setNative](value) {
+    [backgroundInternalProperty.setNative](value) {
         this.backgroundInternalSetNativeCount++;
-        return super[view.backgroundInternalProperty.setNative](value);
+        return super[backgroundInternalProperty.setNative](value);
     }
-    [view.fontInternalProperty.setNative](value) {
+    [fontInternalProperty.setNative](value) {
         this.fontInternalSetNativeCount++;
-        return super[view.fontInternalProperty.setNative](value);
+        return super[fontInternalProperty.setNative](value);
     }
     _redrawNativeBackground(value: any): void {
         this.nativeBackgroundRedraws++;
@@ -642,8 +645,9 @@ describe("Renderer lifecycle", () => {
                     btn.fontInternalSetNativeCount, 1,
                     `Expected ${btn.id} fontInternalSetNativeCount to be called just once.`
                 );
+                const expectedBackgroundRedraws = isIOS ? 0 : 1;
                 assert.equal(
-                    btn.nativeBackgroundRedraws, 0,
+                    btn.nativeBackgroundRedraws, expectedBackgroundRedraws,
                     `Expected ${btn.id} nativeBackgroundRedraws to be called after its layout pass.`
                 );
             });

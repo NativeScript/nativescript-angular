@@ -3,7 +3,7 @@ import {
     ComponentFactory, ComponentFactoryResolver, ComponentRef,
     Directive, Inject, InjectionToken, Injector,
     OnDestroy, OnInit, EventEmitter, Output,
-    Type, ViewContainerRef,
+    Type, ViewContainerRef, ElementRef
 } from "@angular/core";
 import {
     ActivatedRoute,
@@ -105,12 +105,11 @@ function routeToString(activatedRoute: ActivatedRoute | ActivatedRouteSnapshot):
 export class PageRouterOutlet implements OnDestroy, OnInit { // tslint:disable-line:directive-class-suffix
     private activated: ComponentRef<any> | null = null;
     private _activatedRoute: ActivatedRoute | null = null;
-
-    private isInitialPage: boolean = true;
     private detachedLoaderFactory: ComponentFactory<DetachedLoader>;
 
     private name: string;
     private viewUtil: ViewUtil;
+    private frame: Frame;
 
     @Output("activate") activateEvents = new EventEmitter<any>(); // tslint:disable-line:no-output-rename
     @Output("deactivate") deactivateEvents = new EventEmitter<any>(); // tslint:disable-line:no-output-rename
@@ -146,12 +145,14 @@ export class PageRouterOutlet implements OnDestroy, OnInit { // tslint:disable-l
         private locationStrategy: NSLocationStrategy,
         private componentFactoryResolver: ComponentFactoryResolver,
         private resolver: ComponentFactoryResolver,
-        private frame: Frame,
         private changeDetector: ChangeDetectorRef,
         @Inject(DEVICE) device: Device,
         @Inject(PAGE_FACTORY) private pageFactory: PageFactory,
-        private routeReuseStrategy: NSRouteReuseStrategy
+        private routeReuseStrategy: NSRouteReuseStrategy,
+        elRef: ElementRef
     ) {
+        this.frame = elRef.nativeElement;
+        log("PageRouterOutlet.constructor frame:" + this.frame);
 
         this.name = name || PRIMARY_OUTLET;
         parentContexts.onChildOutletCreated(this.name, <any>this);
@@ -265,56 +266,31 @@ export class PageRouterOutlet implements OnDestroy, OnInit { // tslint:disable-l
         activatedRoute: ActivatedRoute,
         loadedResolver: ComponentFactoryResolver
     ): void {
+        log("PageRouterOutlet.activate() forward navigation - " +
+        "create detached loader in the loader container");
 
-        const pageRoute = new PageRoute(activatedRoute);
-        const providers = this.initProvidersMap(activatedRoute, pageRoute);
-
-        const childInjector = new ChildInjector(providers, this.location.injector);
         const factory = this.getComponentFactory(activatedRoute, loadedResolver);
-
-        if (this.isInitialPage) {
-            log("PageRouterOutlet.activate() initial page - just load component");
-
-            this.isInitialPage = false;
-
-            this.activated = this.location.createComponent(
-                factory, this.location.length, childInjector, []);
-            this.changeDetector.markForCheck();
-        } else {
-            log("PageRouterOutlet.activate() forward navigation - " +
-                "create detached loader in the loader container");
-
-            const page = this.pageFactory({
-                isNavigation: true,
-                componentType: factory.componentType,
-            });
-
-            providers.set(Page, page);
-
-            const loaderRef = this.location.createComponent(
-                this.detachedLoaderFactory, this.location.length, childInjector, []);
-            this.changeDetector.markForCheck();
-
-            this.activated = loaderRef.instance.loadWithFactory(factory);
-            this.loadComponentInPage(page, this.activated);
-
-            this.activated[loaderRefSymbol] = loaderRef;
-        }
-    }
-
-    private initProvidersMap(
-        activatedRoute: ActivatedRoute,
-        pageRoute: PageRoute
-    ): ProviderMap {
+        const page = this.pageFactory({
+            isNavigation: true,
+            componentType: factory.componentType,
+        });
 
         const providers = new Map();
-        providers.set(PageRoute, pageRoute);
+        providers.set(Page, page);
+        providers.set(Frame, this.frame);
+        providers.set(PageRoute, new PageRoute(activatedRoute));
         providers.set(ActivatedRoute, activatedRoute);
+        providers.set(ChildrenOutletContexts, this.parentContexts.getOrCreateContext(this.name).children);
 
-        const childContexts = this.parentContexts.getOrCreateContext(this.name).children;
-        providers.set(ChildrenOutletContexts, childContexts);
+        const childInjector = new ChildInjector(providers, this.location.injector);
+        const loaderRef = this.location.createComponent(
+            this.detachedLoaderFactory, this.location.length, childInjector, []);
+        this.changeDetector.markForCheck();
 
-        return providers;
+        this.activated = loaderRef.instance.loadWithFactory(factory);
+        this.loadComponentInPage(page, this.activated);
+
+        this.activated[loaderRefSymbol] = loaderRef;
     }
 
     @profile

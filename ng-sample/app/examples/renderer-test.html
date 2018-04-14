@@ -1,5 +1,5 @@
-<ScrollView>
-    <StackLayout orientation='vertical'>
+<!-- <ScrollView> -->
+    <!-- <StackLayout orientation='vertical'>
         <Label [text]='model.mydate | date:"fullDate"' [ngStyle]="{'background-color': 'lime'}"></Label>
         <Progress value="50" style="color: red"></Progress>
         <SearchBar [(ngModel)]='model.search'></SearchBar>
@@ -26,5 +26,34 @@
         </StackLayout>
         <Label text='==============================' fontSize='20'></Label>
         <templated-component [renderChild]="true"></templated-component>
-    </StackLayout>
-</ScrollView>
+    </StackLayout> -->
+<!-- </ScrollView> -->
+<!-- <StackLayout >
+    <Label [text]='text'></Label>
+    <TextField [(ngModel)]='text'></TextField>
+    <button text="hey there" (tap)="onTap()"></button>
+</StackLayout> -->
+
+<!-- <Frame>
+    <Page>
+        <StackLayout >
+            <Label [text]='text'></Label>
+            <TextField [(ngModel)]='text'></TextField>
+            <button text="hey there sync asd" (tap)="onTap()"></button>
+        </StackLayout>
+    </Page>
+</Frame> -->
+
+<Frame>
+    <Page>
+        <StackLayout>
+            <Button text="toggle" (tap)="toggle()"></Button>
+            <TextField hint="" [text]="show"></TextField>
+            <Label text="====1====" textWrap="true"></Label>
+            
+            <Label text="heya" *ngIf="show" textWrap="true"></Label>
+            
+            <Label text="====2====" textWrap="true"></Label>
+        </StackLayout>
+    </Page>
+</Frame>

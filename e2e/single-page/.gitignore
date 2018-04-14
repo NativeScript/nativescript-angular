@@ -1,0 +1,10 @@
+.vscode
+
+platforms
+node_modules
+hooks
+
+/**/*.js
+/**/*.map
+e2e/reports
+test-results.xml
