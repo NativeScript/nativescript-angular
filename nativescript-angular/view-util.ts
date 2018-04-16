@@ -276,7 +276,7 @@ export class ViewUtil {
         if (view.hasOwnProperty("meta")) {
             return view as NgView;
         } else {
-            const name = view.typeName;
+            const name = view.cssType;
             const ngView = this.setNgViewExtensions(view, name);
 
             return ngView;
