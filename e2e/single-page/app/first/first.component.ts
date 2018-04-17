@@ -3,7 +3,7 @@ import { ActivatedRoute, Router, Route } from "@angular/router";
 import { Location } from "@angular/common";
 
 import { Page } from "ui/page";
-import { Observable } from "rxjs/Observable";
+import { Observable } from "rxjs";
 import { FrameService } from "nativescript-angular/platform-providers";
 
 @Component({

@@ -2,7 +2,7 @@ import { Component, OnInit } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
 
 import { DataService, DataItem } from "../data.service";
-import { Subscription } from "rxjs/Subscription";
+import { Subscription } from "rxjs";
 
 @Component({
     selector: "ns-team-details",
