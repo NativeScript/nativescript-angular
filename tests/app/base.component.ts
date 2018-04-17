@@ -1,6 +1,6 @@
 import { InjectionToken, OnInit, OnDestroy } from "@angular/core";
 export const HOOKS_LOG = new InjectionToken("Hooks log");
-import { BehaviorSubject } from "rxjs/BehaviorSubject";
+import { BehaviorSubject } from "rxjs";
 
 export class BaseComponent implements OnInit, OnDestroy {
     protected name: string = "";

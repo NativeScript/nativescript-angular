@@ -3,7 +3,7 @@ import { Component, Inject, OnInit } from "@angular/core";
 import { Location } from "@angular/common";
 import { RouterExtensions } from "nativescript-angular/router";
 import { HOOKS_LOG, BaseComponent } from "./base.component";
-import { BehaviorSubject } from "rxjs/BehaviorSubject";
+import { BehaviorSubject } from "rxjs";
 
 @Component({
     selector: "second-comp",
