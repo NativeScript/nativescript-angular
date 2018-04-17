@@ -1,8 +1,7 @@
 import { Component, ChangeDetectionStrategy } from "@angular/core";
 import { DataItem, DataService } from "./data.service";
-import { Observable } from "rxjs/Observable";
-import { BehaviorSubject } from "rxjs/BehaviorSubject";
-import "rxjs/add/operator/combineLatest";
+import { Observable, BehaviorSubject } from "rxjs";
+import { combineLatest } from "rxjs/operators";
 
 @Component({
     selector: "list-test-async",
@@ -95,9 +94,10 @@ export class ListTestFilterAsync {
     private filter$ = new BehaviorSubject(false);
 
     constructor(private service: DataService) {
-        this.filteredItems$ = this.service.items$.combineLatest(this.filter$, (data, filter) => {
-            return filter ? data.filter(v => v.id % 2 === 0) : data;
-        });
+        this.filteredItems$ = this.service.items$.pipe(
+            combineLatest(this.filter$, (data, filter) => {
+                return filter ? data.filter(v => v.id % 2 === 0) : data;
+            }));
     }
 
     public onItemTap(args) {
