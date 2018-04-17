@@ -2,7 +2,7 @@
 import { assert } from "./test-config";
 
 import { NavigationEnd, NavigationStart } from "@angular/router";
-import { Subscription } from "rxjs/Subscription";
+import { Subscription } from "rxjs";
 import { TestApp, bootstrapTestApp, destroyTestApp } from "./test-app";
 
 import { GestureComponent } from "../snippets/gestures.component";
