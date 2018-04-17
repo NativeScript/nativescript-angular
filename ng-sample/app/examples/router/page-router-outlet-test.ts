@@ -2,8 +2,8 @@ import { Component, OnInit, OnDestroy } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
 import { Location } from "@angular/common";
 import { Page } from "ui/page";
-import { Observable } from "rxjs/Observable";
-import "rxjs/add/operator/map";
+import { Observable } from "rxjs";
+import { map } from "rxjs/operators";
 
 
 @Component({
@@ -51,7 +51,7 @@ class SecondComponent implements OnInit, OnDestroy {
     public id: Observable<string>;
     constructor(private location: Location, route: ActivatedRoute, page: Page) {
         console.log("SecondComponent.constructor() page: " + page);
-        this.id = route.params.map(r => r["id"]);
+        this.id = route.params.pipe(map(r => r["id"]));
     }
 
     ngOnInit() {
@@ -85,7 +85,7 @@ class ThirdComponent implements OnInit, OnDestroy {
     public id: Observable<string>;
     constructor(private location: Location, route: ActivatedRoute, page: Page) {
         console.log("ThirdComponent.constructor() page: " + page);
-        this.id = route.params.map(r => r["id"]);
+        this.id = route.params.pipe(map(r => r["id"]));
     }
 
     ngOnInit() {

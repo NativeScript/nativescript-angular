@@ -1,6 +1,6 @@
 import { Component, OnInit, OnDestroy } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
-import "rxjs/add/operator/map";
+import { map } from "rxjs/operators";
 
 @Component({
     selector: "first",
@@ -31,7 +31,7 @@ class FirstComponent implements OnInit, OnDestroy {
 class SecondComponent implements OnInit, OnDestroy {
     id;
     constructor(route: ActivatedRoute) {
-        this.id = route.params.map(r => r["id"]);
+        this.id = route.params.pipe(map(r => r["id"]));
     }
 
     ngOnInit() {

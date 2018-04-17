@@ -139,7 +139,7 @@ class MyErrorHandler implements ErrorHandler {
 // platformNativeScriptDynamic().bootstrapModule(makeExampleModule(Benchmark));
 // platformNativeScriptDynamic().bootstrapModule(makeExampleModule(ListTest));
 // platformNativeScriptDynamic().bootstrapModule(makeExampleModule(ListTemplateSelectorTest));
-// platformNativeScriptDynamic().bootstrapModule(makeExampleModule(ListTestAsync));
+platformNativeScriptDynamic().bootstrapModule(makeExampleModule(ListTestAsync));
 // platformNativeScriptDynamic().bootstrapModule(makeExampleModule(ImageTest));
 // platformNativeScriptDynamic().bootstrapModule(makeExampleModule(ModalTest));
 // platformNativeScriptDynamic().bootstrapModule(makeExampleModule(HttpTest));
@@ -187,4 +187,4 @@ onAfterLivesync.subscribe(({ moduleRef, error }) => {
 
 // platformNativeScriptDynamic().bootstrapModule(makeExampleModule(LivesyncApp));
 // console.log("APP RESTART!!!!  !!!");
-platformNativeScriptDynamic().bootstrapModule(makeExampleModule(ModalTest));
+// platformNativeScriptDynamic().bootstrapModule(makeExampleModule(ModalTest));
