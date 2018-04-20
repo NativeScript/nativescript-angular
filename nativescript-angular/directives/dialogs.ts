@@ -19,6 +19,8 @@ import { PageFactory, PAGE_FACTORY } from "../platform-providers";
 export interface ModalDialogOptions {
     context?: any;
     fullscreen?: boolean;
+    animated?: boolean;
+    stretched?: boolean;
     viewContainerRef?: ViewContainerRef;
     moduleRef?: NgModuleRef<any>;
 }
@@ -35,6 +37,8 @@ interface ShowDialogOptions {
     context: any;
     doneCallback;
     fullscreen: boolean;
+    animated: boolean;
+    stretched: boolean;
     pageFactory: PageFactory;
     parentView: ViewBase;
     resolver: ComponentFactoryResolver;
@@ -44,7 +48,7 @@ interface ShowDialogOptions {
 @Injectable()
 export class ModalDialogService {
     public showModal(type: Type<any>,
-        { viewContainerRef, moduleRef, context, fullscreen }: ModalDialogOptions
+        { viewContainerRef, moduleRef, context, fullscreen, animated, stretched }: ModalDialogOptions
     ): Promise<any> {
         if (!viewContainerRef) {
             throw new Error(
@@ -71,6 +75,8 @@ export class ModalDialogService {
                 context,
                 doneCallback: resolve,
                 fullscreen,
+                animated,
+                stretched,
                 pageFactory,
                 parentView,
                 resolver,
@@ -84,6 +90,8 @@ export class ModalDialogService {
         context,
         doneCallback,
         fullscreen,
+        animated,
+        stretched,
         pageFactory,
         parentView,
         resolver,
@@ -118,7 +126,12 @@ export class ModalDialogService {
             }
 
             page.content = componentView;
-            parentView.showModal(page, context, closeCallback, fullscreen);
+            // parentView typed as ViewBase, but only View takes stretched param.
+            if (parentView instanceof View) {
+                parentView.showModal(page, context, closeCallback, fullscreen, animated, stretched);
+            } else {
+                parentView.showModal(page, context, closeCallback, fullscreen, animated);
+            }
         });
     }
 }
