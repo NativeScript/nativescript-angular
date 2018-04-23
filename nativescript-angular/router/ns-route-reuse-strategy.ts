@@ -52,21 +52,30 @@ class DetachedStateCache {
 
     public clearModalCache() {
         let removedItemsCount = 0;
-        this.cache = this.cache.filter(cacheItem => {
+        const hasModalPages = this.cache.some(cacheItem => {
+            return cacheItem.isModal;
+        });
 
-            if (cacheItem.isModal) {
+        if (hasModalPages) {
+            let modalCacheCleared = false;
+
+            while (!modalCacheCleared) {
+                let cacheItem = this.peek();
                 const state = <any>cacheItem.state;
 
                 if (!state.componentRef) {
-                    throw new Error("No componentRed found in DetachedRouteHandle");
+                    throw new Error("No componentRef found in DetachedRouteHandle");
                 }
 
                 destroyComponentRef(state.componentRef);
+                if (cacheItem.isModal) {
+                    modalCacheCleared = true;
+                }
+
+                this.pop();
                 removedItemsCount++;
             }
-
-            return !cacheItem.isModal;
-        });
+        }
 
         log(`DetachedStateCache.clearModalCache() ${removedItemsCount} items will be destroyed`);
     }
@@ -122,7 +131,13 @@ export class NSRouteReuseStrategy implements RouteReuseStrategy {
         const cache = this.cacheByOutlet[route.outlet] = this.cacheByOutlet[route.outlet] || new DetachedStateCache();
 
         if (state) {
-            cache.push({ key, state, isModal: this.location._isModalNavigation });
+            let isModal = false;
+            if (this.location._isModalNavigation) {
+                isModal = true;
+                this.location._isModalNavigation = false;
+            }
+
+            cache.push({ key, state, isModal });
         } else {
             const topItem = cache.peek();
             if (topItem.key === key) {
@@ -170,15 +185,19 @@ export class NSRouteReuseStrategy implements RouteReuseStrategy {
         return shouldReuse;
     }
 
-    clearCache(outletName: string, modalItemsOnly?: boolean) {
+    clearCache(outletName: string) {
         const cache = this.cacheByOutlet[outletName];
 
         if (cache) {
-            if (modalItemsOnly) {
-                cache.clearModalCache();
-            } else {
-                cache.clear();
-            }
+            cache.clear();
+        }
+    }
+
+    clearModalCache(outletName: string) {
+        const cache = this.cacheByOutlet[outletName];
+
+        if (cache) {
+            cache.clearModalCache();
         }
     }
 }

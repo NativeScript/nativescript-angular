@@ -162,13 +162,9 @@ export class PageRouterOutlet implements OnDestroy { // tslint:disable-line:dire
     }
 
     ngOnDestroy(): void {
-
         // Clear accumulated modal view page cache when page-router-outlet
         // destroyed on modal view closing
-        if (this.locationStrategy._isModalNavigation) {
-            this.routeReuseStrategy.clearCache(this.name, true);
-            this.locationStrategy._isModalNavigation = false;
-        }
+        this.routeReuseStrategy.clearModalCache(this.name);
         this.parentContexts.onChildOutletDestroyed(this.name);
     }
 

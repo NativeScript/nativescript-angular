@@ -124,7 +124,7 @@ export class ModalDialogService {
             const detachedProxy = <ProxyViewContainer>compRef.location.nativeElement;
 
             if (detachedProxy.getChildrenCount() > 1) {
-                throw new Error("Modal contet has more than one root view.");
+                throw new Error("Modal content has more than one root view.");
             }
             componentView = detachedProxy.getChildAt(0);
 
