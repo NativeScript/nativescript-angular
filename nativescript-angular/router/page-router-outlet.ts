@@ -2,7 +2,7 @@ import {
     Attribute, ChangeDetectorRef,
     ComponentFactory, ComponentFactoryResolver, ComponentRef,
     Directive, Inject, InjectionToken, Injector,
-    OnDestroy, OnInit, EventEmitter, Output,
+    OnDestroy, EventEmitter, Output,
     Type, ViewContainerRef, ElementRef
 } from "@angular/core";
 import {

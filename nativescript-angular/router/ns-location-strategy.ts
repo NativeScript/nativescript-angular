@@ -136,7 +136,6 @@ export class NSLocationStrategy extends LocationStrategy {
                 const rootOutlets = stateUrlTree.root.children;
 
                 Object.keys(rootOutlets).forEach(outletName => {
-                    const outletStates = this.statesByOutlet[outletName] = this.statesByOutlet[outletName] || [];
                     const topState = this.peekState(outletName);
 
                     topState.segmentGroup = rootOutlets[outletName];

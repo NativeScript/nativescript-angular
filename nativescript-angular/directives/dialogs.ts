@@ -10,7 +10,6 @@ import {
 } from "@angular/core";
 
 import { NSLocationStrategy } from "../router/ns-location-strategy";
-import { Page } from "tns-core-modules/ui/page";
 import { View, ViewBase } from "tns-core-modules/ui/core/view";
 import { ProxyViewContainer } from "tns-core-modules/ui/proxy-view-container/proxy-view-container";
 
