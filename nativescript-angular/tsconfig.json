@@ -29,6 +29,6 @@
     "genDir": ".",
     "skipMetadataEmit": false,
     "skipTemplateCodegen": true,
-    "strictMetadataEmit": false
+    "strictMetadataEmit": true
   }
 }
