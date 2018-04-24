@@ -6,9 +6,9 @@ This folder contains a number of projects containing e2e tests for NativeScript 
 
  - [`renderer`](renderer) - Tests for the nativescript-angular renderer features. Creating/adding/removing elements for the nativescript visual tree.
 
- - [`router`](router) - Test for angular router and navigation. This app contains a mixed scenario with `<page-router-outlet>` and `<router-outlet>`.
+ - [`router`](router) - Tests for angular router and navigation. This app contains a mixed scenario with `<page-router-outlet>` and `<router-outlet>`.
 
- - [`single-page`](single-page) - Test for angular router and navigation. This is a simple app with only one level navigation using `<router-outlet>`.
+ - [`single-page`](single-page) - Tests for angular router and navigation. This is a simple app with only one level navigation using `<router-outlet>`.
 
  - [`modal-navigation-ng`](modal-navigation-ng) - Tests for different scenarios of showing and navigation in modal dialogs.
 
