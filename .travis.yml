@@ -25,7 +25,7 @@ matrix:
       os: osx
       env:
         - Build="iOS"
-      osx_image: xcode8.3
+      osx_image: xcode9.3
       language: node_js
       node_js: "6"
       jdk: oraclejdk8
@@ -43,7 +43,7 @@ matrix:
     - os: osx
       env:
         - Build="iOS"
-      osx_image: xcode8.3
+      osx_image: xcode9.3
       language: node_js
       node_js: "8"
       jdk: oraclejdk8
