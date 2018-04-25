@@ -19,7 +19,7 @@ This folder contains a number of projects containing e2e tests for NativeScript 
 Install external dependencies for nativescript-dev-appium described [here](https://github.com/NativeScript/nativescript-dev-appium#setup).
 
 
-All projects use the same [appium capabilities files](config/appium.capabilities.json). Make sure you p
+All projects use the same [appium capabilities files](config/appium.capabilities.json).
 
 
 ## Running Tests
