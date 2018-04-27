@@ -5,8 +5,6 @@ const appCssContext = require.context("~/", false, /^\.\/app\.(css|scss|less|sas
 global.registerWebpackModules(appCssContext);
 application.loadAppCss();
 
-require("./vendor-platform");
-
 require("reflect-metadata");
 require("@angular/platform-browser");
 require("@angular/core");

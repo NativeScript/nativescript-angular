@@ -7,3 +7,4 @@ report
 
 app/**/*.js
 app/**/*.map
+package-lock.json

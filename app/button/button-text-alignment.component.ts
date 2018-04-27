@@ -1,4 +1,4 @@
-import { Observable as RxObservable } from "rxjs/Observable";
+import { Observable as RxObservable } from "rxjs";
 import {
     Component,
     Input,
