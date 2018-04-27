@@ -1,10 +1,9 @@
-bin/dist
 node_modules
+platforms
+hooks
 tags
 **/*.js.map
 **/*.metadata.json
-
-/hooks
 
 /nativescript-angular/**/*.d.ts
 /nativescript-angular/**/*.js
@@ -23,24 +22,16 @@ npm-debug.log
 nativescript-angular*.tgz
 package-lock.json
 
+# Apps' JS files
 tests/app/**/*.js
 tests/test-output.txt
-tests/platforms
-tests/lib
-tests/node_modules
-tests/hooks
-
 ng-sample/app/**/*.js
-ng-sample/app/global.d.ts
-ng-sample/platforms
-ng-sample/lib
-ng-sample/node_modules
-ng-sample/hooks
-ng-sample/app/nativescript-angular
 
-startup-test/platforms
-startup-test/lib
-startup-test/node_modules
+# Webpack configuration files
+webpack.config.js
+vendor.ts
+vendor-platform.android.ts
+vendor-platform.ios.ts
 
 # IDEs and editors
 /.idea
