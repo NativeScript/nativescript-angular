@@ -1,6 +1,6 @@
-import {Component} from "@angular/core";
-import {Http} from "@angular/http";
-import "rxjs/add/operator/map";
+import { Component } from "@angular/core";
+import { Http } from "@angular/http";
+import { map } from "rxjs/operators";
 
 /* IMPORTANT
 In order to test out the full image example,
@@ -11,8 +11,8 @@ https://blog.nraboy.com/2015/12/fix-ios-9-app-transport-security-issues-in-nativ
 */
 
 @Component({
-    selector: "http-test",
-    template: `
+  selector: "http-test",
+  template: `
     <StackLayout horizontalAlignment="center">
         <Button text="Load Local File with Http" (tap)='loadLocal()' cssClass="btn-primary"></Button>
         <Button text="Load Remote File with Http" (tap)='loadRemote()' cssClass="btn-primary"></Button>
@@ -20,11 +20,11 @@ https://blog.nraboy.com/2015/12/fix-ios-9-app-transport-security-issues-in-nativ
         <Label [text]="description" textWrap="true"></Label>
     </StackLayout>
     `,
-    styles: [
-      `Button {
+  styles: [
+    `Button {
         margin-bottom:20;
       }`
-    ],
+  ],
 })
 export class HttpTest {
   public title: string;
@@ -35,7 +35,9 @@ export class HttpTest {
   }
 
   public loadLocal() {
-    this.http.get("~/examples/http/data.json").map(res => res.json()).subscribe((response: any) => {
+    this.http.get("~/examples/http/data.json").pipe(
+      map(res => res.json())
+    ).subscribe((response: any) => {
       let user = response.results[0];
       this.title = user.title;
       this.description = user.description;
@@ -43,10 +45,12 @@ export class HttpTest {
   }
 
   public loadRemote() {
-    this.http.get(`https://randomuser.me/api/?results=1&nat=us`).map(res => res.json()).subscribe((response: any) => {
-      let user = response.results[0];
-      this.title = user.name.first;
-      this.description = user.email;
-    });
+    this.http.get(`https://randomuser.me/api/?results=1&nat=us`)
+      .pipe(map(res => res.json()))
+      .subscribe((response: any) => {
+        let user = response.results[0];
+        this.title = user.name.first;
+        this.description = user.email;
+      });
   }
 }

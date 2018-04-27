@@ -3,7 +3,8 @@ import { ActivatedRoute, Router, Route } from "@angular/router";
 
 import { RouterExtensions } from "nativescript-angular/router";
 import { Page } from "ui/page";
-import { Observable } from "rxjs/Observable";
+import { Observable } from "rxjs";
+import { map } from "rxjs/operators";
 
 @Component({
     selector: "second",
@@ -28,8 +29,8 @@ export class SecondComponent implements OnInit, OnDestroy {
 
     constructor(private routerExt: RouterExtensions, route: ActivatedRoute, page: Page) {
         console.log("SecondComponent - constructor() page: " + page);
-        this.depth$ = route.params.map(r => r["depth"]);
-        this.nextDepth$ = route.params.map(r => +r["depth"] + 1);
+        this.depth$ = route.params.pipe(map(r => r["depth"]));
+        this.nextDepth$ = route.params.pipe(map(r => +r["depth"] + 1));
     }
 
     ngOnInit() {

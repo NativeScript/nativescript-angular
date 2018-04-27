@@ -4,7 +4,6 @@ import { Location } from "@angular/common";
 import { RouterExtensions } from "nativescript-angular/router";
 
 import { Page } from "ui/page";
-import { Observable } from "rxjs/Observable";
 
 @Component({
     selector: "lazy",

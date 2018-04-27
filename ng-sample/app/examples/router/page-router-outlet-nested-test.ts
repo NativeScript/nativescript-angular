@@ -2,8 +2,8 @@ import { Component, OnInit, OnDestroy } from "@angular/core";
 import { ActivatedRoute, Router, Route } from "@angular/router";
 import { Location } from "@angular/common";
 import { Page } from "ui/page";
-import { Observable } from "rxjs/Observable";
-import "rxjs/add/operator/map";
+import { Observable } from "rxjs";
+import { map } from "rxjs/operators";
 
 @Component({
     selector: "first",
@@ -68,7 +68,7 @@ class DetailComponent {
     public id$: Observable<string>;
     constructor(private router: Router, private route: ActivatedRoute) {
         console.log("DetailComponent.constructor()");
-        this.id$ = route.params.map(r => r["id"]);
+        this.id$ = route.params.pipe(map(r => r["id"]));
     }
 
     ngOnInit() {
@@ -106,8 +106,8 @@ class SecondComponent implements OnInit, OnDestroy {
     public nextDepth$: Observable<number>;
     constructor(private location: Location, route: ActivatedRoute, page: Page) {
         console.log("SecondComponent.constructor() page: " + page);
-        this.depth$ = route.params.map(r => r["depth"]);
-        this.nextDepth$ = route.params.map(r => +r["depth"] + 1);
+        this.depth$ = route.params.pipe(map(r => r["depth"]));
+        this.nextDepth$ = route.params.pipe(map(r => +r["depth"] + 1));
     }
 
     ngOnInit() {
