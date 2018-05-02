@@ -34,10 +34,10 @@ export class NSLocationStrategy extends LocationStrategy {
     private currentOutlet: string;
     private popStateCallbacks = new Array<(_: any) => any>();
 
-    private _isModalClosing = false;
     private _isPageNavigationBack = false;
     private _currentNavigationOptions: NavigationOptions;
 
+    public _isModalClosing = false;
     public _isModalNavigation = false;
 
     constructor(private frameService: FrameService) {

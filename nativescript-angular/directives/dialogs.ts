@@ -100,15 +100,16 @@ export class ModalDialogService {
 
         const closeCallback = (...args) => {
             doneCallback.apply(undefined, args);
-            if (componentView) {
-                componentView.closeModal();
-            }
+            if (componentView && !this.location._isModalClosing) {
+                this.location._beginCloseModalNavigation();
 
-            this.location._beginCloseModalNavigation();
-            this.location.back();
-            this.location._finishCloseModalNavigation();
-            detachedLoaderRef.instance.detectChanges();
-            detachedLoaderRef.destroy();
+                componentView.closeModal();
+            } else if (this.location._isModalClosing) {
+                this.location.back();
+                this.location._finishCloseModalNavigation();
+                detachedLoaderRef.instance.detectChanges();
+                detachedLoaderRef.destroy();
+            }
         };
 
         const modalParams = new ModalDialogParams(context, closeCallback);
