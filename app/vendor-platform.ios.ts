@@ -1,1 +1,0 @@
-(<any>global).noOp;
