@@ -1,4 +1,3 @@
-import {registerTestApp} from "../../tests/test-app";
 import { ApplicationRef } from "@angular/core";
 // >> router-outlet-example
 import { Component, NgModule } from "@angular/core";
@@ -6,7 +5,7 @@ import { platformNativeScriptDynamic } from "nativescript-angular/platform";
 import { NativeScriptRouterModule } from "nativescript-angular/router";
 import { Router, NavigationStart, NavigationEnd } from "@angular/router";
 import { routes } from "./app.routes";
-import {FirstComponent, SecondComponent} from "./navigation-common";
+import { FirstComponent, SecondComponent } from "./navigation-common";
 
 @Component({
     selector: "navigation-test",
@@ -30,8 +29,6 @@ export class NavigationApp {
     public done: Promise<void>;
 
     constructor(public router: Router, public appRef: ApplicationRef) {
-        registerTestApp(NavigationApp, this, appRef);
-
         this.done = new Promise<void>((resolve, reject) => {
             this.router.events.subscribe((e) => {
                 if (e instanceof NavigationStart) {
@@ -55,13 +52,13 @@ export class NavigationApp {
         NativeScriptRouterModule.forRoot(routes)
     ]
 })
-export class NavigationAppModule {}
+export class NavigationAppModule { }
 
 // >> (hide)
 function start_snippet() {
-// << (hide)
-platformNativeScriptDynamic().bootstrapModule(NavigationAppModule);
-// >> (hide)
+    // << (hide)
+    platformNativeScriptDynamic().bootstrapModule(NavigationAppModule);
+    // >> (hide)
 }
 // << (hide)
 // << router-outlet-example
