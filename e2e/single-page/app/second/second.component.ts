@@ -2,7 +2,8 @@ import { Component, OnInit, OnDestroy } from "@angular/core";
 import { ActivatedRoute, Router, Route } from "@angular/router";
 
 import { Page } from "ui/page";
-import { Observable } from "rxjs/Observable";
+import { Observable } from "rxjs";
+import { map } from "rxjs/operators";
 
 @Component({
     selector: "second",
@@ -22,7 +23,7 @@ import { Observable } from "rxjs/Observable";
 export class SecondComponent implements OnInit, OnDestroy {
     public id$: Observable<number>;
     constructor(route: ActivatedRoute) {
-        this.id$ = route.params.map(r => +r["id"]);
+        this.id$ = route.params.pipe(map(r => +r["id"]));
     }
 
     ngOnInit() {

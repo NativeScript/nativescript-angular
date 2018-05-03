@@ -31,7 +31,7 @@ import { NavigationApp } from "./snippets/navigation/router-outlet";
 
 import { rendererTraceCategory, routerTraceCategory } from "nativescript-angular/trace";
 
-import { BehaviorSubject } from "rxjs/BehaviorSubject";
+import { BehaviorSubject } from "rxjs";
 
 import { GridLayout, ItemSpec } from "tns-core-modules/ui/layouts/grid-layout/grid-layout";
 
