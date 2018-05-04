@@ -3,7 +3,6 @@ import { assert } from "./test-config";
 
 import { NavigationEnd, NavigationStart } from "@angular/router";
 import { Subscription } from "rxjs";
-import { bootstrapTestApp, destroyTestApp } from "./test-app";
 
 import { GestureComponent } from "../snippets/gestures.component";
 import { LayoutsComponent } from "../snippets/layouts.component";
@@ -56,97 +55,3 @@ describe("Snippets", () => {
         });
     });
 });
-
-describe("Snippets Navigation", () => {
-    let runningApp: any;
-    let subscription: Subscription;
-
-    const cleanup = () => {
-        if (subscription) {
-            subscription.unsubscribe();
-            subscription = null;
-        }
-        if (runningApp) {
-            destroyTestApp(runningApp);
-            runningApp = null;
-        }
-    };
-
-    after(cleanup);
-
-    it("router-outlet app", (done) => {
-        bootstrapTestApp(NavigationApp, [], routes, [
-            NavigationApp, 
-            FirstComponent, 
-            SecondComponent
-        ]).then((app) => {
-            runningApp = app;
-
-            return runningApp.done.then(() => {
-                assert(app.startEvent instanceof NavigationStart);
-                assert.equal("/", app.startEvent.url);
-
-                assert(app.endEvent instanceof NavigationEnd);
-                assert.equal("/", app.endEvent.url);
-                assert.equal("/first", app.endEvent.urlAfterRedirects);
-
-                cleanup();
-            }).then(() => done(), err => done(err));
-        });
-    });
-
-    //TODO: Skip the page-router-outlet test as it causes a crash in android in the current test-runner setup
-    (isIOS ? it : it.skip)("page-router-outlet app", (done) => {
-        bootstrapTestApp(PageNavigationApp, [], routes, [
-            PageNavigationApp,
-            FirstComponent,
-            SecondComponent
-        ]).then((app) => {
-            runningApp = app;
-
-            return runningApp.done.then(() => {
-                assert(app.startEvent instanceof NavigationStart);
-                assert.equal("/", app.startEvent.url);
-
-                assert(app.endEvent instanceof NavigationEnd);
-                assert.equal("/", app.endEvent.url);
-                assert.equal("/first", app.endEvent.urlAfterRedirects);
-
-                cleanup();
-            }).then(() => done(), err => done(err));
-        });
-    });
-});
-
-describe("Snippets ListView", () => {
-    let runningApp: any;
-
-    const cleanup = () => {
-        if (runningApp) {
-            destroyTestApp(runningApp);
-            runningApp = null;
-        }
-    };
-
-    after(cleanup);
-
-    it("template selector", (done) => {
-        bootstrapTestApp(
-            ListTemplateSelectorTest,
-            [DataService],
-            null,
-            [
-                HeaderComponent,
-                ItemComponent,
-                ListTemplateSelectorTest
-            ])
-            .then((app) => {
-                setTimeout(() => {
-                    cleanup();
-                    done();
-                }, 100);
-            })
-            .catch(err => done(err));
-    });
-});
-

@@ -5,7 +5,6 @@ import { Component, ComponentRef, ElementRef, NgZone, Renderer2, ViewChild } fro
 import { ProxyViewContainer } from "ui/proxy-view-container";
 import { Red } from "color/known-colors";
 import { dumpView } from "./test-utils";
-import { TestApp } from "./test-app";
 import { LayoutBase } from "tns-core-modules/ui/layouts/layout-base";
 import { StackLayout } from "tns-core-modules/ui/layouts/stack-layout";
 import { ContentView } from "tns-core-modules/ui/content-view";
@@ -16,8 +15,7 @@ import { isIOS } from "tns-core-modules/platform";
 import { View, fontInternalProperty, backgroundInternalProperty } from "tns-core-modules/ui/core/view"
 import { nsTestBedAfterEach, nsTestBedBeforeEach, nsTestBedRender } from "nativescript-angular/testing";
 import { ComponentFixture, TestBed } from "@angular/core/testing";
-import { Observable } from "rxjs/Observable";
-import { ReplaySubject } from "rxjs/ReplaySubject";
+import { Observable, ReplaySubject } from "rxjs";
 
 @Component({
     template: `<StackLayout><Label text="Layout"></Label></StackLayout>`
