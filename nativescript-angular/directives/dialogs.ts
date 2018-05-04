@@ -126,7 +126,9 @@ export class ModalDialogService {
             }
 
             page.content = componentView;
-            parentView.showModal(page, context, closeCallback, fullscreen, animated, stretched);
+            // TODO: remove <any> cast after https://github.com/NativeScript/NativeScript/pull/5734
+            //       is in a published version of tns-core-modules.
+            (<any>parentView).showModal(page, context, closeCallback, fullscreen, animated, stretched);
         });
     }
 }
