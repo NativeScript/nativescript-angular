@@ -126,12 +126,7 @@ export class ModalDialogService {
             }
 
             page.content = componentView;
-            // parentView typed as ViewBase, but only View takes stretched param.
-            if (parentView instanceof View) {
-                parentView.showModal(page, context, closeCallback, fullscreen, animated, stretched);
-            } else {
-                parentView.showModal(page, context, closeCallback, fullscreen, animated);
-            }
+            parentView.showModal(page, context, closeCallback, fullscreen, animated, stretched);
         });
     }
 }
