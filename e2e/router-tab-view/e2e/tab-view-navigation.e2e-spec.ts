@@ -19,7 +19,7 @@ describe("TabView with page-router-outlet in each tab", () => {
         }
     });
 
-    it("should find an tabs by text", async () => {
+    it("should find any tabs by text", async () => {
         await driver.findElementByText("Players", SearchOptions.exact);
         await driver.findElementByText("Teams", SearchOptions.exact);
         await driver.findElementByText("Player List", SearchOptions.exact);

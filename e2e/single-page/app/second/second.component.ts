@@ -4,6 +4,7 @@ import { ActivatedRoute, Router, Route } from "@angular/router";
 import { Page } from "ui/page";
 import { Observable } from "rxjs";
 import { map } from "rxjs/operators";
+import { RouterExtensions } from "nativescript-angular/router";
 
 @Component({
     selector: "second",
@@ -18,11 +19,12 @@ import { map } from "rxjs/operators";
 
     <StackLayout>
         <Label [text]="'Second Component: ' + (id$ | async)" class="title"></Label>
+        <Button text="Back" (tap)="back()"></Button>
     </StackLayout>`
 })
 export class SecondComponent implements OnInit, OnDestroy {
     public id$: Observable<number>;
-    constructor(route: ActivatedRoute) {
+    constructor(route: ActivatedRoute, private routerExtensions: RouterExtensions) {
         this.id$ = route.params.pipe(map(r => +r["id"]));
     }
 
@@ -32,5 +34,9 @@ export class SecondComponent implements OnInit, OnDestroy {
 
     ngOnDestroy() {
         console.log("SecondComponent - ngOnDestroy()");
+    }
+
+    back() {
+        this.routerExtensions.back();
     }
 }
