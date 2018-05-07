@@ -90,8 +90,8 @@ export class TabViewItemDirective implements OnInit {
             this.item.iconSource = this._iconSource;
         }
     }
-    
-    
+
+
     @Input()
     get textTransform() {
         return this._textTransform;
