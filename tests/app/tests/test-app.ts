@@ -4,7 +4,7 @@ import { NativeScriptRouterModule } from "nativescript-angular/router";
 import {
     Type, Component, ComponentRef,
     ComponentFactoryResolver, ApplicationRef, Renderer2,
-    ViewContainerRef, NgZone, NgModule,
+    ViewContainerRef, NgZone, NgModule, ErrorHandler,
 } from "@angular/core";
 
 import { getRootView } from "tns-core-modules/application";
@@ -71,6 +71,13 @@ export function registerTestApp(appType, appInstance, appRef) {
     });
 }
 
+class MyErrorHandler implements ErrorHandler {
+    handleError(error) {
+        console.log("### ErrorHandler Error: " + error.toString());
+        console.log("### ErrorHandler Stack: " + error.stack);
+    }
+}
+
 export function bootstrapTestApp<T>(
     appComponentType: new (...args) => T,
     providers: any[] = [],
@@ -118,6 +125,7 @@ export function bootstrapTestApp<T>(
         ],
         providers: [
             rootViewProvider,
+            { provide: ErrorHandler, useClass: MyErrorHandler },
             ...providers,
         ]
     })

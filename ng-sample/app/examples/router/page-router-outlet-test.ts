@@ -5,7 +5,6 @@ import { Page } from "ui/page";
 import { Observable } from "rxjs";
 import { map } from "rxjs/operators";
 
-
 @Component({
     selector: "first",
     styleUrls: ["examples/router/styles.css"],
@@ -19,7 +18,7 @@ import { map } from "rxjs/operators";
         <Button text="Third(2)" [nsRouterLink]="['/third', '2' ]"></Button>
     </StackLayout>`
 })
-class FirstComponent implements OnInit, OnDestroy {
+export class FirstComponent implements OnInit, OnDestroy {
     constructor(page: Page) {
         console.log("FirstComponent.constructor() page: " + page);
     }
@@ -47,7 +46,7 @@ class FirstComponent implements OnInit, OnDestroy {
         <Button text="Third(2)" [nsRouterLink]="['/third', '2' ]"></Button>
     </StackLayout>`
 })
-class SecondComponent implements OnInit, OnDestroy {
+export class SecondComponent implements OnInit, OnDestroy {
     public id: Observable<string>;
     constructor(private location: Location, route: ActivatedRoute, page: Page) {
         console.log("SecondComponent.constructor() page: " + page);
@@ -81,7 +80,7 @@ class SecondComponent implements OnInit, OnDestroy {
         <Button text="Second(2)" [nsRouterLink]="['/second', '2' ]"></Button>
     </StackLayout>`
 })
-class ThirdComponent implements OnInit, OnDestroy {
+export class ThirdComponent implements OnInit, OnDestroy {
     public id: Observable<string>;
     constructor(private location: Location, route: ActivatedRoute, page: Page) {
         console.log("ThirdComponent.constructor() page: " + page);
