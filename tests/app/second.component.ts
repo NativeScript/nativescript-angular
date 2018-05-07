@@ -33,9 +33,7 @@ export class SecondComponent extends BaseComponent implements OnInit {
 
     ngOnInit() {
         super.ngOnInit();
-        this.routerLocationStrategystates = this.routerExtensions.locationStrategy
-            ._getStates()
-            .map(state => state.url).join(",");
+        this.routerLocationStrategystates = this.routerExtensions.locationStrategy.toString();
     }
 
     goBack() {

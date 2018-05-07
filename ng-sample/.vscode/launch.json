@@ -1,72 +1,58 @@
 {
-  "version": "0.2.0",
-  "configurations": [
-    {
-      "name": "Sync on iOS",
-      "type": "nativescript",
-      "platform": "ios",
-      "request": "launch",
-      "appRoot": "${workspaceRoot}",
-      "sourceMaps": true,
-      "diagnosticLogging": false,
-      "emulator": false,
-      "rebuild": false,
-      "syncAllFiles": false
-    },
-    {
-      "name": "Launch on iOS",
-      "type": "nativescript",
-      "platform": "ios",
-      "request": "launch",
-      "appRoot": "${workspaceRoot}",
-      "sourceMaps": true,
-      "diagnosticLogging": false,
-      "emulator": false,
-      "rebuild": true,
-      "stopOnEntry": true
-    },
-    {
-      "name": "Attach on iOS",
-      "type": "nativescript",
-      "platform": "ios",
-      "request": "attach",
-      "appRoot": "${workspaceRoot}",
-      "sourceMaps": true,
-      "diagnosticLogging": false,
-      "emulator": false
-    },
-    {
-      "name": "Sync on Android",
-      "type": "nativescript",
-      "platform": "android",
-      "request": "launch",
-      "appRoot": "${workspaceRoot}",
-      "sourceMaps": true,
-      "diagnosticLogging": false,
-      "emulator": false,
-      "rebuild": false
-    },
-    {
-      "name": "Launch on Android",
-      "type": "nativescript",
-      "platform": "android",
-      "request": "launch",
-      "appRoot": "${workspaceRoot}",
-      "sourceMaps": true,
-      "diagnosticLogging": false,
-      "emulator": false,
-      "rebuild": true,
-      "stopOnEntry": true
-    },
-    {
-      "name": "Attach on Android",
-      "type": "nativescript",
-      "platform": "android",
-      "request": "attach",
-      "appRoot": "${workspaceRoot}",
-      "sourceMaps": true,
-      "diagnosticLogging": false,
-      "emulator": false
-    }
-  ]
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Launch on iOS",
+            "type": "nativescript",
+            "request": "launch",
+            "platform": "ios",
+            "appRoot": "${workspaceRoot}",
+            "sourceMaps": true,
+            "stopOnEntry": false,
+            "tnsArgs": [
+                "--syncAllFiles"
+            ],
+            "watch": true
+        },
+        {
+            "name": "Attach on iOS",
+            "type": "nativescript",
+            "request": "attach",
+            "platform": "ios",
+            "appRoot": "${workspaceRoot}",
+            "sourceMaps": true,
+            "tnsArgs": [
+                "--syncAllFiles"
+            ],
+            "watch": false
+        },
+        {
+            "name": "Launch on Android",
+            "type": "nativescript",
+            "request": "launch",
+            "platform": "android",
+            "appRoot": "${workspaceRoot}",
+            "sourceMaps": true,
+            "stopOnEntry": false,
+            "tnsArgs": [
+                "--syncAllFiles"
+            ],
+            "watch": true
+        },
+        {
+            "name": "Attach on Android",
+            "type": "nativescript",
+            "request": "attach",
+            "platform": "android",
+            "appRoot": "${workspaceRoot}",
+            "sourceMaps": true,
+            "tnsArgs": [
+                "--syncAllFiles"
+            ],
+            "watch": false
+        }
+    ]
 }

@@ -1,5 +1,6 @@
 import { Injectable } from "@angular/core";
 import { LocationStrategy } from "@angular/common";
+import { DefaultUrlSerializer, UrlSegmentGroup, UrlTree } from "@angular/router";
 import { routerLog } from "../trace";
 import { NavigationTransition } from "tns-core-modules/ui/frame";
 import { isPresent } from "../lang-facade";
@@ -19,18 +20,25 @@ const defaultNavOptions: NavigationOptions = {
 export interface LocationState {
     state: any;
     title: string;
-    url: string;
     queryParams: string;
+    segmentGroup: UrlSegmentGroup;
+    isRootSegmentGroup: boolean;
     isPageNavigation: boolean;
+    isModalNavigation: boolean;
 }
 
 @Injectable()
 export class NSLocationStrategy extends LocationStrategy {
-    private states = new Array<LocationState>();
+    private statesByOutlet: { [key: string]: Array<LocationState> } = {};
+    private currentUrlTree: UrlTree;
+    private currentOutlet: string;
     private popStateCallbacks = new Array<(_: any) => any>();
 
     private _isPageNavigationBack = false;
     private _currentNavigationOptions: NavigationOptions;
+
+    public _isModalClosing = false;
+    public _isModalNavigation = false;
 
     constructor(private frameService: FrameService) {
         super();
@@ -38,10 +46,25 @@ export class NSLocationStrategy extends LocationStrategy {
     }
 
     path(): string {
-        let state = this.peekState();
-        const result = state ? state.url : "/";
-        routerLog("NSLocationStrategy.path(): " + result);
-        return result;
+        if (!this.currentUrlTree) {
+            return "/";
+        }
+
+        let tree = this.currentUrlTree;
+        const state = this.peekState(this.currentOutlet);
+
+        // Handle case where the user declares a component at path "/".
+        // The url serializer doesn't parse this url as having a primary outlet.
+        if (state.isRootSegmentGroup) {
+            tree.root = state.segmentGroup;
+        } else {
+            tree.root.children[this.currentOutlet] = state.segmentGroup;
+        }
+
+        const urlSerializer = new DefaultUrlSerializer();
+        const url = urlSerializer.serialize(tree);
+        routerLog("NSLocationStrategy.path(): " + url);
+        return url;
     }
 
     prepareExternalUrl(internal: string): string {
@@ -50,31 +73,77 @@ export class NSLocationStrategy extends LocationStrategy {
     }
 
     pushState(state: any, title: string, url: string, queryParams: string): void {
-        routerLog("NSLocationStrategy.pushState state: " +
+         routerLog("NSLocationStrategy.pushState state: " +
             `${state}, title: ${title}, url: ${url}, queryParams: ${queryParams}`);
         this.pushStateInternal(state, title, url, queryParams);
     }
 
     pushStateInternal(state: any, title: string, url: string, queryParams: string): void {
-        let isNewPage = this.states.length === 0;
-        this.states.push({
-            state: state,
-            title: title,
-            url: url,
-            queryParams: queryParams,
-            isPageNavigation: isNewPage
+        const urlSerializer = new DefaultUrlSerializer();
+        const stateUrlTree: UrlTree = urlSerializer.parse(url);
+        const rootOutlets = stateUrlTree.root.children;
+
+        this.currentUrlTree = stateUrlTree;
+
+        // Handle case where the user declares a component at path "/".
+        // The url serializer doesn't parse this url as having a primary outlet.
+        if (!Object.keys(rootOutlets).length) {
+            const outletStates = this.statesByOutlet["primary"] = this.statesByOutlet["primary"] || [];
+            const isNewPage = outletStates.length === 0;
+            outletStates.push({
+                state: state,
+                title: title,
+                queryParams: queryParams,
+                segmentGroup: stateUrlTree.root,
+                isRootSegmentGroup: true,
+                isPageNavigation: isNewPage,
+                isModalNavigation: false
+            });
+            this.currentOutlet = "primary";
+        }
+
+        Object.keys(rootOutlets).forEach(outletName => {
+            const outletStates = this.statesByOutlet[outletName] = this.statesByOutlet[outletName] || [];
+            const isNewPage = outletStates.length === 0;
+            const lastState = this.peekState(outletName);
+
+            if (!lastState || lastState.segmentGroup.toString() !== rootOutlets[outletName].toString()) {
+                outletStates.push({
+                    state: state,
+                    title: title,
+                    queryParams: queryParams,
+                    segmentGroup: rootOutlets[outletName],
+                    isRootSegmentGroup: false,
+                    isPageNavigation: isNewPage,
+                    isModalNavigation: false
+                });
+
+                this.currentOutlet = outletName;
+            }
         });
     }
 
     replaceState(state: any, title: string, url: string, queryParams: string): void {
-        if (this.states.length > 0) {
+        const states = this.statesByOutlet[this.currentOutlet];
+        if (states && states.length > 0) {
             routerLog("NSLocationStrategy.replaceState changing existing state: " +
                 `${state}, title: ${title}, url: ${url}, queryParams: ${queryParams}`);
-            const topState = this.peekState();
-            topState.state = state;
-            topState.title = title;
-            topState.url = url;
-            topState.queryParams = queryParams;
+
+            const tree = this.currentUrlTree;
+            if (url !== tree.toString()) {
+                const urlSerializer = new DefaultUrlSerializer();
+                const stateUrlTree: UrlTree = urlSerializer.parse(url);
+                const rootOutlets = stateUrlTree.root.children;
+
+                Object.keys(rootOutlets).forEach(outletName => {
+                    const topState = this.peekState(outletName);
+
+                    topState.segmentGroup = rootOutlets[outletName];
+                    topState.state = state;
+                    topState.title = title;
+                    topState.queryParams = queryParams;
+                });
+            }
         } else {
             routerLog("NSLocationStrategy.replaceState pushing new state: " +
                 `${state}, title: ${title}, url: ${url}, queryParams: ${queryParams}`);
@@ -87,21 +156,52 @@ export class NSLocationStrategy extends LocationStrategy {
     }
 
     back(): void {
-        if (this._isPageNavigationBack) {
-            // We are navigating to the previous page
-            // clear the stack until we get to a page navigation state
-            let state = this.states.pop();
+        if (this._isModalClosing) {
+            const states = this.statesByOutlet[this.currentOutlet];
+            // We are closing modal view
+            // clear the stack until we get to the page that opened the modal view
+            let state;
+            let modalStatesCleared = false;
             let count = 1;
 
-            while (!(state.isPageNavigation)) {
-                state = this.states.pop();
+            while (!modalStatesCleared) {
+                state = this.peekState(this.currentOutlet);
+
+                if (!state) {
+                    modalStatesCleared = true;
+                    continue;
+                }
+
+                if (!state.isModalNavigation) {
+                    states.pop();
+                    count++;
+                } else {
+                    modalStatesCleared = true;
+                    state.isModalNavigation = false;
+                }
+            }
+
+            routerLog("NSLocationStrategy.back() while closing modal. States popped: " + count);
+
+            if (state) {
+                this.callPopState(state, true);
+            }
+        } else if (this._isPageNavigationBack) {
+            const states = this.statesByOutlet[this.currentOutlet];
+            // We are navigating to the previous page
+            // clear the stack until we get to a page navigation state
+            let state = states.pop();
+            let count = 1;
+
+            while (!state.isPageNavigation) {
+                state = states.pop();
                 count++;
             }
 
             routerLog("NSLocationStrategy.back() while navigating back. States popped: " + count);
             this.callPopState(state, true);
         } else {
-            let state = this.peekState();
+            let state = this.peekState(this.currentOutlet);
             if (state.isPageNavigation) {
                 // This was a page navigation - so navigate through frame.
                 routerLog("NSLocationStrategy.back() while not navigating back but top" +
@@ -112,14 +212,15 @@ export class NSLocationStrategy extends LocationStrategy {
                 // Nested navigation - just pop the state
                 routerLog("NSLocationStrategy.back() while not navigating back but top" +
                     " state is not page - just pop");
-                this.callPopState(this.states.pop(), true);
+
+                this.callPopState(this.statesByOutlet[this.currentOutlet].pop(), true);
             }
         }
 
     }
 
     canGoBack() {
-        return this.states.length > 1;
+        return this.statesByOutlet[this.currentOutlet].length > 1;
     }
 
     onPopState(fn: (_: any) => any): void {
@@ -133,33 +234,48 @@ export class NSLocationStrategy extends LocationStrategy {
     }
 
     private callPopState(state: LocationState, pop: boolean = true) {
-        const change = { url: state.url, pop: pop };
+        const urlSerializer = new DefaultUrlSerializer();
+        this.currentUrlTree.root.children[this.currentOutlet] = state.segmentGroup;
+        const url = urlSerializer.serialize(this.currentUrlTree);
+        const change = { url: url, pop: pop };
         for (let fn of this.popStateCallbacks) {
             fn(change);
         }
     }
 
-    private peekState(): LocationState {
-        if (this.states.length > 0) {
-            return this.states[this.states.length - 1];
+    private peekState(name: string) {
+        const states = this.statesByOutlet[name] || [];
+        if (states.length > 0) {
+            return states[states.length - 1];
         }
         return null;
     }
 
     public toString() {
-        return this.states
-            .map((v, i) => `${i}.[${v.isPageNavigation ? "PAGE" : "INTERNAL"}] "${v.url}"`)
-            .reverse()
-            .join("\n");
+        let result = [];
+
+        Object.keys(this.statesByOutlet).forEach(outletName => {
+            const outletStates = this.statesByOutlet[outletName];
+            const outletLog = outletStates
+                // tslint:disable-next-line:max-line-length
+                .map((v, i) => `${outletName}.${i}.[${v.isPageNavigation ? "PAGE" : "INTERNAL"}].[${v.isModalNavigation ? "MODAL" : "BASE"}] "${v.segmentGroup.toString()}"`)
+                .reverse();
+
+
+            result = result.concat(outletLog);
+        });
+
+        return result.join("\n");
     }
 
     // Methods for syncing with page navigation in PageRouterOutlet
-    public _beginBackPageNavigation() {
+    public _beginBackPageNavigation(name: string) {
         routerLog("NSLocationStrategy.startGoBack()");
         if (this._isPageNavigationBack) {
             throw new Error("Calling startGoBack while going back.");
         }
         this._isPageNavigationBack = true;
+        this.currentOutlet = name;
     }
 
     public _finishBackPageNavigation() {
@@ -174,17 +290,46 @@ export class NSLocationStrategy extends LocationStrategy {
         return this._isPageNavigationBack;
     }
 
-    public _beginPageNavigation(): NavigationOptions {
+    public _beginModalNavigation(): void {
+        routerLog("NSLocationStrategy._beginModalNavigation()");
+        const lastState = this.peekState(this.currentOutlet);
+
+        if (lastState) {
+            lastState.isModalNavigation = true;
+        }
+
+        this._isModalNavigation = true;
+    }
+
+    public _beginCloseModalNavigation(): void {
+        routerLog("NSLocationStrategy.startCloseModal()");
+        if (this._isModalClosing) {
+            throw new Error("Calling startCloseModal while closing modal.");
+        }
+        this._isModalClosing = true;
+    }
+
+    public _finishCloseModalNavigation() {
+        routerLog("NSLocationStrategy.finishCloseModalNavigation()");
+        if (!this._isModalClosing) {
+            throw new Error("Calling startCloseModal while not closing modal.");
+        }
+        this._isModalClosing = false;
+    }
+
+    public _beginPageNavigation(name: string): NavigationOptions {
         routerLog("NSLocationStrategy._beginPageNavigation()");
-        const lastState = this.peekState();
+        const lastState = this.peekState(name);
         if (lastState) {
             lastState.isPageNavigation = true;
         }
 
+        this.currentOutlet = name;
+
         const navOptions = this._currentNavigationOptions || defaultNavOptions;
         if (navOptions.clearHistory) {
             routerLog("NSLocationStrategy._beginPageNavigation clearing states history");
-            this.states = [lastState];
+            this.statesByOutlet[name] = [lastState];
         }
 
         this._currentNavigationOptions = undefined;
@@ -201,7 +346,7 @@ export class NSLocationStrategy extends LocationStrategy {
             `${JSON.stringify(this._currentNavigationOptions)})`);
     }
 
-    public _getStates(): Array<LocationState> {
-        return this.states.slice();
+    public _getStates(): { [key: string]: Array<LocationState> } {
+        return this.statesByOutlet;
     }
 }
