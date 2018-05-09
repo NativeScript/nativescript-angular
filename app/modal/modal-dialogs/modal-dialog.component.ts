@@ -13,13 +13,15 @@ import {
 @Component({
     selector: "modal-content",
     template: `
-    <StackLayout margin="24" horizontalAlignment="center" verticalAlignment="center">
-        <Label [text]="prompt"></Label>
-        <StackLayout orientation="horizontal" marginTop="12">
-            <Button text="ok" (tap)="close('OK')"></Button>
-            <Button text="cancel" (tap)="close('Cancel')"></Button>
+    <GridLayout>
+        <StackLayout margin="24" horizontalAlignment="center" verticalAlignment="center">
+            <Label [text]="prompt"></Label>
+            <StackLayout orientation="horizontal" marginTop="12">
+                <Button text="ok" (tap)="close('OK')"></Button>
+                <Button text="cancel" (tap)="close('Cancel')"></Button>
+            </StackLayout>
         </StackLayout>
-    </StackLayout>
+    </GridLayout>
     `
 })
 export class ModalContentComponent {
