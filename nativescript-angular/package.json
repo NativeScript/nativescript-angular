@@ -52,7 +52,8 @@
     "@angular/http": "~6.0.0-rc.0",
     "@angular/platform-browser": "~6.0.0-rc.0",
     "@angular/router": "~6.0.0-rc.0",
-    "rxjs": "~6.0.0-rc.1",
+    "rxjs": "~6.0.0-rc.1 || >=6.1.0 || >=6.0.0",
+    "rxjs-compat": "~6.0.0-rc.1 || >=6.1.0 || >=6.0.0",
     "tns-core-modules": "^4.0.0 || >4.0.0- || >4.1.0-",
     "zone.js": "^0.8.4",
     "typescript": "~2.7.2"
@@ -70,10 +71,10 @@
     "@angular/router": "~6.0.0-rc.0",
     "codelyzer": "^4.0.0",
     "rxjs": "~6.0.0-rc.1",
+    "rxjs-compat": "~6.0.0-rc.1",
     "tns-core-modules": "next",
     "tslint": "^5.5.0",
     "typescript": "~2.7.2",
     "zone.js": "^0.8.12"
   }
 }
-
