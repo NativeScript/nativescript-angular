@@ -35,6 +35,16 @@
         "noReset": false,
         "fullReset": false
     },
+    "android22": {
+        "platformName": "Android",
+        "platformVersion": "5.0",
+        "deviceName": "Emulator-Api22-Default",
+        "avd": "Emulator-Api22-Default",
+        "lt": 60000,
+        "newCommandTimeout": 720,
+        "noReset": false,
+        "fullReset": false
+    },
     "android23": {
         "platformName": "Android",
         "platformVersion": "6.0",
