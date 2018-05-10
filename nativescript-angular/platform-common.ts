@@ -175,7 +175,7 @@ export class NativeScriptPlatformRef extends PlatformRef {
                         bootstrapLog(`Angular bootstrap bootstrap done. uptime: ${uptime()}`);
 
                         if (!autoCreateFrame) {
-                            rootContent = this.extractContentFromHost(tempAppHostView);
+                            rootContent = tempAppHostView.content;
                         }
 
                         lastBootstrappedModule = new WeakRef(moduleRef);
@@ -236,7 +236,7 @@ export class NativeScriptPlatformRef extends PlatformRef {
                 onAfterLivesync.next({ moduleRef });
 
                 if (!autoCreateFrame) {
-                    rootContent = this.extractContentFromHost(tempAppHostView);
+                    rootContent = tempAppHostView.content;
                 }
 
                 lastBootstrappedModule = new WeakRef(moduleRef);
@@ -284,13 +284,5 @@ export class NativeScriptPlatformRef extends PlatformRef {
 
         frame.navigate({ create: () => { return page; } });
         return { page, frame };
-    }
-
-    private extractContentFromHost(tempAppHostView: AppHostView) {
-        const result = tempAppHostView.content;
-        tempAppHostView.content = null;
-        tempAppHostView.ngAppRoot = result;
-        result.parentNode = tempAppHostView;
-        return result;
     }
 }

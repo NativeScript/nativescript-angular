@@ -1,5 +1,5 @@
 import { Component, ViewContainerRef } from "@angular/core";
-import * as dialogs from "tns-core-modules/ui/dialogs";
+import * as dialogs from "ui/dialogs";
 import { ModalDialogService, ModalDialogOptions } from "nativescript-angular/directives/dialogs";
 import { ModalContent } from "./modal-content";
 
@@ -31,8 +31,6 @@ export class ModalTest {
         ModalContent
     ];
 
-    static exports = [];
-
     public showModal(fullscreen: boolean) {
         const options: ModalDialogOptions = {
             context: { promptMsg: "This is the prompt message!" },
@@ -42,6 +40,7 @@ export class ModalTest {
 
         this.modal.showModal(ModalContent, options).then((res: string) => {
             this.result = res || "empty result";
+            // console.log("MODAL:" + this.result);
         });
     }
 

@@ -1,13 +1,11 @@
 <TabView androidTabsPosition="bottom">
     <page-router-outlet 
         *tabItem="{title: 'Players'}" 
-        name="playerTab" 
-        (activate)='onActivate(0)'>
+        name="playerTab">
     </page-router-outlet>
 
     <page-router-outlet
         *tabItem="{title: 'Teams'}" 
-        name="teamTab" 
-        (activate)='onActivate(1)'>
+        name="teamTab">
     </page-router-outlet>
 </TabView>
