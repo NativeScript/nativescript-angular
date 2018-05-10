@@ -7,7 +7,7 @@ import { Page } from "ui/page";
 import { View } from "ui/core/view";
 import { FrameService } from "nativescript-angular/platform-providers";
 
-class FakeFrameService extends FrameService {
+export class FakeFrameService extends FrameService {
     private frame: Frame;
     constructor(private backCB?: () => void) {
         super();
@@ -19,7 +19,7 @@ class FakeFrameService extends FrameService {
     }
 }
 
-class FakeFrame extends View implements Frame {
+export class FakeFrame extends View implements Frame {
     backStack: Array<BackstackEntry>;
     currentPage: Page;
     currentEntry: NavigationEntry;

@@ -1,14 +1,17 @@
 // make sure you import mocha-config before @angular/core
-import {assert} from "./test-config";
-import {Component, ViewContainerRef} from "@angular/core";
-import {Page} from "ui/page";
-import {topmost} from "ui/frame";
-import {ModalDialogParams, ModalDialogService} from "nativescript-angular/directives/dialogs";
+import { assert } from "./test-config";
+import { Component, ViewContainerRef } from "@angular/core";
+import { Page } from "ui/page";
+import { topmost } from "ui/frame";
+import { ModalDialogParams, ModalDialogService } from "nativescript-angular/directives/dialogs";
 
-import {device, platformNames} from "platform";
+import { device, platformNames } from "platform";
 
-import {ComponentFixture} from "@angular/core/testing";
-import {nsTestBedRender, nsTestBedAfterEach, nsTestBedBeforeEach} from "nativescript-angular/testing";
+import { ComponentFixture } from "@angular/core/testing";
+import { nsTestBedRender, nsTestBedAfterEach, nsTestBedBeforeEach } from "nativescript-angular/testing";
+import { NSLocationStrategy } from "nativescript-angular/router/ns-location-strategy";
+import { FrameService } from "nativescript-angular";
+import { FakeFrameService } from "./ns-location-strategy";
 const CLOSE_WAIT = (device.os === platformNames.ios) ? 1000 : 0;
 
 @Component({
@@ -50,7 +53,11 @@ export class SuccessComponent {
 
 describe("modal-dialog", () => {
 
-    beforeEach(nsTestBedBeforeEach([FailComponent, SuccessComponent], [], [], [ModalComponent]));
+    beforeEach(nsTestBedBeforeEach(
+        [FailComponent, SuccessComponent],
+        [{ provide: FrameService, useValue: new FakeFrameService() }, NSLocationStrategy],
+        [],
+        [ModalComponent]));
     afterEach(nsTestBedAfterEach());
     before((done) => {
         // HACK: Wait for the navigations from the test runner app
@@ -84,14 +91,14 @@ describe("modal-dialog", () => {
             .then((fixture: ComponentFixture<SuccessComponent>) => {
                 const service = <ModalDialogService>fixture.componentRef.instance.service;
                 const comp = <SuccessComponent>fixture.componentRef.instance;
-                return service.showModal(ModalComponent, {viewContainerRef: comp.vcRef});
+                return service.showModal(ModalComponent, { viewContainerRef: comp.vcRef });
             })
             .then((res) => setTimeout(done, CLOSE_WAIT)) // wait for the dialog to close in IOS
             .catch((e) => done(e));
     });
 
     it("showModal passes modal params and gets result when resolved", (done) => {
-        const context = {property: "my context"};
+        const context = { property: "my context" };
         nsTestBedRender(SuccessComponent)
             .then((fixture: ComponentFixture<SuccessComponent>) => {
                 const service = <ModalDialogService>fixture.componentRef.instance.service;
