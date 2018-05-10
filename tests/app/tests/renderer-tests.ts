@@ -262,7 +262,7 @@ describe("Renderer E2E", () => {
         return nsTestBedRender(LayoutWithLabel).then((fixture) => {
             const componentRef: ComponentRef<LayoutWithLabel> = fixture.componentRef;
             const componentRoot = componentRef.instance.elementRef.nativeElement;
-            assert.equal("(ProxyViewContainer (StackLayout (Label)))", dumpView(componentRoot));
+            assert.equal("(proxyviewcontainer (stacklayout (label)))", dumpView(componentRoot));
         });
     });
 
@@ -270,7 +270,7 @@ describe("Renderer E2E", () => {
         return nsTestBedRender(LabelContainer).then((fixture) => {
             const componentRef: ComponentRef<LabelContainer> = fixture.componentRef;
             const componentRoot = componentRef.instance.elementRef.nativeElement;
-            assert.equal("(ProxyViewContainer (GridLayout (ProxyViewContainer (Label))))", dumpView(componentRoot));
+            assert.equal("(proxyviewcontainer (gridlayout (proxyviewcontainer (label))))", dumpView(componentRoot));
         });
     });
 
@@ -279,7 +279,7 @@ describe("Renderer E2E", () => {
             const componentRef: ComponentRef<ProjectionContainer> = fixture.componentRef;
             const componentRoot = componentRef.instance.elementRef.nativeElement;
             assert.equal(
-                "(ProxyViewContainer (GridLayout (ProxyViewContainer (StackLayout (Button)))))",
+                "(proxyviewcontainer (gridlayout (proxyviewcontainer (stacklayout (button)))))",
                  dumpView(componentRoot));
         });
     });
@@ -355,7 +355,7 @@ describe("Renderer E2E", () => {
             return nsTestBedRender(NgIfLabel).then((fixture) => {
                 const componentRef: ComponentRef<NgIfLabel> = fixture.componentRef;
                 const componentRoot = componentRef.instance.elementRef.nativeElement;
-                assert.equal("(ProxyViewContainer)", dumpView(componentRoot));
+                assert.equal("(proxyviewcontainer)", dumpView(componentRoot));
             });
         });
 
@@ -367,7 +367,7 @@ describe("Renderer E2E", () => {
 
                 component.show = true;
                 fixture.detectChanges();
-                assert.equal("(ProxyViewContainer (Label))", dumpView(componentRoot));
+                assert.equal("(proxyviewcontainer (label))", dumpView(componentRoot));
             });
         });
 
@@ -380,7 +380,7 @@ describe("Renderer E2E", () => {
                 component.show = true;
                 fixture.detectChanges();
                 assert.equal(
-                    "(ProxyViewContainer (StackLayout (Label), (Button)))",
+                    "(proxyviewcontainer (stacklayout (label), (button)))",
                     dumpView(componentRoot));
             });
         });
@@ -394,13 +394,13 @@ describe("Renderer E2E", () => {
                 component.show = true;
                 fixture.detectChanges();
                 assert.equal(
-                    "(ProxyViewContainer " +
-                        "(StackLayout " +
-                            "(Label[text=1]), " +
-                            "(Label[text=2]), " +
-                            "(Label[text=3]), " +
-                            "(Label[text=4]), " + // the content to be conditionally displayed
-                            "(Label[text=5])" +
+                    "(proxyviewcontainer " +
+                        "(stacklayout " +
+                            "(label[text=1]), " +
+                            "(label[text=2]), " +
+                            "(label[text=3]), " +
+                            "(label[text=4]), " + // the content to be conditionally displayed
+                            "(label[text=5])" +
                         ")" +
                     ")",
                     dumpView(componentRoot, true));
@@ -416,9 +416,9 @@ describe("Renderer E2E", () => {
                 fixture.detectChanges();
 
                 assert.equal(
-                    "(ProxyViewContainer " +
-                        "(StackLayout " +
-                            "(Label[text=If])" +
+                    "(proxyviewcontainer " +
+                        "(stacklayout " +
+                            "(label[text=If])" +
                         ")" +
                     ")",
 
@@ -435,9 +435,9 @@ describe("Renderer E2E", () => {
                 component.show = false;
                 fixture.detectChanges();
                 assert.equal(
-                    "(ProxyViewContainer " +
-                        "(StackLayout " +
-                            "(Label[text=Else])" +
+                    "(proxyviewcontainer " +
+                        "(stacklayout " +
+                            "(label[text=Else])" +
                         ")" +
                     ")",
 
@@ -453,9 +453,9 @@ describe("Renderer E2E", () => {
 
                 fixture.detectChanges();
                 assert.equal(
-                    "(ProxyViewContainer " +
-                        "(StackLayout " +
-                            "(Label[text=Then])" +
+                    "(proxyviewcontainer " +
+                        "(stacklayout " +
+                            "(label[text=Then])" +
                         ")" +
                     ")",
 
@@ -473,9 +473,9 @@ describe("Renderer E2E", () => {
                 component.show = false;
                 fixture.detectChanges();
                 assert.equal(
-                    "(ProxyViewContainer " +
-                        "(StackLayout " +
-                            "(Label[text=Else])" +
+                    "(proxyviewcontainer " +
+                        "(stacklayout " +
+                            "(label[text=Else])" +
                         ")" +
                     ")",
 
@@ -488,7 +488,7 @@ describe("Renderer E2E", () => {
                 const componentRef: ComponentRef<NgForLabel> = fixture.componentRef;
                 const componentRoot = componentRef.instance.elementRef.nativeElement;
                 assert.equal(
-                    "(ProxyViewContainer (Label[text=one]), (Label[text=two]), (Label[text=three]))",
+                    "(proxyviewcontainer (label[text=one]), (label[text=two]), (label[text=three]))",
                     dumpView(componentRoot, true));
             });
         });
@@ -503,7 +503,7 @@ describe("Renderer E2E", () => {
                 fixture.detectChanges();
 
                 assert.equal(
-                    "(ProxyViewContainer (Label[text=one]), (Label[text=three]))",
+                    "(proxyviewcontainer (label[text=one]), (label[text=three]))",
                     dumpView(componentRoot, true));
             });
         });
@@ -518,8 +518,8 @@ describe("Renderer E2E", () => {
                 fixture.detectChanges();
 
                 assert.equal(
-                    "(ProxyViewContainer " +
-                    "(Label[text=one]), (Label[text=new]), (Label[text=two]), (Label[text=three]))",
+                    "(proxyviewcontainer " +
+                    "(label[text=one]), (label[text=new]), (label[text=two]), (label[text=three]))",
                     dumpView(componentRoot, true));
             });
         });

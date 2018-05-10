@@ -47,7 +47,7 @@ describe("Platform filter directives", () => {
             return nsTestBedRender(IosSpecificComponent).then((fixture) => {
                 const componentRef = fixture.componentRef;
                 const componentRoot = componentRef.instance.elementRef.nativeElement;
-                assert.isTrue(dumpView(componentRoot, true).indexOf("(Label[text=IOS])") >= 0);
+                assert.isTrue(dumpView(componentRoot, true).indexOf("(label[text=IOS])") >= 0);
             });
         });
         it("does not render android specific content", () => {
@@ -62,7 +62,7 @@ describe("Platform filter directives", () => {
                 const componentRef = fixture.componentRef;
                 const componentRoot = componentRef.instance.elementRef.nativeElement;
                 assert.equal(
-                    "(ProxyViewContainer (StackLayout (Label[text=IOS])))",
+                    "(proxyviewcontainer (stacklayout (label[text=IOS])))",
                     dumpView(componentRoot, true));
             });
         });
@@ -79,7 +79,7 @@ describe("Platform filter directives", () => {
             return nsTestBedRender(AndroidSpecificComponent).then((fixture) => {
                 const componentRef = fixture.componentRef;
                 const componentRoot = componentRef.instance.elementRef.nativeElement;
-                assert.isTrue(dumpView(componentRoot, true).indexOf("(Label[text=ANDROID])") >= 0);
+                assert.isTrue(dumpView(componentRoot, true).indexOf("(label[text=ANDROID])") >= 0);
             });
         });
         it("does not render ios specific content", () => {
@@ -94,7 +94,7 @@ describe("Platform filter directives", () => {
                 const componentRef = fixture.componentRef;
                 const componentRoot = componentRef.instance.elementRef.nativeElement;
                 assert.equal(
-                    "(ProxyViewContainer (StackLayout (Label[text=ANDROID])))",
+                    "(proxyviewcontainer (stacklayout (label[text=ANDROID])))",
                     dumpView(componentRoot, true));
             });
         });

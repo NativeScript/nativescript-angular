@@ -125,7 +125,10 @@ export function nsTestBedAfterEach(resetEnv = true, resetFn = nsTestBedInit) {
         const root = testingRootView() as LayoutBase;
         const fixtures = activeTestFixtures.pop();
         fixtures.forEach((fixture) => {
-            root.removeChild(fixture.nativeElement);
+            const fixtureView = <View>fixture.nativeElement;
+            if (fixtureView.parent === root) {
+                root.removeChild(fixtureView);
+            }
             fixture.destroy();
         });
         TestBed.resetTestingModule();
@@ -144,10 +147,10 @@ export function nsTestBedRender<T>(componentType: Type<T>): Promise<ComponentFix
     const fixture = TestBed.createComponent(componentType);
     fixture.detectChanges();
     return fixture.whenRenderingDone()
-    // TODO(jd): it seems that the whenStable and whenRenderingDone utilities of ComponentFixture
-    //           do not work as expected. I looked at how to fix it and it's not clear how to provide
-    //           a {N} specific subclass, because ComponentFixture is newed directly rather than injected
-    // What to do about it? Maybe fakeAsync can help? For now just setTimeout for 100ms (x_X)
+        // TODO(jd): it seems that the whenStable and whenRenderingDone utilities of ComponentFixture
+        //           do not work as expected. I looked at how to fix it and it's not clear how to provide
+        //           a {N} specific subclass, because ComponentFixture is newed directly rather than injected
+        // What to do about it? Maybe fakeAsync can help? For now just setTimeout for 100ms (x_X)
         .then(promiseWait(100))
         .then(() => {
             const list = activeTestFixtures[activeTestFixtures.length - 1];
