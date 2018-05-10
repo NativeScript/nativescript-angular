@@ -1,4 +1,4 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnInit, OnDestroy } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
 
 import { Item } from "./item";
@@ -9,7 +9,7 @@ import { ItemService } from "./item.service";
     moduleId: module.id,
     templateUrl: "./item-detail.component.html",
 })
-export class ItemDetailComponent implements OnInit {
+export class ItemDetailComponent implements OnInit, OnDestroy {
     item: Item;
 
     constructor(
@@ -20,5 +20,8 @@ export class ItemDetailComponent implements OnInit {
     ngOnInit(): void {
         const id = +this.route.snapshot.params["id"];
         this.item = this.itemService.getItem(id);
+    }
+
+    ngOnDestroy(): void {
     }
 }

@@ -13,14 +13,14 @@ const CLOSE_WAIT = (device.os === platformNames.ios) ? 1000 : 0;
 
 @Component({
     selector: "modal-comp",
-    template: `<Label text="this is modal component"></Label>`
+    template: `<Label text="this is modal component" (shownModally)="onShownModally()"></Label>`
 })
 export class ModalComponent {
-    constructor(public params: ModalDialogParams, private page: Page) {
-        page.on("shownModally", () => {
-            const result = this.params.context;
-            this.params.closeCallback(result);
-        });
+    constructor(public params: ModalDialogParams, private page: Page) { }
+
+    onShownModally() {
+        const result = this.params.context;
+        this.params.closeCallback(result);
     }
 }
 
