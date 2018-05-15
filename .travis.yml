@@ -54,7 +54,7 @@ matrix:
       jdk: oraclejdk8
       before_install: 
         - echo no | android create avd --force -n $EMULATOR_NAME -t "android-"$EMULATOR_API_LEVEL --abi $ANDROID_ABI --tag $ANDROID_TAG -c 12M
-        - QEMU_AUDIO_DRV=none emulator -avd $EMULATOR_NAME -no-window &
+        - QEMU_AUDIO_DRV=none emulator -avd $EMULATOR_NAME &
         - nvm install $NODE_VERSION
         - cd nativescript-angular
         - npm install
@@ -66,8 +66,7 @@ matrix:
       script: 
         - cd nativescript-angular
         - npm run ngc
-        - cd ../tests
-
+        - cd ../tests    
         - tns test android --justlaunch
 
 android:
