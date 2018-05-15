@@ -5,17 +5,8 @@ env:
     - ANDROID_VERSION=25
     - ANDROID_BUILD_TOOLS_VERSION=26.0.2
     - ANDROID_ABI=armeabi-v7a
-    - APPIUM_VERSION=1.7.1
-    - EMULATOR_NAME=Android Emulator
+    - EMULATOR_NAME=AndroidEmulator
     - ANDROID_TAG=google_apis
-    - ANDROID_PACKAGE='renderer.apk'
-    - ANDROID_PACKAGE_FOLDER=$TRAVIS_BUILD_DIR/platforms/android/app/build/outputs/apk/debug/
-    - ANDROID_SAUCE_STORAGE="https://saucelabs.com/rest/v1/storage/$SAUCE_USER/$ANDROID_PACKAGE?overwrite=true"
-    - IOS_PACKAGE='renderer.zip'
-    - IOS_APP_NAME='renderer.app'
-    - IOS_PACKAGE_FOLDER=$TRAVIS_BUILD_DIR/platforms/ios/build/emulator
-    - IOS_SAUCE_STORAGE="https://saucelabs.com/rest/v1/storage/$SAUCE_USER/$IOS_PACKAGE?overwrite=true"
-
 matrix:
   include:
     - stage: "Lint"
@@ -45,7 +36,7 @@ matrix:
         - cd nativescript-angular
         - npm run ngc
         - cd ../tests
-        - tns test ios --justlaunch
+        - tns test ios
     - language: android
       node_js: $NODE_VERSION
       os: linux
@@ -54,7 +45,7 @@ matrix:
       jdk: oraclejdk8
       before_install: 
         - echo no | android create avd --force -n $EMULATOR_NAME -t "android-"$EMULATOR_API_LEVEL --abi $ANDROID_ABI --tag $ANDROID_TAG -c 12M
-        - QEMU_AUDIO_DRV=none emulator -avd $EMULATOR_NAME &
+        - QEMU_AUDIO_DRV=none emulator -avd $EMULATOR_NAME -no-window -no-audio &
         - nvm install $NODE_VERSION
         - cd nativescript-angular
         - npm install
@@ -67,7 +58,7 @@ matrix:
         - cd nativescript-angular
         - npm run ngc
         - cd ../tests    
-        - tns test android --justlaunch
+        - tns test android
 
 android:
   components:
