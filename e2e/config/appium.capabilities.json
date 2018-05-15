@@ -45,6 +45,15 @@
         "noReset": false,
         "fullReset": false
     },
+    "android23.sauceLab": {
+        "platformName": "Android",
+        "platformVersion": "6.0",
+        "deviceName": "Android Emulator",
+        "appium-version": "1.7.1",
+        "noReset": true,
+        "resetKeyboard": true,
+        "app": ""
+    },
     "android24": {
         "platformName": "Android",
         "platformVersion": "7.0",
@@ -100,12 +109,15 @@
         "noReset": true,
         "fullReset": false
     },
-    "sim.iPhone8.iOS112": {
+    "sim.iPhone8.sauceLab": {
         "platformName": "iOS",
         "platformVersion": "11.2",
-        "deviceName": "iPhone 8 112",
+        "deviceName": "iPhone 8",
         "noReset": true,
-        "fullReset": false
+        "fullReset": false,
+        "app": "",
+        "density": 2, 
+        "offsetPixels": 33
     },
     "sim.iPhoneX.iOS110": {
         "platformName": "iOS",
