@@ -43,7 +43,7 @@ matrix:
         - cd nativescript-angular
         - npm run ngc
         - cd ../tests
-        - tns test ios
+        - travis_wait travis_retry tns test ios
     - language: android
       node_js: $NODE_VERSION
       os: linux
@@ -65,7 +65,7 @@ matrix:
         - cd nativescript-angular
         - npm run ngc
         - cd ../tests    
-        - tns test android
+        - travis_wait travis_retry tns test android
 android:
   components:
     - tools
