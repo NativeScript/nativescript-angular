@@ -46,7 +46,7 @@ matrix:
         - npm run ngc
         - cd ../tests
         - tns build ios
-        - tns tests ios
+        - tns test ios
     - language: android
       node_js: $NODE_VERSION
       os: linux
