@@ -42,6 +42,8 @@ matrix:
         - npm install
         - cd ..
       script: 
+        - cd nativescript-angular
+        - npm run ngc
         - cd ../tests
         - tns tests ios
     - language: android
