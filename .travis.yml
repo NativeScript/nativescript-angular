@@ -45,8 +45,7 @@ matrix:
         - cd nativescript-angular
         - npm run ngc
         - cd ../tests
-        - tns build ios
-        - tns test ios
+        - tns test ios --justlaunch
     - language: android
       node_js: $NODE_VERSION
       os: linux
@@ -68,8 +67,8 @@ matrix:
         - cd nativescript-angular
         - npm run ngc
         - cd ../tests
-        - tns build android
-        - tns test android
+
+        - tns test android --justlaunch
 
 android:
   components:
