@@ -66,7 +66,7 @@ matrix:
         - npm run ngc
         - cd ../tests    
         - tns test android
-- stage: "Build Router App"
+    - stage: "Build Router App"
       os: osx
       env: 
         - BuildiOS="11"
@@ -100,12 +100,12 @@ matrix:
         - npm i -g appium
         - npm i
         - travis_retry npm run e2e -- --runType android23.sauceLab --sauceLab --appPath $ANDROID_PACKAGE
-    - os: linux
+      - os: linux
       env: 
         - iOS="11"
       language: node_js 
       node_js: "8"
-      script: 
+      script:
         - npm i -g appium
         - npm i
         - travis_wait travis_retry npm run e2e -- --runType sim.iPhone8.sauceLab --sauceLab --appPath $IOS_PACKAGE
