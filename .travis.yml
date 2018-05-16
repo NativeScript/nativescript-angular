@@ -44,7 +44,7 @@ matrix:
         - npm run ngc
         - cd ../tests
         - tns build ios
-        - travis_wait travis_retry tns test ios
+        - travis_wait travis_retry tns test ios --justlaunch
     - language: android
       node_js: $NODE_VERSION
       os: linux
@@ -67,7 +67,7 @@ matrix:
         - npm run ngc
         - cd ../tests    
         - tns build android
-        - travis_wait travis_retry tns test android
+        - travis_wait travis_retry tns test android --justlaunch
     - stage: "Build Router App"
       os: osx
       env: 
