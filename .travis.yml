@@ -102,6 +102,7 @@ matrix:
       node_js: $NODE_VERSION
       script:
         - npm i -g appium
+        - cd e2e/router
         - npm i
         - travis_retry npm run e2e -- --runType android23 --sauceLab  --appPath $ANDROID_PACKAGE
     - os: linux
@@ -111,6 +112,7 @@ matrix:
       node_js: $NODE_VERSION
       script: 
         - npm i -g appium
+        - cd e2e/router
         - npm i
         - travis_wait travis_retry npm run e2e -- --runType sim.iPhone8 --sauceLab --appPath $IOS_PACKAGE
 android:
