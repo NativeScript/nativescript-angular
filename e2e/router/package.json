@@ -50,7 +50,7 @@
     "mocha": "~3.5.0",
     "mocha-junit-reporter": "^1.13.0",
     "mocha-multi": "^0.11.0",
-    "nativescript-dev-appium": "latest",
+    "nativescript-dev-appium": "next",
     "nativescript-dev-typescript": "latest",
     "nativescript-dev-webpack": "latest",
     "nativescript-worker-loader": "latest",
