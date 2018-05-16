@@ -16,15 +16,15 @@ env:
     - IOS_SAUCE_STORAGE="https://saucelabs.com/rest/v1/storage/$SAUCE_USER/$IOS_PACKAGE?overwrite=true"
 matrix:
   include:
-    - stage: "Lint"
-      language: node_js
-      os: linux
-      before_install: 
-        - nvm install $NODE_VERSION
-      script: 
-        - cd nativescript-angular
-        - npm install
-        - npm run tslint
+    # - stage: "Lint"
+    #   language: node_js
+    #   os: linux
+    #   before_install: 
+    #     - nvm install $NODE_VERSION
+    #   script: 
+    #     - cd nativescript-angular
+    #     - npm install
+    #     - npm run tslint
     # - stage: "Run UnitTests"
     #   os: osx
     #   env:
@@ -78,6 +78,8 @@ matrix:
       node_js: $NODE_VERSION
       jdk: oraclejdk8
       script:
+        - cd e2e/router
+        - npm i
         - tns build ios
         - cd $IOS_PACKAGE_FOLDER && zip -r $IOS_PACKAGE $IOS_APP_NAME
         - "curl -u $SAUCE_USER:$SAUCE_KEY -X POST -H 'Content-Type: application/octet-stream' $IOS_SAUCE_STORAGE --data-binary @$IOS_PACKAGE_FOLDER/$IOS_PACKAGE"
@@ -88,6 +90,8 @@ matrix:
       jdk: oraclejdk8
       before_install: nvm install 8.9.1
       script:
+        - cd e2e/router
+        - npm i
         - tns build android
         - "curl -u $SAUCE_USER:$SAUCE_KEY -X POST -H 'Content-Type: application/octet-stream' $ANDROID_SAUCE_STORAGE --data-binary @$ANDROID_PACKAGE_FOLDER/app-debug.apk"
     - stage: "UI Tests"
