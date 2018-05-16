@@ -104,7 +104,7 @@ matrix:
         - npm i -g appium
         - cd e2e/router
         - npm i
-        - travis_retry npm run e2e -- --runType android23 --sauceLab  --appPath $ANDROID_PACKAGE
+        - travis_retry npm run e2e -- --runType android23.sauceLab --sauceLab --appPath $ANDROID_PACKAGE
     - os: linux
       env: 
         - iOS="11"
@@ -114,7 +114,7 @@ matrix:
         - npm i -g appium
         - cd e2e/router
         - npm i
-        - travis_wait travis_retry npm run e2e -- --runType sim.iPhone8 --sauceLab --appPath $IOS_PACKAGE
+        - travis_wait travis_retry npm run e2e -- --runType sim.iPhone8.sauceLab --sauceLab --appPath $IOS_PACKAGE
 android:
   components:
     - tools
