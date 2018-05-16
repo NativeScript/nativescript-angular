@@ -6,27 +6,27 @@
   "nativescript": {
     "id": "org.nativescript.singlepage",
     "tns-ios": {
-      "version": "4.0.1-2018-03-26-01"
+      "version": "latest"
     },
     "tns-android": {
-      "version": "4.0.0-2018.3.22.2"
+      "version": "latest"
     }
   },
   "dependencies": {
-    "@angular/animations": "~6.0.0-rc.3",
-    "@angular/common": "~6.0.0-rc.3",
-    "@angular/compiler": "~6.0.0-rc.3",
-    "@angular/core": "~6.0.0-rc.3",
-    "@angular/forms": "~6.0.0-rc.3",
-    "@angular/http": "~6.0.0-rc.3",
-    "@angular/platform-browser": "~6.0.0-rc.3",
-    "@angular/platform-browser-dynamic": "~6.0.0-rc.3",
-    "@angular/router": "~6.0.0-rc.3",
+    "@angular/animations": "git+https://github.com/angular/animations-builds.git",
+    "@angular/common": "git+https://github.com/angular/common-builds.git",
+    "@angular/compiler": "git+https://github.com/angular/compiler-builds.git",
+    "@angular/core": "git+https://github.com/angular/core-builds.git",
+    "@angular/forms": "git+https://github.com/angular/forms-builds.git",
+    "@angular/http": "git+https://github.com/angular/http-builds.git",
+    "@angular/platform-browser": "git+https://github.com/angular/platform-browser-builds.git",
+    "@angular/platform-browser-dynamic": "git+https://github.com/angular/platform-browser-dynamic-builds.git",
+    "@angular/router": "git+https://github.com/angular/router-builds.git",
     "nativescript-angular": "file:../../nativescript-angular",
     "nativescript-intl": "^3.0.0",
     "reflect-metadata": "~0.1.8",
     "rxjs": "~6.0.0-rc.1",
-    "tns-core-modules": "next",
+    "tns-core-modules": "latest",
     "zone.js": "^0.8.4"
   },
   "devDependencies": {
@@ -48,10 +48,10 @@
     "mocha": "~3.5.0",
     "mocha-junit-reporter": "^1.13.0",
     "mocha-multi": "^0.11.0",
-    "nativescript-dev-appium": "next",
-    "nativescript-dev-typescript": "~0.4.0",
-    "nativescript-dev-webpack": "next",
-    "nativescript-worker-loader": "~0.8.1",
+    "nativescript-dev-appium": "latest",
+    "nativescript-dev-typescript": "latest",
+    "nativescript-dev-webpack": "latest",
+    "nativescript-worker-loader": "latest",
     "raw-loader": "~0.5.1",
     "resolve-url-loader": "~2.2.1",
     "tslib": "^1.7.1",
