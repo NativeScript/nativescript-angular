@@ -49,7 +49,6 @@
         "platformName": "Android",
         "platformVersion": "6.0",
         "deviceName": "Android Emulator",
-        "appium-version": "1.7.1",
         "noReset": true,
         "resetKeyboard": true,
         "app": ""
@@ -113,7 +112,7 @@
         "platformName": "iOS",
         "platformVersion": "11.2",
         "deviceName": "iPhone 8",
-        "appium-version": "1.7.1",
+        "appiumVersion": "1.8.0",
         "noReset": true,
         "fullReset": false,
         "app": "",
