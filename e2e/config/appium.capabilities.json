@@ -46,12 +46,12 @@
         "fullReset": false
     },
     "android23.sauceLab": {
+        "appActivity":"com.tns.NativeScriptActivity",
+        "appPackage":"org.nativescript.router",
         "platformName": "Android",
         "platformVersion": "6.0",
         "deviceName": "Android Emulator",
-        "noReset": true,
-        "resetKeyboard": true,
-        "app": ""
+        "appiumVersion": "1.8.0"
     },
     "android24": {
         "platformName": "Android",
@@ -112,7 +112,17 @@
         "platformName": "iOS",
         "platformVersion": "11.2",
         "deviceName": "iPhone 8",
-        "appiumVersion": "1.8.0",
+        "bundleId":"org.nativescript.router",
+        "noReset": true,
+        "fullReset": false,
+        "app": "",
+        "density": 2, 
+        "offsetPixels": 33
+    },
+    "sim.iPhone8": {
+        "platformName": "iOS",
+        "platformVersion": "11.3",
+        "deviceName": "iPhone 8",
         "noReset": true,
         "fullReset": false,
         "app": "",
