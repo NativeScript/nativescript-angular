@@ -51,6 +51,7 @@
         "platformName": "Android",
         "platformVersion": "6.0",
         "deviceName": "Android Emulator",
+        "newCommandTimeout": 720,
         "appiumVersion": "1.8.0"
     },
     "android24": {
