@@ -1,155 +1,39 @@
 // make sure you import mocha-config before @angular/core
 import { assert } from "./test-config";
 
-import { NavigationEnd, NavigationStart } from "@angular/router";
-import { Subscription } from "rxjs";
-import { TestApp, bootstrapTestApp, destroyTestApp } from "./test-app";
-
 import { GestureComponent } from "../snippets/gestures.component";
 import { LayoutsComponent } from "../snippets/layouts.component";
 import { IconFontComponent } from "../snippets/icon-font.component";
 
-import { PageNavigationApp } from "../snippets/navigation/page-outlet";
-import { NavigationApp } from "../snippets/navigation/router-outlet";
-import { FirstComponent, SecondComponent } from "../snippets/navigation/navigation-common";
-import { routes } from "../snippets/navigation/app.routes";
-import {
-    HeaderComponent,
-    ItemComponent,
-    DataService,
-    ListTemplateSelectorTest,
-} from "../snippets/list-view/template-selector.component";
-
-import { isIOS } from "platform";
+import { nsTestBedAfterEach, nsTestBedBeforeEach, nsTestBedRender } from "nativescript-angular/testing";
+import { ComponentRef } from "@angular/core";
 
 describe("Snippets", () => {
-    let testApp: TestApp = null;
 
-    before(() => {
-        return TestApp.create([], [GestureComponent, LayoutsComponent, IconFontComponent]).then((app) => {
-            testApp = app;
-        });
-    });
-
-    after(() => {
-        testApp.dispose();
-    });
+    beforeEach(nsTestBedBeforeEach([GestureComponent, LayoutsComponent, IconFontComponent]));
+    afterEach(nsTestBedAfterEach(false));
 
     it("Gesture snippets can be loaded", () => {
-        return testApp.loadComponent(GestureComponent).then((componentRef) => {
+        return nsTestBedRender(GestureComponent).then((fixture) => {
+            const componentRef: ComponentRef<GestureComponent> = fixture.componentRef;
             const componentInstance = componentRef.instance;
             assert.instanceOf(componentInstance, GestureComponent);
         });
     });
 
     it("Layouts snippets can be loaded", () => {
-        return testApp.loadComponent(LayoutsComponent).then((componentRef) => {
+        return nsTestBedRender(LayoutsComponent).then((fixture) => {
+            const componentRef: ComponentRef<LayoutsComponent> = fixture.componentRef;
             const componentInstance = componentRef.instance;
             assert.instanceOf(componentInstance, LayoutsComponent);
         });
     });
 
-    //TODO: Skip list-view test until karma test launcher double navigate bug is fixed
-    (isIOS ? it.skip : it)("Icon-font snippets can be loaded", (done) => {
-        testApp.loadComponent(IconFontComponent).then((componentRef) => {
+    it("Icon-font snippets can be loaded", () => {
+        return nsTestBedRender(IconFontComponent).then((fixture) => {
+            const componentRef: ComponentRef<IconFontComponent> = fixture.componentRef;
             const componentInstance = componentRef.instance;
             assert.instanceOf(componentInstance, IconFontComponent);
-            // Works around a "dehydrated change detector" exception.
-            setTimeout(done, 10);
         });
     });
 });
-
-describe("Snippets Navigation", () => {
-    let runningApp: any;
-    let subscription: Subscription;
-
-    const cleanup = () => {
-        if (subscription) {
-            subscription.unsubscribe();
-            subscription = null;
-        }
-        if (runningApp) {
-            destroyTestApp(runningApp);
-            runningApp = null;
-        }
-    };
-
-    after(cleanup);
-
-    it("router-outlet app", (done) => {
-        bootstrapTestApp(NavigationApp, [], routes, [
-            NavigationApp, 
-            FirstComponent, 
-            SecondComponent
-        ]).then((app) => {
-            runningApp = app;
-
-            return runningApp.done.then(() => {
-                assert(app.startEvent instanceof NavigationStart);
-                assert.equal("/", app.startEvent.url);
-
-                assert(app.endEvent instanceof NavigationEnd);
-                assert.equal("/", app.endEvent.url);
-                assert.equal("/first", app.endEvent.urlAfterRedirects);
-
-                cleanup();
-            }).then(() => done(), err => done(err));
-        });
-    });
-
-    //TODO: Skip the page-router-outlet test as it causes a crash in android in the current test-runner setup
-    (isIOS ? it : it.skip)("page-router-outlet app", (done) => {
-        bootstrapTestApp(PageNavigationApp, [], routes, [
-            PageNavigationApp,
-            FirstComponent,
-            SecondComponent
-        ]).then((app) => {
-            runningApp = app;
-
-            return runningApp.done.then(() => {
-                assert(app.startEvent instanceof NavigationStart);
-                assert.equal("/", app.startEvent.url);
-
-                assert(app.endEvent instanceof NavigationEnd);
-                assert.equal("/", app.endEvent.url);
-                assert.equal("/first", app.endEvent.urlAfterRedirects);
-
-                cleanup();
-            }).then(() => done(), err => done(err));
-        });
-    });
-});
-
-describe("Snippets ListView", () => {
-    let runningApp: any;
-
-    const cleanup = () => {
-        if (runningApp) {
-            destroyTestApp(runningApp);
-            runningApp = null;
-        }
-    };
-
-    after(cleanup);
-
-    it("template selector", (done) => {
-        bootstrapTestApp(
-            ListTemplateSelectorTest,
-            [DataService],
-            null,
-            [
-                HeaderComponent,
-                ItemComponent,
-                ListTemplateSelectorTest
-            ])
-            .then((app) => {
-                setTimeout(() => {
-                    cleanup();
-                    done();
-                }, 100);
-            })
-            .catch(err => done(err));
-    });
-});
-
