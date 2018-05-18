@@ -67,7 +67,10 @@ export class NativeScriptSanitizer extends Sanitizer {
 }
 
 // Add a fake polyfill for the document object
-(<any>global).document = (<any>global).document || {};
+(<any>global).document = (<any>global).document || {
+    getElementById: () => { return undefined; }
+};
+
 const doc = (<any>global).document;
 doc.body = Object.assign(doc.body || {}, {
     isOverride: true,
