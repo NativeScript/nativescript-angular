@@ -1,6 +1,12 @@
 {
   "nativescript": {
-    "id": "org.nativescript.ngtests"
+    "id": "org.nativescript.ngtests",
+    "tns-ios": {
+      "version": "4.0.2-2018-04-13-01"
+    },
+    "tns-android": {
+      "version": "4.1.0-2018.4.16.8"
+    }
   },
   "name": "ngtests",
   "main": "app.js",
@@ -20,18 +26,18 @@
   ],
   "homepage": "http://nativescript.org",
   "dependencies": {
-    "@angular/animations": "~5.2.0",
-    "@angular/common": "~5.2.0",
-    "@angular/compiler": "~5.2.0",
-    "@angular/core": "~5.2.0",
-    "@angular/forms": "~5.2.0",
-    "@angular/http": "~5.2.0",
-    "@angular/platform-browser": "~5.2.0",
-    "@angular/platform-browser-dynamic": "~5.2.0",
-    "@angular/router": "~5.2.0",
+    "@angular/animations": "~6.0.0-rc.3",
+    "@angular/common": "~6.0.0-rc.3",
+    "@angular/compiler": "~6.0.0-rc.3",
+    "@angular/core": "~6.0.0-rc.3",
+    "@angular/forms": "~6.0.0-rc.3",
+    "@angular/http": "~6.0.0-rc.3",
+    "@angular/platform-browser": "~6.0.0-rc.3",
+    "@angular/platform-browser-dynamic": "~6.0.0-rc.3",
+    "@angular/router": "~6.0.0-rc.3",
     "nativescript-angular": "../nativescript-angular",
     "nativescript-unit-test-runner": "^0.3.4",
-    "rxjs": "^5.5.0",
+    "rxjs": "~6.0.0-rc.1",
     "tns-core-modules": "next",
     "zone.js": "^0.8.4"
   },
@@ -60,11 +66,11 @@
     "socket.io-client": "1.4.8",
     "tslib": "^1.7.1",
     "tslint": "^4.5.1",
-    "typescript": "~2.6.2",
+    "typescript": "~2.7.2",
     "mocha": "~3.5.0"
   },
   "scripts": {
-    "e2e": "tsc -p e2e && mocha --opts ./e2e/config/mocha.opts",
+    "e2e": "tsc -p e2e && mocha --opts ../e2e/config/mocha.opts --recursive e2e --appiumCapsLocation ../e2e/config/appium.capabilities.json",
     "compile-tests-w": "tsc -p e2e --watch",
     "update-app-ng-deps": "update-app-ng-deps"
   }

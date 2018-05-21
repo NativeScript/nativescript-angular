@@ -92,6 +92,10 @@ registerElement("NavigationButton", () => require("ui/action-bar").NavigationBut
 })
 export class ActionBarComponent {
     constructor(public element: ElementRef, private page: Page) {
+        if (!this.page) {
+            throw new Error("Inside ActionBarComponent but no Page found in DI.");
+        }
+
         if (isBlank(this.page.actionBarHidden)) {
             this.page.actionBarHidden = false;
         }
@@ -106,6 +110,9 @@ export class ActionBarComponent {
 })
 export class ActionBarScope { // tslint:disable-line:component-class-suffix
     constructor(private page: Page) {
+        if (!this.page) {
+            throw new Error("Inside ActionBarScope but no Page found in DI.");
+        }
     }
 
     public onNavButtonInit(navBtn: NavigationButtonDirective) {

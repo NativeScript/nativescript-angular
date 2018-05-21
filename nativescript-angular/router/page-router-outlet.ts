@@ -2,8 +2,8 @@ import {
     Attribute, ChangeDetectorRef,
     ComponentFactory, ComponentFactoryResolver, ComponentRef,
     Directive, Inject, InjectionToken, Injector,
-    OnDestroy, OnInit, EventEmitter, Output,
-    Type, ViewContainerRef,
+    OnDestroy, EventEmitter, Output,
+    Type, ViewContainerRef, ElementRef
 } from "@angular/core";
 import {
     ActivatedRoute,
@@ -17,7 +17,7 @@ import { Frame } from "tns-core-modules/ui/frame";
 import { Page, NavigatedData } from "tns-core-modules/ui/page";
 import { profile } from "tns-core-modules/profiling";
 
-import { BehaviorSubject } from "rxjs/BehaviorSubject";
+import { BehaviorSubject } from "rxjs";
 
 import { DEVICE, PAGE_FACTORY, PageFactory } from "../platform-providers";
 import { routerLog as log } from "../trace";
@@ -102,15 +102,14 @@ function routeToString(activatedRoute: ActivatedRoute | ActivatedRouteSnapshot):
 }
 
 @Directive({ selector: "page-router-outlet" }) // tslint:disable-line:directive-selector
-export class PageRouterOutlet implements OnDestroy, OnInit { // tslint:disable-line:directive-class-suffix
+export class PageRouterOutlet implements OnDestroy { // tslint:disable-line:directive-class-suffix
     private activated: ComponentRef<any> | null = null;
     private _activatedRoute: ActivatedRoute | null = null;
-
-    private isInitialPage: boolean = true;
     private detachedLoaderFactory: ComponentFactory<DetachedLoader>;
 
     private name: string;
     private viewUtil: ViewUtil;
+    private frame: Frame;
 
     @Output("activate") activateEvents = new EventEmitter<any>(); // tslint:disable-line:no-output-rename
     @Output("deactivate") deactivateEvents = new EventEmitter<any>(); // tslint:disable-line:no-output-rename
@@ -146,12 +145,14 @@ export class PageRouterOutlet implements OnDestroy, OnInit { // tslint:disable-l
         private locationStrategy: NSLocationStrategy,
         private componentFactoryResolver: ComponentFactoryResolver,
         private resolver: ComponentFactoryResolver,
-        private frame: Frame,
         private changeDetector: ChangeDetectorRef,
         @Inject(DEVICE) device: Device,
         @Inject(PAGE_FACTORY) private pageFactory: PageFactory,
-        private routeReuseStrategy: NSRouteReuseStrategy
+        private routeReuseStrategy: NSRouteReuseStrategy,
+        elRef: ElementRef
     ) {
+        this.frame = elRef.nativeElement;
+        log("PageRouterOutlet.constructor frame:" + this.frame);
 
         this.name = name || PRIMARY_OUTLET;
         parentContexts.onChildOutletCreated(this.name, <any>this);
@@ -160,28 +161,10 @@ export class PageRouterOutlet implements OnDestroy, OnInit { // tslint:disable-l
         this.detachedLoaderFactory = resolver.resolveComponentFactory(DetachedLoader);
     }
 
-    ngOnInit(): void {
-        if (this.isActivated) {
-            return;
-        }
-
-        // If the outlet was not instantiated at the time the route got activated we need to populate
-        // the outlet when it is initialized (ie inside a NgIf)
-        const context = this.parentContexts.getContext(this.name);
-        if (!context || !context.route) {
-            return;
-        }
-
-        if (context.attachRef) {
-            // `attachRef` is populated when there is an existing component to mount
-            this.attach(context.attachRef, context.route);
-        } else {
-            // otherwise the component defined in the configuration is created
-            this.activateWith(context.route, context.resolver || null);
-        }
-    }
-
     ngOnDestroy(): void {
+        // Clear accumulated modal view page cache when page-router-outlet
+        // destroyed on modal view closing
+        this.routeReuseStrategy.clearModalCache(this.name);
         this.parentContexts.onChildOutletDestroyed(this.name);
     }
 
@@ -265,56 +248,31 @@ export class PageRouterOutlet implements OnDestroy, OnInit { // tslint:disable-l
         activatedRoute: ActivatedRoute,
         loadedResolver: ComponentFactoryResolver
     ): void {
+        log("PageRouterOutlet.activate() forward navigation - " +
+            "create detached loader in the loader container");
 
-        const pageRoute = new PageRoute(activatedRoute);
-        const providers = this.initProvidersMap(activatedRoute, pageRoute);
-
-        const childInjector = new ChildInjector(providers, this.location.injector);
         const factory = this.getComponentFactory(activatedRoute, loadedResolver);
-
-        if (this.isInitialPage) {
-            log("PageRouterOutlet.activate() initial page - just load component");
-
-            this.isInitialPage = false;
-
-            this.activated = this.location.createComponent(
-                factory, this.location.length, childInjector, []);
-            this.changeDetector.markForCheck();
-        } else {
-            log("PageRouterOutlet.activate() forward navigation - " +
-                "create detached loader in the loader container");
-
-            const page = this.pageFactory({
-                isNavigation: true,
-                componentType: factory.componentType,
-            });
-
-            providers.set(Page, page);
-
-            const loaderRef = this.location.createComponent(
-                this.detachedLoaderFactory, this.location.length, childInjector, []);
-            this.changeDetector.markForCheck();
-
-            this.activated = loaderRef.instance.loadWithFactory(factory);
-            this.loadComponentInPage(page, this.activated);
-
-            this.activated[loaderRefSymbol] = loaderRef;
-        }
-    }
-
-    private initProvidersMap(
-        activatedRoute: ActivatedRoute,
-        pageRoute: PageRoute
-    ): ProviderMap {
+        const page = this.pageFactory({
+            isNavigation: true,
+            componentType: factory.componentType,
+        });
 
         const providers = new Map();
-        providers.set(PageRoute, pageRoute);
+        providers.set(Page, page);
+        providers.set(Frame, this.frame);
+        providers.set(PageRoute, new PageRoute(activatedRoute));
         providers.set(ActivatedRoute, activatedRoute);
+        providers.set(ChildrenOutletContexts, this.parentContexts.getOrCreateContext(this.name).children);
 
-        const childContexts = this.parentContexts.getOrCreateContext(this.name).children;
-        providers.set(ChildrenOutletContexts, childContexts);
+        const childInjector = new ChildInjector(providers, this.location.injector);
+        const loaderRef = this.location.createComponent(
+            this.detachedLoaderFactory, this.location.length, childInjector, []);
+        this.changeDetector.markForCheck();
 
-        return providers;
+        this.activated = loaderRef.instance.loadWithFactory(factory);
+        this.loadComponentInPage(page, this.activated);
+
+        this.activated[loaderRefSymbol] = loaderRef;
     }
 
     @profile
@@ -328,17 +286,17 @@ export class PageRouterOutlet implements OnDestroy, OnInit { // tslint:disable-l
 
         page.on(Page.navigatedFromEvent, (<any>global).Zone.current.wrap((args: NavigatedData) => {
             if (args.isBackNavigation) {
-                this.locationStrategy._beginBackPageNavigation();
+                this.locationStrategy._beginBackPageNavigation(this.name);
                 this.locationStrategy.back();
             }
         }));
 
-        const navOptions = this.locationStrategy._beginPageNavigation();
+        const navOptions = this.locationStrategy._beginPageNavigation(this.name);
 
         // Clear refCache if navigation with clearHistory
         if (navOptions.clearHistory) {
             const clearCallback = () => setTimeout(() => {
-                this.routeReuseStrategy.clearCache();
+                this.routeReuseStrategy.clearCache(this.name);
                 page.off(Page.navigatedToEvent, clearCallback);
             });
 

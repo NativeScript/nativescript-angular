@@ -6,32 +6,33 @@
   "nativescript": {
     "id": "org.nativescript.router",
     "tns-android": {
-      "version": "3.4.0-2017-12-4-1"
+      "version": "next"
     },
     "tns-ios": {
       "version": "next"
     }
   },
   "dependencies": {
-    "@angular/animations": "~5.2.0",
-    "@angular/common": "~5.2.0",
-    "@angular/compiler": "~5.2.0",
-    "@angular/core": "~5.2.0",
-    "@angular/forms": "~5.2.0",
-    "@angular/http": "~5.2.0",
-    "@angular/platform-browser": "~5.2.0",
-    "@angular/platform-browser-dynamic": "~5.2.0",
-    "@angular/router": "~5.2.0",
+    "@angular/animations": "~6.0.0-rc.3",
+    "@angular/common": "~6.0.0-rc.3",
+    "@angular/compiler": "~6.0.0-rc.3",
+    "@angular/core": "~6.0.0-rc.3",
+    "@angular/forms": "~6.0.0-rc.3",
+    "@angular/http": "~6.0.0-rc.3",
+    "@angular/platform-browser": "~6.0.0-rc.3",
+    "@angular/platform-browser-dynamic": "~6.0.0-rc.3",
+    "@angular/router": "~6.0.0-rc.3",
     "nativescript-angular": "file:../../nativescript-angular",
     "nativescript-intl": "^3.0.0",
     "reflect-metadata": "~0.1.8",
-    "rxjs": "^5.5.4",
+    "rxjs": "~6.0.0-rc.1",
     "tns-core-modules": "next",
     "zone.js": "^0.8.4"
   },
   "devDependencies": {
-    "@angular/compiler-cli": "~5.2.0",
-    "@ngtools/webpack": "~1.9.4",
+    "@angular-devkit/core": "~0.5.5",
+    "@angular/compiler-cli": "~6.0.0-rc.3",
+    "@ngtools/webpack": "~6.0.0-rc.3",
     "@types/chai": "^4.0.2",
     "@types/mocha": "^2.2.41",
     "@types/node": "^7.0.5",
@@ -40,8 +41,9 @@
     "babylon": "6.17.4",
     "chai": "~4.1.1",
     "chai-as-promised": "~7.1.1",
+    "clean-webpack-plugin": "~0.1.19",
     "colors": "^1.1.2",
-    "copy-webpack-plugin": "~4.3.0",
+    "copy-webpack-plugin": "~4.5.1",
     "css-loader": "~0.28.7",
     "extract-text-webpack-plugin": "~3.0.2",
     "lazy": "1.0.11",
@@ -50,19 +52,22 @@
     "mocha-multi": "^0.11.0",
     "nativescript-dev-appium": "next",
     "nativescript-dev-typescript": "~0.4.0",
-    "nativescript-dev-webpack": "^0.9.2",
+    "nativescript-dev-webpack": "next",
     "nativescript-worker-loader": "~0.8.1",
     "raw-loader": "~0.5.1",
-    "resolve-url-loader": "~2.2.1",
+    "resolve-url-loader": "~2.3.0",
     "tslib": "^1.7.1",
-    "typescript": "~2.6.2",
-    "uglifyjs-webpack-plugin": "~1.1.6",
-    "webpack": "~3.10.0",
+    "typescript": "~2.7.2",
+    "uglifyjs-webpack-plugin": "~1.2.4",
+    "webpack": "~4.5.0",
     "webpack-bundle-analyzer": "^2.9.1",
-    "webpack-sources": "~1.1.0"
+    "webpack-sources": "~1.1.0",
+    "webpack-cli": "~2.0.14",
+    "webpack-sources": "~1.1.0",
+    "clean-webpack-plugin": "~0.1.19"
   },
   "scripts": {
-    "e2e": "tsc -p e2e && mocha --opts ./e2e/config/mocha.opts",
+    "e2e": "tsc -p e2e && mocha --opts ../config/mocha.opts --recursive e2e --appiumCapsLocation ../config/appium.capabilities.json",
     "compile-tests-w": "tsc -p e2e --watch",
     "update-app-ng-deps": "update-app-ng-deps"
   }

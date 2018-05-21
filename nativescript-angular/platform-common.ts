@@ -6,7 +6,7 @@ import "./zone-js/dist/zone-nativescript";
 import "reflect-metadata";
 import "./polyfills/array";
 import "./polyfills/console";
-import { profile, log, uptime } from "tns-core-modules/profiling";
+import { profile, uptime } from "tns-core-modules/profiling";
 
 import {
     Type,
@@ -18,27 +18,30 @@ import {
     EventEmitter,
     Sanitizer,
     InjectionToken,
-    StaticProvider
+    StaticProvider,
 } from "@angular/core";
 import { DOCUMENT } from "@angular/common";
 
-import { rendererLog, rendererError } from "./trace";
-import {
-    PAGE_FACTORY,
-    PageFactory,
-    defaultPageFactoryProvider,
-    setRootPage
-} from "./platform-providers";
+import { bootstrapLog, bootstrapLogError } from "./trace";
+import { defaultPageFactoryProvider, setRootPage, PageFactory, PAGE_FACTORY } from "./platform-providers";
+import { AppHostView } from "./app-host-view";
 
-import { start, setCssFileName } from "tns-core-modules/application";
-import { topmost, NavigationEntry } from "tns-core-modules/ui/frame";
-import { Page } from "tns-core-modules/ui/page";
+import {
+    setCssFileName,
+    run as applicationRun,
+    _resetRootView as applicationRerun,
+    on,
+    launchEvent,
+    LaunchEventData,
+} from "tns-core-modules/application";
 import { TextView } from "tns-core-modules/ui/text-view";
 
 import "nativescript-intl";
+import { Color, View } from "tns-core-modules/ui/core/view/view";
+import { Frame } from "tns-core-modules/ui/frame";
 
 export const onBeforeLivesync = new EventEmitter<NgModuleRef<any>>();
-export const onAfterLivesync = new EventEmitter<NgModuleRef<any>>();
+export const onAfterLivesync = new EventEmitter<{ moduleRef?: NgModuleRef<any>; error?: Error }>();
 let lastBootstrappedModule: WeakRef<NgModuleRef<any>>;
 type BootstrapperAction = () => Promise<NgModuleRef<any>>;
 
@@ -52,6 +55,7 @@ export interface AppOptions {
     bootInExistingPage?: boolean;
     cssFile?: string;
     startPageActionBarHidden?: boolean;
+    createFrameOnBootstrap?: boolean;
 }
 
 export type PlatformFactory = (extraProviders?: StaticProvider[]) => PlatformRef;
@@ -63,9 +67,12 @@ export class NativeScriptSanitizer extends Sanitizer {
 }
 
 // Add a fake polyfill for the document object
-(<any>global).document = (<any>global).document || {};
+(<any>global).document = (<any>global).document || {
+    getElementById: () => { return undefined; }
+};
+
 const doc = (<any>global).document;
-doc.body = Object.assign((doc.body || {}), {
+doc.body = Object.assign(doc.body || {}, {
     isOverride: true,
 });
 
@@ -84,7 +91,7 @@ export const COMMON_PROVIDERS = [
 export class NativeScriptPlatformRef extends PlatformRef {
     private _bootstrapper: BootstrapperAction;
 
-    constructor(private platform: PlatformRef, private appOptions?: AppOptions) {
+    constructor(private platform: PlatformRef, private appOptions: AppOptions = {}) {
         super();
     }
 
@@ -101,7 +108,7 @@ export class NativeScriptPlatformRef extends PlatformRef {
     bootstrapModule<M>(
         moduleType: Type<M>,
         compilerOptions: CompilerOptions | CompilerOptions[] = []
-        ): Promise<NgModuleRef<M>> {
+    ): Promise<NgModuleRef<M>> {
         this._bootstrapper = () => this.platform.bootstrapModule(moduleType, compilerOptions);
 
         this.bootstrapApp();
@@ -111,39 +118,15 @@ export class NativeScriptPlatformRef extends PlatformRef {
 
     @profile
     private bootstrapApp() {
-        (<any>global).__onLiveSyncCore = () => this.livesyncModule();
-
-        const mainPageEntry = this.createNavigationEntry(this._bootstrapper);
+        (<any>global).__onLiveSyncCore = () => {
+            this.livesync();
+        };
 
         if (this.appOptions && typeof this.appOptions.cssFile === "string") {
-            // TODO: All exported fields in ES6 modules should be read-only
-            // Change the case when tns-core-modules become ES6 compatible and there is a legal way to set cssFile
             setCssFileName(this.appOptions.cssFile);
         }
-        start(mainPageEntry);
-    }
 
-    livesyncModule(): void {
-        rendererLog("ANGULAR LiveSync Started");
-
-        onBeforeLivesync.next(lastBootstrappedModule ? lastBootstrappedModule.get() : null);
-
-        const mainPageEntry = this.createNavigationEntry(
-            this._bootstrapper,
-            compRef => onAfterLivesync.next(compRef),
-            error => onAfterLivesync.error(error),
-            true
-        );
-        mainPageEntry.animated = false;
-        mainPageEntry.clearHistory = true;
-
-        const frame = topmost();
-        if (frame) {
-            if (frame.currentPage && frame.currentPage.modal) {
-                frame.currentPage.modal.closeModal();
-            }
-            frame.navigate(mainPageEntry);
-        }
+        this.bootstrapNativeScriptApp();
     }
 
     onDestroy(callback: () => void): void {
@@ -163,75 +146,143 @@ export class NativeScriptPlatformRef extends PlatformRef {
     }
 
     @profile
-    private createNavigationEntry(
-        bootstrapAction: BootstrapperAction,
-        resolve?: (comp: NgModuleRef<any>) => void,
-        reject?: (e: Error) => void,
-        isLivesync: boolean = false,
-        isReboot: boolean = false): NavigationEntry {
+    private bootstrapNativeScriptApp() {
+        const autoCreateFrame = !!this.appOptions.createFrameOnBootstrap;
+        let tempAppHostView: AppHostView;
+        let rootContent: View;
 
-        const pageFactory: PageFactory = this.platform.injector.get(PAGE_FACTORY);
-
-        const navEntry: NavigationEntry = {
-            create: (): Page => {
-                const page = pageFactory({ isBootstrap: true, isLivesync });
-                setRootPage(page);
-                if (this.appOptions) {
-                    page.actionBarHidden = this.appOptions.startPageActionBarHidden;
-                }
-
-                const initHandlerMethodName =
-                    "nativescript-angular/platform-common.initHandler";
-                const initHandler = profile(initHandlerMethodName, () => {
-                    page.off(Page.navigatingToEvent, initHandler);
-                    // profiling.stop("application-start");
-                    rendererLog("Page loaded");
-
-                    // profiling.start("ng-bootstrap");
-                    rendererLog("BOOTSTRAPPING...");
-
-                    const bootstrapMethodName =
-                        "nativescript-angular/platform-common.postBootstrapAction";
-                    bootstrapAction().then(profile(bootstrapMethodName, moduleRef => {
-                        // profiling.stop("ng-bootstrap");
-                        log(`ANGULAR BOOTSTRAP DONE. ${uptime()}`);
-                        lastBootstrappedModule = new WeakRef(moduleRef);
-
-                        if (resolve) {
-                            resolve(moduleRef);
-                        }
-                        return moduleRef;
-                    }), err => {
-                        rendererError("ERROR BOOTSTRAPPING ANGULAR");
-                        const errorMessage = err.message + "\n\n" + err.stack;
-                        rendererError(errorMessage);
-
-                        let view = new TextView();
-                        view.text = errorMessage;
-                        page.content = view;
-
-                        if (reject) {
-                            reject(err);
-                        }
-                    });
-
-                    (<any>global).Zone.drainMicroTaskQueue();
-                });
-
-                page.on(Page.navigatingToEvent, initHandler);
-
-                return page;
-            },
-            animated: false
-        };
-
-        if (isReboot) {
-            navEntry.clearHistory = true;
+        if (autoCreateFrame) {
+            const { page, frame } = this.createFrameAndPage(false);
+            setRootPage(page);
+            rootContent = frame;
+        } else {
+            // Create a temp page for root of the renderer
+            tempAppHostView = new AppHostView();
+            setRootPage(<any>tempAppHostView);
         }
 
-        return navEntry;
+        bootstrapLog("NativeScriptPlatform bootstrap started.");
+        const launchCallback = profile(
+            "nativescript-angular/platform-common.launchCallback",
+            (args: LaunchEventData) => {
+                bootstrapLog("Application launch event fired");
+
+                let bootstrapPromiseCompleted = false;
+                this._bootstrapper().then(
+                    moduleRef => {
+                        bootstrapPromiseCompleted = true;
+
+                        bootstrapLog(`Angular bootstrap bootstrap done. uptime: ${uptime()}`);
+
+                        if (!autoCreateFrame) {
+                            rootContent = tempAppHostView.content;
+                        }
+
+                        lastBootstrappedModule = new WeakRef(moduleRef);
+                    },
+                    err => {
+                        bootstrapPromiseCompleted = true;
+
+                        const errorMessage = err.message + "\n\n" + err.stack;
+                        bootstrapLogError("ERROR BOOTSTRAPPING ANGULAR");
+                        bootstrapLogError(errorMessage);
+
+                        rootContent = this.createErrorUI(errorMessage);
+                    }
+                );
+
+                bootstrapLog("bootstrapAction called, draining micro tasks queue. Root: " + rootContent);
+                (<any>global).Zone.drainMicroTaskQueue();
+                bootstrapLog("bootstrapAction called, draining micro tasks queue finished! Root: " + rootContent);
+
+                if (!bootstrapPromiseCompleted) {
+                    const errorMessage = "Bootstrap promise didn't resolve";
+                    bootstrapLogError(errorMessage);
+                    rootContent = this.createErrorUI(errorMessage);
+                }
+
+                args.root = rootContent;
+            }
+        );
+        on(launchEvent, launchCallback);
+
+        applicationRun();
     }
 
-    liveSyncApp() {
+    @profile
+    private livesync() {
+        bootstrapLog("Angular livesync started.");
+        onBeforeLivesync.next(lastBootstrappedModule ? lastBootstrappedModule.get() : null);
+
+        const autoCreateFrame = !!this.appOptions.createFrameOnBootstrap;
+        let tempAppHostView: AppHostView;
+        let rootContent: View;
+
+        if (autoCreateFrame) {
+            const { page, frame } = this.createFrameAndPage(true);
+            setRootPage(page);
+            rootContent = frame;
+        } else {
+            // Create a temp page for root of the renderer
+            tempAppHostView = new AppHostView();
+            setRootPage(<any>tempAppHostView);
+        }
+
+        let bootstrapPromiseCompleted = false;
+        this._bootstrapper().then(
+            moduleRef => {
+                bootstrapPromiseCompleted = true;
+                bootstrapLog("Angular livesync done.");
+                onAfterLivesync.next({ moduleRef });
+
+                if (!autoCreateFrame) {
+                    rootContent = tempAppHostView.content;
+                }
+
+                lastBootstrappedModule = new WeakRef(moduleRef);
+            },
+            error => {
+                bootstrapPromiseCompleted = true;
+                bootstrapLogError("ERROR LIVESYNC BOOTSTRAPPING ANGULAR");
+                const errorMessage = error.message + "\n\n" + error.stack;
+                bootstrapLogError(errorMessage);
+
+                rootContent = this.createErrorUI(errorMessage);
+
+                onAfterLivesync.next({ error });
+            }
+        );
+
+        bootstrapLog("livesync bootstrapAction called, draining micro tasks queue. Root: " + rootContent);
+        (<any>global).Zone.drainMicroTaskQueue();
+        bootstrapLog("livesync bootstrapAction called, draining micro tasks queue finished! Root: " + rootContent);
+
+        if (!bootstrapPromiseCompleted) {
+            const result = "Livesync bootstrap promise didn't resolve";
+            bootstrapLogError(result);
+            rootContent = this.createErrorUI(result);
+
+            onAfterLivesync.next({ error: new Error(result) });
+        }
+
+        applicationRerun({
+            create: () => rootContent,
+        });
+    }
+
+    private createErrorUI(message: string): View {
+        const errorTextBox = new TextView();
+        errorTextBox.text = message;
+        errorTextBox.color = new Color("red");
+        return errorTextBox;
+    }
+
+    private createFrameAndPage(isLivesync: boolean) {
+        const frame = new Frame();
+        const pageFactory: PageFactory = this.platform.injector.get(PAGE_FACTORY);
+        const page = pageFactory({ isBootstrap: true, isLivesync });
+
+        frame.navigate({ create: () => { return page; } });
+        return { page, frame };
     }
 }

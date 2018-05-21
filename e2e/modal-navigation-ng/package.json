@@ -1,0 +1,62 @@
+{
+  "description": "NativeScript Application",
+  "license": "SEE LICENSE IN <your-license-filename>",
+  "readme": "NativeScript Application",
+  "repository": "<fill-your-repository-here>",
+  "nativescript": {
+    "id": "org.nativescript.modalnavigationng",
+    "tns-android": {
+      "version": "4.1.0-2018.4.16.8"
+    },
+    "tns-ios": {
+      "version": "next"
+    }
+  },
+  "dependencies": {
+    "@angular/animations": "~6.0.0-rc.3",
+    "@angular/common": "~6.0.0-rc.3",
+    "@angular/compiler": "~6.0.0-rc.3",
+    "@angular/core": "~6.0.0-rc.3",
+    "@angular/forms": "~6.0.0-rc.3",
+    "@angular/http": "~6.0.0-rc.3",
+    "@angular/platform-browser": "~6.0.0-rc.3",
+    "@angular/platform-browser-dynamic": "~6.0.0-rc.3",
+    "@angular/router": "~6.0.0-rc.3",
+    "nativescript-angular": "file:../../nativescript-angular",
+    "nativescript-theme-core": "~1.0.4",
+    "reflect-metadata": "~0.1.8",
+    "rxjs": "~6.0.0-rc.1",
+    "tns-core-modules": "next",
+    "zone.js": "~0.8.2"
+  },
+  "devDependencies": {
+    "@angular/compiler-cli": "~6.0.0-rc.3",
+    "@ngtools/webpack": "~1.9.4",
+    "@types/chai": "^4.0.2",
+    "@types/mocha": "^2.2.41",
+    "@types/node": "^7.0.5",
+    "babel-traverse": "6.26.0",
+    "babel-types": "6.26.0",
+    "babylon": "6.18.0",
+    "copy-webpack-plugin": "~4.3.0",
+    "css-loader": "~0.28.7",
+    "extract-text-webpack-plugin": "~3.0.2",
+    "lazy": "1.0.11",
+    "nativescript-dev-appium": "next",
+    "nativescript-dev-typescript": "next",
+    "nativescript-dev-webpack": "next",
+    "nativescript-worker-loader": "~0.8.1",
+    "raw-loader": "~0.5.1",
+    "resolve-url-loader": "~2.2.1",
+    "typescript": "~2.7.2",
+    "uglifyjs-webpack-plugin": "~1.1.6",
+    "webpack": "~3.10.0",
+    "webpack-bundle-analyzer": "^2.9.1",
+    "webpack-sources": "~1.1.0",
+    "clean-webpack-plugin": "~0.1.19"
+  },
+  "scripts": {
+    "e2e": "tsc -p e2e && mocha --opts ./e2e/config/mocha.opts",
+    "e2e-watch": "tsc -p e2e --watch"
+  }
+}

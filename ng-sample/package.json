@@ -2,10 +2,10 @@
   "nativescript": {
     "id": "org.nativescript.ngsample",
     "tns-android": {
-      "version": "3.0.0"
+      "version": "4.1.0-2018.4.16.8"
     },
     "tns-ios": {
-      "version": "3.0.0"
+      "version": "4.0.2-2018-04-13-01"
     }
   },
   "name": "tns-template-hello-world",
@@ -32,18 +32,19 @@
   },
   "homepage": "https://github.com/NativeScript/template-hello-world",
   "dependencies": {
-    "@angular/animations": "~5.2.0",
-    "@angular/common": "~5.2.0",
-    "@angular/compiler": "~5.2.0",
-    "@angular/core": "~5.2.0",
-    "@angular/forms": "~5.2.0",
-    "@angular/http": "~5.2.0",
-    "@angular/platform-browser": "~5.2.0",
-    "@angular/platform-browser-dynamic": "~5.2.0",
-    "@angular/router": "~5.2.0",
+    "@angular/animations": "~6.0.0-rc.3",
+    "@angular/common": "~6.0.0-rc.3",
+    "@angular/compiler": "~6.0.0-rc.3",
+    "@angular/core": "~6.0.0-rc.3",
+    "@angular/forms": "~6.0.0-rc.3",
+    "@angular/http": "~6.0.0-rc.3",
+    "@angular/platform-browser": "~6.0.0-rc.3",
+    "@angular/platform-browser-dynamic": "~6.0.0-rc.3",
+    "@angular/router": "~6.0.0-rc.3",
     "nativescript-angular": "file:../nativescript-angular",
-    "rxjs": "^5.5.0",
+    "rxjs": "~6.0.0-rc.1",
     "tns-core-modules": "next",
+    "tns-platform-declarations": "^3.4.0",
     "zone.js": "^0.8.4"
   },
   "devDependencies": {
@@ -52,10 +53,10 @@
     "babylon": "6.8.1",
     "filewalker": "0.1.2",
     "lazy": "1.0.11",
-    "nativescript-dev-typescript": "^0.3.1",
+    "nativescript-dev-typescript": "next",
     "shelljs": "^0.7.0",
     "tslint": "^4.5.1",
-    "typescript": "~2.6.2"
+    "typescript": "~2.7.2"
   },
   "scripts": {
     "tslint": "tslint --project tsconfig.json --config tslint.json",

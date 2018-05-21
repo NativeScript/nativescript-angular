@@ -1,7 +1,7 @@
 import { Component, ViewContainerRef } from "@angular/core";
-import * as dialogs from "ui/dialogs";
+import * as dialogs from "tns-core-modules/ui/dialogs";
 import { ModalDialogService, ModalDialogOptions } from "nativescript-angular/directives/dialogs";
-import { ModalContent} from "./modal-content";
+import { ModalContent } from "./modal-content";
 
 @Component({
     selector: "modal-test",
@@ -10,32 +10,28 @@ import { ModalContent} from "./modal-content";
         <StackLayout verticalAlignment="top" margin="12">
             <Button text="show component" (tap)="showModal(false)"></Button>
             <Button text="show component fullscreen" (tap)="showModal(true)"></Button>
-            
+
             <Button text="alert" (tap)="showAlert()"></Button>
             <Button text="confirm" (tap)="showConfirm()"></Button>
             <Button text="prompt" (tap)="showPrompt()"></Button>
-            
             <Button text="action" (tap)="showAction()"></Button>
             <Button text="login" (tap)="showLogin()"></Button>
         </StackLayout>
-        
         <Label [text]="'RESULT: ' + result" row="1" margin="12"></Label>
     </GridLayout>
     `
 })
 export class ModalTest {
+
     public result: string = "result";
 
-    constructor(private modal: ModalDialogService, private vcRef: ViewContainerRef) {
-    }
+    constructor(private modal: ModalDialogService, private vcRef: ViewContainerRef) { }
 
     static entries = [
         ModalContent
     ];
 
-    static exports = [
-        ModalContent
-    ];
+    static exports = [];
 
     public showModal(fullscreen: boolean) {
         const options: ModalDialogOptions = {
@@ -110,4 +106,5 @@ export class ModalTest {
                 "no result";
         });
     }
+
 }

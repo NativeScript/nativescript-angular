@@ -3,18 +3,19 @@ import {
     HttpClient, HTTP_INTERCEPTORS, HttpEventType, HttpErrorResponse,
     HttpEvent, HttpInterceptor, HttpHandler, HttpRequest
 } from "@angular/common/http";
-import { Observable } from "rxjs/Observable";
-import "rxjs/add/operator/do";
+import { Observable } from "rxjs";
+import { tap } from "rxjs/operators";
 
 @Injectable()
 export class CustomInterceptor implements HttpInterceptor {
     intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
         console.log(`[CustomInterceptor] intercept url: ${req.url}`);
 
-        return next.handle(req)
-            .do(event => {
+        return next.handle(req).pipe(
+            tap(event => {
                 console.log(`[CustomInterceptor] handled type: ${HttpEventType[event.type]} url: ${req.url}`);
-            });
+            })
+        );
     }
 }
 

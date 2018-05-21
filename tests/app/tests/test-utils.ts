@@ -12,7 +12,13 @@ function getChildren(view: View): Array<View> {
 }
 
 export function dumpView(view: View, verbose: boolean = false): string {
-    let nodeName = (<any>view).nodeName || view;
+    let nodeName: string = (<any>view).nodeName;
+    if (!nodeName) {
+        // Strip off the source
+        nodeName = view.toString().replace(/(@[^;]*;)/g, '');
+    }
+    nodeName = nodeName.toLocaleLowerCase();
+    
     let output = ["(", nodeName];
     if (verbose) {
         if (view instanceof TextBase) {
