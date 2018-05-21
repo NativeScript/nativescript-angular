@@ -50,8 +50,12 @@ export class NSLocationStrategy extends LocationStrategy {
             return "/";
         }
 
-        let tree = this.currentUrlTree;
         const state = this.peekState(this.currentOutlet);
+        if (!state) {
+            return "/";
+        }
+
+        let tree = this.currentUrlTree;
 
         // Handle case where the user declares a component at path "/".
         // The url serializer doesn't parse this url as having a primary outlet.
