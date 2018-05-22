@@ -9,6 +9,8 @@ import { ModalContent } from "./modal-content";
     <GridLayout rows="*, auto">
         <StackLayout verticalAlignment="top" margin="12">
             <Button text="show component" (tap)="showModal(false)"></Button>
+            <Button text="show component no anim (ios)" (tap)="showModal(false, false)"></Button>
+            <Button text="show component stretched (android)" (tap)="showModal(false, false, true)"></Button>
             <Button text="show component fullscreen" (tap)="showModal(true)"></Button>
 
             <Button text="alert" (tap)="showAlert()"></Button>
@@ -33,10 +35,12 @@ export class ModalTest {
 
     static exports = [];
 
-    public showModal(fullscreen: boolean) {
+    public showModal(fullscreen: boolean, animated = true, stretched = false) {
         const options: ModalDialogOptions = {
             context: { promptMsg: "This is the prompt message!" },
-            fullscreen: fullscreen,
+            fullscreen,
+            animated,
+            stretched,
             viewContainerRef: this.vcRef
         };
 
