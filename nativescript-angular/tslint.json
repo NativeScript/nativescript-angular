@@ -13,7 +13,6 @@
     "pipe-naming": [true, "camelCase", "ns"],
     "component-class-suffix": true,
     "directive-class-suffix": true,
-    "invoke-injectable": true,
     "member-access": false,
     "no-any": false,
     "no-inferrable-types": false,
