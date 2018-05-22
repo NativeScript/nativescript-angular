@@ -98,7 +98,7 @@ export class TabViewItemDirective implements OnInit {
     }
 
     set textTransform(value: TextTransform) {
-        if (this._textTransform !== value) {
+        if (this._textTransform && this._textTransform !== value) {
             this._textTransform = value;
             this.ensureItem();
             this.item.textTransform = this._textTransform;
@@ -116,7 +116,13 @@ export class TabViewItemDirective implements OnInit {
         if (this.config) {
             this.item.title = this._title || this.config.title;
             this.item.iconSource = this._iconSource || this.config.iconSource;
-            this.item.textTransform = this._textTransform || this.config.textTransform;
+
+            //  TabViewItem textTransform has a default value for Android that kick in
+            // only if no value (even a null value) is set.
+            const textTransformValue = this._textTransform || this.config.textTransform;
+            if (textTransformValue) {
+                this.item.textTransform = textTransformValue;
+            }
         }
 
         const viewRef = this.viewContainer.createEmbeddedView(this.templateRef);
