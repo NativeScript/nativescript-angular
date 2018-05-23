@@ -6,8 +6,10 @@ import { AppComponent } from "./app.component";
 import { ItemService } from "./item/item.service";
 import { ItemsComponent } from "./item/items.component";
 import { ItemDetailComponent } from "./item/item-detail.component";
+
 import { HomeComponent } from "./home/home.component";
-import { ModalTest } from "./modal/modal-test";
+import { ModalComponent } from "./modal/modal.component";
+import { ModalRouterComponent } from "./modal/modal-router/modal-router.component";
 
 // Uncomment and add to NgModule imports if you need to use two-way binding
 // import { NativeScriptFormsModule } from "nativescript-angular/forms";
@@ -23,14 +25,14 @@ import { ModalTest } from "./modal/modal-test";
         NativeScriptModule,
         AppRoutingModule
     ],
-    entryComponents: [...ModalTest.entries],
+    entryComponents: [ModalComponent],
     declarations: [
         AppComponent,
         ItemsComponent,
         ItemDetailComponent,
         HomeComponent,
-        ModalTest,
-        ...ModalTest.entries
+        ModalComponent,
+        ModalRouterComponent
     ],
     providers: [
         ItemService

@@ -3,23 +3,14 @@ import { ModalDialogParams } from "nativescript-angular/directives/dialogs";
 import { RouterExtensions, PageRoute } from "nativescript-angular/router";
 import { ActivatedRoute } from "@angular/router";
 import { View } from "ui/core/view"
+import { confirm } from "ui/dialogs";
 
 @Component({
-    selector: "modal-content",
-    template: `
-    <GridLayout #rootLayout margin="24" horizontalAlignment="center" verticalAlignment="center" rows="*, auto">
-        <StackLayout>
-          <page-router-outlet></page-router-outlet>
-        </StackLayout>    
-        <StackLayout row="1" orientation="horizontal" marginTop="12">
-                <Button text="back" (tap)="back()"></Button>
-                <Button text="ok" (tap)="close('OK')"></Button>
-                <Button text="cancel" (tap)="close(rootLayout)"></Button>
-        </StackLayout>
-    </GridLayout>
-    `
+    moduleId: module.id,
+    selector: "modal-page",
+    templateUrl: "./modal.component.html"
 })
-export class ModalContent {
+export class ModalComponent {
 
     @Input() public prompt: string;
     public yes: boolean = true;
@@ -35,16 +26,25 @@ export class ModalContent {
 
     public close(layoutRoot: View) {
         layoutRoot.closeModal();
-        // this.params.closeCallback(res);
     }
 
     ngOnInit() {
-        this.nav.navigate(["items"], { relativeTo: this.activeRoute });
-        console.log("ModalContent.ngOnInit");
     }
 
     ngOnDestroy() {
         console.log("ModalContent.ngOnDestroy");
     }
 
+    showDialogConfirm() {
+        let options = {
+            title: "Dialog",
+            message: "Message",
+            okButtonText: "Yes",
+            cancelButtonText: "No"
+
+        }
+        confirm(options).then((result: boolean) => {
+            console.log(result);
+        })
+    }
 }
