@@ -1,6 +1,5 @@
 env:
   global:
-    - NODE_VERSION=6
     - NODE_VERSION=8
     - EMULATOR_API_LEVEL=22
     - ANDROID_VERSION=25
@@ -27,7 +26,7 @@ matrix:
         - Build="iOS"
       osx_image: xcode9.3
       language: node_js
-      node_js: "6"
+      node_js: "8"
       jdk: oraclejdk8
       before_install: 
         - cd nativescript-angular
@@ -59,7 +58,7 @@ matrix:
         - cd ../tests
         - tns build ios
     - language: android
-      node_js: "6"
+      node_js: "8"
       os: linux
       env:
         - Build="Android"
@@ -119,7 +118,6 @@ android:
     # if you need to run emulator(s) during your tests
     - sys-img-armeabi-v7a-android-26
     - sys-img-armeabi-v7a-android-25
-    - sys-img-armeabi-v7a-android-17
     - sys-img-armeabi-v7a-android-19
     - sys-img-armeabi-v7a-google_apis-$EMULATOR_API_LEVEL
   licenses:
