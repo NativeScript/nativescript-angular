@@ -5,14 +5,14 @@ import { Page } from "ui/page";
 import { topmost } from "ui/frame";
 import { ModalDialogParams, ModalDialogService } from "nativescript-angular/directives/dialogs";
 
-import { device, platformNames } from "platform";
+import { device, isIOS } from "platform";
 
-import { ComponentFixture } from "@angular/core/testing";
+import { ComponentFixture, async } from "@angular/core/testing";
 import { nsTestBedRender, nsTestBedAfterEach, nsTestBedBeforeEach } from "nativescript-angular/testing";
 import { NSLocationStrategy } from "nativescript-angular/router/ns-location-strategy";
 import { FrameService } from "nativescript-angular";
 import { FakeFrameService } from "./ns-location-strategy";
-const CLOSE_WAIT = (device.os === platformNames.ios) ? 1000 : 0;
+const CLOSE_WAIT = isIOS ? 1000 : 0;
 
 @Component({
     selector: "modal-comp",
@@ -74,17 +74,15 @@ describe("modal-dialog", () => {
     });
 
 
-    it("showModal throws when there is no viewContainer provided", (done) => {
+    it("showModal throws when there is no viewContainer provided", async(() => {
         nsTestBedRender(FailComponent)
             .then((fixture: ComponentFixture<FailComponent>) => {
                 const service = <ModalDialogService>fixture.componentRef.instance.service;
                 assert.throws(() => service.showModal(ModalComponent, {}),
                     "No viewContainerRef: Make sure you pass viewContainerRef in ModalDialogOptions."
                 );
-            })
-            .then(() => done())
-            .catch((e) => done(e));
-    });
+            });
+    }));
 
     it("showModal succeeds when there is viewContainer provided", (done) => {
         nsTestBedRender(SuccessComponent)
