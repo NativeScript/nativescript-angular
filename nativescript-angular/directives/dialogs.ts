@@ -16,6 +16,7 @@ import { ProxyViewContainer } from "tns-core-modules/ui/proxy-view-container/pro
 import { AppHostView } from "../app-host-view";
 import { DetachedLoader } from "../common/detached-loader";
 import { PageFactory, PAGE_FACTORY } from "../platform-providers";
+import { once } from "../common/utils";
 
 export interface ModalDialogOptions {
     context?: any;
@@ -106,19 +107,17 @@ export class ModalDialogService {
         let componentView: View;
         let detachedLoaderRef: ComponentRef<DetachedLoader>;
 
-        const closeCallback = (...args) => {
+        const closeCallback = once((...args) => {
             doneCallback.apply(undefined, args);
-            if (componentView && !this.location._isModalClosing) {
+            if (componentView) {
                 this.location._beginCloseModalNavigation();
-
                 componentView.closeModal();
-            } else if (this.location._isModalClosing) {
                 this.location.back();
                 this.location._finishCloseModalNavigation();
                 detachedLoaderRef.instance.detectChanges();
                 detachedLoaderRef.destroy();
             }
-        };
+        });
 
         const modalParams = new ModalDialogParams(context, closeCallback);
         const providers = ReflectiveInjector.resolve([
@@ -141,7 +140,7 @@ export class ModalDialogService {
             }
 
             // TODO: remove <any> cast after https://github.com/NativeScript/NativeScript/pull/5734
-            //       is in a published version of tns-core-modules.
+            // is in a published version of tns-core-modules.
             (<any>parentView).showModal(componentView, context, closeCallback, fullscreen, animated, stretched);
         });
     }
