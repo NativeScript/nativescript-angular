@@ -1,3 +1,23 @@
+<a name="6.0.0"></a>
+# [6.0.0](https://github.com/NativeScript/nativescript-angular/compare/5.3.0...6.0.0) (2018-05-30)
+
+
+### Bug Fixes
+
+* Use cssType (uglify safe) instead typeName of for view metadata. ([d85910c](https://github.com/NativeScript/nativescript-angular/commit/d85910c))
+* **modal:** closeCallback(...) should not have side effects when called multiple times ([#1349](https://github.com/NativeScript/nativescript-angular/issues/1349)) ([bffbbc2](https://github.com/NativeScript/nativescript-angular/commit/bffbbc2))
+* **modal:** missing animated & stretched params ([#1293](https://github.com/NativeScript/nativescript-angular/issues/1293)) ([a9a901b](https://github.com/NativeScript/nativescript-angular/commit/a9a901b))
+* **router:** state is not guarded before use ([#1331](https://github.com/NativeScript/nativescript-angular/issues/1331)) ([d27a893](https://github.com/NativeScript/nativescript-angular/commit/d27a893)), closes [/github.com/NativeScript/nativescript-angular/commit/b98da83adb3f5c51ee448fa38a51b7c65274c82e#diff-a7820fa2a2eb0ce14f3f0b8bfc666dd5R49](https://github.com//github.com/NativeScript/nativescript-angular/commit/b98da83adb3f5c51ee448fa38a51b7c65274c82e/issues/diff-a7820fa2a2eb0ce14f3f0b8bfc666dd5R49)
+* **TabViewItemDirective :** textTransform property added ([#1315](https://github.com/NativeScript/nativescript-angular/issues/1315)) ([11d01f9](https://github.com/NativeScript/nativescript-angular/commit/11d01f9))
+
+
+### Features
+
+* Angular 6 support
+* **router:** enable flexible page router outlets ([#1298](https://github.com/NativeScript/nativescript-angular/issues/1298)) ([b98da83](https://github.com/NativeScript/nativescript-angular/commit/b98da83))
+* **testing:** Testing Components with TestBed ([#1175](https://github.com/NativeScript/nativescript-angular/issues/1175)) ([52f3ec6](https://github.com/NativeScript/nativescript-angular/commit/52f3ec6))
+
+
 <a name="5.3.0"></a>
 # [5.3.0](https://github.com/NativeScript/nativescript-angular/compare/5.2.0...v5.3.0) (2018-04-10)
 
