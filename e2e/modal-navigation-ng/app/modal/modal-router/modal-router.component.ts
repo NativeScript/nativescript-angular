@@ -1,24 +1,21 @@
-import { Component } from "@angular/core";
-import { Router, NavigationEnd, ActivatedRoute } from "@angular/router";
-import { NSLocationStrategy } from "nativescript-angular/router/ns-location-strategy";
+import { Component, OnInit } from "@angular/core";
+import { ActivatedRoute } from "@angular/router";
 import { RouterExtensions } from "nativescript-angular/router";
+import { ModalDialogParams } from "nativescript-angular/directives/dialogs";
 
 @Component({
     selector: "ns-router",
     templateUrl: "app.component.html",
 })
 
-export class ModalRouterComponent {
-    constructor(router: Router, location: NSLocationStrategy, private routerExtension: RouterExtensions, private activeRoute: ActivatedRoute) {
-        router.events.subscribe(e => {
-            if (e instanceof NavigationEnd) {
-                console.log("[ROUTER]: " + e.toString());
-                console.log(location.toString());
-            }
-        });
+export class ModalRouterComponent implements OnInit {
+    private modalRoute: string;
+
+    constructor(private params: ModalDialogParams, private routerExtension: RouterExtensions, private activeRoute: ActivatedRoute) {
+        this.modalRoute = params.context.modalRoute;
     }
 
     ngOnInit() {
-        this.routerExtension.navigate(["modal"], { relativeTo: this.activeRoute });
+        this.routerExtension.navigate([this.modalRoute], { relativeTo: this.activeRoute });
     }
 }

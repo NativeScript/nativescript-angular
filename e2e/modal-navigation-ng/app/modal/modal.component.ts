@@ -1,9 +1,11 @@
-import { Component, Input } from "@angular/core";
-import { ModalDialogParams } from "nativescript-angular/directives/dialogs";
+import { Component, ViewContainerRef } from "@angular/core";
+import { ModalDialogParams, ModalDialogOptions, ModalDialogService } from "nativescript-angular/directives/dialogs";
 import { RouterExtensions, PageRoute } from "nativescript-angular/router";
 import { ActivatedRoute } from "@angular/router";
-import { View } from "ui/core/view"
+import { View, ShownModallyData, EventData } from "ui/core/view"
 import { confirm } from "ui/dialogs";
+import { ModalRouterComponent } from "../modal/modal-router/modal-router.component";
+import { NestedModalComponent } from "../modal-nested/modal-nested.component";
 
 @Component({
     moduleId: module.id,
@@ -11,20 +13,19 @@ import { confirm } from "ui/dialogs";
     templateUrl: "./modal.component.html"
 })
 export class ModalComponent {
+    public navigationVisibility: string = "collapse";
 
-    @Input() public prompt: string;
-    public yes: boolean = true;
+    constructor(private params: ModalDialogParams,
+        private vcRef: ViewContainerRef,
+        private routerExtension: RouterExtensions,
+        private activeRoute: ActivatedRoute,
+        private modal: ModalDialogService) {
 
-    constructor(private params: ModalDialogParams, private nav: RouterExtensions, private activeRoute: ActivatedRoute) {
-        console.log("ModalContent.constructor: " + JSON.stringify(params));
-        this.prompt = params.context.promptMsg;
+        console.log("\nModalContent.constructor: " + JSON.stringify(params));
+        this.navigationVisibility = params.context.navigationVisibility ? "visible" : "collapse";
     }
 
-    public back() {
-        this.nav.back();
-    }
-
-    public close(layoutRoot: View) {
+    close(layoutRoot: View) {
         layoutRoot.closeModal();
     }
 
@@ -35,16 +36,51 @@ export class ModalComponent {
         console.log("ModalContent.ngOnDestroy");
     }
 
+    onShowingModally(args: ShownModallyData) {
+        console.log("modal-page showingModally");
+    }
+
     showDialogConfirm() {
         let options = {
             title: "Dialog",
             message: "Message",
             okButtonText: "Yes",
             cancelButtonText: "No"
-
         }
+
         confirm(options).then((result: boolean) => {
             console.log(result);
         })
+    }
+
+    showNestedModalFrame() {
+        const options: ModalDialogOptions = {
+            context: {
+                navigationVisibility: true,
+                modalRoute: "nested-frame-modal"
+            },
+            fullscreen: true,
+            viewContainerRef: this.vcRef
+        };
+
+        this.modal.showModal(ModalRouterComponent, options).then((res: string) => {
+            console.log("nested-modal-frame closed");
+        });
+    }
+
+    showNestedModal() {
+        const options: ModalDialogOptions = {
+            context: { navigationVisibility: false },
+            fullscreen: true,
+            viewContainerRef: this.vcRef
+        };
+
+        this.modal.showModal(NestedModalComponent, options).then((res: string) => {
+            console.log("nested-modal closed");
+        });
+    }
+
+    onNavigateSecondPage() {
+        this.routerExtension.navigate(["../modal-second"], { relativeTo: this.activeRoute });
     }
 }

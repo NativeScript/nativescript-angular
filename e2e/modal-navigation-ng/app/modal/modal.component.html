@@ -1,16 +1,13 @@
-<ActionBar>
+<ActionBar *ngIf="navigationVisibility === 'visible'">
     <Label text="Modal"></Label>
 </ActionBar>
 
-<GridLayout #rootLayout rows="*, auto">
-    <StackLayout>
-      <!-- <page-router-outlet></page-router-outlet> -->
-    </StackLayout>    
+<GridLayout #rootLayout rows="*, auto" (showingModally)="onShowingModally($event)"> 
     <StackLayout backgroundColor="lightGreen">
-        <Button text="Navigate To Second Page" (tap)="onNavigate" visibility="{{ navigationVisibility }}"></Button>
+        <Button text="Navigate To Second Page" (tap)="onNavigateSecondPage()" [visibility]="navigationVisibility"></Button>
+        <Button text="Show Nested Modal Page With Frame" (tap)="showNestedModalFrame()" [visibility]="navigationVisibility"></Button>
+        <Button text="Show Nested Modal Page" (tap)="showNestedModal()" [visibility]="navigationVisibility"></Button>
         <Button text="Show Dialog Confirm" (tap)="showDialogConfirm()"></Button>
-        <Button text="Show Nested Modal Page With Frame" (tap)="showNestedModalFrame()"></Button>
-        <Button text="Show Nested Modal Page" (tap)="showNestedModalPage()"></Button>
         <Button text="Close Modal" (tap)="close(rootLayout)"></Button>
     </StackLayout>
 </GridLayout>
