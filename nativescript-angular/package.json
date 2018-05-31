@@ -1,5 +1,4 @@
 {
-  "private": true,
   "name": "nativescript-angular",
   "version": "6.0.0",
   "description": "An Angular renderer that lets you build mobile apps with NativeScript.",
