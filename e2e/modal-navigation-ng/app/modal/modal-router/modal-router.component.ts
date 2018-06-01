@@ -4,8 +4,9 @@ import { RouterExtensions } from "nativescript-angular/router";
 import { ModalDialogParams } from "nativescript-angular/directives/dialogs";
 
 @Component({
-    selector: "ns-router",
-    templateUrl: "app.component.html",
+    moduleId: module.id,
+    selector: "ns-modal-router",
+    templateUrl: "./modal-router.component.html",
 })
 
 export class ModalRouterComponent implements OnInit {
