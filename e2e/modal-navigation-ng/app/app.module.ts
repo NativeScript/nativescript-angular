@@ -3,17 +3,18 @@ import { NativeScriptModule } from "nativescript-angular/nativescript.module";
 import { AppRoutingModule } from "./app.routing";
 import { AppComponent } from "./app.component";
 
-import { ItemService } from "./item/item.service";
-import { ItemsComponent } from "./item/items.component";
-import { ItemDetailComponent } from "./item/item-detail.component";
 import { HomeComponent } from "./home/home.component";
-import { ModalTest } from "./modal/modal-test";
+import { SecondComponent } from "./second/second.component";
+import { ModalSecondComponent } from "./modal-second/modal-second.component";
+import { ModalComponent } from "./modal/modal.component";
+import { NestedModalComponent } from "./modal-nested/modal-nested.component";
+import { ModalRouterComponent } from "./modal/modal-router/modal-router.component";
 
-// Uncomment and add to NgModule imports if you need to use two-way binding
-// import { NativeScriptFormsModule } from "nativescript-angular/forms";
+import { enable as traceEnable, addCategories } from "tns-core-modules/trace";
+import { routerTraceCategory } from "nativescript-angular/trace";
 
-// Uncomment and add to NgModule imports  if you need to use the HTTP wrapper
-// import { NativeScriptHttpModule } from "nativescript-angular/http";
+// addCategories(routerTraceCategory);
+// traceEnable();
 
 @NgModule({
     bootstrap: [
@@ -23,17 +24,15 @@ import { ModalTest } from "./modal/modal-test";
         NativeScriptModule,
         AppRoutingModule
     ],
-    entryComponents: [...ModalTest.entries],
+    entryComponents: [ModalRouterComponent, NestedModalComponent, ModalComponent],
     declarations: [
         AppComponent,
-        ItemsComponent,
-        ItemDetailComponent,
         HomeComponent,
-        ModalTest,
-        ...ModalTest.entries
-    ],
-    providers: [
-        ItemService
+        SecondComponent,
+        ModalComponent,
+        NestedModalComponent,
+        ModalRouterComponent,
+        ModalSecondComponent
     ],
     schemas: [
         NO_ERRORS_SCHEMA

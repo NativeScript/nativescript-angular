@@ -10,10 +10,10 @@ import { ModalComponent } from "../modal/modal.component";
 
 @Component({
     moduleId: module.id,
-    selector: "home-page",
-    templateUrl: "./home.component.html"
+    selector: "second-page",
+    templateUrl: "./second.component.html"
 })
-export class HomeComponent {
+export class SecondComponent {
     constructor(private modal: ModalDialogService, private vcRef: ViewContainerRef, private routerExtension: RouterExtensions) { }
 
     onModalNoFrame(args: EventData) {
@@ -45,11 +45,7 @@ export class HomeComponent {
         });
     }
 
-    onNavigateSecond(args: EventData) {
-        this.routerExtension.navigate(["second"]);
-    }
-
-    onFrameRootViewReset(args: EventData) {
-        
+    goBack(args: EventData) {
+        this.routerExtension.back();
     }
 }
