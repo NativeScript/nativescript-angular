@@ -1,12 +1,12 @@
 import { Component, ViewContainerRef } from "@angular/core";
 import { ModalDialogService, ModalDialogOptions } from "nativescript-angular/directives/dialogs";
-import { EventData } from "tns-core-modules/data/observable";
-import { Frame } from "tns-core-modules/ui/frame";
-import { View } from "tns-core-modules/ui/core/view";
-import { ModalRouterComponent } from "../modal/modal-router/modal-router.component";
-import { PageRouterOutlet } from "nativescript-angular/router/page-router-outlet";
 import { RouterExtensions } from "nativescript-angular/router";
+import { EventData } from "tns-core-modules/data/observable";
+
+import { ViewContainerRefService } from "../shared/ViewContainerRefService";
+import { ModalRouterComponent } from "../modal/modal-router/modal-router.component";
 import { ModalComponent } from "../modal/modal.component";
+import { ModalViewComponent } from "../modal-shared/modal-view.component";
 
 @Component({
     moduleId: module.id,
@@ -14,7 +14,11 @@ import { ModalComponent } from "../modal/modal.component";
     templateUrl: "./home.component.html"
 })
 export class HomeComponent {
-    constructor(private modal: ModalDialogService, private vcRef: ViewContainerRef, private routerExtension: RouterExtensions) { }
+    constructor(
+        private modal: ModalDialogService, 
+        private vcRef: ViewContainerRef, 
+        private viewContainerRefService: ViewContainerRefService,
+        private routerExtension: RouterExtensions) { }
 
     onModalNoFrame(args: EventData) {
         const options: ModalDialogOptions = {
@@ -51,5 +55,18 @@ export class HomeComponent {
 
     onFrameRootViewReset(args: EventData) {
         
+    }
+
+    onRootModalTap(): void {
+        const options: ModalDialogOptions = {
+            viewContainerRef: this.viewContainerRefService.root,
+            context: {},
+            fullscreen: true
+        };
+
+        this.modal.showModal(ModalViewComponent, options)
+            .then((result: string) => {
+                console.log(result);
+            });
     }
 }
