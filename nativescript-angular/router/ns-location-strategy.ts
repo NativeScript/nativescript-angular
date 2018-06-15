@@ -328,6 +328,8 @@ export class NSLocationStrategy extends LocationStrategy {
         if (!this._isModalClosing) {
             throw new Error("Calling startCloseModal while not closing modal.");
         }
+
+        this._isModalNavigation = false;
         this._isModalClosing = false;
     }
 
