@@ -1,27 +1,37 @@
 import { Component, ViewContainerRef } from "@angular/core";
+import { Router, NavigationEnd } from "@angular/router";
+import { NSLocationStrategy } from "nativescript-angular/router/ns-location-strategy";
 import { ModalDialogService, ModalDialogOptions } from "nativescript-angular/directives/dialogs";
-import { RouterExtensions } from "nativescript-angular/router";
-import { EventData } from "tns-core-modules/data/observable";
-
-import { ViewContainerRefService } from "../shared/ViewContainerRefService";
-import { ModalRouterComponent } from "../modal/modal-router/modal-router.component";
-import { ModalComponent } from "../modal/modal.component";
-import { ModalViewComponent } from "../modal-shared/modal-view.component";
+import { ModalComponent } from "./modal/modal.component";
+import { ModalViewComponent } from "./modal-shared/modal-view.component";
+import { ModalRouterComponent } from "./modal/modal-router/modal-router.component";
 import { confirm } from "ui/dialogs";
 
-import { AppModule } from "../app.module";
+import { AppModule } from "./app.module";
+
+import { ViewContainerRefService } from "./shared/ViewContainerRefService";
 
 @Component({
-    moduleId: module.id,
-    selector: "home-page",
-    templateUrl: "./home.component.html"
+    selector: "ns-layout",
+    templateUrl: "layout.component.html",
 })
-export class HomeComponent {
+
+export class LayoutComponent {
     constructor(
         private modal: ModalDialogService,
+        private router: Router,
+        private location: NSLocationStrategy,
         private vcRef: ViewContainerRef,
-        private viewContainerRefService: ViewContainerRefService,
-        private routerExtension: RouterExtensions) { }
+        private _viewContainerRefService: ViewContainerRefService) {
+        router.events.subscribe(e => {
+            if (e instanceof NavigationEnd) {
+                console.log("[ROUTER]: " + e.toString());
+                console.log(location.toString());
+            }
+        });
+
+        this._viewContainerRefService.root = this.vcRef;
+    }
 
     onModalNoFrame() {
         const options: ModalDialogOptions = {
@@ -52,10 +62,6 @@ export class HomeComponent {
         });
     }
 
-    onNavigateSecond() {
-        this.routerExtension.navigate(["second"]);
-    }
-
     onFrameRootViewReset() {
         AppModule.root = "page-router";
         AppModule.platformRef._livesync();
@@ -69,19 +75,6 @@ export class HomeComponent {
     onLayoutRootViewReset() {
         AppModule.root = "layout";
         AppModule.platformRef._livesync();
-    }
-
-    onRootModalTap(): void {
-        const options: ModalDialogOptions = {
-            viewContainerRef: this.viewContainerRefService.root,
-            context: {},
-            fullscreen: true
-        };
-
-        this.modal.showModal(ModalViewComponent, options)
-            .then((result: string) => {
-                console.log(result);
-            });
     }
 
     onShowDialog() {
