@@ -8,3 +8,8 @@ report
 app/**/*.js
 app/**/*.map
 package-lock.json
+
+# Webpack files
+tsconfig.esm.json
+webpack.config.js
+
