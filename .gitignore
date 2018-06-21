@@ -9,3 +9,8 @@ e2e/**/*.js
 e2e/**/*.map
 e2e/reports/
 test-results.xml
+
+# Webpack files
+tsconfig.esm.json
+webpack.config.js
+
