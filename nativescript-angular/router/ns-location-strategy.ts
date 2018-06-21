@@ -173,6 +173,7 @@ export class NSLocationStrategy extends LocationStrategy {
 
                 if (!state) {
                     modalStatesCleared = true;
+                    this.callPopState(null, true);
                     continue;
                 }
 
@@ -239,7 +240,16 @@ export class NSLocationStrategy extends LocationStrategy {
 
     private callPopState(state: LocationState, pop: boolean = true) {
         const urlSerializer = new DefaultUrlSerializer();
-        this.currentUrlTree.root.children[this.currentOutlet] = state.segmentGroup;
+        if (state) {
+            this.currentUrlTree.root.children[this.currentOutlet] = state.segmentGroup;
+        } else {
+            // when closing modal view there are scenarios (e.g. root viewContainerRef) when we need
+            // to clean up the named page router outlet to make sure we will open the modal properly again if needed.
+            delete this.statesByOutlet[this.currentOutlet];
+            delete this.currentUrlTree.root.children[this.currentOutlet];
+            this.currentOutlet = Object.keys(this.statesByOutlet)[0];
+        }
+
         const url = urlSerializer.serialize(this.currentUrlTree);
         const change = { url: url, pop: pop };
         for (let fn of this.popStateCallbacks) {
@@ -318,6 +328,8 @@ export class NSLocationStrategy extends LocationStrategy {
         if (!this._isModalClosing) {
             throw new Error("Calling startCloseModal while not closing modal.");
         }
+
+        this._isModalNavigation = false;
         this._isModalClosing = false;
     }
 
