@@ -4,3 +4,8 @@ hooks
 .vscode
 
 app/**/*.js
+
+# Webpack files
+tsconfig.esm.json
+webpack.config.js
+
