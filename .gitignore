@@ -29,9 +29,7 @@ ng-sample/app/**/*.js
 
 # Webpack configuration files
 webpack.config.js
-vendor.ts
-vendor-platform.android.ts
-vendor-platform.ios.ts
+tsconfig.esm.json
 
 # IDEs and editors
 /.idea
