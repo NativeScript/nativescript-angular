@@ -1,5 +1,14 @@
-import { NgModule, Injectable, NgZone, Provider, RendererFactory2, Optional, SkipSelf } from "@angular/core";
-
+import {
+    NgModule,
+    Injectable,
+    Inject,
+    NgZone,
+    Provider,
+    RendererFactory2,
+    Optional,
+    SkipSelf,
+} from "@angular/core";
+import { DOCUMENT } from "@angular/common";
 import { AnimationBuilder } from "@angular/animations";
 
 import {
@@ -21,8 +30,8 @@ import { throwIfAlreadyLoaded } from "../common/utils";
 
 @Injectable()
 export class InjectableAnimationEngine extends AnimationEngine {
-    constructor(driver: AnimationDriver, normalizer: AnimationStyleNormalizer) {
-        super(driver, normalizer);
+    constructor(@Inject(DOCUMENT) doc: any, driver: AnimationDriver, normalizer: AnimationStyleNormalizer) {
+        super(doc.body, driver, normalizer);
     }
 }
 
