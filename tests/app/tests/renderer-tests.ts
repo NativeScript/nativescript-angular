@@ -14,7 +14,7 @@ import * as view from "tns-core-modules/ui/core/view";
 import { isIOS } from "tns-core-modules/platform";
 import { View, fontInternalProperty, backgroundInternalProperty } from "tns-core-modules/ui/core/view"
 import { nsTestBedAfterEach, nsTestBedBeforeEach, nsTestBedRender } from "nativescript-angular/testing";
-import { ComponentFixture, TestBed } from "@angular/core/testing";
+import { ComponentFixture, TestBed, async } from "@angular/core/testing";
 import { Observable, ReplaySubject } from "rxjs";
 
 @Component({
@@ -308,14 +308,13 @@ describe("Renderer E2E", () => {
         });
     });
 
-    it("executes events inside NgZone when listen is called inside NgZone", (done) => {
+    it("executes events inside NgZone when listen is called inside NgZone", async(() => {
         const eventName = "someEvent";
         const view = new StackLayout();
         const eventArg = { eventName, object: view };
         const callback = (arg) => {
             assert.equal(arg, eventArg);
             assert.isTrue(NgZone.isInAngularZone(), "Event should be executed inside NgZone");
-            done();
         };
 
         nsTestBedRender(ZonedRenderer).then((fixture: ComponentFixture<ZonedRenderer>) => {
@@ -330,16 +329,15 @@ describe("Renderer E2E", () => {
             }, 10);
         });
 
-    });
+    }));
 
-    it("executes events inside NgZone when listen is called outside NgZone", (done) => {
+    it("executes events inside NgZone when listen is called outside NgZone", async(() => {
         const eventName = "someEvent";
         const view = new StackLayout();
         const eventArg = { eventName, object: view };
         const callback = (arg) => {
             assert.equal(arg, eventArg);
             assert.isTrue(NgZone.isInAngularZone(), "Event should be executed inside NgZone");
-            done();
         };
         nsTestBedRender(ZonedRenderer).then((fixture: ComponentFixture<ZonedRenderer>) => {
             fixture.ngZone.runOutsideAngular(() => {
@@ -348,7 +346,7 @@ describe("Renderer E2E", () => {
                 view.notify(eventArg);
             });
         });
-    });
+    }));
 
     describe("Structural directives", () => {
         it("ngIf hides component when false", () => {
