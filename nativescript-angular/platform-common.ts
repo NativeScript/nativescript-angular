@@ -119,7 +119,7 @@ export class NativeScriptPlatformRef extends PlatformRef {
     @profile
     private bootstrapApp() {
         (<any>global).__onLiveSyncCore = () => {
-            this.livesync();
+            this._livesync();
         };
 
         if (this.appOptions && typeof this.appOptions.cssFile === "string") {
@@ -210,7 +210,7 @@ export class NativeScriptPlatformRef extends PlatformRef {
     }
 
     @profile
-    private livesync() {
+    public _livesync() {
         bootstrapLog("Angular livesync started.");
         onBeforeLivesync.next(lastBootstrappedModule ? lastBootstrappedModule.get() : null);
 
