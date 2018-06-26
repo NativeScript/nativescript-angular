@@ -14,6 +14,12 @@ import { InvisibleNode } from "../element-registry";
 import { rendererLog } from "../trace";
 import { isBlank } from "../lang-facade";
 
+export interface TabViewItemDef {
+    title?: string;
+    iconSource?: string;
+    textTransform?: TextTransform;
+}
+
 @Directive({
     selector: "TabView", // tslint:disable-line:directive-selector
 })
@@ -52,9 +58,7 @@ export class TabViewDirective implements AfterViewInit {
 })
 export class TabViewItemDirective implements OnInit {
     private item: TabViewItem;
-    private _title: string;
-    private _iconSource: string;
-    private _textTransform: TextTransform;
+    private _config: TabViewItemDef;
 
     constructor(
         private owner: TabViewDirective,
@@ -63,46 +67,46 @@ export class TabViewItemDirective implements OnInit {
     ) {
     }
 
-    @Input("tabItem") config: any; // tslint:disable-line:no-input-rename
+    @Input("tabItem")
+    set config(config: TabViewItemDef) {
+        if (!this._config
+            || this._config.iconSource !== config.iconSource
+            || this._config.title !== config.title
+            || this._config.textTransform !== config.textTransform) {
+            this._config = config;
+            this.applyConfig();
+        }
+    }
+
+    get config(): TabViewItemDef { // tslint:disable-line:no-input-rename
+        return this._config || {};
+    }
 
     @Input()
+    set title(title: string) {
+        this.config = Object.assign(this.config, { title });
+    }
+
     get title() {
-        return this._title;
-    }
-
-    set title(value: string) {
-        if (this._title !== value) {
-            this._title = value;
-            this.ensureItem();
-            this.item.title = this._title;
-        }
+        return this.config.title;
     }
 
     @Input()
+    set iconSource(iconSource: string) {
+        this.config = Object.assign(this.config, { iconSource });
+    }
+
     get iconSource() {
-        return this._iconSource;
+        return this.config.iconSource;
     }
-
-    set iconSource(value: string) {
-        if (this._iconSource !== value) {
-            this._iconSource = value;
-            this.ensureItem();
-            this.item.iconSource = this._iconSource;
-        }
-    }
-
 
     @Input()
-    get textTransform() {
-        return this._textTransform;
+    set textTransform(textTransform: TextTransform) {
+        this.config = Object.assign(this.config, { textTransform });
     }
 
-    set textTransform(value: TextTransform) {
-        if (this._textTransform && this._textTransform !== value) {
-            this._textTransform = value;
-            this.ensureItem();
-            this.item.textTransform = this._textTransform;
-        }
+    get textTransform() {
+        return this.config.textTransform;
     }
 
     private ensureItem() {
@@ -111,19 +115,26 @@ export class TabViewItemDirective implements OnInit {
         }
     }
 
-    ngOnInit() {
+    private applyConfig() {
         this.ensureItem();
-        if (this.config) {
-            this.item.title = this._title || this.config.title;
-            this.item.iconSource = this._iconSource || this.config.iconSource;
 
-            //  TabViewItem textTransform has a default value for Android that kick in
-            // only if no value (even a null value) is set.
-            const textTransformValue = this._textTransform || this.config.textTransform;
-            if (textTransformValue) {
-                this.item.textTransform = textTransformValue;
-            }
+        if (this.config.title) {
+            this.item.title = this.config.title;
         }
+
+        if (this.config.iconSource) {
+            this.item.iconSource = this.config.iconSource;
+        }
+
+        //  TabViewItem textTransform has a default value for Android that kick in
+        // only if no value (even a null value) is set.
+        if (this.config.textTransform) {
+            this.item.textTransform = this.config.textTransform;
+        }
+    }
+
+    ngOnInit() {
+        this.applyConfig();
 
         const viewRef = this.viewContainer.createEmbeddedView(this.templateRef);
         // Filter out text nodes and comments
