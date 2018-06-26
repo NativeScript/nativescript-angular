@@ -4,6 +4,8 @@ import { NativeScriptRouterModule } from "nativescript-angular/router";
 import { ActionBarDynamicItemsComponent } from "./action-bar/action-bar-dynamic-items.component";
 import { ActionBarExtensionComponent } from "./action-bar/action-bar-extension.component";
 
+import { TabItemBindingComponent } from "./tab-view/tab-item-binding.component";
+
 import { ListComponent } from "./list.component";
 import { NgForComponent } from "./ngfor.component";
 import { NgForOfComponent } from "./ngforof.component";
@@ -27,6 +29,10 @@ export const routes = [
     {
         path: "action-bar-extension",
         component: ActionBarExtensionComponent,
+    },
+    {
+        path: "tab-item-binding",
+        component: TabItemBindingComponent,
     },
     {
         path: "list",
@@ -69,6 +75,8 @@ export const routes = [
 export const navigatableComponents = [
     ActionBarDynamicItemsComponent,
     ActionBarExtensionComponent,
+
+    TabItemBindingComponent,
 
     ListComponent,
     NgForComponent,
