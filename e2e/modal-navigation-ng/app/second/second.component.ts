@@ -7,7 +7,7 @@ import { ModalRouterComponent } from "../modal/modal-router/modal-router.compone
 import { PageRouterOutlet } from "nativescript-angular/router/page-router-outlet";
 import { RouterExtensions } from "nativescript-angular/router";
 import { ModalComponent } from "../modal/modal.component";
-
+import { AppModule } from "../app.module";
 @Component({
     moduleId: module.id,
     selector: "second-page",
@@ -16,7 +16,7 @@ import { ModalComponent } from "../modal/modal.component";
 export class SecondComponent {
     constructor(private modal: ModalDialogService, private vcRef: ViewContainerRef, private routerExtension: RouterExtensions) { }
 
-    onModalNoFrame(args: EventData) {
+    onModalNoFrame() {
         const options: ModalDialogOptions = {
             context: {
                 navigationVisibility: false
@@ -30,7 +30,7 @@ export class SecondComponent {
         });
     }
 
-    onModalFrame(args: EventData) {
+    onModalFrame() {
         const options: ModalDialogOptions = {
             context: {
                 navigationVisibility: true,
@@ -45,7 +45,7 @@ export class SecondComponent {
         });
     }
 
-    goBack(args: EventData) {
+    goBack() {
         this.routerExtension.back();
     }
 }
