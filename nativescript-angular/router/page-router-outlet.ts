@@ -25,6 +25,7 @@ import { DetachedLoader } from "../common/detached-loader";
 import { ViewUtil } from "../view-util";
 import { NSLocationStrategy } from "./ns-location-strategy";
 import { NSRouteReuseStrategy } from "./ns-route-reuse-strategy";
+import { FrameService } from "../platform-providers";
 
 export class PageRoute {
     activatedRoute: BehaviorSubject<ActivatedRoute>;
@@ -149,7 +150,8 @@ export class PageRouterOutlet implements OnDestroy { // tslint:disable-line:dire
         @Inject(DEVICE) device: Device,
         @Inject(PAGE_FACTORY) private pageFactory: PageFactory,
         private routeReuseStrategy: NSRouteReuseStrategy,
-        elRef: ElementRef
+        elRef: ElementRef,
+        private frameService: FrameService
     ) {
         this.frame = elRef.nativeElement;
         log("PageRouterOutlet.constructor frame:" + this.frame);
@@ -166,6 +168,7 @@ export class PageRouterOutlet implements OnDestroy { // tslint:disable-line:dire
         // destroyed on modal view closing
         this.routeReuseStrategy.clearModalCache(this.name);
         this.parentContexts.onChildOutletDestroyed(this.name);
+        this.frameService.removeFrame(this.frame);
     }
 
     deactivate(): void {
@@ -286,12 +289,12 @@ export class PageRouterOutlet implements OnDestroy { // tslint:disable-line:dire
 
         page.on(Page.navigatedFromEvent, (<any>global).Zone.current.wrap((args: NavigatedData) => {
             if (args.isBackNavigation) {
-                this.locationStrategy._beginBackPageNavigation(this.name);
+                this.locationStrategy._beginBackPageNavigation(this.name, this.frame);
                 this.locationStrategy.back();
             }
         }));
 
-        const navOptions = this.locationStrategy._beginPageNavigation(this.name);
+        const navOptions = this.locationStrategy._beginPageNavigation(this.name, this.frame);
 
         // Clear refCache if navigation with clearHistory
         if (navOptions.clearHistory) {
