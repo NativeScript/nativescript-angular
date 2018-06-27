@@ -2,8 +2,8 @@ import { NativeScriptModule } from "nativescript-angular/nativescript.module";
 import { platformNativeScriptDynamic } from "nativescript-angular/platform";
 import { NativeScriptAnimationsModule } from "nativescript-angular/animations";
 import { onAfterLivesync, onBeforeLivesync } from "nativescript-angular/platform-common";
-import { NgModule } from "@angular/core";
-import { DOCUMENT } from '@angular/common';
+import { NgModule, ErrorHandler } from "@angular/core";
+import { DOCUMENT } from "@angular/common";
 import { Router } from "@angular/router";
 import { NativeScriptRouterModule } from "nativescript-angular/router";
 import { NativeScriptFormsModule } from "nativescript-angular/forms";
@@ -15,18 +15,24 @@ import {
     routerTraceCategory,
     listViewTraceCategory,
     animationsTraceCategory,
+    viewUtilCategory,
     routeReuseStrategyTraceCategory,
+    bootstrapCategory,
 } from "nativescript-angular/trace";
 import { PAGE_FACTORY, PageFactory, PageFactoryOptions } from "nativescript-angular/platform-providers";
 import { Page } from "ui/page";
 import { Color } from "color";
-import { setCategories, enable } from "trace";
-// setCategories(
-//     `${animationsTraceCategory},${rendererTraceCategory}`
-// );
+import { log } from "tns-core-modules/profiling";
+
+import { setCategories, addCategories, enable, categories } from "trace";
+addCategories(bootstrapCategory);
+// addCategories(rendererTraceCategory);
+// addCategories(routerTraceCategory);
+// addCategories(categories.ViewHierarchy);
+// addCategories(categories.Layout);
 // setCategories(routerTraceCategory);
 // setCategories(listViewTraceCategory);
-setCategories(`${routeReuseStrategyTraceCategory}`);
+// setCategories(`${routeReuseStrategyTraceCategory}, ${routerTraceCategory}, ${viewUtilCategory}`);
 enable();
 
 import { RendererTest } from "./examples/renderer-test";
@@ -39,9 +45,14 @@ import { ImageTest } from "./examples/image/image-test";
 import { HttpTest } from "./examples/http/http-test";
 import { HttpClientTest } from "./examples/http-client/http-client-test";
 import { ActionBarTest } from "./examples/action-bar/action-bar-test";
-import { ModalTest } from "./examples/modal/modal-test";
 import { PlatfromDirectivesTest } from "./examples/platform-directives/platform-directives-test";
 import { LivesyncApp } from "./examples/livesync-test/livesync-test-app";
+
+// modal
+import { ModalTest } from "./examples/modal/modal-test";
+import { ModalNestedTest } from "./examples/modal/modal-nested-test";
+import { ModalRouterOutletTest } from "./examples/modal/modal-router-outlet-test";
+import { ModalPageRouterOutletTest } from "./examples/modal/modal-page-router-outlet-test";
 
 // new router
 import { RouterOutletAppComponent } from "./examples/router/router-outlet-test";
@@ -57,10 +68,8 @@ import { AnimationNgClassTest } from "./examples/animation/animation-ngclass-tes
 import { AnimationStatesTest } from "./examples/animation/animation-states-test";
 import { AnimationStatesMultiTest } from "./examples/animation/animation-states-multi-test";
 
-
 @NgModule({
-    declarations: [
-    ],
+    declarations: [],
     imports: [
         NativeScriptModule,
         NativeScriptFormsModule,
@@ -75,15 +84,12 @@ import { AnimationStatesMultiTest } from "./examples/animation/animation-states-
         NativeScriptHttpClientModule,
         NativeScriptRouterModule,
     ],
-    providers: []
+    providers: [],
 })
 class ExampleModule { }
 
 function makeExampleModule(componentType) {
-    let imports: any[] = [
-        NativeScriptAnimationsModule,
-        ExampleModule,
-    ];
+    let imports: any[] = [NativeScriptAnimationsModule, ExampleModule];
     if (componentType.routes) {
         imports.push(NativeScriptRouterModule.forRoot(componentType.routes));
     }
@@ -97,19 +103,16 @@ function makeExampleModule(componentType) {
     }
     entries.push(componentType);
 
-    let providers = [];
+    let providers = [{ provide: ErrorHandler, useClass: MyErrorHandler }];
     if (componentType.providers) {
-        providers = [componentType.providers];
+        providers = [...providers, componentType.providers];
     }
 
     @NgModule({
         bootstrap: [componentType],
         imports,
         entryComponents: entries,
-        declarations: [
-            ...entries,
-            ...exports,
-        ],
+        declarations: [...entries, ...exports],
         providers,
         exports,
     })
@@ -124,8 +127,15 @@ const customPageFactoryProvider = {
         const page = new Page();
         page.backgroundColor = opts.isModal ? new Color("lightblue") : new Color("lightgreen");
         return page;
-    }
+    },
 };
+
+class MyErrorHandler implements ErrorHandler {
+    handleError(error) {
+        console.log("### ErrorHandler Error: " + error.toString());
+        console.log("### ErrorHandler Stack: " + error.stack);
+    }
+}
 
 // platformNativeScriptDynamic().bootstrapModule(makeExampleModule(RendererTest));
 // platformNativeScriptDynamic(undefined, [customPageFactoryProvider]).bootstrapModule(makeExampleModule(RendererTest));
@@ -133,11 +143,11 @@ const customPageFactoryProvider = {
 // platformNativeScriptDynamic().bootstrapModule(makeExampleModule(Benchmark));
 // platformNativeScriptDynamic().bootstrapModule(makeExampleModule(ListTest));
 // platformNativeScriptDynamic().bootstrapModule(makeExampleModule(ListTemplateSelectorTest));
-// platformNativeScriptDynamic().bootstrapModule(makeExampleModule(ListTestAsync));
+platformNativeScriptDynamic().bootstrapModule(makeExampleModule(ListTestAsync));
 // platformNativeScriptDynamic().bootstrapModule(makeExampleModule(ImageTest));
 // platformNativeScriptDynamic().bootstrapModule(makeExampleModule(ModalTest));
 // platformNativeScriptDynamic().bootstrapModule(makeExampleModule(HttpTest));
-platformNativeScriptDynamic().bootstrapModule(makeExampleModule(HttpClientTest));
+// platformNativeScriptDynamic().bootstrapModule(makeExampleModule(HttpClientTest));
 // platformNativeScriptDynamic().bootstrapModule(makeExampleModule(PlatfromDirectivesTest));
 // platformNativeScriptDynamic().bootstrapModule(makeExampleModule(ActionBarTest));
 
@@ -157,23 +167,31 @@ platformNativeScriptDynamic().bootstrapModule(makeExampleModule(HttpClientTest))
 
 // Livesync test
 let cachedUrl: string;
-onBeforeLivesync.subscribe((moduleRef) => {
-    console.log("------- onBeforeLivesync");
-    if (moduleRef) {
-        const router = <Router>moduleRef.injector.get(Router);
-        cachedUrl = router.url;
-        console.log("------- Caching URL: " + cachedUrl);
-    }
+onBeforeLivesync.subscribe(moduleRef => {
+    console.log("#### onBeforeLivesync");
+    // if (moduleRef) {
+    //     const router = <Router>moduleRef.injector.get(Router);
+    //     cachedUrl = router.url;
+    //     log("-------> Caching URL: " + cachedUrl);
+    // }
 });
 
-onAfterLivesync.subscribe((moduleRef) => {
-    console.log("------- onAfterLivesync cachedUrl:");
-    const router = <Router>moduleRef.injector.get(Router);
-    router.events.subscribe(e => console.log(e.toString()));
-    if (router && cachedUrl) {
-        setTimeout(() => { router.navigateByUrl(cachedUrl); }, 0);
-    }
+onAfterLivesync.subscribe(({ moduleRef, error }) => {
+    console.log(`#### onAfterLivesync moduleRef: ${moduleRef} error: ${error}`);
+    // if (moduleRef) {
+    //     const router = <Router>moduleRef.injector.get(Router);
+    //     router.events.subscribe(e => log(e.toString()));
+    //     if (router && cachedUrl) {
+    //         setTimeout(() => {
+    //             router.navigateByUrl(cachedUrl);
+    //         }, 0);
+    //     }
+    // }
 });
 
 // platformNativeScriptDynamic().bootstrapModule(makeExampleModule(LivesyncApp));
-console.log("APP RESTART");
+// console.log("APP RESTART!!!!  !!!");
+// platformNativeScriptDynamic().bootstrapModule(makeExampleModule(ModalTest));
+// platformNativeScriptDynamic().bootstrapModule(makeExampleModule(ModalNestedTest));
+// platformNativeScriptDynamic().bootstrapModule(makeExampleModule(ModalRouterOutletTest));
+platformNativeScriptDynamic().bootstrapModule(makeExampleModule(ModalPageRouterOutletTest));

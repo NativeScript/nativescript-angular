@@ -1,6 +1,6 @@
 import { Component, OnInit, OnDestroy } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
-import "rxjs/add/operator/map";
+import { map } from "rxjs/operators";
 
 @Component({
     selector: "first",
@@ -10,7 +10,7 @@ import "rxjs/add/operator/map";
         <Label text="First component" class="title"></Label>
     </StackLayout>`
 })
-class FirstComponent implements OnInit, OnDestroy {
+export class FirstComponent implements OnInit, OnDestroy {
     ngOnInit() {
         console.log("FirstComponent - ngOnInit()");
     }
@@ -28,10 +28,10 @@ class FirstComponent implements OnInit, OnDestroy {
         <Label [text]="'Second component: ' + (id | async)" class="title"></Label>
     </StackLayout>`
 })
-class SecondComponent implements OnInit, OnDestroy {
+export class SecondComponent implements OnInit, OnDestroy {
     id;
     constructor(route: ActivatedRoute) {
-        this.id = route.params.map(r => r["id"]);
+        this.id = route.params.pipe(map(r => r["id"]));
     }
 
     ngOnInit() {
@@ -49,8 +49,14 @@ class SecondComponent implements OnInit, OnDestroy {
     template: `
         <StackLayout>
             <StackLayout class="nav">
-                <Button text="First" [class.rlaActive]="rla.isActive" nsRouterLinkActive="active" nsRouterLink="/first" #rla="routerLinkActive"></Button>
-                <Button text="Second(1)" nsRouterLinkActive="active" nsRouterLink="/second/1"></Button>
+                <Button text="First"
+                    [class.rlaActive]="rla.isActive"
+                    nsRouterLinkActive="active"
+                    nsRouterLink="/first"
+                    #rla="routerLinkActive"></Button>
+                <Button text="Second(1)"
+                    nsRouterLinkActive="active"
+                    nsRouterLink="/second/1"></Button>
                 <Button text="Second(2)"
                     nsRouterLinkActive="active"
                     [nsRouterLink]="['/second', '2' ]">

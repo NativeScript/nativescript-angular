@@ -1,0 +1,15 @@
+<ActionBar class="action-bar">
+    <Label class="action-bar-title" text="Home"></Label>
+</ActionBar>
+
+<StackLayout>
+    <Button text="Show Modal Without Frame" (tap)="onModalNoFrame()"></Button>
+    <Button text="Show Modal Page With Frame" (tap)="onModalFrame()"></Button>
+    <Button text="Navigate To Second Page" (tap)="onNavigateSecond()"></Button>
+    <Button text="Reset Frame Root View" (tap)="onFrameRootViewReset()"></Button>
+    <Button text="Reset Tab Root View"></Button>
+    <Button text="Reset Layout Root View"></Button>
+    <Button text="show shared modal" (tap)="onRootModalTap()"></Button>
+    <Button text="go to second (to open shared modal)" [nsRouterLink]="['/modal-shared-second-host']"></Button>
+    <Label text="home component" verticalAlignment="bottom"></Label>
+</StackLayout>  

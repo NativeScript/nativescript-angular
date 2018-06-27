@@ -1,4 +1,3 @@
-import { TestApp, registerTestApp } from "../../tests/test-app";
 import { ApplicationRef } from "@angular/core";
 import { Router, NavigationStart, NavigationEnd } from "@angular/router";
 // >> page-outlet-example
@@ -22,8 +21,6 @@ export class PageNavigationApp {
     public done: Promise<void>;
 
     constructor(public router: Router, public appRef: ApplicationRef) {
-        registerTestApp(PageNavigationApp, this, appRef);
-
         this.done = new Promise<void>((resolve, reject) => {
             this.router.events.subscribe((e) => {
                 if (e instanceof NavigationStart) {

@@ -6,6 +6,7 @@ export const viewUtilCategory = "ns-view-util";
 export const routerTraceCategory = "ns-router";
 export const routeReuseStrategyTraceCategory = "ns-route-reuse-strategy";
 export const listViewTraceCategory = "ns-list-view";
+export const bootstrapCategory = "bootstrap";
 
 export function animationsLog(message: string): void {
     write(message, animationsTraceCategory);
@@ -41,4 +42,12 @@ export function listViewLog(message: string): void {
 
 export function listViewError(message: string): void {
     write(message, listViewTraceCategory, messageType.error);
+}
+
+export function bootstrapLog(message: string): void {
+    write(message, bootstrapCategory);
+}
+
+export function bootstrapLogError(message: string): void {
+    write(message, bootstrapCategory, messageType.error);
 }

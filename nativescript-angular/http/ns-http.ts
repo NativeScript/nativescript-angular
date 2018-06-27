@@ -9,8 +9,7 @@ import {
     ResponseType,
     Response
 } from "@angular/http";
-import { Observable } from "rxjs/Observable";
-import "rxjs/add/observable/fromPromise";
+import { Observable } from "rxjs";
 
 import { isLocalRequest, processLocalFileRequest } from "../http-client/http-utils";
 
