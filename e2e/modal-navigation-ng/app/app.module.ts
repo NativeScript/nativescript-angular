@@ -2,6 +2,8 @@ import { NgModule, NO_ERRORS_SCHEMA } from "@angular/core";
 import { NativeScriptModule } from "nativescript-angular/nativescript.module";
 import { AppRoutingModule } from "./app.routing";
 import { AppComponent } from "./app.component";
+import { TabComponent } from "./tab.component";
+import { LayoutComponent } from "./layout.component";
 
 import { HomeComponent } from "./home/home.component";
 import { SecondComponent } from "./second/second.component";
@@ -14,28 +16,31 @@ import { ModalViewContentComponent } from "./modal-shared/modal-view-content.com
 import { ModalSharedSecondComponent } from "./modal-shared/modal-shared-second.component";
 import { ViewContainerRefService } from "./shared/ViewContainerRefService";
 
-// import { enable as traceEnable, addCategories } from "tns-core-modules/trace";
-// import { routerTraceCategory } from "nativescript-angular/trace";
+import { enable as traceEnable, addCategories } from "tns-core-modules/trace";
+import { routerTraceCategory } from "nativescript-angular/trace";
+import { NativeScriptPlatformRef } from "nativescript-angular";
 
-// addCategories(routerTraceCategory);
-// traceEnable();
+addCategories(routerTraceCategory);
+traceEnable();
 
 @NgModule({
-    bootstrap: [
-        AppComponent
-    ],
     imports: [
         NativeScriptModule,
         AppRoutingModule
     ],
     entryComponents: [
+        AppComponent, 
+        TabComponent, 
+        LayoutComponent, 
         ModalRouterComponent, 
         NestedModalComponent, 
-        ModalComponent,
+        ModalComponent, 
         ModalViewComponent
     ],
     declarations: [
         AppComponent,
+        TabComponent,
+        LayoutComponent,
         HomeComponent,
         SecondComponent,
         ModalComponent,
@@ -56,4 +61,25 @@ import { ViewContainerRefService } from "./shared/ViewContainerRefService";
 /*
 Pass your application module to the bootstrapModule function located in main.ts to start your app
 */
-export class AppModule { }
+
+export class AppModule {
+    private static appRef: any;
+    public static platformRef: NativeScriptPlatformRef;
+    public static root: string = "page-router";
+
+    ngDoBootstrap(app) {
+        AppModule.appRef = app;
+        AppModule.bootstrapRootComponent();
+    }
+
+    static bootstrapRootComponent() {
+        const options = {
+            'page-router': AppComponent,
+            'tab': TabComponent,
+            'layout': LayoutComponent      
+        };
+
+        const component = options[AppModule.root];
+        AppModule.appRef.bootstrap(component);
+    }
+}
