@@ -18,6 +18,11 @@ import {
     SkipSelf,
 } from "@angular/core";
 
+import {
+    ViewportScroller,
+    ɵNullViewportScroller as NullViewportScroller,
+} from "@angular/common";
+
 import { NativeScriptCommonModule } from "./common";
 import { NativeScriptRendererFactory } from "./renderer";
 import { DetachedLoader } from "./common/detached-loader";
@@ -36,6 +41,7 @@ export function errorHandlerFactory() {
         SystemJsNgModuleLoader,
         { provide: ErrorHandler, useFactory: errorHandlerFactory },
         { provide: RendererFactory2, useExisting: NativeScriptRendererFactory },
+        { provide: ViewportScroller, useClass: NullViewportScroller },
     ],
     entryComponents: [
         DetachedLoader,
