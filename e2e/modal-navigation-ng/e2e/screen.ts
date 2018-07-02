@@ -16,6 +16,7 @@ const modalTabView = "Show Modal TabView";
 const navToSecondPage = "Navigate To Second Page";
 const showDialog = "Show Dialog";
 const resetFrameRootView = "Reset Frame Root View";
+const resetNamedFrameRootView = "Reset Named Frame Root View";
 const resetTabRootView = "Reset Tab Root View";
 const resetLayoutRootView = "Reset Layout Root View";
 
@@ -48,6 +49,12 @@ export class Screen {
         await btnResetFrameRootView.tap();
     }
 
+    resetNamedFrameRootView = async () => {
+        console.log("Setting named frame root ...");
+        const btnResetFrameRootView = await this._driver.findElementByText(resetNamedFrameRootView);
+        await btnResetFrameRootView.tap();
+    }
+
     resetLayoutRootView = async () => {
         console.log("Setting layout root ...");
         const btnResetLayoutRootView = await this._driver.findElementByText(resetLayoutRootView);
@@ -69,6 +76,12 @@ export class Screen {
         // should load frame root, no need to verify it is loaded
         await this.loadedHome();
         await this.resetFrameRootView();
+    }
+
+    setNamedFrameRootView = async () => {
+        // should load named frame root, no need to verify it is loaded
+        await this.loadedHome();
+        await this.resetNamedFrameRootView();
     }
 
     setTabRootView = async () => {

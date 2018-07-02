@@ -2,6 +2,7 @@ import { NgModule, NO_ERRORS_SCHEMA } from "@angular/core";
 import { NativeScriptModule } from "nativescript-angular/nativescript.module";
 import { AppRoutingModule } from "./app.routing";
 import { AppComponent } from "./app.component";
+import { NamedRouterComponent } from "./named-router.component";
 import { TabComponent } from "./tab.component";
 import { LayoutComponent } from "./layout.component";
 
@@ -29,16 +30,18 @@ traceEnable();
         AppRoutingModule
     ],
     entryComponents: [
-        AppComponent, 
-        TabComponent, 
-        LayoutComponent, 
-        ModalRouterComponent, 
-        NestedModalComponent, 
-        ModalComponent, 
+        AppComponent,
+        NamedRouterComponent,
+        TabComponent,
+        LayoutComponent,
+        ModalRouterComponent,
+        NestedModalComponent,
+        ModalComponent,
         ModalViewComponent
     ],
     declarations: [
         AppComponent,
+        NamedRouterComponent,
         TabComponent,
         LayoutComponent,
         HomeComponent,
@@ -75,8 +78,9 @@ export class AppModule {
     static bootstrapRootComponent() {
         const options = {
             'page-router': AppComponent,
+            'named-page-router': NamedRouterComponent,
             'tab': TabComponent,
-            'layout': LayoutComponent      
+            'layout': LayoutComponent
         };
 
         const component = options[AppModule.root];

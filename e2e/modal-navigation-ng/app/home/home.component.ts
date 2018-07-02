@@ -61,6 +61,11 @@ export class HomeComponent {
         AppModule.platformRef._livesync();
     }
 
+    onNamedFrameRootViewReset() {
+        AppModule.root = "named-page-router";
+        AppModule.platformRef._livesync();
+    }
+
     onTabRootViewReset() {
         AppModule.root = "tab";
         AppModule.platformRef._livesync();

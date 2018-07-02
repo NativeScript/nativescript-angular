@@ -40,6 +40,34 @@ const routes: Routes = [
     }
 ];
 
+const namedOutletRoutes: Routes = [
+    { path: "", redirectTo: "/(namedRouter:home)", pathMatch: "full" },
+    {
+        path: "home", component: HomeComponent, outlet: "namedRouter", children: [
+            {
+                path: "modal", component: ModalComponent, children: [
+                    { path: "nested-frame-modal", component: NestedModalComponent }]
+            },
+            { path: "modal-second", component: ModalSecondComponent }
+        ]
+    },
+    {
+        path: "second", outlet: "namedRouter", component: SecondComponent, children: [
+            {
+                path: "modal", component: ModalComponent, children: [
+                    { path: "nested-frame-modal", component: NestedModalComponent }]
+            },
+            { path: "modal-second", component: ModalSecondComponent }
+        ]
+    },
+    {
+        path: "modal-shared", component: ModalViewContentComponent, outlet: "modalOutlet"
+    },
+    {
+        path: "modal-shared-second-host", outlet: "namedRouter", component: ModalSharedSecondComponent
+    }
+];
+
 const routesTab: Routes = [
     { path: "", redirectTo: "/home(secondOutlet:second)", pathMatch: "full" },
     {
@@ -96,6 +124,8 @@ export class AppRoutingModule {
             this.router.resetConfig(routes);
         } else if (AppModule.root === "layout") {
             this.router.resetConfig(routesLayout);
+        } else if (AppModule.root === "named-page-router") {
+            this.router.resetConfig(namedOutletRoutes);
         } else {
             this.router.resetConfig(routesTab);
         }
