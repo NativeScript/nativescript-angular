@@ -76,19 +76,25 @@ export class ModalDialogService {
 
         this.location._beginModalNavigation();
 
-        return new Promise(resolve => {
-            setTimeout(() => this._showDialog({
-                containerRef: viewContainerRef,
-                context,
-                doneCallback: resolve,
-                fullscreen,
-                animated,
-                stretched,
-                pageFactory,
-                parentView,
-                resolver,
-                type,
-            }), 10);
+        return new Promise((resolve, reject) => {
+            setTimeout(() => {
+                try {
+                    this._showDialog({
+                        containerRef: viewContainerRef,
+                        context,
+                        doneCallback: resolve,
+                        fullscreen,
+                        animated,
+                        stretched,
+                        pageFactory,
+                        parentView,
+                        resolver,
+                        type,
+                    });
+                } catch (err) {
+                    reject(err);
+                }
+            }, 10);
         });
     }
 

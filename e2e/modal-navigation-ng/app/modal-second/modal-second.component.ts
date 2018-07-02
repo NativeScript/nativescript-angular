@@ -14,7 +14,7 @@ export class ModalSecondComponent {
         console.log("modal-second loaded");
     }
 
-    goBack(args: EventData) {
+    goBack() {
         this.routerExtension.back();
     }
 

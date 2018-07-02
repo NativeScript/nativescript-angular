@@ -18,5 +18,6 @@ export class ModalRouterComponent implements OnInit {
 
     ngOnInit() {
         this.routerExtension.navigate([this.modalRoute], { relativeTo: this.activeRoute });
+        //this.routerExtension.navigate([ { outlets: { modalOutlet: [this.modalRoute] } }], { relativeTo: this.activeRoute });
     }
 }
