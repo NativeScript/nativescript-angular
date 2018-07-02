@@ -73,18 +73,18 @@ export class FrameService {
     // which could be the wrong topmost frame (modal with nested frame e.g.):
     // TabViewItem -> Frame -> Modal -> Frame2 -> Frame2-Navigation
     getFrame(): Frame {
-        let tompostFrame = topmost();
-        const { cachedFrame, cachedFrameRootOutlet } = this.findFrame(tompostFrame);
+        let topmostFrame = topmost();
+        const { cachedFrame, cachedFrameRootOutlet } = this.findFrame(topmostFrame);
 
         if (cachedFrame && cachedFrameRootOutlet) {
             const latestFrameByOutlet = this.getLatestFrameByOutlet(cachedFrameRootOutlet);
 
             if (latestFrameByOutlet && latestFrameByOutlet !== cachedFrame) {
-                tompostFrame = latestFrameByOutlet;
+                topmostFrame = latestFrameByOutlet;
             }
         }
 
-        return tompostFrame;
+        return topmostFrame;
     }
 
     addFrame(frame: Frame, name: string, rootOutlet: string) {
@@ -98,7 +98,7 @@ export class FrameService {
     findFrame(frame: Frame, name?: string) {
         let cachedFrame;
         let cachedFrameRootOutlet;
-        let hasDuplicateOutlet = false;
+        let hasDuplicateOutletName = false;
 
         for (let i = 0; i < this.frames.length; i++) {
             const currentFrame = this.frames[i];
@@ -109,11 +109,11 @@ export class FrameService {
             }
 
             if (name && currentFrame.name === name) {
-                hasDuplicateOutlet = true;
+                hasDuplicateOutletName = true;
             }
         }
 
-        return { cachedFrame, cachedFrameRootOutlet, hasDuplicateOutlet };
+        return { cachedFrame, cachedFrameRootOutlet, hasDuplicateOutletName };
     }
 
     // Return the latest navigated frame from the given outlet branch.

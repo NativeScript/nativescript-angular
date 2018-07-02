@@ -292,11 +292,11 @@ export class NSLocationStrategy extends LocationStrategy {
         }
         this._isPageNavigationBack = true;
 
-        let { cachedFrame, hasDuplicateOutlet } = this.frameService.findFrame(frame, name);
+        let { cachedFrame, hasDuplicateOutletName } = this.frameService.findFrame(frame, name);
 
         if (cachedFrame) {
             this.currentOutlet = cachedFrame.rootOutlet;
-        } else if (!hasDuplicateOutlet) {
+        } else if (!hasDuplicateOutletName) {
             this.currentOutlet = name;
         }
     }
@@ -348,12 +348,12 @@ export class NSLocationStrategy extends LocationStrategy {
     public _beginPageNavigation(name: string, frame: Frame): NavigationOptions {
         routerLog("NSLocationStrategy._beginPageNavigation()");
 
-        let { cachedFrame, hasDuplicateOutlet } = this.frameService.findFrame(frame, name);
+        let { cachedFrame, hasDuplicateOutletName } = this.frameService.findFrame(frame, name);
 
         if (cachedFrame) {
             this.currentOutlet = cachedFrame.rootOutlet;
         } else {
-            if (!hasDuplicateOutlet) {
+            if (!hasDuplicateOutletName && this.statesByOutlet[name]) {
                 this.currentOutlet = name;
             }
 
