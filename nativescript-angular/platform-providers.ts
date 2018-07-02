@@ -77,10 +77,10 @@ export class FrameService {
         const { cachedFrame, cachedFrameRootOutlet } = this.findFrame(topmostFrame);
 
         if (cachedFrame && cachedFrameRootOutlet) {
-            const latestFrameByOutlet = this.getLatestFrameByOutlet(cachedFrameRootOutlet);
+            const topmostFrameByOutlet = this.getTopmostFrameByOutlet(cachedFrameRootOutlet);
 
-            if (latestFrameByOutlet && latestFrameByOutlet !== cachedFrame) {
-                topmostFrame = latestFrameByOutlet;
+            if (topmostFrameByOutlet && topmostFrameByOutlet !== cachedFrame) {
+                topmostFrame = topmostFrameByOutlet;
             }
         }
 
@@ -95,10 +95,24 @@ export class FrameService {
         this.frames = this.frames.filter(currentFrame => currentFrame.frame !== frame);
     }
 
-    findFrame(frame: Frame, name?: string) {
+    containsOutlet(name: string) {
+        let nameFound = false;
+
+        for (let i = 0; i < this.frames.length; i++) {
+            const currentFrame = this.frames[i];
+
+            if (name && currentFrame.name === name) {
+                nameFound = true;
+                break;
+            }
+        }
+
+        return nameFound;
+    }
+
+    findFrame(frame: Frame) {
         let cachedFrame;
         let cachedFrameRootOutlet;
-        let hasDuplicateOutletName = false;
 
         for (let i = 0; i < this.frames.length; i++) {
             const currentFrame = this.frames[i];
@@ -106,18 +120,15 @@ export class FrameService {
             if (currentFrame.frame === frame) {
                 cachedFrame = currentFrame;
                 cachedFrameRootOutlet = currentFrame.rootOutlet;
-            }
-
-            if (name && currentFrame.name === name) {
-                hasDuplicateOutletName = true;
+                break;
             }
         }
 
-        return { cachedFrame, cachedFrameRootOutlet, hasDuplicateOutletName };
+        return { cachedFrame, cachedFrameRootOutlet };
     }
 
     // Return the latest navigated frame from the given outlet branch.
-    private getLatestFrameByOutlet(rootOutlet: string): Frame {
+    private getTopmostFrameByOutlet(rootOutlet: string): Frame {
         let frame: Frame;
 
         for (let i = this.frames.length - 1; i > 0; i--) {

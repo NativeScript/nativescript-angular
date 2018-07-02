@@ -292,11 +292,11 @@ export class NSLocationStrategy extends LocationStrategy {
         }
         this._isPageNavigationBack = true;
 
-        let { cachedFrame, hasDuplicateOutletName } = this.frameService.findFrame(frame, name);
+        let { cachedFrame } = this.frameService.findFrame(frame);
 
         if (cachedFrame) {
             this.currentOutlet = cachedFrame.rootOutlet;
-        } else if (!hasDuplicateOutletName) {
+        } else if (!this.frameService.containsOutlet(name)) {
             this.currentOutlet = name;
         }
     }
@@ -348,12 +348,13 @@ export class NSLocationStrategy extends LocationStrategy {
     public _beginPageNavigation(name: string, frame: Frame): NavigationOptions {
         routerLog("NSLocationStrategy._beginPageNavigation()");
 
-        let { cachedFrame, hasDuplicateOutletName } = this.frameService.findFrame(frame, name);
+        let { cachedFrame } = this.frameService.findFrame(frame);
 
         if (cachedFrame) {
             this.currentOutlet = cachedFrame.rootOutlet;
         } else {
-            if (!hasDuplicateOutletName && this.statesByOutlet[name]) {
+            // Changing the current outlet only if navigating in non-cached root outlet.
+            if (!this.frameService.containsOutlet(name) && this.statesByOutlet[name] /* ensure root outlet exists */) {
                 this.currentOutlet = name;
             }
 

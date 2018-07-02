@@ -1,8 +1,8 @@
 <ActionBar class="action-bar">
-    <Label class="action-bar-title" text="Home"></Label>
+    <Label class="action-bar-title" text="Home Component"></Label>
 </ActionBar>
 
-<StackLayout>
+<WrapLayout>
     <Button text="Show Modal Without Frame" (tap)="onModalNoFrame()"></Button>
     <Button text="Show Modal Page With Frame" (tap)="onModalFrame()"></Button>
     <Button text="Navigate To Second Page" (tap)="onNavigateSecond()"></Button>
@@ -14,5 +14,4 @@
 
     <Button text="show shared modal" (tap)="onRootModalTap()"></Button>
     <Button text="go to second (to open shared modal)" [nsRouterLink]="['/modal-shared-second-host']"></Button>
-    <Label text="home component" verticalAlignment="bottom"></Label>
-</StackLayout>  
+</WrapLayout>  

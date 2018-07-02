@@ -1,7 +1,7 @@
 import { AppiumDriver } from "nativescript-dev-appium";
 import { assert } from "chai";
 
-const home = "Home"
+const home = "Home Component"
 const first = "First"
 const modal = "Modal";
 const modalFirst = "Modal First";
