@@ -18,10 +18,6 @@ import {
 } from "@angular/platform-browser-dynamic";
 
 import {
-    ɵINTERNAL_BROWSER_PLATFORM_PROVIDERS as INTERNAL_BROWSER_PLATFORM_PROVIDERS
-} from "@angular/platform-browser";
-
-import {
     COMPILER_OPTIONS,
     PlatformRef,
     InjectionToken,
@@ -47,7 +43,6 @@ import { NativeScriptElementSchemaRegistry } from "./schema-registry";
 import { FileSystemResourceLoader } from "./resource-loader";
 
 export const NS_COMPILER_PROVIDERS: StaticProvider[] = [
-    INTERNAL_BROWSER_PLATFORM_PROVIDERS,
     {
         provide: COMPILER_OPTIONS,
         useValue: {
