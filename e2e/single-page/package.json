@@ -13,15 +13,15 @@
     }
   },
   "dependencies": {
-    "@angular/animations": "~6.0.0-rc.3",
-    "@angular/common": "~6.0.0-rc.3",
-    "@angular/compiler": "~6.0.0-rc.3",
-    "@angular/core": "~6.0.0-rc.3",
-    "@angular/forms": "~6.0.0-rc.3",
-    "@angular/http": "~6.0.0-rc.3",
-    "@angular/platform-browser": "~6.0.0-rc.3",
-    "@angular/platform-browser-dynamic": "~6.0.0-rc.3",
-    "@angular/router": "~6.0.0-rc.3",
+    "@angular/animations": "~6.1.0-beta.3",
+    "@angular/common": "~6.1.0-beta.3",
+    "@angular/compiler": "~6.1.0-beta.3",
+    "@angular/core": "~6.1.0-beta.3",
+    "@angular/forms": "~6.1.0-beta.3",
+    "@angular/http": "~6.1.0-beta.3",
+    "@angular/platform-browser": "~6.1.0-beta.3",
+    "@angular/platform-browser-dynamic": "~6.1.0-beta.3",
+    "@angular/router": "~6.1.0-beta.3",
     "nativescript-angular": "file:../../nativescript-angular",
     "nativescript-intl": "^3.0.0",
     "reflect-metadata": "~0.1.8",
@@ -30,7 +30,7 @@
     "zone.js": "^0.8.4"
   },
   "devDependencies": {
-    "@angular/compiler-cli": "~6.0.0-rc.3",
+    "@angular/compiler-cli": "~6.1.0-beta.3",
     "@ngtools/webpack": "~1.9.4",
     "@types/chai": "^4.0.2",
     "@types/mocha": "^2.2.41",
