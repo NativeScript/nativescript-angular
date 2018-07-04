@@ -134,11 +134,11 @@ function createState(url: string,
 
 function simulatePageNavigation(strategy: NSLocationStrategy, url: string, outletName: string) {
     strategy.pushState(null, null, url, null);
-    strategy._beginPageNavigation(outletName);
+    strategy._beginPageNavigation(outletName, null);
 }
 
 function simulatePageBack(strategy: NSLocationStrategy, outletName: string) {
-    strategy._beginBackPageNavigation(outletName);
+    strategy._beginBackPageNavigation(outletName, null);
     strategy.back();
     strategy._finishBackPageNavigation();
 }

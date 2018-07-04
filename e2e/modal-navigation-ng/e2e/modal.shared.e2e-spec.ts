@@ -1,6 +1,8 @@
 import { AppiumDriver, createDriver, SearchOptions } from "nativescript-dev-appium";
 import { assert } from "chai";
 
+const homeComponent = "Home Component";
+
 describe("Shared modal from home and back", () => {
     let driver: AppiumDriver;
 
@@ -22,7 +24,7 @@ describe("Shared modal from home and back", () => {
     });
 
     it ("should find home component", async () => {
-        await assertComponent(driver, "home component");
+        await assertComponent(driver, homeComponent);
     });
 
     it("should open/close shared modal from home component", async () => {
@@ -31,7 +33,7 @@ describe("Shared modal from home and back", () => {
     });
 
     it ("should find home component again", async () => {
-        await assertComponent(driver, "home component");
+        await assertComponent(driver, homeComponent);
     });
 });
 
@@ -56,7 +58,7 @@ describe("Shared modal from second and back", () => {
     });
 
     it ("should find home component", async () => {
-        await assertComponent(driver, "home component");
+        await assertComponent(driver, homeComponent);
     });
 
     it ("should navigate to second component", async() => {
@@ -98,7 +100,7 @@ describe("Shared modal from different components", () => {
     });
 
     it ("should find home component", async () => {
-        await assertComponent(driver, "home component");
+        await assertComponent(driver, homeComponent);
     });
 
     it("should open/close shared modal from home component", async () => {
@@ -107,7 +109,7 @@ describe("Shared modal from different components", () => {
     });
 
     it ("should find home component again", async () => {
-        await assertComponent(driver, "home component");
+        await assertComponent(driver, homeComponent);
     });
 
     it ("should navigate to second component", async() => {
@@ -129,7 +131,7 @@ describe("Shared modal from different components", () => {
 
     it ("should navigate back to home component", async () => {
         await goBack(driver);
-        await assertComponent(driver, "home component");
+        await assertComponent(driver, homeComponent);
     });
 
     it("should open/close shared modal from home component after manipulations with second", async () => {
@@ -138,7 +140,7 @@ describe("Shared modal from different components", () => {
     });
 
     it ("should find home component again", async () => {
-        await assertComponent(driver, "home component");
+        await assertComponent(driver, homeComponent);
     });
 });
 

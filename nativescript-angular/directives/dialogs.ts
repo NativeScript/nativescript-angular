@@ -74,7 +74,9 @@ export class ModalDialogService {
         const componentContainer = moduleRef || viewContainerRef;
         const resolver = componentContainer.injector.get(ComponentFactoryResolver);
 
-        this.location._beginModalNavigation();
+        const frame = parentView.page && parentView.page.frame;
+
+        this.location._beginModalNavigation(frame);
 
         return new Promise((resolve, reject) => {
             setTimeout(() => {

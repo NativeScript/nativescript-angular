@@ -2,7 +2,7 @@ import { Injectable } from "@angular/core";
 import { LocationStrategy } from "@angular/common";
 import { DefaultUrlSerializer, UrlSegmentGroup, UrlTree } from "@angular/router";
 import { routerLog } from "../trace";
-import { NavigationTransition } from "tns-core-modules/ui/frame";
+import { NavigationTransition, Frame } from "tns-core-modules/ui/frame";
 import { isPresent } from "../lang-facade";
 import { FrameService } from "../platform-providers";
 
@@ -77,7 +77,7 @@ export class NSLocationStrategy extends LocationStrategy {
     }
 
     pushState(state: any, title: string, url: string, queryParams: string): void {
-         routerLog("NSLocationStrategy.pushState state: " +
+        routerLog("NSLocationStrategy.pushState state: " +
             `${state}, title: ${title}, url: ${url}, queryParams: ${queryParams}`);
         this.pushStateInternal(state, title, url, queryParams);
     }
@@ -240,7 +240,9 @@ export class NSLocationStrategy extends LocationStrategy {
 
     private callPopState(state: LocationState, pop: boolean = true) {
         const urlSerializer = new DefaultUrlSerializer();
-        if (state) {
+        const rootOutlet = this.currentUrlTree.root.children[this.currentOutlet];
+
+        if (state && rootOutlet) {
             this.currentUrlTree.root.children[this.currentOutlet] = state.segmentGroup;
         } else {
             // when closing modal view there are scenarios (e.g. root viewContainerRef) when we need
@@ -283,13 +285,20 @@ export class NSLocationStrategy extends LocationStrategy {
     }
 
     // Methods for syncing with page navigation in PageRouterOutlet
-    public _beginBackPageNavigation(name: string) {
+    public _beginBackPageNavigation(name: string, frame: Frame) {
         routerLog("NSLocationStrategy.startGoBack()");
         if (this._isPageNavigationBack) {
             throw new Error("Calling startGoBack while going back.");
         }
         this._isPageNavigationBack = true;
-        this.currentOutlet = name;
+
+        let { cachedFrame } = this.frameService.findFrame(frame);
+
+        if (cachedFrame) {
+            this.currentOutlet = cachedFrame.rootOutlet;
+        } else if (!this.frameService.containsOutlet(name)) {
+            this.currentOutlet = name;
+        }
     }
 
     public _finishBackPageNavigation() {
@@ -304,9 +313,12 @@ export class NSLocationStrategy extends LocationStrategy {
         return this._isPageNavigationBack;
     }
 
-    public _beginModalNavigation(): void {
+    public _beginModalNavigation(frame: Frame): void {
         routerLog("NSLocationStrategy._beginModalNavigation()");
-        const lastState = this.peekState(this.currentOutlet);
+
+        let { cachedFrameRootOutlet } = this.frameService.findFrame(frame);
+
+        const lastState = this.peekState(cachedFrameRootOutlet || this.currentOutlet);
 
         if (lastState) {
             lastState.isModalNavigation = true;
@@ -333,19 +345,31 @@ export class NSLocationStrategy extends LocationStrategy {
         this._isModalClosing = false;
     }
 
-    public _beginPageNavigation(name: string): NavigationOptions {
+    public _beginPageNavigation(name: string, frame: Frame): NavigationOptions {
         routerLog("NSLocationStrategy._beginPageNavigation()");
-        const lastState = this.peekState(name);
+
+        let { cachedFrame } = this.frameService.findFrame(frame);
+
+        if (cachedFrame) {
+            this.currentOutlet = cachedFrame.rootOutlet;
+        } else {
+            // Changing the current outlet only if navigating in non-cached root outlet.
+            if (!this.frameService.containsOutlet(name) && this.statesByOutlet[name] /* ensure root outlet exists */) {
+                this.currentOutlet = name;
+            }
+
+            this.frameService.addFrame(frame, name, this.currentOutlet);
+        }
+
+        const lastState = this.peekState(this.currentOutlet);
         if (lastState) {
             lastState.isPageNavigation = true;
         }
 
-        this.currentOutlet = name;
-
         const navOptions = this._currentNavigationOptions || defaultNavOptions;
         if (navOptions.clearHistory) {
             routerLog("NSLocationStrategy._beginPageNavigation clearing states history");
-            this.statesByOutlet[name] = [lastState];
+            this.statesByOutlet[this.currentOutlet] = [lastState];
         }
 
         this._currentNavigationOptions = undefined;
