@@ -16,6 +16,7 @@ import {
     SystemJsNgModuleLoader,
     Optional,
     SkipSelf,
+    ɵAPP_ROOT as APP_ROOT,
 } from "@angular/core";
 
 import {
@@ -39,6 +40,7 @@ export function errorHandlerFactory() {
     providers: [
         NativeScriptRendererFactory,
         SystemJsNgModuleLoader,
+        { provide: APP_ROOT, useValue: true },
         { provide: ErrorHandler, useFactory: errorHandlerFactory },
         { provide: RendererFactory2, useExisting: NativeScriptRendererFactory },
         { provide: ViewportScroller, useClass: NullViewportScroller },
