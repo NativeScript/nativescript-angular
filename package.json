@@ -25,37 +25,28 @@
   },
   "devDependencies": {
     "@angular-devkit/build-angular": "~0.7.0-rc.0",
-    "@angular/compiler-cli": "~6.1.0-beta.1",
-    "@types/chai": "^4.0.2",
-    "@types/mocha": "^2.2.41",
+    "@angular/compiler-cli": "~6.1.0-beta.3",
+    "@types/chai": "~4.1.3",
+    "@types/mocha": "~5.2.1",
     "@types/node": "^7.0.5",
     "babel-traverse": "6.25.0",
     "babel-types": "6.25.0",
     "babylon": "6.17.4",
-    "chai": "~4.1.1",
-    "chai-as-promised": "~7.1.1",
     "colors": "^1.1.2",
     "lazy": "1.0.11",
-    "mocha": "~3.5.0",
-    "mocha-junit-reporter": "^1.13.0",
-    "mocha-multi": "^0.11.0",
     "nativescript-css-loader": "~0.26.0",
-    "nativescript-dev-appium": "~3.0.0",
+    "nativescript-dev-appium": "^4.0.0",
     "nativescript-dev-typescript": "~0.7.1",
     "nativescript-dev-webpack": "next",
-    "tslib": "^1.7.1",
-    "typescript": "~2.7.2",
-    "wd": "^1.4.0"
+    "typescript": "~2.7.2"
   },
   "scripts": {
     "ns-bundle": "ns-bundle",
-    "publish-ios-bundle": "npm run ns-bundle --ios --publish-app",
-    "generate-android-snapshot": "generate-android-snapshot --targetArchs arm,arm64,ia32 --install",
-    "appium": "tsc -p e2e && nativescript-dev-appium",
     "e2e": "tsc -p e2e && mocha --opts ./e2e/config/mocha.opts",
-    "start-android-bundle": "npm run ns-bundle --android --run-app",
-    "start-ios-bundle": "npm run ns-bundle --ios --run-app",
-    "build-android-bundle": "npm run ns-bundle --android --build-app",
-    "build-ios-bundle": "npm run ns-bundle --ios --build-app"
+    "compile-tests": "tsc -p e2e",
+    "watch-tests": "tsc -p e2e --watch",
+    "update-app-ng-deps": "update-app-ng-deps",
+    "ns-verify-bundle": "ns-verify-bundle",
+    "update-ns-webpack": "update-ns-webpack"
   }
 }

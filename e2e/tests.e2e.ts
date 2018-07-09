@@ -16,7 +16,7 @@ describe("sample scenario", () => {
 
     afterEach(async function () {
         if (this.currentTest.state === "failed") {
-            await driver.logScreenshoot(this.currentTest.title);
+            await driver.logTestArtifacts(this.currentTest.title);
         }
     });
 

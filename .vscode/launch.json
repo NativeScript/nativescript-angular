@@ -13,7 +13,10 @@
                 "999999",
                 "--colors",
                 "--opts", "./e2e/config/mocha.opts",
-                "--runType", "sim.iPhone7.iOS100"
+                "--runType", "sim.iPhone8",
+                "--attachToDebug",
+                "--port",
+                "8300"
             ],
             "internalConsoleOptions": "openOnSessionStart"
         },
