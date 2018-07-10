@@ -47,6 +47,7 @@
     "babel-traverse": "6.8.0",
     "babel-types": "6.8.1",
     "babylon": "6.8.0",
+    "chai": "^4.1.2",
     "chai-as-promised": "^5.3.0",
     "filewalker": "0.1.2",
     "grunt-cli": "^1.2.0",
