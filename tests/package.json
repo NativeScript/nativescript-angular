@@ -42,13 +42,11 @@
     "zone.js": "^0.8.4"
   },
   "devDependencies": {
-    "@types/chai": "^4.0.2",
-    "@types/mocha": "^2.2.41",
-    "@types/node": "^7.0.5",
+    "@types/chai": "^4.1.4",
+    "@types/mocha": "^5.2.4",
     "babel-traverse": "6.8.0",
     "babel-types": "6.8.1",
     "babylon": "6.8.0",
-    "chai": "^3.5.0",
     "chai-as-promised": "^5.3.0",
     "filewalker": "0.1.2",
     "grunt-cli": "^1.2.0",
@@ -58,16 +56,12 @@
     "karma-mocha-reporter": "^1.2.0",
     "karma-nativescript-launcher": "^0.4.0",
     "lazy": "1.0.11",
-    "mocha-junit-reporter": "^1.13.0",
-    "mocha-multi": "^0.11.0",
-    "nativescript-dev-appium": "next",
-    "nativescript-dev-typescript": "^0.4.0",
+    "mocha": "^5.2.0",
+    "nativescript-dev-typescript": "^0.7.0",
     "socket.io": "1.4.8",
     "socket.io-client": "1.4.8",
-    "tslib": "^1.7.1",
     "tslint": "^4.5.1",
-    "typescript": "~2.7.2",
-    "mocha": "~3.5.0"
+    "typescript": "~2.7.2"
   },
   "scripts": {
     "e2e": "tsc -p e2e && mocha --opts ../e2e/config/mocha.opts --recursive e2e --appiumCapsLocation ../e2e/config/appium.capabilities.json",
