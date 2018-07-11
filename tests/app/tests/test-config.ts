@@ -1,6 +1,5 @@
 (<any>global).mocha.setup({
-    timeout: 20000,
-    exit: true
+    timeout: 20000
 });
 
 import * as chai from "chai";
