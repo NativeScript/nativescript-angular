@@ -39,6 +39,7 @@ matrix:
         - npm run ngc
         - cd ../tests
         - tns build ios
+        - tns test ios --justlaunch --sync-all-files
     - language: android
       node_js: "8"
       os: linux
@@ -61,7 +62,7 @@ matrix:
         - npm run ngc
         - cd ../tests
         - tns build android
-
+        - tns test ios --justlaunch --sync-all-files
 android:
   components:
     - tools
