@@ -36,7 +36,7 @@ export class LoaderComponentOnPush extends LoaderComponentBase { }
 
 describe("DetachedLoader", function () {
     this.timeout(4000);
-    this.retries(2);
+    this.retries(3);
 
     beforeEach(nsTestBedBeforeEach([LoaderComponent, LoaderComponentOnPush], [], [], [TestComponent]));
     afterEach(nsTestBedAfterEach());
