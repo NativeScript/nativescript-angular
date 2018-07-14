@@ -2,7 +2,7 @@ env:
   global:
     - NODE_VERSION=8.9.1
     - EMULATOR_API_LEVEL=23
-    - ANDROID_VERSION=25
+    - ANDROID_VERSION=27
     - ANDROID_BUILD_TOOLS_VERSION=27.0.3
     - ANDROID_ABI=armeabi-v7a
     - EMULATOR_NAME=AndroidEmulator
@@ -66,7 +66,7 @@ android:
     - tools
     - platform-tools
     - build-tools-$ANDROID_BUILD_TOOLS_VERSION
-    - android-27
+    - android-$ANDROID_VERSION
     - android-$EMULATOR_API_LEVEL
     - extra-google-google_play_services
     - extra-google-m2repository

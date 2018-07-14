@@ -21,7 +21,7 @@ class LoaderComponentBase {
     </StackLayout>
     `
 })
-export class LoaderComponent extends LoaderComponentBase {}
+export class LoaderComponent extends LoaderComponentBase { }
 
 @Component({
     selector: "loader-component-on-push",
@@ -34,7 +34,9 @@ export class LoaderComponent extends LoaderComponentBase {}
 })
 export class LoaderComponentOnPush extends LoaderComponentBase { }
 
-describe("DetachedLoader", () => {
+describe("DetachedLoader", function () {
+    this.timeout(4000);
+    this.retries(2);
 
     beforeEach(nsTestBedBeforeEach([LoaderComponent, LoaderComponentOnPush], [], [], [TestComponent]));
     afterEach(nsTestBedAfterEach());
