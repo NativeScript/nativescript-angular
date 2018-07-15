@@ -60,7 +60,7 @@ matrix:
         - npm run ngc
         - cd ../tests    
         - tns build android
-        - travis_wait travis_retry tns test android --justlaunch --sync-all-files
+        - travis_wait tns test android --justlaunch --sync-all-files
 android:
   components:
     - tools
