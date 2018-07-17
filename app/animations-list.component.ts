@@ -1,7 +1,9 @@
 import { Component } from '@angular/core';
 
 class Link {
-    constructor(public title: string, public link: string) {}
+    constructor(public title: string, public link: string, public id?: string) {
+        this.id = this.id || this.link.replace("/", "");
+    }
 }
 
 @Component({
@@ -11,6 +13,7 @@ class Link {
                 <Button
                     [text]="item.title"
                     [nsRouterLink]="item.link"
+                    [automationText]="item.link.replace('/', '')"
                 ></Button>
             </ng-template>
         </ListView>

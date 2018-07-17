@@ -27,7 +27,7 @@ import { Component } from "@angular/core";
         <StackLayout>		
             <Button (tap)="add()" text="ADD" backgroundColor="hotpink"></Button>		
  		
-            <StackLayout [@listAnimation]="items.length"> 		
+            <StackLayout [@listAnimation]="items.length" automationText="container" > 		
                 <Button *ngFor="let item of items" [text]="item" class="ani-button"></Button>		
             </StackLayout>		
         </StackLayout>		

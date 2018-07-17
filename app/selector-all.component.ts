@@ -29,7 +29,8 @@ import { Component } from "@angular/core";
         ]),
     ],
     template: `
-        <FlexboxLayout flexDirection="column">
+        <FlexboxLayout flexDirection="column"
+            automationText="itemsContainer">
             <Button text="add" (tap)="items.push('random')"></Button>
 
             <FlexboxLayout

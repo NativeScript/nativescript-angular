@@ -9,6 +9,7 @@ import { trigger, transition, style, animate } from "@angular/animations";
                 [@someCoolAnimation]="bindingVar"
                 (tap)="hide()"
                 backgroundColor="hotpink"
+                automationText="animatedBtn"
                 height="200"
             ></Button>
 
@@ -16,6 +17,7 @@ import { trigger, transition, style, animate } from "@angular/animations";
                 text="Toggle!"
                 (tap)="toggle()"
                 backgroundColor="red"
+                automationText="toggleAnimation"
             ></Button>
         </StackLayout>
     `,

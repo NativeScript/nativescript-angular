@@ -3,7 +3,7 @@ import { Component, ViewChild } from '@angular/core';
  
 @Component({
     template: `
-        <Button #button (tap)="makeAnimation()" class="btn btn-primary" text="Tap to disappear!"></Button>
+        <Button #button (tap)="makeAnimation()" class="btn btn-primary" automationText="tapToDisappear" text="Tap to disappear!"></Button>
     `
 })
 export class AnimationBuilderComponent {

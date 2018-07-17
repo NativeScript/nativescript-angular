@@ -9,11 +9,13 @@ import { fadeAnimation } from "./animations";
            <Button
                 [@coolAnimation]="isVisible"
                 text="Nice button."
+                automationText="animatedBtn"
             ></Button>
 
             <Button
                 (tap)="toggle()"
                 text="Toggle"
+                automationText="toggleAnimation"
                 backgroundColor="green"
                 color="white"
             ></Button>
@@ -21,7 +23,6 @@ import { fadeAnimation } from "./animations";
     `,
     animations: [
         trigger("coolAnimation", [
-
             transition("invisible => visible", [
                 useAnimation(fadeAnimation, {
                     params: {
@@ -37,7 +38,7 @@ import { fadeAnimation } from "./animations";
                     params: {
                         from: 1,
                         to: 0,
-                        time: "0.4s",
+                        time: "1.0s",
                     },
                 })
             ]),

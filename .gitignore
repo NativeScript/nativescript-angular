@@ -4,8 +4,14 @@ hooks
 .vscode
 
 app/**/*.js
+app/**/*.map
+
+e2e/**/*.js
+e2e/**/*.map
 
 # Webpack files
 tsconfig.esm.json
 webpack.config.js
-
+instruments*
+e2e/reports
+test-results.xml
