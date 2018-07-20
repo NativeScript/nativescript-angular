@@ -1,0 +1,148 @@
+import { AppiumDriver, createDriver, SearchOptions } from "nativescript-dev-appium";
+import { assert } from "chai";
+import { AnimationBuilderPage } from "./pages/animation-builder-page";
+import { ExternalAnimationPage } from "./pages/extarnal-animation-page";
+import { SelectorPage } from "./pages/selector-page";
+import { QueryWithStaggerPage } from "./pages/query-stagger-page";
+import { FadeInOutPage } from "./pages/fade-in-out-page";
+import { AnimationWithOptionsPage } from "./pages/animation-with-options-page";
+import { AnimationsWithDefaultOptionsPage } from "./pages/animations-with-default-options-page";
+import { AnimateChildPage } from "./pages/animate-child-page";
+import { HeroPage } from "./pages/hero-page";
+
+describe("smoke-tests", () => {
+    let driver: AppiumDriver;
+
+    before(async () => {
+        driver = await createDriver();
+    });
+
+    after(async () => {
+        await driver.quit();
+        console.log("Quit driver!");
+    });
+
+    afterEach(async function () {
+        if (this.currentTest.state === "failed") {
+            await driver.logTestArtifacts(this.currentTest.title);
+        }
+        try {
+            await driver.navBack();
+        } catch (error) {
+            await driver.logTestArtifacts(`${this.currentTest.title}_navBack_fail`);
+        }
+    });
+
+    it("animation builder - btn should disappear", async () => {
+        const animationBuilder = new AnimationBuilderPage(driver);
+        await animationBuilder.enterExample();
+        await animationBuilder.executeAnimation();
+        await animationBuilder.waitElementToHide(3000);
+        assert.isFalse(await animationBuilder.isBtnDisplayed(), "The btn should disappear");
+    });
+
+    it("external animation - visibility", async () => {
+        const externalAnimationPage = new ExternalAnimationPage(driver);
+        await externalAnimationPage.enterExample();
+        await externalAnimationPage.toggleAnimation();
+        await externalAnimationPage.waitElementTo(10000, false);
+        assert.isFalse(await externalAnimationPage.isBtnDisplayed(), "The button should disappear!");
+
+        await externalAnimationPage.toggleAnimation();
+        await externalAnimationPage.waitElementTo(10000, true);
+        assert.isTrue(await externalAnimationPage.isBtnDisplayed(), "The button should appear!");
+    });
+
+    it("selector", async () => {
+        const selectorPage = new SelectorPage(driver);
+        await selectorPage.enterExample();
+        await selectorPage.addItem();
+        await selectorPage.awaitItemToApear("Item No.2");
+        await selectorPage.assertElementPossition(4);
+
+        await selectorPage.clickOnItem("second");
+        await selectorPage.awaitItemToDissapear("second");
+        await selectorPage.assertElementPossition(3);
+    });
+
+    it("querry with stagger", async () => {
+        const queryWithStaggerPage = new QueryWithStaggerPage(driver);
+        await queryWithStaggerPage.enterExample();
+        await queryWithStaggerPage.addItem();
+        await queryWithStaggerPage.assertItemPosition("Item 6", 6, 7);
+    });
+
+    it("fade in - out", async () => {
+        const fadeInOutPage = new FadeInOutPage(driver);
+        await fadeInOutPage.enterExample();
+        await fadeInOutPage.toggleAnimation();
+        await fadeInOutPage.waitElementTo(3000, false);
+        assert.isFalse(await fadeInOutPage.isBtnDisplayed(), "The button should disappear!");
+
+        await fadeInOutPage.toggleAnimation();
+        await fadeInOutPage.waitElementTo(3000, false);
+        assert.isTrue(await fadeInOutPage.isBtnDisplayed(), "The button should appear!");
+    });
+
+    it("animation with options", async () => {
+        const animationWithOptionsPage = new AnimationWithOptionsPage(driver);
+        await animationWithOptionsPage.enterExample();
+        await animationWithOptionsPage.toggleAnimation();
+        await animationWithOptionsPage.waitElementTo(3000);
+        assert.isFalse(await animationWithOptionsPage.isBtnDisplayed(), "The button should disappear!");
+
+        await animationWithOptionsPage.assertPositionOfToggleAnimationBtn();
+    });
+
+    it("animation with default options", async () => {
+        const animationWithOptionsPage = new AnimationsWithDefaultOptionsPage(driver);
+        await animationWithOptionsPage.enterExample();
+        let examplesCount = 5;
+        await animationWithOptionsPage.assertItemPosition("Harley Quinn", 1, examplesCount);
+        await animationWithOptionsPage.assertItemPosition("Wonder Woman", 2, examplesCount);
+        await animationWithOptionsPage.assertItemPosition("Joker", 3, examplesCount);
+        await animationWithOptionsPage.assertItemPosition("Aquaman", 4, examplesCount);
+
+        await animationWithOptionsPage.clickOnItem("Harley Quinn");
+        examplesCount--;
+        await animationWithOptionsPage.awaitItemToDissapear("Harley Quinn");
+        await animationWithOptionsPage.assertItemPosition("Wonder Woman", 1, examplesCount);
+        await animationWithOptionsPage.assertItemPosition("Joker", 2, examplesCount);
+        await animationWithOptionsPage.assertItemPosition("Aquaman", 3, examplesCount);
+
+        await animationWithOptionsPage.addItem();
+        examplesCount++;
+        await animationWithOptionsPage.awaitItemToAppear("Harley Quinn");
+        await animationWithOptionsPage.assertItemPosition("Wonder Woman", 1, examplesCount);
+        await animationWithOptionsPage.assertItemPosition("Joker", 2, examplesCount);
+        await animationWithOptionsPage.assertItemPosition("Aquaman", 3, examplesCount);
+        await animationWithOptionsPage.assertItemPosition("Harley Quinn", 4, examplesCount);
+    });
+
+    it("animate child", async () => {
+        const animateChildPage = new AnimateChildPage(driver);
+        await animateChildPage.enterExample();
+        await animateChildPage.waitParentToAppear();
+        await animateChildPage.waitChildToAppear();
+        await animateChildPage.assertContainersPosition();
+    });
+
+    it("angular docs", async () => {
+        const heroPage = new HeroPage(driver);
+        await heroPage.enterExample();
+        await heroPage.addActive();
+        let result = await driver.compareScreen("add_active_items", 5, 0.01);
+
+        await heroPage.addInactive();
+        result = await driver.compareScreen("add_inactive_items", 5, 0.01) && result;
+
+        await heroPage.remove();
+        result = await driver.compareScreen("add_remove_items", 5, 0.01) && result;
+
+        await heroPage.reset();
+        result = await driver.compareScreen("add_reset_items", 5, 0.01) && result;
+
+        assert.isTrue(result, "Image verification failed!");
+
+    });
+});

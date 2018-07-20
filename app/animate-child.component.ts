@@ -10,8 +10,8 @@ import { Component } from "@angular/core";
 
 @Component({
     template: `
-        <StackLayout class="parent" width="500" height="500" [@parent]="parentVal">
-          <StackLayout class="child" [@child]="childVal"></StackLayout>>
+        <StackLayout class="parent" width="500" height="500" [@parent]="parentVal" automationText="parent">
+          <StackLayout class="child" [@child]="childVal" automationText="child"></StackLayout>>
         </StackLayout>
     `,
     animations: [

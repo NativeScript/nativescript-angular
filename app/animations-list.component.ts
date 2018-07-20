@@ -1,19 +1,21 @@
 import { Component } from '@angular/core';
 
 class Link {
-    constructor(public title: string, public link: string) {}
+    constructor(public title: string, public link: string, public id?: string) {
+        this.id = this.id || this.link.replace("/", "");
+    }
 }
 
 @Component({
     template: `
-        <ListView [items]="links">
-            <ng-template let-item="item">
-                <Button
-                    [text]="item.title"
-                    [nsRouterLink]="item.link"
-                ></Button>
-            </ng-template>
-        </ListView>
+        <WrapLayout [items]="links">
+            <Button
+                *ngFor="let item of links"
+                [text]="item.title"
+                [nsRouterLink]="item.link"
+                [automationText]="item.link.replace('/', '')">
+            </Button>
+        </WrapLayout>
     `
 })
 export class AnimationsListComponent {

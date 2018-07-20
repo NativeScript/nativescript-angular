@@ -9,24 +9,26 @@ import {
 
 @Component({
     template: `
-        <StackLayout>
+        <StackLayout automationText="itemsContainer">
             <Button
                 text="Add hero"
                 (tap)="addNew()"
                 [isEnabled]="extraHeroes.length > 0"
                 [ngClass]="extraHeroes.length > 0 ? 'enabled' : 'disabled'"
+                automationText="add"
             ></Button>
 
 
             <Button
                 *ngFor="let hero of heroes"
-                [text]="hero"
+                [text]="hero" 
                 [@flyInOut]="'in'"
                 (tap)="flyOut(hero)"
                 backgroundColor="hotpink"
+                [automationText]="hero"
                 height="75"
             ></Button>
-
+ 
         </StackLayout>
     `,
     styles: [

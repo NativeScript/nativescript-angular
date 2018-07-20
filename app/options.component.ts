@@ -7,6 +7,7 @@ import { Component } from "@angular/core";
            <Button
                 *ngIf="animationData.value === 'active'"
                 [@someCoolAnimation]="animationData"
+                automationText="animatedBtn"
                 text="hello there"
             ></Button>
 
@@ -14,6 +15,7 @@ import { Component } from "@angular/core";
                 (tap)="fadeOut()"
                 text="Remove above button"
                 backgroundColor="green"
+                automationText="toggleAnimation"
                 color="white"
             ></Button>
         </StackLayout>
