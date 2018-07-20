@@ -8,15 +8,14 @@ class Link {
 
 @Component({
     template: `
-        <ListView [items]="links">
-            <ng-template let-item="item">
-                <Button
-                    [text]="item.title"
-                    [nsRouterLink]="item.link"
-                    [automationText]="item.link.replace('/', '')"
-                ></Button>
-            </ng-template>
-        </ListView>
+        <WrapLayout [items]="links">
+            <Button
+                *ngFor="let item of links"
+                [text]="item.title"
+                [nsRouterLink]="item.link"
+                [automationText]="item.link.replace('/', '')">
+            </Button>
+        </WrapLayout>
     `
 })
 export class AnimationsListComponent {

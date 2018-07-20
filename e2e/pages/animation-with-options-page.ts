@@ -1,8 +1,11 @@
-import { AppiumDriver, UIElement, Point } from "nativescript-dev-appium";
+import { AppiumDriver, Point, UIElement } from "nativescript-dev-appium";
 import { assert } from "chai";
+import { BasePage } from "./base-page";
 
-export class AnimationWithOptionsPage {
-    constructor(private _driver: AppiumDriver) { }
+export class AnimationWithOptionsPage extends BasePage{
+    constructor(driver: AppiumDriver) { 
+        super(driver);
+    }
     private initialPositionOfAnimatedBtn: Point
     async enterExample() {
         const exampleBtn = await this._driver.findElementByAccessibilityId("options");
@@ -30,7 +33,7 @@ export class AnimationWithOptionsPage {
     }
 
     async isBtnDisplayed() {
-        let btn = await this.animatedBtn;
+        let btn: UIElement = await this.animatedBtn;
         const isBtnDisplayed = btn ? await btn.isDisplayed() : false;
         return isBtnDisplayed;
     }

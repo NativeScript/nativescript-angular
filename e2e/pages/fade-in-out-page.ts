@@ -1,7 +1,10 @@
-import { AppiumDriver, UIElement } from "nativescript-dev-appium";
+import { AppiumDriver } from "nativescript-dev-appium";
+import { BasePage } from "./base-page";
 
-export class FadeInOutPage {
-    constructor(private _driver: AppiumDriver) { }
+export class FadeInOutPage extends BasePage {
+    constructor(driver: AppiumDriver) {
+        super(driver);
+    }
 
     async enterExample() {
         const exampleBtn = await this._driver.findElementByAccessibilityId("fade-in-out");

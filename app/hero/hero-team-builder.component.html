@@ -1,9 +1,9 @@
 <FlexboxLayout flexDirection="column">
     <FlexboxLayout>
-        <Button (tap)="heroes.addInactive()" text="Add inactive" ></Button>
-        <Button (tap)="heroes.addActive()" text="Add active"></Button>
-        <Button (tap)="heroes.remove()" text="Remove"></Button>
-        <Button (tap)="heroes.reset()" text="Reset"></Button>
+        <Button (tap)="heroes.addInactive()" text="Add inactive" automationText="addInactive" ></Button>
+        <Button (tap)="heroes.addActive()" text="Add active" automationText="addActive" ></Button>
+        <Button (tap)="heroes.remove()" text="Remove" automationText="remove" ></Button>
+        <Button (tap)="heroes.reset()" text="Reset" automationText="reset" ></Button>
     </FlexboxLayout>
 
     <FlexboxLayout flexDirection="column">

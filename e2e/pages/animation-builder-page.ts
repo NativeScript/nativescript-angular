@@ -1,9 +1,12 @@
 import { AppiumDriver, UIElement } from "nativescript-dev-appium";
+import { BasePage } from "./base-page";
 
-export class AnimationBuilderPage {
+export class AnimationBuilderPage extends BasePage{
     static tapToDisappear: string = "tapToDisappear";
     private _btnTapToDisappear: UIElement;
-    constructor(private _driver: AppiumDriver) { }
+    constructor(driver: AppiumDriver) { 
+        super(driver);
+    }
 
     async enterExample() {
         const exampleBtn = await this._driver.findElementByAccessibilityId("builder");
