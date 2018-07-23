@@ -37,31 +37,31 @@ describe("smoke-tests", () => {
         const animationBuilder = new AnimationBuilderPage(driver);
         await animationBuilder.enterExample();
         await animationBuilder.executeAnimation();
-        await animationBuilder.waitElementToHide(3000);
-        assert.isFalse(await animationBuilder.isBtnDisplayed(), "The btn should disappear");
+        const result = await animationBuilder.waitElementToHide(3000);
+        assert.isFalse(result.isVisible, "The btn should disappear");
     });
 
     it("external animation - visibility", async () => {
         const externalAnimationPage = new ExternalAnimationPage(driver);
         await externalAnimationPage.enterExample();
         await externalAnimationPage.toggleAnimation();
-        await externalAnimationPage.waitElementTo(10000, false);
-        assert.isFalse(await externalAnimationPage.isBtnDisplayed(), "The button should disappear!");
+        let result = await externalAnimationPage.waitElementToToggleVisibilityTo(false);
+        assert.isFalse(result.isVisible, "The button should disappear!");
 
         await externalAnimationPage.toggleAnimation();
-        await externalAnimationPage.waitElementTo(10000, true);
-        assert.isTrue(await externalAnimationPage.isBtnDisplayed(), "The button should appear!");
+        result = await externalAnimationPage.waitElementToToggleVisibilityTo(true);
+        assert.isTrue(result.isVisible, "The button should appear!");
     });
 
     it("selector", async () => {
         const selectorPage = new SelectorPage(driver);
         await selectorPage.enterExample();
         await selectorPage.addItem();
-        await selectorPage.awaitItemToApear("Item No.2");
+        await selectorPage.waitItemToToggleVisibility("Item No.2", true);
         await selectorPage.assertElementPossition(4);
 
         await selectorPage.clickOnItem("second");
-        await selectorPage.awaitItemToDissapear("second");
+        await selectorPage.waitItemToToggleVisibility("second", false);
         await selectorPage.assertElementPossition(3);
     });
 
@@ -76,20 +76,20 @@ describe("smoke-tests", () => {
         const fadeInOutPage = new FadeInOutPage(driver);
         await fadeInOutPage.enterExample();
         await fadeInOutPage.toggleAnimation();
-        await fadeInOutPage.waitElementTo(3000, false);
-        assert.isFalse(await fadeInOutPage.isBtnDisplayed(), "The button should disappear!");
+        let result = await fadeInOutPage.waitElementToToggleVisibility(false);
+        assert.isFalse(result.isVisible, "The button should disappear!");
 
         await fadeInOutPage.toggleAnimation();
-        await fadeInOutPage.waitElementTo(3000, false);
-        assert.isTrue(await fadeInOutPage.isBtnDisplayed(), "The button should appear!");
+        result = await fadeInOutPage.waitElementToToggleVisibility(true);
+        assert.isTrue(result.isVisible, "The button should appear!");
     });
 
     it("animation with options", async () => {
         const animationWithOptionsPage = new AnimationWithOptionsPage(driver);
         await animationWithOptionsPage.enterExample();
         await animationWithOptionsPage.toggleAnimation();
-        await animationWithOptionsPage.waitElementTo(3000);
-        assert.isFalse(await animationWithOptionsPage.isBtnDisplayed(), "The button should disappear!");
+        const result = await animationWithOptionsPage.waitElementToHide();
+        assert.isFalse(result.isVisible, "The button should disappear!");
 
         await animationWithOptionsPage.assertPositionOfToggleAnimationBtn();
     });

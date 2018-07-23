@@ -27,23 +27,11 @@ export class SelectorPage extends BasePage {
     async clickOnItem(item: string) {
         const btn = await this._driver.findElementByXPath(this.itemXpath(item));
 
-        await btn.tap();
+        await btn.click();
     }
 
-    async awaitItemToDissapear(item: string, wait: number = 3000) {
-        const startTime = Date.now();
-        let btn = await this._driver.findElementByXPathIfExists(this.itemXpath(item));
-        while (btn && await btn.isDisplayed() && Date.now() - startTime <= wait) {
-            btn = await this._driver.findElementByXPathIfExists(this.itemXpath(item));
-        }
-    }
-
-    async awaitItemToApear(item: string, wait: number = 3000) {
-        const startTime = Date.now();
-        let btn = await this._driver.findElementByXPathIfExists(this.itemXpath(item));
-        while ((!btn || await btn.isDisplayed()) && Date.now() - startTime <= wait) {
-            btn = await this._driver.findElementByXPathIfExists(this.itemXpath(item));
-        }
+    async waitItemToToggleVisibility(item: string, visibility: boolean) {
+        return this.waitElementTo(() => this._driver.findElementByXPathIfExists(this.itemXpath(item)), visibility, 5000);
     }
 
     async getChildren() {
@@ -58,7 +46,7 @@ export class SelectorPage extends BasePage {
         assert.isTrue(children.length === expctedElementsCount)
         for (let index = 0; index < children.length - 1; index++) {
             const element = children[index];
-            const el = await (<any>element.driver()).elementByXPathIfExists( this._elementHelper.getXPathByTextAtributes("//*", `Item No.${index}`, true));
+            const el = await (<any>element.driver()).elementByXPathIfExists(this._elementHelper.getXPathByTextAtributes("//*", `Item No.${index}`, true));
             console.log(await el.text());
             assert.isTrue(el && el !== null);
         }

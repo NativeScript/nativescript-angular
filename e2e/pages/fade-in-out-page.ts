@@ -13,22 +13,14 @@ export class FadeInOutPage extends BasePage {
 
     async toggleAnimation() {
         const btnTapToDisappear = await this._driver.findElementByAccessibilityId("toggleAnimation");
-        await btnTapToDisappear.tap();
+        await btnTapToDisappear.click();
     }
 
     animatedBtn() {
         return this._driver.findElementByAccessibilityIdIfExists("animatedBtn");
     }
 
-    async waitElementTo(wait: number, shouldBeVisible: boolean) {
-        const start = Date.now();
-        while (await this.isBtnDisplayed() === shouldBeVisible && Date.now() - start <= wait) {
-        }
-    }
-
-    async isBtnDisplayed() {
-        let btn = await this.animatedBtn();
-        const isBtnDisplayed = btn ? await btn.isDisplayed() : false;
-        return isBtnDisplayed;
+    async waitElementToToggleVisibility(shouldBeVisible: boolean) {
+        return this.waitElementTo(() => this.animatedBtn(), shouldBeVisible, 10000);
     }
 }

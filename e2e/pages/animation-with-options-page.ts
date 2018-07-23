@@ -2,11 +2,13 @@ import { AppiumDriver, Point, UIElement } from "nativescript-dev-appium";
 import { assert } from "chai";
 import { BasePage } from "./base-page";
 
-export class AnimationWithOptionsPage extends BasePage{
-    constructor(driver: AppiumDriver) { 
+export class AnimationWithOptionsPage extends BasePage {
+    private initialPositionOfAnimatedBtn: Point
+
+    constructor(driver: AppiumDriver) {
         super(driver);
     }
-    private initialPositionOfAnimatedBtn: Point
+
     async enterExample() {
         const exampleBtn = await this._driver.findElementByAccessibilityId("options");
         await exampleBtn.click();
@@ -18,27 +20,21 @@ export class AnimationWithOptionsPage extends BasePage{
     }
 
     get animatedBtn() {
+        this._driver.findElementsByAccessibilityId("animatedBtn", 10000);
         return this._driver.findElementByAccessibilityIdIfExists("animatedBtn");
     }
 
     async toggleAnimation() {
         const btnTapToDisappear = await this.btnToggleAnimation;
-        await btnTapToDisappear.tap();
+        await btnTapToDisappear.click();
     }
 
-    async waitElementTo(wait: number) {
-        const start = Date.now();
-        while (await this.isBtnDisplayed() === false && Date.now() - start <= wait) {
-        }
+    async waitElementToHide() {
+        return this.waitElementTo(() => this.animatedBtn, false, 10000);
     }
 
-    async isBtnDisplayed() {
-        let btn: UIElement = await this.animatedBtn;
-        const isBtnDisplayed = btn ? await btn.isDisplayed() : false;
-        return isBtnDisplayed;
-    }
-
-    async assertPositionOfToggleAnimationBtn(){
+    async assertPositionOfToggleAnimationBtn() {
+        this.waitElementTo(() => this.btnToggleAnimation, true, 5000);
         const point: Point = await (await this.btnToggleAnimation).location();
         assert.isTrue(point.y === this.initialPositionOfAnimatedBtn.y);
     }

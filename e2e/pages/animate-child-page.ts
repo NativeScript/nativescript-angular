@@ -5,6 +5,7 @@ import { BasePage } from "./base-page";
 export class AnimateChildPage extends BasePage {
     private _parent: UIElement;
     private _child: UIElement;
+    
     constructor(_driver: AppiumDriver) {
         super(_driver)
     }
@@ -15,13 +16,13 @@ export class AnimateChildPage extends BasePage {
     }
 
     async waitParentToAppear() {
-        this._parent = await this.awaitItemToAppear("parent");
+        this._parent = (await this.awaitItemToAppear("parent")).element;
         const startTime = Date.now();
         while ((await this._parent.location()).x !== 0 && Date.now() - startTime < 3000) { }
     }
 
     async waitChildToAppear() {
-        this._child = await this.awaitItemToAppear("child");
+        this._child = (await this.awaitItemToAppear("child")).element;
         const startTime = Date.now();
         while ((await this._child.location()).y !== (await this._parent.location()).y && Date.now() - startTime < 3000) { }
     }
@@ -31,14 +32,9 @@ export class AnimateChildPage extends BasePage {
         assert.isTrue((await this._parent.location()).y === (await this._child.location()).y);
     }
 
-    private async awaitItemToAppear(item: string, wait: number = 3000): Promise<UIElement> {
-        const startTime = Date.now();
+    private async awaitItemToAppear(item: string, wait: number = 3000): Promise<{ isVisible: boolean, element: UIElement }> {
         const findBtn = async () => { return await this._driver.findElementByXPathIfExists(this._elementHelper.findByTextLocator("*", item, true)); };
-        let btn = await findBtn();
-        while (!btn || !(await btn.isDisplayed()) && Date.now() - startTime <= wait) {
-            btn = await findBtn();
-        }
 
-        return btn;
+        return await this.waitElementTo(findBtn, true, wait);;
     }
 }

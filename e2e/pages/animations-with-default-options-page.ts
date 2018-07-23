@@ -19,13 +19,13 @@ export class AnimationsWithDefaultOptionsPage extends BasePage {
     async addItem() {
         this._btnAddItem = await this._driver.findElementByAccessibilityId("add");
 
-        await this._btnAddItem.tap();
+        await this._btnAddItem.click();
     }
 
     async clickOnItem(item: string) {
         const btn = await this.getItem(item);
 
-        await btn.tap();
+        await btn.click();
     }
 
     private getItem(item) {
