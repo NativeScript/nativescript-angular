@@ -5,9 +5,8 @@ import {
 } from "@angular/core";
 
 import { Device } from "tns-core-modules/platform";
-import { View } from "tns-core-modules/ui/core/view";
+import { View, getViewById } from "tns-core-modules/ui/core/view";
 import { addCss } from "tns-core-modules/application";
-import { topmost } from "tns-core-modules/ui/frame";
 import { profile } from "tns-core-modules/profiling";
 
 import { APP_ROOT_VIEW, DEVICE, getRootPage } from "./platform-providers";
@@ -46,7 +45,7 @@ export class NativeScriptRendererFactory implements RendererFactory2 {
 
     private setRootNgView(rootView: any) {
         if (!rootView) {
-            rootView = getRootPage() || topmost().currentPage;
+            rootView = getRootPage();
         }
 
         rootView.nodeName = "NONE";
@@ -110,6 +109,10 @@ export class NativeScriptRenderer extends Renderer2 {
     @profile
     selectRootElement(selector: string): NgView {
         traceLog("NativeScriptRenderer.selectRootElement: " + selector);
+        if (selector && selector[0] === "#") {
+            const result = getViewById(this.rootView, selector.slice(1));
+            return (result || this.rootView) as NgView;
+        }
         return this.rootView;
     }
 

@@ -4,28 +4,26 @@
   "readme": "NativeScript Application",
   "repository": "<fill-your-repository-here>",
   "nativescript": {
-    "id": "org.nativescript.renderer",
-    "tns-android": {
-      "version": "next"
-    }
+    "id": "org.nativescript.renderer"
   },
   "dependencies": {
-    "@angular/common": "~5.2.0",
-    "@angular/compiler": "~5.2.0",
-    "@angular/core": "~5.2.0",
-    "@angular/forms": "~5.2.0",
-    "@angular/http": "~5.2.0",
-    "@angular/platform-browser": "~5.2.0",
-    "@angular/platform-browser-dynamic": "~5.2.0",
-    "@angular/router": "~5.2.0",
+    "@angular/common": "~6.1.0-beta.3",
+    "@angular/compiler": "~6.1.0-beta.3",
+    "@angular/core": "~6.1.0-beta.3",
+    "@angular/forms": "~6.1.0-beta.3",
+    "@angular/http": "~6.1.0-beta.3",
+    "@angular/platform-browser": "~6.1.0-beta.3",
+    "@angular/platform-browser-dynamic": "~6.1.0-beta.3",
+    "@angular/router": "~6.1.0-beta.3",
     "nativescript-angular": "file:../../nativescript-angular",
     "nativescript-intl": "^3.0.0",
     "reflect-metadata": "~0.1.8",
-    "rxjs": "^5.5.0",
+    "rxjs": "~6.1.0",
     "tns-core-modules": "next",
     "zone.js": "^0.8.4"
   },
   "devDependencies": {
+    "@angular/compiler-cli": "~6.1.0-beta.1",
     "@types/chai": "^4.0.2",
     "@types/mocha": "^2.2.41",
     "@types/node": "^7.0.5",
@@ -40,12 +38,14 @@
     "mocha-junit-reporter": "^1.13.0",
     "mocha-multi": "^0.11.0",
     "nativescript-dev-appium": "next",
-    "nativescript-dev-typescript": "~0.4.0",
+    "nativescript-dev-typescript": "~0.7.1",
+    "nativescript-dev-webpack": "next",
     "tslib": "^1.7.1",
-    "typescript": "~2.6.2"
+    "typescript": "~2.7.2",
+    "@ngtools/webpack": "6.1.0-rc.0"
   },
   "scripts": {
-    "e2e": "tsc -p e2e && mocha --opts ./e2e/config/mocha.opts",
+    "e2e": "tsc -p e2e && mocha --opts ../config/mocha.opts --recursive e2e --appiumCapsLocation ../config/appium.capabilities.json",
     "compile-tests-w": "tsc -p e2e --watch",
     "update-app-ng-deps": "update-app-ng-deps"
   }

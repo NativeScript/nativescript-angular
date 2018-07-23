@@ -1,0 +1,48 @@
+{
+  "description": "NativeScript Application",
+  "license": "SEE LICENSE IN <your-license-filename>",
+  "readme": "NativeScript Application",
+  "repository": "<fill-your-repository-here>",
+  "nativescript": {
+    "id": "org.nativescript.routertabview",
+    "tns-android": {
+      "version": "3.4.1-2018-02-06-02"
+    },
+    "tns-ios": {
+      "version": "3.4.1"
+    }
+  },
+  "dependencies": {
+    "@angular/animations": "~6.1.0-beta.3",
+    "@angular/common": "~6.1.0-beta.3",
+    "@angular/compiler": "~6.1.0-beta.3",
+    "@angular/core": "~6.1.0-beta.3",
+    "@angular/forms": "~6.1.0-beta.3",
+    "@angular/http": "~6.1.0-beta.3",
+    "@angular/platform-browser": "~6.1.0-beta.3",
+    "@angular/platform-browser-dynamic": "~6.1.0-beta.3",
+    "@angular/router": "~6.1.0-beta.3",
+    "nativescript-angular": "file:../../nativescript-angular",
+    "nativescript-theme-core": "~1.0.4",
+    "reflect-metadata": "~0.1.8",
+    "rxjs": "~6.0.0-rc.1",
+    "tns-core-modules": "next",
+    "zone.js": "~0.8.2"
+  },
+  "devDependencies": {
+    "babel-traverse": "6.26.0",
+    "babel-types": "6.26.0",
+    "babylon": "6.18.0",
+    "lazy": "1.0.11",
+    "nativescript-dev-appium": "^3.1.0",
+    "nativescript-dev-typescript": "~0.6.0",
+    "typescript": "~2.7.2",
+    "@types/chai": "^4.0.2",
+    "@types/mocha": "^2.2.41",
+    "@types/node": "^7.0.5"
+  },
+  "scripts": {
+    "e2e": "tsc -p e2e && mocha --opts ../config/mocha.opts --recursive e2e --appiumCapsLocation ../config/appium.capabilities.json",
+    "compile-tests": "tsc -p e2e --watch"
+  }
+}

@@ -20,6 +20,12 @@ Install your native toolchain and NativeScript as described in the docs:
 
 https://docs.nativescript.org/setup/quick-setup
 
+### Clone repository
+
+```
+$ git clone git@github.com:NativeScript/nativescript-angular.git
+$ cd nativescript-angular
+```
 
 ### Install dependencies
 
@@ -92,5 +98,6 @@ NOTE: The steps below describe how to run `renderer` tests, but the same approac
 
 ## Developer workflow
 
-1. Make changes to the `test`, `ng-sample` projects or in `nativescript-angular` folder.
-2. Run the `tests` or `ng-sample` as shown above.
+1. Open the `nativescript-angular` folder and start a typescript watcher in it `tsc -w`.
+2. Make changes to the `test`, `ng-sample`, `e2e` app projects or in `nativescript-angular` folder.
+3. Run the `tests`, `ng-sample` or `e2e` apps as shown above.

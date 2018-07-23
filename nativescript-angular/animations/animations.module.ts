@@ -1,5 +1,14 @@
-import { NgModule, Injectable, NgZone, Provider, RendererFactory2 } from "@angular/core";
-
+import {
+    NgModule,
+    Injectable,
+    Inject,
+    NgZone,
+    Provider,
+    RendererFactory2,
+    Optional,
+    SkipSelf,
+} from "@angular/core";
+import { DOCUMENT } from "@angular/common";
 import { AnimationBuilder } from "@angular/animations";
 
 import {
@@ -17,11 +26,12 @@ import {
 import { NativeScriptModule } from "../nativescript.module";
 import { NativeScriptRendererFactory } from "../renderer";
 import { NativeScriptAnimationDriver } from "./animation-driver";
+import { throwIfAlreadyLoaded } from "../common/utils";
 
 @Injectable()
 export class InjectableAnimationEngine extends AnimationEngine {
-    constructor(driver: AnimationDriver, normalizer: AnimationStyleNormalizer) {
-        super(driver, normalizer);
+    constructor(@Inject(DOCUMENT) doc: any, driver: AnimationDriver, normalizer: AnimationStyleNormalizer) {
+        super(doc.body, driver, normalizer);
     }
 }
 
@@ -55,4 +65,8 @@ export const NATIVESCRIPT_ANIMATIONS_PROVIDERS: Provider[] = [
     providers: NATIVESCRIPT_ANIMATIONS_PROVIDERS,
 })
 export class NativeScriptAnimationsModule {
+    constructor(@Optional() @SkipSelf() parentModule: NativeScriptAnimationsModule) {
+        // Prevents NativeScriptAnimationsModule from getting imported multiple times
+        throwIfAlreadyLoaded(parentModule, "NativeScriptAnimationsModule");
+    }
 }

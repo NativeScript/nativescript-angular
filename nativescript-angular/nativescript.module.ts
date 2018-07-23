@@ -14,11 +14,20 @@ import {
     NgModule,
     RendererFactory2,
     SystemJsNgModuleLoader,
+    Optional,
+    SkipSelf,
+    ɵAPP_ROOT as APP_ROOT,
 } from "@angular/core";
+
+import {
+    ViewportScroller,
+    ɵNullViewportScroller as NullViewportScroller,
+} from "@angular/common";
 
 import { NativeScriptCommonModule } from "./common";
 import { NativeScriptRendererFactory } from "./renderer";
 import { DetachedLoader } from "./common/detached-loader";
+import { throwIfAlreadyLoaded } from "./common/utils";
 
 export function errorHandlerFactory() {
     return new ErrorHandler();
@@ -31,8 +40,10 @@ export function errorHandlerFactory() {
     providers: [
         NativeScriptRendererFactory,
         SystemJsNgModuleLoader,
+        { provide: APP_ROOT, useValue: true },
         { provide: ErrorHandler, useFactory: errorHandlerFactory },
         { provide: RendererFactory2, useExisting: NativeScriptRendererFactory },
+        { provide: ViewportScroller, useClass: NullViewportScroller },
     ],
     entryComponents: [
         DetachedLoader,
@@ -49,4 +60,8 @@ export function errorHandlerFactory() {
     schemas: [NO_ERRORS_SCHEMA]
 })
 export class NativeScriptModule {
+    constructor(@Optional() @SkipSelf() parentModule: NativeScriptModule) {
+        // Prevents NativeScriptModule from getting imported multiple times
+        throwIfAlreadyLoaded(parentModule, "NativeScriptModule");
+    }
 }

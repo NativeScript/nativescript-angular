@@ -4,7 +4,7 @@ import {
     XhrFactory, HttpResponse,
     HttpErrorResponse, HttpXhrBackend
 } from "@angular/common/http";
-import { Observable } from "rxjs/Observable";
+import { Observable } from "rxjs";
 
 import { NSFileSystem } from "../file-system/ns-file-system";
 import { isLocalRequest, processLocalFileRequest } from "./http-utils";

@@ -2,9 +2,8 @@ import { Component, Injectable } from "@angular/core";
 import { CanActivate, Resolve, ActivatedRouteSnapshot, RouterStateSnapshot } from "@angular/router";
 import { RouterExtensions, PageRoute } from "nativescript-angular/router";
 import * as appSettings from "application-settings";
-import { Observable } from "rxjs/Observable";
-import "rxjs/add/operator/map";
-import "rxjs/add/operator/switchMap";
+import { Observable } from "rxjs";
+import { map, switchMap } from "rxjs/operators";
 
 const USER_KEY = "user";
 
@@ -88,16 +87,16 @@ export interface ResolvedData {
 class MainComponent {
     private data$: Observable<ResolvedData>;
     constructor(private nav: RouterExtensions, private loginService: LoginService, private pageRoute: PageRoute) {
-        this.data$ = this.pageRoute.activatedRoute
-            .switchMap(activatedRoute => activatedRoute.data)
-            .map(data => data[0]);
+        this.data$ = this.pageRoute.activatedRoute.pipe(
+            switchMap(activatedRoute => activatedRoute.data),
+            map(data => data[0])
+        );
     }
 
     logout() {
         this.loginService.logout().then((result) => {
-            if (result) {
+            if (result)
                 this.nav.navigate(["/login"], { clearHistory: true });
-            }
         });
     }
 
@@ -157,7 +156,7 @@ class AuthGuard implements CanActivate {
 class ResolveGuard implements Resolve<ResolvedData> {
     static counter = 0;
     resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot):
-            Observable<ResolvedData> | Promise<ResolvedData> | ResolvedData {
+        Observable<ResolvedData> | Promise<ResolvedData> | ResolvedData {
         const result: ResolvedData = { id: ResolveGuard.counter++ };
         console.log(`ResolveGuard: Fetching new data. Result: ${JSON.stringify(result)} `);
         return result;

@@ -2,7 +2,8 @@ import { Component, OnInit, OnDestroy } from "@angular/core";
 import { ActivatedRoute, Router, Route } from "@angular/router";
 import { Location } from "@angular/common";
 import { Page } from "ui/page";
-import { Observable } from "rxjs/Observable";
+import { Observable } from "rxjs";
+import { map } from "rxjs/operators";
 
 @Component({
     selector: "detail",
@@ -19,7 +20,7 @@ export class DetailComponent {
 
     constructor(private router: Router, private route: ActivatedRoute) {
         console.log("DetailComponent - constructor()");
-        this.id$ = route.params.map(r => r["id"]);
+        this.id$ = route.params.pipe(map(r => r["id"]));
     }
 
     ngOnInit() {
