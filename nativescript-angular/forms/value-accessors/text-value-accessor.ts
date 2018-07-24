@@ -38,7 +38,7 @@ export type TextView = {text: string} & View;
         "search-bar[ngModel], search-bar[formControlName],search-bar[formControl]",
     providers: [TEXT_VALUE_ACCESSOR],
     host: {
-        "(touch)": "onTouched()",
+        "(blur)": "onTouched()",
         "(textChange)": "onChange($event.value)",
     },
 })
