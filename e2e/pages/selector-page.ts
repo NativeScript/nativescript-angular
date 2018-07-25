@@ -20,7 +20,7 @@ export class SelectorPage extends BasePage {
     }
 
     async addItem() {
-        this._btnAddItem = await this._driver.findElementByText("ADD");
+        this._btnAddItem = await this._driver.findElementByText("add");
         await this._btnAddItem.click();
     }
 
