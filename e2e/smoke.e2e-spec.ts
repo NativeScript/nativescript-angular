@@ -17,11 +17,6 @@ describe("smoke-tests", () => {
         driver = await createDriver();
     });
 
-    after(async () => {
-        await driver.quit();
-        console.log("Quit driver!");
-    });
-
     afterEach(async function () {
         if (this.currentTest.state === "failed") {
             await driver.logTestArtifacts(this.currentTest.title);
