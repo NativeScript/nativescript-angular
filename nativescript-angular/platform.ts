@@ -6,6 +6,8 @@ import {
     COMMON_PROVIDERS
 } from "./platform-common";
 
+import "reflect-metadata";
+
 import { NSFileSystem } from "./file-system/ns-file-system";
 
 import {
