@@ -12,6 +12,9 @@ e2e/**/*.map
 # Webpack files
 tsconfig.esm.json
 webpack.config.js
+
+#tests
 instruments*
 e2e/reports
 test-results.xml
+.DS_Store
