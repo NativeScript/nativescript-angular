@@ -8,7 +8,7 @@ before("start server", async () => {
 
 after("stop server", async () => {
     try {
-        await driver.logTestArtifacts(this.currentTest.title);
+        await driver.logTestArtifacts("stop_server_log");
         await driver.quit();
     } catch (error) { }
     await stopServer();
