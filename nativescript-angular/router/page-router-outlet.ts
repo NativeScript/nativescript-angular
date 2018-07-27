@@ -102,8 +102,6 @@ function routeToString(activatedRoute: ActivatedRoute | ActivatedRouteSnapshot):
     return activatedRoute.pathFromRoot.join("->");
 }
 
-const routeTransitionWarning = "This could be due to route transition timing and could be ignored.";
-
 @Directive({ selector: "page-router-outlet" }) // tslint:disable-line:directive-selector
 export class PageRouterOutlet implements OnDestroy { // tslint:disable-line:directive-class-suffix
     private activated: ComponentRef<any> | null = null;
@@ -177,8 +175,7 @@ export class PageRouterOutlet implements OnDestroy { // tslint:disable-line:dire
 
     deactivate(): void {
         if (!this.locationStrategy._isPageNavigatingBack()) {
-          log("Currently not in page back navigation" +
-            " - component should be detached instead of deactivated." + routeTransitionWarning);
+          log("Currently not in page back navigation - component should be detached instead of deactivated.");
           return;
         }
 
@@ -238,8 +235,7 @@ export class PageRouterOutlet implements OnDestroy { // tslint:disable-line:dire
         resolver: ComponentFactoryResolver | null): void {
 
         if (this.locationStrategy._isPageNavigatingBack()) {
-            log("Currently in page back navigation - component should be reattached instead of activated. " +
-                routeTransitionWarning);
+            log("Currently in page back navigation - component should be reattached instead of activated.");
             this.locationStrategy._finishBackPageNavigation();
         }
 
