@@ -28,6 +28,10 @@ export function routerLog(message: string): void {
     write(message, routerTraceCategory);
 }
 
+export function routerError(message: string): void {
+    write(message, routerTraceCategory, messageType.error);
+}
+
 export function routeReuseStrategyLog(message: string): void {
     write(message, routeReuseStrategyTraceCategory);
 }
