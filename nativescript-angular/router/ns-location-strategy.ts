@@ -1,7 +1,7 @@
 import { Injectable } from "@angular/core";
 import { LocationStrategy } from "@angular/common";
 import { DefaultUrlSerializer, UrlSegmentGroup, UrlTree } from "@angular/router";
-import { routerLog } from "../trace";
+import { routerLog, routerError } from "../trace";
 import { NavigationTransition, Frame } from "tns-core-modules/ui/frame";
 import { isPresent } from "../lang-facade";
 import { FrameService } from "../platform-providers";
@@ -286,10 +286,11 @@ export class NSLocationStrategy extends LocationStrategy {
 
     // Methods for syncing with page navigation in PageRouterOutlet
     public _beginBackPageNavigation(name: string, frame: Frame) {
-        routerLog("NSLocationStrategy.startGoBack()");
         if (this._isPageNavigationBack) {
-            throw new Error("Calling startGoBack while going back.");
+            routerError("Attempted to call startGoBack while going back.");
+            return;
         }
+        routerLog("NSLocationStrategy.startGoBack()");
         this._isPageNavigationBack = true;
 
         let { cachedFrame } = this.frameService.findFrame(frame);
@@ -302,10 +303,11 @@ export class NSLocationStrategy extends LocationStrategy {
     }
 
     public _finishBackPageNavigation() {
-        routerLog("NSLocationStrategy.finishBackPageNavigation()");
         if (!this._isPageNavigationBack) {
-            throw new Error("Calling endGoBack while not going back.");
+            routerError("Attempted to call endGoBack while not going back.");
+            return;
         }
+        routerLog("NSLocationStrategy.finishBackPageNavigation()");
         this._isPageNavigationBack = false;
     }
 
@@ -314,33 +316,35 @@ export class NSLocationStrategy extends LocationStrategy {
     }
 
     public _beginModalNavigation(frame: Frame): void {
-        routerLog("NSLocationStrategy._beginModalNavigation()");
+      routerLog("NSLocationStrategy._beginModalNavigation()");
 
-        let { cachedFrameRootOutlet } = this.frameService.findFrame(frame);
+      let { cachedFrameRootOutlet } = this.frameService.findFrame(frame);
 
-        const lastState = this.peekState(cachedFrameRootOutlet || this.currentOutlet);
+      const lastState = this.peekState(cachedFrameRootOutlet || this.currentOutlet);
 
-        if (lastState) {
-            lastState.isModalNavigation = true;
-        }
+      if (lastState) {
+          lastState.isModalNavigation = true;
+      }
 
-        this._isModalNavigation = true;
-    }
+      this._isModalNavigation = true;
+  }
 
     public _beginCloseModalNavigation(): void {
-        routerLog("NSLocationStrategy.startCloseModal()");
         if (this._isModalClosing) {
-            throw new Error("Calling startCloseModal while closing modal.");
+            routerError("Attempted to call startCloseModal while closing modal.");
+            return;
         }
+        routerLog("NSLocationStrategy.startCloseModal()");
         this._isModalClosing = true;
     }
 
     public _finishCloseModalNavigation() {
-        routerLog("NSLocationStrategy.finishCloseModalNavigation()");
         if (!this._isModalClosing) {
-            throw new Error("Calling startCloseModal while not closing modal.");
+            routerError("Attempted to call startCloseModal while not closing modal.");
+            return;
         }
 
+        routerLog("NSLocationStrategy.finishCloseModalNavigation()");
         this._isModalNavigation = false;
         this._isModalClosing = false;
     }
