@@ -238,7 +238,8 @@ export class PageRouterOutlet implements OnDestroy { // tslint:disable-line:dire
         resolver: ComponentFactoryResolver | null): void {
 
         if (this.locationStrategy._isPageNavigatingBack()) {
-            log("Currently in page back navigation - component should be reattached instead of activated. " + routeTransitionWarning);
+            log("Currently in page back navigation - component should be reattached instead of activated. " + 
+                routeTransitionWarning);
             this.locationStrategy._finishBackPageNavigation();
         }
 
