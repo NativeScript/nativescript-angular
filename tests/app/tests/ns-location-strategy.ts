@@ -36,7 +36,7 @@ export class FakeFrame extends View implements Frame {
         }
     }
 
-    navigate(entry: any) {}
+    navigate(entry: any) { }
 
     constructor(private backCB?: () => void) {
         super();
@@ -70,8 +70,13 @@ export class FakeFrame extends View implements Frame {
     _findEntryForTag(fragmentTag: string): BackstackEntry {
         throw new Error("I am a FakeFrame");
     }
-
     _updateBackstack(entry: BackstackEntry, isBack: boolean): void {
+        throw new Error("I am a FakeFrame");
+    }
+    _pushInFrameStack() {
+        throw new Error("I am a FakeFrame");
+    }
+    _removeFromFrameStack() {
         throw new Error("I am a FakeFrame");
     }
 }

@@ -67,6 +67,9 @@ export class ModalDialogService {
             parentView = parentView.ngAppRoot;
         }
 
+        // _ngDialogRoot is the first child of the previously detached proxy.
+        // It should have 'viewController' (iOS) or '_dialogFragment' (Android) available for
+        // presenting future modal views.
         if (parentView._ngDialogRoot) {
             parentView = parentView._ngDialogRoot;
         }
