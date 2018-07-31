@@ -24,7 +24,6 @@ const CHECKED_VALUE_ACCESSOR = {
         "switch[ngModel],switch[formControlName],switch[formControl]",
     providers: [CHECKED_VALUE_ACCESSOR],
     host: {
-        "(touch)": "onTouched()",
         "(checkedChange)": "onChange($event.value)",
     },
 })
