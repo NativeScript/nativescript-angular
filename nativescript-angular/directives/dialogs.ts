@@ -67,6 +67,10 @@ export class ModalDialogService {
             parentView = parentView.ngAppRoot;
         }
 
+        if (parentView._ngDialogRoot) {
+            parentView = parentView._ngDialogRoot;
+        }
+
         const pageFactory: PageFactory = viewContainerRef.injector.get(PAGE_FACTORY);
 
         // resolve from particular module (moduleRef)
@@ -76,7 +80,9 @@ export class ModalDialogService {
 
         const frame = parentView.page && parentView.page.frame;
 
-        this.location._beginModalNavigation(frame);
+        if (frame) {
+            this.location._beginModalNavigation(frame);
+        }
 
         return new Promise((resolve, reject) => {
             setTimeout(() => {
@@ -144,6 +150,7 @@ export class ModalDialogService {
             componentView = detachedProxy.getChildAt(0);
 
             if (componentView.parent) {
+                (<any>componentView.parent)._ngDialogRoot = componentView;
                 (<any>componentView.parent).removeChild(componentView);
             }
 
