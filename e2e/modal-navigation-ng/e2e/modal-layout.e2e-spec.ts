@@ -45,6 +45,10 @@ describe("modal-layout:", () => {
                 await screen.loadedHome();
             });
 
+            it("should show nested modal page, run in background, close", async () => {
+                await testNestedModalPageBackground(driver, screen, false);
+            });
+
             it("should show dialog confirm inside modal view with no frame, run in background", async () => {
                 await testDialogBackground(driver, screen, false);
             });
