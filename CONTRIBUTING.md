@@ -11,6 +11,7 @@ Here are some guides on how to do that:
 - [Requesting Features](#requesting-features)
 - [Submitting a PR](#submitting-a-pr)
 - [Where to Start](#where-to-start)
+- [Publishing new versions](#publishing-new-versions)
 
 <!-- /TOC -->
 
@@ -76,3 +77,38 @@ It's our turn from there on! We will review the PR and discuss changes you might
 ## Where to Start
 
 If you want to contribute, but you are not sure where to start - look for [issues labeled `help wanted`](https://github.com/NativeScript/nativescript-angular/issues?q=is%3Aopen+is%3Aissue+label%3A%22help+wanted%22).
+
+
+## Publishing new versions
+
+1. Run `npm install` to install the dependencies and prepare the package for publishing.
+```bash
+cd nativescript-angular
+npm install
+```
+
+2. Add the following to your `.npmrc`.
+```
+tag-version-prefix=""
+message="release: cut the %s release"
+```
+
+3. Create new branch for the release:
+```
+git checkout -b username/release-version
+```
+
+4. Run `npm version` to bump the version in the `package.json`, tag the release and update the CHANGELOG.md:
+```
+npm version [patch|minor|major]
+```
+
+5. Push all changes to your branch and create a PR.
+```bash
+git push --set-upstream origin username/release-version --tags
+```
+
+6. Publish the package to npm after the PR is merged.
+```bash
+npm publish
+```
