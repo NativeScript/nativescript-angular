@@ -1,3 +1,35 @@
+<a name=""></a>
+## [6.1.0](https://github.com/NativeScript/nativescript-angular/compare/6.0.6...6.1.0) (2018-08-06)
+
+
+### Bug Fixes
+
+* mark NativeScriptModule as root injector ([#1418](https://github.com/NativeScript/nativescript-angular/issues/1418)) ([ce70add](https://github.com/NativeScript/nativescript-angular/commit/ce70add))
+* provide NullViewportScroller in NativeScriptModule ([dd412bf](https://github.com/NativeScript/nativescript-angular/commit/dd412bf))
+* **animations:** inject document object in the animation engine ([#1395](https://github.com/NativeScript/nativescript-angular/issues/1395)) ([379e958](https://github.com/NativeScript/nativescript-angular/commit/379e958)), closes [angular/angular#23300](https://github.com/angular/angular/issues/23300) [#1393](https://github.com/NativeScript/nativescript-angular/issues/1393)
+* **forms:** TextValueAccessor raises onTouched on blur ([#1230](https://github.com/NativeScript/nativescript-angular/issues/1230)) ([06ca3a0](https://github.com/NativeScript/nativescript-angular/commit/06ca3a0))
+* remove global document object ([2b201be](https://github.com/NativeScript/nativescript-angular/commit/2b201be))
+* **location-strategy:** find the correct outlet when navigating back and forward ([#1404](https://github.com/NativeScript/nativescript-angular/issues/1404)) ([f0119a0](https://github.com/NativeScript/nativescript-angular/commit/f0119a0))
+* **modal:** lower isModalNavigation flag when closing modal ([#1378](https://github.com/NativeScript/nativescript-angular/issues/1378)) ([6ab1cac](https://github.com/NativeScript/nativescript-angular/commit/6ab1cac))
+* **modal:** throw from tns-core-modules is now properly caught and rejected ([70730d9](https://github.com/NativeScript/nativescript-angular/commit/70730d9))
+* **router:** avoiding throw for app stability improvements ([#1344](https://github.com/NativeScript/nativescript-angular/issues/1344)) ([82747df](https://github.com/NativeScript/nativescript-angular/commit/82747df))
+* **tabview:** implement setter for TabViewItem Directive's configuration ([#845](https://github.com/NativeScript/nativescript-angular/issues/845)) ([#1370](https://github.com/NativeScript/nativescript-angular/issues/1370)) ([1d44679](https://github.com/NativeScript/nativescript-angular/commit/1d44679))
+
+
+### Features
+
+* **test-bed:** Run render fixtures in a full-page container ([#1416](https://github.com/NativeScript/nativescript-angular/issues/1416)) ([e551df2](https://github.com/NativeScript/nativescript-angular/commit/e551df2))
+
+
+### BREAKING CHANGES
+
+* The `document` object is no longer property of the `global` object. This
+may cause behavioral changes in some plugin that use the `document`
+object to determine if they're running in browser context.
+
+Fixes https://github.com/NativeScript/nativescript-angular/issues/1144.
+
+
 <a name="6.0.6"></a>
 ## [6.0.6](https://github.com/NativeScript/nativescript-angular/compare/6.0.0...6.0.6) (2018-06-22)
 
