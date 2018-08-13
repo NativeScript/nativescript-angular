@@ -360,9 +360,8 @@ export class NSLocationStrategy extends LocationStrategy {
             // Changing the current outlet only if navigating in non-cached root outlet.
             if (!this.frameService.containsOutlet(name) && this.statesByOutlet[name] /* ensure root outlet exists */) {
                 this.currentOutlet = name;
+                this.frameService.addFrame(frame, name, this.currentOutlet);
             }
-
-            this.frameService.addFrame(frame, name, this.currentOutlet);
         }
 
         const lastState = this.peekState(this.currentOutlet);
