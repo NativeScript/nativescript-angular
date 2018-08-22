@@ -28,6 +28,7 @@ import { NativeScriptCommonModule } from "./common";
 import { NativeScriptRendererFactory } from "./renderer";
 import { DetachedLoader } from "./common/detached-loader";
 import { throwIfAlreadyLoaded } from "./common/utils";
+import { FrameService } from "./platform-providers";
 
 export function errorHandlerFactory() {
     return new ErrorHandler();
@@ -38,6 +39,7 @@ export function errorHandlerFactory() {
         DetachedLoader,
     ],
     providers: [
+        FrameService,
         NativeScriptRendererFactory,
         SystemJsNgModuleLoader,
         { provide: APP_ROOT, useValue: true },

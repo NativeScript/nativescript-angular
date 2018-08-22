@@ -12,7 +12,6 @@ import {
     defaultDeviceProvider,
     defaultFrameProvider,
     defaultPageProvider,
-    FrameService,
 } from "./platform-providers";
 import { NS_DIRECTIVES } from "./directives";
 
@@ -26,7 +25,6 @@ import { NS_DIRECTIVES } from "./directives";
         defaultDeviceProvider,
         defaultFrameProvider,
         defaultPageProvider,
-        FrameService,
     ],
     imports: [
         CommonModule,
