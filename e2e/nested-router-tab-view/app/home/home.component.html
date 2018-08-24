@@ -1,0 +1,29 @@
+<ActionBar class="action-bar">
+    <Label class="action-bar-title" text="Home Component"></Label>
+</ActionBar>
+
+<GridLayout rows="auto, *">
+    <WrapLayout row="0">
+        <Button text="Go To Tabs Page" [nsRouterLink]="['/tabs']"></Button>
+        <!-- <Button text="Go To Tabs Page" [nsRouterLink]="['/tabs', { outlets: { playerTab: ['players'], teamTab: ['teams'] } }]"></Button> -->
+        <Button text="Back()" (tap)="back()"></Button>
+        <Button text="CanGoBack(ActivatedRoute)" (tap)="canGoBack()"></Button>
+        <Button text="CanGoBack(Players)" (tap)="canGoBackPlayers()"></Button>
+        <Button text="CanGoBack(Teams)" (tap)="canGoBackTeams()"></Button>
+        <Button text="CanGoBack(Both)" (tap)="canGoBackBoth()"></Button>
+        <Button text="Back(Players)" (tap)="backPlayers()"></Button>
+        <Button text="Back(Teams)" (tap)="backTeams()"></Button>
+        <Button text="Back(Both)" (tap)="backBoth()"></Button>
+        <Button text="Back(ActivatedRoute)" (tap)="backActivatedRoute()"></Button>
+    </WrapLayout>
+
+    <GridLayout row="1" columns="*,*">
+        <GridLayout col="0">
+            <page-router-outlet name="playerTab"></page-router-outlet>
+            <!-- <page-router-outlet></page-router-outlet> -->
+        </GridLayout>
+        <GridLayout col="1">
+            <page-router-outlet name="teamTab"></page-router-outlet>
+        </GridLayout>
+    </GridLayout>
+</GridLayout>

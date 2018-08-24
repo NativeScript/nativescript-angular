@@ -1,0 +1,20 @@
+<ActionBar title="Tabs Component" class="action-bar"></ActionBar>
+
+<StackLayout>
+    <GridLayout rows="auto,*">
+        <WrapLayout row="0">
+            <Button text="Back()" (tap)="back()"></Button>
+            <Button text="CanGoBack(ActivatedRoute)" (tap)="canGoBack()"></Button>
+            <Button text="Back(ActivatedRoute)" (tap)="backActivatedRoute()"></Button>
+        </WrapLayout>
+        <GridLayout row="1">
+            <TabView androidTabsPosition="bottom">
+                <page-router-outlet *tabItem="{title: 'Players Tab'}" name="playerTab">
+                </page-router-outlet>
+
+                <page-router-outlet *tabItem="{title: 'Teams Tab'}" name="teamTab">
+                </page-router-outlet>
+            </TabView>
+        </GridLayout>
+    </GridLayout>
+</StackLayout>

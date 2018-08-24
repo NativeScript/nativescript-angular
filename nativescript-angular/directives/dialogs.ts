@@ -17,6 +17,7 @@ import { AppHostView } from "../app-host-view";
 import { DetachedLoader } from "../common/detached-loader";
 import { PageFactory, PAGE_FACTORY } from "../platform-providers";
 import { once } from "../common/utils";
+import { Frame } from "tns-core-modules/ui/frame/frame";
 
 export interface ModalDialogOptions {
     context?: any;
@@ -81,7 +82,10 @@ export class ModalDialogService {
         const componentContainer = moduleRef || viewContainerRef;
         const resolver = componentContainer.injector.get(ComponentFactoryResolver);
 
-        const frame = parentView.page && parentView.page.frame;
+        let frame = parentView;
+        if (!(parentView instanceof Frame)) {
+            frame = parentView.page && parentView.page.frame;
+        }
 
         if (frame) {
             this.location._beginModalNavigation(frame);
@@ -127,9 +131,7 @@ export class ModalDialogService {
         const closeCallback = once((...args) => {
             doneCallback.apply(undefined, args);
             if (componentView) {
-                this.location._beginCloseModalNavigation();
                 componentView.closeModal();
-                this.location.back();
                 this.location._finishCloseModalNavigation();
                 detachedLoaderRef.instance.detectChanges();
                 detachedLoaderRef.destroy();

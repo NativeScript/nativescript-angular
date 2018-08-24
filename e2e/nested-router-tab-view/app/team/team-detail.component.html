@@ -1,0 +1,9 @@
+<ActionBar title="Team Details" class="action-bar"></ActionBar>
+<StackLayout flexDirection="column" class="page" class="m-15">
+    <Label [text]="item.id"></Label>
+    <Label [text]="item.name + ' Details'"></Label>
+
+    <Button text="next team" [nsRouterLink]="['../', item.id + 1]"></Button>
+    <Button text="teams" [nsRouterLink]="['../../teams']"></Button>
+    <Button text="Back-Teams" (tap)="backTeams()"></Button>
+</StackLayout>
