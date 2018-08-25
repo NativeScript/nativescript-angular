@@ -29,7 +29,6 @@ The `ng-sample` app is meant for testing stuff while developing the renderer cod
 * [Drawer navigation template](https://github.com/NativeScript/template-drawer-navigation-ng)
 * [TabView navigation template](https://github.com/NativeScript/template-tab-navigation-ng)
 * [NativeScript Angular SDK examples](https://github.com/NativeScript/nativescript-sdk-examples-ng)
-* [TodoMVC sample implementation](https://github.com/NativeScript/sample-ng-todomvc)
 
 ## Contribute
 We love PRs! Check out the [contributing guidelines](CONTRIBUTING.md) and [development workflow for local setup](DevelopmentWorkflow.md). If you want to contribute, but you are not sure where to start - look for [issues labeled `help wanted`](https://github.com/NativeScript/nativescript-angular/issues?q=is%3Aopen+is%3Aissue+label%3A%22help+wanted%22).
