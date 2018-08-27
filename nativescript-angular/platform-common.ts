@@ -22,7 +22,7 @@ import {
 } from "@angular/core";
 import { DOCUMENT } from "@angular/common";
 
-import { bootstrapLog, bootstrapLogError } from "./trace";
+import { bootstrapLog, bootstrapLogError, isLogEnabled } from "./trace";
 import { defaultPageFactoryProvider, setRootPage, PageFactory, PAGE_FACTORY } from "./platform-providers";
 import { AppHostView } from "./app-host-view";
 
@@ -156,18 +156,24 @@ export class NativeScriptPlatformRef extends PlatformRef {
             setRootPage(<any>tempAppHostView);
         }
 
-        bootstrapLog("NativeScriptPlatform bootstrap started.");
+        if (isLogEnabled()) {
+            bootstrapLog("NativeScriptPlatform bootstrap started.");
+        }
         const launchCallback = profile(
             "nativescript-angular/platform-common.launchCallback",
             (args: LaunchEventData) => {
-                bootstrapLog("Application launch event fired");
+                if (isLogEnabled()) {
+                    bootstrapLog("Application launch event fired");
+                }
 
                 let bootstrapPromiseCompleted = false;
                 this._bootstrapper().then(
                     moduleRef => {
                         bootstrapPromiseCompleted = true;
 
-                        bootstrapLog(`Angular bootstrap bootstrap done. uptime: ${uptime()}`);
+                        if (isLogEnabled()) {
+                            bootstrapLog(`Angular bootstrap bootstrap done. uptime: ${uptime()}`);
+                        }
 
                         if (!autoCreateFrame) {
                             rootContent = tempAppHostView.content;
@@ -179,20 +185,30 @@ export class NativeScriptPlatformRef extends PlatformRef {
                         bootstrapPromiseCompleted = true;
 
                         const errorMessage = err.message + "\n\n" + err.stack;
-                        bootstrapLogError("ERROR BOOTSTRAPPING ANGULAR");
-                        bootstrapLogError(errorMessage);
+                        if (isLogEnabled()) {
+                            bootstrapLogError("ERROR BOOTSTRAPPING ANGULAR");
+                        }
+                        if (isLogEnabled()) {
+                            bootstrapLogError(errorMessage);
+                        }
 
                         rootContent = this.createErrorUI(errorMessage);
                     }
                 );
 
-                bootstrapLog("bootstrapAction called, draining micro tasks queue. Root: " + rootContent);
+                if (isLogEnabled()) {
+                    bootstrapLog("bootstrapAction called, draining micro tasks queue. Root: " + rootContent);
+                }
                 (<any>global).Zone.drainMicroTaskQueue();
-                bootstrapLog("bootstrapAction called, draining micro tasks queue finished! Root: " + rootContent);
+                if (isLogEnabled()) {
+                    bootstrapLog("bootstrapAction called, draining micro tasks queue finished! Root: " + rootContent);
+                }
 
                 if (!bootstrapPromiseCompleted) {
                     const errorMessage = "Bootstrap promise didn't resolve";
-                    bootstrapLogError(errorMessage);
+                    if (isLogEnabled()) {
+                        bootstrapLogError(errorMessage);
+                    }
                     rootContent = this.createErrorUI(errorMessage);
                 }
 
@@ -206,7 +222,9 @@ export class NativeScriptPlatformRef extends PlatformRef {
 
     @profile
     public _livesync() {
-        bootstrapLog("Angular livesync started.");
+        if (isLogEnabled()) {
+            bootstrapLog("Angular livesync started.");
+        }
         onBeforeLivesync.next(lastBootstrappedModule ? lastBootstrappedModule.get() : null);
 
         const autoCreateFrame = !!this.appOptions.createFrameOnBootstrap;
@@ -227,7 +245,9 @@ export class NativeScriptPlatformRef extends PlatformRef {
         this._bootstrapper().then(
             moduleRef => {
                 bootstrapPromiseCompleted = true;
-                bootstrapLog("Angular livesync done.");
+                if (isLogEnabled()) {
+                    bootstrapLog("Angular livesync done.");
+                }
                 onAfterLivesync.next({ moduleRef });
 
                 if (!autoCreateFrame) {
@@ -238,9 +258,13 @@ export class NativeScriptPlatformRef extends PlatformRef {
             },
             error => {
                 bootstrapPromiseCompleted = true;
-                bootstrapLogError("ERROR LIVESYNC BOOTSTRAPPING ANGULAR");
+                if (isLogEnabled()) {
+                    bootstrapLogError("ERROR LIVESYNC BOOTSTRAPPING ANGULAR");
+                }
                 const errorMessage = error.message + "\n\n" + error.stack;
-                bootstrapLogError(errorMessage);
+                if (isLogEnabled()) {
+                    bootstrapLogError(errorMessage);
+                }
 
                 rootContent = this.createErrorUI(errorMessage);
 
@@ -248,13 +272,19 @@ export class NativeScriptPlatformRef extends PlatformRef {
             }
         );
 
-        bootstrapLog("livesync bootstrapAction called, draining micro tasks queue. Root: " + rootContent);
+        if (isLogEnabled()) {
+            bootstrapLog("livesync bootstrapAction called, draining micro tasks queue. Root: " + rootContent);
+        }
         (<any>global).Zone.drainMicroTaskQueue();
-        bootstrapLog("livesync bootstrapAction called, draining micro tasks queue finished! Root: " + rootContent);
+        if (isLogEnabled()) {
+            bootstrapLog("livesync bootstrapAction called, draining micro tasks queue finished! Root: " + rootContent);
+        }
 
         if (!bootstrapPromiseCompleted) {
             const result = "Livesync bootstrap promise didn't resolve";
-            bootstrapLogError(result);
+            if (isLogEnabled()) {
+                bootstrapLogError(result);
+            }
             rootContent = this.createErrorUI(result);
 
             onAfterLivesync.next({ error: new Error(result) });

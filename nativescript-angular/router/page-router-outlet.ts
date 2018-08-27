@@ -20,7 +20,7 @@ import { profile } from "tns-core-modules/profiling";
 import { BehaviorSubject } from "rxjs";
 
 import { DEVICE, PAGE_FACTORY, PageFactory } from "../platform-providers";
-import { routerLog as log } from "../trace";
+import { routerLog as log, isLogEnabled } from "../trace";
 import { DetachedLoader } from "../common/detached-loader";
 import { ViewUtil } from "../view-util";
 import { NSLocationStrategy } from "./ns-location-strategy";
@@ -126,7 +126,9 @@ export class PageRouterOutlet implements OnDestroy { // tslint:disable-line:dire
 
     get component(): Object {
         if (!this.activated) {
-            log("Outlet is not activated");
+            if (isLogEnabled()) {
+                log("Outlet is not activated");
+            }
             return;
         }
 
@@ -134,7 +136,9 @@ export class PageRouterOutlet implements OnDestroy { // tslint:disable-line:dire
     }
     get activatedRoute(): ActivatedRoute {
         if (!this.activated) {
-            log("Outlet is not activated");
+            if (isLogEnabled()) {
+                log("Outlet is not activated");
+            }
             return;
         }
 
@@ -156,7 +160,9 @@ export class PageRouterOutlet implements OnDestroy { // tslint:disable-line:dire
         private frameService: FrameService
     ) {
         this.frame = elRef.nativeElement;
-        log("PageRouterOutlet.constructor frame:" + this.frame);
+        if (isLogEnabled()) {
+            log(`PageRouterOutlet.constructor frame: ${this.frame}`);
+        }
 
         this.name = name || PRIMARY_OUTLET;
         parentContexts.onChildOutletCreated(this.name, <any>this);
@@ -175,11 +181,16 @@ export class PageRouterOutlet implements OnDestroy { // tslint:disable-line:dire
 
     deactivate(): void {
         if (!this.locationStrategy._isPageNavigatingBack()) {
-          log("Currently not in page back navigation - component should be detached instead of deactivated.");
-          return;
+            if (isLogEnabled()) {
+                log("Currently not in page back navigation - component should be detached instead of deactivated.");
+            }
+
+            return;
         }
 
-        log("PageRouterOutlet.deactivate() while going back - should destroy");
+        if (isLogEnabled()) {
+            log("PageRouterOutlet.deactivate() while going back - should destroy");
+        }
 
         if (!this.isActivated) {
             return;
@@ -199,11 +210,15 @@ export class PageRouterOutlet implements OnDestroy { // tslint:disable-line:dire
      */
     detach(): ComponentRef<any> {
         if (!this.isActivated) {
-            log("Outlet is not activated");
+            if (isLogEnabled()) {
+                log("Outlet is not activated");
+            }
             return;
         }
 
-        log("PageRouterOutlet.detach() - " + routeToString(this._activatedRoute));
+        if (isLogEnabled()) {
+            log(`PageRouterOutlet.detach() - ${routeToString(this._activatedRoute)}`);
+        }
 
         const component = this.activated;
         this.activated = null;
@@ -215,7 +230,9 @@ export class PageRouterOutlet implements OnDestroy { // tslint:disable-line:dire
      * Called when the `RouteReuseStrategy` instructs to re-attach a previously detached subtree
      */
     attach(ref: ComponentRef<any>, activatedRoute: ActivatedRoute) {
-        log("PageRouterOutlet.attach() - " + routeToString(activatedRoute));
+        if (isLogEnabled()) {
+            log(`PageRouterOutlet.attach() - ${routeToString(activatedRoute)}`);
+        }
 
         this.activated = ref;
         this._activatedRoute = activatedRoute;
@@ -235,11 +252,15 @@ export class PageRouterOutlet implements OnDestroy { // tslint:disable-line:dire
         resolver: ComponentFactoryResolver | null): void {
 
         if (this.locationStrategy._isPageNavigatingBack()) {
-            log("Currently in page back navigation - component should be reattached instead of activated.");
+            if (isLogEnabled()) {
+                log("Currently in page back navigation - component should be reattached instead of activated.");
+            }
             this.locationStrategy._finishBackPageNavigation();
         }
 
-        log("PageRouterOutlet.activateWith() - " + routeToString(activatedRoute));
+        if (isLogEnabled()) {
+            log(`PageRouterOutlet.activateWith() - ${routeToString(activatedRoute)}`);
+        }
 
         this._activatedRoute = activatedRoute;
 
@@ -255,8 +276,10 @@ export class PageRouterOutlet implements OnDestroy { // tslint:disable-line:dire
         activatedRoute: ActivatedRoute,
         loadedResolver: ComponentFactoryResolver
     ): void {
-        log("PageRouterOutlet.activate() forward navigation - " +
-            "create detached loader in the loader container");
+        if (isLogEnabled()) {
+            log("PageRouterOutlet.activate() forward navigation - " +
+                "create detached loader in the loader container");
+        }
 
         const factory = this.getComponentFactory(activatedRoute, loadedResolver);
         const page = this.pageFactory({
@@ -321,7 +344,9 @@ export class PageRouterOutlet implements OnDestroy { // tslint:disable-line:dire
     private markActivatedRoute(activatedRoute: ActivatedRoute) {
         const nodeToMark = findTopActivatedRouteNodeForOutlet(activatedRoute.snapshot);
         nodeToMark[pageRouterActivatedSymbol] = true;
-        log("Activated route marked as page: " + routeToString(nodeToMark));
+        if (isLogEnabled()) {
+            log(`Activated route marked as page: ${routeToString(nodeToMark)}`);
+        }
     }
 
     private getComponentFactory(

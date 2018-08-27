@@ -1,7 +1,7 @@
 import { Injectable } from "@angular/core";
 import { RouteReuseStrategy, ActivatedRouteSnapshot, DetachedRouteHandle } from "@angular/router";
 
-import { routeReuseStrategyLog as log } from "../trace";
+import { routeReuseStrategyLog as log, isLogEnabled } from "../trace";
 import { NSLocationStrategy } from "./ns-location-strategy";
 import {
     destroyComponentRef,
@@ -38,7 +38,9 @@ class DetachedStateCache {
     }
 
     public clear() {
-        log(`DetachedStateCache.clear() ${this.cache.length} items will be destroyed`);
+        if (isLogEnabled()) {
+            log(`DetachedStateCache.clear() ${this.cache.length} items will be destroyed`);
+        }
 
         while (this.cache.length > 0) {
             const state = <any>this.cache.pop().state;
@@ -77,7 +79,9 @@ class DetachedStateCache {
             }
         }
 
-        log(`DetachedStateCache.clearModalCache() ${removedItemsCount} items will be destroyed`);
+        if (isLogEnabled()) {
+            log(`DetachedStateCache.clearModalCache() ${removedItemsCount} items will be destroyed`);
+        }
     }
 }
 
@@ -100,7 +104,9 @@ export class NSRouteReuseStrategy implements RouteReuseStrategy {
         const isBack = this.location._isPageNavigatingBack();
         const shouldDetach = !isBack && isPageActivated;
 
-        log(`shouldDetach isBack: ${isBack} key: ${key} result: ${shouldDetach}`);
+        if (isLogEnabled()) {
+            log(`shouldDetach isBack: ${isBack} key: ${key} result: ${shouldDetach}`);
+        }
 
         return shouldDetach;
     }
@@ -117,7 +123,9 @@ export class NSRouteReuseStrategy implements RouteReuseStrategy {
         const isBack = this.location._isPageNavigatingBack();
         const shouldAttach = isBack && cache.peek().key === key;
 
-        log(`shouldAttach isBack: ${isBack} key: ${key} result: ${shouldAttach}`);
+        if (isLogEnabled()) {
+            log(`shouldAttach isBack: ${isBack} key: ${key} result: ${shouldAttach}`);
+        }
 
         return shouldAttach;
     }
@@ -126,7 +134,9 @@ export class NSRouteReuseStrategy implements RouteReuseStrategy {
         route = findTopActivatedRouteNodeForOutlet(route);
 
         const key = getSnapshotKey(route);
-        log(`store key: ${key}, state: ${state}`);
+        if (isLogEnabled()) {
+            log(`store key: ${key}, state: ${state}`);
+        }
 
         const cache = this.cacheByOutlet[route.outlet] = this.cacheByOutlet[route.outlet] || new DetachedStateCache();
 
@@ -166,7 +176,9 @@ export class NSRouteReuseStrategy implements RouteReuseStrategy {
             state = cachedItem.state;
         }
 
-        log(`retrieved isBack: ${isBack} key: ${key} state: ${state}`);
+        if (isLogEnabled()) {
+            log(`retrieved isBack: ${isBack} key: ${key} state: ${state}`);
+        }
 
         return state;
     }
@@ -180,7 +192,9 @@ export class NSRouteReuseStrategy implements RouteReuseStrategy {
             future[pageRouterActivatedSymbol] = curr[pageRouterActivatedSymbol];
         }
 
-        log(`shouldReuseRoute result: ${shouldReuse}`);
+        if (isLogEnabled()) {
+            log(`shouldReuseRoute result: ${shouldReuse}`);
+        }
 
         return shouldReuse;
     }

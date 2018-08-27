@@ -1,7 +1,7 @@
 /* tslint:disable */
 import { Type } from "@angular/core";
 import { ɵDomAdapter } from "@angular/platform-browser";
-import { rendererLog } from "./trace";
+import { rendererLog, isLogEnabled } from "./trace";
 
 export class NativeScriptDomAdapter implements ɵDomAdapter {
   static makeCurrent() {
@@ -12,12 +12,16 @@ export class NativeScriptDomAdapter implements ɵDomAdapter {
             const privateAPI = global.require("@angular/platform-browser");
             const setRootDomAdapter = privateAPI.ɵsetRootDomAdapter;
 
-            rendererLog("Setting root DOM adapter...");
+            if (isLogEnabled()) {
+              rendererLog("Setting root DOM adapter...");
+            }
             setRootDomAdapter(new NativeScriptDomAdapter());
         } catch (e) {
-            rendererLog("@angular/platform-browser package not present. NOT setting root DOM adapter...");
+            if (isLogEnabled()) {
+              rendererLog("@angular/platform-browser package not present. NOT setting root DOM adapter...");
+            }
         }
-    }
+      }
   }
 
   hasProperty(_element: any, _name: string) {
