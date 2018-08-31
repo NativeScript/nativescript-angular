@@ -3,7 +3,6 @@ import "tns-core-modules/globals";
 import "tns-core-modules/application";
 import "./zone-js/dist/zone-nativescript";
 
-import "reflect-metadata";
 import "./polyfills/array";
 import "./polyfills/console";
 
@@ -28,6 +27,7 @@ import { NativeScriptCommonModule } from "./common";
 import { NativeScriptRendererFactory } from "./renderer";
 import { DetachedLoader } from "./common/detached-loader";
 import { throwIfAlreadyLoaded } from "./common/utils";
+import { FrameService } from "./platform-providers";
 
 export function errorHandlerFactory() {
     return new ErrorHandler();
@@ -38,6 +38,7 @@ export function errorHandlerFactory() {
         DetachedLoader,
     ],
     providers: [
+        FrameService,
         NativeScriptRendererFactory,
         SystemJsNgModuleLoader,
         { provide: APP_ROOT, useValue: true },
