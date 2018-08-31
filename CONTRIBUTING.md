@@ -81,11 +81,11 @@ If you want to contribute, but you are not sure where to start - look for [issue
 
 ## Publishing new versions
 
-Instructions how to publish a new version for **NativeScript Core Team Members**.
+Instructions how to publish a new version for Maintainers.
 
 1. Execute `npm install` to install dependencies and prepare the package for publishing:
 ```bash
-cd nativescript-angular
+cd nativescript-angular/nativescript-angular
 npm install
 ```
 
