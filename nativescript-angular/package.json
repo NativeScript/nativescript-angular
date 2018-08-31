@@ -33,7 +33,8 @@
     "tsc": "tsc -p tsconfig.json",
     "tsc-w": "tsc -p tsconfig.json -w",
     "ngc": "ngc -p tsconfig.json",
-    "prepare": "npm run ngc"
+    "prepare": "npm run ngc",
+    "version": "rm package-lock.json && conventional-changelog -p angular -i ../CHANGELOG.md -s && git add ../CHANGELOG.md"
   },
   "bin": {
     "update-app-ng-deps": "./bin/update-app-ng-deps"
