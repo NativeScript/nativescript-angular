@@ -175,8 +175,8 @@ export class PageRouterOutlet implements OnDestroy { // tslint:disable-line:dire
 
     deactivate(): void {
         if (!this.locationStrategy._isPageNavigatingBack()) {
-          log("Currently not in page back navigation - component should be detached instead of deactivated.");
-          return;
+            log("Currently not in page back navigation - component should be detached instead of deactivated.");
+            return;
         }
 
         log("PageRouterOutlet.deactivate() while going back - should destroy");
@@ -205,6 +205,9 @@ export class PageRouterOutlet implements OnDestroy { // tslint:disable-line:dire
 
         log("PageRouterOutlet.detach() - " + routeToString(this._activatedRoute));
 
+        // Detach from ChangeDetection
+        this.activated.hostView.detach();
+
         const component = this.activated;
         this.activated = null;
         this._activatedRoute = null;
@@ -218,6 +221,9 @@ export class PageRouterOutlet implements OnDestroy { // tslint:disable-line:dire
         log("PageRouterOutlet.attach() - " + routeToString(activatedRoute));
 
         this.activated = ref;
+
+        // reattach to ChangeDetection
+        this.activated.hostView.reattach();
         this._activatedRoute = activatedRoute;
 
         this.markActivatedRoute(activatedRoute);

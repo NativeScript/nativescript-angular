@@ -36,6 +36,14 @@ export class FirstComponent implements OnInit, OnDestroy {
         console.log("FirstComponent - ngOnDestroy()");
     }
 
+    ngDoCheck() {
+        console.log("FirstComponent - ngDoCheck()");
+    }
+
+    ngOnChanges(){ 
+        console.log("FirstComponent - ngOnChanges()");
+    }
+
     goBack() {
         this.message = "";
         if (this.routerExt.canGoBack()) {
