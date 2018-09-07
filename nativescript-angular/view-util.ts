@@ -18,7 +18,7 @@ import {
 } from "./element-registry";
 
 import { platformNames, Device } from "tns-core-modules/platform";
-import { viewUtilLog as traceLog } from "./trace";
+import { viewUtilLog as traceLog, isLogEnabled } from "./trace";
 
 const ELEMENT_NODE_TYPE = 1;
 const XML_ATTRIBUTES = Object.freeze(["style", "rows", "columns", "fontAttributes"]);
@@ -84,8 +84,10 @@ export class ViewUtil {
         previous: NgView,
         next: NgView
     ): void {
-        traceLog(`ViewUtil.addToQueue parent: ${parent}, view: ${child}, ` +
-            `previous: ${previous}, next: ${next}`);
+        if (isLogEnabled()) {
+            traceLog(`ViewUtil.addToQueue parent: ${parent}, view: ${child}, ` +
+                `previous: ${previous}, next: ${next}`);
+        }
 
         if (previous) {
             previous.nextSibling = child;
@@ -101,7 +103,9 @@ export class ViewUtil {
     }
 
     private appendToQueue(parent: NgView, view: NgView) {
-        traceLog(`ViewUtil.appendToQueue parent: ${parent} view: ${view}`);
+        if (isLogEnabled()) {
+            traceLog(`ViewUtil.appendToQueue parent: ${parent} view: ${view}`);
+        }
 
         if (parent.lastChild) {
             parent.lastChild.nextSibling = view;
@@ -111,7 +115,9 @@ export class ViewUtil {
     }
 
     private addToVisualTree(parent: NgView, child: NgView, next: NgView): void {
-        traceLog(`ViewUtil.addToVisualTree parent: ${parent}, view: ${child}, next: ${next}`);
+        if (isLogEnabled()) {
+            traceLog(`ViewUtil.addToVisualTree parent: ${parent}, view: ${child}, next: ${next}`);
+        }
 
         if (parent.meta && parent.meta.insertChild) {
             parent.meta.insertChild(parent, child, next);
@@ -152,7 +158,9 @@ export class ViewUtil {
     }
 
     public removeChild(parent: View, child: View) {
-       traceLog(`ViewUtil.removeChild parent: ${parent} child: ${child}`);
+        if (isLogEnabled()) {
+           traceLog(`ViewUtil.removeChild parent: ${parent} child: ${child}`);
+        }
 
         if (!parent) {
             return;
@@ -166,7 +174,9 @@ export class ViewUtil {
     }
 
     private removeFromQueue(parent: NgView, child: NgView) {
-        traceLog(`ViewUtil.removeFromQueue parent: ${parent} child: ${child}`);
+        if (isLogEnabled()) {
+            traceLog(`ViewUtil.removeFromQueue parent: ${parent} child: ${child}`);
+        }
 
         if (parent.firstChild === child && parent.lastChild === child) {
             parent.firstChild = null;
@@ -190,7 +200,9 @@ export class ViewUtil {
 
     // NOTE: This one is O(n) - use carefully
     private findPreviousElement(parent: NgView, child: NgView): NgView {
-        traceLog(`ViewUtil.findPreviousElement parent: ${parent} child: ${child}`);
+        if (isLogEnabled()) {
+            traceLog(`ViewUtil.findPreviousElement parent: ${parent} child: ${child}`);
+        }
 
         let previousVisual;
         if (isLayout(parent)) {
@@ -227,7 +239,9 @@ export class ViewUtil {
     }
 
     private removeFromVisualTree(parent: NgView, child: NgView) {
-        traceLog(`ViewUtil.findPreviousElement parent: ${parent} child: ${child}`);
+        if (isLogEnabled()) {
+            traceLog(`ViewUtil.findPreviousElement parent: ${parent} child: ${child}`);
+        }
 
         if (parent.meta && parent.meta.removeChild) {
             parent.meta.removeChild(parent, child);
@@ -259,7 +273,9 @@ export class ViewUtil {
     }
 
     public createView(name: string): NgView {
-        traceLog(`Creating view: ${name}`);
+        if (isLogEnabled()) {
+            traceLog(`Creating view: ${name}`);
+        }
 
         if (!isKnownView(name)) {
             name = "ProxyViewContainer";
@@ -331,7 +347,9 @@ export class ViewUtil {
     }
 
     private setPropertyInternal(view: NgView, attributeName: string, value: any): void {
-        traceLog(`Setting attribute: ${attributeName}=${value} to ${view}`);
+        if (isLogEnabled()) {
+            traceLog(`Setting attribute: ${attributeName}=${value} to ${view}`);
+        }
 
         if (attributeName === "class") {
             this.setClasses(view, value);

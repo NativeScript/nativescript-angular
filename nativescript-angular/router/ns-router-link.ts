@@ -1,7 +1,7 @@
 import { Directive, HostListener, Input } from "@angular/core";
 import { NavigationExtras } from "@angular/router";
 import { ActivatedRoute, Router, UrlTree } from "@angular/router";
-import { routerLog } from "../trace";
+import { routerLog, isLogEnabled } from "../trace";
 import { RouterExtensions } from "./router-extensions";
 import { NavigationOptions } from "./ns-location-strategy";
 import { NavigationTransition } from "tns-core-modules/ui/frame";
@@ -69,10 +69,12 @@ export class NSRouterLink { // tslint:disable-line:directive-class-suffix
 
     @HostListener("tap")
     onTap() {
-        routerLog(`nsRouterLink.tapped: ${this.commands} ` +
-            `clear: ${this.clearHistory} ` +
-            `transition: ${JSON.stringify(this.pageTransition)} ` +
-            `duration: ${this.pageTransitionDuration}`);
+        if (isLogEnabled()) {
+            routerLog(`nsRouterLink.tapped: ${this.commands} ` +
+                `clear: ${this.clearHistory} ` +
+                `transition: ${JSON.stringify(this.pageTransition)} ` +
+                `duration: ${this.pageTransitionDuration}`);
+        }
 
         const extras = this.getExtras();
         this.navigator.navigateByUrl(this.urlTree, extras);
@@ -100,7 +102,9 @@ export class NSRouterLink { // tslint:disable-line:directive-class-suffix
             preserveFragment: attrBoolValue(this.preserveFragment),
         });
 
-        routerLog(`nsRouterLink urlTree created: ${urlTree}`);
+        if (isLogEnabled()) {
+            routerLog(`nsRouterLink urlTree created: ${urlTree}`);
+        }
 
         return urlTree;
     }
