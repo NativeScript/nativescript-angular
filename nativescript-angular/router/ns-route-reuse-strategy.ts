@@ -108,7 +108,8 @@ export class NSRouteReuseStrategy implements RouteReuseStrategy {
     shouldAttach(route: ActivatedRouteSnapshot): boolean {
         route = findTopActivatedRouteNodeForOutlet(route);
 
-        const cache = this.cacheByOutlet[route.outlet];
+        const pathToOutlet = this.location.getPathToOutlet(route);
+        const cache = this.cacheByOutlet[pathToOutlet];
         if (!cache) {
             return false;
         }
@@ -128,7 +129,8 @@ export class NSRouteReuseStrategy implements RouteReuseStrategy {
         const key = getSnapshotKey(route);
         log(`store key: ${key}, state: ${state}`);
 
-        const cache = this.cacheByOutlet[route.outlet] = this.cacheByOutlet[route.outlet] || new DetachedStateCache();
+        const pathToOutlet = this.location.getPathToOutlet(route);
+        const cache = this.cacheByOutlet[pathToOutlet] = this.cacheByOutlet[pathToOutlet] || new DetachedStateCache();
 
         if (state) {
             let isModal = false;
@@ -152,7 +154,8 @@ export class NSRouteReuseStrategy implements RouteReuseStrategy {
     retrieve(route: ActivatedRouteSnapshot): DetachedRouteHandle | null {
         route = findTopActivatedRouteNodeForOutlet(route);
 
-        const cache = this.cacheByOutlet[route.outlet];
+        const pathToOutlet = this.location.getPathToOutlet(route);
+        const cache = this.cacheByOutlet[pathToOutlet];
         if (!cache) {
             return null;
         }
@@ -185,16 +188,16 @@ export class NSRouteReuseStrategy implements RouteReuseStrategy {
         return shouldReuse;
     }
 
-    clearCache(outletName: string) {
-        const cache = this.cacheByOutlet[outletName];
+    clearCache(pathToOutlet: string) {
+        const cache = this.cacheByOutlet[pathToOutlet];
 
         if (cache) {
             cache.clear();
         }
     }
 
-    clearModalCache(outletName: string) {
-        const cache = this.cacheByOutlet[outletName];
+    clearModalCache(pathToOutlet: string) {
+        const cache = this.cacheByOutlet[pathToOutlet];
 
         if (cache) {
             cache.clearModalCache();
