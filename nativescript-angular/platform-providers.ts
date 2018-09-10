@@ -66,80 +66,8 @@ export const defaultPageFactoryProvider = { provide: PAGE_FACTORY, useValue: def
 @Injectable()
 export class FrameService {
     // TODO: Add any methods that are needed to handle frame/page navigation
-    private frames: { frame: Frame, name: string, rootOutlet: string }[] = [];
-
-    // Return the topmost frame.
-    // TabView with frames scenario: topmost() will return the root TabViewItem frame,
-    // which could be the wrong topmost frame (modal with nested frame e.g.):
-    // TabViewItem -> Frame -> Modal -> Frame2 -> Frame2-Navigation
     getFrame(): Frame {
         let topmostFrame = topmost();
-        const { cachedFrame, cachedFrameRootOutlet } = this.findFrame(topmostFrame);
-
-        if (cachedFrame && cachedFrameRootOutlet) {
-            const topmostFrameByOutlet = this.getTopmostFrameByOutlet(cachedFrameRootOutlet);
-
-            if (topmostFrameByOutlet && topmostFrameByOutlet !== cachedFrame) {
-                topmostFrame = topmostFrameByOutlet;
-            }
-        }
-
         return topmostFrame;
-    }
-
-    addFrame(frame: Frame, name: string, rootOutlet: string) {
-        this.frames.push({ frame: frame, name: name, rootOutlet: rootOutlet });
-    }
-
-    removeFrame(frame: Frame) {
-        this.frames = this.frames.filter(currentFrame => currentFrame.frame !== frame);
-    }
-
-    containsOutlet(name: string) {
-        let nameFound = false;
-
-        for (let i = 0; i < this.frames.length; i++) {
-            const currentFrame = this.frames[i];
-
-            if (name && currentFrame.name === name) {
-                nameFound = true;
-                break;
-            }
-        }
-
-        return nameFound;
-    }
-
-    findFrame(frame: Frame) {
-        let cachedFrame;
-        let cachedFrameRootOutlet;
-
-        for (let i = 0; i < this.frames.length; i++) {
-            const currentFrame = this.frames[i];
-
-            if (currentFrame.frame === frame) {
-                cachedFrame = currentFrame;
-                cachedFrameRootOutlet = currentFrame.rootOutlet;
-                break;
-            }
-        }
-
-        return { cachedFrame, cachedFrameRootOutlet };
-    }
-
-    // Return the latest navigated frame from the given outlet branch.
-    private getTopmostFrameByOutlet(rootOutlet: string): Frame {
-        let frame: Frame;
-
-        for (let i = this.frames.length - 1; i > 0; i--) {
-            const currentFrame = this.frames[i];
-
-            if (currentFrame.rootOutlet === rootOutlet) {
-                frame = currentFrame.frame;
-                break;
-            }
-        }
-
-        return frame;
     }
 }
