@@ -1,10 +1,27 @@
 import { Injectable } from "@angular/core";
 import { LocationStrategy } from "@angular/common";
-import { DefaultUrlSerializer, UrlSegmentGroup, UrlTree } from "@angular/router";
+import { DefaultUrlSerializer, UrlSegmentGroup, UrlTree, ActivatedRoute } from "@angular/router";
 import { routerLog, routerError } from "../trace";
 import { NavigationTransition, Frame } from "tns-core-modules/ui/frame";
 import { isPresent } from "../lang-facade";
 import { FrameService } from "../platform-providers";
+
+export class Outlet {
+    pathToOutlet: string;
+    statesByOutlet: Array<LocationState> = [];
+    frames: Array<Frame> = [];
+
+    constructor(pathToOutlet: string) {
+        this.pathToOutlet = pathToOutlet;
+    }
+
+    peekState() {
+        if (this.statesByOutlet.length > 0) {
+            return this.statesByOutlet[this.statesByOutlet.length - 1];
+        }
+        return null;
+    }
+}
 
 export interface NavigationOptions {
     clearHistory?: boolean;
@@ -18,25 +35,24 @@ const defaultNavOptions: NavigationOptions = {
 };
 
 export interface LocationState {
-    state: any;
-    title: string;
-    queryParams: string;
     segmentGroup: UrlSegmentGroup;
-    isRootSegmentGroup: boolean;
-    isPageNavigation: boolean;
-    isModalNavigation: boolean;
+    isRootSegmentGroup?: boolean;
+    isPageNavigation?: boolean;
+    isModalNavigation?: boolean;
 }
 
 @Injectable()
 export class NSLocationStrategy extends LocationStrategy {
-    private statesByOutlet: { [key: string]: Array<LocationState> } = {};
-    private currentUrlTree: UrlTree;
-    private currentOutlet: string;
+    private outlets: Array<Outlet> = [];
+    private currentOutlet: Outlet;
+
     private popStateCallbacks = new Array<(_: any) => any>();
 
     private _isPageNavigationBack = false;
     private _currentNavigationOptions: NavigationOptions;
 
+    public previousUrlTree: UrlTree;
+    public currentUrlTree: UrlTree;
     public _isModalClosing = false;
     public _isModalNavigation = false;
 
@@ -50,7 +66,7 @@ export class NSLocationStrategy extends LocationStrategy {
             return "/";
         }
 
-        const state = this.peekState(this.currentOutlet);
+        const state = this.currentOutlet && this.currentOutlet.peekState();
         if (!state) {
             return "/";
         }
@@ -62,7 +78,9 @@ export class NSLocationStrategy extends LocationStrategy {
         if (state.isRootSegmentGroup) {
             tree.root = state.segmentGroup;
         } else {
-            tree.root.children[this.currentOutlet] = state.segmentGroup;
+            // tslint:disable-next-line:max-line-length
+            let changedOutlet = this.getSegmentGroup(this.currentOutlet.pathToOutlet);
+            this.updateSegmentGroup(tree.root, changedOutlet, state.segmentGroup);
         }
 
         const urlSerializer = new DefaultUrlSerializer();
@@ -84,70 +102,40 @@ export class NSLocationStrategy extends LocationStrategy {
 
     pushStateInternal(state: any, title: string, url: string, queryParams: string): void {
         const urlSerializer = new DefaultUrlSerializer();
-        const stateUrlTree: UrlTree = urlSerializer.parse(url);
-        const rootOutlets = stateUrlTree.root.children;
+        this.currentUrlTree = urlSerializer.parse(url);
+        const urlTreeRoot = this.currentUrlTree.root;
 
-        this.currentUrlTree = stateUrlTree;
+        if (!Object.keys(urlTreeRoot.children).length) {
+            // Handle case where the user declares a component at path "/".
+            // The url serializer doesn't parse this url as having a primary outlet.
+            const rootOutlet = this.createOutlet("primary", null);
+            this.currentOutlet = rootOutlet;
+        } else {
+            const queue = [];
+            queue.push(urlTreeRoot);
+            let currentTree = queue.shift();
 
-        // Handle case where the user declares a component at path "/".
-        // The url serializer doesn't parse this url as having a primary outlet.
-        if (!Object.keys(rootOutlets).length) {
-            const outletStates = this.statesByOutlet["primary"] = this.statesByOutlet["primary"] || [];
-            const isNewPage = outletStates.length === 0;
-            outletStates.push({
-                state: state,
-                title: title,
-                queryParams: queryParams,
-                segmentGroup: stateUrlTree.root,
-                isRootSegmentGroup: true,
-                isPageNavigation: isNewPage,
-                isModalNavigation: false
-            });
-            this.currentOutlet = "primary";
-        }
+            while (currentTree) {
+                Object.keys(currentTree.children).forEach(outletName => {
+                    currentTree.children[outletName].root = urlTreeRoot;
+                    currentTree.children[outletName].outlet = outletName;
 
-        Object.keys(rootOutlets).forEach(outletName => {
-            const outletStates = this.statesByOutlet[outletName] = this.statesByOutlet[outletName] || [];
-            const isNewPage = outletStates.length === 0;
-            const lastState = this.peekState(outletName);
+                    this.upsertOutlet(currentTree.children[outletName]);
 
-            if (!lastState || lastState.segmentGroup.toString() !== rootOutlets[outletName].toString()) {
-                outletStates.push({
-                    state: state,
-                    title: title,
-                    queryParams: queryParams,
-                    segmentGroup: rootOutlets[outletName],
-                    isRootSegmentGroup: false,
-                    isPageNavigation: isNewPage,
-                    isModalNavigation: false
+                    queue.push(currentTree.children[outletName]);
                 });
 
-                this.currentOutlet = outletName;
+                currentTree = queue.shift();
             }
-        });
+        }
     }
 
     replaceState(state: any, title: string, url: string, queryParams: string): void {
-        const states = this.statesByOutlet[this.currentOutlet];
+        const states = this.currentOutlet && this.currentOutlet.statesByOutlet;
+
         if (states && states.length > 0) {
             routerLog("NSLocationStrategy.replaceState changing existing state: " +
                 `${state}, title: ${title}, url: ${url}, queryParams: ${queryParams}`);
-
-            const tree = this.currentUrlTree;
-            if (url !== tree.toString()) {
-                const urlSerializer = new DefaultUrlSerializer();
-                const stateUrlTree: UrlTree = urlSerializer.parse(url);
-                const rootOutlets = stateUrlTree.root.children;
-
-                Object.keys(rootOutlets).forEach(outletName => {
-                    const topState = this.peekState(outletName);
-
-                    topState.segmentGroup = rootOutlets[outletName];
-                    topState.state = state;
-                    topState.title = title;
-                    topState.queryParams = queryParams;
-                });
-            }
         } else {
             routerLog("NSLocationStrategy.replaceState pushing new state: " +
                 `${state}, title: ${title}, url: ${url}, queryParams: ${queryParams}`);
@@ -161,7 +149,7 @@ export class NSLocationStrategy extends LocationStrategy {
 
     back(): void {
         if (this._isModalClosing) {
-            const states = this.statesByOutlet[this.currentOutlet];
+            const states = this.currentOutlet.statesByOutlet;
             // We are closing modal view
             // clear the stack until we get to the page that opened the modal view
             let state;
@@ -169,7 +157,7 @@ export class NSLocationStrategy extends LocationStrategy {
             let count = 1;
 
             while (!modalStatesCleared) {
-                state = this.peekState(this.currentOutlet);
+                state = this.currentOutlet.peekState();
 
                 if (!state) {
                     modalStatesCleared = true;
@@ -192,7 +180,7 @@ export class NSLocationStrategy extends LocationStrategy {
                 this.callPopState(state, true);
             }
         } else if (this._isPageNavigationBack) {
-            const states = this.statesByOutlet[this.currentOutlet];
+            const states = this.currentOutlet.statesByOutlet;
             // We are navigating to the previous page
             // clear the stack until we get to a page navigation state
             let state = states.pop();
@@ -206,26 +194,28 @@ export class NSLocationStrategy extends LocationStrategy {
             routerLog("NSLocationStrategy.back() while navigating back. States popped: " + count);
             this.callPopState(state, true);
         } else {
-            let state = this.peekState(this.currentOutlet);
+            let state = this.currentOutlet.peekState();
             if (state.isPageNavigation) {
                 // This was a page navigation - so navigate through frame.
                 routerLog("NSLocationStrategy.back() while not navigating back but top" +
                     " state is page - will call frame.goBack()");
-                const frame = this.frameService.getFrame();
-                frame.goBack();
+
+                const topmostFrame = this.frameService.getFrame();
+                this.currentOutlet = this.getOutletByFrame(topmostFrame);
+                this.currentOutlet.frames[this.currentOutlet.frames.length - 1].goBack();
             } else {
                 // Nested navigation - just pop the state
                 routerLog("NSLocationStrategy.back() while not navigating back but top" +
                     " state is not page - just pop");
 
-                this.callPopState(this.statesByOutlet[this.currentOutlet].pop(), true);
+                this.callPopState(this.currentOutlet.statesByOutlet.pop(), true);
             }
         }
 
     }
 
     canGoBack() {
-        return this.statesByOutlet[this.currentOutlet].length > 1;
+        return this.currentOutlet.statesByOutlet.length > 1;
     }
 
     onPopState(fn: (_: any) => any): void {
@@ -240,16 +230,17 @@ export class NSLocationStrategy extends LocationStrategy {
 
     private callPopState(state: LocationState, pop: boolean = true) {
         const urlSerializer = new DefaultUrlSerializer();
-        const rootOutlet = this.currentUrlTree.root.children[this.currentOutlet];
+        // tslint:disable-next-line:max-line-length
+        let changedOutlet = this.getSegmentGroup(this.currentOutlet.pathToOutlet);
 
-        if (state && rootOutlet) {
-            this.currentUrlTree.root.children[this.currentOutlet] = state.segmentGroup;
+        if (state && changedOutlet) {
+            this.updateSegmentGroup(this.currentUrlTree.root, changedOutlet, state.segmentGroup);
         } else {
             // when closing modal view there are scenarios (e.g. root viewContainerRef) when we need
             // to clean up the named page router outlet to make sure we will open the modal properly again if needed.
-            delete this.statesByOutlet[this.currentOutlet];
-            delete this.currentUrlTree.root.children[this.currentOutlet];
-            this.currentOutlet = Object.keys(this.statesByOutlet)[0];
+            const topmostFrame = this.frameService.getFrame();
+            this.currentOutlet = this.getOutletByFrame(topmostFrame);
+            this.updateSegmentGroup(this.currentUrlTree.root, changedOutlet, null);
         }
 
         const url = urlSerializer.serialize(this.currentUrlTree);
@@ -259,24 +250,15 @@ export class NSLocationStrategy extends LocationStrategy {
         }
     }
 
-    private peekState(name: string) {
-        const states = this.statesByOutlet[name] || [];
-        if (states.length > 0) {
-            return states[states.length - 1];
-        }
-        return null;
-    }
-
     public toString() {
         let result = [];
 
-        Object.keys(this.statesByOutlet).forEach(outletName => {
-            const outletStates = this.statesByOutlet[outletName];
+        this.outlets.forEach(outlet => {
+            const outletStates = outlet.statesByOutlet;
             const outletLog = outletStates
                 // tslint:disable-next-line:max-line-length
-                .map((v, i) => `${outletName}.${i}.[${v.isPageNavigation ? "PAGE" : "INTERNAL"}].[${v.isModalNavigation ? "MODAL" : "BASE"}] "${v.segmentGroup.toString()}"`)
+                .map((v, i) => `${outlet.pathToOutlet}.${i}.[${v.isPageNavigation ? "PAGE" : "INTERNAL"}].[${v.isModalNavigation ? "MODAL" : "BASE"}] "${v.segmentGroup.toString()}"`)
                 .reverse();
-
 
             result = result.concat(outletLog);
         });
@@ -293,13 +275,7 @@ export class NSLocationStrategy extends LocationStrategy {
         routerLog("NSLocationStrategy.startGoBack()");
         this._isPageNavigationBack = true;
 
-        let { cachedFrame } = this.frameService.findFrame(frame);
-
-        if (cachedFrame) {
-            this.currentOutlet = cachedFrame.rootOutlet;
-        } else if (!this.frameService.containsOutlet(name)) {
-            this.currentOutlet = name;
-        }
+        this.currentOutlet = this.getOutletByFrame(frame);
     }
 
     public _finishBackPageNavigation() {
@@ -316,18 +292,17 @@ export class NSLocationStrategy extends LocationStrategy {
     }
 
     public _beginModalNavigation(frame: Frame): void {
-      routerLog("NSLocationStrategy._beginModalNavigation()");
+        routerLog("NSLocationStrategy._beginModalNavigation()");
 
-      let { cachedFrameRootOutlet } = this.frameService.findFrame(frame);
+        this.currentOutlet = this.getOutletByFrame(frame);
+        const lastState = this.currentOutlet.peekState();
 
-      const lastState = this.peekState(cachedFrameRootOutlet || this.currentOutlet);
+        if (lastState) {
+            lastState.isModalNavigation = true;
+        }
 
-      if (lastState) {
-          lastState.isModalNavigation = true;
-      }
-
-      this._isModalNavigation = true;
-  }
+        this._isModalNavigation = true;
+    }
 
     public _beginCloseModalNavigation(): void {
         if (this._isModalClosing) {
@@ -352,20 +327,9 @@ export class NSLocationStrategy extends LocationStrategy {
     public _beginPageNavigation(name: string, frame: Frame): NavigationOptions {
         routerLog("NSLocationStrategy._beginPageNavigation()");
 
-        let { cachedFrame } = this.frameService.findFrame(frame);
+        this.currentOutlet = this.getOutletByFrame(frame);
+        const lastState = this.currentOutlet.peekState();
 
-        if (cachedFrame) {
-            this.currentOutlet = cachedFrame.rootOutlet;
-        } else {
-            // Changing the current outlet only if navigating in non-cached root outlet.
-            if (!this.frameService.containsOutlet(name) && this.statesByOutlet[name] /* ensure root outlet exists */) {
-                this.currentOutlet = name;
-            }
-
-            this.frameService.addFrame(frame, name, this.currentOutlet);
-        }
-
-        const lastState = this.peekState(this.currentOutlet);
         if (lastState) {
             lastState.isPageNavigation = true;
         }
@@ -373,7 +337,7 @@ export class NSLocationStrategy extends LocationStrategy {
         const navOptions = this._currentNavigationOptions || defaultNavOptions;
         if (navOptions.clearHistory) {
             routerLog("NSLocationStrategy._beginPageNavigation clearing states history");
-            this.statesByOutlet[this.currentOutlet] = [lastState];
+            this.currentOutlet.statesByOutlet = [lastState];
         }
 
         this._currentNavigationOptions = undefined;
@@ -390,7 +354,172 @@ export class NSLocationStrategy extends LocationStrategy {
             `${JSON.stringify(this._currentNavigationOptions)})`);
     }
 
-    public _getStates(): { [key: string]: Array<LocationState> } {
-        return this.statesByOutlet;
+    public _getOutlets(): Array<Outlet> {
+        return this.outlets;
+    }
+
+    upsertOutlet(changedOutlet: UrlSegmentGroup) {
+        const pathToOutlet = this.getPathToOutlet(changedOutlet);
+        const outlet = this.findOutlet(pathToOutlet);
+
+        if (!outlet) {
+            this.currentOutlet = this.createOutlet(pathToOutlet, changedOutlet);
+        } else if (this.updateOutlet(outlet, changedOutlet)) { // If statesByOutlet updated
+            this.currentOutlet = outlet;
+        }
+    }
+
+    updateOutletFrames(activatedRoute: ActivatedRoute, frame: Frame) {
+        const pathToOutlet = this.getPathToOutlet(activatedRoute);
+        const outlet = this.findOutlet(pathToOutlet);
+
+        if (outlet) {
+            if (!outlet.frames.some(currentFrame => currentFrame === frame)) {
+                outlet.frames.push(frame);
+            }
+
+            this.currentOutlet = outlet;
+            // TODO: move this frame to be the last one in the collection?
+        }
+    }
+
+    removeOutlet(frame: Frame) {
+        // Remove outlet only if the destroying frame is the last one int the outlet frames.
+        this.outlets = this.outlets.filter(currentOutlet => {
+            currentOutlet.frames = currentOutlet.frames.filter(currentFrame => currentFrame !== frame);
+            return currentOutlet.frames.length;
+        });
+    }
+
+    getPathToOutlet(activatedRoute: any): string {
+        let pathToOutlet;
+        let lastPath = activatedRoute.outlet;
+        let parent = activatedRoute.parent;
+
+        while (parent && activatedRoute.root !== parent) {
+            if (parent && parent.outlet !== lastPath) {
+                if (lastPath === "primary") {
+                    lastPath = parent.outlet;
+                } else {
+                    lastPath = parent.outlet;
+                    pathToOutlet = lastPath + "-" + (pathToOutlet || activatedRoute.outlet);
+                }
+            }
+
+            parent = parent.parent;
+        }
+
+        return pathToOutlet || lastPath;
+    }
+
+    private findOutlet(pathToOutlet: string): Outlet {
+        let outlet;
+
+        for (let index = 0; index < this.outlets.length; index++) {
+            const currentOutlet = this.outlets[index];
+
+            if (currentOutlet.pathToOutlet === pathToOutlet) {
+                outlet = currentOutlet;
+                break;
+            }
+        }
+
+        return outlet;
+    }
+
+    private getOutletByFrame(frame: Frame) {
+        let outlet;
+
+        for (let index = 0; index < this.outlets.length; index++) {
+            const currentOutlet = this.outlets[index];
+
+            if (currentOutlet.frames.some(currentFrame => currentFrame === frame)) {
+                outlet = currentOutlet;
+                break;
+            }
+        }
+
+        return outlet;
+    }
+
+    private updateOutlet(outlet: Outlet, segmentGroup: UrlSegmentGroup): boolean {
+        const isNewPage = outlet.statesByOutlet.length === 0;
+        const lastState = outlet.statesByOutlet[outlet.statesByOutlet.length - 1];
+
+        if (!lastState || lastState.segmentGroup.toString() !== segmentGroup.toString()) {
+            const locationState: LocationState = {
+                isModalNavigation: false,
+                segmentGroup: segmentGroup,
+                isRootSegmentGroup: lastState ? lastState.isRootSegmentGroup : false,
+                isPageNavigation: isNewPage
+            };
+
+            outlet.statesByOutlet.push(locationState);
+            return true;
+        }
+
+        return false;
+    }
+
+    private createOutlet(pathToOutlet: string, segmentGroup: any): Outlet {
+        let isRootSegmentGroup: boolean = false;
+
+        if (!segmentGroup) {
+            // Handle case where the user declares a component at path "/".
+            // The url serializer doesn't parse this url as having a primary outlet.
+            segmentGroup = this.currentUrlTree && this.currentUrlTree.root;
+            isRootSegmentGroup = true;
+        }
+
+        const newOutlet = new Outlet(pathToOutlet);
+
+        const locationState: LocationState = {
+            isModalNavigation: false,
+            segmentGroup: segmentGroup,
+            isRootSegmentGroup: isRootSegmentGroup,
+            isPageNavigation: true // It is a new OutletNode.
+        };
+
+        newOutlet.statesByOutlet = [locationState];
+        this.outlets.push(newOutlet);
+
+        return newOutlet;
+    }
+
+    private getSegmentGroup(pathToOutlet: string): UrlSegmentGroup {
+        const pathList = pathToOutlet.split("-");
+        let segmentGroup = this.currentUrlTree.root;
+
+        for (let index = 0; index < pathList.length; index++) {
+            const currentPath = pathList[index];
+
+            if (Object.keys(segmentGroup.children).length) {
+                segmentGroup = segmentGroup.children[currentPath];
+            }
+        }
+
+        return segmentGroup;
+    }
+
+    // Traversal and replacement of segmentGroup.
+    private updateSegmentGroup(rootNode, oldSegmentGroup: UrlSegmentGroup, newSegmentGroup: UrlSegmentGroup) {
+        const queue = [];
+        queue.push(rootNode);
+        let currentTree = queue.shift();
+
+        while (currentTree) {
+            Object.keys(currentTree.children).forEach(outletName => {
+                if (currentTree.children[outletName] === oldSegmentGroup) {
+                    if (newSegmentGroup) {
+                        currentTree.children[outletName] = newSegmentGroup;
+                    } else {
+                        delete currentTree.children[outletName];
+                    }
+                }
+                queue.push(currentTree.children[outletName]);
+            });
+
+            currentTree = queue.shift();
+        }
     }
 }

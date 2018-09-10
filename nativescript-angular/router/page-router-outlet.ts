@@ -108,6 +108,7 @@ export class PageRouterOutlet implements OnDestroy { // tslint:disable-line:dire
     private _activatedRoute: ActivatedRoute | null = null;
     private detachedLoaderFactory: ComponentFactory<DetachedLoader>;
 
+    private pathToOutlet: string;
     private name: string;
     private viewUtil: ViewUtil;
     private frame: Frame;
@@ -168,15 +169,15 @@ export class PageRouterOutlet implements OnDestroy { // tslint:disable-line:dire
     ngOnDestroy(): void {
         // Clear accumulated modal view page cache when page-router-outlet
         // destroyed on modal view closing
-        this.routeReuseStrategy.clearModalCache(this.name);
+        this.routeReuseStrategy.clearModalCache(this.pathToOutlet);
         this.parentContexts.onChildOutletDestroyed(this.name);
-        this.frameService.removeFrame(this.frame);
+        this.locationStrategy.removeOutlet(this.frame);
     }
 
     deactivate(): void {
         if (!this.locationStrategy._isPageNavigatingBack()) {
-          log("Currently not in page back navigation - component should be detached instead of deactivated.");
-          return;
+            log("Currently not in page back navigation - component should be detached instead of deactivated.");
+            return;
         }
 
         log("PageRouterOutlet.deactivate() while going back - should destroy");
@@ -233,6 +234,12 @@ export class PageRouterOutlet implements OnDestroy { // tslint:disable-line:dire
     activateWith(
         activatedRoute: ActivatedRoute,
         resolver: ComponentFactoryResolver | null): void {
+
+        if (!this.pathToOutlet) {
+            this.pathToOutlet = this.locationStrategy.getPathToOutlet(activatedRoute);
+        }
+
+        this.locationStrategy.updateOutletFrames(activatedRoute, this.frame);
 
         if (this.locationStrategy._isPageNavigatingBack()) {
             log("Currently in page back navigation - component should be reattached instead of activated.");
@@ -303,7 +310,7 @@ export class PageRouterOutlet implements OnDestroy { // tslint:disable-line:dire
         // Clear refCache if navigation with clearHistory
         if (navOptions.clearHistory) {
             const clearCallback = () => setTimeout(() => {
-                this.routeReuseStrategy.clearCache(this.name);
+                this.routeReuseStrategy.clearCache(this.pathToOutlet);
                 page.off(Page.navigatedToEvent, clearCallback);
             });
 
