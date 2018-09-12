@@ -2,6 +2,19 @@
     <Label class="action-bar-title" text="Home Component"></Label>
 </ActionBar>
 
-<StackLayout>
-    <Button text="Go to Tabs page" [nsRouterLink]="['/tabs']"></Button>
-</StackLayout>  
+<GridLayout rows="auto, *">
+    <WrapLayout>
+        <Button text="Go to Tabs page" [nsRouterLink]="['/tabs']"></Button>
+        <Button text="Navigate Players" [nsRouterLink]="[{ outlets: { playerTab : ['player', '1']}}]"></Button>
+        <Button text="Navigate Teams" [nsRouterLink]="[{ outlets: { teamTab : ['team', '1']}}]"></Button>
+        <Button text="Back Players" (tap)="backPlayers()"></Button>
+        <Button text="Back Teams" (tap)="backTeams()"></Button>
+        <Button text="Back Both" (tap)="backBoth()"></Button>
+        <Button text="Back Activated Route" (tap)="backActivatedRoute()"></Button>
+    </WrapLayout>
+
+    <GridLayout row="1" columns="*, *">
+        <page-router-outlet col="0" name="playerTab"></page-router-outlet>
+        <page-router-outlet col="1" name="teamTab"></page-router-outlet>
+    </GridLayout>
+</GridLayout>

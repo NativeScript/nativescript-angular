@@ -1,10 +1,7 @@
 import { Component, ViewContainerRef } from "@angular/core";
 import { ModalDialogService, ModalDialogOptions } from "nativescript-angular/directives/dialogs";
 import { RouterExtensions } from "nativescript-angular/router";
-import { EventData } from "tns-core-modules/data/observable";
-import { confirm } from "ui/dialogs";
-
-import { AppModule } from "../app.module";
+import { ActivatedRoute } from "@angular/router";
 
 @Component({
     moduleId: module.id,
@@ -15,5 +12,31 @@ export class HomeComponent {
     constructor(
         private modal: ModalDialogService,
         private vcRef: ViewContainerRef,
+        private activeRoute: ActivatedRoute,
         private routerExtension: RouterExtensions) { }
+
+    ngOnInit() {
+        //this.routerExtension.navigate(["first"], { relativeTo: this.activeRoute });
+        this.routerExtension.navigate([{ outlets: { playerTab: ["players"], teamTab: ["teams"] } }], { relativeTo: this.activeRoute });
+    }
+
+    navigatePlayers() {
+        this.routerExtension.navigate([{ outlets: { playerTab: ['player', '1'] } }], { relativeTo: this.activeRoute });
+    }
+
+    backPlayers() {
+        this.routerExtension.back({ outlets: ["playerTab"], relativeTo: this.activeRoute });
+    }
+
+    backTeams() {
+        this.routerExtension.back({ outlets: ["teamTab"], relativeTo: this.activeRoute });
+    }
+
+    backBoth() {
+        this.routerExtension.back({ outlets: ["teamTab", "playerTab"], relativeTo: this.activeRoute });
+    }
+
+    backActivatedRoute() {
+        this.routerExtension.back({ relativeTo: this.activeRoute });
+    }
 }

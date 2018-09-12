@@ -19,7 +19,13 @@ const routes: Routes = [
         path: "login", component: LoginComponent
     },
     {
-        path: "home", component: HomeComponent
+        path: "home", component: HomeComponent, children: [
+            { path: "players", component: PlayerComponent, outlet: "playerTab" },
+            { path: "player/:id", component: PlayerDetailComponent, outlet: "playerTab" },
+
+            { path: "teams", component: TeamsComponent, outlet: "teamTab" },
+            { path: "team/:id", component: TeamDetailComponent, outlet: "teamTab" },
+        ]
     },
     {
         path: "tabs", component: TabsComponent, children: [
@@ -30,16 +36,6 @@ const routes: Routes = [
             { path: "team/:id", component: TeamDetailComponent, outlet: "teamTab" },
         ]
     }
-
-
-    // { path: "", redirectTo: "/(playerTab:players//teamTab:teams)", pathMatch: "full" },
-
-
-    // { path: "players", component: PlayerComponent, outlet: "playerTab" },
-    // { path: "player/:id", component: PlayerDetailComponent, outlet: "playerTab" },
-
-    // { path: "teams", component: TeamsComponent, outlet: "teamTab" },
-    // { path: "team/:id", component: TeamDetailComponent, outlet: "teamTab" },
 ];
 
 @NgModule({
