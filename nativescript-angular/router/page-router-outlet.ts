@@ -23,7 +23,7 @@ import { DEVICE, PAGE_FACTORY, PageFactory } from "../platform-providers";
 import { routerLog as log } from "../trace";
 import { DetachedLoader } from "../common/detached-loader";
 import { ViewUtil } from "../view-util";
-import { NSLocationStrategy } from "./ns-location-strategy";
+import { NSLocationStrategy, Outlet } from "./ns-location-strategy";
 import { NSRouteReuseStrategy } from "./ns-route-reuse-strategy";
 import { FrameService } from "../platform-providers";
 
@@ -108,7 +108,7 @@ export class PageRouterOutlet implements OnDestroy { // tslint:disable-line:dire
     private _activatedRoute: ActivatedRoute | null = null;
     private detachedLoaderFactory: ComponentFactory<DetachedLoader>;
 
-    private pathToOutlet: string;
+    private outlet: Outlet;
     private name: string;
     private viewUtil: ViewUtil;
     private frame: Frame;
@@ -169,13 +169,13 @@ export class PageRouterOutlet implements OnDestroy { // tslint:disable-line:dire
     ngOnDestroy(): void {
         // Clear accumulated modal view page cache when page-router-outlet
         // destroyed on modal view closing
-        this.routeReuseStrategy.clearModalCache(this.pathToOutlet);
+        this.routeReuseStrategy.clearModalCache(this.outlet.pathToOutlet);
         this.parentContexts.onChildOutletDestroyed(this.name);
         this.locationStrategy.removeOutlet(this.frame);
     }
 
     deactivate(): void {
-        if (!this.locationStrategy._isPageNavigatingBack()) {
+        if (!this.outlet.isPageNavigationBack) {
             log("Currently not in page back navigation - component should be detached instead of deactivated.");
             return;
         }
@@ -223,7 +223,7 @@ export class PageRouterOutlet implements OnDestroy { // tslint:disable-line:dire
 
         this.markActivatedRoute(activatedRoute);
 
-        this.locationStrategy._finishBackPageNavigation();
+        this.locationStrategy._finishBackPageNavigation(this.frame);
     }
 
     /**
@@ -235,15 +235,16 @@ export class PageRouterOutlet implements OnDestroy { // tslint:disable-line:dire
         activatedRoute: ActivatedRoute,
         resolver: ComponentFactoryResolver | null): void {
 
-        if (!this.pathToOutlet) {
-            this.pathToOutlet = this.locationStrategy.getPathToOutlet(activatedRoute);
+        if (!this.outlet) {
+            const pathToOutlet = this.locationStrategy.getPathToOutlet(activatedRoute);
+            this.outlet = this.locationStrategy.findOutlet(pathToOutlet);
         }
 
-        this.locationStrategy.updateOutletFrames(activatedRoute, this.frame);
+        this.locationStrategy.updateOutletFrames(this.outlet, this.frame);
 
-        if (this.locationStrategy._isPageNavigatingBack()) {
+        if (this.outlet.isPageNavigationBack) {
             log("Currently in page back navigation - component should be reattached instead of activated.");
-            this.locationStrategy._finishBackPageNavigation();
+            this.locationStrategy._finishBackPageNavigation(this.frame);
         }
 
         log("PageRouterOutlet.activateWith() - " + routeToString(activatedRoute));
@@ -300,17 +301,17 @@ export class PageRouterOutlet implements OnDestroy { // tslint:disable-line:dire
 
         page.on(Page.navigatedFromEvent, (<any>global).Zone.current.wrap((args: NavigatedData) => {
             if (args.isBackNavigation) {
-                this.locationStrategy._beginBackPageNavigation(this.name, this.frame);
+                this.locationStrategy._beginBackPageNavigation(this.frame);
                 this.locationStrategy.back();
             }
         }));
 
-        const navOptions = this.locationStrategy._beginPageNavigation(this.name, this.frame);
+        const navOptions = this.locationStrategy._beginPageNavigation(this.frame);
 
         // Clear refCache if navigation with clearHistory
         if (navOptions.clearHistory) {
             const clearCallback = () => setTimeout(() => {
-                this.routeReuseStrategy.clearCache(this.pathToOutlet);
+                this.routeReuseStrategy.clearCache(this.outlet.pathToOutlet);
                 page.off(Page.navigatedToEvent, clearCallback);
             });
 

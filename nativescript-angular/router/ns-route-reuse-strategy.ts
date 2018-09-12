@@ -94,10 +94,11 @@ export class NSRouteReuseStrategy implements RouteReuseStrategy {
 
     shouldDetach(route: ActivatedRouteSnapshot): boolean {
         route = findTopActivatedRouteNodeForOutlet(route);
-
+        const pathToOutlet = this.location.getPathToOutlet(route);
+        const outlet = this.location.findOutlet(pathToOutlet);
         const key = getSnapshotKey(route);
         const isPageActivated = route[pageRouterActivatedSymbol];
-        const isBack = this.location._isPageNavigatingBack();
+        const isBack = outlet ? outlet.isPageNavigationBack : false;
         const shouldDetach = !isBack && isPageActivated;
 
         log(`shouldDetach isBack: ${isBack} key: ${key} result: ${shouldDetach}`);
@@ -109,13 +110,14 @@ export class NSRouteReuseStrategy implements RouteReuseStrategy {
         route = findTopActivatedRouteNodeForOutlet(route);
 
         const pathToOutlet = this.location.getPathToOutlet(route);
+        const outlet = this.location.findOutlet(pathToOutlet);
         const cache = this.cacheByOutlet[pathToOutlet];
         if (!cache) {
             return false;
         }
 
         const key = getSnapshotKey(route);
-        const isBack = this.location._isPageNavigatingBack();
+        const isBack = outlet ? outlet.isPageNavigationBack : false;
         const shouldAttach = isBack && cache.peek().key === key;
 
         log(`shouldAttach isBack: ${isBack} key: ${key} result: ${shouldAttach}`);
@@ -155,13 +157,14 @@ export class NSRouteReuseStrategy implements RouteReuseStrategy {
         route = findTopActivatedRouteNodeForOutlet(route);
 
         const pathToOutlet = this.location.getPathToOutlet(route);
+        const outlet = this.location.findOutlet(pathToOutlet);
         const cache = this.cacheByOutlet[pathToOutlet];
         if (!cache) {
             return null;
         }
 
         const key = getSnapshotKey(route);
-        const isBack = this.location._isPageNavigatingBack();
+        const isBack = outlet ? outlet.isPageNavigationBack : false;
         const cachedItem = cache.peek();
 
         let state = null;

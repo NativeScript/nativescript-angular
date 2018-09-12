@@ -7,6 +7,7 @@ import { isPresent } from "../lang-facade";
 import { FrameService } from "../platform-providers";
 
 export class Outlet {
+    isPageNavigationBack: boolean;
     pathToOutlet: string;
     statesByOutlet: Array<LocationState> = [];
     frames: Array<Frame> = [];
@@ -47,12 +48,9 @@ export class NSLocationStrategy extends LocationStrategy {
     private currentOutlet: Outlet;
 
     private popStateCallbacks = new Array<(_: any) => any>();
-
-    private _isPageNavigationBack = false;
     private _currentNavigationOptions: NavigationOptions;
+    private currentUrlTree: UrlTree;
 
-    public previousUrlTree: UrlTree;
-    public currentUrlTree: UrlTree;
     public _isModalClosing = false;
     public _isModalNavigation = false;
 
@@ -147,7 +145,9 @@ export class NSLocationStrategy extends LocationStrategy {
         throw new Error("NSLocationStrategy.forward() - not implemented");
     }
 
-    back(): void {
+    back(outlet?: Outlet): void {
+        this.currentOutlet = outlet || this.currentOutlet;
+
         if (this._isModalClosing) {
             const states = this.currentOutlet.statesByOutlet;
             // We are closing modal view
@@ -179,7 +179,7 @@ export class NSLocationStrategy extends LocationStrategy {
             if (state) {
                 this.callPopState(state, true);
             }
-        } else if (this._isPageNavigationBack) {
+        } else if (this.currentOutlet.isPageNavigationBack) {
             const states = this.currentOutlet.statesByOutlet;
             // We are navigating to the previous page
             // clear the stack until we get to a page navigation state
@@ -200,8 +200,10 @@ export class NSLocationStrategy extends LocationStrategy {
                 routerLog("NSLocationStrategy.back() while not navigating back but top" +
                     " state is page - will call frame.goBack()");
 
-                const topmostFrame = this.frameService.getFrame();
-                this.currentOutlet = this.getOutletByFrame(topmostFrame);
+                if (!outlet) {
+                    const topmostFrame = this.frameService.getFrame();
+                    this.currentOutlet = this.getOutletByFrame(topmostFrame);
+                }
                 this.currentOutlet.frames[this.currentOutlet.frames.length - 1].goBack();
             } else {
                 // Nested navigation - just pop the state
@@ -267,28 +269,28 @@ export class NSLocationStrategy extends LocationStrategy {
     }
 
     // Methods for syncing with page navigation in PageRouterOutlet
-    public _beginBackPageNavigation(name: string, frame: Frame) {
-        if (this._isPageNavigationBack) {
+    public _beginBackPageNavigation(frame: Frame) {
+        const outlet: Outlet = this.getOutletByFrame(frame);
+
+        if (outlet.isPageNavigationBack) {
             routerError("Attempted to call startGoBack while going back.");
             return;
         }
         routerLog("NSLocationStrategy.startGoBack()");
-        this._isPageNavigationBack = true;
+        outlet.isPageNavigationBack = true;
 
-        this.currentOutlet = this.getOutletByFrame(frame);
+        this.currentOutlet = outlet;
     }
 
-    public _finishBackPageNavigation() {
-        if (!this._isPageNavigationBack) {
+    public _finishBackPageNavigation(frame: Frame) {
+        const outlet: Outlet = this.getOutletByFrame(frame);
+
+        if (!outlet.isPageNavigationBack) {
             routerError("Attempted to call endGoBack while not going back.");
             return;
         }
         routerLog("NSLocationStrategy.finishBackPageNavigation()");
-        this._isPageNavigationBack = false;
-    }
-
-    public _isPageNavigatingBack() {
-        return this._isPageNavigationBack;
+        outlet.isPageNavigationBack = false;
     }
 
     public _beginModalNavigation(frame: Frame): void {
@@ -324,7 +326,7 @@ export class NSLocationStrategy extends LocationStrategy {
         this._isModalClosing = false;
     }
 
-    public _beginPageNavigation(name: string, frame: Frame): NavigationOptions {
+    public _beginPageNavigation(frame: Frame): NavigationOptions {
         routerLog("NSLocationStrategy._beginPageNavigation()");
 
         this.currentOutlet = this.getOutletByFrame(frame);
@@ -369,17 +371,13 @@ export class NSLocationStrategy extends LocationStrategy {
         }
     }
 
-    updateOutletFrames(activatedRoute: ActivatedRoute, frame: Frame) {
-        const pathToOutlet = this.getPathToOutlet(activatedRoute);
-        const outlet = this.findOutlet(pathToOutlet);
-
+    updateOutletFrames(outlet: Outlet, frame: Frame) {
         if (outlet) {
             if (!outlet.frames.some(currentFrame => currentFrame === frame)) {
                 outlet.frames.push(frame);
             }
 
             this.currentOutlet = outlet;
-            // TODO: move this frame to be the last one in the collection?
         }
     }
 
@@ -412,7 +410,7 @@ export class NSLocationStrategy extends LocationStrategy {
         return pathToOutlet || lastPath;
     }
 
-    private findOutlet(pathToOutlet: string): Outlet {
+    findOutlet(pathToOutlet: string): Outlet {
         let outlet;
 
         for (let index = 0; index < this.outlets.length; index++) {
