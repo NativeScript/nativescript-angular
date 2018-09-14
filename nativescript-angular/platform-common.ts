@@ -50,11 +50,18 @@ if ((<any>global).___TS_UNUSED) {
         return InjectionToken;
     })();
 }
+
+export interface HmrOptions {
+    moduleTypeFactory?: () => Type<any> | NgModuleFactory<any>
+    livesyncCallback: (bootstrapPlatfrom: () => void) => void;
+}
+
 export interface AppOptions {
     bootInExistingPage?: boolean;
     cssFile?: string;
     startPageActionBarHidden?: boolean;
     createFrameOnBootstrap?: boolean;
+    hmr?: HmrOptions;
 }
 
 export type PlatformFactory = (extraProviders?: StaticProvider[]) => PlatformRef;
@@ -91,7 +98,9 @@ export class NativeScriptPlatformRef extends PlatformRef {
 
     @profile
     bootstrapModuleFactory<M>(moduleFactory: NgModuleFactory<M>): Promise<NgModuleRef<M>> {
-        this._bootstrapper = () => this.platform.bootstrapModuleFactory(moduleFactory);
+        this._bootstrapper = () => this.platform.bootstrapModuleFactory(
+            this.appOptions.hmr ? <NgModuleFactory<M>>this.appOptions.hmr.moduleTypeFactory() : moduleFactory
+        );
 
         this.bootstrapApp();
 
@@ -103,7 +112,9 @@ export class NativeScriptPlatformRef extends PlatformRef {
         moduleType: Type<M>,
         compilerOptions: CompilerOptions | CompilerOptions[] = []
     ): Promise<NgModuleRef<M>> {
-        this._bootstrapper = () => this.platform.bootstrapModule(moduleType, compilerOptions);
+        this._bootstrapper = () => this.platform.bootstrapModule(
+            this.appOptions.hmr ? <Type<M>>this.appOptions.hmr.moduleTypeFactory() : moduleType,
+            compilerOptions);
 
         this.bootstrapApp();
 
@@ -113,7 +124,11 @@ export class NativeScriptPlatformRef extends PlatformRef {
     @profile
     private bootstrapApp() {
         (<any>global).__onLiveSyncCore = () => {
-            this._livesync();
+            if (this.appOptions.hmr) {
+                this.appOptions.hmr.livesyncCallback(() => this._livesync());
+            } else {
+                this._livesync();
+            }
         };
 
         if (this.appOptions && typeof this.appOptions.cssFile === "string") {
@@ -224,7 +239,12 @@ export class NativeScriptPlatformRef extends PlatformRef {
         if (isLogEnabled()) {
             bootstrapLog("Angular livesync started.");
         }
-        onBeforeLivesync.next(lastBootstrappedModule ? lastBootstrappedModule.get() : null);
+
+        const lastModuleRef = lastBootstrappedModule ? lastBootstrappedModule.get() : null
+        onBeforeLivesync.next(lastModuleRef);
+        if (lastModuleRef) {
+            lastModuleRef.destroy();
+        }
 
         const autoCreateFrame = !!this.appOptions.createFrameOnBootstrap;
         let tempAppHostView: AppHostView;
