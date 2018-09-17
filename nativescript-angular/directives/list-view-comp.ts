@@ -26,7 +26,7 @@ import { ObservableArray } from "tns-core-modules/data/observable-array";
 import { profile } from "tns-core-modules/profiling";
 
 import { getSingleViewRecursive } from "../element-registry";
-import { listViewLog, listViewError } from "../trace";
+import { listViewLog, listViewError, isLogEnabled } from "../trace";
 
 const NG_VIEW = "_ngViewRef";
 
@@ -101,7 +101,9 @@ export class ListViewComponent implements DoCheck, OnDestroy, AfterContentInit {
     }
 
     ngAfterContentInit() {
-        listViewLog("ListView.ngAfterContentInit()");
+        if (isLogEnabled()) {
+            listViewLog("ListView.ngAfterContentInit()");
+        }
         this.setItemTemplates();
     }
 
@@ -115,7 +117,9 @@ export class ListViewComponent implements DoCheck, OnDestroy, AfterContentInit {
         this.itemTemplate = this.itemTemplateQuery;
 
         if (this._templateMap) {
-            listViewLog("Setting templates");
+            if (isLogEnabled()) {
+                listViewLog("Setting templates");
+            }
 
             const templates: KeyedTemplate[] = [];
             this._templateMap.forEach(value => {
@@ -126,7 +130,9 @@ export class ListViewComponent implements DoCheck, OnDestroy, AfterContentInit {
     }
 
     public registerTemplate(key: string, template: TemplateRef<ListItemContext>) {
-        listViewLog("registerTemplate for key: " + key);
+        if (isLogEnabled()) {
+            listViewLog(`registerTemplate for key: ${key}`);
+        }
         if (!this._templateMap) {
             this._templateMap = new Map<string, KeyedTemplate>();
         }
@@ -134,7 +140,9 @@ export class ListViewComponent implements DoCheck, OnDestroy, AfterContentInit {
         const keyedTemplate = {
             key,
             createView: () => {
-                listViewLog("registerTemplate for key: " + key);
+                if (isLogEnabled()) {
+                    listViewLog(`registerTemplate for key: ${key}`);
+                }
 
                 const viewRef = this.loader.createEmbeddedView(template, new ListItemContext(), 0);
                 const resultView = getItemViewRoot(viewRef);
@@ -159,7 +167,9 @@ export class ListViewComponent implements DoCheck, OnDestroy, AfterContentInit {
         let viewRef: EmbeddedViewRef<ListItemContext>;
 
         if (args.view) {
-            listViewLog("onItemLoading: " + index + " - Reusing existing view");
+            if (isLogEnabled()) {
+                listViewLog(`onItemLoading: ${index} - Reusing existing view`);
+            }
             viewRef = args.view[NG_VIEW];
             // Getting angular view from original element (in cases when ProxyViewContainer
             // is used NativeScript internally wraps it in a StackLayout)
@@ -168,12 +178,16 @@ export class ListViewComponent implements DoCheck, OnDestroy, AfterContentInit {
             }
 
             if (!viewRef) {
-                listViewError("ViewReference not found for item " + index + ". View recycling is not working");
+                if (isLogEnabled()) {
+                    listViewError(`ViewReference not found for item ${index}. View recycling is not working`);
+                }
             }
         }
 
         if (!viewRef) {
-            listViewLog("onItemLoading: " + index + " - Creating view from template");
+            if (isLogEnabled()) {
+                listViewLog(`onItemLoading: ${index} - Creating view from template`);
+            }
             viewRef = this.loader.createEmbeddedView(this.itemTemplate, new ListItemContext(), 0);
             args.view = getItemViewRoot(viewRef);
             args.view[NG_VIEW] = viewRef;
@@ -197,17 +211,23 @@ export class ListViewComponent implements DoCheck, OnDestroy, AfterContentInit {
 
     @profile
     private detectChangesOnChild(viewRef: EmbeddedViewRef<ListItemContext>, index: number) {
-        listViewLog("Manually detect changes in child: " + index);
+        if (isLogEnabled()) {
+            listViewLog(`Manually detect changes in child: ${index}`);
+        }
         viewRef.markForCheck();
         viewRef.detectChanges();
     }
 
     ngDoCheck() {
         if (this._differ) {
-            listViewLog("ngDoCheck() - execute differ");
+            if (isLogEnabled()) {
+                listViewLog("ngDoCheck() - execute differ");
+            }
             const changes = this._differ.diff(this._items);
             if (changes) {
-                listViewLog("ngDoCheck() - refresh");
+                if (isLogEnabled()) {
+                    listViewLog("ngDoCheck() - refresh");
+                }
                 this.listView.refresh();
             }
         }

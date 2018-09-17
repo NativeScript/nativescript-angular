@@ -39,6 +39,6 @@ We love PRs! Check out the [contributing guidelines](CONTRIBUTING.md) and [devel
   * Self-closing elements (`<Label text="Name" /><Button text="Save" />`) get parsed wrong (in this case Button gets parsed as a Label child.
   
 ## Get Help 
-Please, use [github issues](https://github.com/NativeScript/nativescript-angular/issues) strictly for [reporting bugs](CONTRIBUTING.md#reporting-bugs) or [requesting features](CONTRIBUTING.md#requesting-new-features). For general questions and support, check out the [NativeScript community forum](https://discourse.nativescript.org/) or ask our experts in [NativeScript community Slack channel](http://developer.telerik.com/wp-login.php?action=slack-invitation).
+Please, use [github issues](https://github.com/NativeScript/nativescript-angular/issues) strictly for [reporting bugs](CONTRIBUTING.md#reporting-bugs) or [requesting features](CONTRIBUTING.md#requesting-new-features). For general questions and support, check out [Stack Overflow](https://stackoverflow.com/questions/tagged/nativescript) or ask our experts in [NativeScript community Slack channel](http://developer.telerik.com/wp-login.php?action=slack-invitation).
   
 ![](https://ga-beacon.appspot.com/UA-111455-24/nativescript/nativescript-angular?pixel) 

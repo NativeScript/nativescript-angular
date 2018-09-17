@@ -11,7 +11,7 @@ import { TabView, TabViewItem } from "tns-core-modules/ui/tab-view";
 import { TextTransform  } from "tns-core-modules/ui/text-base";
 
 import { InvisibleNode } from "../element-registry";
-import { rendererLog } from "../trace";
+import { rendererLog, isLogEnabled } from "../trace";
 import { isBlank } from "../lang-facade";
 
 export interface TabViewItemDef {
@@ -46,7 +46,9 @@ export class TabViewDirective implements AfterViewInit {
 
     ngAfterViewInit() {
         this.viewInitialized = true;
-        rendererLog("this._selectedIndex: " + this._selectedIndex);
+        if (isLogEnabled()) {
+            rendererLog("this._selectedIndex: " + this._selectedIndex);
+        }
         if (!isBlank(this._selectedIndex)) {
             this.tabView.selectedIndex = this._selectedIndex;
         }

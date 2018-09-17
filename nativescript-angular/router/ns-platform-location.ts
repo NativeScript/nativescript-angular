@@ -1,15 +1,16 @@
 import { NSLocationStrategy } from "./ns-location-strategy";
 import { PlatformLocation, LocationChangeListener } from "@angular/common";
 import { Injectable } from "@angular/core";
-import { routerLog } from "../trace";
-
+import { routerLog, isLogEnabled } from "../trace";
 
 @Injectable()
 export class NativescriptPlatformLocation extends PlatformLocation {
 
     constructor(private locationStartegy: NSLocationStrategy) {
         super();
-        routerLog("NativescriptPlatformLocation.constructor()");
+        if (isLogEnabled()) {
+            routerLog("NativescriptPlatformLocation.constructor()");
+        }
     }
 
     getBaseHrefFromDOM(): string {
