@@ -240,7 +240,8 @@ export class PageRouterOutlet implements OnDestroy { // tslint:disable-line:dire
             this.outlet = this.locationStrategy.findOutlet(pathToOutlet);
         }
 
-        this.locationStrategy.updateOutletFrames(this.outlet, this.frame);
+        const parentUrlRoute = this.locationStrategy.getParentPathState(activatedRoute);
+        this.locationStrategy.updateOutlet(this.outlet, this.frame, parentUrlRoute);
 
         if (this.outlet.isPageNavigationBack) {
             log("Currently in page back navigation - component should be reattached instead of activated.");
@@ -311,7 +312,8 @@ export class PageRouterOutlet implements OnDestroy { // tslint:disable-line:dire
         // Clear refCache if navigation with clearHistory
         if (navOptions.clearHistory) {
             const clearCallback = () => setTimeout(() => {
-                this.routeReuseStrategy.clearCache(this.outlet.pathToOutlet);
+                const outletParentPath = this.locationStrategy.getParentPathState(this._activatedRoute);
+                this.routeReuseStrategy.clearCache(this.outlet.pathToOutlet + outletParentPath);
                 page.off(Page.navigatedToEvent, clearCallback);
             });
 

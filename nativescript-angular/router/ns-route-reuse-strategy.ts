@@ -95,11 +95,14 @@ export class NSRouteReuseStrategy implements RouteReuseStrategy {
     shouldDetach(route: ActivatedRouteSnapshot): boolean {
         route = findTopActivatedRouteNodeForOutlet(route);
         const pathToOutlet = this.location.getPathToOutlet(route);
+        const pathToParentOutlet = route.parent ? this.location.getPathToOutlet(route.parent) : null;
+        const parentOutlet = pathToParentOutlet ? this.location.findOutlet(pathToParentOutlet) : null;
         const outlet = this.location.findOutlet(pathToOutlet);
         const key = getSnapshotKey(route);
         const isPageActivated = route[pageRouterActivatedSymbol];
         const isBack = outlet ? outlet.isPageNavigationBack : false;
-        const shouldDetach = !isBack && isPageActivated;
+        const isParentBack = parentOutlet ? parentOutlet.isPageNavigationBack : false;
+        const shouldDetach = !isParentBack && !isBack && isPageActivated;
 
         log(`shouldDetach isBack: ${isBack} key: ${key} result: ${shouldDetach}`);
 
@@ -111,7 +114,8 @@ export class NSRouteReuseStrategy implements RouteReuseStrategy {
 
         const pathToOutlet = this.location.getPathToOutlet(route);
         const outlet = this.location.findOutlet(pathToOutlet);
-        const cache = this.cacheByOutlet[pathToOutlet];
+        const outletParentPath = this.location.getParentPathState(route);
+        const cache = this.cacheByOutlet[pathToOutlet + outletParentPath];
         if (!cache) {
             return false;
         }
@@ -132,7 +136,10 @@ export class NSRouteReuseStrategy implements RouteReuseStrategy {
         log(`store key: ${key}, state: ${state}`);
 
         const pathToOutlet = this.location.getPathToOutlet(route);
-        const cache = this.cacheByOutlet[pathToOutlet] = this.cacheByOutlet[pathToOutlet] || new DetachedStateCache();
+        const outletParentPath = this.location.getParentPathState(route);
+
+        // tslint:disable-next-line:max-line-length
+        const cache = this.cacheByOutlet[pathToOutlet + outletParentPath] = this.cacheByOutlet[pathToOutlet + outletParentPath] || new DetachedStateCache();
 
         if (state) {
             let isModal = false;
@@ -158,7 +165,8 @@ export class NSRouteReuseStrategy implements RouteReuseStrategy {
 
         const pathToOutlet = this.location.getPathToOutlet(route);
         const outlet = this.location.findOutlet(pathToOutlet);
-        const cache = this.cacheByOutlet[pathToOutlet];
+        const outletParentPath = this.location.getParentPathState(route);
+        const cache = this.cacheByOutlet[pathToOutlet + outletParentPath];
         if (!cache) {
             return null;
         }

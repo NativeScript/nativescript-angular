@@ -14,6 +14,7 @@ export class Outlet {
 
     constructor(pathToOutlet: string) {
         this.pathToOutlet = pathToOutlet;
+        this.isPageNavigationBack = false;
     }
 
     peekState() {
@@ -37,9 +38,10 @@ const defaultNavOptions: NavigationOptions = {
 
 export interface LocationState {
     segmentGroup: UrlSegmentGroup;
-    isRootSegmentGroup?: boolean;
-    isPageNavigation?: boolean;
-    isModalNavigation?: boolean;
+    isRootSegmentGroup: boolean;
+    isPageNavigation: boolean;
+    isModalNavigation: boolean;
+    parentRouteState?: string;
 }
 
 @Injectable()
@@ -366,15 +368,32 @@ export class NSLocationStrategy extends LocationStrategy {
 
         if (!outlet) {
             this.currentOutlet = this.createOutlet(pathToOutlet, changedOutlet);
-        } else if (this.updateOutlet(outlet, changedOutlet)) { // If statesByOutlet updated
+        } else if (this.updateOutletStates(outlet, changedOutlet)) { // If statesByOutlet updated
             this.currentOutlet = outlet;
         }
     }
 
-    updateOutletFrames(outlet: Outlet, frame: Frame) {
+    updateOutlet(outlet: Outlet, frame: Frame, parentUrl: string) {
         if (outlet) {
             if (!outlet.frames.some(currentFrame => currentFrame === frame)) {
                 outlet.frames.push(frame);
+            }
+
+            let lastState = outlet.peekState();
+
+            // Existing route activated but from different parent url
+            if (lastState.parentRouteState && lastState.parentRouteState !== parentUrl) {
+                const newLocationState: LocationState = {
+                    isModalNavigation: lastState.isModalNavigation,
+                    segmentGroup: lastState.segmentGroup,
+                    isRootSegmentGroup: lastState.isRootSegmentGroup,
+                    isPageNavigation: lastState.isPageNavigation,
+                    parentRouteState: parentUrl // It is a new OutletNode.
+                };
+
+                outlet.statesByOutlet.push(newLocationState);
+            } else if (!lastState.parentRouteState) {
+                lastState.parentRouteState = parentUrl;
             }
 
             this.currentOutlet = outlet;
@@ -410,6 +429,25 @@ export class NSLocationStrategy extends LocationStrategy {
         return pathToOutlet || lastPath;
     }
 
+    getParentPathState(activatedRoute: any): string {
+        if (!activatedRoute.parent) {
+            return "";
+        }
+
+        activatedRoute = activatedRoute.parent;
+        let pathToOutlet;
+        let currentRouteConfig = activatedRoute.routeConfig ? activatedRoute.routeConfig.path : "";
+        let parent = activatedRoute.parent;
+
+        while (parent && activatedRoute.root !== parent) {
+            const parentRouteConfig = parent.routeConfig ? parent.routeConfig.path : "";
+            pathToOutlet = parentRouteConfig + "-" + (pathToOutlet || currentRouteConfig);
+            parent = parent.parent;
+        }
+
+        return pathToOutlet || currentRouteConfig;
+    }
+
     findOutlet(pathToOutlet: string): Outlet {
         let outlet;
 
@@ -440,7 +478,7 @@ export class NSLocationStrategy extends LocationStrategy {
         return outlet;
     }
 
-    private updateOutlet(outlet: Outlet, segmentGroup: UrlSegmentGroup): boolean {
+    private updateOutletStates(outlet: Outlet, segmentGroup: UrlSegmentGroup): boolean {
         const isNewPage = outlet.statesByOutlet.length === 0;
         const lastState = outlet.statesByOutlet[outlet.statesByOutlet.length - 1];
 
