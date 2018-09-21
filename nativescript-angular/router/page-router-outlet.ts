@@ -169,9 +169,11 @@ export class PageRouterOutlet implements OnDestroy { // tslint:disable-line:dire
     ngOnDestroy(): void {
         // Clear accumulated modal view page cache when page-router-outlet
         // destroyed on modal view closing
-        this.routeReuseStrategy.clearModalCache(this.outlet.pathToOutlet);
+        const outletParentPath = this.locationStrategy.getPathState(this._activatedRoute.parent);
+        this.routeReuseStrategy.clearModalCache(outletParentPath);
+        // this.routeReuseStrategy.clearModalCache(this.outlet.pathToOutlet);
         this.parentContexts.onChildOutletDestroyed(this.name);
-        this.locationStrategy.removeOutlet(this.frame);
+        this.locationStrategy.clearOutlet(this.frame, this._activatedRoute);
     }
 
     deactivate(): void {
@@ -240,8 +242,7 @@ export class PageRouterOutlet implements OnDestroy { // tslint:disable-line:dire
             this.outlet = this.locationStrategy.findOutlet(pathToOutlet);
         }
 
-        const parentUrlRoute = this.locationStrategy.getParentPathState(activatedRoute);
-        this.locationStrategy.updateOutlet(this.outlet, this.frame, parentUrlRoute);
+        this.locationStrategy.updateOutlet(this.outlet, this.frame, activatedRoute);
 
         if (this.outlet.isPageNavigationBack) {
             log("Currently in page back navigation - component should be reattached instead of activated.");
@@ -312,8 +313,8 @@ export class PageRouterOutlet implements OnDestroy { // tslint:disable-line:dire
         // Clear refCache if navigation with clearHistory
         if (navOptions.clearHistory) {
             const clearCallback = () => setTimeout(() => {
-                const outletParentPath = this.locationStrategy.getParentPathState(this._activatedRoute);
-                this.routeReuseStrategy.clearCache(this.outlet.pathToOutlet + outletParentPath);
+                const outletParentPath = this.locationStrategy.getPathState(this._activatedRoute.parent);
+                this.routeReuseStrategy.clearCache(outletParentPath);
                 page.off(Page.navigatedToEvent, clearCallback);
             });
 

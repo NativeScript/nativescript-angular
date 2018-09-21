@@ -114,8 +114,8 @@ export class NSRouteReuseStrategy implements RouteReuseStrategy {
 
         const pathToOutlet = this.location.getPathToOutlet(route);
         const outlet = this.location.findOutlet(pathToOutlet);
-        const outletParentPath = this.location.getParentPathState(route);
-        const cache = this.cacheByOutlet[pathToOutlet + outletParentPath];
+        const outletParentPath = this.location.getPathState(route.parent);
+        const cache = this.cacheByOutlet[outletParentPath];
         if (!cache) {
             return false;
         }
@@ -136,10 +136,10 @@ export class NSRouteReuseStrategy implements RouteReuseStrategy {
         log(`store key: ${key}, state: ${state}`);
 
         const pathToOutlet = this.location.getPathToOutlet(route);
-        const outletParentPath = this.location.getParentPathState(route);
+        const outletParentPath = this.location.getPathState(route.parent);
 
         // tslint:disable-next-line:max-line-length
-        const cache = this.cacheByOutlet[pathToOutlet + outletParentPath] = this.cacheByOutlet[pathToOutlet + outletParentPath] || new DetachedStateCache();
+        const cache = this.cacheByOutlet[outletParentPath] = this.cacheByOutlet[outletParentPath] || new DetachedStateCache();
 
         if (state) {
             let isModal = false;
@@ -165,8 +165,8 @@ export class NSRouteReuseStrategy implements RouteReuseStrategy {
 
         const pathToOutlet = this.location.getPathToOutlet(route);
         const outlet = this.location.findOutlet(pathToOutlet);
-        const outletParentPath = this.location.getParentPathState(route);
-        const cache = this.cacheByOutlet[pathToOutlet + outletParentPath];
+        const outletParentPath = this.location.getPathState(route.parent);
+        const cache = this.cacheByOutlet[outletParentPath];
         if (!cache) {
             return null;
         }
