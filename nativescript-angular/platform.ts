@@ -1,4 +1,4 @@
-// Always reflect-metadata before @angular/core.
+// Always import reflect-metadata before @angular/core.
 // It's needed to handle __metadata calls inside @angular/core
 import "reflect-metadata";
 
