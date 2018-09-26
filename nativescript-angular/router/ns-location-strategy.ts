@@ -252,7 +252,6 @@ export class NSLocationStrategy extends LocationStrategy {
 
     private callPopState(state: LocationState, pop: boolean = true) {
         const urlSerializer = new DefaultUrlSerializer();
-        // tslint:disable-next-line:max-line-length
         let changedOutlet = this.getSegmentGroup(this.currentOutlet.pathToOutlet);
 
         if (state && changedOutlet) {
@@ -292,7 +291,7 @@ export class NSLocationStrategy extends LocationStrategy {
     public _beginBackPageNavigation(frame: Frame) {
         const outlet: Outlet = this.getOutletByFrame(frame);
 
-        if (outlet.isPageNavigationBack) {
+        if (!outlet || outlet.isPageNavigationBack) {
             routerError("Attempted to call startGoBack while going back.");
             return;
         }
@@ -305,7 +304,7 @@ export class NSLocationStrategy extends LocationStrategy {
     public _finishBackPageNavigation(frame: Frame) {
         const outlet: Outlet = this.getOutletByFrame(frame);
 
-        if (!outlet.isPageNavigationBack) {
+        if (!outlet || !outlet.isPageNavigationBack) {
             routerError("Attempted to call endGoBack while not going back.");
             return;
         }
@@ -386,21 +385,22 @@ export class NSLocationStrategy extends LocationStrategy {
         if (!outlet.frames.some(currentFrame => currentFrame === frame)) {
             outlet.frames.push(frame);
 
-            const parentRoute = this.getPathState(activatedRoute.parent);
+            const parentRouteState = this.getPathState(activatedRoute.parent);
             let lastState = outlet.peekState();
-            lastState.parentRoute = parentRoute;
+            lastState.parentRoute = parentRouteState;
         }
 
         this.currentOutlet = outlet;
     }
 
-    clearOutlet(frame: Frame, activatedRoute: ActivatedRoute) {
-        const outlet = this.getOutletByFrame(frame);
-        const parentPathRoute = this.getPathState(activatedRoute.parent);
+    clearOutlet(frame: Frame, outlet: Outlet) {
+        let parentPathState;
 
-        if (outlet) {
-            outlet.statesByOutlet = outlet.statesByOutlet.filter(state => state.parentRoute !== parentPathRoute);
+        if (outlet.parent) {
+            parentPathState = this.getPathState(outlet.parent.currentActivatedRoute);
         }
+
+        outlet.statesByOutlet = outlet.statesByOutlet.filter(state => state.parentRoute !== parentPathState);
 
         // Remove outlet only if the destroying frame is the last one int the outlet frames.
         this.outlets = this.outlets.filter(currentOutlet => {
@@ -410,6 +410,10 @@ export class NSLocationStrategy extends LocationStrategy {
     }
 
     getPathToOutlet(activatedRoute: any): string {
+        if (!activatedRoute) {
+            return "";
+        }
+
         let pathToOutlet;
         let lastPath = activatedRoute.outlet;
         let parent = activatedRoute.parent;
