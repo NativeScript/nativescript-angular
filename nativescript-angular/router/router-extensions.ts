@@ -57,10 +57,11 @@ export class RouterExtensions {
     private backOutlets(options: BackNavigationOptions) {
         const rootRoute: ActivatedRoute = this.router.routerState.root;
         const outletsToBack: Array<Outlet> = [];
-        const outlets = options.outlets || ["primary"];
+        let outlets = options.outlets;
         let relativeRoute: ActivatedRoute = options.relativeTo;
 
         if (!options.outlets && relativeRoute) {
+            outlets = [relativeRoute.outlet];
             relativeRoute = relativeRoute.parent || rootRoute;
         } else if (!relativeRoute) {
             relativeRoute = rootRoute;
