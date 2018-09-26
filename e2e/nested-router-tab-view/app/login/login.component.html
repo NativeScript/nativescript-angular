@@ -3,5 +3,6 @@
 </ActionBar>
 
 <StackLayout>
-    <Button text="Go to Home page" [nsRouterLink]="['/home']"></Button>
-</StackLayout>  
+    <!-- <Button text="Go To Home Page" [nsRouterLink]="['/home', { outlets: { playerTab: ['players'], teamTab: ['teams'] } }]"></Button> -->
+    <Button text="Go To Home Page" [nsRouterLink]="['/home', { outlets: { playerTab: ['players'], teamTab: ['teams'] } }]"></Button>
+</StackLayout> 

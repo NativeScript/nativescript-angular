@@ -17,11 +17,9 @@ export class HomeComponent {
 
     ngOnInit() {
         //this.routerExtension.navigate(["first"], { relativeTo: this.activeRoute });
-        this.routerExtension.navigate([{ outlets: { playerTab: ["players"], teamTab: ["teams"] } }], { relativeTo: this.activeRoute });
-    }
+        //this.routerExtension.navigate([{ outlets: { playerTab: ["players"], teamTab: ["teams"] } }], { relativeTo: this.activeRoute });
 
-    navigatePlayers() {
-        this.routerExtension.navigate([{ outlets: { playerTab: ['player', '1'] } }], { relativeTo: this.activeRoute });
+        //this.routerExtension.navigate(['players'], { relativeTo: this.activeRoute });
     }
 
     backPlayers() {
@@ -39,4 +37,17 @@ export class HomeComponent {
     backActivatedRoute() {
         this.routerExtension.back({ relativeTo: this.activeRoute });
     }
+
+    back() {
+        this.routerExtension.back();
+    }
+
+    navigatePlayers() {
+        this.routerExtension.navigate([{ outlets: { playerTab: ['player', '1'] } }], { relativeTo: this.activeRoute, animated:true, transition: {name:"flip", duration:2000, curve:"linear"} });
+    }
+
+
+    // navigateTeams() {
+    //     this.routerExtension.navigate([{ outlets: { teamTab: ['team', '1'] } }], { relativeTo: this.activeRoute });
+    // }
 }

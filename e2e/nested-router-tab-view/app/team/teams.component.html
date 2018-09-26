@@ -1,6 +1,6 @@
 <ActionBar title="Team List" class="action-bar"></ActionBar>
 
-<GridLayout class="page">
+<GridLayout>
     <ListView [items]="items" class="list-group">
         <ng-template let-item="item">
             <Label [nsRouterLink]="['../team', item.id]" [text]="item.name"

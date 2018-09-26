@@ -10,13 +10,11 @@ export class DataService {
     private players = new Array<DataItem>(
         { id: 1, name: "Player One" },
         { id: 2, name: "Player Two" },
-        { id: 3, name: "Player Three" },
     );
 
     private teams = new Array<DataItem>(
         { id: 1, name: "Team One" },
         { id: 2, name: "Team Two" },
-        { id: 3, name: "Team Three" },
     );
 
     getPlayers(): DataItem[] {
