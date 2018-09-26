@@ -1,6 +1,6 @@
 import { Component, OnInit } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
-
+import { RouterExtensions } from "nativescript-angular/router";
 import { DataService, DataItem } from "../data.service";
 import { Subscription } from "rxjs";
 
@@ -15,7 +15,9 @@ export class PlayerDetailComponent implements OnInit {
 
     constructor(
         private data: DataService,
-        private route: ActivatedRoute
+        private route: ActivatedRoute,
+        private routerExtension: RouterExtensions,
+        private activeRoute: ActivatedRoute,
     ) { }
 
     ngOnInit(): void {
@@ -27,5 +29,9 @@ export class PlayerDetailComponent implements OnInit {
 
     ngOnDestroy() {
         this.subscription.unsubscribe();
+    }
+
+    backPlayers() {
+        this.routerExtension.back({ relativeTo: this.activeRoute });
     }
 }

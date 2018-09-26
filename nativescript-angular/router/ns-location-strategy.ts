@@ -215,7 +215,7 @@ export class NSLocationStrategy extends LocationStrategy {
             this.callPopState(state, true);
         } else {
             let state = this.currentOutlet.peekState();
-            if (state.isPageNavigation) {
+            if (state && state.isPageNavigation) {
                 // This was a page navigation - so navigate through frame.
                 routerLog("NSLocationStrategy.back() while not navigating back but top" +
                     " state is page - will call frame.goBack()");
@@ -499,7 +499,7 @@ export class NSLocationStrategy extends LocationStrategy {
             parentRoute: lastState ? lastState.parentRoute : null
         };
 
-        if (parentActivatedRoute) { // p-r-o can only contains activatedRoute
+        if (parentActivatedRoute && parentSegmentGroup) { // p-r-o can only contains activatedRoute
             // Check whether it is a new state but with a different parent url
             const lastParentUrl = parentActivatedRoute.url.value;
             isNewParentUrl = lastParentUrl.toString() !== parentSegmentGroup.toString();
@@ -518,7 +518,7 @@ export class NSLocationStrategy extends LocationStrategy {
             updated = true;
         }
 
-        if (updated) {
+        if (updated && parentSegmentGroup) {
             this.updateParentsStates(outlet, parentSegmentGroup);
         }
 
@@ -529,7 +529,7 @@ export class NSLocationStrategy extends LocationStrategy {
         let parentOutlet = outlet.parent;
 
         // Update parents lastState segmentGroups
-        while (parentOutlet) {
+        while (parentOutlet && newSegmentGroup) {
             const state = parentOutlet.peekState();
 
             if (state) {

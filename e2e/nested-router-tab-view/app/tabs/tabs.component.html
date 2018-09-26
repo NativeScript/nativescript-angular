@@ -1,11 +1,29 @@
-<TabView androidTabsPosition="bottom">
-    <page-router-outlet 
-        *tabItem="{title: 'Players'}" 
-        name="playerTab">
-    </page-router-outlet>
+<ActionBar title="Tabs Component" class="action-bar"></ActionBar>
 
-    <page-router-outlet
-        *tabItem="{title: 'Teams'}" 
-        name="teamTab">
-    </page-router-outlet>
-</TabView>
+<StackLayout>
+    <!-- <GridLayout rows="auto,*" columns="*,*">
+        <WrapLayout row="0" colSpan="2">
+            <Button text="Back()" (tap)="back()"></Button>
+            <Button text="Back(Players)" (tap)="backPlayers()"></Button>
+            <Button text="Back(Teams)" (tap)="backTeams()"></Button>
+            <Button text="Back(Both)" (tap)="backBoth()"></Button>
+            <Button text="Back(ActivatedRoute)" (tap)="backActivatedRoute()"></Button>
+        </WrapLayout>
+        <GridLayout row="1" col="0">
+            <page-router-outlet name="playerTab"></page-router-outlet>
+        </GridLayout>
+        <GridLayout row="1" col="1">
+            <page-router-outlet name="teamTab"></page-router-outlet>
+        </GridLayout>
+    </GridLayout> -->
+    <GridLayout rows="auto,*">
+        <Button text="Back(ActivatedRoute)" (tap)="backActivatedRoute()"></Button>
+        <TabView row="1" androidTabsPosition="bottom">
+            <page-router-outlet *tabItem="{title: 'Players Tab'}" name="playerTab">
+            </page-router-outlet>
+
+            <page-router-outlet *tabItem="{title: 'Teams Tab'}" name="teamTab">
+            </page-router-outlet>
+        </TabView>
+    </GridLayout>
+</StackLayout>

@@ -1,30 +1,25 @@
 import { Component, ViewContainerRef } from "@angular/core";
 import { ModalDialogService, ModalDialogOptions } from "nativescript-angular/directives/dialogs";
 import { RouterExtensions } from "nativescript-angular/router";
-import { EventData } from "tns-core-modules/data/observable";
 import { ActivatedRoute } from "@angular/router";
-import { confirm } from "ui/dialogs";
-import { Page } from "ui/page";
-import { AppModule } from "../app.module";
 
 @Component({
     moduleId: module.id,
-    selector: "tabs-page",
-    templateUrl: "./tabs.component.html"
+    selector: "home2-page",
+    templateUrl: "./home2.component.html"
 })
-export class TabsComponent {
+export class Home2Component {
     constructor(
         private modal: ModalDialogService,
         private vcRef: ViewContainerRef,
-        private routerExtension: RouterExtensions,
         private activeRoute: ActivatedRoute,
-        private page: Page) {
-        // this.page.actionBarHidden = true;
-    }
+        private routerExtension: RouterExtensions) { }
 
     ngOnInit() {
-        //this.routerExtension.navigate(["players"], { relativeTo: this.activeRoute });
-        this.routerExtension.navigate([{ outlets: { playerTab: ["players"], teamTab: ["teams"] } }], { relativeTo: this.activeRoute });
+        //this.routerExtension.navigate(["first"], { relativeTo: this.activeRoute });
+        //this.routerExtension.navigate([{ outlets: { playerTab: ["players"], teamTab: ["teams"] } }], { relativeTo: this.activeRoute });
+
+        //this.routerExtension.navigate(['players'], { relativeTo: this.activeRoute });
     }
 
     backPlayers() {
@@ -45,5 +40,14 @@ export class TabsComponent {
 
     back() {
         this.routerExtension.back();
+    }
+
+    navigatePlayers() {
+        this.routerExtension.navigate([{ outlets: { playerTab: ['player', '1'] } }], { relativeTo: this.activeRoute });
+    }
+
+
+    navigateTeams() {
+        this.routerExtension.navigate([{ outlets: { teamTab: ['team', '1'] } }], { relativeTo: this.activeRoute });
     }
 }

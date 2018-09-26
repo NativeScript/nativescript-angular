@@ -5,11 +5,11 @@
   "repository": "<fill-your-repository-here>",
   "nativescript": {
     "id": "org.nativescript.nestedroutertabview",
-    "tns-ios": {
-      "version": "3.4.1"
-    },
     "tns-android": {
       "version": "4.3.0-2018-08-13-04"
+    },
+    "tns-ios": {
+      "version": "4.2.0"
     }
   },
   "dependencies": {

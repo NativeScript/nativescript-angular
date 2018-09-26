@@ -56,7 +56,6 @@ export class RouterExtensions {
 
     private backOutlets(options: BackNavigationOptions) {
         const rootRoute: ActivatedRoute = this.router.routerState.root;
-        const outletsToBack: Array<Outlet> = [];
         let outlets = options.outlets;
         let relativeRoute: ActivatedRoute = options.relativeTo;
 
@@ -67,6 +66,23 @@ export class RouterExtensions {
             relativeRoute = rootRoute;
         }
 
+        const outletsToBack: Array<Outlet> = this.findOutletsToBack(relativeRoute, outlets);
+
+        if (outletsToBack.length !== outlets.length) {
+            routerError("No outlet found relative to activated route");
+        } else {
+            outletsToBack.forEach(outletToBack => {
+                if (outletToBack.isPageNavigationBack) {
+                    routerError("Attempted to call startGoBack while going back:");
+                } else {
+                    this.locationStrategy.back(outletToBack);
+                }
+            });
+        }
+    }
+
+    private findOutletsToBack(relativeRoute: ActivatedRoute, outlets: Array<string>): Array<Outlet> {
+        const outletsToBack: Array<Outlet> = [];
         for (let index = 0; index < relativeRoute.children.length; index++) {
             const currentRoute = relativeRoute.children[index];
 
@@ -80,16 +96,6 @@ export class RouterExtensions {
             }
         }
 
-        if (outletsToBack.length !== outlets.length) {
-            routerError("No outlet found relative to activated route");
-        } else {
-            outletsToBack.forEach(outletToBack => {
-                if (outletToBack.isPageNavigationBack) {
-                    routerError("Attempted to call startGoBack while going back:");
-                } else {
-                    this.locationStrategy.back(outletToBack);
-                }
-            });
-        }
+        return outletsToBack;
     }
 }
