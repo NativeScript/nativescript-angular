@@ -2,6 +2,7 @@ import { Injectable } from "@angular/core";
 import { Router, UrlTree, NavigationExtras, ActivatedRoute } from "@angular/router";
 import { NSLocationStrategy, NavigationOptions, Outlet } from "./ns-location-strategy";
 import { FrameService } from "../platform-providers";
+import { routerError } from "../trace";
 
 export type ExtendedNavigationExtras = NavigationExtras & NavigationOptions;
 
@@ -70,16 +71,24 @@ export class RouterExtensions {
 
             if (outlets.some(currentOutlet => currentOutlet === currentRoute.outlet)) {
                 const pathToOutlet = this.locationStrategy.getPathToOutlet(currentRoute);
-                outletsToBack.push(this.locationStrategy.findOutlet(pathToOutlet));
+                const outlet = this.locationStrategy.findOutlet(pathToOutlet);
+
+                if (outlet) {
+                    outletsToBack.push(outlet);
+                }
             }
         }
 
         if (outletsToBack.length !== outlets.length) {
-            throw new Error("No outlet found relative to activated route");
+            routerError("No outlet found relative to activated route");
+        } else {
+            outletsToBack.forEach(outletToBack => {
+                if (outletToBack.isPageNavigationBack) {
+                    routerError("Attempted to call startGoBack while going back:");
+                } else {
+                    this.locationStrategy.back(outletToBack);
+                }
+            });
         }
-
-        outletsToBack.forEach(outletToBack => {
-            this.locationStrategy.back(outletToBack);
-        });
     }
 }
