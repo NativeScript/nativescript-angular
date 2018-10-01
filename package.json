@@ -9,28 +9,28 @@
       "version": "next"
     },
     "tns-android": {
-      "version": "4.2.0-2018-06-18-02"
+      "version": "next"
     }
   },
   "dependencies": {
-    "@angular/common": "~6.0.0",
-    "@angular/compiler": "~6.0.0",
-    "@angular/core": "~6.0.0",
-    "@angular/forms": "~6.0.0",
-    "@angular/http": "~6.0.0",
-    "@angular/platform-browser": "~6.0.0",
-    "@angular/platform-browser-dynamic": "~6.0.0",
-    "@angular/router": "~6.0.0",
+    "@angular/common": "~6.1.0",
+    "@angular/compiler": "~6.1.0",
+    "@angular/core": "~6.1.0",
+    "@angular/forms": "~6.1.0",
+    "@angular/http": "~6.1.0",
+    "@angular/platform-browser": "~6.1.0",
+    "@angular/platform-browser-dynamic": "~6.1.0",
+    "@angular/router": "~6.1.0",
     "nativescript-angular": "next",
     "nativescript-intl": "~3.0.0",
     "nativescript-theme-core": "^1.0.4",
     "reflect-metadata": "~0.1.8",
     "rxjs": "~6.0.0 || >=6.1.0 || >=6.0.0",
     "tns-core-modules": "next",
-    "zone.js": "^0.8.4"
+    "zone.js": "^0.8.26"
   },
   "devDependencies": {
-    "@angular/compiler-cli": "~6.1.0-beta.1",
+    "@angular/compiler-cli": "~6.1.0",
     "babel-traverse": "6.24.1",
     "babel-types": "6.24.1",
     "babylon": "6.17.0",
@@ -41,7 +41,7 @@
     "nativescript-dev-webpack": "next",
     "tslint": "^5.4.3",
     "typescript": "~2.7.2",
-    "@ngtools/webpack": "6.1.0-rc.0"
+    "@ngtools/webpack": "~6.2.0"
   },
   "scripts": {
     "tslint": "tslint --config tslint.json 'app/**/*.ts'",
