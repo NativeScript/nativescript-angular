@@ -102,8 +102,11 @@ export class NSRouteReuseStrategy implements RouteReuseStrategy {
         const isBack = outlet ? outlet.isPageNavigationBack : false;
         let shouldDetach = !isBack && isPageActivated;
 
-        if (outlet && outlet.parent && !outlet.parent.shouldDetach) {
-            shouldDetach = false;
+        if (outlet) {
+            if (outlet.parent && !outlet.parent.shouldDetach) {
+                shouldDetach = false;
+            }
+
             outlet.shouldDetach = shouldDetach;
         }
 
