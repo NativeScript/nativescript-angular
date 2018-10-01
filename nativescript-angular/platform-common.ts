@@ -52,7 +52,7 @@ if ((<any>global).___TS_UNUSED) {
 }
 
 export interface HmrOptions {
-    moduleTypeFactory?: () => Type<any> | NgModuleFactory<any>
+    moduleTypeFactory?: () => Type<any> | NgModuleFactory<any>;
     livesyncCallback: (bootstrapPlatfrom: () => void) => void;
 }
 
@@ -240,7 +240,7 @@ export class NativeScriptPlatformRef extends PlatformRef {
             bootstrapLog("Angular livesync started.");
         }
 
-        const lastModuleRef = lastBootstrappedModule ? lastBootstrappedModule.get() : null
+        const lastModuleRef = lastBootstrappedModule ? lastBootstrappedModule.get() : null;
         onBeforeLivesync.next(lastModuleRef);
         if (lastModuleRef) {
             lastModuleRef.destroy();
