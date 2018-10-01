@@ -87,8 +87,8 @@ export class RouterExtensions {
             const currentRoute = relativeRoute.children[index];
 
             if (outlets.some(currentOutlet => currentOutlet === currentRoute.outlet)) {
-                const pathToOutlet = this.locationStrategy.getPathToOutlet(currentRoute);
-                const outlet = this.locationStrategy.findOutlet(pathToOutlet);
+                const outletKey = this.locationStrategy.getRouteFullPath(currentRoute.parent) + currentRoute.outlet;
+                const outlet = this.locationStrategy.findOutletByKey(outletKey);
 
                 if (outlet) {
                     outletsToBack.push(outlet);
