@@ -97,7 +97,7 @@ describe("split-view:", () => {
         await back(driver);
         await screen.loadedPlayerDetails(screen.playerOne);
         await back(driver);
-        await screen.loadedPlayersList;
+        await screen.loadedPlayersList();
     });
 
     it("should navigate Player One/Team One then Android back button", async () => {
@@ -121,8 +121,15 @@ describe("split-view:", () => {
             await driver.navBack();
             await screen.loadedPlayerDetails(screen.playerTwo);
             await driver.navBack();
-            await screen.loadedPlayersList;
+            await screen.loadedPlayersList();
         }
+    });
+
+    it("should not navigate back when no back stack available", async function () {
+        await backTeams(driver);
+        await screen.loadedTeamList();
+        await backPlayers(driver);
+        await screen.loadedPlayersList();
     });
 
     it("should navigate back to Login page with back(activatedRoute)", async function () {

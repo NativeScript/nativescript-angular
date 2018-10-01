@@ -57,6 +57,25 @@ describe("tab-view:", () => {
         await screen.loadedPlayersList();
     });
 
+    it("should navigate Player One/Team One then next Player/Team then back", async () => {
+        await testPlayerNavigated(driver, screen, screen.playerOne);
+        await testPlayerNextNavigated(driver, screen, screen.playerTwo);
+        await gotoTeamsTab(driver);
+        await testTeamNavigated(driver, screen, screen.teamOne);
+        await testTeamNextNavigated(driver, screen, screen.teamTwo);
+        await gotoPlayersTab(driver);
+        await backPlayers(driver);
+        await screen.loadedPlayerDetails(screen.playerOne);
+        await gotoTeamsTab(driver);
+        await backTeams(driver);
+        await screen.loadedTeamDetails(screen.teamOne);
+        await backTeams(driver);
+        await screen.loadedTeamList();
+        await gotoPlayersTab(driver);        
+        await backPlayers(driver); 
+        await screen.loadedPlayersList();
+    });
+
     // it("should navigate Player One/Team One then back separately (keep order)", async () => {
     //     await testPlayerNavigated(driver, screen, screen.playerOne);
     //     await testTeamNavigated(driver, screen, screen.teamOne);
