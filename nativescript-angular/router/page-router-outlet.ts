@@ -169,8 +169,8 @@ export class PageRouterOutlet implements OnDestroy { // tslint:disable-line:dire
     ngOnDestroy(): void {
         // Clear accumulated modal view page cache when page-router-outlet
         // destroyed on modal view closing
-        this.routeReuseStrategy.clearModalCache(this.outlet.currentActivatedRoute);
         this.parentContexts.onChildOutletDestroyed(this.name);
+        this.routeReuseStrategy.clearModalCache(this.outlet.outletKey);
         this.locationStrategy.clearOutlet(this.frame, this.outlet);
     }
 
@@ -236,8 +236,13 @@ export class PageRouterOutlet implements OnDestroy { // tslint:disable-line:dire
         resolver: ComponentFactoryResolver | null): void {
 
         if (!this.outlet) {
-            const pathToOutlet = this.locationStrategy.getPathToOutlet(activatedRoute);
-            this.outlet = this.locationStrategy.findOutlet(pathToOutlet);
+            const outletKey = this.locationStrategy.getRouteFullPath(activatedRoute.parent) + activatedRoute.outlet;
+            this.outlet = this.locationStrategy.findOutletByKey(outletKey);
+
+            if (!this.outlet) {
+                const pathByOutlets = this.locationStrategy.getPathByOutlets(activatedRoute);
+                this.outlet = this.locationStrategy.findOutletByOutletPath(pathByOutlets);
+            }
         }
 
         this.locationStrategy.updateOutlet(this.outlet, this.frame, activatedRoute);
@@ -311,7 +316,7 @@ export class PageRouterOutlet implements OnDestroy { // tslint:disable-line:dire
         // Clear refCache if navigation with clearHistory
         if (navOptions.clearHistory) {
             const clearCallback = () => setTimeout(() => {
-                this.routeReuseStrategy.clearCache(this._activatedRoute);
+                this.routeReuseStrategy.clearCache(this.outlet.outletKey);
                 page.off(Page.navigatedToEvent, clearCallback);
             });
 

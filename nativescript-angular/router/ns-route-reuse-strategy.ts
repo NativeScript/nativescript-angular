@@ -94,12 +94,18 @@ export class NSRouteReuseStrategy implements RouteReuseStrategy {
 
     shouldDetach(route: ActivatedRouteSnapshot): boolean {
         route = findTopActivatedRouteNodeForOutlet(route);
-        const pathToOutlet = this.location.getPathToOutlet(route);
-        const outlet = this.location.findOutlet(pathToOutlet);
+
+        const outletKey = this.location.getRouteFullPath(route && route.parent) + route.outlet;
+        const outlet = this.location.findOutletByKey(outletKey);
         const key = getSnapshotKey(route);
         const isPageActivated = route[pageRouterActivatedSymbol];
         const isBack = outlet ? outlet.isPageNavigationBack : false;
-        const shouldDetach = !isBack && isPageActivated;
+        let shouldDetach = !isBack && isPageActivated;
+
+        if (outlet && outlet.parent && !outlet.parent.shouldDetach) {
+            shouldDetach = false;
+            outlet.shouldDetach = shouldDetach;
+        }
 
         log(`shouldDetach isBack: ${isBack} key: ${key} result: ${shouldDetach}`);
 
@@ -109,10 +115,9 @@ export class NSRouteReuseStrategy implements RouteReuseStrategy {
     shouldAttach(route: ActivatedRouteSnapshot): boolean {
         route = findTopActivatedRouteNodeForOutlet(route);
 
-        const pathToOutlet = this.location.getPathToOutlet(route);
-        const outlet = this.location.findOutlet(pathToOutlet);
-        const cacheOutletKey = this.getCacheKey(route);
-        const cache = this.cacheByOutlet[cacheOutletKey];
+        const outletKey = this.location.getRouteFullPath(route.parent) + route.outlet;
+        const outlet = this.location.findOutletByKey(outletKey);
+        const cache = this.cacheByOutlet[outletKey];
         if (!cache) {
             return false;
         }
@@ -123,6 +128,10 @@ export class NSRouteReuseStrategy implements RouteReuseStrategy {
 
         log(`shouldAttach isBack: ${isBack} key: ${key} result: ${shouldAttach}`);
 
+        if (outlet) {
+            outlet.shouldDetach = true;
+        }
+
         return shouldAttach;
     }
 
@@ -132,10 +141,10 @@ export class NSRouteReuseStrategy implements RouteReuseStrategy {
         const key = getSnapshotKey(route);
         log(`store key: ${key}, state: ${state}`);
 
-        const cacheOutletKey = this.getCacheKey(route);
+        const outletKey = this.location.getRouteFullPath(route.parent) + route.outlet;
 
         // tslint:disable-next-line:max-line-length
-        const cache = this.cacheByOutlet[cacheOutletKey] = this.cacheByOutlet[cacheOutletKey] || new DetachedStateCache();
+        const cache = this.cacheByOutlet[outletKey] = this.cacheByOutlet[outletKey] || new DetachedStateCache();
 
         if (state) {
             let isModal = false;
@@ -149,6 +158,10 @@ export class NSRouteReuseStrategy implements RouteReuseStrategy {
             const topItem = cache.peek();
             if (topItem.key === key) {
                 cache.pop();
+
+                if (!cache.length) {
+                    delete this.cacheByOutlet[outletKey];
+                }
             } else {
                 throw new Error("Trying to pop from DetachedStateCache but keys don't match. " +
                     `expected: ${topItem.key} actual: ${key}`);
@@ -159,10 +172,9 @@ export class NSRouteReuseStrategy implements RouteReuseStrategy {
     retrieve(route: ActivatedRouteSnapshot): DetachedRouteHandle | null {
         route = findTopActivatedRouteNodeForOutlet(route);
 
-        const pathToOutlet = this.location.getPathToOutlet(route);
-        const outlet = this.location.findOutlet(pathToOutlet);
-        const cacheOutletKey = this.getCacheKey(route);
-        const cache = this.cacheByOutlet[cacheOutletKey];
+        const outletKey = this.location.getRouteFullPath(route.parent) + route.outlet;
+        const outlet = this.location.findOutletByKey(outletKey);
+        const cache = this.cacheByOutlet[outletKey];
         if (!cache) {
             return null;
         }
@@ -195,29 +207,20 @@ export class NSRouteReuseStrategy implements RouteReuseStrategy {
         return shouldReuse;
     }
 
-    clearCache(route: any) {
-        const cacheOutletKey = this.getCacheKey(route);
-        const cache = this.cacheByOutlet[cacheOutletKey];
+    clearCache(outletKey: string) {
+        const cache = this.cacheByOutlet[outletKey];
 
         if (cache) {
             cache.clear();
         }
     }
 
-    clearModalCache(route: any) {
-        const cacheOutletKey = this.getCacheKey(route);
-        const cache = this.cacheByOutlet[cacheOutletKey];
+    clearModalCache(outletKey: string) {
+        const cache = this.cacheByOutlet[outletKey];
 
         if (cache) {
             cache.clearModalCache();
         }
-    }
-
-    getCacheKey(route: any): string {
-        const parentRouteState = this.location.getPathState(route && route.parent);
-        const pathToOutlet = this.location.getPathToOutlet(route);
-
-        return parentRouteState + pathToOutlet;
     }
 }
 
