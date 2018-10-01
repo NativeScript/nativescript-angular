@@ -1,12 +1,14 @@
-// Always import platform-common first - because polyfills
+// Always import reflect-metadata before @angular/core.
+// It's needed to handle __metadata calls inside @angular/core
+import "reflect-metadata";
+
+// Import platform-common immediately after reflect-metadata - because rest of the polyfills.
 import {
     NativeScriptPlatformRef,
     AppOptions,
     PlatformFactory,
     COMMON_PROVIDERS
 } from "./platform-common";
-
-import "reflect-metadata";
 
 import { NSFileSystem } from "./file-system/ns-file-system";
 
@@ -49,7 +51,7 @@ export const NS_COMPILER_PROVIDERS: StaticProvider[] = [
         provide: COMPILER_OPTIONS,
         useValue: {
             providers: [
-                { provide: NSFileSystem, deps: []},
+                { provide: NSFileSystem, deps: [] },
                 { provide: ResourceLoader, useClass: FileSystemResourceLoader, deps: [NSFileSystem] },
                 { provide: ElementSchemaRegistry, useClass: NativeScriptElementSchemaRegistry, deps: [] },
             ]
