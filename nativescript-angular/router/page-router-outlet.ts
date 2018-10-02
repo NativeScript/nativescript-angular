@@ -236,7 +236,7 @@ export class PageRouterOutlet implements OnDestroy { // tslint:disable-line:dire
         resolver: ComponentFactoryResolver | null): void {
 
         if (!this.outlet) {
-            const outletKey = this.locationStrategy.getRouteFullPath(activatedRoute.parent) + activatedRoute.outlet;
+            const outletKey = this.locationStrategy.getRouteFullPath(activatedRoute);
             this.outlet = this.locationStrategy.findOutletByKey(outletKey);
 
             if (!this.outlet) {
@@ -332,9 +332,27 @@ export class PageRouterOutlet implements OnDestroy { // tslint:disable-line:dire
     }
 
     private markActivatedRoute(activatedRoute: ActivatedRoute) {
-        const nodeToMark = findTopActivatedRouteNodeForOutlet(activatedRoute.snapshot);
-        nodeToMark[pageRouterActivatedSymbol] = true;
-        log("Activated route marked as page: " + routeToString(nodeToMark));
+        const queue = [];
+        queue.push(activatedRoute.snapshot);
+        let currentRoute = queue.shift();
+
+        while (currentRoute) {
+            currentRoute.children.forEach(childRoute => {
+                queue.push(childRoute);
+            });
+
+            const nodeToMark = findTopActivatedRouteNodeForOutlet(currentRoute);
+            const outletKeyForRoute = this.locationStrategy.getRouteFullPath(nodeToMark);
+            const outletForRoute = this.locationStrategy.findOutletByKey(outletKeyForRoute);
+
+            // Mark p-r-o's only
+            if (outletForRoute && outletForRoute.frames.length) {
+                nodeToMark[pageRouterActivatedSymbol] = true;
+                log("Activated route marked as page: " + routeToString(nodeToMark));
+            }
+
+            currentRoute = queue.shift();
+        }
     }
 
     private getComponentFactory(
