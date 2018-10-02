@@ -3,6 +3,7 @@ import { Router, UrlTree, NavigationExtras, ActivatedRoute } from "@angular/rout
 import { NSLocationStrategy, NavigationOptions, Outlet } from "./ns-location-strategy";
 import { FrameService } from "../platform-providers";
 import { routerError } from "../trace";
+import { findTopActivatedRouteNodeForOutlet } from "./page-router-outlet";
 
 export type ExtendedNavigationExtras = NavigationExtras & NavigationOptions;
 
@@ -87,7 +88,8 @@ export class RouterExtensions {
             const currentRoute = relativeRoute.children[index];
 
             if (outlets.some(currentOutlet => currentOutlet === currentRoute.outlet)) {
-                const outletKey = this.locationStrategy.getRouteFullPath(currentRoute);
+                const currentRouteSnapshop = findTopActivatedRouteNodeForOutlet(currentRoute.snapshot);
+                const outletKey = this.locationStrategy.getRouteFullPath(currentRouteSnapshop);
                 const outlet = this.locationStrategy.findOutletByKey(outletKey);
 
                 if (outlet) {
