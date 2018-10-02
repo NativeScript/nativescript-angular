@@ -386,6 +386,11 @@ export class NSLocationStrategy extends LocationStrategy {
     }
 
     updateOutlet(outlet: Outlet, frame: Frame, activatedRoute: ActivatedRoute) {
+        if (!outlet) {
+            routerError("No outlet found for activatedRoute:" + (<any>activatedRoute.url).value.toString());
+            return;
+        }
+
         outlet.currentActivatedRoute = activatedRoute;
 
         if (!outlet.frames.some(currentFrame => currentFrame === frame)) {
@@ -414,15 +419,17 @@ export class NSLocationStrategy extends LocationStrategy {
         return fullPath;
     }
 
-    getRouteFullPath(route: any): string {
+    getRouteFullPath(currentRoute: any): string {
+        const outletName = currentRoute.outlet;
         let fullPath;
 
-        while (route) {
-            fullPath = (route.url.value || route.url).toString() + (fullPath || "");
-            route = route.parent;
+        currentRoute = currentRoute.parent;
+        while (currentRoute) {
+            fullPath = (currentRoute.url.value || currentRoute.url).toString() + (fullPath || "");
+            currentRoute = currentRoute.parent;
         }
 
-        return fullPath;
+        return fullPath ? fullPath + outletName : outletName;
     }
 
 
@@ -449,24 +456,6 @@ export class NSLocationStrategy extends LocationStrategy {
         }
 
         return pathToOutlet || lastPath;
-    }
-
-    getPathState(activatedRoute: any): string {
-        if (!activatedRoute) {
-            return "";
-        }
-
-        let pathToOutlet;
-        let currentRouteConfig = activatedRoute.routeConfig ? activatedRoute.routeConfig.path : "";
-        let parent = activatedRoute.parent;
-
-        while (parent && activatedRoute.root !== parent) {
-            const parentRouteConfig = parent.routeConfig ? parent.routeConfig.path : "";
-            pathToOutlet = parentRouteConfig + "-" + (pathToOutlet || currentRouteConfig);
-            parent = parent.parent;
-        }
-
-        return pathToOutlet || currentRouteConfig;
     }
 
     findOutletByOutletPath(pathByOutlets: string): Outlet {
@@ -535,47 +524,6 @@ export class NSLocationStrategy extends LocationStrategy {
         }
 
         return false;
-        // let updated = false;
-        // let isNewParentUrl = false;
-        // const isNewPage = outlet.statesByOutlet.length === 0;
-        // const lastState = outlet.statesByOutlet[outlet.statesByOutlet.length - 1];
-        // const equalStateUrls = lastState && lastState.segmentGroup.toString() === currentSegmentGroup.toString();
-
-        // const parentActivatedRoute: any = outlet.parent && outlet.parent.currentActivatedRoute;
-        // const parentSegmentGroup = currentSegmentGroup.parent;
-
-        // const locationState: LocationState = {
-        //     isModalNavigation: false,
-        //     segmentGroup: currentSegmentGroup,
-        //     isRootSegmentGroup: lastState ? lastState.isRootSegmentGroup : false,
-        //     isPageNavigation: isNewPage,
-        //     parentRoute: lastState ? lastState.parentRoute : null
-        // };
-
-        // if (parentActivatedRoute && parentSegmentGroup) { // p-r-o can only contains activatedRoute
-        //     // Check whether it is a new state but with a different parent url
-        //     const lastParentUrl = parentActivatedRoute.url.value;
-        //     isNewParentUrl = lastParentUrl.toString() !== parentSegmentGroup.toString();
-
-        //     if (isNewParentUrl) {
-        //         locationState.isPageNavigation = true;
-        //         locationState.parentRoute = null;
-        //     }
-        // }
-
-        // if (!lastState || !equalStateUrls) {
-        //     outlet.statesByOutlet.push(locationState);
-        //     updated = true;
-        // } else if (lastState && equalStateUrls && isNewParentUrl) {
-        //     outlet.statesByOutlet.push(locationState);
-        //     updated = true;
-        // }
-
-        // if (updated && parentSegmentGroup) {
-        //     this.updateParentsStates(outlet, parentSegmentGroup);
-        // }
-
-        // return updated;
     }
 
     private updateParentsStates(outlet: Outlet, newSegmentGroup: UrlSegmentGroup) {
