@@ -7,15 +7,14 @@ import { PlayerComponent } from "../player/players.component";
 import { PlayerDetailComponent } from "../player/player-detail.component";
 import { TeamsComponent } from "../team/teams.component";
 import { TeamDetailComponent } from "../team/team-detail.component";
-import { HomeLazyComponent } from "./home-lazy.component";
+import { HomeComponent } from "../home/home.component";
 import { DataService } from "../data.service";
 import { SharedModule } from "../shared.module";
-// import { LazyComponentlessRouteComponent } from "./lazy-componentless-route.component";
 
 const routes: Route[] = [
     {
         path: "home",
-        component: HomeLazyComponent,
+        component: HomeComponent,
         children: [
             { path: "players", component: PlayerComponent, outlet: "playerTab" },
             { path: "player/:id", component: PlayerDetailComponent, outlet: "playerTab" },
@@ -23,17 +22,7 @@ const routes: Route[] = [
             { path: "teams", component: TeamsComponent, outlet: "teamTab" },
             { path: "team/:id", component: TeamDetailComponent, outlet: "teamTab" },
         ]
-    },
-
-    // {
-    //     path: "nest",
-    //     children: [
-    //         {
-    //             path: "more",
-    //             component: LazyComponentlessRouteComponent
-    //         }
-    //     ]
-    // }
+    }
 ];
 
 @NgModule({
@@ -43,10 +32,6 @@ const routes: Route[] = [
         NativeScriptRouterModule,
         NativeScriptRouterModule.forChild(routes),
         SharedModule
-    ],
-    declarations: [
-        HomeLazyComponent,
-        // LazyComponentlessRouteComponent
     ],
     providers: [
         DataService

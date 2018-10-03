@@ -241,8 +241,9 @@ export class NSLocationStrategy extends LocationStrategy {
 
     }
 
-    canGoBack() {
-        return this.currentOutlet.statesByOutlet.length > 1;
+    canGoBack(outlet?: Outlet) {
+        outlet = outlet || this.currentOutlet;
+        return outlet.statesByOutlet.length > 1;
     }
 
     onPopState(fn: (_: any) => any): void {

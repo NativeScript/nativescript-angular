@@ -6,6 +6,7 @@ import {
     testPlayerNextNavigated,
     testTeamNextNavigated,
     testPlayersNavigated,
+    canGoBack,
     testTeamsNavigated
 } from "./shared.e2e-spec"
 
@@ -39,14 +40,18 @@ describe("split-view:", () => {
                 await screen.loadedHome();
                 await screen.loadedPlayersList();
                 await screen.loadedTeamList();
+                await canGoBack(driver, screen,screen.canGoBackActivatedRoute, true);
             });
 
             it("should navigate Player One/Team One then back separately", async () => {
                 await testPlayerNavigated(driver, screen, screen.playerOne);
                 await testTeamNavigated(driver, screen, screen.teamOne);
+                await canGoBack(driver, screen,screen.canGoBackPlayers, true);
+                await canGoBack(driver, screen,screen.canGoBackPlayers, true);
                 await backPlayers(driver);
                 await screen.loadedPlayersList();
                 await backTeams(driver);
+                await canGoBack(driver, screen,screen.canGoBackTeams, false);
                 await screen.loadedTeamList();
             });
 
@@ -62,7 +67,9 @@ describe("split-view:", () => {
             it("should navigate Player One/Team One then back simultaneously", async () => {
                 await testPlayerNavigated(driver, screen, screen.playerOne);
                 await testTeamNavigated(driver, screen, screen.teamOne);
+                await canGoBack(driver, screen,screen.canGoBackBoth, true);
                 await backBoth(driver);
+                await canGoBack(driver, screen,screen.canGoBackBoth, false);
                 await screen.loadedTeamList();
                 await screen.loadedPlayersList();
             });

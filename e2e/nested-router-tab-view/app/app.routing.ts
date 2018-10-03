@@ -10,7 +10,7 @@ import { LoginComponent } from "./login/login.component";
 import { TabsComponent } from "./tabs/tabs.component";
 import { HomeComponent } from "./home/home.component";
 
-export const COMPONENTS = [LoginComponent, HomeComponent, TabsComponent];
+export const COMPONENTS = [LoginComponent, TabsComponent];
 
 const routes: Routes = [
     { path: "", redirectTo: "/login", pathMatch: "full" },

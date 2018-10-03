@@ -17,6 +17,7 @@ const gotoTeams = "teams";
 
 const gotoHomePage = "Go To Home Page";
 const gotoTabsPage = "Go To Tabs Page";
+const confirmDialog = "Ok";
 
 export class Screen {
 
@@ -27,8 +28,29 @@ export class Screen {
     teamOne = "Team One";
     teamTwo = "Team Two";
 
+    canGoBackActivatedRoute = "CanGoBack(ActivatedRoute)";
+    canGoBackPlayers = "CanGoBack(Players)";
+    canGoBackTeams = "CanGoBack(Teams)";
+    canGoBackBoth = "CanGoBack(Both)";
+
     constructor(driver: AppiumDriver) {
         this._driver = driver;
+    }
+
+    showDialogConfirm = async (title) => {
+        const btnShowDialogConfirm = await this._driver.findElementByText(title);
+        await btnShowDialogConfirm.tap();
+    }
+
+    loadedConfirmDialog = async (dialogMessage) => {
+        const lblDialogMessage = await this._driver.findElementByText(dialogMessage);
+        assert.isTrue(await lblDialogMessage.isDisplayed());
+        console.log(dialogMessage + " shown!");
+    }
+
+    closeDialog = async () => {
+        const btnYesDialog = await this._driver.findElementByText(confirmDialog);
+        await btnYesDialog.click();
     }
 
     loadedLogin = async () => {

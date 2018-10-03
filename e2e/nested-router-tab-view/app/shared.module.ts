@@ -6,6 +6,7 @@ import { NativeScriptCommonModule } from "nativescript-angular/common";
 import { NativeScriptRouterModule } from "nativescript-angular/router";
 import { DataService } from "./data.service";
 
+import { HomeComponent } from "./home/home.component";
 import { PlayerComponent } from "./player/players.component";
 import { PlayerDetailComponent } from "./player/player-detail.component";
 import { TeamsComponent } from "./team/teams.component";
@@ -17,12 +18,14 @@ import { TeamDetailComponent } from "./team/team-detail.component";
         NativeScriptRouterModule,
     ],
     declarations: [
+        HomeComponent,
         PlayerComponent,
         PlayerDetailComponent,
         TeamsComponent,
         TeamDetailComponent
     ],
     exports: [
+        HomeComponent,
         PlayerComponent,
         PlayerDetailComponent,
         TeamsComponent,
