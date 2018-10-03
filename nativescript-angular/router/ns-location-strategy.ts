@@ -1,6 +1,6 @@
 import { Injectable } from "@angular/core";
 import { LocationStrategy } from "@angular/common";
-import { DefaultUrlSerializer, UrlSegmentGroup, UrlTree, ActivatedRoute, UrlSegment } from "@angular/router";
+import { DefaultUrlSerializer, UrlSegmentGroup, UrlTree } from "@angular/router";
 import { routerLog, routerError } from "../trace";
 import { NavigationTransition, Frame } from "tns-core-modules/ui/frame";
 import { isPresent } from "../lang-facade";
@@ -13,7 +13,6 @@ export class Outlet {
     pathByOutlets: string;
     statesByOutlet: Array<LocationState> = [];
     frames: Array<Frame> = [];
-    currentActivatedRoute: ActivatedRoute;
 
     // Used in reuse-strategy by its children to determine if they should be detached too.
     shouldDetach: boolean = true;
@@ -385,13 +384,11 @@ export class NSLocationStrategy extends LocationStrategy {
         return this.outlets;
     }
 
-    updateOutlet(outlet: Outlet, frame: Frame, activatedRoute: ActivatedRoute) {
+    updateOutlet(outlet: Outlet, frame: Frame) {
         if (!outlet) {
-            routerError("No outlet found for activatedRoute:" + (<any>activatedRoute.url).value.toString());
+            routerError("No outlet found for activatedRoute:");
             return;
         }
-
-        outlet.currentActivatedRoute = activatedRoute;
 
         if (!outlet.frames.some(currentFrame => currentFrame === frame)) {
             outlet.frames.push(frame);
@@ -425,7 +422,13 @@ export class NSLocationStrategy extends LocationStrategy {
 
         currentRoute = currentRoute.parent;
         while (currentRoute) {
-            fullPath = (currentRoute.url.value || currentRoute.url).toString() + (fullPath || "");
+            const url = (currentRoute.url.value || currentRoute.url).toString();
+            if (fullPath) {
+                fullPath = (url ? url + "/" : url) + fullPath;
+            } else {
+                fullPath = url;
+            }
+
             currentRoute = currentRoute.parent;
         }
 
