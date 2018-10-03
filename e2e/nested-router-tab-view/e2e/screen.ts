@@ -86,8 +86,8 @@ export class Screen {
         console.log(team + " Details" + " loaded!");
     }
 
-    navigateToHomePage = async () => {
-        const btnNavToHomePage = await this._driver.findElementByText(gotoHomePage);
+    navigateToHomePage = async (homePageButton?) => {
+        const btnNavToHomePage = await this._driver.findElementByText(homePageButton || gotoHomePage);
         await btnNavToHomePage.tap();
     }
 

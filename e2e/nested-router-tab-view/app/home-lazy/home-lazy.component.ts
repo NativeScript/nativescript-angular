@@ -5,10 +5,10 @@ import { ActivatedRoute } from "@angular/router";
 
 @Component({
     moduleId: module.id,
-    selector: "home2-page",
-    templateUrl: "./home2.component.html"
+    selector: "home-lazy-page",
+    templateUrl: "./home-lazy.component.html"
 })
-export class Home2Component {
+export class HomeLazyComponent {
     constructor(
         private modal: ModalDialogService,
         private vcRef: ViewContainerRef,
@@ -16,10 +16,7 @@ export class Home2Component {
         private routerExtension: RouterExtensions) { }
 
     ngOnInit() {
-        //this.routerExtension.navigate(["first"], { relativeTo: this.activeRoute });
-        //this.routerExtension.navigate([{ outlets: { playerTab: ["players"], teamTab: ["teams"] } }], { relativeTo: this.activeRoute });
-
-        //this.routerExtension.navigate(['players'], { relativeTo: this.activeRoute });
+        this.routerExtension.navigate([{ outlets: { playerTab: ["players"], teamTab: ["teams"] } }], { relativeTo: this.activeRoute });
     }
 
     backPlayers() {
