@@ -225,5 +225,9 @@ export class NSRouteReuseStrategy implements RouteReuseStrategy {
 }
 
 function getSnapshotKey(snapshot: ActivatedRouteSnapshot): string {
-    return snapshot.pathFromRoot.join("->");
+  // return snapshot.pathFromRoot.join("->");
+  return snapshot.pathFromRoot
+    .map(route => route.routeConfig && route.routeConfig.path)
+    .filter(path => !!path)
+    .join('/');
 }
