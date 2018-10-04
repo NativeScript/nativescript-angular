@@ -13,7 +13,9 @@ Provide version numbers for the following components (information can be retriev
  - Android Runtime:
  - iOS Runtime:
  - Plugin(s):
-
+ - NativeScript-Angular:
+ - Angular:
+ 
 **Describe the bug**
 <!-- A clear and concise description of what the bug is. Please, explain whether it's a build time error or a runtime error. More detailed logs can be easily obtained by following the instructions in this guide: https://docs.nativescript.org/get-support#how-to-obtain-diagnostic-reports. -->
 
