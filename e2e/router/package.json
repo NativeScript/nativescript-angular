@@ -7,25 +7,25 @@
     "id": "org.nativescript.router"
   },
   "dependencies": {
-    "@angular/animations": "~6.1.0",
-    "@angular/common": "~6.1.0",
-    "@angular/compiler": "~6.1.0",
-    "@angular/core": "~6.1.0",
-    "@angular/forms": "~6.1.0",
-    "@angular/http": "~6.1.0",
-    "@angular/platform-browser": "~6.1.0",
-    "@angular/platform-browser-dynamic": "~6.1.0",
-    "@angular/router": "~6.1.0",
+    "@angular/animations": "~7.0.0-rc.0",
+    "@angular/common": "~7.0.0-rc.0",
+    "@angular/compiler": "~7.0.0-rc.0",
+    "@angular/core": "~7.0.0-rc.0",
+    "@angular/forms": "~7.0.0-rc.0",
+    "@angular/http": "~7.0.0-rc.0",
+    "@angular/platform-browser": "~7.0.0-rc.0",
+    "@angular/platform-browser-dynamic": "~7.0.0-rc.0",
+    "@angular/router": "~7.0.0-rc.0",
     "nativescript-angular": "file:../../nativescript-angular",
     "nativescript-intl": "^3.0.0",
     "reflect-metadata": "~0.1.8",
-    "rxjs": "~6.1.0",
+    "rxjs": "~7.0.0-rc.0",
     "tns-core-modules": "next",
     "zone.js": "^0.8.26"
   },
   "devDependencies": {
-    "@ngtools/webpack": "~6.1.0",
-    "@angular/compiler-cli": "~6.1.0",
+    "@ngtools/webpack": "~7.0.0-rc.0",
+    "@angular/compiler-cli": "~7.0.0-rc.0",
     "@types/chai": "^4.0.2",
     "@types/mocha": "^2.2.41",
     "@types/node": "^7.0.5",
@@ -43,7 +43,7 @@
     "nativescript-dev-typescript": "~0.4.0",
     "nativescript-dev-webpack": "next",
     "tslib": "^1.7.1",
-    "typescript": "~2.7.2"
+    "typescript": "~3.1.1"
   },
   "scripts": {
     "e2e": "tsc -p e2e && mocha --opts ../config/mocha.opts --recursive e2e --appiumCapsLocation ../config/appium.capabilities.json",

@@ -26,15 +26,15 @@
   ],
   "homepage": "http://nativescript.org",
   "dependencies": {
-    "@angular/animations": "~6.1.0",
-    "@angular/common": "~6.1.0",
-    "@angular/compiler": "~6.1.0",
-    "@angular/core": "~6.1.0",
-    "@angular/forms": "~6.1.0",
-    "@angular/http": "~6.1.0",
-    "@angular/platform-browser": "~6.1.0",
-    "@angular/platform-browser-dynamic": "~6.1.0",
-    "@angular/router": "~6.1.0",
+    "@angular/animations": "~7.0.0-rc.0",
+    "@angular/common": "~7.0.0-rc.0",
+    "@angular/compiler": "~7.0.0-rc.0",
+    "@angular/core": "~7.0.0-rc.0",
+    "@angular/forms": "~7.0.0-rc.0",
+    "@angular/http": "~7.0.0-rc.0",
+    "@angular/platform-browser": "~7.0.0-rc.0",
+    "@angular/platform-browser-dynamic": "~7.0.0-rc.0",
+    "@angular/router": "~7.0.0-rc.0",
     "nativescript-angular": "../nativescript-angular",
     "nativescript-unit-test-runner": "^0.3.4",
     "rxjs": "~6.0.0-rc.1",
@@ -57,7 +57,7 @@
     "babylon": "6.8.0",
     "lazy": "1.0.11",
     "tslint": "^4.5.1",
-    "typescript": "~2.7.2"
+    "typescript": "~3.1.1"
   },
   "scripts": {
     "e2e": "tsc -p e2e && mocha --opts ../e2e/config/mocha.opts --recursive e2e --appiumCapsLocation ../e2e/config/appium.capabilities.json",
