@@ -15,8 +15,4 @@ export class PlayerComponent implements OnInit {
     ngOnInit(): void {
         this.items = this.itemService.getPlayers();
     }
-
-    navigateAbs() {
-        this.router.navigateByUrl("/(playerTab:players//teamTab:team/3)")
-    }
 }

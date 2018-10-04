@@ -2,6 +2,7 @@ import { Component, ViewContainerRef } from "@angular/core";
 import { ModalDialogService, ModalDialogOptions } from "nativescript-angular/directives/dialogs";
 import { RouterExtensions } from "nativescript-angular/router";
 import { ActivatedRoute } from "@angular/router";
+import { confirm } from "ui/dialogs";
 
 @Component({
     moduleId: module.id,
@@ -18,8 +19,31 @@ export class HomeComponent {
     ngOnInit() {
         //this.routerExtension.navigate(["first"], { relativeTo: this.activeRoute });
         //this.routerExtension.navigate([{ outlets: { playerTab: ["players"], teamTab: ["teams"] } }], { relativeTo: this.activeRoute });
-
         //this.routerExtension.navigate(['players'], { relativeTo: this.activeRoute });
+    }
+
+    canGoBack() {
+        const canGoBack = this.routerExtension.canGoBack({ relativeTo: this.activeRoute });
+        const title = "CanGoBack(ActivatedRoute)";
+        this.onShowDialog(title, title + ` ${canGoBack}`);
+    }
+
+    canGoBackPlayers() {
+        const canGoBack = this.routerExtension.canGoBack({ outlets: ["playerTab"], relativeTo: this.activeRoute });
+        const title = "CanGoBack(Players)";
+        this.onShowDialog(title, title + ` ${canGoBack}`);
+    }
+
+    canGoBackTeams() {
+        const canGoBack = this.routerExtension.canGoBack({ outlets: ["teamTab"], relativeTo: this.activeRoute });
+        const title = "CanGoBack(Teams)";
+        this.onShowDialog(title, title + ` ${canGoBack}`);
+    }
+
+    canGoBackBoth() {
+        const canGoBack = this.routerExtension.canGoBack({ outlets: ["teamTab", "playerTab"], relativeTo: this.activeRoute });
+        const title = "CanGoBack(Both)";
+        this.onShowDialog(title, title + ` ${canGoBack}`);
     }
 
     backPlayers() {
@@ -43,11 +67,18 @@ export class HomeComponent {
     }
 
     navigatePlayers() {
-        this.routerExtension.navigate([{ outlets: { playerTab: ['player', '1'] } }], { relativeTo: this.activeRoute, animated:true, transition: {name:"flip", duration:2000, curve:"linear"} });
+        this.routerExtension.navigate([{ outlets: { playerTab: ['player', '1'] } }], { relativeTo: this.activeRoute, animated: true, transition: { name: "flip", duration: 2000, curve: "linear" } });
     }
 
+    onShowDialog(title: string, result: string) {
+        let options: any = {
+            title: title,
+            message: result,
+            okButtonText: "Ok"
+        }
 
-    // navigateTeams() {
-    //     this.routerExtension.navigate([{ outlets: { teamTab: ['team', '1'] } }], { relativeTo: this.activeRoute });
-    // }
+        confirm(options).then((result: boolean) => {
+            console.log(result);
+        })
+    }
 }

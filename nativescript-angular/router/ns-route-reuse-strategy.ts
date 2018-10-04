@@ -95,15 +95,18 @@ export class NSRouteReuseStrategy implements RouteReuseStrategy {
     shouldDetach(route: ActivatedRouteSnapshot): boolean {
         route = findTopActivatedRouteNodeForOutlet(route);
 
-        const outletKey = this.location.getRouteFullPath(route && route.parent) + route.outlet;
+        const outletKey = this.location.getRouteFullPath(route);
         const outlet = this.location.findOutletByKey(outletKey);
         const key = getSnapshotKey(route);
         const isPageActivated = route[pageRouterActivatedSymbol];
         const isBack = outlet ? outlet.isPageNavigationBack : false;
         let shouldDetach = !isBack && isPageActivated;
 
-        if (outlet && outlet.parent && !outlet.parent.shouldDetach) {
-            shouldDetach = false;
+        if (outlet) {
+            if (outlet.parent && !outlet.parent.shouldDetach) {
+                shouldDetach = false;
+            }
+
             outlet.shouldDetach = shouldDetach;
         }
 
@@ -115,7 +118,7 @@ export class NSRouteReuseStrategy implements RouteReuseStrategy {
     shouldAttach(route: ActivatedRouteSnapshot): boolean {
         route = findTopActivatedRouteNodeForOutlet(route);
 
-        const outletKey = this.location.getRouteFullPath(route.parent) + route.outlet;
+        const outletKey = this.location.getRouteFullPath(route);
         const outlet = this.location.findOutletByKey(outletKey);
         const cache = this.cacheByOutlet[outletKey];
         if (!cache) {
@@ -141,7 +144,7 @@ export class NSRouteReuseStrategy implements RouteReuseStrategy {
         const key = getSnapshotKey(route);
         log(`store key: ${key}, state: ${state}`);
 
-        const outletKey = this.location.getRouteFullPath(route.parent) + route.outlet;
+        const outletKey = this.location.getRouteFullPath(route);
 
         // tslint:disable-next-line:max-line-length
         const cache = this.cacheByOutlet[outletKey] = this.cacheByOutlet[outletKey] || new DetachedStateCache();
@@ -172,7 +175,7 @@ export class NSRouteReuseStrategy implements RouteReuseStrategy {
     retrieve(route: ActivatedRouteSnapshot): DetachedRouteHandle | null {
         route = findTopActivatedRouteNodeForOutlet(route);
 
-        const outletKey = this.location.getRouteFullPath(route.parent) + route.outlet;
+        const outletKey = this.location.getRouteFullPath(route);
         const outlet = this.location.findOutletByKey(outletKey);
         const cache = this.cacheByOutlet[outletKey];
         if (!cache) {

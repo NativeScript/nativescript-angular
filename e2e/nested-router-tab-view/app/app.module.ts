@@ -1,10 +1,12 @@
-import { NgModule, NO_ERRORS_SCHEMA, ErrorHandler } from "@angular/core";
+import { NgModule, NO_ERRORS_SCHEMA, ErrorHandler, NgModuleFactoryLoader } from "@angular/core";
 import { NativeScriptModule } from "nativescript-angular/nativescript.module";
 import { AppRoutingModule, COMPONENTS } from "./app.routing";
 import { AppComponent } from "./app.component";
 
 import { DataService } from "./data.service";
+import { NSModuleFactoryLoader } from "nativescript-angular/router";
 
+import { SharedModule } from "./shared.module";
 import { enable as traceEnable, addCategories } from "tns-core-modules/trace";
 import { routerTraceCategory } from "nativescript-angular/trace";
 
@@ -23,8 +25,9 @@ class MyErrorHandler implements ErrorHandler {
         AppComponent
     ],
     imports: [
+        SharedModule,
         NativeScriptModule,
-        AppRoutingModule
+        AppRoutingModule,
     ],
     declarations: [
         AppComponent,
@@ -32,7 +35,8 @@ class MyErrorHandler implements ErrorHandler {
     ],
     providers: [
         DataService,
-        { provide: ErrorHandler, useClass: MyErrorHandler }
+        { provide: ErrorHandler, useClass: MyErrorHandler },
+        { provide: NgModuleFactoryLoader, useClass: NSModuleFactoryLoader }
     ],
     schemas: [
         NO_ERRORS_SCHEMA

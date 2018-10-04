@@ -3,6 +3,7 @@ import { Router, UrlTree, NavigationExtras, ActivatedRoute } from "@angular/rout
 import { NSLocationStrategy, NavigationOptions, Outlet } from "./ns-location-strategy";
 import { FrameService } from "../platform-providers";
 import { routerError } from "../trace";
+import { findTopActivatedRouteNodeForOutlet } from "./page-router-outlet";
 
 export type ExtendedNavigationExtras = NavigationExtras & NavigationOptions;
 
@@ -42,8 +43,25 @@ export class RouterExtensions {
         }
     }
 
-    public canGoBack() {
-        return this.locationStrategy.canGoBack();
+    public canGoBack(backNavigationOptions?: BackNavigationOptions) {
+        let canGoBack = true;
+        if (backNavigationOptions) {
+            const { outletsToBack, outlets } = this.findOutletsToBack(backNavigationOptions);
+
+            if (outletsToBack.length !== outlets.length) {
+                routerError("No outlet found relative to activated route");
+            } else {
+                outletsToBack.forEach(outletToBack => {
+                    if (!this.locationStrategy.canGoBack(outletToBack)) {
+                        canGoBack = false;
+                    }
+                });
+            }
+        } else {
+            canGoBack = this.locationStrategy.canGoBack();
+        }
+
+        return canGoBack;
     }
 
     public backToPreviousPage() {
@@ -55,18 +73,7 @@ export class RouterExtensions {
     }
 
     private backOutlets(options: BackNavigationOptions) {
-        const rootRoute: ActivatedRoute = this.router.routerState.root;
-        let outlets = options.outlets;
-        let relativeRoute: ActivatedRoute = options.relativeTo;
-
-        if (!options.outlets && relativeRoute) {
-            outlets = [relativeRoute.outlet];
-            relativeRoute = relativeRoute.parent || rootRoute;
-        } else if (!relativeRoute) {
-            relativeRoute = rootRoute;
-        }
-
-        const outletsToBack: Array<Outlet> = this.findOutletsToBack(relativeRoute, outlets);
+        const { outletsToBack, outlets } = this.findOutletsToBack(options);
 
         if (outletsToBack.length !== outlets.length) {
             routerError("No outlet found relative to activated route");
@@ -81,13 +88,26 @@ export class RouterExtensions {
         }
     }
 
-    private findOutletsToBack(relativeRoute: ActivatedRoute, outlets: Array<string>): Array<Outlet> {
+    // tslint:disable-next-line:max-line-length
+    private findOutletsToBack(options?: BackNavigationOptions): { outletsToBack: Array<Outlet>, outlets: Array<string> } {
         const outletsToBack: Array<Outlet> = [];
+        const rootRoute: ActivatedRoute = this.router.routerState.root;
+        let outlets = options.outlets;
+        let relativeRoute = options.relativeTo;
+
+        if (!outlets && relativeRoute) {
+            outlets = [relativeRoute.outlet];
+            relativeRoute = relativeRoute.parent || rootRoute;
+        } else if (!relativeRoute) {
+            relativeRoute = rootRoute;
+        }
+
         for (let index = 0; index < relativeRoute.children.length; index++) {
             const currentRoute = relativeRoute.children[index];
 
             if (outlets.some(currentOutlet => currentOutlet === currentRoute.outlet)) {
-                const outletKey = this.locationStrategy.getRouteFullPath(currentRoute.parent) + currentRoute.outlet;
+                const currentRouteSnapshop = findTopActivatedRouteNodeForOutlet(currentRoute.snapshot);
+                const outletKey = this.locationStrategy.getRouteFullPath(currentRouteSnapshop);
                 const outlet = this.locationStrategy.findOutletByKey(outletKey);
 
                 if (outlet) {
@@ -96,6 +116,6 @@ export class RouterExtensions {
             }
         }
 
-        return outletsToBack;
+        return { outletsToBack: outletsToBack, outlets: outlets };
     }
 }

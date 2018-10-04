@@ -1,6 +1,12 @@
 import { AppiumDriver, createDriver } from "nativescript-dev-appium";
 import { Screen } from "./screen"
 
+export async function canGoBack(driver: AppiumDriver, screen: Screen, title: string, result: boolean) {
+    await screen.showDialogConfirm(title);
+    await screen.loadedConfirmDialog(title + ` ${result}`);
+    await screen.closeDialog();
+}
+
 export async function testPlayerNavigated(driver: AppiumDriver, screen: Screen, player: string) {
     await screen.navigateToPlayer(player);
     await screen.loadedPlayerDetails(player);

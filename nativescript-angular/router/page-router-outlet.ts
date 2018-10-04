@@ -220,7 +220,6 @@ export class PageRouterOutlet implements OnDestroy { // tslint:disable-line:dire
 
         this.activated = ref;
         this._activatedRoute = activatedRoute;
-        this.outlet.currentActivatedRoute = activatedRoute;
         this.markActivatedRoute(activatedRoute);
 
         this.locationStrategy._finishBackPageNavigation(this.frame);
@@ -234,18 +233,19 @@ export class PageRouterOutlet implements OnDestroy { // tslint:disable-line:dire
     activateWith(
         activatedRoute: ActivatedRoute,
         resolver: ComponentFactoryResolver | null): void {
+        const topActivatedRoute = findTopActivatedRouteNodeForOutlet(activatedRoute.snapshot);
 
         if (!this.outlet) {
-            const outletKey = this.locationStrategy.getRouteFullPath(activatedRoute.parent) + activatedRoute.outlet;
+            const outletKey = this.locationStrategy.getRouteFullPath(topActivatedRoute);
             this.outlet = this.locationStrategy.findOutletByKey(outletKey);
 
             if (!this.outlet) {
-                const pathByOutlets = this.locationStrategy.getPathByOutlets(activatedRoute);
+                const pathByOutlets = this.locationStrategy.getPathByOutlets(topActivatedRoute);
                 this.outlet = this.locationStrategy.findOutletByOutletPath(pathByOutlets);
             }
         }
 
-        this.locationStrategy.updateOutlet(this.outlet, this.frame, activatedRoute);
+        this.locationStrategy.updateOutlet(this.outlet, this.frame);
 
         if (this.outlet.isPageNavigationBack) {
             log("Currently in page back navigation - component should be reattached instead of activated.");
@@ -332,9 +332,27 @@ export class PageRouterOutlet implements OnDestroy { // tslint:disable-line:dire
     }
 
     private markActivatedRoute(activatedRoute: ActivatedRoute) {
-        const nodeToMark = findTopActivatedRouteNodeForOutlet(activatedRoute.snapshot);
-        nodeToMark[pageRouterActivatedSymbol] = true;
-        log("Activated route marked as page: " + routeToString(nodeToMark));
+        const queue = [];
+        queue.push(activatedRoute.snapshot);
+        let currentRoute = queue.shift();
+
+        while (currentRoute) {
+            currentRoute.children.forEach(childRoute => {
+                queue.push(childRoute);
+            });
+
+            const nodeToMark = findTopActivatedRouteNodeForOutlet(currentRoute);
+            const outletKeyForRoute = this.locationStrategy.getRouteFullPath(nodeToMark);
+            const outletForRoute = this.locationStrategy.findOutletByKey(outletKeyForRoute);
+
+            // Mark p-r-o's only
+            if (outletForRoute && outletForRoute.frames.length) {
+                nodeToMark[pageRouterActivatedSymbol] = true;
+                log("Activated route marked as page: " + routeToString(nodeToMark));
+            }
+
+            currentRoute = queue.shift();
+        }
     }
 
     private getComponentFactory(
