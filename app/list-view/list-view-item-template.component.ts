@@ -15,7 +15,7 @@ export class CustomTemplateComponent {
 @Component({
     selector: "list-test",
     template: `
-        <GridLayout rows="*" automationText="mainView">
+        <GridLayout rows="*" automationText="mainView" iosOverflowSafeArea="false" >
             <ListView [items]="myItems"
                 iosOverflowSafeArea="false" >
                 <ng-template let-item="item">
