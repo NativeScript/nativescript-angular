@@ -3,7 +3,7 @@ import { Component, ChangeDetectionStrategy } from "@angular/core";
 @Component({
     selector: "list-test",
     template: `
-        <GridLayout rows="* auto" automationText="mainView">
+        <GridLayout rows="* auto" automationText="mainView" iosOverflowSafeArea="false" >
             <ListView [items]="myItems">
                 <ng-template let-item="item">
                     <GridLayout>

@@ -6,9 +6,8 @@ import { DataItem } from "./data-item";
     selector: "list-test",
     styleUrls: ["./list-view-page.css"],
     template: `
-                <StackLayout automationText="mainView">
-                    <ListView [items]="myItems" (itemTap)="onItemTap($event)"
-                    iosOverflowSafeArea="false" >
+                <StackLayout automationText="mainView" iosOverflowSafeArea="false" >
+                    <ListView [items]="myItems" (itemTap)="onItemTap($event)" >
                         <ng-template let-item="item" let-i="index" let-odd="odd" let-even="even">
                             <StackLayout [class.odd]="odd" [class.even]="even">
                                 <Label [text]='"index: " + i'></Label>

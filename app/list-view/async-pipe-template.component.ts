@@ -5,7 +5,7 @@ import { DataItem } from "./data-item";
 @Component({
     selector: "list-test-async",
     template: `
-    <GridLayout rows='*,60' automationText="mainView">
+    <GridLayout rows='*,60' automationText="mainView" iosOverflowSafeArea="false" >
         <ListView [items]="myItems | async">
             <ng-template let-item="item" let-i="index" let-odd="odd" let-even="even">
                 <StackLayout [class.odd]="odd" [class.even]="even">
