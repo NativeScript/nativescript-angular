@@ -30,16 +30,19 @@
     "zone.js": "~0.8.2"
   },
   "devDependencies": {
+    "@types/chai": "^4.0.2",
+    "@types/mocha": "^2.2.41",
+    "@types/node": "^7.0.5",
     "babel-traverse": "6.26.0",
     "babel-types": "6.26.0",
     "babylon": "6.18.0",
     "lazy": "1.0.11",
-    "nativescript-dev-appium": "^3.1.0",
+    "mocha": "~5.1.0",
+    "mocha-junit-reporter": "~1.17.0",
+    "mocha-multi": "~1.0.0",
+    "nativescript-dev-appium": "next",
     "nativescript-dev-typescript": "~0.6.0",
-    "typescript": "~2.7.2",
-    "@types/chai": "^4.0.2",
-    "@types/mocha": "^2.2.41",
-    "@types/node": "^7.0.5"
+    "typescript": "~2.7.2"
   },
   "scripts": {
     "e2e": "tsc -p e2e && mocha --opts ../config/mocha.opts --recursive e2e --appiumCapsLocation ../config/appium.capabilities.json",
