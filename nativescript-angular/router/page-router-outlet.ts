@@ -241,6 +241,7 @@ export class PageRouterOutlet implements OnDestroy { // tslint:disable-line:dire
             const outletKey = this.locationStrategy.getRouteFullPath(topActivatedRoute);
             this.outlet = this.locationStrategy.findOutletByKey(outletKey);
 
+            // Modal with 'primary' p-r-o
             if (!this.outlet) {
                 const pathByOutlets = this.locationStrategy.getPathByOutlets(topActivatedRoute);
                 this.outlet = this.locationStrategy.findOutletByOutletPath(pathByOutlets);

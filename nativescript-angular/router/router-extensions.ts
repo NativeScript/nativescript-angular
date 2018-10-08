@@ -108,9 +108,14 @@ export class RouterExtensions {
             if (outlets.some(currentOutlet => currentOutlet === currentRoute.outlet)) {
                 const currentRouteSnapshop = findTopActivatedRouteNodeForOutlet(currentRoute.snapshot);
                 const outletKey = this.locationStrategy.getRouteFullPath(currentRouteSnapshop);
-                const outlet = this.locationStrategy.findOutletByKey(outletKey);
+                let outlet = this.locationStrategy.findOutletByKey(outletKey);
 
                 if (outlet) {
+                    outletsToBack.push(outlet);
+                } else {
+                    // Modal with 'primary' p-r-o
+                    const pathByOutlets = this.locationStrategy.getPathByOutlets(currentRouteSnapshop);
+                    outlet = this.locationStrategy.findOutletByOutletPath(pathByOutlets);
                     outletsToBack.push(outlet);
                 }
             }
