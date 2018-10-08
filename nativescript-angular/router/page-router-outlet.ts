@@ -170,7 +170,9 @@ export class PageRouterOutlet implements OnDestroy { // tslint:disable-line:dire
         // Clear accumulated modal view page cache when page-router-outlet
         // destroyed on modal view closing
         this.parentContexts.onChildOutletDestroyed(this.name);
-        this.routeReuseStrategy.clearModalCache(this.outlet.outletKey);
+        if (this.outlet) {
+          this.routeReuseStrategy.clearModalCache(this.outlet.outletKey);
+        }
         this.locationStrategy.clearOutlet(this.frame, this.outlet);
     }
 
@@ -317,7 +319,9 @@ export class PageRouterOutlet implements OnDestroy { // tslint:disable-line:dire
         // Clear refCache if navigation with clearHistory
         if (navOptions.clearHistory) {
             const clearCallback = () => setTimeout(() => {
+              if (this.outlet) {
                 this.routeReuseStrategy.clearCache(this.outlet.outletKey);
+              }
                 page.off(Page.navigatedToEvent, clearCallback);
             });
 

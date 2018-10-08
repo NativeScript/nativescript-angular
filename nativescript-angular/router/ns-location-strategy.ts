@@ -180,7 +180,7 @@ export class NSLocationStrategy extends LocationStrategy {
     back(outlet?: Outlet): void {
         this.currentOutlet = outlet || this.currentOutlet;
 
-        if (this.currentOutlet.isPageNavigationBack) {
+        if (this.currentOutlet && this.currentOutlet.isPageNavigationBack) {
             const states = this.currentOutlet.statesByOutlet;
             // We are navigating to the previous page
             // clear the stack until we get to a page navigation state
@@ -195,7 +195,7 @@ export class NSLocationStrategy extends LocationStrategy {
             routerLog("NSLocationStrategy.back() while navigating back. States popped: " + count);
             this.callPopState(state, true);
         } else {
-            let state = this.currentOutlet.peekState();
+            let state = this.currentOutlet && this.currentOutlet.peekState();
             if (state && state.isPageNavigation) {
                 // This was a page navigation - so navigate through frame.
                 routerLog("NSLocationStrategy.back() while not navigating back but top" +
@@ -320,7 +320,7 @@ export class NSLocationStrategy extends LocationStrategy {
         routerLog("NSLocationStrategy._beginPageNavigation()");
 
         this.currentOutlet = this.getOutletByFrame(frame);
-        const lastState = this.currentOutlet.peekState();
+        const lastState = this.currentOutlet && this.currentOutlet.peekState();
 
         if (lastState) {
             lastState.isPageNavigation = true;
