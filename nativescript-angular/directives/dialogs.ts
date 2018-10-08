@@ -127,9 +127,7 @@ export class ModalDialogService {
         const closeCallback = once((...args) => {
             doneCallback.apply(undefined, args);
             if (componentView) {
-                this.location._beginCloseModalNavigation();
                 componentView.closeModal();
-                this.location.back();
                 this.location._finishCloseModalNavigation();
                 detachedLoaderRef.instance.detectChanges();
                 detachedLoaderRef.destroy();

@@ -7,6 +7,8 @@ import { isPresent } from "../lang-facade";
 import { FrameService } from "../platform-providers";
 
 export class Outlet {
+    showingModal: boolean;
+    modalNavigationDepth: number;
     parent: Outlet;
     isPageNavigationBack: boolean;
     outletKey: string;
@@ -16,9 +18,11 @@ export class Outlet {
 
     // Used in reuse-strategy by its children to determine if they should be detached too.
     shouldDetach: boolean = true;
-    constructor(outletKey: string, pathByOutlets: string) {
+    constructor(outletKey: string, pathByOutlets: string, modalNavigationDepth?: number) {
         this.outletKey = outletKey;
         this.isPageNavigationBack = false;
+        this.showingModal = false;
+        this.modalNavigationDepth = modalNavigationDepth || 0;
         this.pathByOutlets = pathByOutlets;
     }
 
@@ -45,7 +49,7 @@ export interface LocationState {
     segmentGroup: UrlSegmentGroup;
     isRootSegmentGroup: boolean;
     isPageNavigation: boolean;
-    isModalNavigation: boolean;
+    modalNavigationDepth: number;
     parentRoute?: string;
 }
 
@@ -58,8 +62,7 @@ export class NSLocationStrategy extends LocationStrategy {
     private _currentNavigationOptions: NavigationOptions;
     private currentUrlTree: UrlTree;
 
-    public _isModalClosing = false;
-    public _isModalNavigation = false;
+    public _modalNavigationDepth = 0;
 
     constructor(private frameService: FrameService) {
         super();
@@ -113,7 +116,7 @@ export class NSLocationStrategy extends LocationStrategy {
         if (!Object.keys(urlTreeRoot.children).length) {
             // Handle case where the user declares a component at path "/".
             // The url serializer doesn't parse this url as having a primary outlet.
-            const rootOutlet = this.createOutlet("primary", null);
+            const rootOutlet = this.createOutlet("primary", null, null);
             this.currentOutlet = rootOutlet;
         } else {
             const queue = [];
@@ -127,16 +130,20 @@ export class NSLocationStrategy extends LocationStrategy {
                     currentSegmentGroup.root = urlTreeRoot;
 
                     let outletKey = this.getSegmentGroupFullPath(currentTree) + outletName;
-
-                    // Update or Create outlet with new state
                     let outlet = this.findOutletByKey(outletKey);
                     const parentOutletName = currentTree.outlet || "";
                     const parentOutletKey = this.getSegmentGroupFullPath(currentTree.parent) + parentOutletName;
                     let parentOutlet = this.findOutletByKey(parentOutletKey);
 
                     if (!outlet) {
-                        outlet = this.createOutlet(outletKey, currentSegmentGroup, parentOutlet);
+                        // tslint:disable-next-line:max-line-length
+                        outlet = this.createOutlet(outletKey, currentSegmentGroup, parentOutlet, this._modalNavigationDepth);
                         this.currentOutlet = outlet;
+                    } else if (this._modalNavigationDepth > 0) {
+                        // Navigation inside modal view.
+                        if (this.updateStates(outlet, currentSegmentGroup, this._modalNavigationDepth)) {
+                            this.currentOutlet = outlet; // If states updated
+                        }
                     } else {
                         outlet.parent = parentOutlet;
 
@@ -173,38 +180,7 @@ export class NSLocationStrategy extends LocationStrategy {
     back(outlet?: Outlet): void {
         this.currentOutlet = outlet || this.currentOutlet;
 
-        if (this._isModalClosing) {
-            const states = this.currentOutlet.statesByOutlet;
-            // We are closing modal view
-            // clear the stack until we get to the page that opened the modal view
-            let state;
-            let modalStatesCleared = false;
-            let count = 1;
-
-            while (!modalStatesCleared) {
-                state = this.currentOutlet.peekState();
-
-                if (!state) {
-                    modalStatesCleared = true;
-                    this.callPopState(null, true);
-                    continue;
-                }
-
-                if (!state.isModalNavigation) {
-                    states.pop();
-                    count++;
-                } else {
-                    modalStatesCleared = true;
-                    state.isModalNavigation = false;
-                }
-            }
-
-            routerLog("NSLocationStrategy.back() while closing modal. States popped: " + count);
-
-            if (state) {
-                this.callPopState(state, true);
-            }
-        } else if (this.currentOutlet.isPageNavigationBack) {
+        if (this.currentOutlet.isPageNavigationBack) {
             const states = this.currentOutlet.statesByOutlet;
             // We are navigating to the previous page
             // clear the stack until we get to a page navigation state
@@ -284,7 +260,7 @@ export class NSLocationStrategy extends LocationStrategy {
             const outletStates = outlet.statesByOutlet;
             const outletLog = outletStates
                 // tslint:disable-next-line:max-line-length
-                .map((v, i) => `${outlet.outletKey}.${i}.[${v.isPageNavigation ? "PAGE" : "INTERNAL"}].[${v.isModalNavigation ? "MODAL" : "BASE"}] "${v.segmentGroup.toString()}"`)
+                .map((v, i) => `${outlet.outletKey}.${i}.[${v.isPageNavigation ? "PAGE" : "INTERNAL"}].[${v.modalNavigationDepth ? "MODAL" : "BASE"}] "${v.segmentGroup.toString()}"`)
                 .reverse();
 
             result = result.concat(outletLog);
@@ -322,33 +298,22 @@ export class NSLocationStrategy extends LocationStrategy {
         routerLog("NSLocationStrategy._beginModalNavigation()");
 
         this.currentOutlet = this.getOutletByFrame(frame);
-        const lastState = this.currentOutlet.peekState();
-
-        if (lastState) {
-            lastState.isModalNavigation = true;
-        }
-
-        this._isModalNavigation = true;
-    }
-
-    public _beginCloseModalNavigation(): void {
-        if (this._isModalClosing) {
-            routerError("Attempted to call startCloseModal while closing modal.");
-            return;
-        }
-        routerLog("NSLocationStrategy.startCloseModal()");
-        this._isModalClosing = true;
+        this.currentOutlet.showingModal = true;
+        this._modalNavigationDepth++;
     }
 
     public _finishCloseModalNavigation() {
-        if (!this._isModalClosing) {
-            routerError("Attempted to call startCloseModal while not closing modal.");
-            return;
-        }
-
         routerLog("NSLocationStrategy.finishCloseModalNavigation()");
-        this._isModalNavigation = false;
-        this._isModalClosing = false;
+        this._modalNavigationDepth--;
+
+        this.currentOutlet = this.findOutletByModal(this._modalNavigationDepth) || this.currentOutlet;
+        this.currentOutlet.showingModal = false;
+
+        this.currentOutlet.statesByOutlet = this.currentOutlet.statesByOutlet.filter(state => {
+            return state.modalNavigationDepth <= this._modalNavigationDepth;
+        });
+
+        this.callPopState(this.currentOutlet.peekState(), false);
     }
 
     public _beginPageNavigation(frame: Frame): NavigationOptions {
@@ -462,35 +427,18 @@ export class NSLocationStrategy extends LocationStrategy {
         return pathToOutlet || lastPath;
     }
 
-    findOutletByOutletPath(pathByOutlets: string): Outlet {
-        let outlet;
-
-        for (let index = 0; index < this.outlets.length; index++) {
-            const currentOutlet = this.outlets[index];
-
-            if (currentOutlet.pathByOutlets === pathByOutlets) {
-                outlet = currentOutlet;
-                break;
-            }
-        }
-
-        return outlet;
+    findOutletByModal(modalNavigation: number): Outlet {
+        return this.outlets.find((outlet) => {
+            return outlet.modalNavigationDepth === modalNavigation && outlet.showingModal;
+        });
     }
 
+    findOutletByOutletPath(pathByOutlets: string): Outlet {
+        return this.outlets.find((outlet) => outlet.pathByOutlets === pathByOutlets);
+    }
 
     findOutletByKey(outletKey: string): Outlet {
-        let outlet;
-
-        for (let index = 0; index < this.outlets.length; index++) {
-            const currentOutlet = this.outlets[index];
-
-            if (currentOutlet.outletKey === outletKey) {
-                outlet = currentOutlet;
-                break;
-            }
-        }
-
-        return outlet;
+        return this.outlets.find((outlet) => outlet.outletKey === outletKey);
     }
 
     private getOutletByFrame(frame: Frame): Outlet {
@@ -508,13 +456,13 @@ export class NSLocationStrategy extends LocationStrategy {
         return outlet;
     }
 
-    private updateStates(outlet: Outlet, currentSegmentGroup: UrlSegmentGroup): boolean {
+    private updateStates(outlet: Outlet, currentSegmentGroup: UrlSegmentGroup, modalNavigation?: number): boolean {
         const isNewPage = outlet.statesByOutlet.length === 0;
         const lastState = outlet.statesByOutlet[outlet.statesByOutlet.length - 1];
         const equalStateUrls = lastState && lastState.segmentGroup.toString() === currentSegmentGroup.toString();
 
         const locationState: LocationState = {
-            isModalNavigation: false,
+            modalNavigationDepth: modalNavigation || 0,
             segmentGroup: currentSegmentGroup,
             isRootSegmentGroup: lastState ? lastState.isRootSegmentGroup : false,
             isPageNavigation: isNewPage
@@ -522,7 +470,10 @@ export class NSLocationStrategy extends LocationStrategy {
 
         if (!lastState || !equalStateUrls) {
             outlet.statesByOutlet.push(locationState);
-            this.updateParentsStates(outlet, currentSegmentGroup.parent);
+
+            if (modalNavigation === 0 && !outlet.showingModal) {
+                this.updateParentsStates(outlet, currentSegmentGroup.parent);
+            }
 
             return true;
         }
@@ -544,7 +495,8 @@ export class NSLocationStrategy extends LocationStrategy {
             }
         }
     }
-    private createOutlet(outletKey: string, segmentGroup: any, parentOutlet?: Outlet): Outlet {
+
+    private createOutlet(outletKey: string, segmentGroup: any, parent: Outlet, modalNavigation?: number): Outlet {
         let isRootSegmentGroup: boolean = false;
 
         if (!segmentGroup) {
@@ -555,17 +507,17 @@ export class NSLocationStrategy extends LocationStrategy {
         }
 
         const pathByOutlets = this.getPathByOutlets(segmentGroup);
-        const newOutlet = new Outlet(outletKey, pathByOutlets);
+        const newOutlet = new Outlet(outletKey, pathByOutlets, modalNavigation);
 
         const locationState: LocationState = {
-            isModalNavigation: false,
+            modalNavigationDepth: modalNavigation || 0,
             segmentGroup: segmentGroup,
             isRootSegmentGroup: isRootSegmentGroup,
             isPageNavigation: true // It is a new OutletNode.
         };
 
         newOutlet.statesByOutlet = [locationState];
-        newOutlet.parent = parentOutlet;
+        newOutlet.parent = parent;
         this.outlets.push(newOutlet);
 
         return newOutlet;

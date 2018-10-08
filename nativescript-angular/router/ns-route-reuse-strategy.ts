@@ -151,9 +151,8 @@ export class NSRouteReuseStrategy implements RouteReuseStrategy {
 
         if (state) {
             let isModal = false;
-            if (this.location._isModalNavigation) {
+            if (this.location._modalNavigationDepth > 0) {
                 isModal = true;
-                this.location._isModalNavigation = false;
             }
 
             cache.push({ key, state, isModal });
