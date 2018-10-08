@@ -38,7 +38,7 @@ export type TextView = {text: string} & View;
         "search-bar[ngModel], search-bar[formControlName],search-bar[formControl]",
     providers: [TEXT_VALUE_ACCESSOR],
     host: {
-        "(blur)": "onTouched()",
+        // "(blur)": "onTouched()", // Causes ExpressionChangedAfterItHasBeenCheckedError when using [formControlName] bindings in dynamic forms
         "(textChange)": "onChange($event.value)",
     },
 })
