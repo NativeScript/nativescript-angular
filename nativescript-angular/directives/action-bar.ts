@@ -82,9 +82,9 @@ const appendActionItem = (bar: NgActionBar, item: ActionItem) => {
     bar.actionItems.addItem(item);
 };
 
-registerElement("ActionBar", () => require("ui/action-bar").ActionBar, actionBarMeta);
-registerElement("ActionItem", () => require("ui/action-bar").ActionItem);
-registerElement("NavigationButton", () => require("ui/action-bar").NavigationButton);
+registerElement("ActionBar", () => require("tns-core-modules/ui/action-bar").ActionBar, actionBarMeta);
+registerElement("ActionItem", () => require("tns-core-modules/ui/action-bar").ActionItem);
+registerElement("NavigationButton", () => require("tns-core-modules/ui/action-bar").NavigationButton);
 
 @Component({
     selector: "ActionBar",
