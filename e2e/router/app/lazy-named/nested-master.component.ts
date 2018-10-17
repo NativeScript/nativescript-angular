@@ -3,20 +3,18 @@ import { Page } from "tns-core-modules/ui/page";
 @Component({
     selector: "master",
     template: `
-    <GridLayout rows="auto, auto">
-        <Label text="NestedMaster" class="nested-header"></Label>
-                
+    <GridLayout rows="auto">   
         <StackLayout row="1" orientation="horizontal">
-            <Button *ngFor="let detail of details" [text]="'DETAIL ' + detail" [nsRouterLink]="['detail', detail]"></Button>
+            <Button *ngFor="let detail of details" [text]="'DETAIL-NAMED ' + detail" [nsRouterLink]="['detail', detail]"></Button>
         </StackLayout>
     </GridLayout>
     `
 })
-export class MasterComponent implements OnInit, OnDestroy {
+export class NestedMasterComponent implements OnInit, OnDestroy {
     public details: Array<number> = [1, 2, 3];
 
     constructor(private page: Page) {
-        this.page.actionBarHidden = true;
+        this.page.actionBar.title = "NamedNestedMaster";
         console.log("MasterComponent - constructor()");
     }
 

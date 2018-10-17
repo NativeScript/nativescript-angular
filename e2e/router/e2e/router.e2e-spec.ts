@@ -190,6 +190,53 @@ describe("Nested navigation + page navigation", () => {
     });
 });
 
+describe("Nested name navigation + page navigation", () => {
+    let driver: AppiumDriver;
+
+    before(async () => {
+        driver = await createDriver();
+        await driver.resetApp();
+    });
+
+    it("should find First", async () => {
+        await assureFirstComponent(driver);
+    });
+
+    it("should navigate to Second(1)/master", async () => {
+        await findAndClick(driver, "GO TO SECOND");
+
+        await assureSecondComponent(driver, 1)
+        await assureNestedMasterComponent(driver);
+    });
+
+    it("should load nested named Master", async () => {
+        await findAndClick(driver, "LOAD NESTED NAMED OUTLET");
+        await assureNamedNestedMasterComponent(driver);
+    });
+
+    it("should navigate to nested named Master Detail/1", async () => {
+        const navigationButton =
+            await driver.findElementByText("DETAIL-NAMED 1", SearchOptions.exact);
+        navigationButton.click();
+
+        await assureNamedNestedDetailComponent(driver, 1);
+    });
+
+    it("should navigate back to Master and navigate to Detail/2", async () => {
+        let navigationButton =
+            await driver.findElementByText("BACK-NESTED", SearchOptions.exact);
+        navigationButton.click();
+
+        await assureNamedNestedMasterComponent(driver);
+
+        navigationButton =
+            await driver.findElementByText("DETAIL-NAMED 2", SearchOptions.exact);
+        navigationButton.click();
+
+        await assureNamedNestedDetailComponent(driver, 2);
+    });
+});
+
 describe("Shouldn't be able to navigate back on startup", () => {
     let driver: AppiumDriver;
 
@@ -369,6 +416,16 @@ async function assureLazyComponent(driver: AppiumDriver) {
 
 async function assureComponentlessLazyComponent(driver: AppiumDriver) {
     await driver.findElementByText("Lazy Componentless Route", SearchOptions.exact);
+}
+
+async function assureNamedNestedMasterComponent(driver: AppiumDriver) {
+    await driver.findElementByText("NamedNestedMaster", SearchOptions.exact);
+}
+
+async function assureNamedNestedDetailComponent(driver: AppiumDriver, param: number) {
+    await driver.findElementByText("NamedNestedDetail", SearchOptions.exact);
+    await driver.findElementByText(`nested-named-param: ${param}`, SearchOptions.exact);
+
 }
 
 async function assureSecondComponent(driver: AppiumDriver, param: number) {
