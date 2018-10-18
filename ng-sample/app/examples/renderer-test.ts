@@ -1,6 +1,6 @@
 import { Component, Directive, Host, ElementRef, Input } from "@angular/core";
-import { Observable } from "data/observable";
-import { SegmentedBarItem } from "ui/segmented-bar";
+import { Observable } from "tns-core-modules/data/observable";
+import { SegmentedBarItem } from "tns-core-modules/ui/segmented-bar";
 
 function createTabItem(title: string) {
     let item = new SegmentedBarItem();

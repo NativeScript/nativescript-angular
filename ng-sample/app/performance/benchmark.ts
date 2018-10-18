@@ -1,6 +1,6 @@
-import {StackLayout} from "ui/layouts/stack-layout";
-import {Button} from "ui/button";
-import {Label} from "ui/label";
+import {StackLayout} from "tns-core-modules/ui/layouts/stack-layout";
+import {Button} from "tns-core-modules/ui/button";
+import {Label} from "tns-core-modules/ui/label";
 import {Inject, Component, ApplicationRef} from "@angular/core";
 import * as profiling from "./profiling";
 

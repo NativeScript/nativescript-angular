@@ -3,7 +3,7 @@ import { ActivatedRoute, Router, Route } from "@angular/router";
 import { Location } from "@angular/common";
 import { RouterExtensions } from "nativescript-angular/router";
 
-import { Page } from "ui/page";
+import { Page } from "tns-core-modules/ui/page";
 
 @Component({
     selector: "lazy",

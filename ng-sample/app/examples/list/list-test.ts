@@ -1,6 +1,6 @@
 import {Component, Input, WrappedValue, ChangeDetectionStrategy, AfterViewChecked, DoCheck} from "@angular/core";
-import {Label} from "ui/label";
-import {ObservableArray} from "data/observable-array";
+import {Label} from "tns-core-modules/ui/label";
+import {ObservableArray} from "tns-core-modules/data/observable-array";
 
 class DataItem {
     constructor(public id: number, public name: string) { }

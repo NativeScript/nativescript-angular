@@ -1,7 +1,7 @@
 import { Component, Injectable } from "@angular/core";
 import { CanActivate, Resolve, ActivatedRouteSnapshot, RouterStateSnapshot } from "@angular/router";
 import { RouterExtensions, PageRoute } from "nativescript-angular/router";
-import * as appSettings from "application-settings";
+import * as appSettings from "tns-core-modules/application-settings";
 import { Observable } from "rxjs";
 import { map, switchMap } from "rxjs/operators";
 

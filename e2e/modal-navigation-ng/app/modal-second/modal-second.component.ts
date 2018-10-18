@@ -1,5 +1,5 @@
 import { Component } from "@angular/core";
-import { View, EventData } from "ui/core/view"
+import { View, EventData } from "tns-core-modules/ui/core/view"
 import { RouterExtensions } from "nativescript-angular/router";
 
 @Component({

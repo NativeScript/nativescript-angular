@@ -1,8 +1,8 @@
 // make sure you import mocha-config before @angular/core
 import {assert} from "./test-config";
 import {Component, ComponentRef, Directive, TemplateRef, ViewContainerRef} from "@angular/core";
-import {View} from "ui/core/view";
-import {Label} from "ui/label";
+import {View} from "tns-core-modules/ui/core/view";
+import {Label} from "tns-core-modules/ui/label";
 import {nsTestBedAfterEach, nsTestBedBeforeEach, nsTestBedRender} from "nativescript-angular/testing";
 // >> third-party-simple-view-registration
 import {registerElement} from "nativescript-angular/element-registry";
