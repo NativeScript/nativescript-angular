@@ -58,13 +58,13 @@ export interface LocationState {
 
 @Injectable()
 export class NSLocationStrategy extends LocationStrategy {
-    private outlets: Array<Outlet> = [];
     private currentOutlet: Outlet;
 
     private popStateCallbacks = new Array<(_: any) => any>();
     private _currentNavigationOptions: NavigationOptions;
     private currentUrlTree: UrlTree;
 
+    public outlets: Array<Outlet> = [];
     public _modalNavigationDepth = 0;
 
     constructor(private frameService: FrameService) {
@@ -177,6 +177,21 @@ export class NSLocationStrategy extends LocationStrategy {
             if (isLogEnabled()) {
                 routerLog("NSLocationStrategy.replaceState changing existing state: " +
                     `${state}, title: ${title}, url: ${url}, queryParams: ${queryParams}`);
+            }
+
+            const tree = this.currentUrlTree;
+
+            if (url !== tree.toString()) {
+                const urlSerializer = new DefaultUrlSerializer();
+                const stateUrlTree: UrlTree = urlSerializer.parse(url);
+                const rootOutlets = stateUrlTree.root.children;
+
+                Object.keys(rootOutlets).forEach(outletName => {
+                    const outlet = this.findOutletByKey(outletName);
+                    const topState = outlet.peekState();
+
+                    topState.segmentGroup = rootOutlets[outletName];
+                });
             }
         } else {
             if (isLogEnabled()) {
@@ -502,7 +517,7 @@ export class NSLocationStrategy extends LocationStrategy {
 
         const locationState: LocationState = {
             segmentGroup: currentSegmentGroup,
-            isRootSegmentGroup: lastState ? lastState.isRootSegmentGroup : false,
+            isRootSegmentGroup: false,
             isPageNavigation: isNewPage
         };
 
