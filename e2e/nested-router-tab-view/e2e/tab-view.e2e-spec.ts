@@ -26,7 +26,7 @@ describe("tab-view:", () => {
 
     afterEach(async function () {
         if (this.currentTest.state === "failed") {
-            await driver.logScreenshot(this.currentTest.title);
+            await driver.logTestArtifacts(this.currentTest.title);
         }
     });
 

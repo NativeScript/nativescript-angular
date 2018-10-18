@@ -9,7 +9,7 @@ import { device, isIOS } from "tns-core-modules/platform";
 
 import { ComponentFixture, async } from "@angular/core/testing";
 import { nsTestBedRender, nsTestBedAfterEach, nsTestBedBeforeEach } from "nativescript-angular/testing";
-import { NSLocationStrategy } from "nativescript-angular/router/ns-location-strategy";
+import { NSLocationStrategy, Outlet } from "nativescript-angular/router/ns-location-strategy";
 import { FrameService } from "nativescript-angular";
 import { FakeFrameService } from "./ns-location-strategy";
 const CLOSE_WAIT = isIOS ? 1000 : 0;
@@ -47,7 +47,11 @@ export class FailComponent {
     </GridLayout>`
 })
 export class SuccessComponent {
-    constructor(public service: ModalDialogService, public vcRef: ViewContainerRef) {
+    constructor(
+        public service: ModalDialogService,
+        public vcRef: ViewContainerRef,
+        public locationStrategy: NSLocationStrategy,
+        public fakeFrameService: FrameService) {
     }
 }
 
@@ -88,6 +92,16 @@ describe("modal-dialog", () => {
         nsTestBedRender(SuccessComponent)
             .then((fixture: ComponentFixture<SuccessComponent>) => {
                 const service = <ModalDialogService>fixture.componentRef.instance.service;
+                const locStrategy = <NSLocationStrategy>fixture.componentRef.instance.locationStrategy;
+                const outlet = new Outlet("primary", "primary", 0);
+
+                let parentView = fixture.componentRef.instance.vcRef.element.nativeElement;
+                parentView = parentView.page && parentView.page.frame;
+                outlet.frame = parentView;
+                locStrategy.outlets.push(outlet);
+
+                locStrategy.pushState(null, "test", "/test", null);
+
                 const comp = <SuccessComponent>fixture.componentRef.instance;
                 return service.showModal(ModalComponent, { viewContainerRef: comp.vcRef });
             })
@@ -100,6 +114,16 @@ describe("modal-dialog", () => {
         nsTestBedRender(SuccessComponent)
             .then((fixture: ComponentFixture<SuccessComponent>) => {
                 const service = <ModalDialogService>fixture.componentRef.instance.service;
+                const locStrategy = <NSLocationStrategy>fixture.componentRef.instance.locationStrategy;
+                const outlet = new Outlet("primary", "primary", 0);
+
+                let parentView = fixture.componentRef.instance.vcRef.element.nativeElement;
+                parentView = parentView.page && parentView.page.frame;
+                outlet.frame = parentView;
+                locStrategy.outlets.push(outlet);
+
+                locStrategy.pushState(null, "test", "/test", null);
+
                 const comp = <SuccessComponent>fixture.componentRef.instance;
                 return service.showModal(ModalComponent, {
                     viewContainerRef: comp.vcRef,

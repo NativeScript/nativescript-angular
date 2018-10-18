@@ -18,8 +18,7 @@ describe("Shared modal from home and back", () => {
 
     afterEach(async function () {
         if (this.currentTest.state === "failed") {
-            await driver.logPageSource(this.currentTest.title);
-            await driver.logScreenshot(this.currentTest.title);
+            await driver.logTestArtifacts(this.currentTest.title);
         }
     });
 
