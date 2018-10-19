@@ -50,11 +50,34 @@ if ((<any>global).___TS_UNUSED) {
         return InjectionToken;
     })();
 }
+
+// tslint:disable:max-line-length
+/**
+ * Options to be passed when HMR is enabled
+ */
+export interface HmrOptions {
+    /**
+     * A factory function that returns either Module type or NgModuleFactory type.
+     * This needs to be a factory function as the types will change when modules are replaced.
+     */
+    moduleTypeFactory?: () => Type<any> | NgModuleFactory<any>;
+
+    /**
+     * A livesync callback that will be called instead of the original livesync.
+     * It gives the HMR a hook to apply the module replacement.
+     * @param bootstrapPlatform - A bootstrap callback to be called after HMR is done. It will bootstrap a new angular app within the exisiting platform, using the moduleTypeFactory to get the Module or NgModuleFactory to be used.
+     */
+    livesyncCallback: (bootstrapPlatform: () => void) => void;
+}
+// tslint:enable:max-line-length
+
+
 export interface AppOptions {
     bootInExistingPage?: boolean;
     cssFile?: string;
     startPageActionBarHidden?: boolean;
     createFrameOnBootstrap?: boolean;
+    hmrOptions?: HmrOptions;
 }
 
 export type PlatformFactory = (extraProviders?: StaticProvider[]) => PlatformRef;
@@ -91,7 +114,14 @@ export class NativeScriptPlatformRef extends PlatformRef {
 
     @profile
     bootstrapModuleFactory<M>(moduleFactory: NgModuleFactory<M>): Promise<NgModuleRef<M>> {
-        this._bootstrapper = () => this.platform.bootstrapModuleFactory(moduleFactory);
+        this._bootstrapper = () => {
+            let bootstrapFactory = moduleFactory;
+            if (this.appOptions.hmrOptions) {
+                bootstrapFactory = <NgModuleFactory<M>>this.appOptions.hmrOptions.moduleTypeFactory();
+            }
+
+            return this.platform.bootstrapModuleFactory(bootstrapFactory);
+        };
 
         this.bootstrapApp();
 
@@ -103,8 +133,14 @@ export class NativeScriptPlatformRef extends PlatformRef {
         moduleType: Type<M>,
         compilerOptions: CompilerOptions | CompilerOptions[] = []
     ): Promise<NgModuleRef<M>> {
-        this._bootstrapper = () => this.platform.bootstrapModule(moduleType, compilerOptions);
+        this._bootstrapper = () => {
+            let bootstrapType = moduleType;
+            if (this.appOptions.hmrOptions) {
+                bootstrapType = <Type<M>>this.appOptions.hmrOptions.moduleTypeFactory();
+            }
 
+            return this.platform.bootstrapModule(bootstrapType, compilerOptions);
+        };
         this.bootstrapApp();
 
         return null; // Make the compiler happy
@@ -113,7 +149,11 @@ export class NativeScriptPlatformRef extends PlatformRef {
     @profile
     private bootstrapApp() {
         (<any>global).__onLiveSyncCore = () => {
-            this._livesync();
+            if (this.appOptions.hmrOptions) {
+                this.appOptions.hmrOptions.livesyncCallback(() => this._livesync());
+            } else {
+                this._livesync();
+            }
         };
 
         if (this.appOptions && typeof this.appOptions.cssFile === "string") {
@@ -224,7 +264,12 @@ export class NativeScriptPlatformRef extends PlatformRef {
         if (isLogEnabled()) {
             bootstrapLog("Angular livesync started.");
         }
-        onBeforeLivesync.next(lastBootstrappedModule ? lastBootstrappedModule.get() : null);
+
+        const lastModuleRef = lastBootstrappedModule ? lastBootstrappedModule.get() : null;
+        onBeforeLivesync.next(lastModuleRef);
+        if (lastModuleRef) {
+            lastModuleRef.destroy();
+        }
 
         const autoCreateFrame = !!this.appOptions.createFrameOnBootstrap;
         let tempAppHostView: AppHostView;

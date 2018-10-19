@@ -2,10 +2,9 @@ env:
   global:
     - NODE_VERSION=8
     - EMULATOR_API_LEVEL=23
-    - ANDROID_VERSION=25
-    - ANDROID_BUILD_TOOLS_VERSION=27.0.3
+    - ANDROID_VERSION=28
+    - ANDROID_BUILD_TOOLS_VERSION=28.0.2
     - ANDROID_ABI=armeabi-v7a
-    - APPIUM_VERSION=1.7.0
     - EMULATOR_NAME=test
     - ANDROID_TAG=google_apis
 
@@ -66,6 +65,7 @@ android:
   components:
     - tools
     - platform-tools
+    - android-$ANDROID_VERSION
     - build-tools-$ANDROID_BUILD_TOOLS_VERSION
     - android-$EMULATOR_API_LEVEL
     - extra-google-google_play_services
