@@ -2,9 +2,9 @@
 import { assert } from "./test-config";
 import { DefaultUrlSerializer, UrlSegmentGroup, UrlTree } from "@angular/router";
 import { NSLocationStrategy, LocationState } from "nativescript-angular/router/ns-location-strategy";
-import { Frame, BackstackEntry, NavigationEntry } from "ui/frame";
-import { Page } from "ui/page";
-import { View } from "ui/core/view";
+import { Frame, BackstackEntry, NavigationEntry } from "tns-core-modules/ui/frame";
+import { Page } from "tns-core-modules/ui/page";
+import { View } from "tns-core-modules/ui/core/view";
 import { FrameService } from "nativescript-angular/platform-providers";
 
 export class FakeFrameService extends FrameService {

@@ -2,8 +2,8 @@
 
 import { assert } from "./test-config";
 import { Component, ComponentRef, ElementRef, NgZone, Renderer2, ViewChild } from "@angular/core";
-import { ProxyViewContainer } from "ui/proxy-view-container";
-import { Red } from "color/known-colors";
+import { ProxyViewContainer } from "tns-core-modules/ui/proxy-view-container";
+import { Red } from "tns-core-modules/color/known-colors";
 import { dumpView } from "./test-utils";
 import { LayoutBase } from "tns-core-modules/ui/layouts/layout-base";
 import { StackLayout } from "tns-core-modules/ui/layouts/stack-layout";

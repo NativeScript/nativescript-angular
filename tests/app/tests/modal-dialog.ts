@@ -1,11 +1,11 @@
 // make sure you import mocha-config before @angular/core
 import { assert } from "./test-config";
 import { Component, ViewContainerRef } from "@angular/core";
-import { Page } from "ui/page";
-import { topmost } from "ui/frame";
+import { Page } from "tns-core-modules/ui/page";
+import { topmost } from "tns-core-modules/ui/frame";
 import { ModalDialogParams, ModalDialogService } from "nativescript-angular/directives/dialogs";
 
-import { device, isIOS } from "platform";
+import { device, isIOS } from "tns-core-modules/platform";
 
 import { ComponentFixture, async } from "@angular/core/testing";
 import { nsTestBedRender, nsTestBedAfterEach, nsTestBedBeforeEach } from "nativescript-angular/testing";
