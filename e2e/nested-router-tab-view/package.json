@@ -6,10 +6,10 @@
   "nativescript": {
     "id": "org.nativescript.nestedroutertabview",
     "tns-ios": {
-      "version": "4.2.0"
+      "version": "next"
     },
     "tns-android": {
-      "version": "4.2.0"
+      "version": "next"
     }
   },
   "dependencies": {
@@ -26,10 +26,12 @@
     "nativescript-theme-core": "~1.0.4",
     "reflect-metadata": "~0.1.8",
     "rxjs": "~6.0.0-rc.1",
-    "tns-core-modules": "^4.3.0-2018-10-15-104309-01",
+    "tns-core-modules": "next",
     "zone.js": "~0.8.2"
   },
   "devDependencies": {
+    "@angular/compiler-cli": "~6.1.0",
+    "@ngtools/webpack": "~6.2.0",
     "@types/chai": "^4.0.2",
     "@types/mocha": "^2.2.41",
     "@types/node": "^7.0.5",
@@ -40,8 +42,9 @@
     "mocha": "^5.2.0",
     "mocha-junit-reporter": "^1.18.0",
     "mocha-multi": "^1.0.1",
-    "nativescript-dev-appium": "^4.1.0-2018-10-11-01",
-    "nativescript-dev-typescript": "~0.6.0",
+    "nativescript-dev-appium": "next",
+    "nativescript-dev-typescript": "~0.7.4",
+    "nativescript-dev-webpack": "next",
     "typescript": "~2.7.2"
   },
   "scripts": {
