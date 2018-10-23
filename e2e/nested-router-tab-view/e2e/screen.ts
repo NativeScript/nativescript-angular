@@ -93,7 +93,7 @@ export class Screen {
     }
 
     loadedTeamList = async () => {
-        const lblTeamList = await this._driver.findElementByText(teamList);
+        const lblTeamList = await this._driver.findElementByText(teamList, 10);
         assert.isTrue(await lblTeamList.isDisplayed());
         console.log(teamList + " loaded!");
     }

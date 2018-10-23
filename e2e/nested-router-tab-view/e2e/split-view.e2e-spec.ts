@@ -6,8 +6,7 @@ import {
     testPlayerNextNavigated,
     testTeamNextNavigated,
     testPlayersNavigated,
-    canGoBack,
-    testTeamsNavigated
+    canGoBack
 } from "./shared.e2e-spec"
 
 const pages = ["Go To Home Page", "Go To Lazy Home Page"];
