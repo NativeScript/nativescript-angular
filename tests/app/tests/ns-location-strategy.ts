@@ -242,7 +242,9 @@ describe("NSLocationStrategy", () => {
         assert.equal(strategy.path(), "/test");
 
         strategy.replaceState(null, "test2", "/test2", null);
-        assert.equal(strategy.path(), "/test2");
+        // Currently replaceState does nothing since this shouldn't affect any functionality on {N} side.
+        // replaceState should be relevant only in Web.
+        // assert.equal(strategy.path(), "/test2");
 
         assert.equal(popCount, 0); // no onPopState when replacing
     });
@@ -258,7 +260,9 @@ describe("NSLocationStrategy", () => {
         assert.equal(strategy.path(), "/(test1:test12//test2:test2)");
 
         strategy.replaceState(null, "test2", "/(test1:test13//test2:test2)", null);
-        assert.equal(strategy.path(), "/(test1:test13//test2:test2)");
+        // Currently replaceState does nothing since this shouldn't affect any functionality on {N} side.
+        // replaceState should be relevant only in Web.
+        // assert.equal(strategy.path(), "/(test1:test13//test2:test2)");
 
         assert.equal(popCount, 0); // no onPopState when replacing
     });

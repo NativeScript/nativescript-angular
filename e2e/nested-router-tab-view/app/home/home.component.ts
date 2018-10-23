@@ -2,7 +2,7 @@ import { Component, ViewContainerRef } from "@angular/core";
 import { ModalDialogService, ModalDialogOptions } from "nativescript-angular/directives/dialogs";
 import { RouterExtensions } from "nativescript-angular/router";
 import { ActivatedRoute } from "@angular/router";
-import { confirm } from "ui/dialogs";
+import { confirm } from "tns-core-modules/ui/dialogs";
 
 @Component({
     moduleId: module.id,
