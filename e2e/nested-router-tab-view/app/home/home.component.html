@@ -3,20 +3,28 @@
 </ActionBar>
 
 <GridLayout rows="auto, *">
-    <WrapLayout row="0">
-        <Button text="Go To Tabs Page" [nsRouterLink]="['/tabs']"></Button>
-        <!-- <Button text="Go To Tabs Page" [nsRouterLink]="['/tabs', { outlets: { playerTab: ['players'], teamTab: ['teams'] } }]"></Button> -->
-        <Button text="Back()" (tap)="back()"></Button>
-        <Button text="CanGoBack(ActivatedRoute)" (tap)="canGoBack()"></Button>
-        <Button text="CanGoBack(Players)" (tap)="canGoBackPlayers()"></Button>
-        <Button text="CanGoBack(Teams)" (tap)="canGoBackTeams()"></Button>
-        <Button text="CanGoBack(Both)" (tap)="canGoBackBoth()"></Button>
-        <Button text="Back(Players)" (tap)="backPlayers()"></Button>
-        <Button text="Back(Teams)" (tap)="backTeams()"></Button>
-        <Button text="Back(Both)" (tap)="backBoth()"></Button>
-        <Button text="Back(ActivatedRoute)" (tap)="backActivatedRoute()"></Button>
-    </WrapLayout>
-
+    <GridLayout row="0" rows="auto,auto,auto,auto,auto,auto">
+        <TextView text="Go To" editable="false"></TextView>
+        <GridLayout columns="auto,*,*" row="1">
+            <Button text="Tabs Page" automationText="Go To Tabs Page" [nsRouterLink]="['/tabs']"></Button>
+            <Button text="Tabs Page Outlets" automationText="Go To Tabs Page Outlets" col="1" [nsRouterLink]="['/tabs', { outlets: { playerTab: ['players'], teamTab: ['teams'] } }]"></Button>
+            <Button text="Back()" col="2" automationText="Back()" (tap)="back()"></Button>
+        </GridLayout>
+        <TextView text="Can go back" row="2" editable="false"></TextView>
+        <GridLayout row="3" columns="auto,*,*,*">
+            <Button text="ActivatedRoute" automationText="CanGoBack(ActivatedRoute)" (tap)="canGoBack()"></Button>
+            <Button text="Players" automationText="CanGoBack(Players)" col="1" (tap)="canGoBackPlayers()"></Button>
+            <Button text="Teams" automationText="CanGoBack(Teams)" col="2" (tap)="canGoBackTeams()"></Button>
+            <Button text="Both" automationText="CanGoBack(Both)" col="3" (tap)="canGoBackBoth()"></Button>
+        </GridLayout>
+        <TextView text="Back to" row="4" editable="false"></TextView>
+        <GridLayout row="5" columns="auto,*,*,*">
+            <Button text="ActivatedRoute" automationText="Back(ActivatedRoute)" (tap)="backActivatedRoute()"></Button>
+            <Button text="Players" automationText="Back(Players)" col="1" (tap)="backPlayers()"></Button>
+            <Button text="Teams" automationText="Back(Teams)" col="2" (tap)="backTeams()"></Button>
+            <Button text="Both" automationText="Back(Both)" col="3" (tap)="backBoth()"></Button>
+        </GridLayout>
+    </GridLayout>
     <GridLayout row="1" columns="*,*">
         <GridLayout col="0">
             <page-router-outlet name="playerTab"></page-router-outlet>

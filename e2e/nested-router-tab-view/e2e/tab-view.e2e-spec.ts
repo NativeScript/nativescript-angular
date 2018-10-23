@@ -1,13 +1,10 @@
-import { AppiumDriver, createDriver, SearchOptions } from "nativescript-dev-appium";
+import { AppiumDriver, createDriver } from "nativescript-dev-appium";
 import { Screen } from "./screen"
 import {
     testPlayerNavigated,
     testTeamNavigated,
     testPlayerNextNavigated,
     testTeamNextNavigated,
-    testPlayersNavigated,
-    testTeamsNavigated,
-    canGoBack
 } from "./shared.e2e-spec"
 
 describe("tab-view:", () => {
@@ -48,9 +45,9 @@ describe("tab-view:", () => {
     });
 
     it("should navigate Player One/Team One then back separately", async () => {
-        await testPlayerNavigated(driver, screen, screen.playerOne);
+        await testPlayerNavigated(screen, screen.playerOne);
         await gotoTeamsTab(driver);
-        await testTeamNavigated(driver, screen, screen.teamOne);
+        await testTeamNavigated(screen, screen.teamOne);
         await backTeams(driver);
         await screen.loadedTeamList();
         await gotoPlayersTab(driver);
@@ -59,11 +56,11 @@ describe("tab-view:", () => {
     });
 
     it("should navigate Player One/Team One then next Player/Team then back", async () => {
-        await testPlayerNavigated(driver, screen, screen.playerOne);
-        await testPlayerNextNavigated(driver, screen, screen.playerTwo);
+        await testPlayerNavigated(screen, screen.playerOne);
+        await testPlayerNextNavigated(screen, screen.playerTwo);
         await gotoTeamsTab(driver);
-        await testTeamNavigated(driver, screen, screen.teamOne);
-        await testTeamNextNavigated(driver, screen, screen.teamTwo);
+        await testTeamNavigated(screen, screen.teamOne);
+        await testTeamNextNavigated(screen, screen.teamTwo);
         await gotoPlayersTab(driver);
         await backPlayers(driver);
         await screen.loadedPlayerDetails(screen.playerOne);
@@ -72,8 +69,8 @@ describe("tab-view:", () => {
         await screen.loadedTeamDetails(screen.teamOne);
         await backTeams(driver);
         await screen.loadedTeamList();
-        await gotoPlayersTab(driver);        
-        await backPlayers(driver); 
+        await gotoPlayersTab(driver);
+        await backPlayers(driver);
         await screen.loadedPlayersList();
     });
 });

@@ -40,24 +40,24 @@ describe("split-view:", () => {
                 await screen.loadedHome();
                 await screen.loadedPlayersList();
                 await screen.loadedTeamList();
-                await canGoBack(driver, screen,screen.canGoBackActivatedRoute, true);
+                await canGoBack(screen, screen.canGoBackActivatedRoute, true);
             });
 
             it("should navigate Player One/Team One then back separately", async () => {
-                await testPlayerNavigated(driver, screen, screen.playerOne);
-                await testTeamNavigated(driver, screen, screen.teamOne);
-                await canGoBack(driver, screen,screen.canGoBackPlayers, true);
-                await canGoBack(driver, screen,screen.canGoBackTeams, true);
+                await testPlayerNavigated(screen, screen.playerOne);
+                await testTeamNavigated(screen, screen.teamOne);
+                await canGoBack(screen, screen.canGoBackPlayers, true);
+                await canGoBack(screen, screen.canGoBackTeams, true);
                 await backPlayers(driver);
                 await screen.loadedPlayersList();
                 await backTeams(driver);
-                await canGoBack(driver, screen,screen.canGoBackTeams, false);
+                await canGoBack(screen, screen.canGoBackTeams, false);
                 await screen.loadedTeamList();
             });
 
             it("should navigate Player One/Team One then back separately (keep order)", async () => {
-                await testPlayerNavigated(driver, screen, screen.playerOne);
-                await testTeamNavigated(driver, screen, screen.teamOne);
+                await testPlayerNavigated(screen, screen.playerOne);
+                await testTeamNavigated(screen, screen.teamOne);
                 await backTeams(driver);
                 await screen.loadedTeamList();
                 await backPlayers(driver);
@@ -65,20 +65,20 @@ describe("split-view:", () => {
             });
 
             it("should navigate Player One/Team One then back simultaneously", async () => {
-                await testPlayerNavigated(driver, screen, screen.playerOne);
-                await testTeamNavigated(driver, screen, screen.teamOne);
-                await canGoBack(driver, screen,screen.canGoBackBoth, true);
+                await testPlayerNavigated(screen, screen.playerOne);
+                await testTeamNavigated(screen, screen.teamOne);
+                await canGoBack(screen, screen.canGoBackBoth, true);
                 await backBoth(driver);
-                await canGoBack(driver, screen,screen.canGoBackBoth, false);
+                await canGoBack(screen, screen.canGoBackBoth, false);
                 await screen.loadedTeamList();
                 await screen.loadedPlayersList();
             });
 
             it("should navigate Player One/Team One then next Player/Team then back separately", async () => {
-                await testPlayerNavigated(driver, screen, screen.playerOne);
-                await testTeamNavigated(driver, screen, screen.teamOne);
-                await testPlayerNextNavigated(driver, screen, screen.playerTwo);
-                await testTeamNextNavigated(driver, screen, screen.teamTwo);
+                await testPlayerNavigated(screen, screen.playerOne);
+                await testTeamNavigated(screen, screen.teamOne);
+                await testPlayerNextNavigated(screen, screen.playerTwo);
+                await testTeamNextNavigated(screen, screen.teamTwo);
 
                 await backPlayers(driver);
                 await screen.loadedPlayerDetails(screen.playerOne);
@@ -90,8 +90,8 @@ describe("split-view:", () => {
             });
 
             it("should navigate Player One/Team One then back", async () => {
-                await testPlayerNavigated(driver, screen, screen.playerOne);
-                await testTeamNavigated(driver, screen, screen.teamOne);
+                await testPlayerNavigated(screen, screen.playerOne);
+                await testTeamNavigated(screen, screen.teamOne);
                 await back(driver);
                 await screen.loadedPlayerDetails(screen.playerOne);
                 await screen.loadedTeamList();
@@ -101,9 +101,9 @@ describe("split-view:", () => {
             });
 
             it("should navigate Player One then navigate Players list then back", async () => {
-                await testPlayerNavigated(driver, screen, screen.playerOne);
-                await testPlayerNextNavigated(driver, screen, screen.playerTwo);
-                await testPlayersNavigated(driver, screen);
+                await testPlayerNavigated(screen, screen.playerOne);
+                await testPlayerNextNavigated(screen, screen.playerTwo);
+                await testPlayersNavigated(screen);
                 await back(driver);
                 await screen.loadedPlayerDetails(screen.playerTwo);
                 await back(driver);
@@ -114,8 +114,8 @@ describe("split-view:", () => {
 
             it("should navigate Player One/Team One then Android back button", async () => {
                 if (driver.isAndroid) {
-                    await testPlayerNavigated(driver, screen, screen.playerOne);
-                    await testTeamNavigated(driver, screen, screen.teamOne);
+                    await testPlayerNavigated(screen, screen.playerOne);
+                    await testTeamNavigated(screen, screen.teamOne);
                     await driver.navBack();
                     await screen.loadedPlayerDetails(screen.playerOne);
                     await screen.loadedTeamList();
@@ -127,9 +127,9 @@ describe("split-view:", () => {
 
             it("should navigate Player One then navigate Players list then Android back button", async function () {
                 if (driver.isAndroid) {
-                    await testPlayerNavigated(driver, screen, screen.playerOne);
-                    await testPlayerNextNavigated(driver, screen, screen.playerTwo);
-                    await testPlayersNavigated(driver, screen);
+                    await testPlayerNavigated(screen, screen.playerOne);
+                    await testPlayerNextNavigated(screen, screen.playerTwo);
+                    await testPlayersNavigated(screen);
                     await driver.navBack();
                     await screen.loadedPlayerDetails(screen.playerTwo);
                     await driver.navBack();

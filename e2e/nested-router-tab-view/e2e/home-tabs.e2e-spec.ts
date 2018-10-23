@@ -53,8 +53,8 @@ describe("home-tabs:", () => {
             });
 
             it("should navigate Player One/Team One then go to Tabs and back", async () => {
-                await testPlayerNavigated(driver, screen, screen.playerOne);
-                await testTeamNavigated(driver, screen, screen.teamOne);
+                await testPlayerNavigated(screen, screen.playerOne);
+                await testTeamNavigated(screen, screen.teamOne);
                 await screen.navigateToTabsPage();
                 await screen.loadedTabs();
                 await screen.loadedPlayersList();
@@ -70,8 +70,8 @@ describe("home-tabs:", () => {
             });
 
             it("should navigate 2 times in Players go to Tabs and back", async () => {
-                await testPlayerNavigated(driver, screen, screen.playerOne);
-                await testPlayerNextNavigated(driver, screen, screen.playerTwo);
+                await testPlayerNavigated(screen, screen.playerOne);
+                await testPlayerNextNavigated(screen, screen.playerTwo);
                 await screen.navigateToTabsPage();
                 await screen.loadedTabs();
                 await screen.loadedPlayersList();
