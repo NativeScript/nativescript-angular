@@ -132,7 +132,7 @@ export class ModalDialogService {
             doneCallback.apply(undefined, args);
             if (componentView) {
                 componentView.closeModal();
-                this.location._finishCloseModalNavigation();
+                this.location._closeModalNavigation();
                 detachedLoaderRef.instance.detectChanges();
                 detachedLoaderRef.destroy();
             }

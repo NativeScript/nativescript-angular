@@ -4,6 +4,6 @@
 
 <StackLayout>
     <!-- <Button text="Go To Home Page" [nsRouterLink]="['/home', { outlets: { playerTab: ['players'], teamTab: ['teams'] } }]"></Button> -->
-    <Button text="Go To Home Page" [nsRouterLink]="['/home', { outlets: { playerTab: ['players'], teamTab: ['teams'] } }]"></Button>
-    <Button text="Go To Lazy Home Page" [nsRouterLink]="['/home-lazy/home', { outlets: { playerTab: ['players'], teamTab: ['teams'] } }]"></Button>
+    <Button text="Go To Home Page" [nsRouterLink]="['../home', { outlets: { playerTab: ['players'], teamTab: ['teams'] } }]"></Button>
+    <Button text="Go To Lazy Home Page" [nsRouterLink]="['../home-lazy/home', { outlets: { playerTab: ['players'], teamTab: ['teams'] } }]"></Button>
 </StackLayout> 

@@ -11,9 +11,12 @@ export class Outlet {
     modalNavigationDepth: number;
     parent: Outlet;
     isPageNavigationBack: boolean;
+
+    // More than one key available when using NSEmptyOutletComponent component
+    // in module that lazy loads children (loadChildren) and has outlet name.
     outletKeys: Array<string>;
     pathByOutlets: string;
-    statesByOutlet: Array<LocationState> = [];
+    states: Array<LocationState> = [];
     frame: Frame;
 
     // Used in reuse-strategy by its children to determine if they should be detached too.
@@ -27,13 +30,13 @@ export class Outlet {
     }
 
     peekState(): LocationState {
-        if (this.statesByOutlet.length > 0) {
-            return this.statesByOutlet[this.statesByOutlet.length - 1];
+        if (this.states.length > 0) {
+            return this.states[this.states.length - 1];
         }
         return null;
     }
 
-    containsLastState(stateUrl: string): boolean {
+    containsTopState(stateUrl: string): boolean {
         const lastState = this.peekState();
         return lastState && lastState.segmentGroup.toString() === stateUrl;
     }
@@ -92,7 +95,6 @@ export class NSLocationStrategy extends LocationStrategy {
         if (state.isRootSegmentGroup) {
             tree.root = state.segmentGroup;
         } else if (changedOutlet) {
-            // tslint:disable-next-line:max-line-length
             this.updateSegmentGroup(tree.root, changedOutlet, state.segmentGroup);
         }
 
@@ -129,49 +131,49 @@ export class NSLocationStrategy extends LocationStrategy {
             // The url serializer doesn't parse this url as having a primary outlet.
             const rootOutlet = this.createOutlet("primary", null, null);
             this.currentOutlet = rootOutlet;
-        } else {
-            const queue = [];
-            queue.push(urlTreeRoot);
-            let currentTree = queue.shift();
+            return;
+        }
 
-            while (currentTree) {
-                Object.keys(currentTree.children).forEach(outletName => {
-                    const currentSegmentGroup = currentTree.children[outletName];
-                    currentSegmentGroup.outlet = outletName;
-                    currentSegmentGroup.root = urlTreeRoot;
+        const queue = [];
+        let currentTree = <any>urlTreeRoot;
 
-                    let outletKey = this.getSegmentGroupFullPath(currentTree) + outletName;
-                    let outlet = this.findOutletByKey(outletKey);
-                    const parentOutletName = currentTree.outlet || "";
-                    const parentOutletKey = this.getSegmentGroupFullPath(currentTree.parent) + parentOutletName;
-                    const parentOutlet = this.findOutletByKey(parentOutletKey);
+        while (currentTree) {
+            Object.keys(currentTree.children).forEach(outletName => {
+                const currentSegmentGroup = currentTree.children[outletName];
+                currentSegmentGroup.outlet = outletName;
+                currentSegmentGroup.root = urlTreeRoot;
 
-                    const containsLastState = outlet && outlet.containsLastState(currentSegmentGroup.toString());
-                    if (!outlet) {
-                        // tslint:disable-next-line:max-line-length
-                        outlet = this.createOutlet(outletKey, currentSegmentGroup, parentOutlet, this._modalNavigationDepth);
-                        this.currentOutlet = outlet;
-                    } else if (this._modalNavigationDepth > 0 && outlet.showingModal && !containsLastState) {
-                        // Navigation inside modal view.
-                        this.upsertModalOutlet(outlet, currentSegmentGroup);
-                    } else {
-                        outlet.parent = parentOutlet;
+                let outletKey = this.getSegmentGroupFullPath(currentTree) + outletName;
+                let outlet = this.findOutletByKey(outletKey);
+                const parentOutletName = currentTree.outlet || "";
+                const parentOutletKey = this.getSegmentGroupFullPath(currentTree.parent) + parentOutletName;
+                const parentOutlet = this.findOutletByKey(parentOutletKey);
 
-                        if (this.updateStates(outlet, currentSegmentGroup)) {
-                            this.currentOutlet = outlet; // If states updated
-                        }
+                const containsLastState = outlet && outlet.containsTopState(currentSegmentGroup.toString());
+                if (!outlet) {
+                    // tslint:disable-next-line:max-line-length
+                    outlet = this.createOutlet(outletKey, currentSegmentGroup, parentOutlet, this._modalNavigationDepth);
+                    this.currentOutlet = outlet;
+                } else if (this._modalNavigationDepth > 0 && outlet.showingModal && !containsLastState) {
+                    // Navigation inside modal view.
+                    this.upsertModalOutlet(outlet, currentSegmentGroup);
+                } else {
+                    outlet.parent = parentOutlet;
+
+                    if (this.updateStates(outlet, currentSegmentGroup)) {
+                        this.currentOutlet = outlet; // If states updated
                     }
+                }
 
-                    queue.push(currentTree.children[outletName]);
-                });
+                queue.push(currentSegmentGroup);
+            });
 
-                currentTree = queue.shift();
-            }
+            currentTree = queue.shift();
         }
     }
 
     replaceState(state: any, title: string, url: string, queryParams: string): void {
-        const states = this.currentOutlet && this.currentOutlet.statesByOutlet;
+        const states = this.currentOutlet && this.currentOutlet.states;
 
         if (states && states.length > 0) {
             if (isLogEnabled()) {
@@ -195,7 +197,7 @@ export class NSLocationStrategy extends LocationStrategy {
         this.currentOutlet = outlet || this.currentOutlet;
 
         if (this.currentOutlet.isPageNavigationBack) {
-            const states = this.currentOutlet.statesByOutlet;
+            const states = this.currentOutlet.states;
             // We are navigating to the previous page
             // clear the stack until we get to a page navigation state
             let state = states.pop();
@@ -231,14 +233,14 @@ export class NSLocationStrategy extends LocationStrategy {
                         " state is not page - just pop");
                 }
 
-                this.callPopState(this.currentOutlet.statesByOutlet.pop(), true);
+                this.callPopState(this.currentOutlet.states.pop(), true);
             }
         }
     }
 
     canGoBack(outlet?: Outlet) {
         outlet = outlet || this.currentOutlet;
-        return outlet.statesByOutlet.length > 1;
+        return outlet.states.length > 1;
     }
 
     onPopState(fn: (_: any) => any): void {
@@ -279,7 +281,7 @@ export class NSLocationStrategy extends LocationStrategy {
         let result = [];
 
         this.outlets.forEach(outlet => {
-            const outletStates = outlet.statesByOutlet;
+            const outletStates = outlet.states;
             const outletLog = outletStates
                 // tslint:disable-next-line:max-line-length
                 .map((v, i) => `${outlet.outletKeys}.${i}.[${v.isPageNavigation ? "PAGE" : "INTERNAL"}].[${outlet.modalNavigationDepth ? "MODAL" : "BASE"}] "${v.segmentGroup.toString()}"`)
@@ -336,9 +338,9 @@ export class NSLocationStrategy extends LocationStrategy {
         this._modalNavigationDepth++;
     }
 
-    public _finishCloseModalNavigation() {
+    public _closeModalNavigation() {
         if (isLogEnabled()) {
-            routerLog("NSLocationStrategy.finishCloseModalNavigation()");
+            routerLog("NSLocationStrategy.closeModalNavigation()");
         }
         this._modalNavigationDepth--;
 
@@ -365,7 +367,7 @@ export class NSLocationStrategy extends LocationStrategy {
             if (isLogEnabled()) {
                 routerLog("NSLocationStrategy._beginPageNavigation clearing states history");
             }
-            this.currentOutlet.statesByOutlet = [lastState];
+            this.currentOutlet.states = [lastState];
         }
 
         this._currentNavigationOptions = undefined;
@@ -412,7 +414,13 @@ export class NSLocationStrategy extends LocationStrategy {
 
         while (segmentGroup) {
             const url = segmentGroup.toString();
-            fullPath = fullPath ? (url ? url + "/" : url) + fullPath : url;
+
+            if (fullPath) {
+                fullPath = (url ? url + "/" : "") + fullPath;
+            } else {
+                fullPath = url;
+            }
+
             segmentGroup = segmentGroup.parent;
         }
 
@@ -496,9 +504,9 @@ export class NSLocationStrategy extends LocationStrategy {
     }
 
     private updateStates(outlet: Outlet, currentSegmentGroup: UrlSegmentGroup): boolean {
-        const isNewPage = outlet.statesByOutlet.length === 0;
-        const lastState = outlet.statesByOutlet[outlet.statesByOutlet.length - 1];
-        const equalStateUrls = outlet.containsLastState(currentSegmentGroup.toString());
+        const isNewPage = outlet.states.length === 0;
+        const lastState = outlet.states[outlet.states.length - 1];
+        const equalStateUrls = outlet.containsTopState(currentSegmentGroup.toString());
 
         const locationState: LocationState = {
             segmentGroup: currentSegmentGroup,
@@ -507,7 +515,7 @@ export class NSLocationStrategy extends LocationStrategy {
         };
 
         if (!lastState || !equalStateUrls) {
-            outlet.statesByOutlet.push(locationState);
+            outlet.states.push(locationState);
 
             if (this._modalNavigationDepth === 0 && !outlet.showingModal) {
                 this.updateParentsStates(outlet, currentSegmentGroup.parent);
@@ -553,7 +561,7 @@ export class NSLocationStrategy extends LocationStrategy {
             isPageNavigation: true // It is a new OutletNode.
         };
 
-        newOutlet.statesByOutlet = [locationState];
+        newOutlet.states = [locationState];
         newOutlet.parent = parent;
         this.outlets.push(newOutlet);
 
@@ -571,6 +579,9 @@ export class NSLocationStrategy extends LocationStrategy {
             if (childrenCount && segmentGroup.children[currentPath]) {
                 segmentGroup = segmentGroup.children[currentPath];
             } else {
+                // If no child outlet found with the given name - forget about all previously found outlets.
+                // example: seaching for 'primary-second-primary' shouldn't return 'primary-second'
+                // if no 'primary' child available on 'second'.
                 segmentGroup = null;
                 break;
             }
@@ -580,10 +591,9 @@ export class NSLocationStrategy extends LocationStrategy {
     }
 
     // Traversal and replacement of segmentGroup.
-    private updateSegmentGroup(rootNode, oldSegmentGroup: UrlSegmentGroup, newSegmentGroup: UrlSegmentGroup) {
+    private updateSegmentGroup(rootNode: any, oldSegmentGroup: UrlSegmentGroup, newSegmentGroup: UrlSegmentGroup) {
         const queue = [];
-        queue.push(rootNode);
-        let currentTree = queue.shift();
+        let currentTree = rootNode;
 
         while (currentTree) {
             Object.keys(currentTree.children).forEach(outletName => {

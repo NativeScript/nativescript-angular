@@ -109,7 +109,7 @@ export class PageRouterOutlet implements OnDestroy { // tslint:disable-line:dire
 
     private outlet: Outlet;
     private name: string;
-    private isNSEmptyOutlet: boolean;
+    private isEmptyOutlet: boolean;
     private viewUtil: ViewUtil;
     private frame: Frame;
 
@@ -150,7 +150,7 @@ export class PageRouterOutlet implements OnDestroy { // tslint:disable-line:dire
         private parentContexts: ChildrenOutletContexts,
         private location: ViewContainerRef,
         @Attribute("name") name: string,
-        @Attribute("isNSEmptyOutlet") isNSEmptyOutlet: boolean,
+        @Attribute("isEmptyOutlet") isEmptyOutlet: boolean,
         private locationStrategy: NSLocationStrategy,
         private componentFactoryResolver: ComponentFactoryResolver,
         private resolver: ComponentFactoryResolver,
@@ -160,7 +160,7 @@ export class PageRouterOutlet implements OnDestroy { // tslint:disable-line:dire
         private routeReuseStrategy: NSRouteReuseStrategy,
         elRef: ElementRef
     ) {
-        this.isNSEmptyOutlet = isNSEmptyOutlet;
+        this.isEmptyOutlet = isEmptyOutlet;
         this.frame = elRef.nativeElement;
         if (isLogEnabled()) {
             log(`PageRouterOutlet.constructor frame: ${this.frame}`);
@@ -360,6 +360,9 @@ export class PageRouterOutlet implements OnDestroy { // tslint:disable-line:dire
         });
     }
 
+    // Find and mark the top activated route as an activated one.
+    // In ns-location-strategy we are reusing components only if their corresponing routes
+    // are marked as activated from this method.
     private markActivatedRoute(activatedRoute: ActivatedRoute) {
         const queue = [];
         queue.push(activatedRoute.snapshot);
@@ -409,7 +412,7 @@ export class PageRouterOutlet implements OnDestroy { // tslint:disable-line:dire
         }
 
         // Named lazy loaded outlet.
-        if (!outlet && this.isNSEmptyOutlet) {
+        if (!outlet && this.isEmptyOutlet) {
             const parentOutletKey = this.locationStrategy.getRouteFullPath(topActivatedRoute.parent);
             outlet = this.locationStrategy.findOutletByKey(parentOutletKey);
 

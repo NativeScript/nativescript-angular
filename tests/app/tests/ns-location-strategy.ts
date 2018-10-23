@@ -281,7 +281,7 @@ describe("NSLocationStrategy", () => {
 
         const outlet: Outlet = strategy.findOutletByOutletPath(outletName);
 
-        assertStatesEqual(outlet.statesByOutlet, expectedStates);
+        assertStatesEqual(outlet.states, expectedStates);
     });
 
     it("pushState() with page navigation with named outlets", () => {
@@ -307,8 +307,8 @@ describe("NSLocationStrategy", () => {
         const outlet: Outlet = strategy.findOutletByOutletPath(outletName);
         const outlet2: Outlet = strategy.findOutletByOutletPath(outletName2);
 
-        assertStatesEqual(outlet.statesByOutlet, expectedStatesTest1);
-        assertStatesEqual(outlet2.statesByOutlet, expectedStatesTest2);
+        assertStatesEqual(outlet.states, expectedStatesTest1);
+        assertStatesEqual(outlet2.states, expectedStatesTest2);
     });
 
     it("back() when on page-state calls frame.goBack() if no page navigation in progress", () => {
@@ -331,7 +331,7 @@ describe("NSLocationStrategy", () => {
 
         assert.equal(frameBackCount, 0);
         assert.equal(popCount, 0);
-        assert.equal(outlet.statesByOutlet.length, 2);
+        assert.equal(outlet.states.length, 2);
 
         // Act
         strategy.back();
@@ -339,7 +339,7 @@ describe("NSLocationStrategy", () => {
         // Assert
         assert.equal(frameBackCount, 1);
         assert.equal(popCount, 0);
-        assert.equal(outlet.statesByOutlet.length, 2);
+        assert.equal(outlet.states.length, 2);
     });
 
     it("back() when on page-state calls frame.goBack() if no page navigation in progress with named outlets", () => {
@@ -363,8 +363,8 @@ describe("NSLocationStrategy", () => {
 
         assert.equal(frameBackCount, 0);
         assert.equal(popCount, 0);
-        assert.equal(outlet.statesByOutlet.length, 2);
-        assert.equal(outlet2.statesByOutlet.length, 1);
+        assert.equal(outlet.states.length, 2);
+        assert.equal(outlet2.states.length, 1);
 
         // Act
         strategy.back();
@@ -372,8 +372,8 @@ describe("NSLocationStrategy", () => {
         // Assert
         assert.equal(frameBackCount, 1);
         assert.equal(popCount, 0);
-        assert.equal(outlet.statesByOutlet.length, 2);
-        assert.equal(outlet2.statesByOutlet.length, 1);
+        assert.equal(outlet.states.length, 2);
+        assert.equal(outlet2.states.length, 1);
     });
 
     it("back() when on page-state navigates back if page navigation is in progress", () => {
@@ -394,7 +394,7 @@ describe("NSLocationStrategy", () => {
 
         assert.equal(frameBackCount, 0);
         assert.equal(popCount, 0);
-        assert.equal(outlet.statesByOutlet.length, 2);
+        assert.equal(outlet.states.length, 2);
 
         // Act
         simulatePageBack(strategy, currentFrame);
@@ -402,7 +402,7 @@ describe("NSLocationStrategy", () => {
         // Assert
         assert.equal(frameBackCount, 0);
         assert.equal(popCount, 1);
-        assert.equal(outlet.statesByOutlet.length, 1);
+        assert.equal(outlet.states.length, 1);
     });
 
     it("back() when on page-state navigates back if page navigation is in progress with named outlets", () => {
@@ -427,8 +427,8 @@ describe("NSLocationStrategy", () => {
 
         assert.equal(frameBackCount, 0);
         assert.equal(popCount, 0);
-        assert.equal(outlet.statesByOutlet.length, 2);
-        assert.equal(outlet2.statesByOutlet.length, 1);
+        assert.equal(outlet.states.length, 2);
+        assert.equal(outlet2.states.length, 1);
 
         // Act
         simulatePageBack(strategy, frame);
@@ -436,8 +436,8 @@ describe("NSLocationStrategy", () => {
         // Assert
         assert.equal(frameBackCount, 0);
         assert.equal(popCount, 1);
-        assert.equal(outlet.statesByOutlet.length, 1);
-        assert.equal(outlet2.statesByOutlet.length, 1);
+        assert.equal(outlet.states.length, 1);
+        assert.equal(outlet2.states.length, 1);
     });
 
     it("pushState() with clearHistory clears history", () => {
@@ -449,7 +449,7 @@ describe("NSLocationStrategy", () => {
         simulatePageNavigation(strategy, "/cleared", frame, outletName);
         const outlet: Outlet = strategy.findOutletByOutletPath(outletName);
         // Assert
-        assertStatesEqual(outlet.statesByOutlet, [createState("/cleared", outletName, true)]);
+        assertStatesEqual(outlet.states, [createState("/cleared", outletName, true)]);
     });
 
     it("pushState() with clearHistory clears history with named outlets", () => {
@@ -474,7 +474,7 @@ describe("NSLocationStrategy", () => {
         const outlet2: Outlet = strategy.findOutletByOutletPath(outletName2);
 
         // Assert
-        assertStatesEqual(outlet.statesByOutlet, expectedStatesTest1);
-        assertStatesEqual(outlet2.statesByOutlet, expectedStatesTest2);
+        assertStatesEqual(outlet.states, expectedStatesTest1);
+        assertStatesEqual(outlet2.states, expectedStatesTest2);
     });
 });
