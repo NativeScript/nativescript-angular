@@ -24,6 +24,7 @@ export class FakeFrame extends View implements Frame {
     currentPage: Page;
     currentEntry: NavigationEntry;
     animated: boolean;
+    actionBarVisibility: "always" | "auto" | "never";
     transition: any;
     _currentEntry: any;
 
