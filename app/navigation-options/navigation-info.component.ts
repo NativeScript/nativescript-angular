@@ -23,6 +23,6 @@ export class NavigationInfoComponent {
     update() {
         // If history is cleared: frameStack = 0, locationStack = 1
         this.frameStack = this.frame.backStack.length;
-        this.locationStack = this.strategy._getStates()["primary"].length;
+        this.locationStack = this.strategy.findOutletByOutletPath("primary").states.length;
     }
 }
