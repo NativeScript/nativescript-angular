@@ -8,7 +8,7 @@ import {
     ViewContainerRef,
 } from "@angular/core";
 import { TabView, TabViewItem } from "tns-core-modules/ui/tab-view";
-import { TextTransform  } from "tns-core-modules/ui/text-base";
+import { TextTransform, Color } from "tns-core-modules/ui/text-base";
 
 import { InvisibleNode } from "../element-registry";
 import { rendererLog, isLogEnabled } from "../trace";
@@ -145,7 +145,8 @@ export class TabViewItemDirective implements OnInit {
 
         if (realViews.length > 0) {
             this.item.view = realViews[0];
-
+            // prevent white flash on tab changes
+            this.item.view.backgroundColor = new Color('#00000000');
             const newItems = (this.owner.tabView.items || []).concat([this.item]);
             this.owner.tabView.items = newItems;
         }
