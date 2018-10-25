@@ -16,18 +16,24 @@ import { map } from "rxjs/operators";
         <Button text="GO TO FIRST" [nsRouterLink]="['/first']"></Button>
         <Button text="GO TO FIRST(CLEAR)" [nsRouterLink]="['/first']" clearHistory="true" pageTransition="flipRight"></Button>
         <Button text="GO TO NEXT SECOND" [nsRouterLink]="['/second', (nextDepth$ | async)]"></Button>
+        <Button text="LOAD NESTED NAMED OUTLET" (tap)="loadNestedNamedOutlet()"></Button>
         <Button text="BACK" (tap)="goBack()"></Button>
-
-        <StackLayout class="nested-outlet">
-            <router-outlet></router-outlet>
-        </StackLayout>
+        
+        <GridLayout row="1" rows="*,*">
+            <GridLayout row="0" class="nested-outlet">
+                <router-outlet></router-outlet>
+            </GridLayout>
+            <GridLayout row="1">
+                <page-router-outlet name="lazyNameOutlet"></page-router-outlet>
+            </GridLayout>
+        </GridLayout>
     </StackLayout>`
 })
 export class SecondComponent implements OnInit, OnDestroy {
     public depth$: Observable<string>;
     public nextDepth$: Observable<number>;
 
-    constructor(private routerExt: RouterExtensions, route: ActivatedRoute, page: Page) {
+    constructor(private routerExt: RouterExtensions, private route: ActivatedRoute, page: Page) {
         console.log("SecondComponent - constructor() page: " + page);
         this.depth$ = route.params.pipe(map(r => r["depth"]));
         this.nextDepth$ = route.params.pipe(map(r => +r["depth"] + 1));
@@ -42,6 +48,10 @@ export class SecondComponent implements OnInit, OnDestroy {
     }
 
     goBack() {
-        this.routerExt.back();
+        this.routerExt.back({ relativeTo: this.route });
+    }
+
+    loadNestedNamedOutlet() {
+        this.routerExt.navigate([{ outlets: { lazyNameOutlet: ["lazy-named"] } }], { relativeTo: this.route });
     }
 }

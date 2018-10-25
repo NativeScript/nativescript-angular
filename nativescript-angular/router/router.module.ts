@@ -10,14 +10,17 @@ import { NSRouteReuseStrategy } from "./ns-route-reuse-strategy";
 import { RouterExtensions } from "./router-extensions";
 import { NativeScriptCommonModule } from "../common";
 import { FrameService } from "../platform-providers";
+import { NSEmptyOutletComponent } from "./ns-empty-outlet.component";
 
 export { PageRoute } from "./page-router-outlet";
 export { RouterExtensions } from "./router-extensions";
 export { NSModuleFactoryLoader } from "./ns-module-factory-loader";
+export { NSEmptyOutletComponent } from "./ns-empty-outlet.component";
+
 export type LocationState = LocationState;
 
 @NgModule({
-    declarations: [NSRouterLink, NSRouterLinkActive, PageRouterOutlet],
+    declarations: [NSRouterLink, NSRouterLinkActive, PageRouterOutlet, NSEmptyOutletComponent],
     providers: [
         {
             provide: NSLocationStrategy,
@@ -32,7 +35,7 @@ export type LocationState = LocationState;
         { provide: RouteReuseStrategy, useExisting: NSRouteReuseStrategy },
     ],
     imports: [RouterModule, NativeScriptCommonModule],
-    exports: [RouterModule, NSRouterLink, NSRouterLinkActive, PageRouterOutlet],
+    exports: [RouterModule, NSRouterLink, NSRouterLinkActive, PageRouterOutlet, NSEmptyOutletComponent],
     schemas: [NO_ERRORS_SCHEMA],
 })
 export class NativeScriptRouterModule {

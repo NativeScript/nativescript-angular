@@ -1,5 +1,5 @@
 import { NgModule, NO_ERRORS_SCHEMA } from "@angular/core";
-import { NativeScriptRouterModule } from "nativescript-angular/router";
+import { NativeScriptRouterModule, NSEmptyOutletComponent } from "nativescript-angular/router";
 
 import { FirstComponent } from "./first/first.component"
 import { SecondComponent } from "./second/second.component"
@@ -17,10 +17,17 @@ export const routes = [
         component: FirstComponent,
     },
     {
-        path: "second/:depth", component: SecondComponent,
+        path: "second/:depth",
+        component: SecondComponent,
         children: [
             { path: "", component: MasterComponent },
-            { path: "detail/:id", component: DetailComponent }
+            { path: "detail/:id", component: DetailComponent },
+            {
+                path: "lazy-named",
+                outlet: "lazyNameOutlet",
+                component: NSEmptyOutletComponent,
+                loadChildren: "./lazy-named/lazy-named.module#LazyNamedModule",
+            }
         ]
     },
     {
@@ -50,7 +57,7 @@ export const navigatableComponents = [
 ];
 
 @NgModule({
-    imports: [NativeScriptRouterModule.forRoot(routes)],
+    imports: [NativeScriptRouterModule, NativeScriptRouterModule.forRoot(routes)],
     exports: [NativeScriptRouterModule],
 })
 export class AppRoutingModule { }

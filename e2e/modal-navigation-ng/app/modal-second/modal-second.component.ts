@@ -1,5 +1,6 @@
 import { Component } from "@angular/core";
-import { View, EventData } from "tns-core-modules/ui/core/view"
+import { View } from "tns-core-modules/ui/core/view"
+import { ActivatedRoute } from "@angular/router";
 import { RouterExtensions } from "nativescript-angular/router";
 
 @Component({
@@ -8,14 +9,14 @@ import { RouterExtensions } from "nativescript-angular/router";
     templateUrl: "./modal-second.component.html"
 })
 export class ModalSecondComponent {
-    constructor(private routerExtension: RouterExtensions) { }
+    constructor(private routerExtension: RouterExtensions, private activeRoute: ActivatedRoute) { }
 
-    onLoaded(args: EventData) {
+    onLoaded() {
         console.log("modal-second loaded");
     }
 
     goBack() {
-        this.routerExtension.back();
+        this.routerExtension.back({ relativeTo: this.activeRoute });
     }
 
     close(layoutRoot: View) {
