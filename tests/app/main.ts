@@ -12,12 +12,12 @@ import { GestureComponent } from "./snippets/gestures.component";
 import { LayoutsComponent } from "./snippets/layouts.component";
 import { IconFontComponent } from "./snippets/icon-font.component";
 import { APP_ROOT_VIEW } from "nativescript-angular/platform-providers";
-import { Page } from "ui/page";
-import { StackLayout } from "ui/layouts/stack-layout";
+import { Page } from "tns-core-modules/ui/page";
+import { StackLayout } from "tns-core-modules/ui/layouts/stack-layout";
 
-import * as application from "application";
-import "ui/styling/style";
-import "ui/frame";
+import * as application from "tns-core-modules/application";
+import "tns-core-modules/ui/styling/style";
+import "tns-core-modules/ui/frame";
 import { HOOKS_LOG } from "./base.component";
 import { MultiPageMain, routes as multiPageRoutes } from "./multi-page-main.component";
 import { SinglePageMain, routes as singlePageRoutes } from "./single-page-main.component";
@@ -35,7 +35,7 @@ import { BehaviorSubject } from "rxjs";
 
 import { GridLayout, ItemSpec } from "tns-core-modules/ui/layouts/grid-layout/grid-layout";
 
-import { enable, addCategories, categories } from "trace";
+import { enable, addCategories, categories } from "tns-core-modules/trace";
 import { Color } from "tns-core-modules/color/color";
 
 addCategories(rendererTraceCategory);

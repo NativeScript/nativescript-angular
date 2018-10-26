@@ -1,6 +1,6 @@
-import { View } from "ui/core/view";
-import { TextBase } from "ui/text-base";
-import { Device } from "platform";
+import { View } from "tns-core-modules/ui/core/view";
+import { TextBase } from "tns-core-modules/ui/text-base";
+import { Device } from "tns-core-modules/platform";
 
 function getChildren(view: View): Array<View> {
     let children: Array<View> = [];

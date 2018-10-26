@@ -1,7 +1,6 @@
-import { Component, OnInit, OnDestroy } from "@angular/core";
-import { ActivatedRoute, Router, Route } from "@angular/router";
-import { Location } from "@angular/common";
-import { Page } from "ui/page";
+import { Component} from "@angular/core";
+import { ActivatedRoute } from "@angular/router";
+import { Page } from "tns-core-modules/ui/page";
 import { Observable } from "rxjs";
 import { map } from "rxjs/operators";
 
@@ -18,7 +17,8 @@ import { map } from "rxjs/operators";
 export class DetailComponent {
     public id$: Observable<string>;
 
-    constructor(private router: Router, private route: ActivatedRoute) {
+    constructor(private route: ActivatedRoute, private page: Page) {
+        page.actionBarHidden = true;
         console.log("DetailComponent - constructor()");
         this.id$ = route.params.pipe(map(r => r["id"]));
     }

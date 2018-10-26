@@ -153,7 +153,9 @@ export function getSingleViewRecursive(nodes: Array<any>, nestLevel: number): Vi
 
     const parentLayout = rootLayout.parent;
     if (parentLayout instanceof LayoutBase) {
+        let node = rootLayout.parentNode;
         parentLayout.removeChild(rootLayout);
+        rootLayout.parentNode = node;
     }
 
     return rootLayout;

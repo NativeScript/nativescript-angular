@@ -1,14 +1,14 @@
 // make sure you import mocha-config before @angular/core
 import {assert} from "./test-config";
-import {View} from "ui/core/view";
+import {View} from "tns-core-modules/ui/core/view";
 import {ViewUtil} from "nativescript-angular/view-util";
 import {
     NgView,
     ViewExtensions,
     ViewClassMeta,
 } from "nativescript-angular/element-registry";
-import {Red} from "color/known-colors";
-import {device, platformNames} from "platform";
+import {Red} from "tns-core-modules/color/known-colors";
+import {device, platformNames} from "tns-core-modules/platform";
 import {createDevice} from "./test-utils";
 
 class TestView extends View implements NgView {

@@ -2,7 +2,7 @@ import { Component, NgModule } from "@angular/core";
 import { NativeScriptCommonModule } from "nativescript-angular/common";
 import { NativeScriptRouterModule } from "nativescript-angular/router";
 import { ModalDialogParams } from "nativescript-angular/directives/dialogs";
-import { Page } from "ui/page";
+import { Page } from "tns-core-modules/ui/page";
 
 import { lazyLoadHooksLogProvider } from "./main";
 import { SecondComponent } from "./second.component";

@@ -1,5 +1,5 @@
 import { Component } from "@angular/core";
-import { Page } from "ui/page";
+import { Page } from "tns-core-modules/ui/page";
 
 @Component({
     selector: "first",
