@@ -1,12 +1,12 @@
 // make sure you import mocha-config before @angular/core
 import { assert } from "./test-config";
-import { View } from "ui/core/view";
-import { Slider } from "ui/slider";
-import { Switch } from "ui/switch";
-import { DatePicker } from "ui/date-picker";
-import { TimePicker } from "ui/time-picker";
-import { ListPicker } from "ui/list-picker";
-import { TextField } from "ui/text-field";
+import { View } from "tns-core-modules/ui/core/view";
+import { Slider } from "tns-core-modules/ui/slider";
+import { Switch } from "tns-core-modules/ui/switch";
+import { DatePicker } from "tns-core-modules/ui/date-picker";
+import { TimePicker } from "tns-core-modules/ui/time-picker";
+import { ListPicker } from "tns-core-modules/ui/list-picker";
+import { TextField } from "tns-core-modules/ui/text-field";
 import {
     NumberValueAccessor,
     CheckedValueAccessor,

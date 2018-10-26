@@ -10,7 +10,7 @@ import {
 import { AppComponent } from "./app.component";
 
 import { rendererTraceCategory, viewUtilCategory, routeReuseStrategyTraceCategory, routerTraceCategory } from "nativescript-angular/trace";
-import { setCategories, enable } from "trace";
+import { setCategories, enable } from "tns-core-modules/trace";
 setCategories(routerTraceCategory + "," + routeReuseStrategyTraceCategory);
 enable();
 

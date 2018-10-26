@@ -1,5 +1,5 @@
 import { Component } from "@angular/core";
-import { View, ShownModallyData } from "ui/core/view"
+import { View, ShownModallyData } from "tns-core-modules/ui/core/view"
 import { ModalDialogParams } from "nativescript-angular/directives/dialogs";
 
 @Component({

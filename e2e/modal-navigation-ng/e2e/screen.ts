@@ -27,7 +27,7 @@ const confirmDialog = "Yes";
 const confirmDialogMessage = "Message";
 const closeModalNested = "Close Modal Nested";
 const closeModal = "Close Modal";
-const goBack = "Go Back";
+const goBack = "Go Back(activatedRoute)";
 
 export class Screen {
 

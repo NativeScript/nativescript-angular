@@ -1,9 +1,9 @@
 // make sure you import mocha-config before @angular/core
 import { assert } from "./test-config";
-import { TextField } from "ui/text-field";
-import { Red, Lime } from "color/known-colors";
+import { TextField } from "tns-core-modules/ui/text-field";
+import { Red, Lime } from "tns-core-modules/color/known-colors";
 import { NativeScriptRendererFactory, NativeScriptRenderer } from "nativescript-angular/renderer";
-import { device } from "platform";
+import { device } from "tns-core-modules/platform";
 import { ViewEncapsulation, RendererType2, Renderer2 } from "@angular/core";
 import { NgView } from "nativescript-angular/view-util";
 import { StackLayout } from "tns-core-modules/ui/layouts/stack-layout";

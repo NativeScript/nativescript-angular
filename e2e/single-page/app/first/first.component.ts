@@ -2,7 +2,7 @@ import { Component, OnInit, OnDestroy, OnChanges } from "@angular/core";
 import { ActivatedRoute, Router, Route } from "@angular/router";
 import { Location } from "@angular/common";
 
-import { Page } from "ui/page";
+import { Page } from "tns-core-modules/ui/page";
 import { Observable } from "rxjs";
 import { FrameService } from "nativescript-angular/platform-providers";
 

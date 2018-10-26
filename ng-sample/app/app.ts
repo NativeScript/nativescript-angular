@@ -20,11 +20,11 @@ import {
     bootstrapCategory,
 } from "nativescript-angular/trace";
 import { PAGE_FACTORY, PageFactory, PageFactoryOptions } from "nativescript-angular/platform-providers";
-import { Page } from "ui/page";
-import { Color } from "color";
+import { Page } from "tns-core-modules/ui/page";
+import { Color } from "tns-core-modules/color";
 import { log } from "tns-core-modules/profiling";
 
-import { setCategories, addCategories, enable, categories } from "trace";
+import { setCategories, addCategories, enable, categories } from "tns-core-modules/trace";
 addCategories(bootstrapCategory);
 // addCategories(rendererTraceCategory);
 // addCategories(routerTraceCategory);

@@ -7,7 +7,7 @@ import { ViewContainerRefService } from "../shared/ViewContainerRefService";
 import { ModalRouterComponent } from "../modal/modal-router/modal-router.component";
 import { ModalComponent } from "../modal/modal.component";
 import { ModalViewComponent } from "../modal-shared/modal-view.component";
-import { confirm } from "ui/dialogs";
+import { confirm } from "tns-core-modules/ui/dialogs";
 
 import { AppModule } from "../app.module";
 

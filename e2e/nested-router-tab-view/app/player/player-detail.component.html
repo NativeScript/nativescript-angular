@@ -1,0 +1,9 @@
+<ActionBar title="Player Details" class="action-bar"></ActionBar>
+<StackLayout flexDirection="column" class="page" class="m-15">
+    <Label [text]="item.id"></Label>
+    <Label [text]="item.name + ' Details'"></Label>
+
+    <Button text="next player" [nsRouterLink]="['../', item.id + 1]"></Button>
+    <Button text="players" [nsRouterLink]="['../../players']"></Button>
+    <Button text="Back-Players" (tap)="backPlayers()"></Button>
+</StackLayout>

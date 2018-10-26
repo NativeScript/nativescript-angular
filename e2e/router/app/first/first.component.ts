@@ -3,7 +3,7 @@ import { ActivatedRoute, Router, Route } from "@angular/router";
 import { Location } from "@angular/common";
 import { RouterExtensions } from "nativescript-angular/router";
 
-import { Page } from "ui/page";
+import { Page } from "tns-core-modules/ui/page";
 
 @Component({
     selector: "first",
@@ -14,7 +14,6 @@ import { Page } from "ui/page";
         <Button text="GO TO SECOND" [nsRouterLink]="['/second','1']"></Button>
         <Button text="GO TO C-LESS SECOND" [nsRouterLink]="['/c-less', 'deep', '100', 'detail', '200']"></Button>
         
-
         <Button text="GO TO LAZY HOME" [nsRouterLink]="['/lazy','home']"></Button>
         <Button text="GO TO C-LESS LAZY" [nsRouterLink]="['/lazy','nest','more']"></Button>
         

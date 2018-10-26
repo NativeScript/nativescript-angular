@@ -1,19 +1,22 @@
 import { Component, OnInit, OnDestroy } from "@angular/core";
-
+import { Page } from "tns-core-modules/ui/page";
 @Component({
     selector: "master",
     template: `
-    <StackLayout>
+    <GridLayout rows="auto, auto">
         <Label text="NestedMaster" class="nested-header"></Label>
-            
-        <Button *ngFor="let detail of details" [text]="'DETAIL ' + detail" [nsRouterLink]="['detail', detail]"></Button>
-    </StackLayout>
+                
+        <StackLayout row="1" orientation="horizontal">
+            <Button *ngFor="let detail of details" [text]="'DETAIL ' + detail" [nsRouterLink]="['detail', detail]"></Button>
+        </StackLayout>
+    </GridLayout>
     `
 })
 export class MasterComponent implements OnInit, OnDestroy {
     public details: Array<number> = [1, 2, 3];
 
-    constructor() {
+    constructor(private page: Page) {
+        this.page.actionBarHidden = true;
         console.log("MasterComponent - constructor()");
     }
 
