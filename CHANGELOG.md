@@ -5,14 +5,13 @@
 ### Bug Fixes
 
 * **frame-service:** move FrameService provider to NativeScriptModule ([#1489](https://github.com/NativeScript/nativescript-angular/issues/1489)) ([3b434c9](https://github.com/NativeScript/nativescript-angular/commit/3b434c9))
-* handle root path ([#1570](https://github.com/NativeScript/nativescript-angular/issues/1570)) ([854a120](https://github.com/NativeScript/nativescript-angular/commit/854a120))
 * Import reflect-metadata(needed in JIT mode) before [@angular](https://github.com/angular) ([#1530](https://github.com/NativeScript/nativescript-angular/issues/1530)) ([6e45af0](https://github.com/NativeScript/nativescript-angular/commit/6e45af0))
 * Persist the original "parentNode" when "retrieving" the root View created by createEmbeddedView ([#1542](https://github.com/NativeScript/nativescript-angular/issues/1542)) ([0b8d2c5](https://github.com/NativeScript/nativescript-angular/commit/0b8d2c5))
 
 
 ### Features
 
-* add actionBarVisibility property to p-r-o ([#1573](https://github.com/NativeScript/nativescript-angular/issues/1573)) ([c645ca8](https://github.com/NativeScript/nativescript-angular/commit/c645ca8))
+* add actionBarVisibility property to page-router-outlet ([#1573](https://github.com/NativeScript/nativescript-angular/issues/1573)) ([c645ca8](https://github.com/NativeScript/nativescript-angular/commit/c645ca8))
 * enable nesting named page router outlets ([#1556](https://github.com/NativeScript/nativescript-angular/issues/1556)) ([46a0dc0](https://github.com/NativeScript/nativescript-angular/commit/46a0dc0))
 * HMR bootstrap and livesync options ([#1531](https://github.com/NativeScript/nativescript-angular/issues/1531)) ([1e92c7b](https://github.com/NativeScript/nativescript-angular/commit/1e92c7b))
 
