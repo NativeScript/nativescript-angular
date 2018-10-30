@@ -27,6 +27,7 @@ export class FakeFrame extends View implements Frame {
     actionBarVisibility: "always" | "auto" | "never";
     transition: any;
     _currentEntry: any;
+    _executingEntry: any;
 
     canGoBack(): boolean {
         return true;
