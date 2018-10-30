@@ -1,6 +1,6 @@
 {
   "name": "nativescript-angular",
-  "version": "6.1.0",
+  "version": "6.2.0",
   "description": "An Angular renderer that lets you build mobile apps with NativeScript.",
   "homepage": "https://www.nativescript.org/",
   "bugs": "https://github.com/NativeScript/nativescript-angular/issues",
@@ -34,7 +34,7 @@
     "tsc-w": "tsc -p tsconfig.json -w",
     "ngc": "ngc -p tsconfig.json",
     "prepare": "npm run ngc",
-    "version": "rm package-lock.json && conventional-changelog -p angular -i ../CHANGELOG.md -s && git add ../CHANGELOG.md"
+    "version": "rm -rf package-lock.json && conventional-changelog -p angular -i ../CHANGELOG.md -s && git add ../CHANGELOG.md"
   },
   "bin": {
     "update-app-ng-deps": "./bin/update-app-ng-deps"
