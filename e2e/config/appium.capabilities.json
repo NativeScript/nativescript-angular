@@ -37,7 +37,7 @@
     },
     "android22": {
         "platformName": "Android",
-        "platformVersion": "5.0",
+        "platformVersion": "5.1",
         "deviceName": "Emulator-Api22-Default",
         "avd": "Emulator-Api22-Default",
         "lt": 60000,
