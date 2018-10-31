@@ -11,13 +11,13 @@ import { Page } from "tns-core-modules/ui/page";
     <StackLayout>
         <Label text="FirstComponent" class="header"></Label>
 
-        <Button text="GO TO SECOND" [nsRouterLink]="['/second','1']"></Button>
-        <Button text="GO TO C-LESS SECOND" [nsRouterLink]="['/c-less', 'deep', '100', 'detail', '200']"></Button>
+        <Button text="GO TO SECOND" automationText="GO TO SECOND" [nsRouterLink]="['/second','1']"></Button>
+        <Button text="GO TO C-LESS SECOND" automationText="GO TO C-LESS SECOND" [nsRouterLink]="['/c-less', 'deep', '100', 'detail', '200']"></Button>
         
-        <Button text="GO TO LAZY HOME" [nsRouterLink]="['/lazy','home']"></Button>
-        <Button text="GO TO C-LESS LAZY" [nsRouterLink]="['/lazy','nest','more']"></Button>
+        <Button text="GO TO LAZY HOME" automationText="GO TO LAZY HOME" [nsRouterLink]="['/lazy','home']"></Button>
+        <Button text="GO TO C-LESS LAZY" automationText="GO TO C-LESS LAZY" [nsRouterLink]="['/lazy','nest','more']"></Button>
         
-        <Button text="BACK" (tap)="goBack()"></Button>
+        <Button text="BACK" automationText="BACK" (tap)="goBack()"></Button>
         <Label [text]="message"></Label>
     </StackLayout>`
 })

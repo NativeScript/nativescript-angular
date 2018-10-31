@@ -155,6 +155,13 @@
         "noReset": true,
         "fullReset": false
     },
+    "sim.iPhoneXS.latest": {
+        "platformName": "iOS",
+        "platformVersion": "12.1",
+        "deviceName": "iPhone XS",
+        "noReset": true,
+        "fullReset": false
+    },
     "sim.iPhoneXR": {
         "platformName": "iOS",
         "platformVersion": "12.0",
