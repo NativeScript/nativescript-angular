@@ -19,6 +19,12 @@ describe("TabView-scenario", () => {
             await driver.driver.resetApp();
         });
 
+        afterEach(async function () {
+            if (this.currentTest.state === "failed") {
+                await driver.logTestArtifacts(this.currentTest.title);
+            }
+        });
+
         it("should navigate to page", async () => {
             const navigationButton =
                 await driver.findElementByAutomationText("TabItem Binding");

@@ -15,6 +15,12 @@ describe("page-router-outlet-scenario", () => {
             await driver.driver.resetApp();
         });
 
+        afterEach(async function () {
+            if (this.currentTest.state === "failed") {
+                await driver.logTestArtifacts(this.currentTest.title);
+            }
+        });
+
         it("should navigate to page", async () => {
             const navigationButton =
                 await driver.findElementByAutomationText("ActionBarVisibility Always");
@@ -51,6 +57,12 @@ describe("page-router-outlet-scenario", () => {
             await driver.driver.resetApp();
         });
 
+        afterEach(async function () {
+            if (this.currentTest.state === "failed") {
+                await driver.logTestArtifacts(this.currentTest.title);
+            }
+        });
+
         it("should navigate to page", async () => {
             const navigationButton =
                 await driver.findElementByAutomationText("ActionBarVisibility Never");
@@ -85,6 +97,12 @@ describe("page-router-outlet-scenario", () => {
         before(async () => {
             driver = await createDriver();
             await driver.driver.resetApp();
+        });
+
+        afterEach(async function () {
+            if (this.currentTest.state === "failed") {
+                await driver.logTestArtifacts(this.currentTest.title);
+            }
         });
 
         it("should navigate to page", async () => {

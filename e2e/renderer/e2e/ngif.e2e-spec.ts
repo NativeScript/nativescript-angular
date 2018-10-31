@@ -19,6 +19,12 @@ describe("ngIf scenario", () => {
             await driver.driver.resetApp();
         });
 
+        afterEach(async function () {
+            if (this.currentTest.state === "failed") {
+                await driver.logTestArtifacts(this.currentTest.title);
+            }
+        });
+
         it("should navigate to page", async () => {
             const navigationButton =
                 await driver.findElementByAutomationText("NgIf no layout");
@@ -49,6 +55,12 @@ describe("ngIf scenario", () => {
         before(async () => {
             driver = await createDriver();
             await driver.driver.resetApp();            
+        });
+
+        afterEach(async function () {
+            if (this.currentTest.state === "failed") {
+                await driver.logTestArtifacts(this.currentTest.title);
+            }
         });
 
         it("should navigate to page", async () => {
@@ -91,6 +103,12 @@ describe("ngIf scenario", () => {
         before(async () => {
             driver = await createDriver();
             await driver.driver.resetApp();            
+        });
+
+        afterEach(async function () {
+            if (this.currentTest.state === "failed") {
+                await driver.logTestArtifacts(this.currentTest.title);
+            }
         });
 
         it("should navigate to page", async () => {
@@ -148,6 +166,12 @@ describe("ngIf scenario", () => {
             await driver.driver.resetApp();            
         });
 
+        afterEach(async function () {
+            if (this.currentTest.state === "failed") {
+                await driver.logTestArtifacts(this.currentTest.title);
+            }
+        });
+
         it("should navigate to page", async () => {
             const navigationButton =
                 await driver.findElementByAutomationText("NgIf Then Else");
@@ -201,6 +225,12 @@ describe("ngIf scenario", () => {
         before(async () => {
             driver = await createDriver();
             await driver.driver.resetApp();            
+        });
+
+        afterEach(async function () {
+            if (this.currentTest.state === "failed") {
+                await driver.logTestArtifacts(this.currentTest.title);
+            }
         });
 
         it("should navigate to page", async () => {
@@ -259,6 +289,12 @@ describe("ngIf scenario", () => {
             await driver.driver.resetApp();
         });
 
+        afterEach(async function () {
+            if (this.currentTest.state === "failed") {
+                await driver.logTestArtifacts(this.currentTest.title);
+            }
+        });
+        
         it("should navigate to page", async () => {
             const navigationButton =
                 await driver.findElementByAutomationText("NgIf Subsequent Ifs");
