@@ -27,19 +27,19 @@ describe("ngForOf scenario", function () {
 
     it("should navigate to page", async () => {
         const navigationButton =
-            await driver.findElementByText("NgForOf", SearchOptions.exact);
+            await driver.findElementByAutomationText("NgForOf");
         await navigationButton.click();
 
         const actionBar =
-            await driver.findElementByText("ngForOf", SearchOptions.exact);
+            await driver.findElementByAutomationText("ngForOf");
     });
 
     it("should find elements", async () => {
         const firstElement = await getElement(lastAddedElementId);
         elements.push(firstElement);
 
-        addButton = await driver.findElementByText("add", SearchOptions.exact);
-        removeButton = await driver.findElementByText("remove", SearchOptions.exact);
+        addButton = await driver.findElementByAutomationText("add");
+        removeButton = await driver.findElementByAutomationText("remove");
 
         await elementTupleCorrectlyRendered(firstElement);
         await isAbove(firstElement.button, addButton);
@@ -150,11 +150,11 @@ describe("ngForOf scenario", function () {
             button = await driver.findElementByAccessibilityId(
                 id.toString());
         } else {
-            label = await driver.findElementByText(
-                "label: " + id.toString(), SearchOptions.exact);
+            label = await driver.findElementByAutomationText(
+                "label: " + id.toString());
 
-            button = await driver.findElementByText(
-                id.toString(), SearchOptions.exact);
+            button = await driver.findElementByAutomationText(
+                id.toString());
         }
 
         return { label, button };

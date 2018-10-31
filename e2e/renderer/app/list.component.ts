@@ -1,8 +1,9 @@
 import { Component } from "@angular/core";
 
 @Component({
+    styles: ["Button { font-size: 10; margin: 0; padding: 0 }"],
     template: `
-        <FlexboxLayout flexDirection="column">
+        <FlexboxLayout flexDirection="column" >
             <Button text="ActionBar dynamic" [nsRouterLink]="['/action-bar-dynamic']"></Button>
             <Button text="ActionBarExtension" [nsRouterLink]="['/action-bar-extension']"></Button>
             <Button text="ActionBarVisibility Always" [nsRouterLink]="['/action-bar-visibility-always']"></Button>

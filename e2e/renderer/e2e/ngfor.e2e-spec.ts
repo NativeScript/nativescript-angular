@@ -21,20 +21,20 @@ describe("ngFor scenario", () => {
 
     it("should navigate to page", async () => {
         const navigationButton =
-            await driver.findElementByText("NgFor", SearchOptions.exact);
+            await driver.findElementByAutomationText("NgFor");
         await navigationButton.click();
 
         const actionBar =
-            await driver.findElementByText("ngFor", SearchOptions.exact);
+            await driver.findElementByAutomationText("ngFor");
     });
 
     it("should find elements", async () => {
-        const first = await driver.findElementByText(
-            lastAddedElementId.toString(), SearchOptions.exact);
+        const first = await driver.findElementByAutomationText(
+            lastAddedElementId.toString());
         elements.push(first);
 
-        addButton = await driver.findElementByText("add", SearchOptions.exact);
-        removeButton = await driver.findElementByText("remove", SearchOptions.exact);
+        addButton = await driver.findElementByAutomationText("add");
+        removeButton = await driver.findElementByAutomationText("remove");
 
         await isAbove(first, addButton);
     });
@@ -75,8 +75,8 @@ describe("ngFor scenario", () => {
         await addButton.click();
 
         lastAddedElementId += 1;
-        const newElement = await driver.findElementByText(
-            lastAddedElementId.toString(), SearchOptions.exact);
+        const newElement = await driver.findElementByAutomationText(
+            lastAddedElementId.toString());
 
         elements.push(newElement);
     };
@@ -96,8 +96,8 @@ describe("ngFor scenario", () => {
     };
 
     const checkAppendedCorrectly = async () => {
-        const lastAdded = await driver.findElementByText(
-            lastAddedElementId.toString(), SearchOptions.exact);
+        const lastAdded = await driver.findElementByAutomationText(
+            lastAddedElementId.toString());
 
         await isAbove(elements.slice(-2)[0], lastAdded);
         await isAbove(lastAdded, addButton);

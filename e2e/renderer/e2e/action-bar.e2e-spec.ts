@@ -23,19 +23,19 @@ describe("Action Bar scenario", () => {
 
         it("should navigate to page", async () => {
             const navigationButton =
-                await driver.findElementByText("ActionBar dynamic", SearchOptions.exact);
+                await driver.findElementByAutomationText("ActionBar dynamic");
             await navigationButton.click();
 
             const actionBar =
-                await driver.findElementByText("Action Bar Dynamic Items", SearchOptions.exact);
+                await driver.findElementByAutomationText("Action Bar Dynamic Items");
         });
 
         it("should find elements", async () => {
-            firstActionItem = await driver.findElementByText("one");
-            secondActionItem = await driver.findElementByText("two");
+            firstActionItem = await driver.findElementByAutomationText("one");
+            secondActionItem = await driver.findElementByAutomationText("two");
 
-            toggleFirstButton = await driver.findElementByText("toggle 1");
-            toggleSecondButton = await driver.findElementByText("toggle 2");
+            toggleFirstButton = await driver.findElementByAutomationText("toggle 1");
+            toggleSecondButton = await driver.findElementByAutomationText("toggle 2");
         });
 
         it("should initially render the action items in the correct order", async () => {
@@ -47,7 +47,7 @@ describe("Action Bar scenario", () => {
                 await toggleFirst();
 
                 try {
-                    await driver.findElementByText("one", SearchOptions.exact);
+                    await driver.findElementByAutomationText("one");
                 } catch (e) {
                     done();
                 }
@@ -64,7 +64,7 @@ describe("Action Bar scenario", () => {
                 await toggleSecond();
 
                 try {
-                    await driver.findElementByText("two", SearchOptions.exact);
+                    await driver.findElementByAutomationText("two");
                 } catch (e) {
                     done();
                 }
@@ -111,13 +111,13 @@ describe("Action Bar scenario", () => {
 
         it("should navigate to page", async () => {
             const navigationButton =
-                await driver.findElementByText("ActionBarExtension", SearchOptions.exact);
+                await driver.findElementByAutomationText("ActionBarExtension");
             await navigationButton.click();
         });
 
         it("should find elements", async () => {
-            toggleButton = await driver.findElementByText("toggle");
-            conditional = await driver.findElementByText("conditional");
+            toggleButton = await driver.findElementByAutomationText("toggle");
+            conditional = await driver.findElementByAutomationText("conditional");
         });
 
         it("should detach conditional action item when its condition is false", done => {
@@ -125,7 +125,7 @@ describe("Action Bar scenario", () => {
                 await toggle();
 
                 try {
-                    await driver.findElementByText("conditional", SearchOptions.exact);
+                    await driver.findElementByAutomationText("conditional");
                 } catch (e) {
                     done();
                 }
