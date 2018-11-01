@@ -28,7 +28,6 @@ describe("modal-frame:", () => {
             });
 
             beforeEach(async function () {
-                await screen.loadModalFrame();
             });
 
             afterEach(async function () {
@@ -45,30 +44,37 @@ describe("modal-frame:", () => {
             });
 
             it("should show dialog confirm, run in background", async () => {
+                await screen.loadModalFrame(true);
                 await testDialogBackground(driver, screen);
             });
 
             it("should run modal page with frame in background", async () => {
+                await screen.loadModalFrame(false);
                 await modalFrameBackground(driver, screen);
             });
 
             it("should navigate to second page, run in background, go back", async () => {
+                await screen.loadModalFrame(false);
                 await testSecondPageBackground(driver, screen);
             });
 
             it("should show nested modal page with frame, run in background, close", async () => {
+                await screen.loadModalFrame(false);
                 await testNestedModalFrameBackground(driver, screen);
             });
 
             it("should show nested modal page, run in background, close", async () => {
+                await screen.loadModalFrame(false);
                 await testNestedModalPageBackground(driver, screen);
             });
 
             it("should navigate to second page, close", async () => {
+                await screen.loadModalFrame(false);
                 await testSecondPageClose(driver, screen);
             });
 
             it("should navigate to second page, run in background, go back", async () => {
+                await screen.loadModalFrame(true);
                 await testSecondPageBackground(driver, screen);
             });
         });
