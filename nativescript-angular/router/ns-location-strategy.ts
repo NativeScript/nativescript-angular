@@ -527,6 +527,7 @@ export class NSLocationStrategy extends LocationStrategy {
         if (!lastState || !equalStateUrls) {
             outlet.states.push(locationState);
 
+            // Update last state segmentGroup of parent Outlet.
             if (this._modalNavigationDepth === 0 && !outlet.showingModal) {
                 this.updateParentsStates(outlet, currentSegmentGroup.parent);
             }
@@ -565,6 +566,11 @@ export class NSLocationStrategy extends LocationStrategy {
         newOutlet.states = [locationState];
         newOutlet.parent = parent;
         this.outlets.push(newOutlet);
+
+        // Update last state segmentGroup of parent Outlet.
+        if (this._modalNavigationDepth === 0 && !newOutlet.showingModal) {
+            this.updateParentsStates(newOutlet, segmentGroup.parent);
+        }
 
         return newOutlet;
     }
