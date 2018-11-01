@@ -2,10 +2,6 @@ import { AppiumDriver, createDriver } from "nativescript-dev-appium";
 import { Screen } from "./screen"
 import {
     roots,
-    modalFrameBackground,
-    testSecondPageBackground,
-    testSecondPageClose,
-    testNestedModalFrameBackground,
     testNestedModalPageBackground,
     testDialogBackground,
 } from "./shared.e2e-spec"
@@ -22,13 +18,8 @@ describe("modal-layout:", () => {
 
     roots.forEach(root => {
         describe(`${root} modal no frame background scenarios:`, () => {
-
             before(async () => {
                 await screen[root]();
-            });
-
-            beforeEach(async function () {
-                await screen.loadModalNoFrame();
             });
 
             afterEach(async function () {
@@ -45,10 +36,13 @@ describe("modal-layout:", () => {
             });
 
             it("should show nested modal page, run in background, close", async () => {
+                await screen.loadModalNoFrame(true);
                 await testNestedModalPageBackground(driver, screen, false);
+
             });
 
             it("should show dialog confirm inside modal view with no frame, run in background", async () => {
+                await screen.loadModalNoFrame(false);
                 await testDialogBackground(driver, screen, false);
             });
         });

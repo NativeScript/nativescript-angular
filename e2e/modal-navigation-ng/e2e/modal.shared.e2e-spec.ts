@@ -11,11 +11,6 @@ describe("Shared modal from home and back", () => {
         await driver.resetApp();
     });
 
-    after(async () => {
-        await driver.quit();
-        console.log("Quit driver!");
-    });
-
     afterEach(async function () {
         if (this.currentTest.state === "failed") {
             await driver.logTestArtifacts(this.currentTest.title);
@@ -93,8 +88,7 @@ describe("Shared modal from different components", () => {
 
     afterEach(async function () {
         if (this.currentTest.state === "failed") {
-            await driver.logPageSource(this.currentTest.title);
-            await driver.logScreenshot(this.currentTest.title);
+            await driver.logTestArtifacts(this.currentTest.title);
         }
     });
 
