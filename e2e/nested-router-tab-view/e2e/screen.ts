@@ -2,6 +2,7 @@ import { AppiumDriver, SearchOptions } from "nativescript-dev-appium";
 import { assert } from "chai";
 
 const home = "Home Component";
+const about = "About Component";
 const login = "Login Component";
 const tabs = "Tabs Component";
 
@@ -16,6 +17,7 @@ const gotoNextTeam = "next team";
 const gotoTeams = "teams";
 
 const gotoHomePage = "Go To Home Page";
+const gotoAboutPage = "Go To About Page";
 const gotoTabsPage = "Go To Tabs Page";
 const confirmDialog = "Ok";
 
@@ -65,6 +67,12 @@ export class Screen {
         console.log(home + " loaded!");
     }
 
+    loadedAbout= async () => {
+        const lblAbout = await this._driver.findElementByAutomationText(about);
+        assert.isTrue(await lblAbout.isDisplayed());
+        console.log(home + " loaded!");
+    }
+
     loadedTabs = async () => {
         const lblTabs = await this._driver.findElementByAutomationText(tabs);
         assert.isTrue(await lblTabs.isDisplayed());
@@ -111,6 +119,11 @@ export class Screen {
     navigateToHomePage = async (homePageButton?) => {
         const btnNavToHomePage = await this._driver.findElementByAutomationText(homePageButton || gotoHomePage);
         await btnNavToHomePage.tap();
+    }
+
+    navigateToAboutPage = async () => {
+        const btnNavToAboutPage = await this._driver.findElementByAutomationText(gotoAboutPage);
+        await btnNavToAboutPage.tap();
     }
 
     navigateToPlayer = async (player: string) => {

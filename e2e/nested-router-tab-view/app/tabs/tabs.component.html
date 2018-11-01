@@ -3,6 +3,7 @@
 <StackLayout>
     <GridLayout rows="auto,*">
         <WrapLayout row="0">
+            <Button text="Go To About Page" [nsRouterLink]="['../about']"></Button>
             <Button text="Back()" (tap)="back()"></Button>
             <Button text="CanGoBack(ActivatedRoute)" (tap)="canGoBack()"></Button>
             <Button text="Back(ActivatedRoute)" (tap)="backActivatedRoute()"></Button>

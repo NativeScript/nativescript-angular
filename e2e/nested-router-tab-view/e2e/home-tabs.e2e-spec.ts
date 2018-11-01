@@ -42,6 +42,28 @@ describe("home-tabs:", () => {
                 await screen.loadedTeamList();
             });
 
+            it("should navigate to Tabs then to About forward", async () => {
+                if (driver.isIOS) {
+                    await screen.navigateToTabsPage();
+                    await screen.loadedTabs();
+                    await screen.loadedPlayersList();
+                    await screen.navigateToAboutPage();
+                    await screen.loadedAbout();
+                }
+            });
+
+            it("should go back to Tabs and then back to Home", async () => {
+                if (driver.isIOS) {
+                    await backActivatedRoute(driver);
+                    await screen.loadedTabs();
+                    await screen.loadedPlayersList();
+                    await backActivatedRoute(driver);
+                    await screen.loadedHome();
+                    await screen.loadedPlayersList();
+                    await screen.loadedTeamList();
+                }
+            });
+
             it("should navigate to Tabs without Players/Teams navigation", async () => {
                 await screen.navigateToTabsPage();
                 await screen.loadedTabs();

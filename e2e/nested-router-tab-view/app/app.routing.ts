@@ -9,6 +9,7 @@ import { TeamDetailComponent } from "./team/team-detail.component";
 import { LoginComponent } from "./login/login.component";
 import { TabsComponent } from "./tabs/tabs.component";
 import { HomeComponent } from "./home/home.component";
+import { AboutComponent } from "./about/about.component";
 
 import { ModalComponent } from "./modal/modal.component";
 import { NestedModalComponent } from "./modal-nested/modal-nested.component";
@@ -54,7 +55,8 @@ const routes: Routes = [
             { path: "teams", component: TeamsComponent, outlet: "teamTab" },
             { path: "team/:id", component: TeamDetailComponent, outlet: "teamTab" },
         ]
-    }
+    },
+    { path: "about", component: AboutComponent }
 ];
 
 @NgModule({
