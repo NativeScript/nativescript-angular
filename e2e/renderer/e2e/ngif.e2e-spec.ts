@@ -19,24 +19,30 @@ describe("ngIf scenario", () => {
             await driver.driver.resetApp();
         });
 
+        afterEach(async function () {
+            if (this.currentTest.state === "failed") {
+                await driver.logTestArtifacts(this.currentTest.title);
+            }
+        });
+
         it("should navigate to page", async () => {
             const navigationButton =
-                await driver.findElementByText("NgIf no layout", SearchOptions.exact);
+                await driver.findElementByAutomationText("NgIf no layout");
             await navigationButton.click();
 
             const actionBar =
-                await driver.findElementByText("ngIf - no layout", SearchOptions.exact);
+                await driver.findElementByAutomationText("ngIf - no layout");
         });
 
         it("should find elements", async () => {
-            await driver.findElementByText("false", SearchOptions.exact);
-            toggleButton = await driver.findElementByText("Toggle", SearchOptions.exact);
+            await driver.findElementByAutomationText("false");
+            toggleButton = await driver.findElementByAutomationText("Toggle");
         });
 
         it("show 'true' button when show is true", async () => {
             await toggleButton.click();
 
-            await driver.findElementByText("true", SearchOptions.exact);
+            await driver.findElementByAutomationText("true");
         });
     });
 
@@ -51,21 +57,27 @@ describe("ngIf scenario", () => {
             await driver.driver.resetApp();            
         });
 
+        afterEach(async function () {
+            if (this.currentTest.state === "failed") {
+                await driver.logTestArtifacts(this.currentTest.title);
+            }
+        });
+
         it("should navigate to page", async () => {
             const navigationButton =
-                await driver.findElementByText("NgIf inbetween", SearchOptions.exact);
+                await driver.findElementByAutomationText("NgIf inbetween");
             await navigationButton.click();
 
             const actionBar =
-                await driver.findElementByText("ngIf - inbetween", SearchOptions.exact);
+                await driver.findElementByAutomationText("ngIf - inbetween");
         });
 
         it("should find elements", async () => {
-            firstButton = await driver.findElementByText("Button 1", SearchOptions.exact);
-            secondButton = await driver.findElementByText("Button 2", SearchOptions.exact);
-            toggleButton = await driver.findElementByText("Toggle", SearchOptions.exact);
+            firstButton = await driver.findElementByAutomationText("Button 1");
+            secondButton = await driver.findElementByAutomationText("Button 2");
+            toggleButton = await driver.findElementByAutomationText("Toggle");
 
-            conditionalLabel = await driver.findElementByText("Label", SearchOptions.exact);
+            conditionalLabel = await driver.findElementByAutomationText("Label");
             const labelIsDisplayed = await conditionalLabel.isDisplayed();
             assert.isTrue(labelIsDisplayed);
         });
@@ -75,7 +87,7 @@ describe("ngIf scenario", () => {
                 await toggleButton.click();
 
                 try {
-                    await driver.findElementByText("Label", SearchOptions.exact);
+                    await driver.findElementByAutomationText("Label");
                 } catch (e) {
                     done();
                 }
@@ -93,22 +105,28 @@ describe("ngIf scenario", () => {
             await driver.driver.resetApp();            
         });
 
+        afterEach(async function () {
+            if (this.currentTest.state === "failed") {
+                await driver.logTestArtifacts(this.currentTest.title);
+            }
+        });
+
         it("should navigate to page", async () => {
             const navigationButton =
-                await driver.findElementByText("NgIfElse", SearchOptions.exact);
+                await driver.findElementByAutomationText("NgIfElse");
             await navigationButton.click();
 
             const actionBar =
-                await driver.findElementByText("ngIfElse", SearchOptions.exact);
+                await driver.findElementByAutomationText("ngIfElse");
         });
 
         it("should find elements", async () => {
-            toggleButton = await driver.findElementByText("Toggle", SearchOptions.exact);
-            ifButton = await driver.findElementByText("If", SearchOptions.exact);
+            toggleButton = await driver.findElementByAutomationText("Toggle");
+            ifButton = await driver.findElementByAutomationText("If");
         });
 
         it("shouldn't render 'else' template when condition is true", done => {
-            driver.findElementByText("Else", SearchOptions.exact)
+            driver.findElementByAutomationText("Else", SearchOptions.exact)
                 .then(_ => { throw new Error("Else template found!"); })
                 .catch(() => done());
         });
@@ -116,11 +134,11 @@ describe("ngIf scenario", () => {
         it("should attach 'else' template when condition is changed to false", async () => {
             await toggleButton.click();
 
-            elseButton = await driver.findElementByText("Else", SearchOptions.exact);
+            elseButton = await driver.findElementByAutomationText("Else");
         });
 
         it("should detach 'if' template when condition is changed to false", done => {
-            driver.findElementByText("If", SearchOptions.exact)
+            driver.findElementByAutomationText("If", SearchOptions.exact)
                 .then(_ => { throw new Error("If template found!"); })
                 .catch(() => done());
         });
@@ -130,7 +148,7 @@ describe("ngIf scenario", () => {
                 await toggleButton.click();
 
                 try {
-                    await driver.findElementByText("Else", SearchOptions.exact);
+                    await driver.findElementByAutomationText("Else");
                 } catch (e) {
                     done();
                 }
@@ -148,22 +166,28 @@ describe("ngIf scenario", () => {
             await driver.driver.resetApp();            
         });
 
+        afterEach(async function () {
+            if (this.currentTest.state === "failed") {
+                await driver.logTestArtifacts(this.currentTest.title);
+            }
+        });
+
         it("should navigate to page", async () => {
             const navigationButton =
-                await driver.findElementByText("NgIf Then Else", SearchOptions.exact);
+                await driver.findElementByAutomationText("NgIf Then Else");
             await navigationButton.click();
 
             const actionBar =
-                await driver.findElementByText("ngIf Then Else", SearchOptions.exact);
+                await driver.findElementByAutomationText("ngIf Then Else");
         });
 
         it("should find elements", async () => {
-            toggleButton = await driver.findElementByText("Toggle", SearchOptions.exact);
-            thenButton = await driver.findElementByText("Then", SearchOptions.exact);
+            toggleButton = await driver.findElementByAutomationText("Toggle");
+            thenButton = await driver.findElementByAutomationText("Then");
         });
 
         it("shouldn't render 'else' template when condition is true", done => {
-            driver.findElementByText("Else", SearchOptions.exact)
+            driver.findElementByAutomationText("Else", SearchOptions.exact)
                 .then(_ => { throw new Error("Else template found!"); })
                 .catch(() => done());
         });
@@ -171,11 +195,11 @@ describe("ngIf scenario", () => {
         it("should attach 'else' template when condition is changed to false", async () => {
             await toggleButton.click();
 
-            elseButton = await driver.findElementByText("Else", SearchOptions.exact);
+            elseButton = await driver.findElementByAutomationText("Else");
         });
 
         it("should detach 'then' template when condition is changed to false", done => {
-            driver.findElementByText("Then", SearchOptions.exact)
+            driver.findElementByAutomationText("Then", SearchOptions.exact)
                 .then(_ => { throw new Error("Then template found!"); })
                 .catch(() => done());
         });
@@ -185,7 +209,7 @@ describe("ngIf scenario", () => {
                 await toggleButton.click();
 
                 try {
-                    await driver.findElementByText("Else", SearchOptions.exact);
+                    await driver.findElementByAutomationText("Else");
                 } catch (e) {
                     done();
                 }
@@ -203,22 +227,28 @@ describe("ngIf scenario", () => {
             await driver.driver.resetApp();            
         });
 
+        afterEach(async function () {
+            if (this.currentTest.state === "failed") {
+                await driver.logTestArtifacts(this.currentTest.title);
+            }
+        });
+
         it("should navigate to page", async () => {
             const navigationButton =
-                await driver.findElementByText("Content view", SearchOptions.exact);
+                await driver.findElementByAutomationText("Content view");
             await navigationButton.click();
 
             const actionBar =
-                await driver.findElementByText("Content View", SearchOptions.exact);
+                await driver.findElementByAutomationText("Content View");
         });
 
         it("should find elements", async () => {
-            toggleButton = await driver.findElementByText("Toggle", SearchOptions.exact);
-            thenButton = await driver.findElementByText("Then", SearchOptions.exact);
+            toggleButton = await driver.findElementByAutomationText("Toggle");
+            thenButton = await driver.findElementByAutomationText("Then");
         });
 
         it("shouldn't render 'else' template when condition is true", done => {
-            driver.findElementByText("Else", SearchOptions.exact)
+            driver.findElementByAutomationText("Else", SearchOptions.exact)
                 .then(_ => { throw new Error("Else template found!"); })
                 .catch(() => done());
         });
@@ -226,11 +256,11 @@ describe("ngIf scenario", () => {
         it("should attach 'else' template when condition is changed to false", async () => {
             await toggleButton.click();
 
-            elseButton = await driver.findElementByText("Else", SearchOptions.exact);
+            elseButton = await driver.findElementByAutomationText("Else");
         });
 
         it("should detach 'then' template when condition is changed to false", done => {
-            driver.findElementByText("Then", SearchOptions.exact)
+            driver.findElementByAutomationText("Then", SearchOptions.exact)
                 .then(_ => { throw new Error("Then template found!"); })
                 .catch(() => done());
         });
@@ -240,7 +270,7 @@ describe("ngIf scenario", () => {
                 await toggleButton.click();
 
                 try {
-                    await driver.findElementByText("Else", SearchOptions.exact);
+                    await driver.findElementByAutomationText("Else");
                 } catch (e) {
                     done();
                 }
@@ -259,18 +289,24 @@ describe("ngIf scenario", () => {
             await driver.driver.resetApp();
         });
 
+        afterEach(async function () {
+            if (this.currentTest.state === "failed") {
+                await driver.logTestArtifacts(this.currentTest.title);
+            }
+        });
+        
         it("should navigate to page", async () => {
             const navigationButton =
-                await driver.findElementByText("NgIf Subsequent Ifs", SearchOptions.exact);
+                await driver.findElementByAutomationText("NgIf Subsequent Ifs");
             await navigationButton.click();
         });
 
         it("should find elements", async () => {
-            firstButton = await driver.findElementByText("Toggle first", SearchOptions.exact);
-            secondButton = await driver.findElementByText("Toggle second", SearchOptions.exact);
+            firstButton = await driver.findElementByAutomationText("Toggle first");
+            secondButton = await driver.findElementByAutomationText("Toggle second");
 
-            firstLabel = await driver.findElementByText("== 1 ==", SearchOptions.exact);
-            secondLabel = await driver.findElementByText("== 2 ==", SearchOptions.exact);
+            firstLabel = await driver.findElementByAutomationText("== 1 ==");
+            secondLabel = await driver.findElementByAutomationText("== 2 ==");
 
             assert.isDefined(firstButton);
             assert.isDefined(secondButton);
@@ -281,7 +317,7 @@ describe("ngIf scenario", () => {
         it("should toggle on first view", async () => {
             await firstButton.click();
 
-            let conditional = await driver.findElementByText("first", SearchOptions.exact);
+            let conditional = await driver.findElementByAutomationText("first");
 
             await isAbove(firstLabel, conditional);
             await isAbove(conditional, secondLabel);
@@ -291,7 +327,7 @@ describe("ngIf scenario", () => {
             (async () => {
                 await firstButton.click();
 
-                driver.findElementByText("first", SearchOptions.exact, 500)
+                driver.findElementsByAutomationText("first", 500)
                     .then(_ => { throw new Error("first label found!"); })
                     .catch(() => done());
             })();
@@ -300,7 +336,7 @@ describe("ngIf scenario", () => {
         it("should toggle on second view", async () => {
             await secondButton.click();
 
-            let conditional = await driver.findElementByText("second", SearchOptions.exact);
+            let conditional = await driver.findElementByAutomationText("second");
             await isAbove(firstLabel, conditional);
             await isAbove(conditional, secondLabel);
         });
@@ -309,7 +345,7 @@ describe("ngIf scenario", () => {
             (async () => {
                 await secondButton.click();
 
-                driver.findElementByText("first", SearchOptions.exact, 500)
+                driver.findElementByAutomationText("first", 500)
                     .then(_ => { throw new Error("first label found!"); })
                     .catch(() => done());
             })();
@@ -319,8 +355,8 @@ describe("ngIf scenario", () => {
             await firstButton.click();
             await secondButton.click();
 
-            let conditional1 = await driver.findElementByText("first", SearchOptions.exact);
-            let conditional2 = await driver.findElementByText("second", SearchOptions.exact);
+            let conditional1 = await driver.findElementByAutomationText("first");
+            let conditional2 = await driver.findElementByAutomationText("second");
             await isAbove(firstLabel, conditional1);
             await isAbove(conditional1, conditional2);
             await isAbove(conditional2, secondLabel);
@@ -331,10 +367,10 @@ describe("ngIf scenario", () => {
                 await firstButton.click();
                 await secondButton.click();
 
-                driver.findElementByText("first", SearchOptions.exact, 500)
+                driver.findElementByAutomationText("first", 500)
                     .then(_ => { throw new Error("first label found!"); })
                     .catch(() => {
-                        driver.findElementByText("second", SearchOptions.exact, 500)
+                        driver.findElementByAutomationText("second", 500)
                             .then(_ => { throw new Error("second label found!"); })
                             .catch(() => done());
                     });
@@ -345,8 +381,8 @@ describe("ngIf scenario", () => {
             await secondButton.click();
             await firstButton.click();
 
-            let conditional1 = await driver.findElementByText("first", SearchOptions.exact);
-            let conditional2 = await driver.findElementByText("second", SearchOptions.exact);
+            let conditional1 = await driver.findElementByAutomationText("first");
+            let conditional2 = await driver.findElementByAutomationText("second");
             await isAbove(firstLabel, conditional1);
             await isAbove(conditional1, conditional2);
             await isAbove(conditional2, secondLabel);
@@ -357,10 +393,10 @@ describe("ngIf scenario", () => {
                 await secondButton.click();
                 await firstButton.click();
 
-                driver.findElementByText("first", SearchOptions.exact, 500)
+                driver.findElementByAutomationText("first", 500)
                     .then(_ => { throw new Error("first label found!"); })
                     .catch(() => {
-                        driver.findElementByText("second", SearchOptions.exact, 500)
+                        driver.findElementByAutomationText("second", 500)
                             .then(_ => { throw new Error("second label found!"); })
                             .catch(() => done());
                     });
