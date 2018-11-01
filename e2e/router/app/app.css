@@ -4,7 +4,7 @@
 }
 
 .nested-header {
-    font-size: 26;
+    font-size: 16;
 }
 
 .nested-outlet {
@@ -14,4 +14,9 @@
 
 Label {
     text-align: center;
+    font-size: 12;
+}
+
+Button {
+    font-size: 12;
 }
