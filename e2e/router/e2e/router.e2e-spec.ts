@@ -50,7 +50,7 @@ describe("Navigate inside nested outlet", () => {
     });
 
     it("should navigate to Second(1)/detail(1) and back", async () => {
-        const detailBtn = await driver.findElementByText("DETAIL 1", SearchOptions.exact);
+        const detailBtn = await driver.findElementByAutomationText("DETAIL 1");
         detailBtn.click();
         await assureSecondComponent(driver, 1)
         await assureNestedDetailComponent(driver, 1);
@@ -61,7 +61,7 @@ describe("Navigate inside nested outlet", () => {
     });
 
     it("should navigate to Second(1)/detail(2) and back", async () => {
-        const detailBtn = await driver.findElementByText("DETAIL 2", SearchOptions.exact);
+        const detailBtn = await driver.findElementByAutomationText("DETAIL 2");
         detailBtn.click();
         await assureSecondComponent(driver, 1)
         await assureNestedDetailComponent(driver, 2);
@@ -98,7 +98,7 @@ describe("Navigate to same component with different param", () => {
 
     it("should navigate to Second(2)/master", async () => {
         const navigationButton =
-            await driver.findElementByText("GO TO NEXT SECOND", SearchOptions.exact);
+            await driver.findElementByAutomationText("GO TO NEXT SECOND");
         navigationButton.click();
 
         await assureSecondComponent(driver, 2)
@@ -138,7 +138,7 @@ describe("Nested navigation + page navigation", () => {
     });
 
     it("should navigate to Second(1)/detail(1)", async () => {
-        const detailBtn = await driver.findElementByText("DETAIL 1", SearchOptions.exact);
+        const detailBtn = await driver.findElementByAutomationText("DETAIL 1");
         detailBtn.click();
 
         await assureSecondComponent(driver, 1)
@@ -147,7 +147,7 @@ describe("Nested navigation + page navigation", () => {
 
     it("should navigate to Second(2)/master", async () => {
         const navigationButton =
-            await driver.findElementByText("GO TO NEXT SECOND", SearchOptions.exact);
+            await driver.findElementByAutomationText("GO TO NEXT SECOND");
         navigationButton.click();
 
         await assureSecondComponent(driver, 2)
@@ -155,7 +155,7 @@ describe("Nested navigation + page navigation", () => {
     });
 
     it("should navigate to Second(2)/detail(2)", async () => {
-        const detailBtn = await driver.findElementByText("DETAIL 2", SearchOptions.exact);
+        const detailBtn = await driver.findElementByAutomationText("DETAIL 2");
         detailBtn.click();
 
         await assureSecondComponent(driver, 2)
@@ -216,7 +216,7 @@ describe("Nested name navigation + page navigation", () => {
 
     it("should navigate to nested named Master Detail/1", async () => {
         const navigationButton =
-            await driver.findElementByText("DETAIL-NAMED 1", SearchOptions.exact);
+            await driver.findElementByAutomationText("DETAIL-NAMED 1");
         navigationButton.click();
 
         await assureNamedNestedDetailComponent(driver, 1);
@@ -224,13 +224,13 @@ describe("Nested name navigation + page navigation", () => {
 
     it("should navigate back to Master and navigate to Detail/2", async () => {
         let navigationButton =
-            await driver.findElementByText("BACK-NESTED", SearchOptions.exact);
+            await driver.findElementByAutomationText("BACK-NESTED");
         navigationButton.click();
 
         await assureNamedNestedMasterComponent(driver);
 
         navigationButton =
-            await driver.findElementByText("DETAIL-NAMED 2", SearchOptions.exact);
+            await driver.findElementByAutomationText("DETAIL-NAMED 2");
         navigationButton.click();
 
         await assureNamedNestedDetailComponent(driver, 2);
@@ -251,7 +251,7 @@ describe("Shouldn't be able to navigate back on startup", () => {
 
     it("shouldn't be able to go back", async () => {
         await goBack(driver);
-        await driver.findElementByText("canGoBack() - false", SearchOptions.exact);
+        await driver.findElementByAutomationText("canGoBack() - false");
     });
 });
 
@@ -282,7 +282,7 @@ describe("Shouldn't be able to navigate back after cleared history", () => {
 
     it("shouldn't be able to go back", async () => {
         await goBack(driver);
-        await driver.findElementByText("canGoBack() - false", SearchOptions.exact);
+        await driver.findElementByAutomationText("canGoBack() - false");
     });
 });
 
@@ -300,7 +300,7 @@ describe("Navigate to componentless route", () => {
 
     it("should navigate to ComponentlessSecond(100)/detail(200)", async () => {
         const navigationButton =
-            await driver.findElementByText("GO TO C-LESS SECOND", SearchOptions.exact);
+            await driver.findElementByAutomationText("GO TO C-LESS SECOND");
         navigationButton.click();
 
         await assureSecondComponent(driver, 100)
@@ -407,49 +407,47 @@ describe("Navigate to componentless lazy module route", () => {
 });
 
 async function assureFirstComponent(driver: AppiumDriver) {
-    await driver.findElementByText("FirstComponent", SearchOptions.exact);
+    await driver.findElementByAutomationText("FirstComponent");
 }
 
 async function assureLazyComponent(driver: AppiumDriver) {
-    await driver.findElementByText("LazyComponent", SearchOptions.exact);
+    await driver.findElementByAutomationText("LazyComponent");
 }
 
 async function assureComponentlessLazyComponent(driver: AppiumDriver) {
-    await driver.findElementByText("Lazy Componentless Route", SearchOptions.exact);
+    await driver.findElementByAutomationText("Lazy Componentless Route");
 }
 
 async function assureNamedNestedMasterComponent(driver: AppiumDriver) {
-    await driver.findElementByText("NamedNestedMaster", SearchOptions.exact);
+    await driver.findElementByAutomationText("NamedNestedMaster");
 }
 
 async function assureNamedNestedDetailComponent(driver: AppiumDriver, param: number) {
-    await driver.findElementByText("NamedNestedDetail", SearchOptions.exact);
-    await driver.findElementByText(`nested-named-param: ${param}`, SearchOptions.exact);
+    await driver.findElementByAutomationText("NamedNestedDetail");
+    await driver.findElementByAutomationText(`nested-named-param: ${param}`);
 
 }
 
 async function assureSecondComponent(driver: AppiumDriver, param: number) {
-    await driver.findElementByText("SecondComponent", SearchOptions.exact);
-    await driver.findElementByText(`param: ${param}`, SearchOptions.exact);
+    await driver.findElementByAutomationText("SecondComponent");
+    await driver.findElementByAutomationText(`param: ${param}`);
 }
 
 async function assureNestedMasterComponent(driver: AppiumDriver) {
-    await driver.findElementByText("NestedMaster", SearchOptions.exact);
+    await driver.findElementByAutomationText("NestedMaster");
 }
 
 async function assureNestedDetailComponent(driver: AppiumDriver, param: number) {
-    await driver.findElementByText("NestedDetail", SearchOptions.exact);
-    await driver.findElementByText(`nested-param: ${param}`, SearchOptions.exact);
+    await driver.findElementByAutomationText("NestedDetail");
+    await driver.findElementByAutomationText(`nested-param: ${param}`);
 }
 
 async function goBack(driver: AppiumDriver) {
-    const backButton = await driver.findElementByText("BACK", SearchOptions.exact);
+    const backButton = await driver.waitForElement("BACK");
     await backButton.click();
-    //await driver.navBack();
 }
 
 async function findAndClick(driver: AppiumDriver, text: string) {
-    const navigationButton =
-        await driver.findElementByText(text, SearchOptions.exact);
-    navigationButton.click();
+    const navigationButton = await driver.waitForElement(text);
+    await navigationButton.click();
 }

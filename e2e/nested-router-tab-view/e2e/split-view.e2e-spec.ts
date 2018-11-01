@@ -152,26 +152,26 @@ describe("split-view:", () => {
 });
 
 async function backActivatedRoute(driver: AppiumDriver) {
-    const btnBack = await driver.findElementByText("Back(ActivatedRoute)");
+    const btnBack = await driver.findElementByAutomationText("Back(ActivatedRoute)");
     await btnBack.tap();
 }
 
 async function back(driver: AppiumDriver) {
-    const btnBack = await driver.findElementByText("Back()");
+    const btnBack = await driver.findElementByAutomationText("Back()");
     await btnBack.tap();
 }
 
 async function backPlayers(driver: AppiumDriver) {
-    const btnBackPlayers = await driver.findElementByText("Back(Players)");
+    const btnBackPlayers = await driver.findElementByAutomationText("Back(Players)");
     await btnBackPlayers.tap();
 }
 
 async function backTeams(driver: AppiumDriver) {
-    const btnBackTeams = await driver.findElementByText("Back(Teams)");
+    const btnBackTeams = await driver.findElementByAutomationText("Back(Teams)");
     await btnBackTeams.tap();
 }
 
 async function backBoth(driver: AppiumDriver) {
-    const btnBackBoth = await driver.findElementByText("Back(Both)");
+    const btnBackBoth = await driver.findElementByAutomationText("Back(Both)");
     await btnBackBoth.tap();
 }

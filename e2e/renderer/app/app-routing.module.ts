@@ -4,6 +4,11 @@ import { NativeScriptRouterModule } from "nativescript-angular/router";
 import { ActionBarDynamicItemsComponent } from "./action-bar/action-bar-dynamic-items.component";
 import { ActionBarExtensionComponent } from "./action-bar/action-bar-extension.component";
 
+import { ActionBarVisibilityAlwaysComponent } from "./page-router-outlet/action-bar-visibility-always.component";
+import { ActionBarVisibilityAutoComponent } from "./page-router-outlet/action-bar-visibility-auto.component"
+import { ActionBarVisibilityNeverComponent } from "./page-router-outlet/action-bar-visibility-never.component"
+import { NestedPageComponent } from "./page-router-outlet/nested-page.component"
+
 import { TabItemBindingComponent } from "./tab-view/tab-item-binding.component";
 
 import { ListComponent } from "./list.component";
@@ -21,6 +26,33 @@ export const routes = [
         path: "",
         redirectTo: "/list",
         pathMatch: "full"
+    },
+    {
+        path: "action-bar-visibility-always",
+        component: ActionBarVisibilityAlwaysComponent,
+        children: [{
+            path: "nested",
+            outlet: "nested",
+            component: NestedPageComponent
+        }]
+    },
+    {
+        path: "action-bar-visibility-never",
+        component: ActionBarVisibilityNeverComponent,
+        children: [{
+            path: "nested",
+            outlet: "nested",
+            component: NestedPageComponent
+        }]
+    },
+    {
+        path: "action-bar-visibility-auto",
+        component: ActionBarVisibilityAutoComponent,
+        children: [{
+            path: "nested",
+            outlet: "nested",
+            component: NestedPageComponent
+        }]
     },
     {
         path: "action-bar-dynamic",
@@ -75,6 +107,11 @@ export const routes = [
 export const navigatableComponents = [
     ActionBarDynamicItemsComponent,
     ActionBarExtensionComponent,
+
+    ActionBarVisibilityAlwaysComponent,
+    ActionBarVisibilityNeverComponent,
+    ActionBarVisibilityAutoComponent,
+    NestedPageComponent,
 
     TabItemBindingComponent,
 

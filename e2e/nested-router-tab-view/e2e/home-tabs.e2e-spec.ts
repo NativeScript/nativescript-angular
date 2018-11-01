@@ -42,6 +42,28 @@ describe("home-tabs:", () => {
                 await screen.loadedTeamList();
             });
 
+            it("should navigate to Tabs then to About forward", async () => {
+                if (driver.isIOS) {
+                    await screen.navigateToTabsPage();
+                    await screen.loadedTabs();
+                    await screen.loadedPlayersList();
+                    await screen.navigateToAboutPage();
+                    await screen.loadedAbout();
+                }
+            });
+
+            it("should go back to Tabs and then back to Home", async () => {
+                if (driver.isIOS) {
+                    await backActivatedRoute(driver);
+                    await screen.loadedTabs();
+                    await screen.loadedPlayersList();
+                    await backActivatedRoute(driver);
+                    await screen.loadedHome();
+                    await screen.loadedPlayersList();
+                    await screen.loadedTeamList();
+                }
+            });
+
             it("should navigate to Tabs without Players/Teams navigation", async () => {
                 await screen.navigateToTabsPage();
                 await screen.loadedTabs();
@@ -97,26 +119,26 @@ describe("home-tabs:", () => {
 });
 
 async function backActivatedRoute(driver: AppiumDriver) {
-    const btnBack = await driver.findElementByText("Back(ActivatedRoute)");
+    const btnBack = await driver.findElementByAutomationText("Back(ActivatedRoute)");
     await btnBack.tap();
 }
 
 async function backPlayers(driver: AppiumDriver) {
-    const btnBackPlayers = await driver.findElementByText("Back(Players)");
+    const btnBackPlayers = await driver.findElementByAutomationText("Back(Players)");
     await btnBackPlayers.tap();
 }
 
 async function backBoth(driver: AppiumDriver) {
-    const btnBackBoth = await driver.findElementByText("Back(Both)");
+    const btnBackBoth = await driver.findElementByAutomationText("Back(Both)");
     await btnBackBoth.tap();
 }
 
 async function gotoPlayersTab(driver: AppiumDriver) {
-    const btnTabPlayers = await driver.findElementByText("Players Tab");
+    const btnTabPlayers = await driver.findElementByAutomationText("Players Tab");
     await btnTabPlayers.tap();
 }
 
 async function gotoTeamsTab(driver: AppiumDriver) {
-    const btnTabTeams = await driver.findElementByText("Teams Tab");
+    const btnTabTeams = await driver.findElementByAutomationText("Teams Tab");
     await btnTabTeams.tap();
 }
