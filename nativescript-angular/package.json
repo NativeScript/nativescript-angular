@@ -52,7 +52,7 @@
     "@angular/http": "~7.0.0",
     "@angular/platform-browser": "~7.0.0",
     "@angular/router": "~7.0.0",
-    "rxjs": "^6.0.0",
+    "rxjs": "^6.3.3",
     "tns-core-modules": "^4.0.0 || >4.0.0- || >4.1.0-",
     "zone.js": "^0.8.26",
     "typescript": "~3.1.1"
