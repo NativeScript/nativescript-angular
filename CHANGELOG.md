@@ -1,5 +1,5 @@
 <a name="7.0.0-rc.0"></a>
-# [7.0.0-rc.0](https://github.com/NativeScript/nativescript-angular/compare/6.1.0...7.0.0-rc.0) (2018-11-05)
+# [7.0.0-rc.0](https://github.com/NativeScript/nativescript-angular/compare/6.2.0...7.0.0-rc.0) (2018-11-05)
 
 
 ### Bug Fixes
