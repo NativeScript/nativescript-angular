@@ -203,7 +203,7 @@ export class PageRouterOutlet implements OnDestroy { // tslint:disable-line:dire
     }
 
     deactivate(): void {
-        if (!this.outlet.isPageNavigationBack) {
+        if (!this.outlet || !this.outlet.isPageNavigationBack) {
             if (isLogEnabled()) {
                 log("Currently not in page back navigation - component should be detached instead of deactivated.");
             }
