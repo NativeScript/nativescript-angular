@@ -11,9 +11,3 @@ after("stop server", async () => {
     await driver.quit();
     await stopServer();
 });
-
-afterEach(async function () {
-    if (this.currentTest.state === "failed") {
-        await driver.logTestArtifacts(this.currentTest.title);
-    }
-});

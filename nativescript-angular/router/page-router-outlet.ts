@@ -150,6 +150,7 @@ export class PageRouterOutlet implements OnDestroy { // tslint:disable-line:dire
         private parentContexts: ChildrenOutletContexts,
         private location: ViewContainerRef,
         @Attribute("name") name: string,
+        @Attribute("actionBarVisibility") actionBarVisibility: string,
         @Attribute("isEmptyOutlet") isEmptyOutlet: boolean,
         private locationStrategy: NSLocationStrategy,
         private componentFactoryResolver: ComponentFactoryResolver,
@@ -162,6 +163,7 @@ export class PageRouterOutlet implements OnDestroy { // tslint:disable-line:dire
     ) {
         this.isEmptyOutlet = isEmptyOutlet;
         this.frame = elRef.nativeElement;
+        this.setActionBarVisibility(actionBarVisibility);
         if (isLogEnabled()) {
             log(`PageRouterOutlet.constructor frame: ${this.frame}`);
         }
@@ -171,6 +173,18 @@ export class PageRouterOutlet implements OnDestroy { // tslint:disable-line:dire
 
         this.viewUtil = new ViewUtil(device);
         this.detachedLoaderFactory = resolver.resolveComponentFactory(DetachedLoader);
+    }
+
+    setActionBarVisibility(actionBarVisibility: string): void {
+        switch (actionBarVisibility) {
+            case "always":
+            case "never":
+                this.frame.actionBarVisibility = actionBarVisibility;
+                return;
+
+            default:
+                this.frame.actionBarVisibility = "auto";
+        }
     }
 
     ngOnDestroy(): void {
@@ -189,7 +203,7 @@ export class PageRouterOutlet implements OnDestroy { // tslint:disable-line:dire
     }
 
     deactivate(): void {
-        if (!this.outlet.isPageNavigationBack) {
+        if (!this.outlet || !this.outlet.isPageNavigationBack) {
             if (isLogEnabled()) {
                 log("Currently not in page back navigation - component should be detached instead of deactivated.");
             }

@@ -126,11 +126,21 @@ export class NSLocationStrategy extends LocationStrategy {
         this.currentUrlTree = urlSerializer.parse(url);
         const urlTreeRoot = this.currentUrlTree.root;
 
+        // Handle case where the user declares a component at path "/".
+        // The url serializer doesn't parse this url as having a primary outlet.
         if (!Object.keys(urlTreeRoot.children).length) {
-            // Handle case where the user declares a component at path "/".
-            // The url serializer doesn't parse this url as having a primary outlet.
-            const rootOutlet = this.createOutlet("primary", null, null);
-            this.currentOutlet = rootOutlet;
+            const segmentGroup = this.currentUrlTree && this.currentUrlTree.root;
+            const outletKey = this.getSegmentGroupFullPath(segmentGroup) + "primary";
+            const outlet = this.findOutletByKey(outletKey);
+
+            if (outlet && this.updateStates(outlet, segmentGroup)) {
+                this.currentOutlet = outlet; // If states updated
+            } else if (!outlet) {
+                const rootOutlet = this.createOutlet("primary", segmentGroup, null);
+                this.currentOutlet = rootOutlet;
+            }
+
+            this.currentOutlet.peekState().isRootSegmentGroup = true;
             return;
         }
 
@@ -517,6 +527,7 @@ export class NSLocationStrategy extends LocationStrategy {
         if (!lastState || !equalStateUrls) {
             outlet.states.push(locationState);
 
+            // Update last state segmentGroup of parent Outlet.
             if (this._modalNavigationDepth === 0 && !outlet.showingModal) {
                 this.updateParentsStates(outlet, currentSegmentGroup.parent);
             }
@@ -543,27 +554,23 @@ export class NSLocationStrategy extends LocationStrategy {
     }
 
     private createOutlet(outletKey: string, segmentGroup: any, parent: Outlet, modalNavigation?: number): Outlet {
-        let isRootSegmentGroup: boolean = false;
-
-        if (!segmentGroup) {
-            // Handle case where the user declares a component at path "/".
-            // The url serializer doesn't parse this url as having a primary outlet.
-            segmentGroup = this.currentUrlTree && this.currentUrlTree.root;
-            isRootSegmentGroup = true;
-        }
-
         const pathByOutlets = this.getPathByOutlets(segmentGroup);
         const newOutlet = new Outlet(outletKey, pathByOutlets, modalNavigation);
 
         const locationState: LocationState = {
             segmentGroup: segmentGroup,
-            isRootSegmentGroup: isRootSegmentGroup,
+            isRootSegmentGroup: false,
             isPageNavigation: true // It is a new OutletNode.
         };
 
         newOutlet.states = [locationState];
         newOutlet.parent = parent;
         this.outlets.push(newOutlet);
+
+        // Update last state segmentGroup of parent Outlet.
+        if (this._modalNavigationDepth === 0 && !newOutlet.showingModal) {
+            this.updateParentsStates(newOutlet, segmentGroup.parent);
+        }
 
         return newOutlet;
     }

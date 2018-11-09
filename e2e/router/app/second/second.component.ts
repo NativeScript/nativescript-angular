@@ -17,7 +17,7 @@ import { map } from "rxjs/operators";
         <Button text="GO TO FIRST(CLEAR)" [nsRouterLink]="['/first']" clearHistory="true" pageTransition="flipRight"></Button>
         <Button text="GO TO NEXT SECOND" [nsRouterLink]="['/second', (nextDepth$ | async)]"></Button>
         <Button text="LOAD NESTED NAMED OUTLET" (tap)="loadNestedNamedOutlet()"></Button>
-        <Button text="BACK" (tap)="goBack()"></Button>
+        <Button text="BACK" automationText="BACK" (tap)="goBack()"></Button>
         
         <GridLayout row="1" rows="*,*">
             <GridLayout row="0" class="nested-outlet">
