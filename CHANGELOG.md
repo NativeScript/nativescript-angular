@@ -1,3 +1,14 @@
+<a name="7.0.0"></a>
+# [7.0.0](https://github.com/NativeScript/nativescript-angular/compare/7.0.0-rc.0...7.0.0) (2018-11-12)
+
+
+### Bug Fixes
+
+* crash in deactivate page router outlet ([#1590](https://github.com/NativeScript/nativescript-angular/issues/1590)) ([f8c7468](https://github.com/NativeScript/nativescript-angular/commit/f8c7468))
+
+
+
+
 <a name="7.0.0-rc.0"></a>
 # [7.0.0-rc.0](https://github.com/NativeScript/nativescript-angular/compare/6.2.0...7.0.0-rc.0) (2018-11-05)
 
