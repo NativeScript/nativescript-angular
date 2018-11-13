@@ -1,6 +1,8 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, ViewContainerRef } from "@angular/core";
 import { Router, NavigationEnd } from "@angular/router";
-import { RouterExtensions } from "nativescript-angular/router";
+import { NSLocationStrategy } from "nativescript-angular/router/ns-location-strategy";
+
+import { ViewContainerRefService } from "./shared/ViewContainerRefService";
 
 @Component({
     selector: "ns-tab",
@@ -8,5 +10,18 @@ import { RouterExtensions } from "nativescript-angular/router";
 })
 
 export class TabComponent  {
-    constructor(private routerExtension: RouterExtensions) { }
+    constructor(
+        router: Router, 
+        location: NSLocationStrategy,
+        private _vcRef: ViewContainerRef,
+        private _viewContainerRefService: ViewContainerRefService) {
+        router.events.subscribe(e => {
+            if (e instanceof NavigationEnd) {
+                console.log("[ROUTER]: " + e.toString());
+               console.log(location.toString());
+            }
+        });
+
+        this._viewContainerRefService.root = this._vcRef;
+    }
 }

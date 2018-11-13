@@ -4,7 +4,6 @@ import { Screen } from "./screen"
 const time = 1;
 
 export const roots = ["setFrameRootView", "setLayoutRootView", "setTabRootView", "setNamedFrameRootView"];
-// export const roots = ["setTabRootView", "setNamedFrameRootView"];
 
 export async function modalFrameBackground(driver: AppiumDriver, screen: Screen) {
     await driver.backgroundApp(time);

@@ -1,139 +1,151 @@
 import { AppiumDriver, createDriver, SearchOptions } from "nativescript-dev-appium";
 import { assert } from "chai";
+import { Screen } from "./screen"
 
 const homeComponent = "Home Component";
+const roots = ["setFrameRootView", "setTabRootView"];
 
-describe("Shared modal from home and back", () => {
+describe("modal-shared:", () => {
     let driver: AppiumDriver;
+    let screen: Screen;
 
     before(async () => {
         driver = await createDriver();
-        await driver.resetApp();
+        screen = new Screen(driver);
     });
 
-    afterEach(async function () {
-        if (this.currentTest.state === "failed") {
-            await driver.logTestArtifacts(this.currentTest.title);
-        }
-    });
+    roots.forEach(root => {
+        describe("Shared modal from second and back", () => {
 
-    it ("should find home component", async () => {
-        await assertComponent(driver, homeComponent);
-    });
+            before(async () => {
+                await screen[root]();
+            });
 
-    it("should open/close shared modal from home component", async () => {
-        await openModal(driver);
-        await closeModal(driver);
-    });
+            beforeEach(async function () {
+            });
 
-    it ("should find home component again", async () => {
-        await assertComponent(driver, homeComponent);
-    });
+            afterEach(async function () {
+                if (this.currentTest.state === "failed") {
+                    await driver.logTestArtifacts(this.currentTest.title);
+                    await driver.resetApp();
+                    await screen[root]();
+                }
+            });
+
+            it("should find home component", async () => {
+                await assertComponent(driver, homeComponent);
+            });
+
+            it("should open/close shared modal from home component", async () => {
+                await openModal(driver);
+                await closeModal(driver);
+            });
+
+            it("should open/close shared modal from home component again", async () => {
+                await openModal(driver);
+                await closeModal(driver);
+            });
+
+            it("should find home component again", async () => {
+                await assertComponent(driver, homeComponent);
+            });
+
+            it("should navigate to second component", async () => {
+                await navigateToSecondComponent(driver);
+            });
+
+            it("should find second component", async () => {
+                await assertComponent(driver, "second component");
+            });
+
+            it("should open/close shared modal from second component", async () => {
+                await openModal(driver);
+                await closeModal(driver);
+            });
+
+            it("should find second component again", async () => {
+                await assertComponent(driver, "second component");
+            });
+
+            it("should navigate back to home component", async () => {
+                await goBack(driver);
+                await assertComponent(driver, homeComponent);
+            });
+        });
+    })
 });
 
-describe("Shared modal from second and back", () => {
+describe("modal-shared-different-component:", () => {
     let driver: AppiumDriver;
+    let screen: Screen;
 
     before(async () => {
         driver = await createDriver();
-        await driver.resetApp();
+        screen = new Screen(driver);
     });
 
-    after(async () => {
-        await driver.quit();
-        console.log("Quit driver!");
-    });
+    roots.forEach(root => {
+        describe("Shared modal from different components", () => {
+            before(async () => {
+                driver = await createDriver();
+                await driver.resetApp();
+            });
 
-    afterEach(async function () {
-        if (this.currentTest.state === "failed") {
-            await driver.logPageSource(this.currentTest.title);
-            await driver.logScreenshot(this.currentTest.title);
-        }
-    });
+            after(async () => {
+                await driver.quit();
+                console.log("Quit driver!");
+            });
 
-    it ("should find home component", async () => {
-        await assertComponent(driver, homeComponent);
-    });
+            afterEach(async function () {
+                if (this.currentTest.state === "failed") {
+                    await driver.logTestArtifacts(this.currentTest.title);
+                }
+            });
 
-    it ("should navigate to second component", async() => {
-        await navigateToSecondComponent(driver);
-    });
+            it("should find home component", async () => {
+                await assertComponent(driver, homeComponent);
+            });
 
-    it ("should find second component", async () => {
-        await assertComponent(driver, "second component");
-    });
+            it("should open/close shared modal from home component", async () => {
+                await openModal(driver);
+                await closeModal(driver);
+            });
 
-    it("should open/close shared modal from second component", async () => {
-        await openModal(driver);
-        await closeModal(driver);
-    });
+            it("should find home component again", async () => {
+                await assertComponent(driver, homeComponent);
+            });
 
-    it ("should find second component again", async () => {
-        await assertComponent(driver, "second component");
-    });
-});
+            it("should navigate to second component", async () => {
+                await navigateToSecondComponent(driver);
+            });
 
-describe("Shared modal from different components", () => {
-    let driver: AppiumDriver;
+            it("should find second component", async () => {
+                await assertComponent(driver, "second component");
+            });
 
-    before(async () => {
-        driver = await createDriver();
-        await driver.resetApp();
-    });
+            it("should open/close shared modal from second component", async () => {
+                await openModal(driver);
+                await closeModal(driver);
+            });
 
-    after(async () => {
-        await driver.quit();
-        console.log("Quit driver!");
-    });
+            it("should find second component again", async () => {
+                await assertComponent(driver, "second component");
+            });
 
-    afterEach(async function () {
-        if (this.currentTest.state === "failed") {
-            await driver.logTestArtifacts(this.currentTest.title);
-        }
-    });
+            it("should navigate back to home component", async () => {
+                await goBack(driver);
+                await assertComponent(driver, homeComponent);
+            });
 
-    it ("should find home component", async () => {
-        await assertComponent(driver, homeComponent);
-    });
+            it("should open/close shared modal from home component after manipulations with second", async () => {
+                await openModal(driver);
+                await closeModal(driver);
+            });
 
-    it("should open/close shared modal from home component", async () => {
-        await openModal(driver);
-        await closeModal(driver);
-    });
-
-    it ("should find home component again", async () => {
-        await assertComponent(driver, homeComponent);
-    });
-
-    it ("should navigate to second component", async() => {
-        await navigateToSecondComponent(driver);
-    });
-
-    it ("should find second component", async () => {
-        await assertComponent(driver, "second component");
-    });
-
-    it("should open/close shared modal from second component", async () => {
-        await openModal(driver);
-        await closeModal(driver);
-    });
-
-    it ("should find second component again", async () => {
-        await assertComponent(driver, "second component");
-    });
-
-    it ("should navigate back to home component", async () => {
-        await goBack(driver);
-        await assertComponent(driver, homeComponent);
-    });
-
-    it("should open/close shared modal from home component after manipulations with second", async () => {
-        await openModal(driver);
-        await closeModal(driver);
-    });
-
-    it ("should find home component again", async () => {
-        await assertComponent(driver, homeComponent);
+            it("should find home component again", async () => {
+                await assertComponent(driver, homeComponent);
+            });
+        });
     });
 });
 
