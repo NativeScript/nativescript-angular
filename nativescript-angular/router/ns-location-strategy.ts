@@ -344,20 +344,34 @@ export class NSLocationStrategy extends LocationStrategy {
         }
 
         this.currentOutlet = this.getOutletByFrame(frame);
-        this.currentOutlet.showingModal = true;
-        this._modalNavigationDepth++;
+
+        // It is possible to have frame, but not corresponding Outlet, if
+        // showing modal dialog on app.component.ts ngOnInit() e.g.
+        if (this.currentOutlet) {
+            this.currentOutlet.showingModal = true;
+            this._modalNavigationDepth++;
+        }
     }
 
     public _closeModalNavigation() {
         if (isLogEnabled()) {
             routerLog("NSLocationStrategy.closeModalNavigation()");
         }
-        this._modalNavigationDepth--;
 
-        this.currentOutlet = this.findOutletByModal(this._modalNavigationDepth, true) || this.currentOutlet;
-        this.currentOutlet.showingModal = false;
+        if (this._modalNavigationDepth > 0) {
+            this._modalNavigationDepth--;
+        }
 
-        this.callPopState(this.currentOutlet.peekState(), false);
+        // currentOutlet should be the one that corresponds to the topmost() frame
+        const topmostOutlet = this.getOutletByFrame(this.frameService.getFrame());
+        const currentOutlet = this.findOutletByModal(this._modalNavigationDepth, true) || topmostOutlet;
+
+        if (currentOutlet) {
+            this.currentOutlet = currentOutlet;
+            this.currentOutlet.showingModal = false;
+
+            this.callPopState(this.currentOutlet.peekState(), false);
+        }
     }
 
     public _beginPageNavigation(frame: Frame): NavigationOptions {
@@ -408,11 +422,10 @@ export class NSLocationStrategy extends LocationStrategy {
 
     clearOutlet(frame: Frame) {
         this.outlets = this.outlets.filter(currentOutlet => {
-            // Remove current outlet, if it's named p-r-o, from the url tree.
             const isEqualToCurrent = currentOutlet.pathByOutlets === this.currentOutlet.pathByOutlets;
-            const isModalOutlet = currentOutlet.modalNavigationDepth > 0;
 
-            if (currentOutlet.frame === frame && isModalOutlet && !isEqualToCurrent) {
+            // Remove outlet from the url tree.
+            if (currentOutlet.frame === frame && !isEqualToCurrent) {
                 this.callPopState(null, true, currentOutlet);
             }
             return currentOutlet.frame !== frame;
