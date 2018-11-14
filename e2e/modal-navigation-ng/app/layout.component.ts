@@ -22,7 +22,7 @@ export class LayoutComponent {
         private router: Router,
         private location: NSLocationStrategy,
         private vcRef: ViewContainerRef,
-        private _viewContainerRefService: ViewContainerRefService) {
+        private viewContainerRefService: ViewContainerRefService) {
         router.events.subscribe(e => {
             if (e instanceof NavigationEnd) {
                 console.log("[ROUTER]: " + e.toString());
@@ -30,7 +30,7 @@ export class LayoutComponent {
             }
         });
 
-        this._viewContainerRefService.root = this.vcRef;
+        this.viewContainerRefService.root = this.vcRef;
     }
 
     onModalNoFrame() {

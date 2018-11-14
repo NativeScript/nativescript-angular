@@ -102,6 +102,12 @@ const routesTab: Routes = [
                 path: "modal-second", component: ModalSecondComponent
             }
         ]
+    },
+    {
+        path: "modal-shared", component: ModalViewContentComponent, outlet: "modalOutlet"
+    },
+    {
+        path: "modal-shared-second-host", component: ModalSharedSecondComponent
     }
 ];
 
@@ -112,7 +118,6 @@ const routesLayout: Routes = [
     },
     { path: "modal-second", component: ModalSecondComponent }
 ]
-
 
 @NgModule({
     imports: [NativeScriptRouterModule.forRoot(routes)],
