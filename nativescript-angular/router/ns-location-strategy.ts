@@ -364,12 +364,10 @@ export class NSLocationStrategy extends LocationStrategy {
 
         // currentOutlet should be the one that corresponds to the topmost() frame
         const topmostOutlet = this.getOutletByFrame(this.frameService.getFrame());
-        const currentOutlet = this.findOutletByModal(this._modalNavigationDepth, true) || topmostOutlet;
+        this.currentOutlet = this.findOutletByModal(this._modalNavigationDepth, true) || topmostOutlet;
 
-        if (currentOutlet) {
-            this.currentOutlet = currentOutlet;
+        if (this.currentOutlet) {
             this.currentOutlet.showingModal = false;
-
             this.callPopState(this.currentOutlet.peekState(), false);
         }
     }
@@ -422,7 +420,11 @@ export class NSLocationStrategy extends LocationStrategy {
 
     clearOutlet(frame: Frame) {
         this.outlets = this.outlets.filter(currentOutlet => {
-            const isEqualToCurrent = currentOutlet.pathByOutlets === this.currentOutlet.pathByOutlets;
+            let isEqualToCurrent;
+
+            if (this.currentOutlet) {
+                isEqualToCurrent = currentOutlet.pathByOutlets === this.currentOutlet.pathByOutlets;
+            }
 
             // Remove outlet from the url tree.
             if (currentOutlet.frame === frame && !isEqualToCurrent) {
