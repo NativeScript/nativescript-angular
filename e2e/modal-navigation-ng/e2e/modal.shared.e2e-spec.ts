@@ -47,7 +47,7 @@ describe("modal-shared:", () => {
             });
 
             it("should find home component again", async () => {
-                await assertComponent(driver, homeComponent);
+                await screen.loadedHome();
             });
 
             it("should navigate to second component", async () => {
