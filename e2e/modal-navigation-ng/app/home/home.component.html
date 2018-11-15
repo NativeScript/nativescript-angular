@@ -2,23 +2,13 @@
     <Label text="Home Component" automationText="Home Component"></Label>
 </ActionBar>
 
-<GridLayout rows="auto" columns="auto, *" >
-    <StackLayout id="home-page" row="0" col="0" borderColor="yellowgreen" borderWidth="1" borderRadius="5" padding="2">
-        <TextView text="Reset root" editable="false" ></TextView>
-        <Button text="Reset Named Frame Root View" (tap)="onNamedFrameRootViewReset()" textAlignment="left" ></Button>
-        <Button text="Reset Frame Root View" (tap)="onFrameRootViewReset()" textAlignment="left" ></Button>
-        <Button text="Reset Tab Root View" (tap)="onTabRootViewReset()" textAlignment="left" ></Button>
-        <Button text="Reset Layout Root View" automationText="Reset Layout Root View" (tap)="onLayoutRootViewReset()" textAlignment="left"></Button>
-    </StackLayout>
+<GridLayout rows="auto, auto" columns="auto, *" >
+    <root-section row="0" col="0" ></root-section>
     <StackLayout id="home-page" row="0" col="1" borderColor="blue" borderWidth="1" borderRadius="5" marginLeft="2"
         padding="2">
-        <TextView text="Navigate to example" editable="false"></TextView>
-
-        <Button text="Show Modal Without Frame" (tap)="onModalNoFrame()" textAlignment="left"></Button>
-        <Button text="Show Modal Page With Frame" (tap)="onModalFrame()" textAlignment="left"></Button>
+        <basic-nav></basic-nav> 
         <Button text="Navigate To Second Page" (tap)="onNavigateSecond()" textAlignment="left"></Button>
-        <Button text="Show Dialog" (tap)="onShowDialog()" textAlignment="left"></Button>
-        <Button text="show shared modal" (tap)="onRootModalTap()" textAlignment="left"></Button>
-        <Button text="go to second (to open shared modal)" [nsRouterLink]="['/modal-shared-second-host']" textAlignment="left"></Button>
+        <Button text="Navigate To Second Page Named Outlet" (tap)="onNavigateSecondWithOutlet()" textAlignment="left"></Button>
+        <Button text="Go To Second (to open shared modal)" [nsRouterLink]="['/modal-shared-second-host']" textAlignment="left"></Button>
     </StackLayout>
 </GridLayout>
