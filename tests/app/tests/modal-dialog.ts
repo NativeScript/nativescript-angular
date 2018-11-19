@@ -97,7 +97,7 @@ describe("modal-dialog", () => {
 
                 let parentView = fixture.componentRef.instance.vcRef.element.nativeElement;
                 parentView = parentView.page && parentView.page.frame;
-                outlet.frame = parentView;
+                outlet.frames.push(parentView);
                 locStrategy._getOutlets().push(outlet);
 
                 locStrategy.pushState(null, "test", "/test", null);
@@ -119,7 +119,7 @@ describe("modal-dialog", () => {
 
                 let parentView = fixture.componentRef.instance.vcRef.element.nativeElement;
                 parentView = parentView.page && parentView.page.frame;
-                outlet.frame = parentView;
+                outlet.frames.push(parentView);
                 locStrategy._getOutlets().push(outlet);
 
                 locStrategy.pushState(null, "test", "/test", null);

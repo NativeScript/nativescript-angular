@@ -16,13 +16,15 @@ export class Outlet {
     // in module that lazy loads children (loadChildren) and has outlet name.
     outletKeys: Array<string>;
 
+    // More than one frame available when using NSEmptyOutletComponent component
+    // in module that lazy loads children (loadChildren) and has outlet name.
+    frames: Array<Frame> = [];
     // The url path to the Outlet.
     // E.G: the path to Outlet3 that is nested Outlet1(home)->Outlet2(nested1)->Outlet3(nested2)
     // will be 'home/nested1'
     path: string;
     pathByOutlets: string;
     states: Array<LocationState> = [];
-    frame: Frame;
 
     // Used in reuse-strategy by its children to determine if they should be detached too.
     shouldDetach: boolean = true;
@@ -33,6 +35,10 @@ export class Outlet {
         this.modalNavigationDepth = modalNavigationDepth || 0;
         this.pathByOutlets = pathByOutlets;
         this.path = path;
+    }
+
+    containsFrame(frame: Frame): boolean {
+        return this.frames.indexOf(frame) > -1;
     }
 
     peekState(): LocationState {
@@ -244,7 +250,7 @@ export class NSLocationStrategy extends LocationStrategy {
                     const topmostFrame = this.frameService.getFrame();
                     this.currentOutlet = this.getOutletByFrame(topmostFrame);
                 }
-                this.currentOutlet.frame.goBack();
+                this.currentOutlet.frames[this.currentOutlet.frames.length - 1].goBack();
             } else {
                 // Nested navigation - just pop the state
                 if (isLogEnabled()) {
@@ -423,7 +429,9 @@ export class NSLocationStrategy extends LocationStrategy {
     }
 
     updateOutletFrame(outlet: Outlet, frame: Frame) {
-        outlet.frame = frame;
+        if (!outlet.containsFrame(frame)) {
+            outlet.frames.push(frame);
+        }
         this.currentOutlet = outlet;
     }
 
@@ -436,10 +444,10 @@ export class NSLocationStrategy extends LocationStrategy {
             }
 
             // Remove outlet from the url tree.
-            if (currentOutlet.frame === frame && !isEqualToCurrent) {
+            if (currentOutlet.containsFrame(frame) && !isEqualToCurrent) {
                 this.callPopState(null, true, currentOutlet);
             }
-            return currentOutlet.frame !== frame;
+            return !currentOutlet.containsFrame(frame);
         });
     }
 
@@ -528,7 +536,7 @@ export class NSLocationStrategy extends LocationStrategy {
         for (let index = 0; index < this.outlets.length; index++) {
             const currentOutlet = this.outlets[index];
 
-            if (currentOutlet.frame === frame) {
+            if (currentOutlet.containsFrame(frame)) {
                 outlet = currentOutlet;
                 break;
             }

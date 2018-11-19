@@ -143,7 +143,7 @@ function simulatePageNavigation(strategy: NSLocationStrategy, url: string, frame
     strategy.pushState(null, null, url, null);
 
     const outlet: Outlet = strategy.findOutletByOutletPath(outletName);
-    outlet.frame = frame;
+    outlet.frames.push(frame);
     strategy._beginPageNavigation(frame);
 }
 
