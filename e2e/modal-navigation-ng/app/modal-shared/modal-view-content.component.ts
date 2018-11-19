@@ -9,7 +9,7 @@ import { ModalDialogParams } from "nativescript-angular/modal-dialog";
     </ActionBar>
 
     <StackLayout class="page">
-        <Button text="close modal" (tap)="onTap()"></Button>
+        <Button text="Close Modal" (tap)="onTap()"></Button>
     </StackLayout>
     `,
     styles: [`

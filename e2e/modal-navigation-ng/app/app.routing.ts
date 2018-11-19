@@ -116,7 +116,13 @@ const routesLayout: Routes = [
         path: "modal", component: ModalComponent, children: [
             { path: "nested-frame-modal", component: NestedModalComponent }]
     },
-    { path: "modal-second", component: ModalSecondComponent }
+    { path: "modal-second", component: ModalSecondComponent },
+    {
+        path: "modal-shared", component: ModalViewContentComponent, outlet: "modalOutlet"
+    },
+    {
+        path: "modal-shared-second-host", component: ModalSharedSecondComponent
+    }
 ]
 
 @NgModule({
@@ -125,13 +131,13 @@ const routesLayout: Routes = [
 })
 export class AppRoutingModule {
     constructor(private router: Router) {
-        if (AppModule.root === "page-router") {
+        if (AppModule.root === "page-router" ||  AppModule.root === "page-router-modal") {
             this.router.resetConfig(routes);
-        } else if (AppModule.root === "layout") {
+        } else if (AppModule.root === "layout" || AppModule.root === "layout-modal") {
             this.router.resetConfig(routesLayout);
-        } else if (AppModule.root === "named-page-router") {
+        } else if (AppModule.root === "named-page-router" || AppModule.root === "named-page-router-modal") {
             this.router.resetConfig(namedOutletRoutes);
-        } else {
+        } else if(AppModule.root === "tab" ||  AppModule.root === "tab-modal"){
             this.router.resetConfig(routesTab);
         }
     }
