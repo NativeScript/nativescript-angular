@@ -12,93 +12,22 @@ import { confirm } from "tns-core-modules/ui/dialogs";
 import { AppModule } from "../app.module";
 
 @Component({
-    moduleId: module.id,
-    selector: "home-page",
-    templateUrl: "./home.component.html"
+  moduleId: module.id,
+  selector: "home-page",
+  templateUrl: "./home.component.html"
 })
 export class HomeComponent {
-    constructor(
-        private modal: ModalDialogService,
-        private vcRef: ViewContainerRef,
-        private viewContainerRefService: ViewContainerRefService,
-        private routerExtension: RouterExtensions) { }
+  constructor(
+    private modal: ModalDialogService,
+    private vcRef: ViewContainerRef,
+    private viewContainerRefService: ViewContainerRefService,
+    private routerExtension: RouterExtensions) { }
+  
+  onNavigateSecond() {
+      this.routerExtension.navigate(["second"]);
+  }
 
-    onModalNoFrame() {
-        const options: ModalDialogOptions = {
-            context: {
-                navigationVisibility: false
-            },
-            fullscreen: true,
-            viewContainerRef: this.vcRef
-        };
-
-        this.modal.showModal(ModalComponent, options).then((res: string) => {
-            console.log("moda-no-frame closed");
-        });
-    }
-
-    onModalFrame() {
-        const options: ModalDialogOptions = {
-            context: {
-                navigationVisibility: true,
-                modalRoute: "modal"
-            },
-            fullscreen: true,
-            viewContainerRef: this.vcRef
-        };
-
-        this.modal.showModal(ModalRouterComponent, options).then((res: string) => {
-            console.log("moda-frame closed");
-        });
-    }
-
-    onNavigateSecond() {
-        this.routerExtension.navigate(["second"]);
-    }
-
-    onFrameRootViewReset() {
-        AppModule.root = "page-router";
-        AppModule.platformRef._livesync();
-    }
-
-    onNamedFrameRootViewReset() {
-        AppModule.root = "named-page-router";
-        AppModule.platformRef._livesync();
-    }
-
-    onTabRootViewReset() {
-        AppModule.root = "tab";
-        AppModule.platformRef._livesync();
-    }
-
-    onLayoutRootViewReset() {
-        AppModule.root = "layout";
-        AppModule.platformRef._livesync();
-    }
-
-    onRootModalTap(): void {
-        const options: ModalDialogOptions = {
-            viewContainerRef: this.viewContainerRefService.root,
-            context: {},
-            fullscreen: true
-        };
-
-        this.modal.showModal(ModalViewComponent, options)
-            .then((result: string) => {
-                console.log(result);
-            });
-    }
-
-    onShowDialog() {
-        let options = {
-            title: "Dialog",
-            message: "Message",
-            okButtonText: "Yes",
-            cancelButtonText: "No"
-        }
-
-        confirm(options).then((result: boolean) => {
-            console.log(result);
-        })
-    }
+  onNavigateSecondWithOutlet() {
+    this.routerExtension.navigate([ { outlets: { namedRouter:["second"] } }]);
+  }
 }

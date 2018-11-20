@@ -16,9 +16,13 @@ const modalTabView = "Show Modal TabView";
 const navToSecondPage = "Navigate To Second Page";
 const showDialog = "Show Dialog";
 const resetFrameRootView = "Reset Frame Root View";
+const resetFrameRootViewModal = "Reset Frame Root View Modal";
 const resetNamedFrameRootView = "Reset Named Frame Root View";
+const resetNamedFrameRootViewModal = "Reset Named Frame Root View Modal";
 const resetTabRootView = "Reset Tab Root View";
+const resetTabRootViewModal = "Reset Tab Root View Modal";
 const resetLayoutRootView = "Reset Layout Root View";
+const resetLayoutRootViewModal = "Reset Layout Root View Modal";
 
 const showNestedModalFrame = "Show Nested Modal Page With Frame";
 const showNestedModalPage = "Show Nested Modal Page";
@@ -28,6 +32,8 @@ const confirmDialogMessage = "Message";
 const closeModalNested = "Close Modal Nested";
 const closeModal = "Close Modal";
 const goBack = "Go Back(activatedRoute)";
+export const sharedModalView = "SHARED MODAL VIEW";
+export const homeComponent = "Home Component";
 
 export class Screen {
 
@@ -66,6 +72,26 @@ export class Screen {
         await btnResetTabRootView.tap();
     }
 
+    resetTabRootViewModal = async () => {
+        const btnResetTabRootViewModal = await this._driver.findElementByAutomationText(resetTabRootViewModal);
+        await btnResetTabRootViewModal.click();
+    }
+
+    resetFrameRootViewModal = async () => {
+        const btnResetTabRootViewModal = await this._driver.findElementByAutomationText(resetFrameRootViewModal);
+        await btnResetTabRootViewModal.click();
+    }
+
+    resetNamedFrameRootViewModal = async () => {
+        const btnResetTabRootViewModal = await this._driver.findElementByAutomationText(resetNamedFrameRootViewModal);
+        await btnResetTabRootViewModal.click();
+    }
+
+    resetLayoutRootViewModal = async () => {
+        const btnResetTabRootViewModal = await this._driver.findElementByAutomationText(resetLayoutRootViewModal);
+        await btnResetTabRootViewModal.click();
+    }
+
     loadedTabRootView = async () => {
         const tabFirst = await this._driver.findElementByAutomationText(first);
         assert.isTrue(await tabFirst.isDisplayed());
@@ -97,6 +123,26 @@ export class Screen {
         await this.resetLayoutRootView();
     }
 
+    setTabRootViewModal = async () => {
+        await this.loadedHome();
+        await this.resetTabRootViewModal();
+    }
+
+    setFrameRootViewModal = async () => {
+        await this.loadedHome();
+        await this.resetFrameRootViewModal();
+    }
+
+    setNamedFrameRootViewModal = async () => {
+        await this.loadedHome();
+        await this.resetNamedFrameRootViewModal();
+    }
+
+    setLayoutRootViewModal = async () => {
+        await this.loadedHome();
+        await this.resetLayoutRootViewModal();
+    }
+
     showModalFrame = async () => {
         const btnModalFrame = await this._driver.findElementByAutomationText(modalFrame);
         await btnModalFrame.tap();
@@ -111,6 +157,12 @@ export class Screen {
     showModalNoFrame = async () => {
         const btnModalPage = await this._driver.findElementByAutomationText(modalNoFrame);
         await btnModalPage.tap();
+    }
+
+
+    private showSharedModal = async () => {
+        const btnTap = await this._driver.waitForElement("Show Shared Modal");
+        await btnTap.click();
     }
 
     loadedModalPage = async () => {
@@ -230,7 +282,7 @@ export class Screen {
 
     closeModal = async () => {
         const btnCloseModal = await this._driver.waitForElement(closeModal, 10000);
-        await btnCloseModal.tap();
+        await btnCloseModal.click();
     }
 
     loadModalNoFrame = async (loadShowModalPageWithFrame: boolean) => {
@@ -247,5 +299,14 @@ export class Screen {
         }
 
         await this.loadedModalFrame();
+    }
+
+    loadSharedModal = async (loadShowModalPageWithFrame: boolean) => {
+        if (loadShowModalPageWithFrame) {
+            await this.showSharedModal();
+        }
+
+        const lbl = await this._driver.waitForElement(sharedModalView, 5000);
+        assert.isTrue(await lbl.isDisplayed());
     }
 }

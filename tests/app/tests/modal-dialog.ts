@@ -93,11 +93,11 @@ describe("modal-dialog", () => {
             .then((fixture: ComponentFixture<SuccessComponent>) => {
                 const service = <ModalDialogService>fixture.componentRef.instance.service;
                 const locStrategy = <NSLocationStrategy>fixture.componentRef.instance.locationStrategy;
-                const outlet = new Outlet("primary", "primary", 0);
+                const outlet = new Outlet("primary", null, "primary", 0);
 
                 let parentView = fixture.componentRef.instance.vcRef.element.nativeElement;
                 parentView = parentView.page && parentView.page.frame;
-                outlet.frame = parentView;
+                outlet.frames.push(parentView);
                 locStrategy._getOutlets().push(outlet);
 
                 locStrategy.pushState(null, "test", "/test", null);
@@ -115,11 +115,11 @@ describe("modal-dialog", () => {
             .then((fixture: ComponentFixture<SuccessComponent>) => {
                 const service = <ModalDialogService>fixture.componentRef.instance.service;
                 const locStrategy = <NSLocationStrategy>fixture.componentRef.instance.locationStrategy;
-                const outlet = new Outlet("primary", "primary", 0);
+                const outlet = new Outlet("primary", null, "primary", 0);
 
                 let parentView = fixture.componentRef.instance.vcRef.element.nativeElement;
                 parentView = parentView.page && parentView.page.frame;
-                outlet.frame = parentView;
+                outlet.frames.push(parentView);
                 locStrategy._getOutlets().push(outlet);
 
                 locStrategy.pushState(null, "test", "/test", null);

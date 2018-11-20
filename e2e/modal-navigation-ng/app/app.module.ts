@@ -7,6 +7,8 @@ import { TabComponent } from "./tab.component";
 import { LayoutComponent } from "./layout.component";
 
 import { HomeComponent } from "./home/home.component";
+import { RootSectionComponent } from "./navigation/root.section.component";
+import { BasicsNavigationComponent } from "./navigation/basic.navigation.component";
 import { SecondComponent } from "./second/second.component";
 import { ModalSecondComponent } from "./modal-second/modal-second.component";
 import { ModalComponent } from "./modal/modal.component";
@@ -44,6 +46,8 @@ traceEnable();
         NamedRouterComponent,
         TabComponent,
         LayoutComponent,
+        RootSectionComponent,
+        BasicsNavigationComponent,
         HomeComponent,
         SecondComponent,
         ModalComponent,
@@ -78,9 +82,13 @@ export class AppModule {
     static bootstrapRootComponent() {
         const options = {
             'page-router': AppComponent,
+            'page-router-modal': AppComponent,
             'named-page-router': NamedRouterComponent,
+            'named-page-router-modal': NamedRouterComponent,
             'tab': TabComponent,
-            'layout': LayoutComponent
+            'tab-modal': TabComponent,
+            'layout': LayoutComponent,
+            'layout-modal': LayoutComponent,
         };
 
         const component = options[AppModule.root];
