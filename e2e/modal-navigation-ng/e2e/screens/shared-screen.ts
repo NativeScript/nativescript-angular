@@ -1,10 +1,9 @@
 import { AppiumDriver } from "nativescript-dev-appium";
 import { Screen } from "./screen"
+import { assert } from "chai";
 
 const time = 1;
-
 export const roots = ["setFrameRootView", "setLayoutRootView", "setTabRootView", "setNamedFrameRootView"];
-// export const roots = ["setTabRootView", "setNamedFrameRootView"];
 
 export async function modalFrameBackground(driver: AppiumDriver, screen: Screen) {
     await driver.backgroundApp(time);
@@ -84,4 +83,19 @@ export async function testSecondItemBackground(driver: AppiumDriver, screen: Scr
 
     await screen.navigateToFirstItem();
     await screen.loadedFirstItem();
+}
+
+export async function assertComponent(driver: AppiumDriver, message: string) {
+    const lbl = await driver.waitForElement(message, 5000);
+    assert.isTrue(await lbl.isDisplayed());
+}
+
+export async function navigateToSecondComponent(driver: AppiumDriver) {
+    const navigateBtnTap = await driver.findElementByAutomationText("Go To Second (to open shared modal)");
+    await navigateBtnTap.click();
+}
+
+export async function goBack(driver: AppiumDriver) {
+    const backBtnTap = await driver.findElementByAutomationText("go back");
+    await backBtnTap.click();
 }

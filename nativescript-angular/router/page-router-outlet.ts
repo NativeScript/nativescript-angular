@@ -391,7 +391,7 @@ export class PageRouterOutlet implements OnDestroy { // tslint:disable-line:dire
             let outletKeyForRoute = this.locationStrategy.getRouteFullPath(nodeToMark);
             let outlet = this.locationStrategy.findOutletByKey(outletKeyForRoute);
 
-            if (outlet && outlet.frame) {
+            if (outlet && outlet.frames.length) {
                 nodeToMark[pageRouterActivatedSymbol] = true;
                 if (isLogEnabled()) {
                     log("Activated route marked as page: " + routeToString(nodeToMark));

@@ -1,5 +1,5 @@
 import { AppiumDriver, createDriver } from "nativescript-dev-appium";
-import { Screen } from "./screen"
+import { Screen } from "./screens/screen"
 import {
     roots,
     modalFrameBackground,
@@ -8,7 +8,7 @@ import {
     testNestedModalFrameBackground,
     testNestedModalPageBackground,
     testDialogBackground
-} from "./shared.e2e-spec"
+} from "./screens/shared-screen"
 
 describe("modal-frame:", () => {
 
