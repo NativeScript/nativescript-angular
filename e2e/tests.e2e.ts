@@ -21,20 +21,20 @@ describe("sample scenario", () => {
     });
 
     it("should go to support page", async () => {
-        const btnGoToSupportPage = await driver.findElementByText("go to support page", SearchOptions.exact);
+        const btnGoToSupportPage = await driver.findElementByAutomationText("go to support page");
         const homeImage = await driver.compareScreen("home");
         assert.isTrue(homeImage);
         await btnGoToSupportPage.click();
-        const titleSupportPage = await driver.findElementByText("Support Page", SearchOptions.exact);
+        const titleSupportPage = await driver.findElementByAutomationText("Support Page");
         console.log(await titleSupportPage.text());
     });
 
     it("should go back to home page", async () => {
-        const btnGoBackToHomePage = await driver.findElementByText("go back to home page", SearchOptions.exact);
+        const btnGoBackToHomePage = await driver.findElementByAutomationText("go back to home page");
         const supportImage = await driver.compareScreen("support");
         assert.isTrue(supportImage);
         await btnGoBackToHomePage.click();
-        const titleHomePage = await driver.findElementByText("Home Page", SearchOptions.exact);
+        const titleHomePage = await driver.findElementByAutomationText("Home Page");
         console.log(await titleHomePage.text());
     });
 });
