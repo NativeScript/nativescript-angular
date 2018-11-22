@@ -10,12 +10,12 @@ export class AnimationBuilderPage extends BasePage {
     }
 
     async enterExample() {
-        const exampleBtn = await this._driver.findElementByAccessibilityId("builder");
+        const exampleBtn = await this._driver.findElementByAutomationText("builder");
         await exampleBtn.click();
     }
 
     async executeAnimation() {
-        this._btnTapToDisappear = this._driver.findElementByAccessibilityId(AnimationBuilderPage.tapToDisappear);
+        this._btnTapToDisappear = this._driver.waitForElement(AnimationBuilderPage.tapToDisappear);
         console.log("Btn tap to disappear should disappear");
         await (await this._btnTapToDisappear).click();
     }

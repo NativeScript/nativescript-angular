@@ -7,10 +7,10 @@ export class BasePage {
         this._elementHelper = new ElementHelper(this._driver.nsCapabilities);
     }
 
-    async waitElementTo(element: () => Promise<UIElement>, shouldBeVissible: boolean, wait: number) {
+    async waitElementTo(element: () => Promise<UIElement>, shouldBeVisible: boolean, wait: number) {
         const start = Date.now();
         let btn = await element();
-        while ((await this.isBtnDisplayed(btn)) !== shouldBeVissible && Date.now() - start <= wait) {
+        while ((await this.isBtnDisplayed(btn)) !== shouldBeVisible && Date.now() - start <= wait) {
             btn = await element();
         }
 

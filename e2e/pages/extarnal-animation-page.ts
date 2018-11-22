@@ -7,17 +7,17 @@ export class ExternalAnimationPage extends BasePage {
     }
 
     async enterExample() {
-        const exampleBtn = await this._driver.findElementByAccessibilityId("external");
+        const exampleBtn = await this._driver.waitForElement("external");
         await exampleBtn.click();
     }
 
     async toggleAnimation() {
-        const btnTapToDisappear = await this._driver.findElementByAccessibilityId("toggleAnimation", 5);
+        const btnTapToDisappear = await this._driver.waitForElement("toggleAnimation");
         await btnTapToDisappear.click();
     }
 
     animatedBtn() {
-        return this._driver.findElementByAccessibilityIdIfExists("animatedBtn", 5);
+        return this._driver.waitForElement("animatedBtn");
     }
 
     async waitElementToToggleVisibilityTo(shouldBeVisible: boolean) {

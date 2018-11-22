@@ -10,7 +10,8 @@ import { AnimationsWithDefaultOptionsPage } from "./pages/animations-with-defaul
 import { AnimateChildPage } from "./pages/animate-child-page";
 import { HeroPage } from "./pages/hero-page";
 
-describe("smoke-tests", () => {
+describe("smoke-tests", function(){
+    this.retries(2);
     let driver: AppiumDriver;
 
     before(async () => {
@@ -36,7 +37,8 @@ describe("smoke-tests", () => {
         assert.isFalse(result.isVisible, "The btn should disappear");
     });
 
-    it("external animation - visibility", async () => {
+    it("external animation - visibility", async function(){
+        this.retries(1);
         const externalAnimationPage = new ExternalAnimationPage(driver);
         await externalAnimationPage.enterExample();
         await externalAnimationPage.toggleAnimation();
@@ -67,7 +69,8 @@ describe("smoke-tests", () => {
         await queryWithStaggerPage.assertItemPosition("Item 6", 6, 7);
     });
 
-    it("fade in - out", async () => {
+    it("fade in - out", async function(){
+        this.retries(1);
         const fadeInOutPage = new FadeInOutPage(driver);
         await fadeInOutPage.enterExample();
         await fadeInOutPage.toggleAnimation();
@@ -114,7 +117,8 @@ describe("smoke-tests", () => {
         await animationWithOptionsPage.assertItemPosition("Harley Quinn", 4, examplesCount);
     });
 
-    it("animate child", async () => {
+    it("animate child", async function (){
+        this.retries(1);
         const animateChildPage = new AnimateChildPage(driver);
         await animateChildPage.enterExample();
         await animateChildPage.waitParentToAppear();
