@@ -94,9 +94,13 @@ describe("page-router-outlet-scenario", () => {
     });
 
     describe("actionBarVisibility 'never' doesn't show action bars in lazy module page", async () => {
+        let imagePostFix = "";
         before(async () => {
             driver = await createDriver();
             await driver.driver.resetApp();
+            if (driver.isIOS && driver.nsCapabilities.device.name.toLowerCase().includes("x")) {
+                imagePostFix = "-lazy";
+            }
         });
 
         afterEach(async function () {
@@ -114,7 +118,7 @@ describe("page-router-outlet-scenario", () => {
         });
 
         it("should hide action bar by default", async () => {
-            const screenMatches =  await driver.compareScreen("actionBarVisibility-never-default", 5);
+            const screenMatches =  await driver.compareScreen(`actionBarVisibility-never-default${imagePostFix}`, 5);
             assert(screenMatches);
         });
 
@@ -122,7 +126,7 @@ describe("page-router-outlet-scenario", () => {
             const showActionBarButton = await driver.findElementByAutomationText("ShowActionBar");
             showActionBarButton.click();
 
-            const screenMatches =  await driver.compareScreen("actionBarVisibility-never-shown", 5);
+            const screenMatches =  await driver.compareScreen(`actionBarVisibility-never-shown${imagePostFix}`, 5);
             assert(screenMatches);
         });
 
@@ -130,7 +134,7 @@ describe("page-router-outlet-scenario", () => {
             const hideActionBarButton = await driver.findElementByAutomationText("HideActionBar");
             hideActionBarButton.click();
 
-            const screenMatches =  await driver.compareScreen("actionBarVisibility-never-hidden", 5);
+            const screenMatches =  await driver.compareScreen(`actionBarVisibility-never-hidden${imagePostFix}`, 5);
             assert(screenMatches);
         });
     });
