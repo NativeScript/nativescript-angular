@@ -1,5 +1,5 @@
 import { NgModule, NO_ERRORS_SCHEMA } from "@angular/core";
-import { NativeScriptRouterModule } from "nativescript-angular/router";
+import { NativeScriptRouterModule, NSEmptyOutletComponent } from "nativescript-angular/router";
 
 import { ActionBarDynamicItemsComponent } from "./action-bar/action-bar-dynamic-items.component";
 import { ActionBarExtensionComponent } from "./action-bar/action-bar-extension.component";
@@ -52,6 +52,16 @@ export const routes = [
             path: "nested",
             outlet: "nested",
             component: NestedPageComponent
+        }]
+    },
+    {
+        path: "action-bar-visibility-never-lazy",
+        component: ActionBarVisibilityNeverComponent,
+        children: [{
+            path: "nested",
+            outlet: "nested",
+            component: NSEmptyOutletComponent,
+            loadChildren:"~/page-router-outlet/nested-lazy-page.module#NestedLazyPageModule"
         }]
     },
     {
@@ -111,7 +121,6 @@ export const navigatableComponents = [
     ActionBarVisibilityAlwaysComponent,
     ActionBarVisibilityNeverComponent,
     ActionBarVisibilityAutoComponent,
-    NestedPageComponent,
 
     TabItemBindingComponent,
 
