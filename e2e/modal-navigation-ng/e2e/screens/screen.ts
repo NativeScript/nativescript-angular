@@ -149,7 +149,7 @@ export class Screen {
     }
 
     loadedModalFrame = async () => {
-        const lblModal = await this._driver.waitForElement(modal, 3000);
+        const lblModal = await this._driver.waitForElement(modal, 5000);
         assert.isTrue(await lblModal.isDisplayed(), `${modal} is not displayed!`);
         console.log(modal + " loaded!");
     }
@@ -226,7 +226,7 @@ export class Screen {
     }
 
     loadedSecondPage = async () => {
-        const lblModalSecond = await this._driver.waitForElement(modalSecond);
+        const lblModalSecond = await this._driver.waitForElement(modalSecond, 5000);
         assert.isTrue(await lblModalSecond.isDisplayed());
         console.log(modalSecond + " loaded!");
     }
@@ -259,7 +259,7 @@ export class Screen {
     }
 
     loadedNestedModalFrame = async () => {
-        const lblModalNested = await this._driver.waitForElement(modalNested);
+        const lblModalNested = await this._driver.waitForElement(modalNested, 5000);
         assert.isTrue(await lblModalNested.isDisplayed());
         console.log(modalNested + " loaded!");
     }
