@@ -44,7 +44,7 @@ export class Screen {
     }
 
     loadedHome = async () => {
-        const lblHome = await this._driver.findElementByAutomationText(home);
+        const lblHome = await this._driver.waitForElement(home);
         assert.isTrue(await lblHome.isDisplayed());
         console.log(home + " loaded!");
     }
