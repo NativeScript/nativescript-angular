@@ -149,7 +149,7 @@ export class Screen {
     }
 
     loadedModalFrame = async () => {
-        const lblModal = await this._driver.waitForElement(modal, 1000);
+        const lblModal = await this._driver.waitForElement(modal, 3000);
         assert.isTrue(await lblModal.isDisplayed(), `${modal} is not displayed!`);
         console.log(modal + " loaded!");
     }
