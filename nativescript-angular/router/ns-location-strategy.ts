@@ -41,6 +41,10 @@ export class Outlet {
         return this.frames.indexOf(frame) > -1;
     }
 
+    isNSEmptyOutlet(): boolean {
+        return this.frames.length > 1;
+    }
+
     peekState(): LocationState {
         if (this.states.length > 0) {
             return this.states[this.states.length - 1];

@@ -93,22 +93,24 @@ export class RouterExtensions {
         const outletsToBack: Array<Outlet> = [];
         const rootRoute: ActivatedRoute = this.router.routerState.root;
         let outlets = options.outlets;
-        let relativeRoute = options.relativeTo;
+        let relativeRoute = options.relativeTo || rootRoute;
 
-        if (!outlets && relativeRoute) {
-            outlets = [relativeRoute.outlet];
-            relativeRoute = relativeRoute.parent || rootRoute;
-        } else if (!relativeRoute) {
-            relativeRoute = rootRoute;
+        const relativeRouteOutlet = this.findOutletByRoute(relativeRoute);
+        const isNSEmptyOutlet = relativeRouteOutlet && relativeRouteOutlet.isNSEmptyOutlet();
+
+        // Lazy named outlet has added 'primary' inner NSEmptyOutlet child.
+        // Take parent route when `relativeTo` option points to the outer named outlet.
+        if (isNSEmptyOutlet && relativeRoute.outlet !== "primary") {
+            relativeRoute = relativeRoute.parent || relativeRoute;
         }
 
-        for (let index = 0; index < relativeRoute.children.length; index++) {
-            const currentRoute = relativeRoute.children[index];
+        const routesToMatch = outlets ? relativeRoute.children : [relativeRoute];
+        outlets = outlets || [relativeRoute.outlet];
 
+        for (let index = 0; index < routesToMatch.length; index++) {
+            const currentRoute = routesToMatch[index];
             if (outlets.some(currentOutlet => currentOutlet === currentRoute.outlet)) {
-                const currentRouteSnapshop = findTopActivatedRouteNodeForOutlet(currentRoute.snapshot);
-                const outletKey = this.locationStrategy.getRouteFullPath(currentRouteSnapshop);
-                let outlet = this.locationStrategy.findOutletByKey(outletKey);
+                let outlet = this.findOutletByRoute(currentRoute);
 
                 if (outlet) {
                     outletsToBack.push(outlet);
@@ -117,5 +119,15 @@ export class RouterExtensions {
         }
 
         return { outletsToBack: outletsToBack, outlets: outlets };
+    }
+
+    private findOutletByRoute(currentRoute: ActivatedRoute): Outlet {
+        let outlet;
+
+        const currentRouteSnapshop = findTopActivatedRouteNodeForOutlet(currentRoute.snapshot);
+        const outletKey = this.locationStrategy.getRouteFullPath(currentRouteSnapshop);
+        outlet = this.locationStrategy.findOutletByKey(outletKey);
+
+        return outlet;
     }
 }
