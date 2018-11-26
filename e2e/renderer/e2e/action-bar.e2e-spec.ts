@@ -6,6 +6,7 @@ import {
 } from "nativescript-dev-appium";
 
 import { isOnTheLeft } from "./helpers/location";
+import { assert } from "chai";
 
 describe("Action Bar scenario", () => {
     let driver: AppiumDriver;
@@ -132,16 +133,10 @@ describe("Action Bar scenario", () => {
             conditional = await driver.findElementByAutomationText("conditional");
         });
 
-        it("should detach conditional action item when its condition is false", done => {
-            (async () => {
-                await toggle();
-
-                try {
-                    await driver.findElementByAutomationText("conditional");
-                } catch (e) {
-                    done();
-                }
-            })();
+        it("should detach conditional action item when its condition is false", async () => {
+            await toggle();
+            const conditionalBtn = await driver.waitForElement("conditional", 1000);
+            assert.isUndefined(conditionalBtn, "Conditional button should not be visible!");
         });
 
         it("should reattach conditional action item at correct place", async () => {
