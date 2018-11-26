@@ -96,7 +96,7 @@ export class RouterExtensions {
         let relativeRoute = options.relativeTo || rootRoute;
 
         const relativeRouteOutlet = this.findOutletByRoute(relativeRoute);
-        const isNSEmptyOutlet = relativeRouteOutlet && relativeRouteOutlet.isNSEmptyOutlet();
+        const isNSEmptyOutlet = relativeRouteOutlet && relativeRouteOutlet.isNSEmptyOutlet;
 
         // Lazy named outlet has added 'primary' inner NSEmptyOutlet child.
         // Take parent route when `relativeTo` option points to the outer named outlet.
@@ -110,7 +110,7 @@ export class RouterExtensions {
         for (let index = 0; index < routesToMatch.length; index++) {
             const currentRoute = routesToMatch[index];
             if (outlets.some(currentOutlet => currentOutlet === currentRoute.outlet)) {
-                let outlet = this.findOutletByRoute(currentRoute);
+                const outlet = this.findOutletByRoute(currentRoute);
 
                 if (outlet) {
                     outletsToBack.push(outlet);
