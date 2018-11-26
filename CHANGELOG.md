@@ -1,3 +1,14 @@
+<a name="7.0.2"></a>
+## [7.0.2](https://github.com/NativeScript/nativescript-angular/compare/7.0.1...7.0.2) (2018-11-26)
+
+
+### Bug Fixes
+
+* **page-router-outlet:** actionBarVisibility not applied ([#1621](https://github.com/NativeScript/nativescript-angular/issues/1621)) ([a6ff509](https://github.com/NativeScript/nativescript-angular/commit/a6ff509))
+* **router-extensions:** unable to go back with relativeTo param ([#1632](https://github.com/NativeScript/nativescript-angular/issues/1632)) ([63900dc](https://github.com/NativeScript/nativescript-angular/commit/63900dc))
+
+
+
 <a name="7.0.1"></a>
 ## [7.0.1](https://github.com/NativeScript/nativescript-angular/compare/7.0.0...7.0.1) (2018-11-20)
 
