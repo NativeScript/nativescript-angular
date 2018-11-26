@@ -280,6 +280,7 @@ export class PageRouterOutlet implements OnDestroy { // tslint:disable-line:dire
             return;
         }
 
+        this.outlet.isNSEmptyOutlet = this.isEmptyOutlet;
         this.locationStrategy.updateOutletFrame(this.outlet, this.frame);
 
         if (this.outlet && this.outlet.isPageNavigationBack) {

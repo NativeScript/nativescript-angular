@@ -25,6 +25,7 @@ export class Outlet {
     path: string;
     pathByOutlets: string;
     states: Array<LocationState> = [];
+    isNSEmptyOutlet: boolean;
 
     // Used in reuse-strategy by its children to determine if they should be detached too.
     shouldDetach: boolean = true;
