@@ -11,6 +11,8 @@ import { ItemsService } from "./items.service";
 
 import { rendererTraceCategory, viewUtilCategory, bootstrapCategory } from "nativescript-angular/trace";
 import { addCategories, enable, categories } from "tns-core-modules/trace";
+import { SharedModule } from "./shared.module";
+
 addCategories(bootstrapCategory);
 addCategories(rendererTraceCategory);
 addCategories(viewUtilCategory);
@@ -22,7 +24,7 @@ export class MyErrorHandler implements ErrorHandler {
         console.log("### ErrorHandler Error: " + error.toString());
         console.log("### ErrorHandler Stack: " + error.stack);
     }
-}  
+}
 
 
 @NgModule({
@@ -38,6 +40,7 @@ export class MyErrorHandler implements ErrorHandler {
     imports: [
         NativeScriptModule,
         AppRoutingModule,
+        SharedModule
     ],
     schemas: [NO_ERRORS_SCHEMA],
 })
