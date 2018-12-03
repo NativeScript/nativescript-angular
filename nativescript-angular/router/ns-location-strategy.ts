@@ -53,6 +53,24 @@ export class Outlet {
         const lastState = this.peekState();
         return lastState && lastState.segmentGroup.toString() === stateUrl;
     }
+
+    // Search for frame that can go back.
+    // Nested 'primary' outlets could result in Outlet with multiple navigatable frames.
+    getFrameToBack(): Frame {
+        let frame = this.frames[this.frames.length - 1];
+
+        if (!this.isNSEmptyOutlet) {
+            for (let index = this.frames.length - 1; index >= 0; index--) {
+                const currentFrame = this.frames[index];
+                if (currentFrame.canGoBack()) {
+                    frame = currentFrame;
+                    break;
+                }
+            }
+
+            return frame;
+        }
+    }
 }
 
 export interface NavigationOptions {
@@ -251,7 +269,7 @@ export class NSLocationStrategy extends LocationStrategy {
                     const topmostFrame = this.frameService.getFrame();
                     this.currentOutlet = this.getOutletByFrame(topmostFrame);
                 }
-                this.currentOutlet.frames[this.currentOutlet.frames.length - 1].goBack();
+                this.currentOutlet.getFrameToBack().goBack();
             } else {
                 // Nested navigation - just pop the state
                 if (isLogEnabled()) {
@@ -448,6 +466,12 @@ export class NSLocationStrategy extends LocationStrategy {
             if (currentOutlet.containsFrame(frame) && !isEqualToCurrent) {
                 this.callPopState(null, true, currentOutlet);
             }
+
+            if (!currentOutlet.isNSEmptyOutlet) {
+                currentOutlet.frames = currentOutlet.frames.filter(currentFrame => currentFrame !== frame);
+                return currentOutlet.frames.length;
+            }
+
             return !currentOutlet.containsFrame(frame);
         });
     }

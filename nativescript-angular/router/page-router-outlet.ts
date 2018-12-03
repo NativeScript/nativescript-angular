@@ -423,7 +423,9 @@ export class PageRouterOutlet implements OnDestroy { // tslint:disable-line:dire
         if (modalNavigation > 0) { // Modal with 'primary' p-r-o
             outlet = this.locationStrategy.findOutletByModal(modalNavigation);
         } else {
+            const pathByOutlets = this.locationStrategy.getPathByOutlets(topActivatedRoute);
             outlet = this.locationStrategy.findOutletByKey(outletKey);
+            outlet = outlet || this.locationStrategy.findOutletByOutletPath(pathByOutlets);
         }
 
         // Named lazy loaded outlet.
