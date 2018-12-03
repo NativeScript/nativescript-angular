@@ -48,6 +48,7 @@ describe("home-tabs:", () => {
                 await screen.loadedPlayersList();
                 await screen.navigateToAboutPage();
                 await screen.loadedAbout();
+                await screen.loadedNestedAbout();
             });
 
             it("should go back to Tabs and then back to Home", async () => {
