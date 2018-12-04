@@ -67,9 +67,9 @@ export class Outlet {
                     break;
                 }
             }
-
-            return frame;
         }
+
+        return frame;
     }
 }
 
