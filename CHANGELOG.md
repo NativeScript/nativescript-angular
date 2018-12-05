@@ -1,3 +1,13 @@
+<a name="7.0.3"></a>
+## [7.0.3](https://github.com/NativeScript/nativescript-angular/compare/7.0.2...7.0.3) (2018-12-05)
+
+
+### Bug Fixes
+
+* **router:** handle nested primary p-r-o ([#1645](https://github.com/NativeScript/nativescript-angular/issues/1645)) ([e632fc5](https://github.com/NativeScript/nativescript-angular/commit/e632fc5))
+
+
+
 <a name="7.0.2"></a>
 ## [7.0.2](https://github.com/NativeScript/nativescript-angular/compare/7.0.1...7.0.2) (2018-11-26)
 

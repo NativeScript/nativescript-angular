@@ -1,5 +1,4 @@
-import { Component, ViewContainerRef } from "@angular/core";
-import { ModalDialogService, ModalDialogOptions } from "nativescript-angular/directives/dialogs";
+import { Component } from "@angular/core";
 import { RouterExtensions } from "nativescript-angular/router";
 import { ActivatedRoute } from "@angular/router";
 
@@ -10,8 +9,6 @@ import { ActivatedRoute } from "@angular/router";
 })
 export class AboutComponent {
     constructor(
-        private modal: ModalDialogService,
-        private vcRef: ViewContainerRef,
         private activeRoute: ActivatedRoute,
         private routerExtension: RouterExtensions) { }
 
