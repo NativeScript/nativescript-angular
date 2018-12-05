@@ -4,4 +4,7 @@
 
 <GridLayout rows="auto, *">
     <Button text="Back(ActivatedRoute)" automationText="Back(ActivatedRoute)" (tap)="backActivatedRoute()"></Button>
+    <GridLayout row="1">
+        <page-router-outlet actionBarVisibility="never"></page-router-outlet>
+    </GridLayout>
 </GridLayout>

@@ -3,6 +3,7 @@ import { assert } from "chai";
 
 const home = "Home Component";
 const about = "About Component";
+const aboutNested = "Nested About Component";
 const login = "Login Component";
 const tabs = "Tabs Component";
 
@@ -70,7 +71,13 @@ export class Screen {
     loadedAbout= async () => {
         const lblAbout = await this._driver.findElementByAutomationText(about);
         assert.isTrue(await lblAbout.isDisplayed());
-        console.log(home + " loaded!");
+        console.log(about + " loaded!");
+    }
+
+    loadedNestedAbout= async () => {
+        const lblAboutNested = await this._driver.findElementByAutomationText(aboutNested);
+        assert.isTrue(await lblAboutNested.isDisplayed());
+        console.log(aboutNested + " loaded!");
     }
 
     loadedTabs = async () => {
