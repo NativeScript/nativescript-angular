@@ -2,8 +2,8 @@ import { Component, ViewContainerRef } from "@angular/core";
 import { ModalDialogParams, ModalDialogOptions, ModalDialogService } from "nativescript-angular/directives/dialogs";
 import { RouterExtensions, PageRoute } from "nativescript-angular/router";
 import { ActivatedRoute } from "@angular/router";
-import { View, ShownModallyData, EventData } from "ui/core/view"
-import { confirm } from "ui/dialogs";
+import { View, ShownModallyData } from "tns-core-modules/ui/core/view"
+import { confirm } from "tns-core-modules/ui/dialogs";
 import { ModalRouterComponent } from "../modal/modal-router/modal-router.component";
 import { NestedModalComponent } from "../modal-nested/modal-nested.component";
 

@@ -3,8 +3,8 @@ import { ModalDialogService, ModalDialogOptions } from "nativescript-angular/dir
 import { RouterExtensions } from "nativescript-angular/router";
 import { EventData } from "tns-core-modules/data/observable";
 import { ActivatedRoute } from "@angular/router";
-import { confirm } from "ui/dialogs";
-import { Page } from "ui/page";
+import { confirm } from "tns-core-modules/ui/dialogs";
+import { Page } from "tns-core-modules/ui/page";
 import { AppModule } from "../app.module";
 
 @Component({

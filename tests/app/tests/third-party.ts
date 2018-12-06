@@ -84,7 +84,7 @@ export class DocumentFormContainer {
 
 describe("Third party component snippets", () => {
     before(() => {
-        registerElement("document-form", () => require("ui/layouts/stack-layout").StackLayout);
+        registerElement("document-form", () => require("tns-core-modules/ui/layouts/stack-layout").StackLayout);
     });
 
     beforeEach(nsTestBedBeforeEach([
