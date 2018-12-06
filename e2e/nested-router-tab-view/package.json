@@ -30,11 +30,11 @@
     "zone.js": "~0.8.2"
   },
   "devDependencies": {
-    "@angular/compiler-cli": "~6.1.0",
-    "@ngtools/webpack": "~6.2.0",
+    "@angular/compiler-cli": "~7.1.0",
+    "@ngtools/webpack": "~7.1.0",
     "@types/chai": "^4.0.2",
-    "@types/mocha": "^2.2.41",
-    "@types/node": "^7.0.5",
+    "@types/mocha": "^5.2.5",
+    "@types/node": "^10.12.12",
     "babel-traverse": "6.26.0",
     "babel-types": "6.26.0",
     "babylon": "6.18.0",
@@ -46,7 +46,7 @@
     "nativescript-dev-appium": "next",
     "nativescript-dev-typescript": "~0.7.4",
     "nativescript-dev-webpack": "next",
-    "typescript": "~2.7.2"
+    "typescript": "~3.1.1"
   },
   "scripts": {
     "e2e": "tsc -p e2e && mocha --opts ../config/mocha.opts --recursive e2e --appiumCapsLocation ../config/appium.capabilities.json",
