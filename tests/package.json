@@ -37,7 +37,7 @@
     "@angular/router": "~7.1.0",
     "nativescript-angular": "../nativescript-angular",
     "nativescript-unit-test-runner": "^0.3.4",
-    "rxjs": "~6.0.0-rc.1",
+    "rxjs": "~6.3.3",
     "tns-core-modules": "next",
     "zone.js": "^0.8.4"
   },
