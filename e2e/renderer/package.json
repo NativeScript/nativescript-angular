@@ -7,14 +7,14 @@
     "id": "org.nativescript.renderer"
   },
   "dependencies": {
-    "@angular/common": "~7.0.0",
-    "@angular/compiler": "~7.0.0",
-    "@angular/core": "~7.0.0",
-    "@angular/forms": "~7.0.0",
-    "@angular/http": "~7.0.0",
-    "@angular/platform-browser": "~7.0.0",
-    "@angular/platform-browser-dynamic": "~7.0.0",
-    "@angular/router": "~7.0.0",
+    "@angular/common": "~7.1.0",
+    "@angular/compiler": "~7.1.0",
+    "@angular/core": "~7.1.0",
+    "@angular/forms": "~7.1.0",
+    "@angular/http": "~7.1.0",
+    "@angular/platform-browser": "~7.1.0",
+    "@angular/platform-browser-dynamic": "~7.1.0",
+    "@angular/router": "~7.1.0",
     "nativescript-angular": "file:../../nativescript-angular",
     "nativescript-intl": "^3.0.0",
     "reflect-metadata": "~0.1.8",
@@ -23,8 +23,8 @@
     "zone.js": "^0.8.4"
   },
   "devDependencies": {
-    "@angular/compiler-cli": "~7.0.0",
-    "@ngtools/webpack": "~7.0.0",
+    "@angular/compiler-cli": "~7.1.0",
+    "@ngtools/webpack": "~7.1.0",
     "@types/chai": "~4.1.3",
     "@types/mocha": "~5.2.1",
     "@types/node": "10.11.4",

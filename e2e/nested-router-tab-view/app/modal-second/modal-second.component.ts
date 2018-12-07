@@ -1,6 +1,6 @@
 import { Component } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
-import { View, EventData } from "ui/core/view"
+import { View, EventData } from "tns-core-modules/ui/core/view"
 import { RouterExtensions } from "nativescript-angular/router";
 
 @Component({

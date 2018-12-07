@@ -1,3 +1,11 @@
+<a name="7.1.0"></a>
+# [7.1.0](https://github.com/NativeScript/nativescript-angular/compare/7.0.3...7.1.0) (2018-12-07)
+
+
+### Features
+
+* Angular 7.1 support
+
 <a name="7.0.3"></a>
 ## [7.0.3](https://github.com/NativeScript/nativescript-angular/compare/7.0.2...7.0.3) (2018-12-05)
 
