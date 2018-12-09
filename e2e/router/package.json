@@ -21,7 +21,7 @@
     "reflect-metadata": "~0.1.8",
     "rxjs": "~6.3.3",
     "tns-core-modules": "next",
-    "zone.js": "^0.8.26"
+    "zone.js": "^0.8.4"
   },
   "devDependencies": {
     "@ngtools/webpack": "~7.1.0",

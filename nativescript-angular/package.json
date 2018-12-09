@@ -54,8 +54,8 @@
     "@angular/router": "~7.1.0",
     "rxjs": "^6.3.3",
     "tns-core-modules": "^5.0.0 || >5.0.0- || >5.1.0-",
-    "zone.js": "^0.8.26",
-    "typescript": "~3.1.1"
+    "typescript": "~3.1.1",
+    "zone.js": "^0.8.4"
   },
   "devDependencies": {
     "@angular/animations": "~7.1.0",
@@ -73,6 +73,6 @@
     "tns-core-modules": "next",
     "tslint": "^5.5.0",
     "typescript": "~3.1.1",
-    "zone.js": "^0.8.26"
+    "zone.js": "^0.8.4"
   }
 }

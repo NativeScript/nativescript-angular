@@ -25,9 +25,9 @@
     "nativescript-angular": "file:../../nativescript-angular",
     "nativescript-theme-core": "~1.0.4",
     "reflect-metadata": "~0.1.8",
-    "rxjs": "~6.0.0-rc.1",
+    "rxjs": "~6.3.3",
     "tns-core-modules": "next",
-    "zone.js": "~0.8.2"
+    "zone.js": "^0.8.4"
   },
   "devDependencies": {
     "@types/chai": "^4.0.2",
