@@ -4,7 +4,7 @@
 
 ### Bug Fixes
 
-* **p-r-o:** needless forward navigation after back inside nested named outlet ([d8a0653](https://github.com/NativeScript/nativescript-angular/commit/d8a0653))
+ * **page-router-outlet:** prevent needless forward navigation after back inside nested named outlet ([d8a0653](https://github.com/NativeScript/nativescript-angular/commit/d8a0653))
 
 
 
