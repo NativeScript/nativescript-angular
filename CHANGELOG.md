@@ -1,3 +1,13 @@
+<a name="7.1.1"></a>
+## [7.1.1](https://github.com/NativeScript/nativescript-angular/compare/7.1.0...7.1.1) (2018-12-20)
+
+
+### Bug Fixes
+
+* **p-r-o:** needless forward navigation after back inside nested named outlet ([d8a0653](https://github.com/NativeScript/nativescript-angular/commit/d8a0653))
+
+
+
 <a name="7.1.0"></a>
 # [7.1.0](https://github.com/NativeScript/nativescript-angular/compare/7.0.3...7.1.0) (2018-12-07)
 
