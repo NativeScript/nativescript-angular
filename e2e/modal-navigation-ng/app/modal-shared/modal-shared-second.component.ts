@@ -10,7 +10,7 @@ import { RouterExtensions } from "nativescript-angular/router";
     moduleId: module.id,
     template: `
     <StackLayout class="page">
-        <Button text="show shared modal" (tap)="onRootModalTap()"></Button>
+        <Button text="Show Shared Modal" (tap)="onRootModalTap()"></Button>
         <Button text="go back" (tap)="onBackTap()"></Button>
         <Label text="second component"></Label>
     </StackLayout>
@@ -25,9 +25,9 @@ export class ModalSharedSecondComponent {
 
     onRootModalTap(): void {
         const options: ModalDialogOptions = {
-            viewContainerRef: this._viewContainerRefService.root,
             context: {},
-            fullscreen: true
+            fullscreen: true,
+            viewContainerRef: this._viewContainerRefService.root,
         };
 
         this._modalService.showModal(ModalViewComponent, options)

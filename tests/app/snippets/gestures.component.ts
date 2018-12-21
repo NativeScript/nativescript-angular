@@ -5,7 +5,7 @@ import {
     PinchGestureEventData,
     RotationGestureEventData,
     SwipeGestureEventData,
-    TouchGestureEventData} from "ui/gestures";
+    TouchGestureEventData} from "tns-core-modules/ui/gestures";
 
 @Component({
     selector: "gestures",

@@ -286,6 +286,7 @@ export class PageRouterOutlet implements OnDestroy { // tslint:disable-line:dire
             return;
         }
 
+        this.outlet.isNSEmptyOutlet = this.isEmptyOutlet;
         this.locationStrategy.updateOutletFrame(this.outlet, this.frame);
 
         if (this.outlet && this.outlet.isPageNavigationBack) {
@@ -397,7 +398,7 @@ export class PageRouterOutlet implements OnDestroy { // tslint:disable-line:dire
             let outletKeyForRoute = this.locationStrategy.getRouteFullPath(nodeToMark);
             let outlet = this.locationStrategy.findOutletByKey(outletKeyForRoute);
 
-            if (outlet && outlet.frame) {
+            if (outlet && outlet.frames.length) {
                 nodeToMark[pageRouterActivatedSymbol] = true;
                 if (isLogEnabled()) {
                     log("Activated route marked as page: " + routeToString(nodeToMark));
@@ -439,6 +440,9 @@ export class PageRouterOutlet implements OnDestroy { // tslint:disable-line:dire
             if (outlet) {
                 outlet.outletKeys.push(outletKey);
             }
+        } else if (!outlet) {
+            const pathByOutlets = this.locationStrategy.getPathByOutlets(topActivatedRoute);
+            outlet = this.locationStrategy.findOutletByOutletPath(pathByOutlets);
         }
 
         return outlet;

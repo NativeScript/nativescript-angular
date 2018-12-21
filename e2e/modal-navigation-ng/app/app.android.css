@@ -1,0 +1,12 @@
+Button{
+    font-size: 8;
+    margin: 0px;
+    padding: 0px;
+    height: 40;
+}
+
+TextView {
+    font-size: 10;
+    margin: 0px;
+    padding: 0px;
+}

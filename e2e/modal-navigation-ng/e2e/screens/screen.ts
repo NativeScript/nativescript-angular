@@ -16,9 +16,13 @@ const modalTabView = "Show Modal TabView";
 const navToSecondPage = "Navigate To Second Page";
 const showDialog = "Show Dialog";
 const resetFrameRootView = "Reset Frame Root View";
+const resetFrameRootViewModal = "Reset Frame Root View Modal";
 const resetNamedFrameRootView = "Reset Named Frame Root View";
+const resetNamedFrameRootViewModal = "Reset Named Frame Root View Modal";
 const resetTabRootView = "Reset Tab Root View";
+const resetTabRootViewModal = "Reset Tab Root View Modal";
 const resetLayoutRootView = "Reset Layout Root View";
+const resetLayoutRootViewModal = "Reset Layout Root View Modal";
 
 const showNestedModalFrame = "Show Nested Modal Page With Frame";
 const showNestedModalPage = "Show Nested Modal Page";
@@ -28,6 +32,8 @@ const confirmDialogMessage = "Message";
 const closeModalNested = "Close Modal Nested";
 const closeModal = "Close Modal";
 const goBack = "Go Back(activatedRoute)";
+export const sharedModalView = "SHARED MODAL VIEW";
+export const homeComponent = "Home Component";
 
 export class Screen {
 
@@ -38,7 +44,7 @@ export class Screen {
     }
 
     loadedHome = async () => {
-        const lblHome = await this._driver.findElementByAutomationText(home);
+        const lblHome = await this._driver.waitForElement(home);
         assert.isTrue(await lblHome.isDisplayed());
         console.log(home + " loaded!");
     }
@@ -64,6 +70,26 @@ export class Screen {
     resetTabRootView = async () => {
         const btnResetTabRootView = await this._driver.findElementByAutomationText(resetTabRootView);
         await btnResetTabRootView.tap();
+    }
+
+    resetTabRootViewModal = async () => {
+        const btnResetTabRootViewModal = await this._driver.findElementByAutomationText(resetTabRootViewModal);
+        await btnResetTabRootViewModal.click();
+    }
+
+    resetFrameRootViewModal = async () => {
+        const btnResetTabRootViewModal = await this._driver.findElementByAutomationText(resetFrameRootViewModal);
+        await btnResetTabRootViewModal.click();
+    }
+
+    resetNamedFrameRootViewModal = async () => {
+        const btnResetTabRootViewModal = await this._driver.findElementByAutomationText(resetNamedFrameRootViewModal);
+        await btnResetTabRootViewModal.click();
+    }
+
+    resetLayoutRootViewModal = async () => {
+        const btnResetTabRootViewModal = await this._driver.findElementByAutomationText(resetLayoutRootViewModal);
+        await btnResetTabRootViewModal.click();
     }
 
     loadedTabRootView = async () => {
@@ -97,13 +123,33 @@ export class Screen {
         await this.resetLayoutRootView();
     }
 
+    setTabRootViewModal = async () => {
+        await this.loadedHome();
+        await this.resetTabRootViewModal();
+    }
+
+    setFrameRootViewModal = async () => {
+        await this.loadedHome();
+        await this.resetFrameRootViewModal();
+    }
+
+    setNamedFrameRootViewModal = async () => {
+        await this.loadedHome();
+        await this.resetNamedFrameRootViewModal();
+    }
+
+    setLayoutRootViewModal = async () => {
+        await this.loadedHome();
+        await this.resetLayoutRootViewModal();
+    }
+
     showModalFrame = async () => {
         const btnModalFrame = await this._driver.findElementByAutomationText(modalFrame);
         await btnModalFrame.tap();
     }
 
     loadedModalFrame = async () => {
-        const lblModal = await this._driver.findElementByAutomationText(modal, 1000);
+        const lblModal = await this._driver.waitForElement(modal, 5000);
         assert.isTrue(await lblModal.isDisplayed(), `${modal} is not displayed!`);
         console.log(modal + " loaded!");
     }
@@ -111,6 +157,12 @@ export class Screen {
     showModalNoFrame = async () => {
         const btnModalPage = await this._driver.findElementByAutomationText(modalNoFrame);
         await btnModalPage.tap();
+    }
+
+
+    private showSharedModal = async () => {
+        const btnTap = await this._driver.waitForElement("Show Shared Modal");
+        await btnTap.click();
     }
 
     loadedModalPage = async () => {
@@ -174,7 +226,7 @@ export class Screen {
     }
 
     loadedSecondPage = async () => {
-        const lblModalSecond = await this._driver.findElementByAutomationText(modalSecond);
+        const lblModalSecond = await this._driver.waitForElement(modalSecond, 5000);
         assert.isTrue(await lblModalSecond.isDisplayed());
         console.log(modalSecond + " loaded!");
     }
@@ -207,7 +259,7 @@ export class Screen {
     }
 
     loadedNestedModalFrame = async () => {
-        const lblModalNested = await this._driver.findElementByAutomationText(modalNested);
+        const lblModalNested = await this._driver.waitForElement(modalNested, 5000);
         assert.isTrue(await lblModalNested.isDisplayed());
         console.log(modalNested + " loaded!");
     }
@@ -230,7 +282,7 @@ export class Screen {
 
     closeModal = async () => {
         const btnCloseModal = await this._driver.waitForElement(closeModal, 10000);
-        await btnCloseModal.tap();
+        await btnCloseModal.click();
     }
 
     loadModalNoFrame = async (loadShowModalPageWithFrame: boolean) => {
@@ -247,5 +299,14 @@ export class Screen {
         }
 
         await this.loadedModalFrame();
+    }
+
+    loadSharedModal = async (loadShowModalPageWithFrame: boolean) => {
+        if (loadShowModalPageWithFrame) {
+            await this.showSharedModal();
+        }
+
+        const lbl = await this._driver.waitForElement(sharedModalView, 5000);
+        assert.isTrue(await lbl.isDisplayed());
     }
 }

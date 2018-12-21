@@ -1,8 +1,51 @@
-<a name="7.0.0-rc.0"></a>
-# [7.0.0-rc.0](https://github.com/NativeScript/nativescript-angular/compare/6.2.0...7.0.0-rc.0) (2018-11-05)
+<a name="7.1.0"></a>
+# [7.1.0](https://github.com/NativeScript/nativescript-angular/compare/7.0.3...7.1.0) (2018-12-07)
+
+
+### Features
+
+* Angular 7.1 support
+
+<a name="7.0.3"></a>
+## [7.0.3](https://github.com/NativeScript/nativescript-angular/compare/7.0.2...7.0.3) (2018-12-05)
 
 
 ### Bug Fixes
+
+* **router:** handle nested primary p-r-o ([#1645](https://github.com/NativeScript/nativescript-angular/issues/1645)) ([e632fc5](https://github.com/NativeScript/nativescript-angular/commit/e632fc5))
+
+
+
+<a name="7.0.2"></a>
+## [7.0.2](https://github.com/NativeScript/nativescript-angular/compare/7.0.1...7.0.2) (2018-11-26)
+
+
+### Bug Fixes
+
+* **page-router-outlet:** actionBarVisibility not applied ([#1621](https://github.com/NativeScript/nativescript-angular/issues/1621)) ([a6ff509](https://github.com/NativeScript/nativescript-angular/commit/a6ff509))
+* **router-extensions:** unable to go back with relativeTo param ([#1632](https://github.com/NativeScript/nativescript-angular/issues/1632)) ([63900dc](https://github.com/NativeScript/nativescript-angular/commit/63900dc))
+
+
+
+<a name="7.0.1"></a>
+## [7.0.1](https://github.com/NativeScript/nativescript-angular/compare/7.0.0...7.0.1) (2018-11-20)
+
+
+### Bug Fixes
+
+* crash in deactivate page router outlet ([#1590](https://github.com/NativeScript/nativescript-angular/issues/1590)) ([f8c7468](https://github.com/NativeScript/nativescript-angular/commit/f8c7468))
+* **dialogs:** unable to reopen shared modal view when tab as root ([199c245](https://github.com/NativeScript/nativescript-angular/commit/199c245))
+* **location-strategy:** crash when going back on nested named lazy loaded module ([#1618](https://github.com/NativeScript/nativescript-angular/issues/1618)) ([d9ffb83](https://github.com/NativeScript/nativescript-angular/commit/d9ffb83))
+
+
+
+<a name="7.0.0"></a>
+# [7.0.0](https://github.com/NativeScript/nativescript-angular/compare/6.2.0...7.0.0) (2018-11-12)
+
+
+### Bug Fixes
+
+* crash in deactivate page router outlet ([#1590](https://github.com/NativeScript/nativescript-angular/issues/1590)) ([f8c7468](https://github.com/NativeScript/nativescript-angular/commit/f8c7468))
 
 * **location-strategy:** crash on going back to TabView with nested outlets ([#1582](https://github.com/NativeScript/nativescript-angular/issues/1582)) ([f755991](https://github.com/NativeScript/nativescript-angular/commit/f755991))
 

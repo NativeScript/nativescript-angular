@@ -1,0 +1,16 @@
+<GridLayout rows="auto, auto" columns="auto" >
+    <StackLayout id="home-page" row="0" col="0" borderColor="yellowgreen" borderWidth="1" borderRadius="5" padding="2">
+        <TextView text="Reset root" editable="false" ></TextView>
+        <Button text="Reset Named Frame Root View" (tap)="onNamedFrameRootViewReset()" textAlignment="left" ></Button>
+        <Button text="Reset Frame Root View" (tap)="onFrameRootViewReset()" textAlignment="left" ></Button>
+        <Button text="Reset Tab Root View" (tap)="onTabRootViewReset()" textAlignment="left" ></Button>
+        <Button text="Reset Layout Root View" automationText="Reset Layout Root View" (tap)="onLayoutRootViewReset()" textAlignment="left"></Button>
+    </StackLayout>
+    <StackLayout id="home-page" row="1" col="0" borderColor="yellowgreen" borderWidth="1" borderRadius="5" padding="2">
+        <TextView text="Reset root With Modal" editable="false" ></TextView>
+        <Button text="Reset Frame Root View Modal" (tap)="onFrameRootViewReset(true)" textAlignment="left" ></Button>
+        <Button text="Reset Tab Root View Modal" (tap)="onTabRootViewReset(true)" textAlignment="left" ></Button>
+        <Button text="Reset Layout Root View Modal" automationText="Reset Layout Root View Modal" (tap)="onLayoutRootViewReset(true)" textAlignment="left"></Button>
+        <Button text="Reset Named Frame Root View Modal" (tap)="onNamedFrameRootViewReset(true)" textAlignment="left" ></Button>
+    </StackLayout>
+</GridLayout>

@@ -17,7 +17,7 @@ import { AppHostView } from "../app-host-view";
 import { DetachedLoader } from "../common/detached-loader";
 import { PageFactory, PAGE_FACTORY } from "../platform-providers";
 import { once } from "../common/utils";
-import { Frame } from "tns-core-modules/ui/frame/frame";
+import { topmost, Frame } from "tns-core-modules/ui/frame";
 
 export interface ModalDialogOptions {
     context?: any;
@@ -84,7 +84,7 @@ export class ModalDialogService {
 
         let frame = parentView;
         if (!(parentView instanceof Frame)) {
-            frame = parentView.page && parentView.page.frame;
+            frame = (parentView.page && parentView.page.frame) || topmost();
         }
 
         if (frame) {
