@@ -4,7 +4,6 @@ import { PageRouterOutlet } from "./page-router-outlet";
 @Component({
     // tslint:disable-next-line:component-selector
     selector: "ns-empty-outlet",
-    moduleId: module.id,
     template: "<page-router-outlet isEmptyOutlet='true'></page-router-outlet>"
 })
 export class NSEmptyOutletComponent {
