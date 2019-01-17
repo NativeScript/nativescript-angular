@@ -6,21 +6,11 @@ import { BehaviorSubject } from "rxjs";
 
 @Injectable()
 class LocationLogService {
-    public locationStack$ = new BehaviorSubject<Array<string>>([]);
     public routerEvents$ = new BehaviorSubject<Array<string>>([]);
-    public showStack: boolean = true;
 
     constructor(router: Router, private strategy: NSLocationStrategy) {
         router.events.subscribe((e) => {
             this.routerEvents$.next([...this.routerEvents$.getValue(), e.toString()]);
-
-            let states = this.strategy._getStates()
-                .map((v, i) => {
-                    return (i + "." + (v.isPageNavigation ? "[PAGE]" : "") + " \"" + v.url + "\"");
-                })
-                .reverse();
-
-            this.locationStack$.next(states);
         });
     }
 }
@@ -29,15 +19,9 @@ class LocationLogService {
     selector: "location-log",
     styleUrls: ["examples/router/styles.css"],
     template: `
-    <GridLayout rows="auto *" columns="*">
-        <button class="stretch"
-            [text]="service.showStack ? 'show events' : 'show stack'" 
-            (tap)="service.showStack=!service.showStack"></button>
-
-        <ListView row="1"
-            [items]="service.showStack ?
-                (service.locationStack$ | async) :
-                (service.routerEvents$ | async)"
+    <GridLayout rows="*" columns="*">
+        <ListView
+            [items]="service.routerEvents$ | async"
                 margin="10">
 
             <ng-template let-data="item" let-odd="odd" let-even="even">
