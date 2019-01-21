@@ -4,7 +4,7 @@
 
 ### Bug Fixes
 
- * **page-router-outlet:** refactor(empty-outlet): remove unnecessary moduleId ([#1686](https://github.com/NativeScript/nativescript-angular/issues/1686)) ([1222e57](https://github.com/NativeScript/nativescript-angular/commit/1222e57))
+ * **page-router-outlet:** fix(empty-outlet): remove unnecessary moduleId ([#1686](https://github.com/NativeScript/nativescript-angular/issues/1686)) ([1222e57](https://github.com/NativeScript/nativescript-angular/commit/1222e57))
 
 
 <a name="7.1.1"></a>
