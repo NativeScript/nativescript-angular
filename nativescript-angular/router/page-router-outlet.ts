@@ -242,6 +242,9 @@ export class PageRouterOutlet implements OnDestroy { // tslint:disable-line:dire
             log(`PageRouterOutlet.detach() - ${routeToString(this._activatedRoute)}`);
         }
 
+        // Detach from ChangeDetection
+        this.activated.hostView.detach();
+
         const component = this.activated;
         this.activated = null;
         this._activatedRoute = null;
@@ -257,6 +260,9 @@ export class PageRouterOutlet implements OnDestroy { // tslint:disable-line:dire
         }
 
         this.activated = ref;
+
+        // reattach to ChangeDetection
+        this.activated.hostView.reattach();
         this._activatedRoute = activatedRoute;
         this.markActivatedRoute(activatedRoute);
 

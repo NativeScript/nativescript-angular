@@ -406,6 +406,37 @@ describe("Navigate to componentless lazy module route", () => {
     });
 });
 
+describe("Simple navigate and back should trigger only one CD on FirstComponent", () => {
+    let driver: AppiumDriver;
+
+    before(async () => {
+        driver = await createDriver();
+        await driver.resetApp();
+    });
+
+    it("should find First", async () => {
+        await assureFirstComponent(driver);
+    });
+
+    it("should reset counter", async () => {
+        await findAndClick(driver, "RESET");
+        await driver.waitForElement("CHECK: 1");
+    });
+
+    it("should navigate to Second(1)/master", async () => {
+        await findAndClick(driver, "GO TO SECOND");
+
+        await assureSecondComponent(driver, 1);
+        await assureNestedMasterComponent(driver);
+    });
+
+    it("should navigate back to First", async () => {
+        await goBack(driver);
+        await assureFirstComponent(driver);
+        await driver.waitForElement("CHECK: 2");
+    });
+});
+
 async function assureFirstComponent(driver: AppiumDriver) {
     await driver.findElementByAutomationText("FirstComponent");
 }
