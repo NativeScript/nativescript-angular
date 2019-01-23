@@ -1,3 +1,12 @@
+<a name="7.1.2"></a>
+## [7.1.2](https://github.com/NativeScript/nativescript-angular/compare/7.1.1...7.1.2) (2019-01-21)
+
+
+### Bug Fixes
+
+ * **page-router-outlet:** fix(empty-outlet): remove unnecessary moduleId ([#1686](https://github.com/NativeScript/nativescript-angular/issues/1686)) ([1222e57](https://github.com/NativeScript/nativescript-angular/commit/1222e57))
+
+
 <a name="7.1.1"></a>
 ## [7.1.1](https://github.com/NativeScript/nativescript-angular/compare/7.1.0...7.1.1) (2018-12-20)
 
