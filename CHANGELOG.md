@@ -1,3 +1,18 @@
+<a name="7.2.0"></a>
+# [7.2.0](https://github.com/NativeScript/nativescript-angular/compare/7.1.2...7.2.0) (2019-01-31)
+
+
+### Bug Fixes
+
+* **p-r-o:** needless forward navigation after back inside nested named outlet ([130e392](https://github.com/NativeScript/nativescript-angular/commit/130e392))
+
+
+### Features
+
+* **router:** detach change detection on navigation ([#1507](https://github.com/NativeScript/nativescript-angular/issues/1507)) ([86cd290](https://github.com/NativeScript/nativescript-angular/commit/86cd290))
+
+
+
 <a name="7.1.2"></a>
 ## [7.1.2](https://github.com/NativeScript/nativescript-angular/compare/7.1.1...7.1.2) (2019-01-21)
 
