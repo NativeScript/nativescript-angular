@@ -26,6 +26,7 @@ export interface ModalDialogOptions {
     stretched?: boolean;
     viewContainerRef?: ViewContainerRef;
     moduleRef?: NgModuleRef<any>;
+    ios?: any;
 }
 
 export class ModalDialogParams {
@@ -46,6 +47,7 @@ interface ShowDialogOptions {
     parentView: ViewBase;
     resolver: ComponentFactoryResolver;
     type: Type<any>;
+    ios: any;
 }
 
 @Injectable()
@@ -54,7 +56,7 @@ export class ModalDialogService {
     }
 
     public showModal(type: Type<any>,
-        { viewContainerRef, moduleRef, context, fullscreen, animated, stretched }: ModalDialogOptions
+        { viewContainerRef, moduleRef, context, fullscreen, animated, stretched, ios }: ModalDialogOptions
     ): Promise<any> {
         if (!viewContainerRef) {
             throw new Error(
@@ -103,6 +105,7 @@ export class ModalDialogService {
                         parentView,
                         resolver,
                         type,
+                        ios
                     });
                 } catch (err) {
                     reject(err);
@@ -122,6 +125,7 @@ export class ModalDialogService {
         parentView,
         resolver,
         type,
+        ios
     }: ShowDialogOptions): void {
         let componentView: View;
         let detachedLoaderRef: ComponentRef<DetachedLoader>;
@@ -159,7 +163,7 @@ export class ModalDialogService {
 
             // TODO: remove <any> cast after https://github.com/NativeScript/NativeScript/pull/5734
             // is in a published version of tns-core-modules.
-            (<any>parentView).showModal(componentView, context, closeCallback, fullscreen, animated, stretched);
+            (<any>parentView).showModal(componentView, context, closeCallback, fullscreen, animated, stretched, ios);
         });
     }
 }

@@ -12,6 +12,7 @@ import { ModalContent } from "./modal-content";
             <Button text="show component no anim (ios)" (tap)="showModal(false, false)"></Button>
             <Button text="show component stretched (android)" (tap)="showModal(false, false, true)"></Button>
             <Button text="show component fullscreen" (tap)="showModal(true)"></Button>
+            <Button text="show component popover" (tap)="showModal(false, true, false, true)"></Button>
 
             <Button text="alert" (tap)="showAlert()"></Button>
             <Button text="confirm" (tap)="showConfirm()"></Button>
@@ -35,14 +36,20 @@ export class ModalTest {
 
     static exports = [];
 
-    public showModal(fullscreen: boolean, animated = true, stretched = false) {
-        const options: ModalDialogOptions = {
+    public showModal(fullscreen: boolean, animated = true, stretched = false, popover = false) {
+        let options: ModalDialogOptions = {
             context: { promptMsg: "This is the prompt message!" },
             fullscreen,
             animated,
             stretched,
             viewContainerRef: this.vcRef
         };
+
+        if (popover) {
+            options.ios = {
+                presentationStyle: UIModalPresentationStyle.Popover
+            };
+        }
 
         this.modal.showModal(ModalContent, options).then((res: string) => {
             this.result = res || "empty result";
