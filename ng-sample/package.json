@@ -5,7 +5,7 @@
       "version": "next"
     },
     "tns-ios": {
-      "version": "5.2.0-2019-02-01-153600-01"
+      "version": "next"
     }
   },
   "name": "tns-template-hello-world",
@@ -42,8 +42,9 @@
     "@angular/platform-browser-dynamic": "~7.2.0",
     "@angular/router": "~7.2.0",
     "nativescript-angular": "file:../nativescript-angular",
-    "rxjs": "^6.3.3",
+    "rxjs": "~6.3.3",
     "tns-core-modules": "next",
+    "tns-platform-declarations": "next",
     "zone.js": "^0.8.4"
   },
   "devDependencies": {
@@ -54,7 +55,6 @@
     "lazy": "1.0.11",
     "nativescript-dev-typescript": "next",
     "shelljs": "^0.7.0",
-    "tns-platform-declarations": "^5.1.2",
     "tslint": "^4.5.1",
     "typescript": "~3.1.1"
   },
