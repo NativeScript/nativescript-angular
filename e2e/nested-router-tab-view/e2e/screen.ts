@@ -1,6 +1,7 @@
 import { AppiumDriver, SearchOptions } from "nativescript-dev-appium";
 import { assert } from "chai";
 
+const customTabs = "Custom Tabs Component";
 const home = "Home Component";
 const about = "About Component";
 const aboutNested = "Nested About Component";
@@ -18,6 +19,7 @@ const gotoNextTeam = "next team";
 const gotoTeams = "teams";
 
 const gotoHomePage = "Go To Home Page";
+const gotoCustomTabPage = "Go To Lazy Custom Tabs";
 const gotoAboutPage = "Go To About Page";
 const gotoTabsPage = "Go To Tabs Page";
 const confirmDialog = "Ok";
@@ -65,6 +67,12 @@ export class Screen {
     loadedHome = async () => {
         const lblHome = await this._driver.findElementByAutomationText(home);
         assert.isTrue(await lblHome.isDisplayed());
+        console.log(home + " loaded!");
+    }
+
+    loadedCustomTabsPage= async () => {
+        const lblCustomTabs = await this._driver.findElementByAutomationText(customTabs);
+        assert.isTrue(await lblCustomTabs.isDisplayed());
         console.log(home + " loaded!");
     }
 
@@ -125,6 +133,11 @@ export class Screen {
 
     navigateToHomePage = async (homePageButton?) => {
         const btnNavToHomePage = await this._driver.findElementByAutomationText(homePageButton || gotoHomePage);
+        await btnNavToHomePage.tap();
+    }
+
+    navigateCustomTabsPage = async () => {
+        const btnNavToHomePage = await this._driver.findElementByAutomationText(gotoCustomTabPage);
         await btnNavToHomePage.tap();
     }
 

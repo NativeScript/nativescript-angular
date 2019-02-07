@@ -1,6 +1,5 @@
 import { Component, OnInit, ViewContainerRef } from "@angular/core";
 import { DataService, DataItem } from "../data.service";
-import { RouterExtensions } from "nativescript-angular/router";
 
 import { ModalDialogService, ModalDialogOptions } from "nativescript-angular/directives/dialogs";
 import { ModalRouterComponent } from "../modal/modal-router/modal-router.component";
@@ -12,7 +11,10 @@ import { ModalRouterComponent } from "../modal/modal-router/modal-router.compone
 export class PlayerComponent implements OnInit {
     items: DataItem[];
 
-    constructor(private modal: ModalDialogService, private itemService: DataService, private router: RouterExtensions, private vcRef: ViewContainerRef, ) { }
+    constructor(
+        private modal: ModalDialogService,
+        private itemService: DataService,
+        private vcRef: ViewContainerRef, ) { }
 
     ngOnInit(): void {
         this.items = this.itemService.getPlayers();

@@ -49,6 +49,10 @@ const routes: Routes = [
         loadChildren: "./home-lazy/home-lazy.module#HomeLazyModule",
     },
     {
+        path: "custom-tabs",
+        loadChildren: "./custom-tabs/custom-tabs.module#CustomTabsModule",
+    },
+    {
         path: "tabs", component: TabsComponent, children: [
             { path: "players", component: PlayerComponent, outlet: "playerTab" },
             { path: "player/:id", component: PlayerDetailComponent, outlet: "playerTab" },

@@ -249,7 +249,7 @@ export class NSLocationStrategy extends LocationStrategy {
             let count = 1;
 
             if (frame) {
-                while (state.frame !== frame) {
+                while (state.frame && state.frame !== frame) {
                     state = states.pop();
                     count++;
                 }
@@ -463,7 +463,7 @@ export class NSLocationStrategy extends LocationStrategy {
         }
 
         if (!outlet.containsFrame(frame)) {
-                        outlet.frames.push(frame);
+            outlet.frames.push(frame);
         }
         this.currentOutlet = outlet;
     }
