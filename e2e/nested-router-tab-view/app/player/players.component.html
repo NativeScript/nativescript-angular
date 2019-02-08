@@ -1,11 +1,11 @@
-<ActionBar title="Player List" class="action-bar"></ActionBar>
+<ActionBar title="Player List" class="action-bar">
+    <!-- <NavigationButton visibility="hidden"></NavigationButton> -->
+</ActionBar>
 
-<GridLayout>
-    <!-- <Button text="Open Named Modal" (tap)="onModalFrame()"></Button> -->
-    <ListView [items]="items" class="list-group">
+<GridLayout rows="auto,*">
+    <ListView row="1" [items]="items" class="list-group">
         <ng-template let-item="item">
-            <Label [nsRouterLink]="['../player', item.id]" [text]="item.name"
-                class="list-group-item"></Label>
+            <Label [nsRouterLink]="['../player', item.id]" [text]="item.name" class="list-group-item"></Label>
         </ng-template>
     </ListView>
 </GridLayout>

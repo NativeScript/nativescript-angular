@@ -100,7 +100,7 @@ export class NSRouteReuseStrategy implements RouteReuseStrategy {
         route = findTopActivatedRouteNodeForOutlet(route);
 
         const outletKey = this.location.getRouteFullPath(route);
-        const outlet = this.location.findOutletByKey(outletKey);
+        const outlet = this.location.findOutlet(outletKey, route);
         const key = getSnapshotKey(route);
         const isPageActivated = route[pageRouterActivatedSymbol];
         const isBack = outlet ? outlet.isPageNavigationBack : false;
@@ -125,7 +125,7 @@ export class NSRouteReuseStrategy implements RouteReuseStrategy {
         route = findTopActivatedRouteNodeForOutlet(route);
 
         const outletKey = this.location.getRouteFullPath(route);
-        const outlet = this.location.findOutletByKey(outletKey);
+        const outlet = this.location.findOutlet(outletKey, route);
         const cache = this.cacheByOutlet[outletKey];
         if (!cache) {
             return false;
@@ -185,7 +185,7 @@ export class NSRouteReuseStrategy implements RouteReuseStrategy {
         route = findTopActivatedRouteNodeForOutlet(route);
 
         const outletKey = this.location.getRouteFullPath(route);
-        const outlet = this.location.findOutletByKey(outletKey);
+        const outlet = this.location.findOutlet(outletKey, route);
         const cache = this.cacheByOutlet[outletKey];
         if (!cache) {
             return null;

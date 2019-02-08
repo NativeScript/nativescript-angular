@@ -1,0 +1,19 @@
+<ActionBar title="Custom Tabs Component" class="action-bar">
+    <NavigationButton text="Root Back"></NavigationButton>
+
+    <StackLayout orientation="horizontal">
+        <Button horizontalAlignment="left" android:visibility="visible" ios:visibility="collapse" text="Root Back" (tap)="onRootBack()"></Button>
+        <Label horizontalAlignment="center" text="Custom Tabs Component"></Label>
+    </StackLayout>
+</ActionBar>
+
+<GridLayout rows="50,*, auto">
+    <!-- <Button row="0" text="CanGoBack(ParentRoute)" automationText="CanGoBack(ParentRoute)" col="3" (tap)="canGoBackParentRoute()"></Button> -->
+    <GridLayout row="1">
+        <page-router-outlet tag="customTabsPRO"></page-router-outlet>
+    </GridLayout>
+    <GridLayout row="2" columns="*, *">
+        <Button col="0" text="Players Tab" [nsRouterLink]="['../tabs/players']"></Button>
+        <Button col="1" text="Teams Tab" [nsRouterLink]="['../tabs/teams']"></Button>
+    </GridLayout>
+</GridLayout>

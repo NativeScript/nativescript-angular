@@ -142,7 +142,7 @@ function simulatePageNavigation(strategy: NSLocationStrategy, url: string, frame
     outletName = outletName || "primary";
     strategy.pushState(null, null, url, null);
 
-    const outlet: Outlet = strategy.findOutletByOutletPath(outletName);
+    const outlet: Outlet = strategy.findOutlet(outletName);
     outlet.frames.push(frame);
     strategy._beginPageNavigation(frame);
 }
@@ -281,7 +281,7 @@ describe("NSLocationStrategy", () => {
         strategy.pushState(null, null, "/internal", null);
         expectedStates.push(createState("/internal", outletName));
 
-        const outlet: Outlet = strategy.findOutletByOutletPath(outletName);
+        const outlet: Outlet = strategy.findOutlet(outletName);
 
         assertStatesEqual(outlet.states, expectedStates);
     });
@@ -306,8 +306,8 @@ describe("NSLocationStrategy", () => {
         strategy.pushState(null, null, "/(test1:internal//test2:test2)", null);
         expectedStatesTest1.push(createState("/(test1:internal//test2:test2)", outletName));
 
-        const outlet: Outlet = strategy.findOutletByOutletPath(outletName);
-        const outlet2: Outlet = strategy.findOutletByOutletPath(outletName2);
+        const outlet: Outlet = strategy.findOutlet(outletName);
+        const outlet2: Outlet = strategy.findOutlet(outletName2);
 
         assertStatesEqual(outlet.states, expectedStatesTest1);
         assertStatesEqual(outlet2.states, expectedStatesTest2);
@@ -329,7 +329,7 @@ describe("NSLocationStrategy", () => {
         });
 
         simulatePageNavigation(strategy, "/page", currentFrame, outletName);
-        const outlet: Outlet = strategy.findOutletByOutletPath(outletName);
+        const outlet: Outlet = strategy.findOutlet(outletName);
 
         assert.equal(frameBackCount, 0);
         assert.equal(popCount, 0);
@@ -360,8 +360,8 @@ describe("NSLocationStrategy", () => {
         const currentFrame = frameService.getFrame();
         simulatePageNavigation(strategy, "/(test1:page//test2:test2)", frame, outletName);
         simulatePageNavigation(strategy, "/(test1:page//test2:test2)", currentFrame, outletName2);
-        const outlet: Outlet = strategy.findOutletByOutletPath(outletName);
-        const outlet2: Outlet = strategy.findOutletByOutletPath(outletName2);
+        const outlet: Outlet = strategy.findOutlet(outletName);
+        const outlet2: Outlet = strategy.findOutlet(outletName2);
 
         assert.equal(frameBackCount, 0);
         assert.equal(popCount, 0);
@@ -392,7 +392,7 @@ describe("NSLocationStrategy", () => {
         });
 
         simulatePageNavigation(strategy, "/page", currentFrame, outletName);
-        const outlet: Outlet = strategy.findOutletByOutletPath(outletName);
+        const outlet: Outlet = strategy.findOutlet(outletName);
 
         assert.equal(frameBackCount, 0);
         assert.equal(popCount, 0);
@@ -424,8 +424,8 @@ describe("NSLocationStrategy", () => {
 
         simulatePageNavigation(strategy, "/(test1:page//test2:test2)", frame, outletName);
         simulatePageNavigation(strategy, "/(test1:page//test2:test2)", frame2, outletName2);
-        const outlet: Outlet = strategy.findOutletByOutletPath(outletName);
-        const outlet2: Outlet = strategy.findOutletByOutletPath(outletName2);
+        const outlet: Outlet = strategy.findOutlet(outletName);
+        const outlet2: Outlet = strategy.findOutlet(outletName2);
 
         assert.equal(frameBackCount, 0);
         assert.equal(popCount, 0);
@@ -449,7 +449,7 @@ describe("NSLocationStrategy", () => {
         // Act
         strategy._setNavigationOptions({ clearHistory: true });
         simulatePageNavigation(strategy, "/cleared", frame, outletName);
-        const outlet: Outlet = strategy.findOutletByOutletPath(outletName);
+        const outlet: Outlet = strategy.findOutlet(outletName);
         // Assert
         assertStatesEqual(outlet.states, [createState("/cleared", outletName, true)]);
     });
@@ -472,8 +472,8 @@ describe("NSLocationStrategy", () => {
             createState("/(test1:cleared//test2:test2)", outletName2, true)
         ];
 
-        const outlet: Outlet = strategy.findOutletByOutletPath(outletName);
-        const outlet2: Outlet = strategy.findOutletByOutletPath(outletName2);
+        const outlet: Outlet = strategy.findOutlet(outletName);
+        const outlet2: Outlet = strategy.findOutlet(outletName2);
 
         // Assert
         assertStatesEqual(outlet.states, expectedStatesTest1);
