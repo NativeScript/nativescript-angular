@@ -40,9 +40,6 @@ if ((<any>global).___TS_UNUSED) {
     (() => MissingTranslationStrategy)();
 }
 
-// Register DOM adapter, if possible. Dynamic platform only!
-import "./dom-adapter";
-
 import { NativeScriptElementSchemaRegistry } from "./schema-registry";
 import { FileSystemResourceLoader } from "./resource-loader";
 
