@@ -287,7 +287,7 @@ export class PageRouterOutlet implements OnDestroy { // tslint:disable-line:dire
         }
 
         this.outlet.isNSEmptyOutlet = this.isEmptyOutlet;
-        this.locationStrategy.updateOutletFrame(this.outlet, this.frame);
+        this.locationStrategy.updateOutletFrame(this.outlet, this.frame, this.isEmptyOutlet);
 
         if (this.outlet && this.outlet.isPageNavigationBack) {
             if (isLogEnabled()) {
@@ -355,7 +355,7 @@ export class PageRouterOutlet implements OnDestroy { // tslint:disable-line:dire
         page.on(Page.navigatedFromEvent, (<any>global).Zone.current.wrap((args: NavigatedData) => {
             if (args.isBackNavigation) {
                 this.locationStrategy._beginBackPageNavigation(this.frame);
-                this.locationStrategy.back();
+                this.locationStrategy.back(null, this.frame);
             }
         }));
 
@@ -394,14 +394,14 @@ export class PageRouterOutlet implements OnDestroy { // tslint:disable-line:dire
                 queue.push(childRoute);
             });
 
-            const nodeToMark = findTopActivatedRouteNodeForOutlet(currentRoute);
-            let outletKeyForRoute = this.locationStrategy.getRouteFullPath(nodeToMark);
-            let outlet = this.locationStrategy.findOutletByKey(outletKeyForRoute);
+            const topActivatedRoute = findTopActivatedRouteNodeForOutlet(currentRoute);
+            let outletKey = this.locationStrategy.getRouteFullPath(topActivatedRoute);
+            let outlet = this.locationStrategy.findOutlet(outletKey, topActivatedRoute);
 
             if (outlet && outlet.frames.length) {
-                nodeToMark[pageRouterActivatedSymbol] = true;
+                topActivatedRoute[pageRouterActivatedSymbol] = true;
                 if (isLogEnabled()) {
-                    log("Activated route marked as page: " + routeToString(nodeToMark));
+                    log("Activated route marked as page: " + routeToString(topActivatedRoute));
                 }
             }
 
@@ -429,20 +429,17 @@ export class PageRouterOutlet implements OnDestroy { // tslint:disable-line:dire
         if (modalNavigation > 0) { // Modal with 'primary' p-r-o
             outlet = this.locationStrategy.findOutletByModal(modalNavigation);
         } else {
-            outlet = this.locationStrategy.findOutletByKey(outletKey);
+            outlet = this.locationStrategy.findOutlet(outletKey, topActivatedRoute);
         }
 
         // Named lazy loaded outlet.
         if (!outlet && this.isEmptyOutlet) {
             const parentOutletKey = this.locationStrategy.getRouteFullPath(topActivatedRoute.parent);
-            outlet = this.locationStrategy.findOutletByKey(parentOutletKey);
+            outlet = this.locationStrategy.findOutlet(parentOutletKey, topActivatedRoute.parent);
 
             if (outlet) {
                 outlet.outletKeys.push(outletKey);
             }
-        } else if (!outlet) {
-            const pathByOutlets = this.locationStrategy.getPathByOutlets(topActivatedRoute);
-            outlet = this.locationStrategy.findOutletByOutletPath(pathByOutlets);
         }
 
         return outlet;

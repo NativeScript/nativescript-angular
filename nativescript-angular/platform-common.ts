@@ -6,6 +6,7 @@ import "./zone-js/dist/zone-nativescript";
 import "./polyfills/array";
 import "./polyfills/console";
 import { profile, uptime } from "tns-core-modules/profiling";
+import "./dom-adapter";
 
 import {
     Type,

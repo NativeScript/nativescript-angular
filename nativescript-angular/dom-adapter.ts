@@ -1,27 +1,15 @@
 /* tslint:disable */
 import { Type } from "@angular/core";
-import { ɵDomAdapter } from "@angular/platform-browser";
+import { ɵDomAdapter, ɵsetRootDomAdapter } from "@angular/platform-browser";
 import { rendererLog, isLogEnabled } from "./trace";
 
 export class NativeScriptDomAdapter implements ɵDomAdapter {
   static makeCurrent() {
+    if (isLogEnabled()) {
+      rendererLog("Setting root DOM adapter...");
+    }
 
-    // Don't register when bundling (likely AoT setup).
-    if (!global.TNS_WEBPACK) {
-        try {
-            const privateAPI = global.require("@angular/platform-browser");
-            const setRootDomAdapter = privateAPI.ɵsetRootDomAdapter;
-
-            if (isLogEnabled()) {
-              rendererLog("Setting root DOM adapter...");
-            }
-            setRootDomAdapter(new NativeScriptDomAdapter());
-        } catch (e) {
-            if (isLogEnabled()) {
-              rendererLog("@angular/platform-browser package not present. NOT setting root DOM adapter...");
-            }
-        }
-      }
+    ɵsetRootDomAdapter(new NativeScriptDomAdapter());
   }
 
   hasProperty(_element: any, _name: string) {
@@ -44,8 +32,8 @@ export class NativeScriptDomAdapter implements ɵDomAdapter {
   logGroupEnd(): void {
   }
 
-  get attrToPropMap(): {[key: string]: string} { throw new Error("Not implemented!"); };
-  set attrToPropMap(_value: {[key: string]: string}) { throw new Error("Not implemented!"); };
+  get attrToPropMap(): { [key: string]: string } { throw new Error("Not implemented!"); };
+  set attrToPropMap(_value: { [key: string]: string }) { throw new Error("Not implemented!"); };
 
   public resourceLoaderType: Type<any> = null;
   setProperty(_el: Element, _name: string, _value: any): any /** TODO #9100 */ { throw new Error("Not implemented!") }
@@ -58,11 +46,11 @@ export class NativeScriptDomAdapter implements ɵDomAdapter {
   querySelector(_el: any /** TODO #9100 */, _selector: string): HTMLElement { throw new Error("Not implemented!") }
   querySelectorAll(_el: any /** TODO #9100 */, _selector: string): any[] { throw new Error("Not implemented!") }
   on(
-      _el: any /** TODO #9100 */, _evt: any /** TODO #9100 */, _listener: any /** TODO #9100 */): any
+    _el: any /** TODO #9100 */, _evt: any /** TODO #9100 */, _listener: any /** TODO #9100 */): any
       /** TODO #9100 */ { throw new Error("Not implemented!") }
   onAndCancel(
-      _el: any /** TODO #9100 */, _evt: any /** TODO #9100 */,
-      _listener: any /** TODO #9100 */): Function { throw new Error("Not implemented!") }
+    _el: any /** TODO #9100 */, _evt: any /** TODO #9100 */,
+    _listener: any /** TODO #9100 */): Function { throw new Error("Not implemented!") }
   dispatchEvent(_el: any /** TODO #9100 */, _evt: any /** TODO #9100 */): any
       /** TODO #9100 */ { throw new Error("Not implemented!") }
   createMouseEvent(_eventType: any /** TODO #9100 */): any { throw new Error("Not implemented!") }
@@ -88,8 +76,8 @@ export class NativeScriptDomAdapter implements ɵDomAdapter {
   removeChild(_el: any /** TODO #9100 */, _node: any /** TODO #9100 */): any
       /** TODO #9100 */ { throw new Error("Not implemented!") }
   replaceChild(
-      _el: any /** TODO #9100 */, _newNode: any /** TODO #9100 */,
-      _oldNode: any /** TODO #9100 */): any /** TODO #9100 */ { throw new Error("Not implemented!") }
+    _el: any /** TODO #9100 */, _newNode: any /** TODO #9100 */,
+    _oldNode: any /** TODO #9100 */): any /** TODO #9100 */ { throw new Error("Not implemented!") }
   remove(_el: any /** TODO #9100 */): Node { throw new Error("Not implemented!") }
   insertBefore(_el: any /** TODO #9100 */, _node: any /** TODO #9100 */): any
       /** TODO #9100 */ { throw new Error("Not implemented!") }
@@ -111,13 +99,13 @@ export class NativeScriptDomAdapter implements ɵDomAdapter {
   createElementNS(_ns: string, _tagName: string, _doc?: any /** TODO #9100 */): Element { throw new Error("Not implemented!") }
   createTextNode(_text: string, _doc?: any /** TODO #9100 */): Text { throw new Error("Not implemented!") }
   createScriptTag(_attrName: string, _attrValue: string, _doc?: any /** TODO #9100 */):
-      HTMLElement { throw new Error("Not implemented!") }
+    HTMLElement { throw new Error("Not implemented!") }
   createStyleElement(_css: string, _doc?: any /** TODO #9100 */): HTMLStyleElement { throw new Error("Not implemented!") }
   createShadowRoot(_el: any /** TODO #9100 */): any { throw new Error("Not implemented!") }
   getShadowRoot(_el: any /** TODO #9100 */): any { throw new Error("Not implemented!") }
   getHost(_el: any /** TODO #9100 */): any { throw new Error("Not implemented!") }
   getDistributedNodes(_el: any /** TODO #9100 */): Node[] { throw new Error("Not implemented!") }
-  clone /*<T extends Node>*/ (_node: Node /*T*/): Node /*T*/ { throw new Error("Not implemented!") }
+  clone /*<T extends Node>*/(_node: Node /*T*/): Node /*T*/ { throw new Error("Not implemented!") }
   getElementsByClassName(_element: any /** TODO #9100 */, _name: string): HTMLElement[] { throw new Error("Not implemented!") }
   getElementsByTagName(_element: any /** TODO #9100 */, _name: string): HTMLElement[] { throw new Error("Not implemented!") }
   classList(_element: any /** TODO #9100 */): any[] { throw new Error("Not implemented!") }
@@ -129,7 +117,7 @@ export class NativeScriptDomAdapter implements ɵDomAdapter {
   removeStyle(_element: any /** TODO #9100 */, _styleName: string): any /** TODO #9100 */ { throw new Error("Not implemented!") }
   getStyle(_element: any /** TODO #9100 */, _styleName: string): string { throw new Error("Not implemented!") }
   hasStyle(_element: any /** TODO #9100 */, _styleName: string, _styleValue?: string):
-      boolean { throw new Error("Not implemented!") }
+    boolean { throw new Error("Not implemented!") }
   tagName(_element: any /** TODO #9100 */): string { throw new Error("Not implemented!") }
   attributeMap(_element: any /** TODO #9100 */): Map<string, string> { throw new Error("Not implemented!") }
   hasAttribute(_element: any /** TODO #9100 */, _attribute: string): boolean { throw new Error("Not implemented!") }
@@ -139,7 +127,7 @@ export class NativeScriptDomAdapter implements ɵDomAdapter {
   setAttribute(_element: any /** TODO #9100 */, _name: string, _value: string): any
       /** TODO #9100 */ { throw new Error("Not implemented!") }
   setAttributeNS(_element: any /** TODO #9100 */, _ns: string, _name: string, _value: string):
-      any /** TODO #9100 */ { throw new Error("Not implemented!") }
+    any /** TODO #9100 */ { throw new Error("Not implemented!") }
   removeAttribute(_element: any /** TODO #9100 */, _attribute: string): any
       /** TODO #9100 */ { throw new Error("Not implemented!") }
   removeAttributeNS(_element: any /** TODO #9100 */, _ns: string, _attribute: string): any
@@ -158,8 +146,8 @@ export class NativeScriptDomAdapter implements ɵDomAdapter {
   isElementNode(_node: any /** TODO #9100 */): boolean { throw new Error("Not implemented!") }
   hasShadowRoot(_node: any /** TODO #9100 */): boolean { throw new Error("Not implemented!") }
   isShadowRoot(_node: any /** TODO #9100 */): boolean { throw new Error("Not implemented!") }
-  importIntoDoc /*<T extends Node>*/ (_node: Node /*T*/): Node /*T*/ { throw new Error("Not implemented!") }
-  adoptNode /*<T extends Node>*/ (_node: Node /*T*/): Node /*T*/ { throw new Error("Not implemented!") }
+  importIntoDoc /*<T extends Node>*/(_node: Node /*T*/): Node /*T*/ { throw new Error("Not implemented!") }
+  adoptNode /*<T extends Node>*/(_node: Node /*T*/): Node /*T*/ { throw new Error("Not implemented!") }
   getHref(_element: any /** TODO #9100 */): string { throw new Error("Not implemented!") }
   getEventKey(_event: any /** TODO #9100 */): string { throw new Error("Not implemented!") }
   resolveAndSetHref(_element: any /** TODO #9100 */, _baseUrl: string, _href: string): any
@@ -183,7 +171,7 @@ export class NativeScriptDomAdapter implements ɵDomAdapter {
   getTransitionEnd(): string { throw new Error("Not implemented!") }
   supportsAnimation(): boolean { throw new Error("Not implemented!") }
 
-  supportsCookies(): boolean { return false;  }
+  supportsCookies(): boolean { return false; }
   getCookie(_name: string): string { throw new Error("Not implemented!") }
   setCookie(_name: string, _value: string): any /** TODO #9100 */ { throw new Error("Not implemented!") }
 }

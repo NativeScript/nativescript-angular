@@ -1,6 +1,6 @@
 import { Injectable } from "@angular/core";
 import { LocationStrategy } from "@angular/common";
-import { DefaultUrlSerializer, UrlSegmentGroup, UrlTree } from "@angular/router";
+import { DefaultUrlSerializer, UrlSegmentGroup, UrlTree, ActivatedRouteSnapshot } from "@angular/router";
 import { routerLog, routerError, isLogEnabled } from "../trace";
 import { NavigationTransition, Frame } from "tns-core-modules/ui/frame";
 import { isPresent } from "../lang-facade";
@@ -88,6 +88,7 @@ export interface LocationState {
     segmentGroup: UrlSegmentGroup;
     isRootSegmentGroup: boolean;
     isPageNavigation: boolean;
+    frame?: Frame;
 }
 
 @Injectable()
@@ -162,7 +163,7 @@ export class NSLocationStrategy extends LocationStrategy {
         if (!Object.keys(urlTreeRoot.children).length) {
             const segmentGroup = this.currentUrlTree && this.currentUrlTree.root;
             const outletKey = this.getOutletKey(this.getSegmentGroupFullPath(segmentGroup), "primary");
-            const outlet = this.findOutletByKey(outletKey);
+            const outlet = this.findOutlet(outletKey);
 
             if (outlet && this.updateStates(outlet, segmentGroup)) {
                 this.currentOutlet = outlet; // If states updated
@@ -186,12 +187,12 @@ export class NSLocationStrategy extends LocationStrategy {
 
                 const outletPath = this.getSegmentGroupFullPath(currentTree);
                 let outletKey = this.getOutletKey(outletPath, outletName);
-                let outlet = this.findOutletByKey(outletKey);
+                let outlet = this.findOutlet(outletKey);
 
                 const parentOutletName = currentTree.outlet || "";
                 const parentOutletPath = this.getSegmentGroupFullPath(currentTree.parent);
                 const parentOutletKey = this.getOutletKey(parentOutletPath, parentOutletName);
-                const parentOutlet = this.findOutletByKey(parentOutletKey);
+                const parentOutlet = this.findOutlet(parentOutletKey);
 
                 const containsLastState = outlet && outlet.containsTopState(currentSegmentGroup.toString());
                 if (!outlet) {
@@ -237,7 +238,7 @@ export class NSLocationStrategy extends LocationStrategy {
         throw new Error("NSLocationStrategy.forward() - not implemented");
     }
 
-    back(outlet?: Outlet): void {
+    back(outlet?: Outlet, frame?: Frame): void {
         this.currentOutlet = outlet || this.currentOutlet;
 
         if (this.currentOutlet.isPageNavigationBack) {
@@ -246,6 +247,13 @@ export class NSLocationStrategy extends LocationStrategy {
             // clear the stack until we get to a page navigation state
             let state = states.pop();
             let count = 1;
+
+            if (frame) {
+                while (state.frame && state.frame !== frame) {
+                    state = states.pop();
+                    count++;
+                }
+            }
 
             while (!state.isPageNavigation) {
                 state = states.pop();
@@ -447,7 +455,13 @@ export class NSLocationStrategy extends LocationStrategy {
         return this.outlets;
     }
 
-    updateOutletFrame(outlet: Outlet, frame: Frame) {
+    updateOutletFrame(outlet: Outlet, frame: Frame, isEmptyOutletFrame: boolean) {
+        const lastState = outlet.peekState();
+
+        if (lastState && !lastState.frame && !isEmptyOutletFrame) {
+            lastState.frame = frame;
+        }
+
         if (!outlet.containsFrame(frame)) {
             outlet.frames.push(frame);
         }
@@ -547,12 +561,17 @@ export class NSLocationStrategy extends LocationStrategy {
         });
     }
 
-    findOutletByOutletPath(pathByOutlets: string): Outlet {
-        return this.outlets.find((outlet) => outlet.pathByOutlets === pathByOutlets);
-    }
+    findOutlet(outletKey: string, activatedRouteSnapshot?: ActivatedRouteSnapshot): Outlet {
+        let outlet: Outlet = this.outlets.find((currentOutlet) => currentOutlet.outletKeys.indexOf(outletKey) > -1);
 
-    findOutletByKey(outletKey: string): Outlet {
-        return this.outlets.find((outlet) => outlet.outletKeys.indexOf(outletKey) > -1);
+        // No Outlet with the given outletKey could happen when using nested unnamed p-r-o
+        // primary -> primary -> prymary
+        if (!outlet && activatedRouteSnapshot) {
+            const pathByOutlets = this.getPathByOutlets(activatedRouteSnapshot);
+            outlet = this.outlets.find((currentOutlet) => currentOutlet.pathByOutlets === pathByOutlets);
+        }
+
+        return outlet;
     }
 
     private getOutletByFrame(frame: Frame): Outlet {

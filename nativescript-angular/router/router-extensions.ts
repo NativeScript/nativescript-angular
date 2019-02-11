@@ -126,7 +126,7 @@ export class RouterExtensions {
 
         const currentRouteSnapshop = findTopActivatedRouteNodeForOutlet(currentRoute.snapshot);
         const outletKey = this.locationStrategy.getRouteFullPath(currentRouteSnapshop);
-        outlet = this.locationStrategy.findOutletByKey(outletKey);
+        outlet = this.locationStrategy.findOutlet(outletKey, currentRouteSnapshop);
 
         return outlet;
     }

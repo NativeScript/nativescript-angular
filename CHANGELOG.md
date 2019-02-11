@@ -1,3 +1,14 @@
+<a name="7.2.1"></a>
+## [7.2.1](https://github.com/NativeScript/nativescript-angular/compare/7.2.0...7.2.1) (2019-02-10)
+
+
+### Bug Fixes
+
+* **location-strategy:** extend support for nested primary outlets ([566896d](https://github.com/NativeScript/nativescript-angular/commit/566896d))
+* Router tracing does not work with webpack ([e87ef68](https://github.com/NativeScript/nativescript-angular/commit/e87ef68))
+
+
+
 <a name="7.2.0"></a>
 # [7.2.0](https://github.com/NativeScript/nativescript-angular/compare/7.1.2...7.2.0) (2019-01-31)
 
