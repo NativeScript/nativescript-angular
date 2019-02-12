@@ -33,6 +33,7 @@ import {
     on,
     launchEvent,
     LaunchEventData,
+    exitEvent,
 } from "tns-core-modules/application";
 import { TextView } from "tns-core-modules/ui/text-view";
 
@@ -255,7 +256,16 @@ export class NativeScriptPlatformRef extends PlatformRef {
                 args.root = rootContent;
             }
         );
+        const exitCallback = profile(
+            "nativescript-angular/platform-common.exitCallback",() => {
+                const lastModuleRef = lastBootstrappedModule ? lastBootstrappedModule.get() : null;
+                if (lastModuleRef) {
+                    lastModuleRef.destroy();
+                }
+            }
+        );
         on(launchEvent, launchCallback);
+        on(exitEvent, exitCallback);
 
         applicationRun();
     }

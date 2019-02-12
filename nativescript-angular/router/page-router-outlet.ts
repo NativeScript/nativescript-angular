@@ -352,12 +352,19 @@ export class PageRouterOutlet implements OnDestroy { // tslint:disable-line:dire
         // Add it to the new page
         page.content = componentView;
 
-        page.on(Page.navigatedFromEvent, (<any>global).Zone.current.wrap((args: NavigatedData) => {
+        const navigatedFromCallback = (<any>global).Zone.current.wrap((args: NavigatedData) => {
             if (args.isBackNavigation) {
                 this.locationStrategy._beginBackPageNavigation(this.frame);
                 this.locationStrategy.back(null, this.frame);
             }
-        }));
+        });
+        page.on(Page.navigatedFromEvent, navigatedFromCallback);
+        componentRef.onDestroy(() => {
+            if (page) {
+                page.off(Page.navigatedFromEvent, navigatedFromCallback);
+                page = null;
+            }
+        });
 
         const navOptions = this.locationStrategy._beginPageNavigation(this.frame);
 
@@ -374,7 +381,9 @@ export class PageRouterOutlet implements OnDestroy { // tslint:disable-line:dire
         }
 
         this.frame.navigate({
-            create: () => { return page; },
+            create() {
+                return page;
+            },
             clearHistory: navOptions.clearHistory,
             animated: navOptions.animated,
             transition: navOptions.transition
