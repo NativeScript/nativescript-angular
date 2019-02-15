@@ -29,9 +29,6 @@ describe("NativeScriptRouterModule.forRoot", () => {
     it("should provide nativescript routing services", () => {
         return nsTestBedRender(RouterTestComponent).then((fixture) => {
             const injector = fixture.componentRef.injector
-            let ls = injector.get(LocationStrategy, null);
-            console.log("----> ls: " + typeof ls);
-            console.dir(ls);
 
             assert.instanceOf(injector.get(LocationStrategy, null), NSLocationStrategy);
             assert.instanceOf(injector.get(RouterExtensions, null), RouterExtensions);
