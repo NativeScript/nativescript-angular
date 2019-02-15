@@ -155,11 +155,6 @@ export abstract class TemplatedItemsComponent implements DoCheck, OnDestroy, Aft
 
             viewRef = args.view[NG_VIEW];
 
-            // No ng-template is setup, continue with 'defaultTemplate' 
-            if (viewRef) {
-                return;
-            }
-
             // Getting angular view from original element (in cases when ProxyViewContainer
             // is used NativeScript internally wraps it in a StackLayout)
             if (!viewRef && args.view instanceof LayoutBase && args.view.getChildrenCount() > 0) {
@@ -168,6 +163,11 @@ export abstract class TemplatedItemsComponent implements DoCheck, OnDestroy, Aft
 
             if (!viewRef && isLogEnabled()) {
                 listViewError(`ViewReference not found for item ${index}. View recycling is not working`);
+            }
+
+            // No ng-template is setup, continue with 'defaultTemplate'
+            if (!viewRef) {
+                return;
             }
         }
 
