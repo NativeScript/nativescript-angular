@@ -44,16 +44,14 @@ const NS_ROUTER_PROVIDERS = [
 })
 export class NativeScriptRouterModule {
     static forRoot(routes: Routes, config?: ExtraOptions): ModuleWithProviders<NativeScriptRouterModule> {
-        const ngForRoot: ModuleWithProviders = RouterModule.forRoot(routes, config);
         return {
             ngModule: NativeScriptRouterModule,
-            providers: [...ngForRoot.providers, ...NS_ROUTER_PROVIDERS]
+            providers: [...RouterModule.forRoot(routes, config).providers, ...NS_ROUTER_PROVIDERS]
         };
     }
 
     static forChild(routes: Routes): ModuleWithProviders<NativeScriptRouterModule> {
-        const ngForChild: ModuleWithProviders = RouterModule.forChild(routes);
-        return { ngModule: NativeScriptRouterModule, providers: ngForChild.providers };
+        return { ngModule: NativeScriptRouterModule, providers: RouterModule.forChild(routes).providers };
     }
 }
 
