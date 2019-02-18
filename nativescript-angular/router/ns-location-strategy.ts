@@ -729,4 +729,13 @@ export class NSLocationStrategy extends LocationStrategy {
     private getOutletKey(path: string, outletName: string): string {
         return path ? path + "-" + outletName : outletName;
     }
+
+    ngOnDestroy() {
+        if (isLogEnabled()) {
+            routerLog("NSLocationStrategy.ngOnDestroy()");
+        }
+
+        this.outlets = [];
+        this.currentOutlet = null;
+    }
 }
