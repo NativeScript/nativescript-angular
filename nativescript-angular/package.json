@@ -1,6 +1,6 @@
 {
   "name": "nativescript-angular",
-  "version": "7.2.1",
+  "version": "7.2.2",
   "description": "An Angular renderer that lets you build mobile apps with NativeScript.",
   "homepage": "https://www.nativescript.org/",
   "bugs": "https://github.com/NativeScript/nativescript-angular/issues",
