@@ -19,32 +19,39 @@ export { NSEmptyOutletComponent } from "./ns-empty-outlet.component";
 
 export type LocationState = LocationState;
 
+const ROUTER_DIRECTIVES = [NSRouterLink, NSRouterLinkActive, PageRouterOutlet, NSEmptyOutletComponent];
+
+const NS_ROUTER_PROVIDERS = [
+    {
+        provide: NSLocationStrategy,
+        useFactory: provideLocationStrategy,
+        deps: [[NSLocationStrategy, new Optional(), new SkipSelf()], FrameService],
+    },
+    { provide: LocationStrategy, useExisting: NSLocationStrategy },
+    NativescriptPlatformLocation,
+    { provide: PlatformLocation, useClass: NativescriptPlatformLocation },
+    RouterExtensions,
+    NSRouteReuseStrategy,
+    { provide: RouteReuseStrategy, useExisting: NSRouteReuseStrategy },
+];
+
 @NgModule({
-    declarations: [NSRouterLink, NSRouterLinkActive, PageRouterOutlet, NSEmptyOutletComponent],
-    providers: [
-        {
-            provide: NSLocationStrategy,
-            useFactory: provideLocationStrategy,
-            deps: [[NSLocationStrategy, new Optional(), new SkipSelf()], FrameService],
-        },
-        { provide: LocationStrategy, useExisting: NSLocationStrategy },
-        NativescriptPlatformLocation,
-        { provide: PlatformLocation, useClass: NativescriptPlatformLocation },
-        RouterExtensions,
-        NSRouteReuseStrategy,
-        { provide: RouteReuseStrategy, useExisting: NSRouteReuseStrategy },
-    ],
+    declarations: ROUTER_DIRECTIVES,
+    entryComponents: [NSEmptyOutletComponent],
     imports: [RouterModule, NativeScriptCommonModule],
-    exports: [RouterModule, NSRouterLink, NSRouterLinkActive, PageRouterOutlet, NSEmptyOutletComponent],
+    exports: [RouterModule, ...ROUTER_DIRECTIVES],
     schemas: [NO_ERRORS_SCHEMA],
 })
 export class NativeScriptRouterModule {
-    static forRoot(routes: Routes, config?: ExtraOptions): ModuleWithProviders {
-        return RouterModule.forRoot(routes, config);
+    static forRoot(routes: Routes, config?: ExtraOptions): ModuleWithProviders<NativeScriptRouterModule> {
+        return {
+            ngModule: NativeScriptRouterModule,
+            providers: [...RouterModule.forRoot(routes, config).providers, ...NS_ROUTER_PROVIDERS]
+        };
     }
 
-    static forChild(routes: Routes): ModuleWithProviders {
-        return RouterModule.forChild(routes);
+    static forChild(routes: Routes): ModuleWithProviders<NativeScriptRouterModule> {
+        return { ngModule: NativeScriptRouterModule, providers: RouterModule.forChild(routes).providers };
     }
 }
 
