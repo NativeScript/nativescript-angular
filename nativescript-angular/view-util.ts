@@ -265,6 +265,8 @@ export class ViewUtil {
         } else if (child.nodeName === "DetachedContainer") {
             // Skip - DetachedContainer is... well detached from its parent
             // Used with ListViews and other TemplatedItemsComponent views.
+        } else if (child.nodeName === "FormattedString") {
+            // Removing FormattedString and its Spans from a Label throws an exception
         } else if (isView(parent)) {
             parent._removeView(child);
         }
