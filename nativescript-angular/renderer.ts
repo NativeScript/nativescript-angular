@@ -79,7 +79,7 @@ export class NativeScriptRendererFactory implements RendererFactory2 {
             traceLog(`NativeScriptRendererFactory.ngOnDestroy()`);
         }
 
-        if (this.rootNgView && this.rootNgView.firstChild) {
+        while (this.rootNgView && this.rootNgView.firstChild) {
             this.viewUtil.removeChild(this.rootNgView, this.rootNgView.firstChild);
         }
     }
