@@ -357,7 +357,7 @@ export class PageRouterOutlet implements OnDestroy { // tslint:disable-line:dire
         // Component loaded. Find its root native view.
         const componentView = componentRef.location.nativeElement;
         // Remove it from original native parent.
-        this.viewUtil.removeChild(componentView.parent, componentView);
+        this.viewUtil.removeChild(componentView.parent, componentView, false);
         // Add it to the new page
         this.viewUtil.insertChild(page, componentView);
 

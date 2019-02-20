@@ -157,9 +157,10 @@ export class ViewUtil {
         return next;
     }
 
-    public removeChild(parent: View, child: View) {
+    public removeChild(parent: View, child: View, removeGrandchildren = true) {
         if (isLogEnabled()) {
-           traceLog(`ViewUtil.removeChild parent: ${parent} child: ${child}`);
+           traceLog(`ViewUtil.removeChild parent: ${parent} child: ${child} `
+            + `remove grandchildren: ${removeGrandchildren}`);
         }
 
         if (!parent) {
@@ -170,7 +171,8 @@ export class ViewUtil {
         const extendedChild = this.ensureNgViewExtensions(child);
 
         // Remove the child's children and their children
-        while (extendedChild && extendedChild.firstChild) {
+        // Unless called from PageRouterOutlet when the child is moved from once parent to another.
+        while (extendedChild && extendedChild.firstChild && removeGrandchildren) {
             const grandchild = extendedChild.firstChild;
             if (isLogEnabled()) {
                 traceLog(`ViewUtil.removeChild parent: ${parent} child: ${extendedChild} grandchild: ${grandchild}`);
