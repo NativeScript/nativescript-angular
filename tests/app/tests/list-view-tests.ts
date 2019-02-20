@@ -1,7 +1,8 @@
 import { assert } from "./test-config";
-import { Component, Input } from "@angular/core";
+import { Component, Input, ViewChild } from "@angular/core";
 import { ComponentFixture, async } from "@angular/core/testing";
 import { nsTestBedAfterEach, nsTestBedBeforeEach, nsTestBedRender } from "nativescript-angular/testing";
+import { ListViewComponent } from "nativescript-angular/directives";
 // import trace = require("trace");
 // trace.setCategories("ns-list-view, " + trace.categories.Navigation);
 // trace.enable();
@@ -76,11 +77,34 @@ export class TestListViewSelectorComponent {
     constructor() { testTemplates = { first: 0, second: 0 }; }
 }
 
+@Component({
+    selector: "list-view-default-item-template",
+    template: `
+    <GridLayout>
+        <ListView #listView [items]="myItems"></ListView>
+    </GridLayout>
+    `
+})
+export class TestDefaultItemTemplateComponent {
+    public myItems: Array<DataItem>;
+    constructor () {
+        this.myItems = new Array<DataItem>();
+        for (let i = 0; i < 100; i++) {
+            this.myItems.push(new DataItem(i, "Name " + i));
+        }
+    }
+    @ViewChild("listView") listViewElement: ListViewComponent;
+    onScrollListViewTo() { 
+        this.listViewElement.nativeElement.scrollToIndex(100);
+    }
+}
+
 describe("ListView-tests", () => {
     beforeEach(nsTestBedBeforeEach([
         TestListViewComponent,
         TestListViewSelectorComponent,
-        ItemTemplateComponent
+        ItemTemplateComponent,
+        TestDefaultItemTemplateComponent
     ]));
     afterEach(nsTestBedAfterEach(false));
 
@@ -97,5 +121,13 @@ describe("ListView-tests", () => {
         nsTestBedRender(TestListViewSelectorComponent).then(() => {
             assert.deepEqual(testTemplates, { first: 2, second: 1 });
         });
+    }));
+
+    it("'defaultTemplate' does not throw when list-view is scrolled", async(() => {
+        nsTestBedRender(TestDefaultItemTemplateComponent)
+            .then((fixture: ComponentFixture<TestDefaultItemTemplateComponent>) => {
+                const component = fixture.componentRef.instance;
+                assert.doesNotThrow(component.onScrollListViewTo.bind(component));
+            });
     }));
 });
