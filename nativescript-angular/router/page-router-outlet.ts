@@ -359,7 +359,7 @@ export class PageRouterOutlet implements OnDestroy { // tslint:disable-line:dire
         // Remove it from original native parent.
         this.viewUtil.removeChild(componentView.parent, componentView);
         // Add it to the new page
-        page.content = componentView;
+        this.viewUtil.insertChild(page, componentView);
 
         page.on(Page.navigatedFromEvent, (<any>global).Zone.current.wrap((args: NavigatedData) => {
             if (args.isBackNavigation) {
