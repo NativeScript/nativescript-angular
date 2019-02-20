@@ -253,7 +253,7 @@ export class ViewUtil {
 
     private removeFromVisualTree(parent: NgView, child: NgView) {
         if (isLogEnabled()) {
-            traceLog(`ViewUtil.findPreviousElement parent: ${parent} child: ${child}`);
+            traceLog(`ViewUtil.removeFromVisualTree parent: ${parent} child: ${child}`);
         }
 
         if (parent.meta && parent.meta.removeChild) {
