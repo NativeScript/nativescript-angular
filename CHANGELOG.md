@@ -1,3 +1,13 @@
+<a name="7.2.2"></a>
+## [7.2.2](https://github.com/NativeScript/nativescript-angular/compare/7.2.1...7.2.2) (2019-02-19)
+
+
+### Bug Fixes
+
+* **list-view:** add support for default item template ([4061cc7](https://github.com/NativeScript/nativescript-angular/commit/4061cc7))
+
+
+
 <a name="7.2.1"></a>
 ## [7.2.1](https://github.com/NativeScript/nativescript-angular/compare/7.2.0...7.2.1) (2019-02-10)
 
