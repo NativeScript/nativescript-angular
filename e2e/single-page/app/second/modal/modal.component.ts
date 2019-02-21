@@ -12,8 +12,8 @@ export class ModalComponent {
     constructor(private params: ModalDialogParams) {
     }
 
-    public close(result: string) {
-        this.params.closeCallback(result);
+    public close() {
+        this.params.closeCallback();
     }
 
 }

@@ -564,10 +564,9 @@ export class NSLocationStrategy extends LocationStrategy {
     }
 
     findOutlet(outletKey: string, activatedRouteSnapshot?: ActivatedRouteSnapshot): Outlet {
-        const that = this;
         let outlet: Outlet = this.outlets.find((currentOutlet) => {
-            let equalModalDepth = currentOutlet.modalNavigationDepth === that._modalNavigationDepth;
-            return currentOutlet.outletKeys.indexOf(outletKey) > -1 && equalModalDepth;
+            let equalModalDepth = currentOutlet.modalNavigationDepth === this._modalNavigationDepth;
+            return equalModalDepth && currentOutlet.outletKeys.indexOf(outletKey) > -1;
         });
 
         // No Outlet with the given outletKey could happen when using nested unnamed p-r-o
@@ -575,8 +574,8 @@ export class NSLocationStrategy extends LocationStrategy {
         if (!outlet && activatedRouteSnapshot) {
             const pathByOutlets = this.getPathByOutlets(activatedRouteSnapshot);
             outlet = this.outlets.find((currentOutlet) => {
-                let equalModalDepth = currentOutlet.modalNavigationDepth === that._modalNavigationDepth;
-                return currentOutlet.pathByOutlets === pathByOutlets && equalModalDepth;
+                let equalModalDepth = currentOutlet.modalNavigationDepth === this._modalNavigationDepth;
+                return equalModalDepth && currentOutlet.pathByOutlets === pathByOutlets;
             });
         }
 
