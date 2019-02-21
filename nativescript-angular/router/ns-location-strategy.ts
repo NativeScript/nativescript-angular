@@ -275,9 +275,13 @@ export class NSLocationStrategy extends LocationStrategy {
 
                 if (!outlet) {
                     const topmostFrame = this.frameService.getFrame();
-                    this.currentOutlet = this.getOutletByFrame(topmostFrame);
+                    this.currentOutlet = this.getOutletByFrame(topmostFrame) || this.currentOutlet;
                 }
-                this.currentOutlet.getFrameToBack().goBack();
+
+                const frameToBack: Frame = this.currentOutlet.getFrameToBack();
+                if (frameToBack) {
+                    frameToBack.goBack();
+                }
             } else {
                 // Nested navigation - just pop the state
                 if (isLogEnabled()) {
@@ -385,10 +389,11 @@ export class NSLocationStrategy extends LocationStrategy {
             routerLog("NSLocationStrategy._beginModalNavigation()");
         }
 
-        this.currentOutlet = this.getOutletByFrame(frame);
+        this.currentOutlet = this.getOutletByFrame(frame) || this.currentOutlet;
 
         // It is possible to have frame, but not corresponding Outlet, if
-        // showing modal dialog on app.component.ts ngOnInit() e.g.
+        // showing modal dialog on app.component.ts ngOnInit() e.g. In that case
+        // the modal is treated as none modal navigation.
         if (this.currentOutlet) {
             this.currentOutlet.showingModal = true;
             this._modalNavigationDepth++;
@@ -400,15 +405,18 @@ export class NSLocationStrategy extends LocationStrategy {
             routerLog("NSLocationStrategy.closeModalNavigation()");
         }
 
-        if (this._modalNavigationDepth > 0) {
+        const isShowingModal = this._modalNavigationDepth > 0;
+
+        if (isShowingModal) {
             this._modalNavigationDepth--;
         }
 
         // currentOutlet should be the one that corresponds to the topmost() frame
         const topmostOutlet = this.getOutletByFrame(this.frameService.getFrame());
-        this.currentOutlet = this.findOutletByModal(this._modalNavigationDepth, true) || topmostOutlet;
+        const outlet = this.findOutletByModal(this._modalNavigationDepth, isShowingModal) || topmostOutlet;
 
-        if (this.currentOutlet) {
+        if (outlet) {
+            this.currentOutlet = outlet;
             this.currentOutlet.showingModal = false;
             this.callPopState(this.currentOutlet.peekState(), false);
         }
@@ -481,7 +489,8 @@ export class NSLocationStrategy extends LocationStrategy {
                 this.callPopState(null, true, currentOutlet);
             }
 
-            if (!currentOutlet.isNSEmptyOutlet) {
+            // Skip frames filtering since currentOutlet is <router-outlet> when no frames available.
+            if (currentOutlet.frames.length && !currentOutlet.isNSEmptyOutlet) {
                 currentOutlet.frames = currentOutlet.frames.filter(currentFrame => currentFrame !== frame);
                 return currentOutlet.frames.length;
             }
@@ -554,24 +563,31 @@ export class NSLocationStrategy extends LocationStrategy {
         return pathToOutlet || lastPath;
     }
 
-    findOutletByModal(modalNavigation: number, isShowingModal?: boolean): Outlet {
-        return this.outlets.find((outlet) => {
-            let isEqual = outlet.modalNavigationDepth === modalNavigation;
-            return isShowingModal ? isEqual && outlet.showingModal : isEqual;
-        });
-    }
-
     findOutlet(outletKey: string, activatedRouteSnapshot?: ActivatedRouteSnapshot): Outlet {
-        let outlet: Outlet = this.outlets.find((currentOutlet) => currentOutlet.outletKeys.indexOf(outletKey) > -1);
+        const that = this;
+        let outlet: Outlet = this.outlets.find((currentOutlet) => {
+            let equalModalDepth = currentOutlet.modalNavigationDepth === that._modalNavigationDepth;
+            return currentOutlet.outletKeys.indexOf(outletKey) > -1 && equalModalDepth;
+        });
 
         // No Outlet with the given outletKey could happen when using nested unnamed p-r-o
         // primary -> primary -> prymary
         if (!outlet && activatedRouteSnapshot) {
             const pathByOutlets = this.getPathByOutlets(activatedRouteSnapshot);
-            outlet = this.outlets.find((currentOutlet) => currentOutlet.pathByOutlets === pathByOutlets);
+            outlet = this.outlets.find((currentOutlet) => {
+                let equalModalDepth = currentOutlet.modalNavigationDepth === that._modalNavigationDepth;
+                return currentOutlet.pathByOutlets === pathByOutlets && equalModalDepth;
+            });
         }
 
         return outlet;
+    }
+
+    private findOutletByModal(modalNavigation: number, isShowingModal?: boolean): Outlet {
+        return this.outlets.find((outlet) => {
+            let equalModalDepth = outlet.modalNavigationDepth === modalNavigation;
+            return isShowingModal ? equalModalDepth && outlet.showingModal : equalModalDepth;
+        });
     }
 
     private getOutletByFrame(frame: Frame): Outlet {

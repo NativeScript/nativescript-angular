@@ -87,9 +87,7 @@ export class ModalDialogService {
             frame = (parentView.page && parentView.page.frame) || topmost();
         }
 
-        if (frame) {
-            this.location._beginModalNavigation(frame);
-        }
+        this.location._beginModalNavigation(frame);
 
         return new Promise((resolve, reject) => {
             setTimeout(() => {
