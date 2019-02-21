@@ -262,6 +262,10 @@ export class NativeScriptPlatformRef extends PlatformRef {
                 if (lastModuleRef) {
                     lastModuleRef.destroy();
                 }
+
+                if (!autoCreateFrame) {
+                    rootContent = null;
+                }
             }
         );
         on(launchEvent, launchCallback);
