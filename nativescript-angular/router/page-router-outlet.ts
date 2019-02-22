@@ -374,10 +374,9 @@ export class PageRouterOutlet implements OnDestroy { // tslint:disable-line:dire
                 if (this.outlet) {
                     this.routeReuseStrategy.clearCache(this.outlet.outletKeys[0]);
                 }
-                page.off(Page.navigatedToEvent, clearCallback);
             });
 
-            page.on(Page.navigatedToEvent, clearCallback);
+            page.once(Page.navigatedToEvent, clearCallback);
         }
 
         this.frame.navigate({
