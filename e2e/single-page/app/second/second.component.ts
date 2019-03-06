@@ -1,10 +1,12 @@
-import { Component, OnInit, OnDestroy } from "@angular/core";
+import { Component, OnInit, OnDestroy, ViewContainerRef } from "@angular/core";
 import { ActivatedRoute, Router, Route } from "@angular/router";
 
+import { ModalDialogService, ModalDialogOptions } from "nativescript-angular";
 import { Page } from "tns-core-modules/ui/page";
 import { Observable } from "rxjs";
 import { map } from "rxjs/operators";
 import { RouterExtensions } from "nativescript-angular/router";
+import { ModalComponent } from "./modal/modal.component";
 
 @Component({
     selector: "second",
@@ -19,12 +21,16 @@ import { RouterExtensions } from "nativescript-angular/router";
 
     <StackLayout>
         <Label [text]="'Second Component: ' + (id$ | async)" class="title"></Label>
+        <Button text="Show Modal" (tap)="onShowModal()"></Button>
         <Button text="Back" (tap)="back()"></Button>
     </StackLayout>`
 })
 export class SecondComponent implements OnInit, OnDestroy {
     public id$: Observable<number>;
-    constructor(route: ActivatedRoute, private routerExtensions: RouterExtensions) {
+    constructor(route: ActivatedRoute,
+        private routerExtensions: RouterExtensions,
+        private viewContainerRef: ViewContainerRef,
+        private modalService: ModalDialogService) {
         this.id$ = route.params.pipe(map(r => +r["id"]));
     }
 
@@ -38,5 +44,17 @@ export class SecondComponent implements OnInit, OnDestroy {
 
     back() {
         this.routerExtensions.back();
+    }
+
+    onShowModal() {
+        let options: ModalDialogOptions = {
+            viewContainerRef: this.viewContainerRef,
+            context: {
+            },
+            fullscreen: true
+        };
+
+        this.modalService.showModal(ModalComponent, options).then((dialogResult: string) => {
+        });
     }
 }
