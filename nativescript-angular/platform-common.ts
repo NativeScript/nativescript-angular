@@ -260,6 +260,8 @@ export class NativeScriptPlatformRef extends PlatformRef {
             "nativescript-angular/platform-common.exitCallback", () => {
                 const lastModuleRef = lastBootstrappedModule ? lastBootstrappedModule.get() : null;
                 if (lastModuleRef) {
+                    lastBootstrappedModule = null;
+
                     lastModuleRef.destroy();
                 }
 
