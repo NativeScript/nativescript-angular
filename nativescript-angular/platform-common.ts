@@ -34,6 +34,7 @@ import {
     launchEvent,
     LaunchEventData,
     exitEvent,
+    ApplicationEventData,
 } from "tns-core-modules/application";
 import { TextView } from "tns-core-modules/ui/text-view";
 
@@ -257,9 +258,16 @@ export class NativeScriptPlatformRef extends PlatformRef {
             }
         );
         const exitCallback = profile(
-            "nativescript-angular/platform-common.exitCallback", () => {
+            "nativescript-angular/platform-common.exitCallback", (args: ApplicationEventData) => {
+                const androidActivity = args.android;
+                if (androidActivity && !androidActivity.isFinishing()) {
+                    // Exit event was triggered as a part of a restart of the app.
+                    return;
+                }
+
                 const lastModuleRef = lastBootstrappedModule ? lastBootstrappedModule.get() : null;
                 if (lastModuleRef) {
+                    // Make sure the module is only destroyed once
                     lastBootstrappedModule = null;
 
                     lastModuleRef.destroy();
