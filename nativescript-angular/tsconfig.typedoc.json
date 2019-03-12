@@ -39,6 +39,23 @@
         "./index.ts",
         "./bin",
         "./index.d.ts",
-        "./testing"
+        "./testing",
+        "./animations/index.ts",
+        "./animations/utils.ts",
+        "./app-host-view.ts",
+        "./common/utils.ts",
+        "./dom-adapter.ts",
+        "./file-system",
+        "./forms/index.ts",
+        "./forms/value-accessors/index.ts",
+        "./lang-facade.ts",
+        "./polyfills",
+        "./router/private-imports",
+        "./schema-registry.ts",
+        "./http-client/index.ts",
+        "./http/index.ts",
+        "./router/index.ts",
+        ""
+
     ]
 }
