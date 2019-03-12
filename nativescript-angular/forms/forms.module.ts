@@ -5,7 +5,7 @@ import {
     CheckedValueAccessor,
     DateValueAccessor,
     TimeValueAccessor,
-    NumberValueAccessor,
+    NsNumberValueAccessor,
     SelectedIndexValueAccessor
 } from "./value-accessors";
 
@@ -15,7 +15,7 @@ export const FORMS_DIRECTIVES = [
     DateValueAccessor,
     TimeValueAccessor,
     SelectedIndexValueAccessor,
-    NumberValueAccessor,
+    NsNumberValueAccessor,
 ];
 
 @NgModule({

@@ -1,0 +1,9 @@
+{
+    "name": "nativescript-angular/nativescript.module",
+    "main": "index",
+    "ngPackage": {
+        "lib": {
+            "entryFile": "index.ts"
+        }
+    }
+}

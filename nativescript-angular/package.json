@@ -1,6 +1,16 @@
 {
   "name": "nativescript-angular",
   "version": "7.3.0",
+  "$schema": "./node_modules/ng-packagr/package.schema.json",
+  "ngPackage": {
+    "whitelistedNonPeerDependencies": [
+      "nativescript-intl",
+      "reflect-metadata"
+    ],
+    "lib": {
+      "entryFile": "index.ts"
+    }
+  },
   "description": "An Angular renderer that lets you build mobile apps with NativeScript.",
   "homepage": "https://www.nativescript.org/",
   "bugs": "https://github.com/NativeScript/nativescript-angular/issues",
@@ -28,16 +38,7 @@
     "url": "https://github.com/NativeScript/nativescript-angular.git"
   },
   "scripts": {
-    "tslint": "tslint --project tsconfig.json --config tslint.json",
-    "postinstall": "node postinstall.js",
-    "tsc": "tsc -p tsconfig.json",
-    "tsc-w": "tsc -p tsconfig.json -w",
-    "ngc": "ngc -p tsconfig.json",
-    "prepare": "npm run ngc",
-    "version": "rm -rf package-lock.json && conventional-changelog -p angular -i ../CHANGELOG.md -s && git add ../CHANGELOG.md"
-  },
-  "bin": {
-    "update-app-ng-deps": "./bin/update-app-ng-deps"
+    "pack": "ng-packagr -p package.json && cp -rf hooks dist/hooks && cd dist && npm pack"
   },
   "dependencies": {
     "nativescript-intl": "^3.0.0",
@@ -69,8 +70,10 @@
     "@angular/platform-browser-dynamic": "~7.2.0",
     "@angular/router": "~7.2.0",
     "codelyzer": "^4.5.0",
+    "ng-packagr": "^4.7.1",
     "rxjs": "~6.3.3",
     "tns-core-modules": "next",
+    "tsickle": "^0.34.3",
     "tslint": "^5.5.0",
     "typescript": "~3.1.1",
     "zone.js": "^0.8.4"

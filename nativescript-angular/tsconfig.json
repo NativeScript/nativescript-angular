@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
-    "target": "es5",
-    "module": "commonjs",
+    "module": "es2015",
+    "target": "es2015",
     "moduleResolution": "node",
     "sourceMap": true,
     "emitDecoratorMetadata": true,
@@ -13,22 +13,25 @@
     "noEmitOnError": true,
     "noImplicitAny": false,
     "lib": [
-        "dom",
-        "es6",
-        "es2015.iterable"
+      "dom",
+      "es6",
+      "es2015.iterable"
     ],
     "baseUrl": ".",
     "paths": {
-        "*": [
-            "./node_modules/tns-core-modules/*",
-            "./node_modules/*"
-        ]
+      "*": [
+        "./node_modules/tns-core-modules/*",
+        "./node_modules/*"
+      ]
     }
   },
   "angularCompilerOptions": {
     "genDir": ".",
     "skipMetadataEmit": false,
     "skipTemplateCodegen": true,
-    "strictMetadataEmit": true
+    "annotateForClosureCompiler": true,
+    "strictMetadataEmit": false,
+    "flatModuleOutFile": "nativescript-angular.js",
+    "flatModuleId": "nativescript-angular"
   }
 }

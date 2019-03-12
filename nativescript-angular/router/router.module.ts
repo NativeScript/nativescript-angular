@@ -12,6 +12,8 @@ import { NativeScriptCommonModule } from "../common";
 import { FrameService } from "../platform-providers";
 import { NSEmptyOutletComponent } from "./ns-empty-outlet.component";
 
+export { NSRouterLink } from "./ns-router-link";
+export { NSRouterLinkActive } from "./ns-router-link-active";
 export { PageRoute } from "./page-router-outlet";
 export { RouterExtensions } from "./router-extensions";
 export { NSModuleFactoryLoader } from "./ns-module-factory-loader";

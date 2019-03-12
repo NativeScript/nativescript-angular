@@ -1,3 +1,5 @@
+import { install } from "tns-core-modules/globals";
+install();
 import "tns-core-modules/application";
 
 export * from "./platform-common";
@@ -15,6 +17,7 @@ export * from "./modal-dialog";
 export * from "./renderer";
 export * from "./view-util";
 export * from "./resource-loader";
+export * from "./nativescript.module";
 
 export {
     ViewClass,

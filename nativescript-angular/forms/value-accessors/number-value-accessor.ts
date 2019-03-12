@@ -5,7 +5,7 @@ import { Slider } from "tns-core-modules/ui/slider";
 
 const NUMBER_VALUE_ACCESSOR = {
     provide: NG_VALUE_ACCESSOR,
-    useExisting: forwardRef(() => NumberValueAccessor),
+    useExisting: forwardRef(() => NsNumberValueAccessor),
     multi: true,
 };
 
@@ -27,7 +27,7 @@ const NUMBER_VALUE_ACCESSOR = {
         "(valueChange)": "onChange($event.value)",
     },
 })
-export class NumberValueAccessor extends BaseValueAccessor<Slider> { // tslint:disable-line:directive-class-suffix
+export class NsNumberValueAccessor extends BaseValueAccessor<Slider> { // tslint:disable-line:directive-class-suffix
     constructor(elementRef: ElementRef) {
         super(elementRef.nativeElement);
     }
