@@ -13,7 +13,6 @@ import { topmost, Frame } from "tns-core-modules/ui/frame";
 import { View, ViewBase } from "tns-core-modules/ui/core/view";
 import { ProxyViewContainer } from "tns-core-modules/ui/proxy-view-container/proxy-view-container";
 
-
 // import { NSLocationStrategy } from "nativescript-angular/router";
 
 import { PageFactory, PAGE_FACTORY, AppHostView, once } from "nativescript-angular/core";

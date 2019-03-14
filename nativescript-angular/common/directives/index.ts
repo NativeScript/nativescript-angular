@@ -25,7 +25,7 @@ export {
 export { AndroidFilterComponent } from "./platform-filter-android";
 export { IosFilterComponent } from "./platform-filter-ios";
 export { DetachedLoader } from "./detached-loader";
-export  { TemplatedItemsComponent } from "./templated-items-comp";
+export { TemplatedItemsComponent } from "./templated-items-comp";
 
 export const NS_DIRECTIVES = [
     ListViewComponent,
