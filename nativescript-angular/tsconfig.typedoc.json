@@ -1,0 +1,61 @@
+{"compilerOptions": {
+    "target": "es5",
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "sourceMap": true,
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "noImplicitUseStrict": true,
+    "noEmitHelpers": true,
+    "declaration": true,
+    "removeComments": false,
+    "noEmitOnError": true,
+    "noImplicitAny": false,
+    "lib": [
+        "dom",
+        "es6",
+        "es2015.iterable"
+    ],
+    "baseUrl": ".",
+    "paths": {
+        "*": [
+            "./node_modules/tns-core-modules/*",
+            "./node_modules/*"
+        ]
+    }
+  },
+  "angularCompilerOptions": {
+    "genDir": ".",
+    "skipMetadataEmit": false,
+    "skipTemplateCodegen": true,
+    "strictMetadataEmit": true
+  },
+"exclude": [
+        "./node_modules",
+        "tns-core-modules/references.d.ts",
+        "tns-core-modules/node_modules",
+        "tns-core-modules/ui/frame/transition-definitions.android.d.ts",
+        "./zone-js",
+        "./index.ts",
+        "./bin",
+        "./index.d.ts",
+        "./testing",
+        "./animations/index.ts",
+        "./animations/utils.ts",
+        "./app-host-view.ts",
+        "./common/utils.ts",
+        "./dom-adapter.ts",
+        "./file-system",
+        "./forms/index.ts",
+        "./forms/value-accessors/index.ts",
+        "./lang-facade.ts",
+        "./polyfills",
+        "./router/private-imports",
+        "./schema-registry.ts",
+        "./http-client/index.ts",
+        "./http/index.ts",
+        "./router/index.ts",
+        ""
+
+    ]
+}
