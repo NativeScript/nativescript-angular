@@ -1,6 +1,6 @@
 {
   "name": "nativescript-angular",
-  "version": "7.3.0",
+  "version": "8.0.0",
   "$schema": "./node_modules/ng-packagr/package.schema.json",
   "ngPackage": {
     "whitelistedNonPeerDependencies": [
@@ -38,37 +38,37 @@
     "url": "https://github.com/NativeScript/nativescript-angular.git"
   },
   "scripts": {
-    "pack": "ng-packagr -p package.json && cp -rf hooks dist/hooks && cd dist && npm pack"
+    "pack": "rm -rf dist && tsc && ng-packagr -p package.json && cp -rf hooks dist/hooks && cd dist && npm pack"
   },
   "dependencies": {
     "nativescript-intl": "^3.0.0",
     "reflect-metadata": "^0.1.8"
   },
   "peerDependencies": {
-    "@angular/platform-browser-dynamic": "~7.2.0",
-    "@angular/common": "~7.2.0",
-    "@angular/compiler": "~7.2.0",
-    "@angular/core": "~7.2.0",
-    "@angular/forms": "~7.2.0",
-    "@angular/http": "~7.2.0",
-    "@angular/platform-browser": "~7.2.0",
-    "@angular/router": "~7.2.0",
+    "@angular/platform-browser-dynamic": "~8.0.0-beta.7",
+    "@angular/common": "~8.0.0-beta.7",
+    "@angular/compiler": "~8.0.0-beta.7",
+    "@angular/core": "~8.0.0-beta.7",
+    "@angular/forms": "~8.0.0-beta.7",
+    "@angular/http": "~8.0.0-beta.7",
+    "@angular/platform-browser": "~8.0.0-beta.7",
+    "@angular/router": "~8.0.0-beta.7",
     "rxjs": "^6.3.3",
     "tns-core-modules": "^5.1.0 || >5.1.0- || >5.2.0-",
     "typescript": "~3.1.1",
     "zone.js": "^0.8.4"
   },
   "devDependencies": {
-    "@angular/animations": "~7.2.0",
-    "@angular/common": "~7.2.0",
-    "@angular/compiler": "~7.2.0",
-    "@angular/compiler-cli": "~7.2.0",
-    "@angular/core": "~7.2.0",
-    "@angular/forms": "~7.2.0",
-    "@angular/http": "~7.2.0",
-    "@angular/platform-browser": "~7.2.0",
-    "@angular/platform-browser-dynamic": "~7.2.0",
-    "@angular/router": "~7.2.0",
+    "@angular/animations": "~8.0.0-beta.7",
+    "@angular/common": "~8.0.0-beta.7",
+    "@angular/compiler": "~8.0.0-beta.7",
+    "@angular/compiler-cli": "~8.0.0-beta.7",
+    "@angular/core": "~8.0.0-beta.7",
+    "@angular/forms": "~8.0.0-beta.7",
+    "@angular/http": "~8.0.0-beta.7",
+    "@angular/platform-browser": "~8.0.0-beta.7",
+    "@angular/platform-browser-dynamic": "~8.0.0-beta.7",
+    "@angular/router": "~8.0.0-beta.7",
     "codelyzer": "^4.5.0",
     "ng-packagr": "^4.7.1",
     "rxjs": "~6.3.3",

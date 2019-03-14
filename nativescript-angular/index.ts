@@ -1,6 +1,4 @@
-import { install } from "tns-core-modules/globals";
-install();
-import "tns-core-modules/application";
+import "./init-globals";
 
 export * from "./platform-common";
 export * from "./platform";
