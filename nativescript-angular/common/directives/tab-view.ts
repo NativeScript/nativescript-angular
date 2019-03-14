@@ -10,9 +10,9 @@ import {
 import { TabView, TabViewItem } from "tns-core-modules/ui/tab-view";
 import { TextTransform  } from "tns-core-modules/ui/text-base";
 
-import { InvisibleNode } from "../element-registry";
-import { rendererLog, isLogEnabled } from "../trace";
-import { isBlank } from "../lang-facade";
+import { InvisibleNode } from "nativescript-angular/element-registry";
+import { rendererLog, isLogEnabled } from "nativescript-angular/trace";
+import { isBlank } from "nativescript-angular/lang-facade";
 
 export interface TabViewItemDef {
     title?: string;

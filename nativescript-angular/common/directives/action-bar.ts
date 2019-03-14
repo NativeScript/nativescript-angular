@@ -7,7 +7,7 @@ import {
 } from "tns-core-modules/ui/action-bar";
 import { Page } from "tns-core-modules/ui/page";
 
-import { isBlank } from "../lang-facade";
+import { isBlank } from "nativescript-angular/lang-facade";
 import {
     NgView,
     ViewClassMeta,
@@ -15,7 +15,7 @@ import {
     isInvisibleNode,
     isView,
     registerElement,
-} from "../element-registry";
+} from "nativescript-angular/element-registry";
 
 export function isActionItem(view: any): view is ActionItem {
     return view instanceof ActionItem;

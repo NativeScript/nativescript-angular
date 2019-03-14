@@ -1,7 +1,7 @@
 import { Injectable } from "@angular/core";
 import { RouteReuseStrategy, ActivatedRouteSnapshot, DetachedRouteHandle } from "@angular/router";
 
-import { routeReuseStrategyLog as log, isLogEnabled } from "../trace";
+import { routeReuseStrategyLog as log, isLogEnabled } from "nativescript-angular/trace";
 import { NSLocationStrategy } from "./ns-location-strategy";
 import {
     destroyComponentRef,

@@ -6,10 +6,10 @@ export * from "./platform-static";
 export * from "./router";
 export * from "./forms";
 export * from "./http";
-export * from "./directives";
-export * from "./common/detached-loader";
-export * from "./trace";
-export * from "./platform-providers";
+// export * from "./directives";
+// export * from "./common/detached-loader";
+// export * from "nativescript-angular/trace";
+// export * from "nativescript-angular/core";
 export * from "./file-system/ns-file-system";
 export * from "./modal-dialog";
 export * from "./renderer";
@@ -25,6 +25,6 @@ export {
     getViewMeta,
     isKnownView,
     registerElement,
-} from "./element-registry";
+} from "./element-registry/element-registry";
 
 export * from "./forms/value-accessors/base-value-accessor";

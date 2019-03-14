@@ -9,14 +9,13 @@ import {
     ViewContainerRef,
 } from "@angular/core";
 
-import { NSLocationStrategy } from "../router/ns-location-strategy";
+import { NSLocationStrategy } from "nativescript-angular/router";
 import { View, ViewBase } from "tns-core-modules/ui/core/view";
 import { ProxyViewContainer } from "tns-core-modules/ui/proxy-view-container/proxy-view-container";
 
-import { AppHostView } from "../app-host-view";
-import { DetachedLoader } from "../common/detached-loader";
-import { PageFactory, PAGE_FACTORY } from "../platform-providers";
-import { once } from "../common/utils";
+import { DetachedLoader } from "nativescript-angular/common";
+import { PageFactory, PAGE_FACTORY, AppHostView } from "nativescript-angular/core";
+import { once } from "nativescript-angular/core";
 import { topmost, Frame } from "tns-core-modules/ui/frame";
 
 export interface ModalDialogOptions {

@@ -1,10 +1,10 @@
 import { Injectable } from "@angular/core";
 import { LocationStrategy } from "@angular/common";
 import { DefaultUrlSerializer, UrlSegmentGroup, UrlTree, ActivatedRouteSnapshot } from "@angular/router";
-import { routerLog, routerError, isLogEnabled } from "../trace";
+import { routerLog, routerError, isLogEnabled } from "nativescript-angular/trace";
 import { NavigationTransition, Frame } from "tns-core-modules/ui/frame";
-import { isPresent } from "../lang-facade";
-import { FrameService } from "../platform-providers";
+import { isPresent } from "nativescript-angular/lang-facade";
+import { FrameService } from "nativescript-angular/core";
 
 export class Outlet {
     showingModal: boolean;

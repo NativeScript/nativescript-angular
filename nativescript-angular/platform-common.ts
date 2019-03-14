@@ -16,9 +16,8 @@ import {
 } from "@angular/core";
 import { DOCUMENT } from "@angular/common";
 
-import { bootstrapLog, bootstrapLogError, isLogEnabled } from "./trace";
-import { defaultPageFactoryProvider, setRootPage, PageFactory, PAGE_FACTORY } from "./platform-providers";
-import { AppHostView } from "./app-host-view";
+import { bootstrapLog, bootstrapLogError, isLogEnabled } from "nativescript-angular/trace";
+import { defaultPageFactoryProvider, setRootPage, PageFactory, PAGE_FACTORY, AppHostView } from "nativescript-angular/core";
 
 import {
     setCssFileName,

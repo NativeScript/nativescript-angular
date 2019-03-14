@@ -25,8 +25,8 @@ import { LayoutBase } from "tns-core-modules/ui/layouts/layout-base";
 import { ObservableArray } from "tns-core-modules/data/observable-array";
 import { profile } from "tns-core-modules/profiling";
 
-import { getSingleViewRecursive } from "../element-registry";
-import { listViewLog, listViewError, isLogEnabled } from "../trace";
+import { getSingleViewRecursive } from "nativescript-angular/element-registry";
+import { listViewLog, listViewError, isLogEnabled } from "nativescript-angular/trace";
 
 const NG_VIEW = "_ngViewRef";
 

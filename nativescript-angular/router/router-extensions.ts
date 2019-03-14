@@ -1,8 +1,8 @@
 import { Injectable } from "@angular/core";
 import { Router, UrlTree, NavigationExtras, ActivatedRoute } from "@angular/router";
 import { NSLocationStrategy, NavigationOptions, Outlet } from "./ns-location-strategy";
-import { FrameService } from "../platform-providers";
-import { routerError } from "../trace";
+import { FrameService } from "nativescript-angular/core";
+import { routerError } from "nativescript-angular/trace";
 import { findTopActivatedRouteNodeForOutlet } from "./page-router-outlet";
 
 export type ExtendedNavigationExtras = NavigationExtras & NavigationOptions;

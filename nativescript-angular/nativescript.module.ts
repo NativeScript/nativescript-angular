@@ -15,11 +15,10 @@ import {
     ɵNullViewportScroller as NullViewportScroller,
 } from "@angular/common";
 
-import { NativeScriptCommonModule } from "./common";
+import { NativeScriptCommonModule, DetachedLoader, } from "nativescript-angular/common";
+import { throwIfAlreadyLoaded } from "nativescript-angular/core";
 import { NativeScriptRendererFactory } from "./renderer";
-import { DetachedLoader } from "./common/detached-loader";
-import { throwIfAlreadyLoaded } from "./common/utils";
-import { FrameService } from "./platform-providers";
+import { FrameService } from "nativescript-angular/core";
 
 export function errorHandlerFactory() {
     return new ErrorHandler();

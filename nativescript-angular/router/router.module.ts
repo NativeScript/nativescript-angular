@@ -9,7 +9,7 @@ import { NativescriptPlatformLocation } from "./ns-platform-location";
 import { NSRouteReuseStrategy } from "./ns-route-reuse-strategy";
 import { RouterExtensions } from "./router-extensions";
 import { NativeScriptCommonModule } from "../common";
-import { FrameService } from "../platform-providers";
+import { FrameService } from "nativescript-angular/core";
 import { NSEmptyOutletComponent } from "./ns-empty-outlet.component";
 
 export { NSRouterLink } from "./ns-router-link";

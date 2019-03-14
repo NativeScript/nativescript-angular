@@ -3,8 +3,8 @@ import { KeyframeAnimation }
     from "tns-core-modules/ui/animation/keyframe-animation";
 
 import { Keyframe, createKeyframeAnimation } from "./utils";
-import { NgView } from "../element-registry";
-import { animationsLog as traceLog, isLogEnabled } from "../trace";
+import { NgView } from "nativescript-angular/element-registry";
+import { animationsLog as traceLog, isLogEnabled } from "nativescript-angular/trace";
 
 export class NativeScriptAnimationPlayer implements AnimationPlayer {
     public parentPlayer: AnimationPlayer = null;

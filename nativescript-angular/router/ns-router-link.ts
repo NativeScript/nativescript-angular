@@ -1,7 +1,7 @@
 import { Directive, HostListener, Input } from "@angular/core";
 import { NavigationExtras } from "@angular/router";
 import { ActivatedRoute, Router, UrlTree } from "@angular/router";
-import { routerLog, isLogEnabled } from "../trace";
+import { routerLog, isLogEnabled } from "nativescript-angular/trace";
 import { RouterExtensions } from "./router-extensions";
 import { NavigationOptions } from "./ns-location-strategy";
 import { NavigationTransition } from "tns-core-modules/ui/frame";

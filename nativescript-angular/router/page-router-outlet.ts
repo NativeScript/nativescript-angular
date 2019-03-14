@@ -19,9 +19,9 @@ import { profile } from "tns-core-modules/profiling";
 
 import { BehaviorSubject } from "rxjs";
 
-import { DEVICE, PAGE_FACTORY, PageFactory } from "../platform-providers";
-import { routerLog as log, routerError as error, isLogEnabled } from "../trace";
-import { DetachedLoader } from "../common/detached-loader";
+import { DEVICE, PAGE_FACTORY, PageFactory } from "nativescript-angular/core";
+import { routerLog as log, routerError as error, isLogEnabled } from "nativescript-angular/trace";
+import { DetachedLoader } from "nativescript-angular/common";
 import { ViewUtil } from "../view-util";
 import { NSLocationStrategy, Outlet } from "./ns-location-strategy";
 import { NSRouteReuseStrategy } from "./ns-route-reuse-strategy";

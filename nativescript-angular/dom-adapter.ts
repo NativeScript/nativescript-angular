@@ -1,7 +1,7 @@
 /* tslint:disable */
 import { Type } from "@angular/core";
 import { ɵDomAdapter, ɵsetRootDomAdapter } from "@angular/platform-browser";
-import { rendererLog, isLogEnabled } from "./trace";
+import { rendererLog, isLogEnabled } from "nativescript-angular/trace";
 
 export class NativeScriptDomAdapter implements ɵDomAdapter {
   static makeCurrent() {

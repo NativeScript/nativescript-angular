@@ -15,10 +15,10 @@ import {
     isInvisibleNode,
     isKnownView,
     isView,
-} from "./element-registry";
+} from "./element-registry/element-registry";
 
 import { platformNames, Device } from "tns-core-modules/platform";
-import { viewUtilLog as traceLog, isLogEnabled } from "./trace";
+import { viewUtilLog as traceLog, isLogEnabled } from "nativescript-angular/trace";
 
 const ELEMENT_NODE_TYPE = 1;
 const XML_ATTRIBUTES = Object.freeze(["style", "rows", "columns", "fontAttributes"]);

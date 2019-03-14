@@ -1,7 +1,7 @@
 import { NSLocationStrategy } from "./ns-location-strategy";
 import { PlatformLocation, LocationChangeListener } from "@angular/common";
 import { Injectable } from "@angular/core";
-import { routerLog, isLogEnabled } from "../trace";
+import { routerLog, isLogEnabled } from "nativescript-angular/trace";
 
 @Injectable()
 export class NativescriptPlatformLocation extends PlatformLocation {

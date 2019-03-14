@@ -10,8 +10,8 @@ import {
     Keyframe,
     dashCaseToCamelCase,
 } from "./utils";
-import { NgView, InvisibleNode } from "../element-registry";
-import { animationsLog as traceLog } from "../trace";
+import { NgView, InvisibleNode } from "nativescript-angular/element-registry";
+import { animationsLog as traceLog } from "nativescript-angular/trace";
 
 
 interface ViewMatchResult {

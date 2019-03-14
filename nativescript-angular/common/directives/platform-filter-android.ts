@@ -1,6 +1,6 @@
 import { Component, Inject } from "@angular/core";
 import { Device, platformNames } from "tns-core-modules/platform";
-import { DEVICE } from "../platform-providers";
+import { DEVICE } from "nativescript-angular/core";
 
 @Component({
     selector: "android",

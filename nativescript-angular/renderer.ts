@@ -9,10 +9,10 @@ import { View, getViewById } from "tns-core-modules/ui/core/view";
 import { addCss } from "tns-core-modules/application";
 import { profile } from "tns-core-modules/profiling";
 
-import { APP_ROOT_VIEW, DEVICE, getRootPage } from "./platform-providers";
+import { APP_ROOT_VIEW, DEVICE, getRootPage } from "nativescript-angular/core";
 import { ViewUtil } from "./view-util";
-import { NgView, InvisibleNode } from "./element-registry";
-import { rendererLog as traceLog, isLogEnabled } from "./trace";
+import { NgView, InvisibleNode } from "./element-registry/element-registry";
+import { rendererLog as traceLog, isLogEnabled } from "nativescript-angular/trace";
 
 // CONTENT_ATTR not exported from NativeScript_renderer - we need it for styles application.
 const COMPONENT_REGEX = /%COMP%/g;
