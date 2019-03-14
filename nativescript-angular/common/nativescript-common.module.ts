@@ -1,13 +1,9 @@
+import { NO_ERRORS_SCHEMA, NgModule, } from "@angular/core";
 import { CommonModule } from "@angular/common";
-import {
-    NO_ERRORS_SCHEMA,
-    NgModule,
-} from "@angular/core";
 
-// import {
-//     ModalDialogHost,
-//     ModalDialogService,
-// } from "nativescript-angular/directives/dialogs";
+import {
+    ModalDialogService,
+} from "./dialogs";
 
 import {
     defaultDeviceProvider,
@@ -15,15 +11,16 @@ import {
     defaultPageProvider,
 } from "nativescript-angular/core";
 
-// import { NS_DIRECTIVES } from "../directives";
-
+// import { NS_DIRECTIVES } from "./directives";
+import {
+    NS_DIRECTIVES
+} from "./directives";
 @NgModule({
     declarations: [
-        // ModalDialogHost,
-        // ...NS_DIRECTIVES,
+        ...NS_DIRECTIVES
     ],
     providers: [
-        // ModalDialogService,
+        ModalDialogService,
         defaultDeviceProvider,
         defaultFrameProvider,
         defaultPageProvider,
@@ -33,8 +30,7 @@ import {
     ],
     exports: [
         CommonModule,
-        // ModalDialogHost,
-        // ...NS_DIRECTIVES,
+        ...NS_DIRECTIVES,
     ],
     schemas: [NO_ERRORS_SCHEMA]
 })

@@ -23,8 +23,8 @@ import {
     ɵBrowserAnimationBuilder as BrowserAnimationBuilder,
 } from "@angular/platform-browser/animations";
 
-import { NativeScriptModule } from "../nativescript.module";
-import { NativeScriptRendererFactory } from "../renderer";
+import { NativeScriptModule } from "nativescript-angular/nativescript.module";
+import { NativeScriptRendererFactory } from "nativescript-angular/renderer";
 import { NativeScriptAnimationDriver } from "./animation-driver";
 import { throwIfAlreadyLoaded } from "nativescript-angular/core";
 

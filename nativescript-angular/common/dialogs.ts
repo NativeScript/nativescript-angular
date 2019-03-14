@@ -9,14 +9,16 @@ import {
     ViewContainerRef,
 } from "@angular/core";
 
-import { NSLocationStrategy } from "nativescript-angular/router";
+import { topmost, Frame } from "tns-core-modules/ui/frame";
 import { View, ViewBase } from "tns-core-modules/ui/core/view";
 import { ProxyViewContainer } from "tns-core-modules/ui/proxy-view-container/proxy-view-container";
 
-import { DetachedLoader } from "nativescript-angular/common";
-import { PageFactory, PAGE_FACTORY, AppHostView } from "nativescript-angular/core";
-import { once } from "nativescript-angular/core";
-import { topmost, Frame } from "tns-core-modules/ui/frame";
+
+// import { NSLocationStrategy } from "nativescript-angular/router";
+
+import { PageFactory, PAGE_FACTORY, AppHostView, once } from "nativescript-angular/core";
+
+import { DetachedLoader } from "./directives";
 
 export interface ModalDialogOptions {
     context?: any;
@@ -49,8 +51,8 @@ interface ShowDialogOptions {
 
 @Injectable()
 export class ModalDialogService {
-    constructor(private location: NSLocationStrategy) {
-    }
+    // constructor(private location: NSLocationStrategy) {
+    // }
 
     public showModal(type: Type<any>,
         { viewContainerRef, moduleRef, context, fullscreen, animated, stretched }: ModalDialogOptions
@@ -86,7 +88,7 @@ export class ModalDialogService {
             frame = (parentView.page && parentView.page.frame) || topmost();
         }
 
-        this.location._beginModalNavigation(frame);
+        // this.location._beginModalNavigation(frame);
 
         return new Promise((resolve, reject) => {
             setTimeout(() => {
@@ -129,7 +131,7 @@ export class ModalDialogService {
             doneCallback.apply(undefined, args);
             if (componentView) {
                 componentView.closeModal();
-                this.location._closeModalNavigation();
+                // this.location._closeModalNavigation();
                 detachedLoaderRef.instance.detectChanges();
                 detachedLoaderRef.destroy();
             }
@@ -160,17 +162,5 @@ export class ModalDialogService {
             // is in a published version of tns-core-modules.
             (<any>parentView).showModal(componentView, context, closeCallback, fullscreen, animated, stretched);
         });
-    }
-}
-
-@Directive({
-    selector: "[modal-dialog-host]" // tslint:disable-line:directive-selector
-})
-export class ModalDialogHost { // tslint:disable-line:directive-class-suffix
-    constructor() {
-        throw new Error("ModalDialogHost is deprecated. " +
-            "Call ModalDialogService.showModal() " +
-            "by passing ViewContainerRef in the options instead."
-        );
     }
 }

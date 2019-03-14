@@ -1,6 +1,9 @@
 import { NgModule, ModuleWithProviders, NO_ERRORS_SCHEMA, Optional, SkipSelf } from "@angular/core";
 import { RouterModule, Routes, ExtraOptions, RouteReuseStrategy } from "@angular/router";
 import { LocationStrategy, PlatformLocation } from "@angular/common";
+
+import { NativeScriptCommonModule } from "nativescript-angular/common";
+
 import { NSRouterLink } from "./ns-router-link";
 import { NSRouterLinkActive } from "./ns-router-link-active";
 import { PageRouterOutlet } from "./page-router-outlet";
@@ -8,7 +11,6 @@ import { NSLocationStrategy, LocationState } from "./ns-location-strategy";
 import { NativescriptPlatformLocation } from "./ns-platform-location";
 import { NSRouteReuseStrategy } from "./ns-route-reuse-strategy";
 import { RouterExtensions } from "./router-extensions";
-import { NativeScriptCommonModule } from "../common";
 import { FrameService } from "nativescript-angular/core";
 import { NSEmptyOutletComponent } from "./ns-empty-outlet.component";
 

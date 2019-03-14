@@ -22,7 +22,7 @@ import { BehaviorSubject } from "rxjs";
 import { DEVICE, PAGE_FACTORY, PageFactory } from "nativescript-angular/core";
 import { routerLog as log, routerError as error, isLogEnabled } from "nativescript-angular/trace";
 import { DetachedLoader } from "nativescript-angular/common";
-import { ViewUtil } from "../view-util";
+import { ViewUtil } from "nativescript-angular/view-util";
 import { NSLocationStrategy, Outlet } from "./ns-location-strategy";
 import { NSRouteReuseStrategy } from "./ns-route-reuse-strategy";
 

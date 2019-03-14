@@ -15,9 +15,9 @@ import {
     ɵNullViewportScroller as NullViewportScroller,
 } from "@angular/common";
 
-import { NativeScriptCommonModule, DetachedLoader, } from "nativescript-angular/common";
+import { NativeScriptCommonModule } from "nativescript-angular/common";
 import { throwIfAlreadyLoaded } from "nativescript-angular/core";
-import { NativeScriptRendererFactory } from "./renderer";
+import { NativeScriptRendererFactory } from "nativescript-angular/renderer";
 import { FrameService } from "nativescript-angular/core";
 
 export function errorHandlerFactory() {
@@ -25,9 +25,6 @@ export function errorHandlerFactory() {
 }
 
 @NgModule({
-    declarations: [
-        DetachedLoader,
-    ],
     providers: [
         FrameService,
         NativeScriptRendererFactory,
@@ -38,7 +35,6 @@ export function errorHandlerFactory() {
         { provide: ViewportScroller, useClass: NullViewportScroller },
     ],
     entryComponents: [
-        DetachedLoader,
     ],
     imports: [
         ApplicationModule,
@@ -47,7 +43,6 @@ export function errorHandlerFactory() {
     exports: [
         ApplicationModule,
         NativeScriptCommonModule,
-        DetachedLoader,
     ],
     schemas: [NO_ERRORS_SCHEMA]
 })

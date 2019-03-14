@@ -9,7 +9,6 @@ function log(message: string) {
     write(message, CATEGORY);
 }
 
-
 /**
  * Wrapper component used for loading components when navigating
  * It uses DetachedContainer as selector so that it is containerRef is not attached to

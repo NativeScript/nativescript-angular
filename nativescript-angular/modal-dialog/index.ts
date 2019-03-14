@@ -1,6 +1,5 @@
 export {
-    ModalDialogHost,
     ModalDialogOptions,
     ModalDialogParams,
     ModalDialogService
-} from "./dialogs"
+} from "nativescript-angular/common"

@@ -1,0 +1,8 @@
+{
+    "main": "index",
+    "ngPackage": {
+        "lib": {
+            "entryFile": "index.ts"
+        }
+    }
+}

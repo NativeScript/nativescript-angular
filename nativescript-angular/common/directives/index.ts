@@ -7,7 +7,9 @@ import {
     ActionItemDirective,
     NavigationButtonDirective
 } from "./action-bar";
-import { AndroidFilterComponent, IosFilterComponent } from "./platform-filters";
+import { AndroidFilterComponent } from "./platform-filter-android";
+import { IosFilterComponent } from "./platform-filter-ios";
+import { DetachedLoader } from "./detached-loader";
 
 export { ListViewComponent } from "./list-view-comp";
 export { SetupItemViewArgs, TemplateKeyDirective } from "./templated-items-comp";
@@ -19,7 +21,11 @@ export {
     ActionItemDirective,
     NavigationButtonDirective
 } from "./action-bar";
-export { AndroidFilterComponent, IosFilterComponent } from "./platform-filters";
+
+export { AndroidFilterComponent } from "./platform-filter-android";
+export { IosFilterComponent } from "./platform-filter-ios";
+export { DetachedLoader } from "./detached-loader";
+export  { TemplatedItemsComponent } from "./templated-items-comp";
 
 export const NS_DIRECTIVES = [
     ListViewComponent,
@@ -32,4 +38,5 @@ export const NS_DIRECTIVES = [
     NavigationButtonDirective,
     AndroidFilterComponent,
     IosFilterComponent,
+    DetachedLoader,
 ];
