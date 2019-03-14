@@ -1,3 +1,13 @@
+<a name="7.2.3"></a>
+## [7.2.3](https://github.com/NativeScript/nativescript-angular/compare/7.2.2...7.2.3) (2019-03-14)
+
+
+### Bug Fixes
+
+* **location-strategy:** crash on going back with router-outlet after closing modal ([#1748](https://github.com/NativeScript/nativescript-angular/issues/1748)) ([0ed7de6](https://github.com/NativeScript/nativescript-angular/commit/0ed7de6))
+
+
+
 <a name="7.2.2"></a>
 ## [7.2.2](https://github.com/NativeScript/nativescript-angular/compare/7.2.1...7.2.2) (2019-02-19)
 
