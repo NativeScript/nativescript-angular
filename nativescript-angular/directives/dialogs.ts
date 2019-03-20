@@ -178,6 +178,7 @@ export class ModalDialogService {
             // TODO: remove <any> cast after https://github.com/NativeScript/NativeScript/pull/5734
             // is in a published version of tns-core-modules.
             if (ios) {
+                // tslint:disable-next-line:max-line-length
                 (<any>parentView).showModal(componentView, { context, closeCallback, fullscreen, animated, stretched, ios });
             } else {
                 (<any>parentView).showModal(componentView, context, closeCallback, fullscreen, animated, stretched);
