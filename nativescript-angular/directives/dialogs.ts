@@ -19,9 +19,10 @@ import { PageFactory, PAGE_FACTORY } from "../platform-providers";
 import { once } from "../common/utils";
 import { topmost, Frame, ShowModalOptions } from "tns-core-modules/ui/frame";
 
-export type BaseShowModalOptions = Pick<ShowModalOptions, Exclude<keyof ShowModalOptions, "closeCallback">>;
+export type BaseShowModalOptions = Pick<ShowModalOptions, Exclude<keyof ShowModalOptions, "closeCallback" | "context">>;
 
 export interface ModalDialogOptions extends BaseShowModalOptions {
+    context?: any;
     viewContainerRef?: ViewContainerRef;
     moduleRef?: NgModuleRef<any>;
 }
@@ -34,6 +35,7 @@ export class ModalDialogParams {
 }
 
 interface ShowDialogOptions extends BaseShowModalOptions {
+    context: any;
     containerRef: ViewContainerRef;
     doneCallback;
     pageFactory: PageFactory;
