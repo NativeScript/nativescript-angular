@@ -61,7 +61,10 @@ export class ModalDialogService {
             );
         }
 
-        let parentView = options.sourceView ? options.sourceView.nativeElement : options.viewContainerRef.element.nativeElement;
+        let parentView = options.viewContainerRef.element.nativeElement;
+        if (options.sourceView) {
+            parentView = options.sourceView.nativeElement;
+        }
         if (parentView instanceof AppHostView && parentView.ngAppRoot) {
             parentView = parentView.ngAppRoot;
         }
