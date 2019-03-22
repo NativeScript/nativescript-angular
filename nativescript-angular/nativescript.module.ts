@@ -29,6 +29,9 @@ import { DetachedLoader } from "./common/detached-loader";
 import { throwIfAlreadyLoaded } from "./common/utils";
 import { FrameService } from "./platform-providers";
 
+export * from "./directives";
+export { DetachedLoader } from "./common/detached-loader";
+
 export function errorHandlerFactory() {
     return new ErrorHandler();
 }

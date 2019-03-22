@@ -88,7 +88,12 @@ export function nsTestBedBeforeEach(
     components: any[],
     providers: any[] = [],
     imports: any[] = [],
-    entryComponents: any[] = []) {
+    entryComponentsParam?: any[]) {
+    let entryComponents = [];
+    if (entryComponentsParam) {
+        entryComponents.push(...entryComponentsParam);
+    }
+
     return (done) => {
         activeTestFixtures.push([]);
         // If there are no entry components we can take the simple path.
