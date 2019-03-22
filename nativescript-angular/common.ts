@@ -5,7 +5,6 @@ import {
 } from "@angular/core";
 
 import {
-    ModalDialogHost,
     ModalDialogService,
 } from "./directives/dialogs";
 import {
@@ -15,9 +14,10 @@ import {
 } from "./platform-providers";
 import { NS_DIRECTIVES } from "./directives";
 
+export * from "./directives";
+
 @NgModule({
     declarations: [
-        ModalDialogHost,
         ...NS_DIRECTIVES,
     ],
     providers: [
@@ -31,7 +31,6 @@ import { NS_DIRECTIVES } from "./directives";
     ],
     exports: [
         CommonModule,
-        ModalDialogHost,
         ...NS_DIRECTIVES,
     ],
     schemas: [NO_ERRORS_SCHEMA]
