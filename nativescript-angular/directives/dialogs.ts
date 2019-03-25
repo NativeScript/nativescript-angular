@@ -148,7 +148,7 @@ export class ModalDialogService {
 
             // TODO: remove <any> cast after https://github.com/NativeScript/NativeScript/pull/5734
             // is in a published version of tns-core-modules.
-            (<any>options.parentView).showModal(componentView, { ...options, closeCallback });
+            options.parentView.showModal(componentView, { ...options, closeCallback });
         });
     }
 }
