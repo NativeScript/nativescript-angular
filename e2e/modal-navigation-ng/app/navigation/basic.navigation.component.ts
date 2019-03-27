@@ -1,4 +1,4 @@
-import { Component, ViewContainerRef, Input, ViewChild } from "@angular/core";
+import { Component, ViewContainerRef, Input, ViewChild, ElementRef } from "@angular/core";
 import { Router, NavigationEnd } from "@angular/router";
 import { ModalDialogService, ModalDialogOptions } from "nativescript-angular/directives/dialogs";
 import { ModalComponent } from "../modal/modal.component";
@@ -16,14 +16,14 @@ import { ModalViewComponent } from "~/modal-shared/modal-view.component";
     <Button text="Show Modal Without Frame" (tap)="onModalNoFrame()" textAlignment="left"></Button>
     <Button text="Show Modal Page With Frame" (tap)="onModalFrame()" textAlignment="left"></Button>
     <Button text="Show Shared Modal" (tap)="onRootModalTap()" textAlignment="left"></Button>
-    <Button #popoverButtonComp text="Show Dialog" (tap)="onShowDialog()" textAlignment="left"></Button>
-    <Button text="Show 'popover' modal" (tap)="onPopoverModal()" textAlignment="left"></Button>
+    <Button text="Show Dialog" (tap)="onShowDialog()" textAlignment="left"></Button>
+    <Button #popoverButtonComp text="Show 'popover' modal" (tap)="onPopoverModal()" textAlignment="left"></Button>
 </StackLayout>`
 })
 
 export class BasicsNavigationComponent {
 
-    @ViewChild("popoverButtonComp") popoverButtonComp;
+    @ViewChild("popoverButtonComp") popoverButtonComp: ElementRef;
     @Input() col: number;
     constructor(
         private modal: ModalDialogService,
@@ -94,7 +94,7 @@ export class BasicsNavigationComponent {
             ios: {
                 presentationStyle: UIModalPresentationStyle.Popover
             },
-            sourceView: this.popoverButtonComp
+            target: this.popoverButtonComp.nativeElement
         };
 
         this.modal.showModal(ModalViewComponent, options)
