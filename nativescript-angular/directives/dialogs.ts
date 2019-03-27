@@ -18,7 +18,8 @@ import { AppHostView } from "../app-host-view";
 import { DetachedLoader } from "../common/detached-loader";
 import { PageFactory, PAGE_FACTORY } from "../platform-providers";
 import { once } from "../common/utils";
-import { topmost, Frame, ShowModalOptions } from "tns-core-modules/ui/frame";
+import { topmost, Frame } from "tns-core-modules/ui/frame";
+import { ShowModalOptions } from  "tns-core-modules/ui/core/view";
 
 export type BaseShowModalOptions = Pick<ShowModalOptions, Exclude<keyof ShowModalOptions, "closeCallback" | "context">>;
 
@@ -26,7 +27,7 @@ export interface ModalDialogOptions extends BaseShowModalOptions {
     context?: any;
     viewContainerRef?: ViewContainerRef;
     moduleRef?: NgModuleRef<any>;
-    sourceView?: ElementRef;
+    target?: View;
 }
 
 export class ModalDialogParams {
@@ -62,9 +63,10 @@ export class ModalDialogService {
         }
 
         let parentView = options.viewContainerRef.element.nativeElement;
-        if (options.sourceView) {
-            parentView = options.sourceView.nativeElement;
+        if (options.target) {
+            parentView = options.target;
         }
+
         if (parentView instanceof AppHostView && parentView.ngAppRoot) {
             parentView = parentView.ngAppRoot;
         }
