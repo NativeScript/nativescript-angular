@@ -6,8 +6,7 @@ import {
     NgModuleRef,
     ReflectiveInjector,
     Type,
-    ViewContainerRef,
-    ElementRef,
+    ViewContainerRef
 } from "@angular/core";
 
 import { NSLocationStrategy } from "../router/ns-location-strategy";
