@@ -11,13 +11,18 @@ import { AppComponent } from "./app.component";
 
 import { rendererTraceCategory, viewUtilCategory, routeReuseStrategyTraceCategory, routerTraceCategory } from "nativescript-angular/trace";
 import { setCategories, enable } from "tns-core-modules/trace";
+import { ModalComponent } from "./second/modal/modal.component";
 setCategories(routerTraceCategory + "," + routeReuseStrategyTraceCategory);
 enable();
 
 @NgModule({
     declarations: [
         AppComponent,
+        ModalComponent,
         ...navigatableComponents,
+    ],
+    entryComponents:[
+        ModalComponent
     ],
     bootstrap: [AppComponent],
     providers: [
