@@ -6,7 +6,7 @@ import {
     NgModuleRef,
     ReflectiveInjector,
     Type,
-    ViewContainerRef,
+    ViewContainerRef
 } from "@angular/core";
 
 import { NSLocationStrategy } from "../router/ns-location-strategy";
@@ -18,14 +18,15 @@ import { DetachedLoader } from "../common/detached-loader";
 import { PageFactory, PAGE_FACTORY } from "../platform-providers";
 import { once } from "../common/utils";
 import { topmost, Frame } from "tns-core-modules/ui/frame";
+import { ShowModalOptions } from  "tns-core-modules/ui/core/view";
 
-export interface ModalDialogOptions {
+export type BaseShowModalOptions = Pick<ShowModalOptions, Exclude<keyof ShowModalOptions, "closeCallback" | "context">>;
+
+export interface ModalDialogOptions extends BaseShowModalOptions {
     context?: any;
-    fullscreen?: boolean;
-    animated?: boolean;
-    stretched?: boolean;
     viewContainerRef?: ViewContainerRef;
     moduleRef?: NgModuleRef<any>;
+    target?: View;
 }
 
 export class ModalDialogParams {
@@ -35,13 +36,10 @@ export class ModalDialogParams {
     }
 }
 
-interface ShowDialogOptions {
+interface ShowDialogOptions extends BaseShowModalOptions {
     containerRef: ViewContainerRef;
     context: any;
     doneCallback;
-    fullscreen: boolean;
-    animated: boolean;
-    stretched: boolean;
     pageFactory: PageFactory;
     parentView: ViewBase;
     resolver: ComponentFactoryResolver;
@@ -54,16 +52,20 @@ export class ModalDialogService {
     }
 
     public showModal(type: Type<any>,
-        { viewContainerRef, moduleRef, context, fullscreen, animated, stretched }: ModalDialogOptions
+        options: ModalDialogOptions
     ): Promise<any> {
-        if (!viewContainerRef) {
+        if (!options.viewContainerRef) {
             throw new Error(
                 "No viewContainerRef: " +
                 "Make sure you pass viewContainerRef in ModalDialogOptions."
             );
         }
 
-        let parentView = viewContainerRef.element.nativeElement;
+        let parentView = options.viewContainerRef.element.nativeElement;
+        if (options.target) {
+            parentView = options.target;
+        }
+
         if (parentView instanceof AppHostView && parentView.ngAppRoot) {
             parentView = parentView.ngAppRoot;
         }
@@ -75,11 +77,11 @@ export class ModalDialogService {
             parentView = parentView._ngDialogRoot;
         }
 
-        const pageFactory: PageFactory = viewContainerRef.injector.get(PAGE_FACTORY);
+        const pageFactory: PageFactory = options.viewContainerRef.injector.get(PAGE_FACTORY);
 
         // resolve from particular module (moduleRef)
         // or from same module as parentView (viewContainerRef)
-        const componentContainer = moduleRef || viewContainerRef;
+        const componentContainer = options.moduleRef || options.viewContainerRef;
         const resolver = componentContainer.injector.get(ComponentFactoryResolver);
 
         let frame = parentView;
@@ -93,16 +95,14 @@ export class ModalDialogService {
             setTimeout(() => {
                 try {
                     this._showDialog({
-                        containerRef: viewContainerRef,
-                        context,
+                        ...options,
+                        containerRef: options.viewContainerRef,
+                        context: options.context,
                         doneCallback: resolve,
-                        fullscreen,
-                        animated,
-                        stretched,
                         pageFactory,
                         parentView,
                         resolver,
-                        type,
+                        type
                     });
                 } catch (err) {
                     reject(err);
@@ -111,23 +111,12 @@ export class ModalDialogService {
         });
     }
 
-    private _showDialog({
-        containerRef,
-        context,
-        doneCallback,
-        fullscreen,
-        animated,
-        stretched,
-        pageFactory,
-        parentView,
-        resolver,
-        type,
-    }: ShowDialogOptions): void {
+    private _showDialog(options: ShowDialogOptions): void {
         let componentView: View;
         let detachedLoaderRef: ComponentRef<DetachedLoader>;
 
         const closeCallback = once((...args) => {
-            doneCallback.apply(undefined, args);
+            options.doneCallback.apply(undefined, args);
             if (componentView) {
                 componentView.closeModal();
                 this.location._closeModalNavigation();
@@ -136,15 +125,15 @@ export class ModalDialogService {
             }
         });
 
-        const modalParams = new ModalDialogParams(context, closeCallback);
+        const modalParams = new ModalDialogParams(options.context, closeCallback);
         const providers = ReflectiveInjector.resolve([
             { provide: ModalDialogParams, useValue: modalParams },
         ]);
 
-        const childInjector = ReflectiveInjector.fromResolvedProviders(providers, containerRef.parentInjector);
-        const detachedFactory = resolver.resolveComponentFactory(DetachedLoader);
-        detachedLoaderRef = containerRef.createComponent(detachedFactory, -1, childInjector, null);
-        detachedLoaderRef.instance.loadComponent(type).then((compRef) => {
+        const childInjector = ReflectiveInjector.fromResolvedProviders(providers, options.containerRef.parentInjector);
+        const detachedFactory = options.resolver.resolveComponentFactory(DetachedLoader);
+        detachedLoaderRef = options.containerRef.createComponent(detachedFactory, -1, childInjector, null);
+        detachedLoaderRef.instance.loadComponent(options.type).then((compRef) => {
             const detachedProxy = <ProxyViewContainer>compRef.location.nativeElement;
 
             if (detachedProxy.getChildrenCount() > 1) {
@@ -157,9 +146,7 @@ export class ModalDialogService {
                 (<any>componentView.parent).removeChild(componentView);
             }
 
-            // TODO: remove <any> cast after https://github.com/NativeScript/NativeScript/pull/5734
-            // is in a published version of tns-core-modules.
-            (<any>parentView).showModal(componentView, context, closeCallback, fullscreen, animated, stretched);
+            options.parentView.showModal(componentView, { ...options, closeCallback });
         });
     }
 }
