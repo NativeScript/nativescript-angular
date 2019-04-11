@@ -13,14 +13,13 @@
     }
   },
   "dependencies": {
-    "@angular/common": "~6.1.0",
-    "@angular/compiler": "~6.1.0",
-    "@angular/core": "~6.1.0",
-    "@angular/forms": "~6.1.0",
-    "@angular/http": "~6.1.0",
-    "@angular/platform-browser": "~6.1.0",
-    "@angular/platform-browser-dynamic": "~6.1.0",
-    "@angular/router": "~6.1.0",
+    "@angular/common": "~7.2.0",
+    "@angular/compiler": "~7.2.0",
+    "@angular/core": "~7.2.0",
+    "@angular/forms": "~7.2.0",
+    "@angular/platform-browser": "~7.2.0",
+    "@angular/platform-browser-dynamic": "~7.2.0",
+    "@angular/router": "~7.2.0",
     "nativescript-angular": "next",
     "nativescript-intl": "~3.0.0",
     "nativescript-theme-core": "^1.0.4",
@@ -30,7 +29,6 @@
     "zone.js": "^0.8.26"
   },
   "devDependencies": {
-    "@angular/compiler-cli": "~6.1.0",
     "babel-traverse": "6.24.1",
     "babel-types": "6.24.1",
     "babylon": "6.17.0",
@@ -39,9 +37,7 @@
     "lazy": "1.0.11",
     "nativescript-dev-typescript": "next",
     "nativescript-dev-webpack": "next",
-    "tslint": "^5.4.3",
-    "typescript": "~2.7.2",
-    "@ngtools/webpack": "~6.2.0"
+    "tslint": "^5.4.3"
   },
   "scripts": {
     "tslint": "tslint --config tslint.json 'app/**/*.ts'",

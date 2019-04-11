@@ -1,6 +1,6 @@
 import { Component } from "@angular/core";
 import { NSLocationStrategy } from "nativescript-angular/router/ns-location-strategy";
-import { Frame } from "ui/frame";
+import { Frame } from "tns-core-modules/ui/frame";
 
 @Component({
     selector: "nav-info",

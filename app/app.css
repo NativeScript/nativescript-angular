@@ -1,5 +1,5 @@
 ﻿@import '~nativescript-theme-core/css/core.light.css';
-@import url(~/resources/fonts/FontAwesome);
+
 button {
     font-size: 13;
 }
