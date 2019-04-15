@@ -29,7 +29,7 @@ const NS_ROUTER_PROVIDERS = [
     },
     { provide: LocationStrategy, useExisting: NSLocationStrategy },
     NativescriptPlatformLocation,
-    { provide: PlatformLocation, useClass: NativescriptPlatformLocation },
+    { provide: PlatformLocation, useExisting: NativescriptPlatformLocation },
     RouterExtensions,
     NSRouteReuseStrategy,
     { provide: RouteReuseStrategy, useExisting: NSRouteReuseStrategy },
