@@ -10,7 +10,7 @@ import {
 } from "@angular/core";
 
 import { NSLocationStrategy } from "../router/ns-location-strategy";
-import { View, ViewBase } from "tns-core-modules/ui/core/view";
+import { View, ViewBase, ShowModalOptions } from "tns-core-modules/ui/core/view";
 import { ProxyViewContainer } from "tns-core-modules/ui/proxy-view-container/proxy-view-container";
 
 import { AppHostView } from "../app-host-view";
@@ -18,7 +18,6 @@ import { DetachedLoader } from "../common/detached-loader";
 import { PageFactory, PAGE_FACTORY } from "../platform-providers";
 import { once } from "../common/utils";
 import { topmost, Frame } from "tns-core-modules/ui/frame";
-import { ShowModalOptions } from  "tns-core-modules/ui/core/view";
 
 export type BaseShowModalOptions = Pick<ShowModalOptions, Exclude<keyof ShowModalOptions, "closeCallback" | "context">>;
 
@@ -118,7 +117,9 @@ export class ModalDialogService {
         const closeCallback = once((...args) => {
             options.doneCallback.apply(undefined, args);
             if (componentView) {
-                componentView.closeModal();
+                if (componentView.viewController) {
+                    componentView.closeModal();
+                }
                 this.location._closeModalNavigation();
                 detachedLoaderRef.instance.detectChanges();
                 detachedLoaderRef.destroy();
@@ -145,6 +146,8 @@ export class ModalDialogService {
                 (<any>componentView.parent)._ngDialogRoot = componentView;
                 (<any>componentView.parent).removeChild(componentView);
             }
+
+            componentView.on(View.popoverClosedEvent, closeCallback);
 
             options.parentView.showModal(componentView, { ...options, closeCallback });
         });
