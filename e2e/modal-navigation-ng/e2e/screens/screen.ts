@@ -165,6 +165,11 @@ export class Screen {
         await btnTap.click();
     }
 
+    private showSharedModalPresentationStyle = async () => {
+        const btnTap = await this._driver.waitForElement("Show shared 'popover' modal");
+        await btnTap.click();
+    }
+
     loadedModalPage = async () => {
         const btnShowNestedModalPage = await this._driver.findElementByAutomationText(showNestedModalPage);
         assert.isTrue(await btnShowNestedModalPage.isDisplayed(), `${showNestedModalPage} is not displayed`);
@@ -304,6 +309,15 @@ export class Screen {
     loadSharedModal = async (loadShowModalPageWithFrame: boolean) => {
         if (loadShowModalPageWithFrame) {
             await this.showSharedModal();
+        }
+
+        const lbl = await this._driver.waitForElement(sharedModalView, 5000);
+        assert.isTrue(await lbl.isDisplayed());
+    }
+
+    loadSharedModalWithPresentationStyle = async (loadShowModalPageWithFrame: boolean) => {
+        if (loadShowModalPageWithFrame) {
+            await this.showSharedModalPresentationStyle();
         }
 
         const lbl = await this._driver.waitForElement(sharedModalView, 5000);
