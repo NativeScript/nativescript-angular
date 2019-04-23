@@ -112,41 +112,38 @@ npm --no-git-tag-version version [version] --allow-same-version -m "release: cut
 ```
 NOTE: Check the changelog!!!
 
-7. Create release-branch with change log
+4. Create release-branch with change log
 ```
 git checkout -b release-[version]
 ```
-
-7. Add changes
+5. Add changes
 ```
 git add changed-files
 git commit -m "release: cut the %s release"
 git push
 ```
-8. Create git tag version with format 0.22.3
-```
-git tag version
-git push --tags
-```
-9. Create a pull request from git in web or try to use script below. Be careful to base your branch on the correct "release" branch
-```
-curl -d '{"title": "release: cut the [version] release","body": "docs: update changelog","head": "[BRANCH]","base": "release"}' -X POST https://api.github.com/repos/NativeScript/nativescript-dev-webpack/pulls -H "Authorization: token ${GIT_TOKEN}"
-```
-10. Merge PR into release branch.
+NOTE: Make sure the PR is based on release branch
 
-11. If all checks has passed publish package. Usually the night builds will be triggered and the package will be ready to be released on the next day. 
-12. Don't forget to tag the release branch 
+6. Merge PR into release branch.
+
+7. The merge will produce package with rc tag in npm. If all checks have passed, publish official package. Usually the night builds will be triggered and the package will be ready to be released on the next day. 
+
+8. Don't forget to tag the release branch 
 ```
 git tag [version]
-git push tags
+git push --tags
 ```
-Tips to remove tags: 
+Only if needed to Tips to remove tags: 
 ```
 git push --delete origin [version]
 git tag -d [version]
 ```
 
+## Checkout master branch and bump version usually should be minor or major.
+
 ## Merge changes from release into master
+
+## NOTE: Don't use git IDE/WEB
 
 ![](./merge-guidance-schema.png)
 
@@ -154,13 +151,12 @@ git tag -d [version]
 
 1. Make sure you are in release branch:
 ```
-git checkout release
-git pull
+git checkout release && git pull
 ```
 2. Create PR to merge changes back in master and preserve history:
 ```
-git checkout -b merge-release-in-master-branch
-git push --set-upstream origin merge-release-in-master-branch
+git checkout -b merge-release-in-master-[branch]/[sha]
+git push --set-upstream origin merge-release-in-master-branch-[branch]/[sha]
 git merge origin/master
 ```
 3. Resolve conflicts. Choose to keep the version of master branch. If it is needed to revert versions of modules, see at the bottom.
@@ -175,15 +171,15 @@ git commit
 git push
 ```
 
-6. Create pull request. Replace replace env merge-release-in-master-branch with its value
+6. Create pull request which should be based on master. Replace replace env merge-release-in-master-branch with its value
 ```
 curl -d '{"title": "chore: merge release in master","body": "chore: merge release in master","head": "merge-release-in-master","base": "master"}' -X POST https://api.github.com/repos/NativeScript/NativeScript/pulls -H "Authorization: token ${GIT_TOKEN}"
 ```
 
-**If needed, revert version of modules and platform declarations to take the one from master:**
+**If needed, to revert file and take it from master:**
 ```
-git checkout origin/master nativescript-angular/package.json
+git checkout origin/master nativescript-angular/[some-file]
 git commit --amend
 git push --force-with-lease
 ```
-This will require to repeat steps from 1 to 4, since we need to keep the branches with the same history
+This could require to repeat steps from 1 to 4, since we need to keep the branches with the same history
