@@ -1,4 +1,4 @@
-import { AppiumDriver } from "nativescript-dev-appium";
+import { AppiumDriver, SearchOptions } from "nativescript-dev-appium";
 import { assert } from "chai";
 
 const home = "Home Component"
@@ -166,7 +166,7 @@ export class Screen {
     }
 
     private showSharedModalPresentationStyle = async () => {
-        const btnTap = await this._driver.waitForElement("Show shared 'popover' modal");
+        const btnTap = await this._driver.findElementByText("popover", SearchOptions.contains);
         await btnTap.click();
     }
 
@@ -217,6 +217,7 @@ export class Screen {
     }
 
     loadedModalNoFrame = async () => {
+        await this._driver.wait(2000);
         const btnShowDialogConfirm = await this._driver.waitForElement(showDialog);
         const btnCloseModal = await this._driver.waitForElement(closeModal);
         assert.isTrue(await btnShowDialogConfirm.isDisplayed());
