@@ -1,3 +1,21 @@
+## [7.2.4](https://github.com/NativeScript/nativescript-angular/compare/7.2.3...7.2.4) (2019-04-24)
+
+
+### Bug Fixes
+
+* **router:** routing services should be provided in forRoot only ([#1729](https://github.com/NativeScript/nativescript-angular/issues/1729)) ([0f6a975](https://github.com/NativeScript/nativescript-angular/commit/0f6a975))
+* on destroy remove the lastBootstrappedModule ([5e13263](https://github.com/NativeScript/nativescript-angular/commit/5e13263))
+* page might be null'ed before clearHistory's navigatedToEvent ([ea66985](https://github.com/NativeScript/nativescript-angular/commit/ea66985))
+* remove rootContent on exit ([14e787f](https://github.com/NativeScript/nativescript-angular/commit/14e787f))
+* the exit event is triggered on restart ([3dffbd5](https://github.com/NativeScript/nativescript-angular/commit/3dffbd5))
+
+
+### Features
+
+* **modal:** add ‘ios presentationStyle’ option to ModalDialogParams ([9cfa127](https://github.com/NativeScript/nativescript-angular/commit/9cfa127))
+
+
+
 <a name="7.2.3"></a>
 ## [7.2.3](https://github.com/NativeScript/nativescript-angular/compare/7.2.2...7.2.3) (2019-03-14)
 
