@@ -16,8 +16,8 @@ import { ModalViewComponent } from "~/modal-shared/modal-view.component";
     <Button text="Show Modal Without Frame" (tap)="onModalNoFrame()" textAlignment="left"></Button>
     <Button text="Show Modal Page With Frame" (tap)="onModalFrame()" textAlignment="left"></Button>
     <Button text="Show Shared Modal" (tap)="onRootModalTap()" textAlignment="left"></Button>
+    <Button #popoverButtonComp text="Show shared 'popover' modal" (tap)="onPopoverModal()" textAlignment="left"></Button>
     <Button text="Show Dialog" (tap)="onShowDialog()" textAlignment="left"></Button>
-    <Button #popoverButtonComp text="Show 'popover' modal" (tap)="onPopoverModal()" textAlignment="left"></Button>
 </StackLayout>`
 })
 
