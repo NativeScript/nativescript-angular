@@ -81,36 +81,105 @@ If you want to contribute, but you are not sure where to start - look for [issue
 
 ## Publishing new versions
 
-Instructions how to publish a new version for Maintainers.
 
-1. Execute `npm install` to install dependencies and prepare the package for publishing:
-```bash
-cd nativescript-angular/nativescript-angular
-npm install
+## <a name="release"></a> Releasing new versions
+Instructions how to release a new version for **NativeScript Core Team Members**.
+
+![](./release-contribution-guide-schema-webpack.png?raw=true)
+
+1. Checkout release branch
+```
+cd nativescript-angular/nativescript-angular && git checkout release && git pull
+```
+#### If we prepare major or minor release, merge master in release branch else **skip this step**.
+```
+git merge --ff-only origin/master
+```
+*** Note: If there are commits in release branch which are not merged in master branch '-ff-merge' command will fail. 
+In this case the commits should be merge firstly from release in master branch as explained in section 'Merge changes from release into master' and then repeat step 1.
+
+2. Execute `npm i` to install dependencies:
+```
+cd nativescript-angular && npm i
+```
+3. Execute [`npm version`](https://docs.npmjs.com/cli/version) to bump the version:
+```
+npm --no-git-tag-version version [patch|minor|major] -m "release: cut the %s release"
+```
+or
+```
+npm --no-git-tag-version version [version] --allow-same-version -m "release: cut the %s release"
+```
+NOTE: Check the changelog!!!
+
+4. Create release-branch with change log
+```
+git checkout -b release-[version]
+```
+5. Add changes
+```
+git add changed-files
+git commit -m "release: cut the %s release"
+git push
+```
+NOTE: Make sure the PR is based on release branch
+
+6. Merge PR into release branch.
+
+7. The merge will produce package with rc tag in npm. If all checks have passed, publish official package. Usually the night builds will be triggered and the package will be ready to be released on the next day. 
+
+8. Don't forget to tag the release branch 
+```
+git tag [version]
+git push --tags
+```
+Only if needed to Tips to remove tags: 
+```
+git push --delete origin [version]
+git tag -d [version]
 ```
 
-2. Add the following to your `.npmrc`:
+## Checkout master branch and bump version usually should be minor or major.
+
+## Merge changes from release into master
+
+## NOTE: Don't use git IDE/WEB
+
+![](./merge-guidance-schema.png)
+
+### Here are steps described in the diagram above.
+
+1. Make sure you are in release branch:
 ```
-tag-version-prefix=""
-message="release: cut the %s release"
+git checkout release && git pull
+```
+2. Create PR to merge changes back in master and preserve history:
+```
+git checkout -b merge-release-in-master-[branch]/[sha]
+git push --set-upstream origin merge-release-in-master-branch-[branch]/[sha]
+git merge origin/master
+```
+3. Resolve conflicts. Choose to keep the version of master branch. If it is needed to revert versions of modules, see at the bottom.
+
+4. Add conflicts:
+```
+git add resolved files
+```
+5. Commit changes with default merge message:
+```
+git commit
+git push
 ```
 
-3. Create new branch for the release:
-```bash
-git checkout -b username/release-version
+6. Create pull request which should be based on master. Replace replace env merge-release-in-master-branch with its value
+```
+curl -d '{"title": "chore: merge release in master","body": "chore: merge release in master","head": "merge-release-in-master","base": "master"}' -X POST https://api.github.com/repos/NativeScript/NativeScript/pulls -H "Authorization: token ${GIT_TOKEN}"
 ```
 
-4. Execute [`npm version`](https://docs.npmjs.com/cli/version) to bump the version in the `package.json` file, tag the release and update the CHANGELOG.md:
-```bash
-npm version [patch|minor|major]
+**If needed, to revert file and take it from master:**
 ```
-
-5. Push all the changes to your branch and create a pull request:
-```bash
-git push --set-upstream origin username/release-version --tags
+git checkout origin/master nativescript-angular/[some-file]
+git commit --amend
+git push --force-with-lease
 ```
-
-6. Publish the package to `npm` after the pull request is merged:
-```bash
-npm publish
-```
+This could require to repeat steps from 1 to 4, since we need to keep the branches with the same history

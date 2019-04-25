@@ -46,6 +46,7 @@
     "nativescript-dev-appium": "next",
     "nativescript-dev-typescript": "next",
     "nativescript-dev-webpack": "next",
+    "tns-platform-declarations": "next",
     "typescript": "~3.1.1"
   },
   "scripts": {

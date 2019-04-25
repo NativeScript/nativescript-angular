@@ -1,4 +1,4 @@
-import { Component, ViewContainerRef, Input } from "@angular/core";
+import { Component, ViewContainerRef, Input, ViewChild, ElementRef } from "@angular/core";
 import { Router, NavigationEnd } from "@angular/router";
 import { ModalDialogService, ModalDialogOptions } from "nativescript-angular/directives/dialogs";
 import { ModalComponent } from "../modal/modal.component";
@@ -16,12 +16,14 @@ import { ModalViewComponent } from "~/modal-shared/modal-view.component";
     <Button text="Show Modal Without Frame" (tap)="onModalNoFrame()" textAlignment="left"></Button>
     <Button text="Show Modal Page With Frame" (tap)="onModalFrame()" textAlignment="left"></Button>
     <Button text="Show Shared Modal" (tap)="onRootModalTap()" textAlignment="left"></Button>
+    <Button #popoverButtonComp text="Show shared 'popover' modal" (tap)="onPopoverModal()" textAlignment="left"></Button>
     <Button text="Show Dialog" (tap)="onShowDialog()" textAlignment="left"></Button>
 </StackLayout>`
 })
 
 export class BasicsNavigationComponent {
 
+    @ViewChild("popoverButtonComp") popoverButtonComp: ElementRef;
     @Input() col: number;
     constructor(
         private modal: ModalDialogService,
@@ -29,7 +31,7 @@ export class BasicsNavigationComponent {
         private vcf: ViewContainerRef,
         private viewContainerRefService: ViewContainerRefService) {
     }
- 
+
     onModalNoFrame() {
         const options: ModalDialogOptions = {
             context: {
@@ -74,14 +76,28 @@ export class BasicsNavigationComponent {
 
     onRootModalTap(): void {
         const options: ModalDialogOptions = {
-          viewContainerRef: this.viewContainerRefService.root,
-          context: {},
-          fullscreen: true
+            viewContainerRef: this.viewContainerRefService.root,
+            context: {},
+            fullscreen: true
         };
-     
+
         this.modal.showModal(ModalViewComponent, options)
-        .then((result: string) => {
-          console.log(result);
-        });
-      }
+            .then((result: string) => {
+                console.log(result);
+            });
+    }
+
+    onPopoverModal() {
+        const options: ModalDialogOptions = {
+            viewContainerRef: this.viewContainerRefService.root,
+            context: {},
+            ios: {
+                presentationStyle: UIModalPresentationStyle.Popover
+            },
+            target: this.popoverButtonComp.nativeElement
+        };
+
+        this.modal.showModal(ModalViewComponent, options)
+            .then((result: string) => { console.log(result);});
+    }
 }
