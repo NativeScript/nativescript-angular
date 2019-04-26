@@ -15,7 +15,7 @@ describe("modal-shared:", () => {
     });
 
     roots.forEach(root => {
-        describe("Shared modal from second and back", () => {
+        describe("Shared modal from home component and back", () => {
 
             before(async () => {
                 await screen[root]();
@@ -43,6 +43,11 @@ describe("modal-shared:", () => {
 
             it("should open/close shared modal from home component again", async () => {
                 await screen.loadSharedModal(true);
+                await screen.closeModal();
+            });
+
+            it("should open/close shared modal with presentation style from home component", async () => {
+                await screen.loadSharedModalWithPresentationStyle(true);
                 await screen.closeModal();
             });
 

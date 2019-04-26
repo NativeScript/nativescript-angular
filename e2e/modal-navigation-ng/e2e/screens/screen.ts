@@ -1,4 +1,4 @@
-import { AppiumDriver } from "nativescript-dev-appium";
+import { AppiumDriver, SearchOptions } from "nativescript-dev-appium";
 import { assert } from "chai";
 
 const home = "Home Component"
@@ -165,6 +165,11 @@ export class Screen {
         await btnTap.click();
     }
 
+    private showSharedModalPresentationStyle = async () => {
+        const btnTap = await this._driver.findElementByText("popover", SearchOptions.contains);
+        await btnTap.click();
+    }
+
     loadedModalPage = async () => {
         const btnShowNestedModalPage = await this._driver.findElementByAutomationText(showNestedModalPage);
         assert.isTrue(await btnShowNestedModalPage.isDisplayed(), `${showNestedModalPage} is not displayed`);
@@ -212,6 +217,7 @@ export class Screen {
     }
 
     loadedModalNoFrame = async () => {
+        await this._driver.wait(2000);
         const btnShowDialogConfirm = await this._driver.waitForElement(showDialog);
         const btnCloseModal = await this._driver.waitForElement(closeModal);
         assert.isTrue(await btnShowDialogConfirm.isDisplayed());
@@ -304,6 +310,15 @@ export class Screen {
     loadSharedModal = async (loadShowModalPageWithFrame: boolean) => {
         if (loadShowModalPageWithFrame) {
             await this.showSharedModal();
+        }
+
+        const lbl = await this._driver.waitForElement(sharedModalView, 5000);
+        assert.isTrue(await lbl.isDisplayed());
+    }
+
+    loadSharedModalWithPresentationStyle = async (loadShowModalPageWithFrame: boolean) => {
+        if (loadShowModalPageWithFrame) {
+            await this.showSharedModalPresentationStyle();
         }
 
         const lbl = await this._driver.waitForElement(sharedModalView, 5000);
