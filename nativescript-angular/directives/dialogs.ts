@@ -117,9 +117,7 @@ export class ModalDialogService {
         const closeCallback = once((...args) => {
             options.doneCallback.apply(undefined, args);
             if (componentView) {
-                if (componentView.viewController) {
-                    componentView.closeModal();
-                }
+                componentView.closeModal();
                 this.location._closeModalNavigation();
                 detachedLoaderRef.instance.detectChanges();
                 detachedLoaderRef.destroy();
@@ -146,8 +144,6 @@ export class ModalDialogService {
                 (<any>componentView.parent)._ngDialogRoot = componentView;
                 (<any>componentView.parent).removeChild(componentView);
             }
-
-            componentView.on(View.popoverClosedEvent, closeCallback);
 
             options.parentView.showModal(componentView, { ...options, closeCallback });
         });
