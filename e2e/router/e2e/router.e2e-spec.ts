@@ -437,6 +437,46 @@ describe("Simple navigate and back should trigger only one CD on FirstComponent"
     });
 });
 
+describe("Simple navigate and back should trigger only one CD on FirstComponent even with 3 changes in service", () => {
+    let driver: AppiumDriver;
+
+    before(async () => {
+        driver = await createDriver();
+        await driver.resetApp();
+    });
+
+    it("should find First", async () => {
+        await assureFirstComponent(driver);
+    });
+
+    it("should reset counter", async () => {
+        await findAndClick(driver, "RESET");
+        await driver.waitForElement("CHECK: 1");
+        await driver.waitForElement("COUNTER: 0");
+    });
+
+    it("should navigate to Second(1)/master", async () => {
+        await findAndClick(driver, "GO TO SECOND");
+
+        await assureSecondComponent(driver, 1);
+        await assureNestedMasterComponent(driver);
+    });
+
+    it("should increase counter", async () => {
+        await findAndClick(driver, "TICK");
+        await findAndClick(driver, "TICK");
+        await findAndClick(driver, "TICK");
+    });
+
+    it("should navigate back to First", async () => {
+        await goBack(driver);
+        await assureFirstComponent(driver);
+        await driver.waitForElement("CHECK: 2");
+        await driver.waitForElement("COUNTER: 3");
+    });
+});
+
+
 async function assureFirstComponent(driver: AppiumDriver) {
     await driver.findElementByAutomationText("FirstComponent");
 }
