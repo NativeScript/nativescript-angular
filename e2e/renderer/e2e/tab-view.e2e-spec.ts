@@ -2,19 +2,21 @@ import {
     AppiumDriver,
     createDriver,
     SearchOptions,
-    UIElement
+    UIElement,
+    nsCapabilities
 } from "nativescript-dev-appium";
 import { assert } from "chai";
 
-describe("TabView-scenario", () => {
+describe("TabView-scenario", async function(){
     let driver: AppiumDriver;
 
-    describe("dynamically change TabView item title, icon and textTransform", async () => {
+    describe("dynamically change TabView item title, icon and textTransform", async function(){
         let firstTabItem: UIElement;
         let secondTabItem: UIElement;
         let thirdTabItem: UIElement;
 
-        before(async () => {
+        before(async function(){
+            nsCapabilities.testReporter.context = this;
             driver = await createDriver();
             await driver.driver.resetApp();
         });
@@ -25,7 +27,7 @@ describe("TabView-scenario", () => {
             }
         });
 
-        it("should navigate to page", async () => {
+        it("should navigate to page", async function(){
             const navigationButton =
                 await driver.findElementByAutomationText("TabItem Binding");
             await navigationButton.click();
@@ -33,7 +35,7 @@ describe("TabView-scenario", () => {
             await driver.findElementByAutomationText("Tab Item Binding");
         });
 
-        it("should find elements", async () => {
+        it("should find elements", async function(){
             await driver.findElementByAutomationText("First Tab");
 
             const notSelectedTabItems = await driver.findElementsByText("not selected");
@@ -46,7 +48,7 @@ describe("TabView-scenario", () => {
             assert(screenMatches);
         });
 
-        it("should navigate to second tab item", async () => {
+        it("should navigate to second tab item", async function(){
             await secondTabItem.click();
 
             await driver.findElementByAutomationText("Second Tab");
@@ -61,7 +63,7 @@ describe("TabView-scenario", () => {
             assert(screenMatches);
         });
 
-        it("should navigate to third tab item", async () => {
+        it("should navigate to third tab item", async function(){
             await thirdTabItem.click();
 
             await driver.findElementByAutomationText("Third Tab");

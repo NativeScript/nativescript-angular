@@ -2,12 +2,13 @@ import {
     AppiumDriver,
     createDriver,
     SearchOptions,
-    UIElement
+    UIElement,
+    nsCapabilities
 } from "nativescript-dev-appium";
 
 import { isAbove } from "./helpers/location";
 
-describe("ngFor scenario", () => {
+describe("ngFor scenario", async function () {
     let driver: AppiumDriver;
     let addButton: UIElement;
     let removeButton: UIElement;
@@ -15,6 +16,7 @@ describe("ngFor scenario", () => {
     let lastAddedElementId = 0;
 
     before(async () => {
+        nsCapabilities.testReporter.context = this;
         driver = await createDriver();
         await driver.driver.resetApp();
     });
@@ -25,7 +27,7 @@ describe("ngFor scenario", () => {
         }
     });
 
-    it("should navigate to page", async () => {
+    it("should navigate to page", async function () {
         const navigationButton =
             await driver.findElementByAutomationText("NgFor");
         await navigationButton.click();
@@ -34,7 +36,7 @@ describe("ngFor scenario", () => {
             await driver.findElementByAutomationText("ngFor");
     });
 
-    it("should find elements", async () => {
+    it("should find elements", async function () {
         const first = await driver.findElementByAutomationText(
             lastAddedElementId.toString());
         elements.push(first);
@@ -45,33 +47,33 @@ describe("ngFor scenario", () => {
         await isAbove(first, addButton);
     });
 
-    it("should render elements in correct order", async () => {
+    it("should render elements in correct order", async function () {
         await isAbove(elements[0], addButton);
         await isAbove(addButton, removeButton);
     });
 
-    it("should place new elements in the right places", async () => {
+    it("should place new elements in the right places", async function () {
         for (let i = 0; i < 5; i += 1) {
             await addElement();
             await checkAppendedCorrectly();
         }
     });
 
-    it("shouldn't reorder elements when last is removed", async () => {
+    it("shouldn't reorder elements when last is removed", async function () {
         while (elements.length) {
             await removeElement();
             await checkCorrectOrderAll();
         }
     });
 
-    it("should render new elements correctly after all old ones are removed", async () => {
+    it("should render new elements correctly after all old ones are removed", async function () {
         for (let i = 0; i < 5; i += 1) {
             await addElement();
             await checkCorrectOrderAll();
         }
     });
 
-    it("shouldn't reorder elements when middle is removed", async () => {
+    it("shouldn't reorder elements when middle is removed", async function () {
         const middleIndex = Math.floor(elements.length / 2);
         await removeElement(middleIndex);
         await checkCorrectOrderAll();
