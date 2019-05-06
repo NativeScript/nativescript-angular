@@ -1,16 +1,12 @@
-import { AppiumDriver, createDriver, SearchOptions } from "nativescript-dev-appium";
+import { AppiumDriver, createDriver, SearchOptions, nsCapabilities } from "nativescript-dev-appium";
 import { assert } from "chai";
 
-describe("TabView with page-router-outlet in each tab", () => {
+describe("TabView with page-router-outlet in each tab", async function () {
     let driver: AppiumDriver;
 
-    before(async () => {
+    before(async function () {
+        nsCapabilities.testReporter.context = this;
         driver = await createDriver();
-    });
-
-    after(async () => {
-        await driver.quit();
-        console.log("Quit driver!");
     });
 
     afterEach(async function () {
@@ -19,13 +15,13 @@ describe("TabView with page-router-outlet in each tab", () => {
         }
     });
 
-    it("should find any tabs by text", async () => {
+    it("should find any tabs by text", async function () {
         await driver.findElementByAutomationText("Players");
         await driver.findElementByAutomationText("Teams");
         await driver.findElementByAutomationText("Player List");
     });
 
-    it("should be able to switch between tabs", async () => {
+    it("should be able to switch between tabs", async function () {
         await driver.findElementByAutomationText("Player List");
 
         await selectTeamTab(driver);
@@ -33,7 +29,7 @@ describe("TabView with page-router-outlet in each tab", () => {
         await selectPlayerTab(driver);
     });
 
-    it("should go forward and go back on first(player) tab", async () => {
+    it("should go forward and go back on first(player) tab", async function () {
         await driver.findElementByAutomationText("Player List");
 
         await navigateToPlayerItem(driver, "Player One", "1");
@@ -42,7 +38,7 @@ describe("TabView with page-router-outlet in each tab", () => {
         await driver.findElementByAutomationText("Player List");
     });
 
-    it("should go forward and go back on second(team) tab", async () => {
+    it("should go forward and go back on second(team) tab", async function () {
         await driver.findElementByAutomationText("Player List");
 
         await selectTeamTab(driver);
@@ -55,7 +51,7 @@ describe("TabView with page-router-outlet in each tab", () => {
         await selectPlayerTab(driver);
     });
 
-    it("should navigate first(player) tab, second(team) tab and back in the same order ", async () => {
+    it("should navigate first(player) tab, second(team) tab and back in the same order ", async function () {
         await driver.findElementByAutomationText("Player List");
 
         // Go forward in player tab
@@ -79,7 +75,7 @@ describe("TabView with page-router-outlet in each tab", () => {
         await driver.findElementByAutomationText("Player List");
     });
 
-    it("should navigate second(team) tab, first(player) and back in the same order ", async () => {
+    it("should navigate second(team) tab, first(player) and back in the same order ", async function () {
         await driver.findElementByAutomationText("Player List");
 
         // Go forward in team tab
@@ -106,7 +102,7 @@ describe("TabView with page-router-outlet in each tab", () => {
         await selectPlayerTab(driver);
     });
 
-    it("should navigate first(player) tab, second(team) tab and back in reverse order ", async () => {
+    it("should navigate first(player) tab, second(team) tab and back in reverse order ", async function () {
         await driver.findElementByAutomationText("Player List");
 
         // Go forward in player tab
@@ -129,10 +125,10 @@ describe("TabView with page-router-outlet in each tab", () => {
         await driver.navBack();
         await driver.findElementByAutomationText("Team List");
 
-        await selectPlayerTab(driver);        
+        await selectPlayerTab(driver);
     });
 
-    it("should navigate second(team) tab, first(player) tab and back in reverse order ", async () => {
+    it("should navigate second(team) tab, first(player) tab and back in reverse order ", async function () {
         await driver.findElementByAutomationText("Player List");
 
         // Go forward in team tab

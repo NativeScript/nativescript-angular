@@ -1,4 +1,4 @@
-import { AppiumDriver, createDriver, SearchOptions } from "nativescript-dev-appium";
+import { AppiumDriver, createDriver, SearchOptions, nsCapabilities } from "nativescript-dev-appium";
 import { Screen } from "./screen"
 import {
     testPlayerNavigated,
@@ -11,22 +11,29 @@ import {
 
 const pages = ["Go To Home Page", "Go To Lazy Home Page"];
 
-describe("split-view:", () => {
+describe("split-view:", async function () {
     let driver: AppiumDriver;
     let screen: Screen;
 
-    before(async () => {
+    before(async function () {
+        nsCapabilities.testReporter.context = this;
         driver = await createDriver();
         screen = new Screen(driver);
     });
 
-    after(async () => {
+    after(async function () {
         await driver.quit();
         console.log("Quit driver!");
     });
 
-    pages.forEach(page => {
-        describe(`${page} split-view:`, () => {
+
+    for (let index = 0; index < pages.length; index++) {
+        const page = pages[index];
+        describe(`${page} split-view:`, async function () {
+
+            before(async function () {
+                nsCapabilities.testReporter.context = this;
+            });
 
             afterEach(async function () {
                 if (this.currentTest.state === "failed") {
@@ -34,7 +41,7 @@ describe("split-view:", () => {
                 }
             });
 
-            it("loaded home component and lists", async () => {
+            it("loaded home component and lists", async function () {
                 await screen.navigateToHomePage(page);
                 await screen.loadedHome();
                 await screen.loadedPlayersList();
@@ -42,7 +49,7 @@ describe("split-view:", () => {
                 await canGoBack(screen, screen.canGoBackActivatedRoute, true);
             });
 
-            it("should navigate Player One/Team One then back separately", async () => {
+            it("should navigate Player One/Team One then back separately", async function () {
                 await testPlayerNavigated(screen, screen.playerOne);
                 await testTeamNavigated(screen, screen.teamOne);
                 await canGoBack(screen, screen.canGoBackPlayers, true);
@@ -54,7 +61,7 @@ describe("split-view:", () => {
                 await screen.loadedTeamList();
             });
 
-            it("should navigate Player One/Team One then back separately (keep order)", async () => {
+            it("should navigate Player One/Team One then back separately (keep order)", async function () {
                 await testPlayerNavigated(screen, screen.playerOne);
                 await testTeamNavigated(screen, screen.teamOne);
                 await backTeams(driver);
@@ -63,7 +70,7 @@ describe("split-view:", () => {
                 await screen.loadedPlayersList();
             });
 
-            it("should navigate Player One/Team One then back simultaneously", async () => {
+            it("should navigate Player One/Team One then back simultaneously", async function () {
                 await testPlayerNavigated(screen, screen.playerOne);
                 await testTeamNavigated(screen, screen.teamOne);
                 await canGoBack(screen, screen.canGoBackBoth, true);
@@ -73,7 +80,7 @@ describe("split-view:", () => {
                 await screen.loadedPlayersList();
             });
 
-            it("should navigate Player One/Team One then next Player/Team then back separately", async () => {
+            it("should navigate Player One/Team One then next Player/Team then back separately", async function () {
                 await testPlayerNavigated(screen, screen.playerOne);
                 await testTeamNavigated(screen, screen.teamOne);
                 await testPlayerNextNavigated(screen, screen.playerTwo);
@@ -88,7 +95,7 @@ describe("split-view:", () => {
                 await screen.loadedPlayersList();
             });
 
-            it("should navigate Player One/Team One then back", async () => {
+            it("should navigate Player One/Team One then back", async function () {
                 await testPlayerNavigated(screen, screen.playerOne);
                 await testTeamNavigated(screen, screen.teamOne);
                 await back(driver);
@@ -99,7 +106,7 @@ describe("split-view:", () => {
                 await screen.loadedPlayersList();
             });
 
-            it("should navigate Player One then navigate Players list then back", async () => {
+            it("should navigate Player One then navigate Players list then back", async function () {
                 await testPlayerNavigated(screen, screen.playerOne);
                 await testPlayerNextNavigated(screen, screen.playerTwo);
                 await testPlayersNavigated(screen);
@@ -111,7 +118,7 @@ describe("split-view:", () => {
                 await screen.loadedPlayersList();
             });
 
-            it("should navigate Player One/Team One then Android back button", async () => {
+            it("should navigate Player One/Team One then Android back button", async function () {
                 if (driver.isAndroid) {
                     await testPlayerNavigated(screen, screen.playerOne);
                     await testTeamNavigated(screen, screen.teamOne);
@@ -148,7 +155,7 @@ describe("split-view:", () => {
                 await screen.loadedLogin;
             });
         });
-    });
+    };
 });
 
 async function backActivatedRoute(driver: AppiumDriver) {

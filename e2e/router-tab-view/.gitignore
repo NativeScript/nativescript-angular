@@ -10,3 +10,4 @@ e2e/reports
 test-results.xml
 
 instrumentscli*.trace
+mochawesome-report
