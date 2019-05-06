@@ -8,3 +8,4 @@ hooks
 /**/*.map
 e2e/reports
 test-results.xml
+mochawesome-report

@@ -1,4 +1,4 @@
-import { AppiumDriver, createDriver } from "nativescript-dev-appium";
+import { AppiumDriver, createDriver, nsCapabilities } from "nativescript-dev-appium";
 import { Screen } from "./screen"
 import {
     testPlayerNavigated,
@@ -7,16 +7,17 @@ import {
     testTeamNextNavigated,
 } from "./shared.e2e-spec"
 
-describe("custom-tabs:", () => {
+describe("custom-tabs:", async function () {
     let driver: AppiumDriver;
     let screen: Screen;
 
-    before(async () => {
+    before(async function () {
+        nsCapabilities.testReporter.context = this;
         driver = await createDriver();
         screen = new Screen(driver);
     });
 
-    after(async () => {
+    after(async function () {
         await driver.quit();
         console.log("Quit driver!");
     });
@@ -27,7 +28,7 @@ describe("custom-tabs:", () => {
         }
     });
 
-    it("loaded custom tab component and tabs", async () => {
+    it("loaded custom tab component and tabs", async function () {
         await screen.navigateCustomTabsPage();
         await screen.loadedCustomTabsPage();
         await screen.loadedPlayersList();
@@ -35,7 +36,7 @@ describe("custom-tabs:", () => {
         await screen.loadedTeamList();
     });
 
-    it("navigate back to login and again to custom tabs", async () => {
+    it("navigate back to login and again to custom tabs", async function () {
         await backRoot(driver);
         await screen.loadedLogin();
         await screen.navigateCustomTabsPage();
@@ -45,7 +46,7 @@ describe("custom-tabs:", () => {
         await screen.loadedTeamList();
     });
 
-    it("navigate back to login and again to custom tabs", async () => {
+    it("navigate back to login and again to custom tabs", async function () {
         await gotoPlayersTab(driver);
         await testPlayerNavigated(screen, screen.playerOne);
         await gotoTeamsTab(driver);

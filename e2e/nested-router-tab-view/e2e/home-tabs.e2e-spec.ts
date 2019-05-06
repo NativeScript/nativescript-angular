@@ -1,4 +1,4 @@
-import { AppiumDriver, createDriver, SearchOptions } from "nativescript-dev-appium";
+import { AppiumDriver, createDriver, SearchOptions, nsCapabilities } from "nativescript-dev-appium";
 import { Screen } from "./screen"
 import {
     testPlayerNavigated,
@@ -12,22 +12,28 @@ import {
 
 const pages = ["Go To Home Page", "Go To Lazy Home Page"];
 
-describe("home-tabs:", () => {
+describe("home-tabs:", async function () {
     let driver: AppiumDriver;
     let screen: Screen;
 
-    before(async () => {
+    before(async function () {
+        nsCapabilities.testReporter.context = this;
         driver = await createDriver();
         screen = new Screen(driver);
     });
 
-    after(async () => {
+    after(async function () {
         await driver.quit();
         console.log("Quit driver!");
     });
 
-    pages.forEach(page => {
-        describe(`${page} home-tab:`, () => {
+    for (let index = 0; index < pages.length; index++) {
+        const page = pages[index];
+        describe(`${page} home-tab:`, async function () {
+
+            before(async function () {
+                nsCapabilities.testReporter.context = this;
+            });
 
             afterEach(async function () {
                 if (this.currentTest.state === "failed") {
@@ -35,14 +41,14 @@ describe("home-tabs:", () => {
                 }
             });
 
-            it("loaded home component and lists", async () => {
+            it("loaded home component and lists", async function () {
                 await screen.navigateToHomePage(page);
                 await screen.loadedHome();
                 await screen.loadedPlayersList();
                 await screen.loadedTeamList();
             });
 
-            it("should navigate to Tabs then to About forward", async () => {
+            it("should navigate to Tabs then to About forward", async function () {
                 await screen.navigateToTabsPage();
                 await screen.loadedTabs();
                 await screen.loadedPlayersList();
@@ -51,7 +57,7 @@ describe("home-tabs:", () => {
                 await screen.loadedNestedAbout();
             });
 
-            it("should go back to Tabs and then back to Home", async () => {
+            it("should go back to Tabs and then back to Home", async function () {
                 await backActivatedRoute(driver);
                 await screen.loadedTabs();
                 await screen.loadedPlayersList();
@@ -61,7 +67,7 @@ describe("home-tabs:", () => {
                 await screen.loadedTeamList();
             });
 
-            it("should navigate to Tabs without Players/Teams navigation", async () => {
+            it("should navigate to Tabs without Players/Teams navigation", async function () {
                 await screen.navigateToTabsPage();
                 await screen.loadedTabs();
                 await screen.loadedPlayersList();
@@ -71,7 +77,7 @@ describe("home-tabs:", () => {
                 await screen.loadedTeamList();
             });
 
-            it("should navigate Player One/Team One then go to Tabs and back", async () => {
+            it("should navigate Player One/Team One then go to Tabs and back", async function () {
                 await testPlayerNavigated(screen, screen.playerOne);
                 await testTeamNavigated(screen, screen.teamOne);
                 await screen.navigateToTabsPage();
@@ -88,7 +94,7 @@ describe("home-tabs:", () => {
                 await screen.loadedTeamList();
             });
 
-            it("should navigate 2 times in Players go to Tabs and back", async () => {
+            it("should navigate 2 times in Players go to Tabs and back", async function () {
                 await testPlayerNavigated(screen, screen.playerOne);
                 await testPlayerNextNavigated(screen, screen.playerTwo);
                 await screen.navigateToTabsPage();
@@ -112,7 +118,7 @@ describe("home-tabs:", () => {
                 await screen.loadedLogin;
             });
         });
-    });
+    };
 });
 
 async function backActivatedRoute(driver: AppiumDriver) {
