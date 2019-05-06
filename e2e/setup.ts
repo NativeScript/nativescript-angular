@@ -1,15 +1,18 @@
-import { startServer, stopServer, createDriver } from "nativescript-dev-appium";
+import { startServer, stopServer, ITestReporter, nsCapabilities, LogImageType } from "nativescript-dev-appium";
+const addContext = require('mochawesome/addContext');
 
-let driver;
-before("start server", async () => {
+const testReporterContext = <ITestReporter>{};
+testReporterContext.name = "mochawesome";
+testReporterContext.reportDir = "mochawesome-report";
+testReporterContext.log = addContext;
+testReporterContext.logImageTypes = [LogImageType.screenshots, LogImageType.everyImage];
+nsCapabilities.testReporter = testReporterContext;
+
+before("start server", async function () {
+    nsCapabilities.testReporter.context = this;
     await startServer();
-    driver = await createDriver();
 });
 
-after("stop server", async () => {
-    try {
-        await driver.logTestArtifacts("stop_server_log");
-        await driver.quit();
-    } catch (error) { }
+after("stop server", async function () {
     await stopServer();
 });

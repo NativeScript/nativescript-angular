@@ -19,7 +19,11 @@ export class BasePage {
 
     async isBtnDisplayed(element: UIElement) {
         let btn: UIElement = await element;
-        const isBtnDisplayed = btn ? await btn.isDisplayed() : false;
+        let isBtnDisplayed = false
+        try {
+            isBtnDisplayed = btn ? await btn.isDisplayed() : false;
+        } catch (error) { }
+
         return isBtnDisplayed;
     }
 }

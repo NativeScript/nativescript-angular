@@ -1,4 +1,4 @@
-import { AppiumDriver, createDriver, SearchOptions } from "nativescript-dev-appium";
+import { AppiumDriver, createDriver, nsCapabilities } from "nativescript-dev-appium";
 import { assert } from "chai";
 import { AnimationBuilderPage } from "./pages/animation-builder-page";
 import { ExternalAnimationPage } from "./pages/extarnal-animation-page";
@@ -10,11 +10,11 @@ import { AnimationsWithDefaultOptionsPage } from "./pages/animations-with-defaul
 import { AnimateChildPage } from "./pages/animate-child-page";
 import { HeroPage } from "./pages/hero-page";
 
-describe("smoke-tests", function(){
-    this.retries(2);
+describe("smoke-tests", async function () {
     let driver: AppiumDriver;
 
-    before(async () => {
+    before(async function () {
+        nsCapabilities.testReporter.context = this;
         driver = await createDriver();
     });
 
@@ -29,7 +29,7 @@ describe("smoke-tests", function(){
         }
     });
 
-    it("animation builder - btn should disappear", async () => {
+    it("animation builder - btn should disappear", async function () {
         const animationBuilder = new AnimationBuilderPage(driver);
         await animationBuilder.enterExample();
         await animationBuilder.executeAnimation();
@@ -37,7 +37,7 @@ describe("smoke-tests", function(){
         assert.isFalse(result.isVisible, "The btn should disappear");
     });
 
-    it("external animation - visibility", async function(){
+    it("external animation - visibility", async function () {
         this.retries(1);
         const externalAnimationPage = new ExternalAnimationPage(driver);
         await externalAnimationPage.enterExample();
@@ -50,7 +50,7 @@ describe("smoke-tests", function(){
         assert.isTrue(result.isVisible, "The button should appear!");
     });
 
-    it("selector", async () => {
+    it("selector", async function () {
         const selectorPage = new SelectorPage(driver);
         await selectorPage.enterExample();
         await selectorPage.addItem();
@@ -62,14 +62,14 @@ describe("smoke-tests", function(){
         await selectorPage.assertElementPossition(3);
     });
 
-    it("querry with stagger", async () => {
+    it("querry with stagger", async function () {
         const queryWithStaggerPage = new QueryWithStaggerPage(driver);
         await queryWithStaggerPage.enterExample();
         await queryWithStaggerPage.addItem();
         await queryWithStaggerPage.assertItemPosition("Item 6", 6, 7);
     });
 
-    it("fade in - out", async function(){
+    it("fade in - out", async function () {
         this.retries(1);
         const fadeInOutPage = new FadeInOutPage(driver);
         await fadeInOutPage.enterExample();
@@ -82,7 +82,7 @@ describe("smoke-tests", function(){
         assert.isTrue(result.isVisible, "The button should appear!");
     });
 
-    it("animation with options", async () => {
+    it("animation with options", async function () {
         const animationWithOptionsPage = new AnimationWithOptionsPage(driver);
         await animationWithOptionsPage.enterExample();
         await animationWithOptionsPage.toggleAnimation();
@@ -92,7 +92,7 @@ describe("smoke-tests", function(){
         await animationWithOptionsPage.assertPositionOfToggleAnimationBtn();
     });
 
-    it("animation with default options", async () => {
+    it("animation with default options", async function () {
         const animationWithOptionsPage = new AnimationsWithDefaultOptionsPage(driver);
         await animationWithOptionsPage.enterExample();
         let examplesCount = 5;
@@ -117,7 +117,7 @@ describe("smoke-tests", function(){
         await animationWithOptionsPage.assertItemPosition("Harley Quinn", 4, examplesCount);
     });
 
-    it("animate child", async function (){
+    it("animate child", async function () {
         this.retries(1);
         const animateChildPage = new AnimateChildPage(driver);
         await animateChildPage.enterExample();
@@ -126,7 +126,7 @@ describe("smoke-tests", function(){
         await animateChildPage.assertContainersPosition();
     });
 
-    it("angular docs", async () => {
+    it("angular docs", async function () {
         const heroPage = new HeroPage(driver);
         await heroPage.enterExample();
         await heroPage.addActive();

@@ -45,7 +45,7 @@ export class AnimationsWithDefaultOptionsPage extends BasePage {
     async awaitItemToAppear(item: string, wait: number = 3000) {
         const startTime = Date.now();
         let btn = await this.getItem(item);
-        while (!btn && !(await btn.isDisplayed()) && Date.now() - startTime <= wait) {
+        while (!btn && !(btn && !(await btn.isDisplayed())) && Date.now() - startTime <= wait) {
             btn = await this.getItem(item);
         }
 

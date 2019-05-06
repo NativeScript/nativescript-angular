@@ -18,3 +18,4 @@ instruments*
 e2e/reports
 test-results.xml
 .DS_Store
+mochawesome-report
