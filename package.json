@@ -5,9 +5,6 @@
   "repository": "<fill-your-repository-here>",
   "nativescript": {
     "id": "org.nativescript.ng4animations",
-    "tns-android": {
-      "version": "latest"
-    },
     "tns-ios": {
       "version": "latest"
     }
@@ -32,20 +29,20 @@
   "devDependencies": {
     "@angular/compiler-cli": "~7.2.0",
     "@ngtools/webpack": "~7.2.0",
+    "@types/chai": "~4.1.7",
+    "@types/mocha": "~5.2.5",
+    "@types/node": "~10.12.18",
     "babel-traverse": "6.25.0",
     "babel-types": "6.25.0",
     "babylon": "6.17.4",
     "lazy": "1.0.11",
-    "nativescript-css-loader": "~0.26.0",
-    "nativescript-dev-typescript": "^0.7.0",
-    "nativescript-dev-webpack": "next",
-    "typescript": "~3.1.1",
-    "nativescript-dev-appium": "next",
     "mocha": "~5.2.0",
     "mochawesome": "~3.1.2",
-    "@types/mocha": "~5.2.5",
-    "@types/chai": "~4.1.7",
-    "@types/node": "~10.12.18"
+    "nativescript-css-loader": "~0.26.0",
+    "nativescript-dev-appium": "next",
+    "nativescript-dev-typescript": "^0.7.0",
+    "nativescript-dev-webpack": "next",
+    "typescript": "~3.1.1"
   },
   "scripts": {
     "u": "update-ns-webpack",

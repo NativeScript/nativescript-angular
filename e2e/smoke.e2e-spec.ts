@@ -33,8 +33,8 @@ describe("smoke-tests", async function () {
         const animationBuilder = new AnimationBuilderPage(driver);
         await animationBuilder.enterExample();
         await animationBuilder.executeAnimation();
-        const result = await animationBuilder.waitElementToHide(3000);
-        assert.isFalse(result.isVisible, "The btn should disappear");
+        const result = await animationBuilder.waitElementToHide(driver.defaultWaitTime);
+        assert.isFalse(!result || result.isVisible, "The btn should disappear");
     });
 
     it("external animation - visibility", async function () {
