@@ -21,7 +21,7 @@ describe("ngForOf scenario", function () {
     let elements: ElementTuple[] = [];
     let lastAddedElementId = 0;
 
-    before(async () => {
+    before(async function () {
         nsCapabilities.testReporter.context = this;
         driver = await createDriver();
         await driver.driver.resetApp();
@@ -88,7 +88,7 @@ describe("ngForOf scenario", function () {
     });
 
 
-    const addElement = async () => {
+    const addElement = async function () {
         await addButton.click();
 
         lastAddedElementId += 1;
@@ -114,7 +114,7 @@ describe("ngForOf scenario", function () {
         lastAddedElementId -= 1;
     };
 
-    const checkAppendedCorrectly = async () => {
+    const checkAppendedCorrectly = async function () {
         const lastAdded = await getElement(lastAddedElementId);
 
         await elementIsAbove(elements.slice(-2)[0], lastAdded);
@@ -122,7 +122,7 @@ describe("ngForOf scenario", function () {
         await isAbove(addButton, removeButton);
     };
 
-    const checkCorrectOrderAll = async () => {
+    const checkCorrectOrderAll = async function () {
         for (let i = 0; i < elements.length - 1; i += 1) {
             await elementIsAbove(elements[i], elements[i + 1]);
         }
