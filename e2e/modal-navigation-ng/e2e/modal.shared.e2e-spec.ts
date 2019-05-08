@@ -24,9 +24,6 @@ describe("modal-shared:", async function () {
                 await screen[root]();
             });
 
-            beforeEach(async function () {
-            });
-
             afterEach(async function () {
                 if (this.currentTest.state === "failed") {
                     await driver.logTestArtifacts(this.currentTest.title);
