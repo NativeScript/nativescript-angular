@@ -1,9 +1,8 @@
 import { Component, OnInit, OnDestroy, OnChanges, DoCheck } from "@angular/core";
-import { ActivatedRoute, Router, Route } from "@angular/router";
-import { Location } from "@angular/common";
 import { RouterExtensions } from "nativescript-angular/router";
-
 import { Page } from "tns-core-modules/ui/page";
+
+import { CounterService } from "../counter.service";
 
 @Component({
     selector: "first",
@@ -21,12 +20,18 @@ import { Page } from "tns-core-modules/ui/page";
         <Button text="RESET" automationText="RESET" (tap)="reset()"></Button>
         <Label [text]="message"></Label>
         <Label [text]="'CHECK: ' + doCheckCount"></Label>
+        <Label [text]="'COUNTER: ' + (service.counter$ | async)"></Label>
     </StackLayout>`
 })
 export class FirstComponent implements OnInit, OnDestroy, DoCheck {
     public message: string = "";
     public doCheckCount: number = 0;
-    constructor(private routerExt: RouterExtensions, page: Page) {
+
+    constructor(
+        private routerExt: RouterExtensions,
+        public service: CounterService,
+        page: Page) {
+
         console.log("FirstComponent - constructor() page: " + page);
     }
 
@@ -42,7 +47,7 @@ export class FirstComponent implements OnInit, OnDestroy, DoCheck {
         this.doCheckCount++;
         console.log("FirstComponent - ngDoCheck(): " + this.doCheckCount);
     }
-    
+
     reset() {
         this.doCheckCount = 0;
     }
