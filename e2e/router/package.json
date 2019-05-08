@@ -46,7 +46,7 @@
     "nativescript-dev-typescript": "^0.7.10-next-2019-01-07-183215-03",
     "nativescript-dev-webpack": "next",
     "tslib": "^1.7.1",
-    "typescript": "^3.1.6"
+    "typescript": "~3.1.1"
   },
   "scripts": {
     "e2e": "tsc -p e2e && mocha --opts ../config/mocha.opts --recursive e2e --appiumCapsLocation ../config/appium.capabilities.json",
