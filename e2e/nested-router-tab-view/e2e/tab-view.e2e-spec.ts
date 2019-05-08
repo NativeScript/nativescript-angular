@@ -1,4 +1,4 @@
-import { AppiumDriver, createDriver } from "nativescript-dev-appium";
+import { AppiumDriver, createDriver, nsCapabilities } from "nativescript-dev-appium";
 import { Screen } from "./screen"
 import {
     testPlayerNavigated,
@@ -7,11 +7,12 @@ import {
     testTeamNextNavigated,
 } from "./shared.e2e-spec"
 
-describe("tab-view:", () => {
+describe("tab-view:", async function () {
     let driver: AppiumDriver;
     let screen: Screen;
 
     before(async () => {
+        nsCapabilities.testReporter.context = this;
         driver = await createDriver();
         screen = new Screen(driver);
     });
