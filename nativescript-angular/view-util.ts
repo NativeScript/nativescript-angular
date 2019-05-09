@@ -182,7 +182,9 @@ export class ViewUtil {
         }
 
         this.removeFromQueue(extendedParent, extendedChild);
-        this.removeFromVisualTree(extendedParent, extendedChild);
+        if (!isDetachedElement(extendedChild)) {
+            this.removeFromVisualTree(extendedParent, extendedChild);
+        }
     }
 
     private removeFromQueue(parent: NgView, child: NgView) {
@@ -264,11 +266,6 @@ export class ViewUtil {
             this.removeLayoutChild(parent, child);
         } else if (isContentView(parent) && parent.content === child) {
             parent.content = null;
-        } else if (child.nodeName === "DetachedContainer") {
-            // Skip - DetachedContainer is... well detached from its parent
-            // Used with ListViews and other TemplatedItemsComponent views.
-        } else if (child.nodeName === "FormattedString" || child.nodeName === "Span") {
-            // Removing FormattedString and its Spans from a Label throws an exception
         } else if (isView(parent)) {
             parent._removeView(child);
         }
