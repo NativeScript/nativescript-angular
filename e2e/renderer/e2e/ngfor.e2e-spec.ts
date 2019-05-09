@@ -15,7 +15,7 @@ describe("ngFor scenario", async function () {
     let elements: UIElement[] = [];
     let lastAddedElementId = 0;
 
-    before(async () => {
+    before(async function () {
         nsCapabilities.testReporter.context = this;
         driver = await createDriver();
         await driver.driver.resetApp();
@@ -79,7 +79,7 @@ describe("ngFor scenario", async function () {
         await checkCorrectOrderAll();
     });
 
-    const addElement = async () => {
+    const addElement = async function () {
         await addButton.click();
 
         lastAddedElementId += 1;
@@ -103,7 +103,7 @@ describe("ngFor scenario", async function () {
         lastAddedElementId -= 1;
     };
 
-    const checkAppendedCorrectly = async () => {
+    const checkAppendedCorrectly = async function () {
         const lastAdded = await driver.findElementByAutomationText(
             lastAddedElementId.toString());
 
@@ -112,7 +112,7 @@ describe("ngFor scenario", async function () {
         await isAbove(addButton, removeButton);
     };
 
-    const checkCorrectOrderAll = async () => {
+    const checkCorrectOrderAll = async function () {
         for (let i = 0; i < elements.length - 1; i += 1) {
             await isAbove(elements[i], elements[i + 1]);
         }

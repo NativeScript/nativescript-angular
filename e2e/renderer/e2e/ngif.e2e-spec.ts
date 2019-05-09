@@ -10,7 +10,7 @@ import { isAbove } from "./helpers/location";
 
 import { assert } from "chai";
 
-describe("ngIf scenario", () => {
+describe("ngIf scenario", async function () {
     let driver: AppiumDriver;
     let toggleButton: UIElement;
 
@@ -376,7 +376,7 @@ describe("ngIf scenario", () => {
 
                 driver.findElementByAutomationText("first", 500)
                     .then(_ => { throw new Error("first label found!"); })
-                    .catch(() => {
+                    .catch(async function () {
                         driver.findElementByAutomationText("second", 500)
                             .then(_ => { throw new Error("second label found!"); })
                             .catch(() => done());
@@ -402,7 +402,7 @@ describe("ngIf scenario", () => {
 
                 driver.findElementByAutomationText("first", 500)
                     .then(_ => { throw new Error("first label found!"); })
-                    .catch(() => {
+                    .catch(async function () {
                         driver.findElementByAutomationText("second", 500)
                             .then(_ => { throw new Error("second label found!"); })
                             .catch(() => done());
