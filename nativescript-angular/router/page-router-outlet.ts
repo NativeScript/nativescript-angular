@@ -271,6 +271,7 @@ export class PageRouterOutlet implements OnDestroy { // tslint:disable-line:dire
         this.activated = ref;
 
         // reattach to ChangeDetection
+        this.activated.hostView.markForCheck();
         this.activated.hostView.reattach();
         this._activatedRoute = activatedRoute;
         this.markActivatedRoute(activatedRoute);

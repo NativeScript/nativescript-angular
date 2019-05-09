@@ -18,7 +18,7 @@ describe("Action Bar scenario", async function () {
         let toggleFirstButton: UIElement;
         let toggleSecondButton: UIElement;
 
-        before(async () => {
+        before(async function () {
             nsCapabilities.testReporter.context = this;
             driver = await createDriver();
             await driver.driver.resetApp();
@@ -52,7 +52,7 @@ describe("Action Bar scenario", async function () {
         });
 
         it("should detach first element when its condition is false", done => {
-            (async () => {
+            (async function () {
                 await toggleFirst();
 
                 try {
@@ -69,7 +69,7 @@ describe("Action Bar scenario", async function () {
         });
 
         it("should detach second element when its condition is false", done => {
-            (async () => {
+            (async function () {
                 await toggleSecond();
 
                 try {
@@ -95,15 +95,15 @@ describe("Action Bar scenario", async function () {
             await checkOrderIsCorrect();
         });
 
-        const checkOrderIsCorrect = async () => {
+        const checkOrderIsCorrect = async function () {
             await isOnTheLeft(firstActionItem, secondActionItem);
         };
 
-        const toggleFirst = async () => {
+        const toggleFirst = async function () {
             await toggleFirstButton.click();
         };
 
-        const toggleSecond = async () => {
+        const toggleSecond = async function () {
             await toggleSecondButton.click();
         };
 
@@ -113,7 +113,7 @@ describe("Action Bar scenario", async function () {
         let toggleButton: UIElement;
         let conditional: UIElement;
 
-        before(async () => {
+        before(async function () {
             nsCapabilities.testReporter.context = this;
             driver = await createDriver();
             await driver.driver.resetApp();
@@ -147,11 +147,11 @@ describe("Action Bar scenario", async function () {
             await checkOrderIsCorrect();
         });
 
-        const checkOrderIsCorrect = async () => {
+        const checkOrderIsCorrect = async function () {
             await isOnTheLeft(toggleButton, conditional);
         };
 
-        const toggle = async () => {
+        const toggle = async function () {
             await toggleButton.click();
         };
     });
