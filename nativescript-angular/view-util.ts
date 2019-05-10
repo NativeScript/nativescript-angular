@@ -157,9 +157,10 @@ export class ViewUtil {
         return next;
     }
 
-    public removeChild(parent: View, child: View) {
+    public removeChild(parent: View, child: View, removeGrandchildren = true) {
         if (isLogEnabled()) {
-           traceLog(`ViewUtil.removeChild parent: ${parent} child: ${child}`);
+           traceLog(`ViewUtil.removeChild parent: ${parent} child: ${child} `
+            + `remove grandchildren: ${removeGrandchildren}`);
         }
 
         if (!parent) {
@@ -169,8 +170,21 @@ export class ViewUtil {
         const extendedParent = this.ensureNgViewExtensions(parent);
         const extendedChild = this.ensureNgViewExtensions(child);
 
+        // Remove the child's children and their children
+        // Unless called from PageRouterOutlet when the child is moved from once parent to another.
+        while (extendedChild && extendedChild.firstChild && removeGrandchildren) {
+            const grandchild = extendedChild.firstChild;
+            if (isLogEnabled()) {
+                traceLog(`ViewUtil.removeChild parent: ${parent} child: ${extendedChild} grandchild: ${grandchild}`);
+            }
+
+            this.removeChild(extendedChild, grandchild);
+        }
+
         this.removeFromQueue(extendedParent, extendedChild);
-        this.removeFromVisualTree(extendedParent, extendedChild);
+        if (!isDetachedElement(extendedChild)) {
+            this.removeFromVisualTree(extendedParent, extendedChild);
+        }
     }
 
     private removeFromQueue(parent: NgView, child: NgView) {
@@ -181,6 +195,7 @@ export class ViewUtil {
         if (parent.firstChild === child && parent.lastChild === child) {
             parent.firstChild = null;
             parent.lastChild = null;
+            child.nextSibling = null;
             return;
         }
 
@@ -196,6 +211,8 @@ export class ViewUtil {
         if (previous) {
             previous.nextSibling = child.nextSibling;
         }
+
+        child.nextSibling = null;
     }
 
     // NOTE: This one is O(n) - use carefully
@@ -240,7 +257,7 @@ export class ViewUtil {
 
     private removeFromVisualTree(parent: NgView, child: NgView) {
         if (isLogEnabled()) {
-            traceLog(`ViewUtil.findPreviousElement parent: ${parent} child: ${child}`);
+            traceLog(`ViewUtil.removeFromVisualTree parent: ${parent} child: ${child}`);
         }
 
         if (parent.meta && parent.meta.removeChild) {
@@ -249,8 +266,6 @@ export class ViewUtil {
             this.removeLayoutChild(parent, child);
         } else if (isContentView(parent) && parent.content === child) {
             parent.content = null;
-            parent.lastChild = null;
-            parent.firstChild = null;
         } else if (isView(parent)) {
             parent._removeView(child);
         }
@@ -273,12 +288,13 @@ export class ViewUtil {
     }
 
     public createView(name: string): NgView {
-        if (isLogEnabled()) {
-            traceLog(`Creating view: ${name}`);
-        }
-
+        const originalName = name;
         if (!isKnownView(name)) {
             name = "ProxyViewContainer";
+        }
+
+        if (isLogEnabled()) {
+            traceLog(`Creating view: ${originalName} ${name}`);
         }
 
         const viewClass = getViewClass(name);
@@ -300,6 +316,10 @@ export class ViewUtil {
     }
 
     private setNgViewExtensions(view: View, name: string): NgView {
+        if (isLogEnabled()) {
+            traceLog(`Make into a NgView view: ${view} name: "${name}"`);
+        }
+
         const ngView = view as NgView;
         ngView.nodeName = name;
         ngView.meta = getViewMeta(name);

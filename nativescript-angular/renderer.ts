@@ -73,6 +73,16 @@ export class NativeScriptRendererFactory implements RendererFactory2 {
         this.componentRenderers.set(type.id, renderer);
         return renderer;
     }
+
+    ngOnDestroy(): void {
+        if (isLogEnabled()) {
+            traceLog(`NativeScriptRendererFactory.ngOnDestroy()`);
+        }
+
+        while (this.rootNgView && this.rootNgView.firstChild) {
+            this.viewUtil.removeChild(this.rootNgView, this.rootNgView.firstChild);
+        }
+    }
 }
 
 export class NativeScriptRenderer extends Renderer2 {
@@ -129,7 +139,7 @@ export class NativeScriptRenderer extends Renderer2 {
     @profile
     parentNode(node: NgView): any {
         if (isLogEnabled()) {
-            traceLog(`NativeScriptRenderer.parentNode for node: ${node}`);
+            traceLog(`NativeScriptRenderer.parentNode for node: ${node} is ${node.parentNode}`);
         }
         return node.parentNode;
     }
