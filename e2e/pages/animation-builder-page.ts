@@ -3,8 +3,7 @@ import { BasePage } from "./base-page";
 
 export class AnimationBuilderPage extends BasePage {
     static tapToDisappear: string = "tapToDisappear";
-    private _btnTapToDisappear: Promise<UIElement>;
-    
+
     constructor(driver: AppiumDriver) {
         super(driver);
     }
@@ -15,12 +14,12 @@ export class AnimationBuilderPage extends BasePage {
     }
 
     async executeAnimation() {
-        this._btnTapToDisappear = this._driver.waitForElement(AnimationBuilderPage.tapToDisappear);
+        const btnTapToDisappear = await this._driver.waitForElement(AnimationBuilderPage.tapToDisappear);
         console.log("Btn tap to disappear should disappear");
-        await (await this._btnTapToDisappear).click();
+        await btnTapToDisappear.click();
     }
 
     async waitElementToHide(wait: number) {
-        return this.waitElementTo(() => this._btnTapToDisappear, false, wait);
+        return this.waitElementTo(() => this._driver.waitForElement(AnimationBuilderPage.tapToDisappear), false, wait);
     }
 }

@@ -7,6 +7,9 @@
     "id": "org.nativescript.ng4animations",
     "tns-ios": {
       "version": "latest"
+    },
+    "tns-android": {
+      "version": "5.4.0-2019-05-02-235338-05"
     }
   },
   "dependencies": {
@@ -19,11 +22,11 @@
     "@angular/platform-browser": "~7.2.0",
     "@angular/platform-browser-dynamic": "~7.2.0",
     "@angular/router": "~7.2.0",
-    "nativescript-angular": "next",
+    "nativescript-angular": "^7.2.4-next-2019-05-06-201428-01",
     "nativescript-theme-core": "~1.0.2",
     "reflect-metadata": "~0.1.8",
     "rxjs": "^6.3.3",
-    "tns-core-modules": "latest",
+    "tns-core-modules": "^5.4.0-next-2019-05-01-141636-02",
     "zone.js": "^0.8.4"
   },
   "devDependencies": {
@@ -40,14 +43,17 @@
     "mochawesome": "~3.1.2",
     "nativescript-css-loader": "~0.26.0",
     "nativescript-dev-appium": "next",
-    "nativescript-dev-typescript": "^0.7.0",
-    "nativescript-dev-webpack": "next",
+    "nativescript-dev-typescript": "^0.9.1-next-2019-03-12-162713-03",
+    "nativescript-dev-webpack": "^0.22.0-next-2019-04-17-111030-01",
     "typescript": "~3.1.1"
   },
   "scripts": {
     "u": "update-ns-webpack",
     "e2e": "tsc -p e2e && mocha --opts ./e2e/config/mocha.opts",
     "e2e-watch": "tsc -p e2e --watch",
-    "e2e-compile": "tsc -p e2e"
+    "e2e-compile": "tsc -p e2e",
+    "update-app-ng-deps": "update-app-ng-deps",
+    "ns-verify-bundle": "ns-verify-bundle",
+    "update-ns-webpack": "update-ns-webpack"
   }
 }
