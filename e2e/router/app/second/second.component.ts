@@ -14,13 +14,14 @@ import { CounterService } from "../counter.service";
         <Label text="SecondComponent" class="header"></Label>
         <Label [text]="'param: ' + (depth$ | async)" class="title"></Label>
 
-        <Button text="GO TO FIRST" [nsRouterLink]="['/first']"></Button>
-        <Button text="GO TO FIRST(CLEAR)" [nsRouterLink]="['/first']" clearHistory="true" pageTransition="flipRight"></Button>
-        <Button text="GO TO NEXT SECOND" [nsRouterLink]="['/second', (nextDepth$ | async)]"></Button>
-        <Button text="LOAD NESTED NAMED OUTLET" (tap)="loadNestedNamedOutlet()"></Button>
-        <Button text="BACK" automationText="BACK" (tap)="goBack()"></Button>
-        
-        <Button text="TICK" automationText="TICK" (tap)="service.tick()"></Button>
+        <WrapLayout>
+            <Button text="GO TO FIRST" [nsRouterLink]="['/first']"></Button>
+            <Button text="GO TO FIRST(CLEAR)" [nsRouterLink]="['/first']" clearHistory="true" pageTransition="flipRight"></Button>
+            <Button text="GO TO NEXT SECOND" [nsRouterLink]="['/second', (nextDepth$ | async)]"></Button>
+            <Button text="LOAD NESTED NAMED OUTLET" (tap)="loadNestedNamedOutlet()"></Button>
+            <Button text="BACK" automationText="BACK" (tap)="goBack()"></Button>
+            <Button text="TICK" automationText="TICK" (tap)="service.tick()"></Button>
+        </WrapLayout>
         
         <GridLayout row="1" rows="*,*">
             <GridLayout row="0" class="nested-outlet">
