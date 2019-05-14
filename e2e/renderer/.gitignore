@@ -6,4 +6,5 @@ app/**/*.js
 e2e/**/*.js
 test-results.xml
 e2e/reports
+mochawesome-report
 

@@ -3,53 +3,56 @@ import {
     UIElement,
     createDriver,
     SearchOptions,
+    nsCapabilities,
 } from "nativescript-dev-appium";
 
-describe("Simple navigate and back", () => {
+describe("Simple navigate and back", async function(){
     let driver: AppiumDriver;
 
-    before(async () => {
+    before(async function(){
+        nsCapabilities.testReporter.context = this;
         driver = await createDriver();
         await driver.resetApp();
     });
 
-    it("should find First", async () => {
+    it("should find First", async function(){
         await assureFirstComponent(driver);
     });
 
-    it("should navigate to Second(1)/master", async () => {
+    it("should navigate to Second(1)/master", async function(){
         await findAndClick(driver, "GO TO SECOND");
 
         await assureSecondComponent(driver, 1);
         await assureNestedMasterComponent(driver);
     });
 
-    it("should navigate back to First", async () => {
+    it("should navigate back to First", async function(){
         await goBack(driver);
         await assureFirstComponent(driver);
     });
 });
 
-describe("Navigate inside nested outlet", () => {
+describe("Navigate inside nested outlet", async function(){
     let driver: AppiumDriver;
 
-    before(async () => {
+    before(async function(){
+        nsCapabilities.testReporter.context = this;
         driver = await createDriver();
         await driver.resetApp();
     });
 
-    it("should find First", async () => {
+    it("should find First", async function(){
         await assureFirstComponent(driver);
     });
 
-    it("should navigate to Second(1)/master", async () => {
+    it("should navigate to Second(1)/master", async function(){
         await findAndClick(driver, "GO TO SECOND");
 
         await assureSecondComponent(driver, 1)
         await assureNestedMasterComponent(driver);
     });
 
-    it("should navigate to Second(1)/detail(1) and back", async () => {
+    it("should navigate to Second(1)/detail(1) and back", async function(){
         const detailBtn = await driver.findElementByAutomationText("DETAIL 1");
         detailBtn.click();
         await assureSecondComponent(driver, 1)
@@ -60,7 +63,7 @@ describe("Navigate inside nested outlet", () => {
         await assureNestedMasterComponent(driver);
     });
 
-    it("should navigate to Second(1)/detail(2) and back", async () => {
+    it("should navigate to Second(1)/detail(2) and back", async function(){
         const detailBtn = await driver.findElementByAutomationText("DETAIL 2");
         detailBtn.click();
         await assureSecondComponent(driver, 1)
@@ -71,32 +74,33 @@ describe("Navigate inside nested outlet", () => {
         await assureNestedMasterComponent(driver);
     });
 
-    it("should navigate back to First", async () => {
+    it("should navigate back to First", async function(){
         await goBack(driver);
         await assureFirstComponent(driver);
     });
 });
 
-describe("Navigate to same component with different param", () => {
+describe("Navigate to same component with different param", async function(){
     let driver: AppiumDriver;
 
-    before(async () => {
+    before(async function(){
+        nsCapabilities.testReporter.context = this;
         driver = await createDriver();
         await driver.resetApp();
     });
 
-    it("should find First", async () => {
+    it("should find First", async function(){
         await assureFirstComponent(driver);
     });
 
-    it("should navigate to Second(1)/master", async () => {
+    it("should navigate to Second(1)/master", async function(){
         await findAndClick(driver, "GO TO SECOND");
 
         await assureSecondComponent(driver, 1)
         await assureNestedMasterComponent(driver);
     });
 
-    it("should navigate to Second(2)/master", async () => {
+    it("should navigate to Second(2)/master", async function(){
         const navigationButton =
             await driver.findElementByAutomationText("GO TO NEXT SECOND");
         navigationButton.click();
@@ -105,39 +109,40 @@ describe("Navigate to same component with different param", () => {
         await assureNestedMasterComponent(driver);
     });
 
-    it("should navigate back to Second(1)/master", async () => {
+    it("should navigate back to Second(1)/master", async function(){
         await goBack(driver);
 
         await assureSecondComponent(driver, 1)
         await assureNestedMasterComponent(driver);
     });
 
-    it("should navigate back to First", async () => {
+    it("should navigate back to First", async function(){
         await goBack(driver);
         await assureFirstComponent(driver);
     });
 });
 
-describe("Nested navigation + page navigation", () => {
+describe("Nested navigation + page navigation", async function(){
     let driver: AppiumDriver;
 
-    before(async () => {
+    before(async function(){
+        nsCapabilities.testReporter.context = this;
         driver = await createDriver();
         await driver.resetApp();
     });
 
-    it("should find First", async () => {
+    it("should find First", async function(){
         await assureFirstComponent(driver);
     });
 
-    it("should navigate to Second(1)/master", async () => {
+    it("should navigate to Second(1)/master", async function(){
         await findAndClick(driver, "GO TO SECOND");
 
         await assureSecondComponent(driver, 1)
         await assureNestedMasterComponent(driver);
     });
 
-    it("should navigate to Second(1)/detail(1)", async () => {
+    it("should navigate to Second(1)/detail(1)", async function(){
         const detailBtn = await driver.findElementByAutomationText("DETAIL 1");
         detailBtn.click();
 
@@ -145,7 +150,7 @@ describe("Nested navigation + page navigation", () => {
         await assureNestedDetailComponent(driver, 1);
     });
 
-    it("should navigate to Second(2)/master", async () => {
+    it("should navigate to Second(2)/master", async function(){
         const navigationButton =
             await driver.findElementByAutomationText("GO TO NEXT SECOND");
         navigationButton.click();
@@ -154,7 +159,7 @@ describe("Nested navigation + page navigation", () => {
         await assureNestedMasterComponent(driver);
     });
 
-    it("should navigate to Second(2)/detail(2)", async () => {
+    it("should navigate to Second(2)/detail(2)", async function(){
         const detailBtn = await driver.findElementByAutomationText("DETAIL 2");
         detailBtn.click();
 
@@ -162,13 +167,13 @@ describe("Nested navigation + page navigation", () => {
         await assureNestedDetailComponent(driver, 2);
     });
 
-    it("should navigate to First", async () => {
+    it("should navigate to First", async function(){
         await findAndClick(driver, "GO TO FIRST");
 
         await assureFirstComponent(driver);
     });
 
-    it("should navigate the whole stack", async () => {
+    it("should navigate the whole stack", async function(){
         await goBack(driver);
         await assureSecondComponent(driver, 2)
         await assureNestedDetailComponent(driver, 2);
@@ -190,31 +195,32 @@ describe("Nested navigation + page navigation", () => {
     });
 });
 
-describe("Nested name navigation + page navigation", () => {
+describe("Nested name navigation + page navigation", async function(){
     let driver: AppiumDriver;
 
-    before(async () => {
+    before(async function(){
+        nsCapabilities.testReporter.context = this;
         driver = await createDriver();
         await driver.resetApp();
     });
 
-    it("should find First", async () => {
+    it("should find First", async function(){
         await assureFirstComponent(driver);
     });
 
-    it("should navigate to Second(1)/master", async () => {
+    it("should navigate to Second(1)/master", async function(){
         await findAndClick(driver, "GO TO SECOND");
 
         await assureSecondComponent(driver, 1)
         await assureNestedMasterComponent(driver);
     });
 
-    it("should load nested named Master", async () => {
+    it("should load nested named Master", async function(){
         await findAndClick(driver, "LOAD NESTED NAMED OUTLET");
         await assureNamedNestedMasterComponent(driver);
     });
 
-    it("should navigate to nested named Master Detail/1", async () => {
+    it("should navigate to nested named Master Detail/1", async function(){
         const navigationButton =
             await driver.findElementByAutomationText("DETAIL-NAMED 1");
         navigationButton.click();
@@ -222,7 +228,7 @@ describe("Nested name navigation + page navigation", () => {
         await assureNamedNestedDetailComponent(driver, 1);
     });
 
-    it("should navigate back to Master and navigate to Detail/2", async () => {
+    it("should navigate back to Master and navigate to Detail/2", async function(){
         let navigationButton =
             await driver.findElementByAutomationText("BACK-NESTED");
         navigationButton.click();
@@ -237,68 +243,71 @@ describe("Nested name navigation + page navigation", () => {
     });
 });
 
-describe("Shouldn't be able to navigate back on startup", () => {
+describe("Shouldn't be able to navigate back on startup", async function(){
     let driver: AppiumDriver;
 
-    before(async () => {
+    before(async function(){
+        nsCapabilities.testReporter.context = this;
         driver = await createDriver();
         await driver.resetApp();
     });
 
-    it("should find First", async () => {
+    it("should find First", async function(){
         await assureFirstComponent(driver);
     });
 
-    it("shouldn't be able to go back", async () => {
+    it("shouldn't be able to go back", async function(){
         await goBack(driver);
         await driver.findElementByAutomationText("canGoBack() - false");
     });
 });
 
-describe("Shouldn't be able to navigate back after cleared history", () => {
+describe("Shouldn't be able to navigate back after cleared history", async function(){
     let driver: AppiumDriver;
 
-    before(async () => {
+    before(async function(){
+        nsCapabilities.testReporter.context = this;
         driver = await createDriver();
         await driver.resetApp();
     });
 
-    it("should find First", async () => {
+    it("should find First", async function(){
         await assureFirstComponent(driver);
     });
 
-    it("should navigate to Second(1)/master", async () => {
+    it("should navigate to Second(1)/master", async function(){
         await findAndClick(driver, "GO TO SECOND");
 
         await assureSecondComponent(driver, 1)
         await assureNestedMasterComponent(driver);
     });
 
-    it("should navigate to Second(1)/master", async () => {
+    it("should navigate to Second(1)/master", async function(){
         await findAndClick(driver, "GO TO FIRST(CLEAR)");
 
         await assureFirstComponent(driver);
     });
 
-    it("shouldn't be able to go back", async () => {
+    it("shouldn't be able to go back", async function(){
         await goBack(driver);
         await driver.findElementByAutomationText("canGoBack() - false");
     });
 });
 
-describe("Navigate to componentless route", () => {
+describe("Navigate to componentless route", async function(){
     let driver: AppiumDriver;
 
-    before(async () => {
+    before(async function(){
+        nsCapabilities.testReporter.context = this;
         driver = await createDriver();
         await driver.resetApp();
     });
 
-    it("should find First", async () => {
+    it("should find First", async function(){
         await assureFirstComponent(driver);
     });
 
-    it("should navigate to ComponentlessSecond(100)/detail(200)", async () => {
+    it("should navigate to ComponentlessSecond(100)/detail(200)", async function(){
         const navigationButton =
             await driver.findElementByAutomationText("GO TO C-LESS SECOND");
         navigationButton.click();
@@ -307,13 +316,13 @@ describe("Navigate to componentless route", () => {
         await assureNestedDetailComponent(driver, 200);
     });
 
-    it("should navigate to First", async () => {
+    it("should navigate to First", async function(){
         await findAndClick(driver, "GO TO FIRST");
 
         await assureFirstComponent(driver);
     });
 
-    it("should navigate the whole stack", async () => {
+    it("should navigate the whole stack", async function(){
         await goBack(driver);
         await assureSecondComponent(driver, 100)
         await assureNestedDetailComponent(driver, 200);
@@ -323,39 +332,40 @@ describe("Navigate to componentless route", () => {
     });
 });
 
-describe("Navigate to lazy module", () => {
+describe("Navigate to lazy module", async function(){
     let driver: AppiumDriver;
 
-    before(async () => {
+    before(async function(){
+        nsCapabilities.testReporter.context = this;
         driver = await createDriver();
         await driver.resetApp();
     });
 
-    it("should find First", async () => {
+    it("should find First", async function(){
         await assureFirstComponent(driver);
     });
 
-    it("should navigate to lazy/home", async () => {
+    it("should navigate to lazy/home", async function(){
         await findAndClick(driver, "GO TO LAZY HOME");
         await assureLazyComponent(driver);
     });
 
-    it("should navigate to First", async () => {
+    it("should navigate to First", async function(){
         await findAndClick(driver, "GO TO FIRST");
         await assureFirstComponent(driver);
     });
 
-    it("should navigate back to lazy/home", async () => {
+    it("should navigate back to lazy/home", async function(){
         await goBack(driver);
         await assureLazyComponent(driver);
     });
 
-    it("should navigate to First again", async () => {
+    it("should navigate to First again", async function(){
         await findAndClick(driver, "GO TO FIRST");
         await assureFirstComponent(driver);
     });
 
-    it("should navigate the whole stack", async () => {
+    it("should navigate the whole stack", async function(){
         await goBack(driver);
         await assureLazyComponent(driver);
 
@@ -364,37 +374,38 @@ describe("Navigate to lazy module", () => {
     });
 });
 
-describe("Navigate to componentless lazy module route", () => {
+describe("Navigate to componentless lazy module route", async function(){
     let driver: AppiumDriver;
 
-    before(async () => {
+    before(async function(){
+        nsCapabilities.testReporter.context = this;
         driver = await createDriver();
         await driver.resetApp();
     });
 
-    it("should find First", async () => {
+    it("should find First", async function(){
         await assureFirstComponent(driver);
     });
 
-    it("should navigate to nest/more (componentless lazy route)", async () => {
+    it("should navigate to nest/more (componentless lazy route)", async function(){
         await findAndClick(driver, "GO TO C-LESS LAZY");
 
         await assureComponentlessLazyComponent(driver);
     });
 
-    it("should navigate to lazy/home", async () => {
+    it("should navigate to lazy/home", async function(){
         await findAndClick(driver, "GO TO LAZY HOME");
 
         await assureLazyComponent(driver);
     });
 
-    it("should navigate to First", async () => {
+    it("should navigate to First", async function(){
         await findAndClick(driver, "GO TO FIRST");
 
         await assureFirstComponent(driver);
     });
 
-    it("should navigate the whole stack", async () => {
+    it("should navigate the whole stack", async function(){
         await goBack(driver);
         await assureLazyComponent(driver);
 
@@ -406,7 +417,39 @@ describe("Navigate to componentless lazy module route", () => {
     });
 });
 
-describe("Simple navigate and back should trigger only one CD on FirstComponent", () => {
+describe("Simple navigate and back should trigger only one CD on FirstComponent", async function(){
+    let driver: AppiumDriver;
+
+    before(async function(){
+        nsCapabilities.testReporter.context = this;
+        driver = await createDriver();
+        await driver.resetApp();
+    });
+
+    it("should find First", async function(){
+        await assureFirstComponent(driver);
+    });
+
+    it("should reset counter", async function(){
+        await findAndClick(driver, "RESET");
+        await driver.waitForElement("CHECK: 1");
+    });
+
+    it("should navigate to Second(1)/master", async function(){
+        await findAndClick(driver, "GO TO SECOND");
+
+        await assureSecondComponent(driver, 1);
+        await assureNestedMasterComponent(driver);
+    });
+
+    it("should navigate back to First", async function(){
+        await goBack(driver);
+        await assureFirstComponent(driver);
+        await driver.waitForElement("CHECK: 2");
+    });
+});
+
+describe("Simple navigate and back should trigger only one CD on FirstComponent even with 3 changes in service", () => {
     let driver: AppiumDriver;
 
     before(async () => {
@@ -421,6 +464,7 @@ describe("Simple navigate and back should trigger only one CD on FirstComponent"
     it("should reset counter", async () => {
         await findAndClick(driver, "RESET");
         await driver.waitForElement("CHECK: 1");
+        await driver.waitForElement("COUNTER: 0");
     });
 
     it("should navigate to Second(1)/master", async () => {
@@ -430,12 +474,20 @@ describe("Simple navigate and back should trigger only one CD on FirstComponent"
         await assureNestedMasterComponent(driver);
     });
 
+    it("should increase counter", async () => {
+        await findAndClick(driver, "TICK");
+        await findAndClick(driver, "TICK");
+        await findAndClick(driver, "TICK");
+    });
+
     it("should navigate back to First", async () => {
         await goBack(driver);
         await assureFirstComponent(driver);
         await driver.waitForElement("CHECK: 2");
+        await driver.waitForElement("COUNTER: 3");
     });
 });
+
 
 async function assureFirstComponent(driver: AppiumDriver) {
     await driver.findElementByAutomationText("FirstComponent");

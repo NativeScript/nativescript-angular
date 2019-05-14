@@ -2,22 +2,24 @@ import {
     AppiumDriver,
     createDriver,
     SearchOptions,
-    UIElement
+    UIElement,
+    nsCapabilities
 } from "nativescript-dev-appium";
 
 import { isOnTheLeft } from "./helpers/location";
 import { assert } from "chai";
 
-describe("Action Bar scenario", () => {
+describe("Action Bar scenario", async function () {
     let driver: AppiumDriver;
 
-    describe("dynamically add/remove ActionItems", async () => {
+    describe("dynamically add/remove ActionItems", async function () {
         let firstActionItem: UIElement;
         let secondActionItem: UIElement;
         let toggleFirstButton: UIElement;
         let toggleSecondButton: UIElement;
 
-        before(async () => {
+        before(async function () {
+            nsCapabilities.testReporter.context = this;
             driver = await createDriver();
             await driver.driver.resetApp();
         });
@@ -28,7 +30,7 @@ describe("Action Bar scenario", () => {
             }
         });
 
-        it("should navigate to page", async () => {
+        it("should navigate to page", async function () {
             const navigationButton =
                 await driver.findElementByAutomationText("ActionBar dynamic");
             await navigationButton.click();
@@ -37,7 +39,7 @@ describe("Action Bar scenario", () => {
                 await driver.findElementByAutomationText("Action Bar Dynamic Items");
         });
 
-        it("should find elements", async () => {
+        it("should find elements", async function () {
             firstActionItem = await driver.findElementByAutomationText("one");
             secondActionItem = await driver.findElementByAutomationText("two");
 
@@ -45,12 +47,12 @@ describe("Action Bar scenario", () => {
             toggleSecondButton = await driver.findElementByAutomationText("toggle 2");
         });
 
-        it("should initially render the action items in the correct order", async () => {
+        it("should initially render the action items in the correct order", async function () {
             await checkOrderIsCorrect();
         });
 
         it("should detach first element when its condition is false", done => {
-            (async () => {
+            (async function () {
                 await toggleFirst();
 
                 try {
@@ -61,13 +63,13 @@ describe("Action Bar scenario", () => {
             })();
         });
 
-        it("should attach first element in the correct position", async () => {
+        it("should attach first element in the correct position", async function () {
             await toggleFirst();
             await checkOrderIsCorrect();
         });
 
         it("should detach second element when its condition is false", done => {
-            (async () => {
+            (async function () {
                 await toggleSecond();
 
                 try {
@@ -78,12 +80,12 @@ describe("Action Bar scenario", () => {
             })();
         });
 
-        it("should attach second element in the correct position", async () => {
+        it("should attach second element in the correct position", async function () {
             await toggleSecond();
             await checkOrderIsCorrect();
         });
 
-        it("should detach and then reattach both at correct places", async () => {
+        it("should detach and then reattach both at correct places", async function () {
             await toggleFirst();
             await toggleSecond();
 
@@ -93,25 +95,26 @@ describe("Action Bar scenario", () => {
             await checkOrderIsCorrect();
         });
 
-        const checkOrderIsCorrect = async () => {
+        const checkOrderIsCorrect = async function () {
             await isOnTheLeft(firstActionItem, secondActionItem);
         };
 
-        const toggleFirst = async () => {
+        const toggleFirst = async function () {
             await toggleFirstButton.click();
         };
 
-        const toggleSecond = async () => {
+        const toggleSecond = async function () {
             await toggleSecondButton.click();
         };
 
     });
 
-    describe("Action Bar extension with dynamic ActionItem", async () => {
+    describe("Action Bar extension with dynamic ActionItem", async function () {
         let toggleButton: UIElement;
         let conditional: UIElement;
 
-        before(async () => {
+        before(async function () {
+            nsCapabilities.testReporter.context = this;
             driver = await createDriver();
             await driver.driver.resetApp();
         });
@@ -122,33 +125,33 @@ describe("Action Bar scenario", () => {
             }
         });
 
-        it("should navigate to page", async () => {
+        it("should navigate to page", async function () {
             const navigationButton =
                 await driver.findElementByAutomationText("ActionBarExtension");
             await navigationButton.click();
         });
 
-        it("should find elements", async () => {
+        it("should find elements", async function () {
             toggleButton = await driver.findElementByAutomationText("toggle");
             conditional = await driver.findElementByAutomationText("conditional");
         });
 
-        it("should detach conditional action item when its condition is false", async () => {
+        it("should detach conditional action item when its condition is false", async function () {
             await toggle();
             const conditionalBtn = await driver.waitForElement("conditional", 1000);
             assert.isUndefined(conditionalBtn, "Conditional button should not be visible!");
         });
 
-        it("should reattach conditional action item at correct place", async () => {
+        it("should reattach conditional action item at correct place", async function () {
             await toggle();
             await checkOrderIsCorrect();
         });
-        
-        const checkOrderIsCorrect = async () => {
+
+        const checkOrderIsCorrect = async function () {
             await isOnTheLeft(toggleButton, conditional);
         };
 
-        const toggle = async () => {
+        const toggle = async function () {
             await toggleButton.click();
         };
     });

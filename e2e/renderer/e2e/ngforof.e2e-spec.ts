@@ -2,7 +2,8 @@ import {
     AppiumDriver,
     createDriver,
     SearchOptions,
-    UIElement
+    UIElement,
+    nsCapabilities
 } from "nativescript-dev-appium";
 
 import { isAbove } from "./helpers/location";
@@ -20,7 +21,8 @@ describe("ngForOf scenario", function () {
     let elements: ElementTuple[] = [];
     let lastAddedElementId = 0;
 
-    before(async () => {
+    before(async function () {
+        nsCapabilities.testReporter.context = this;
         driver = await createDriver();
         await driver.driver.resetApp();
     });
@@ -31,7 +33,7 @@ describe("ngForOf scenario", function () {
         }
     });
 
-    it("should navigate to page", async () => {
+    it("should navigate to page", async function () {
         const navigationButton =
             await driver.findElementByAutomationText("NgForOf");
         await navigationButton.click();
@@ -40,7 +42,7 @@ describe("ngForOf scenario", function () {
             await driver.findElementByAutomationText("ngForOf");
     });
 
-    it("should find elements", async () => {
+    it("should find elements", async function () {
         const firstElement = await getElement(lastAddedElementId);
         elements.push(firstElement);
 
@@ -51,42 +53,42 @@ describe("ngForOf scenario", function () {
         await isAbove(firstElement.button, addButton);
     });
 
-    it("should render elements in correct order", async () => {
+    it("should render elements in correct order", async function () {
         await elementTupleCorrectlyRendered(elements[0]);
         await isAbove(elements[0].button, addButton);
         await isAbove(addButton, removeButton);
     });
 
 
-    it("should place new elements in the right places", async () => {
+    it("should place new elements in the right places", async function () {
         for (let i = 0; i < 2; i += 1) {
             await addElement();
             await checkAppendedCorrectly();
         }
     });
 
-    it("shouldn't reorder elements when last is removed", async () => {
+    it("shouldn't reorder elements when last is removed", async function () {
         while (elements.length) {
             await removeElement();
             await checkCorrectOrderAll();
         }
     });
 
-    it("should render new elements correctly after all old ones are removed", async () => {
+    it("should render new elements correctly after all old ones are removed", async function () {
         for (let i = 0; i < 5; i += 1) {
             await addElement();
             await checkCorrectOrderAll();
         }
     });
 
-    it("shouldn't reorder elements when middle is removed", async () => {
+    it("shouldn't reorder elements when middle is removed", async function () {
         const middleIndex = Math.floor(elements.length / 2);
         await removeElement(middleIndex);
         await checkCorrectOrderAll();
     });
 
 
-    const addElement = async () => {
+    const addElement = async function () {
         await addButton.click();
 
         lastAddedElementId += 1;
@@ -112,7 +114,7 @@ describe("ngForOf scenario", function () {
         lastAddedElementId -= 1;
     };
 
-    const checkAppendedCorrectly = async () => {
+    const checkAppendedCorrectly = async function () {
         const lastAdded = await getElement(lastAddedElementId);
 
         await elementIsAbove(elements.slice(-2)[0], lastAdded);
@@ -120,7 +122,7 @@ describe("ngForOf scenario", function () {
         await isAbove(addButton, removeButton);
     };
 
-    const checkCorrectOrderAll = async () => {
+    const checkCorrectOrderAll = async function () {
         for (let i = 0; i < elements.length - 1; i += 1) {
             await elementIsAbove(elements[i], elements[i + 1]);
         }
@@ -148,7 +150,7 @@ describe("ngForOf scenario", function () {
     const getElement = async (id: number) => {
         let label = null;
         let button = null;
-        
+
         if (driver.platformName.toLowerCase().includes("ios")) {
             label = await driver.findElementByAccessibilityId(
                 "label: " + id.toString());

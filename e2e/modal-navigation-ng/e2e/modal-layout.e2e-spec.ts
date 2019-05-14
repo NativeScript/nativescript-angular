@@ -1,4 +1,4 @@
-import { AppiumDriver, createDriver } from "nativescript-dev-appium";
+import { AppiumDriver, createDriver, nsCapabilities } from "nativescript-dev-appium";
 import { Screen } from "./screens/screen"
 import {
     roots,
@@ -6,19 +6,20 @@ import {
     testDialogBackground,
 } from "./screens/shared-screen"
 
-describe("modal-layout:", () => {
-
+describe("modal-layout:", async function () {
     let driver: AppiumDriver;
     let screen: Screen;
 
-    before(async () => {
+    before(async function () {
+        nsCapabilities.testReporter.context = this;
         driver = await createDriver();
         screen = new Screen(driver);
     });
-
-    roots.forEach(root => {
-        describe(`${root} modal no frame background scenarios:`, () => {
-            before(async () => {
+    for (let index = 0; index < roots.length; index++) {
+        const root = roots[index];
+        describe(`${root} modal no frame background scenarios:`, async function () {
+            before(async function () {
+                nsCapabilities.testReporter.context = this;
                 await screen[root]();
             });
 
@@ -30,21 +31,21 @@ describe("modal-layout:", () => {
                 }
             });
 
-            after(async () => {
+            after(async function () {
                 await screen.closeModal();
                 await screen.loadedHome();
             });
 
-            it("should show nested modal page, run in background, close", async () => {
+            it("should show nested modal page, run in background, close", async function () {
                 await screen.loadModalNoFrame(true);
                 await testNestedModalPageBackground(driver, screen, false);
 
             });
 
-            it("should show dialog confirm inside modal view with no frame, run in background", async () => {
+            it("should show dialog confirm inside modal view with no frame, run in background", async function () {
                 await screen.loadModalNoFrame(false);
                 await testDialogBackground(driver, screen, false);
             });
         });
-    });
+    };
 });

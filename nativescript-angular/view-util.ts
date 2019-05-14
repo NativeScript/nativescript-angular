@@ -170,7 +170,9 @@ export class ViewUtil {
         const extendedChild = this.ensureNgViewExtensions(child);
 
         this.removeFromQueue(extendedParent, extendedChild);
-        this.removeFromVisualTree(extendedParent, extendedChild);
+        if (!isDetachedElement(extendedChild)) {
+            this.removeFromVisualTree(extendedParent, extendedChild);
+        }
     }
 
     private removeFromQueue(parent: NgView, child: NgView) {
@@ -181,6 +183,7 @@ export class ViewUtil {
         if (parent.firstChild === child && parent.lastChild === child) {
             parent.firstChild = null;
             parent.lastChild = null;
+            child.nextSibling = null;
             return;
         }
 
@@ -196,6 +199,8 @@ export class ViewUtil {
         if (previous) {
             previous.nextSibling = child.nextSibling;
         }
+
+        child.nextSibling = null;
     }
 
     // NOTE: This one is O(n) - use carefully
@@ -240,7 +245,7 @@ export class ViewUtil {
 
     private removeFromVisualTree(parent: NgView, child: NgView) {
         if (isLogEnabled()) {
-            traceLog(`ViewUtil.findPreviousElement parent: ${parent} child: ${child}`);
+            traceLog(`ViewUtil.removeFromVisualTree parent: ${parent} child: ${child}`);
         }
 
         if (parent.meta && parent.meta.removeChild) {
@@ -249,8 +254,6 @@ export class ViewUtil {
             this.removeLayoutChild(parent, child);
         } else if (isContentView(parent) && parent.content === child) {
             parent.content = null;
-            parent.lastChild = null;
-            parent.firstChild = null;
         } else if (isView(parent)) {
             parent._removeView(child);
         }
@@ -273,12 +276,13 @@ export class ViewUtil {
     }
 
     public createView(name: string): NgView {
-        if (isLogEnabled()) {
-            traceLog(`Creating view: ${name}`);
-        }
-
+        const originalName = name;
         if (!isKnownView(name)) {
             name = "ProxyViewContainer";
+        }
+
+        if (isLogEnabled()) {
+            traceLog(`Creating view: ${originalName} ${name}`);
         }
 
         const viewClass = getViewClass(name);
@@ -300,6 +304,10 @@ export class ViewUtil {
     }
 
     private setNgViewExtensions(view: View, name: string): NgView {
+        if (isLogEnabled()) {
+            traceLog(`Make into a NgView view: ${view} name: "${name}"`);
+        }
+
         const ngView = view as NgView;
         ngView.nodeName = name;
         ngView.meta = getViewMeta(name);

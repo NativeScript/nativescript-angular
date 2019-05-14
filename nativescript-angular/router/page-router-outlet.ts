@@ -198,7 +198,16 @@ export class PageRouterOutlet implements OnDestroy { // tslint:disable-line:dire
             });
             this.locationStrategy.clearOutlet(this.frame);
         } else {
-            log("NSLocationStrategy.ngOnDestroy: no outlet available for page-router-outlet");
+            log("PageRouterOutlet.ngOnDestroy: no outlet available for page-router-outlet");
+        }
+
+        if (this.isActivated) {
+            const c = this.activated.instance;
+            this.activated.hostView.detach();
+            destroyComponentRef(this.activated);
+
+            this.deactivateEvents.emit(c);
+            this.activated = null;
         }
     }
 
@@ -262,6 +271,7 @@ export class PageRouterOutlet implements OnDestroy { // tslint:disable-line:dire
         this.activated = ref;
 
         // reattach to ChangeDetection
+        this.activated.hostView.markForCheck();
         this.activated.hostView.reattach();
         this._activatedRoute = activatedRoute;
         this.markActivatedRoute(activatedRoute);
@@ -350,7 +360,7 @@ export class PageRouterOutlet implements OnDestroy { // tslint:disable-line:dire
         // Remove it from original native parent.
         this.viewUtil.removeChild(componentView.parent, componentView);
         // Add it to the new page
-        page.content = componentView;
+        this.viewUtil.insertChild(page, componentView);
 
         const navigatedFromCallback = (<any>global).Zone.current.wrap((args: NavigatedData) => {
             if (args.isBackNavigation) {

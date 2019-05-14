@@ -1,4 +1,4 @@
-import { AppiumDriver, createDriver } from "nativescript-dev-appium";
+import { AppiumDriver, createDriver, nsCapabilities } from "nativescript-dev-appium";
 import { Screen } from "./screen"
 import {
     testPlayerNavigated,
@@ -7,16 +7,17 @@ import {
     testTeamNextNavigated,
 } from "./shared.e2e-spec"
 
-describe("tab-view:", () => {
+describe("tab-view:", async function () {
     let driver: AppiumDriver;
     let screen: Screen;
 
-    before(async () => {
+    before(async function () {
+        nsCapabilities.testReporter.context = this;
         driver = await createDriver();
         screen = new Screen(driver);
     });
 
-    after(async () => {
+    after(async function () {
         await driver.quit();
         console.log("Quit driver!");
     });
@@ -27,14 +28,14 @@ describe("tab-view:", () => {
         }
     });
 
-    it("loaded home component and lists", async () => {
+    it("loaded home component and lists", async function () {
         await screen.navigateToHomePage();
         await screen.loadedHome();
         await screen.loadedPlayersList();
         await screen.loadedTeamList();
     });
 
-    it("loaded tabs component, Players List and Teams List pages", async () => {
+    it("loaded tabs component, Players List and Teams List pages", async function () {
         await screen.navigateToTabsPage();
         await screen.loadedTabs();
         await screen.loadedPlayersList();
@@ -44,7 +45,7 @@ describe("tab-view:", () => {
         await screen.loadedPlayersList();
     });
 
-    it("should navigate Player One/Team One then back separately", async () => {
+    it("should navigate Player One/Team One then back separately", async function () {
         await testPlayerNavigated(screen, screen.playerOne);
         await gotoTeamsTab(driver);
         await testTeamNavigated(screen, screen.teamOne);
@@ -55,7 +56,7 @@ describe("tab-view:", () => {
         await screen.loadedPlayersList();
     });
 
-    it("should navigate Player One/Team One then next Player/Team then back", async () => {
+    it("should navigate Player One/Team One then next Player/Team then back", async function () {
         await testPlayerNavigated(screen, screen.playerOne);
         await testPlayerNextNavigated(screen, screen.playerTwo);
         await gotoTeamsTab(driver);
