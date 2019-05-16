@@ -183,7 +183,7 @@ export class NativeScriptRenderer extends Renderer2 {
     @profile
     createViewRoot(hostElement: NgView): NgView {
         if (isLogEnabled()) {
-            traceLog(`NativeScriptRenderer.createViewRoot ${hostElement.nodeName}`);
+            traceLog(`NativeScriptRenderer.createViewRoot ${hostElement} ${hostElement.nodeName}`);
         }
         return hostElement;
     }
@@ -191,7 +191,7 @@ export class NativeScriptRenderer extends Renderer2 {
     @profile
     projectNodes(parentElement: NgView, nodes: NgView[]): void {
         if (isLogEnabled()) {
-            traceLog("NativeScriptRenderer.projectNodes");
+            traceLog(`NativeScriptRenderer.projectNodes ${parentElement} ${nodes}`);
         }
         nodes.forEach((node) => this.viewUtil.insertChild(parentElement, node));
     }
@@ -231,7 +231,7 @@ export class NativeScriptRenderer extends Renderer2 {
     @profile
     addClass(view: NgView, name: string): void {
         if (isLogEnabled()) {
-            traceLog(`NativeScriptRenderer.addClass ${view} ${name}`);
+            traceLog(`NativeScriptRenderer.addClass: ${view} : ${name}`);
         }
         this.viewUtil.addClass(view, name);
     }
@@ -239,7 +239,7 @@ export class NativeScriptRenderer extends Renderer2 {
     @profile
     removeClass(view: NgView, name: string): void {
         if (isLogEnabled()) {
-            traceLog(`NativeScriptRenderer.removeClass ${name}`);
+            traceLog(`NativeScriptRenderer.removeClass: ${view} : ${name}`);
         }
         this.viewUtil.removeClass(view, name);
     }
@@ -247,7 +247,7 @@ export class NativeScriptRenderer extends Renderer2 {
     @profile
     setStyle(view: NgView, styleName: string, value: any, _flags?: RendererStyleFlags2): void {
         if (isLogEnabled()) {
-            traceLog(`NativeScriptRenderer.setStyle: ${styleName} = ${value}`);
+            traceLog(`NativeScriptRenderer.setStyle: ${view} : ${styleName} = ${value}`);
         }
         this.viewUtil.setStyle(view, styleName, value);
     }
@@ -255,7 +255,7 @@ export class NativeScriptRenderer extends Renderer2 {
     @profile
     removeStyle(view: NgView, styleName: string, _flags?: RendererStyleFlags2): void {
         if (isLogEnabled()) {
-            traceLog("NativeScriptRenderer.removeStyle: ${styleName}");
+            traceLog(`NativeScriptRenderer.removeStyle: ${view} : ${styleName}, ${_flags}`);
         }
         this.viewUtil.removeStyle(view, styleName);
     }
@@ -294,7 +294,7 @@ export class NativeScriptRenderer extends Renderer2 {
     listen(renderElement: any, eventName: string, callback: (event: any) => boolean):
         () => void {
         if (isLogEnabled()) {
-            traceLog(`NativeScriptRenderer.listen: ${eventName}`);
+            traceLog(`NativeScriptRenderer.listen: ${renderElement} ${eventName}`);
         }
         // Explicitly wrap in zone
         let zonedCallback = (...args) => {
