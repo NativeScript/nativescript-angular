@@ -6,19 +6,21 @@ import {
     NgModuleRef,
     ReflectiveInjector,
     Type,
-    ViewContainerRef
+    ViewContainerRef,
+    Inject
 } from "@angular/core";
 
 import { NSLocationStrategy } from "../router/ns-location-strategy";
 import { View, ViewBase } from "tns-core-modules/ui/core/view";
-import { ProxyViewContainer } from "tns-core-modules/ui/proxy-view-container/proxy-view-container";
+import { Device } from "tns-core-modules/platform/platform";
 
 import { AppHostView } from "../app-host-view";
 import { DetachedLoader } from "../common/detached-loader";
-import { PageFactory, PAGE_FACTORY } from "../platform-providers";
+import { PageFactory, PAGE_FACTORY, DEVICE } from "../platform-providers";
 import { once } from "../common/utils";
-import { topmost, Frame } from "tns-core-modules/ui/frame";
+import { topmost, Frame, ContentView } from "tns-core-modules/ui/frame";
 import { ShowModalOptions } from  "tns-core-modules/ui/core/view";
+import { ViewUtil } from "../view-util";
 
 export type BaseShowModalOptions = Pick<ShowModalOptions, Exclude<keyof ShowModalOptions, "closeCallback" | "context">>;
 
@@ -48,7 +50,9 @@ interface ShowDialogOptions extends BaseShowModalOptions {
 
 @Injectable()
 export class ModalDialogService {
-    constructor(private location: NSLocationStrategy) {
+    private viewUtil: ViewUtil;
+    constructor(private location: NSLocationStrategy, @Inject(DEVICE) device: Device) {
+        this.viewUtil = new ViewUtil(device);
     }
 
     public showModal(type: Type<any>,
@@ -134,16 +138,12 @@ export class ModalDialogService {
         const detachedFactory = options.resolver.resolveComponentFactory(DetachedLoader);
         detachedLoaderRef = options.containerRef.createComponent(detachedFactory, -1, childInjector, null);
         detachedLoaderRef.instance.loadComponent(options.type).then((compRef) => {
-            const detachedProxy = <ProxyViewContainer>compRef.location.nativeElement;
+            const detachedProxy = <ContentView>compRef.location.nativeElement;
 
-            if (detachedProxy.getChildrenCount() > 1) {
-                throw new Error("Modal content has more than one root view.");
-            }
-            componentView = detachedProxy.getChildAt(0);
+            componentView = detachedProxy.content;
 
             if (componentView.parent) {
-                (<any>componentView.parent)._ngDialogRoot = componentView;
-                (<any>componentView.parent).removeChild(componentView);
+                this.viewUtil.removeChild(componentView.parent as View, componentView);
             }
 
             options.parentView.showModal(componentView, { ...options, closeCallback });

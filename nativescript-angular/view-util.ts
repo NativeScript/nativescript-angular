@@ -278,11 +278,11 @@ export class ViewUtil {
     public createView(name: string): NgView {
         const originalName = name;
         if (!isKnownView(name)) {
-            name = "ProxyViewContainer";
+            name = "ContentView";
         }
 
         if (isLogEnabled()) {
-            traceLog(`Creating view: ${originalName} ${name}`);
+            traceLog(`Creating view: "${originalName}". viewClass: "${name}"`);
         }
 
         const viewClass = getViewClass(name);

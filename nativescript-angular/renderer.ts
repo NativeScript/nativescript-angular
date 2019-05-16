@@ -231,7 +231,7 @@ export class NativeScriptRenderer extends Renderer2 {
     @profile
     addClass(view: NgView, name: string): void {
         if (isLogEnabled()) {
-            traceLog(`NativeScriptRenderer.addClass ${name}`);
+            traceLog(`NativeScriptRenderer.addClass ${view} ${name}`);
         }
         this.viewUtil.addClass(view, name);
     }
