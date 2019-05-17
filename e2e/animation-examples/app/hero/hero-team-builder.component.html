@@ -1,0 +1,44 @@
+<FlexboxLayout flexDirection="column">
+    <FlexboxLayout>
+        <Button (tap)="heroes.addInactive()" text="Add inactive" automationText="addInactive" ></Button>
+        <Button (tap)="heroes.addActive()" text="Add active" automationText="addActive" ></Button>
+        <Button (tap)="heroes.remove()" text="Remove" automationText="remove" ></Button>
+        <Button (tap)="heroes.reset()" text="Reset" automationText="reset" ></Button>
+    </FlexboxLayout>
+
+    <FlexboxLayout flexDirection="column">
+        <Label text="Basic State"></Label>
+        <hero-list-basic [heroes]=heroes></hero-list-basic>
+    </FlexboxLayout>
+
+    <FlexboxLayout flexDirection="column">
+        <Label text="Styles inline in transitions"></Label>
+        <hero-list-inline-styles [heroes]=heroes></hero-list-inline-styles>
+    </FlexboxLayout>
+
+    <FlexboxLayout flexDirection="column">
+        <Label text="Combined transition syntax"></Label>
+        <hero-list-combined-transitions [heroes]=heroes></hero-list-combined-transitions>
+    </FlexboxLayout>
+
+    <FlexboxLayout flexDirection="column">
+        <Label text="Two-way transition syntax"></Label>
+        <hero-list-twoway [heroes]=heroes></hero-list-twoway>
+    </FlexboxLayout>
+
+    <FlexboxLayout flexDirection="column">
+        <Label text="Enter & Leave"></Label>
+        <hero-list-enter-leave [heroes]=heroes></hero-list-enter-leave>
+    </FlexboxLayout>
+
+    <FlexboxLayout flexDirection="column">
+        <Label text="Enter & Leave States"></Label>
+        <hero-list-enter-leave-states [heroes]=heroes></hero-list-enter-leave-states>
+    </FlexboxLayout>
+
+    <FlexboxLayout flexDirection="column">
+        <Label text="Different Timings"></Label>
+        <hero-list-timings [heroes]=heroes></hero-list-timings>
+    </FlexboxLayout>
+</FlexboxLayout>
+
