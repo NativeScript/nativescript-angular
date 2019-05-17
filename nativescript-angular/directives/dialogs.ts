@@ -143,6 +143,7 @@ export class ModalDialogService {
             componentView = detachedProxy.content;
 
             if (componentView.parent) {
+                (<any>componentView.parent)._ngDialogRoot = componentView;
                 this.viewUtil.removeChild(componentView.parent as View, componentView);
             }
 
