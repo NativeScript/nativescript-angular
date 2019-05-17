@@ -32,15 +32,15 @@
   },
   "homepage": "https://github.com/NativeScript/template-hello-world",
   "dependencies": {
-    "@angular/animations": "~7.2.0",
-    "@angular/common": "~7.2.0",
-    "@angular/compiler": "~7.2.0",
-    "@angular/core": "~7.2.0",
-    "@angular/forms": "~7.2.0",
-    "@angular/http": "~7.2.0",
-    "@angular/platform-browser": "~7.2.0",
-    "@angular/platform-browser-dynamic": "~7.2.0",
-    "@angular/router": "~7.2.0",
+    "@angular/animations": "8.0.0-rc.4",
+    "@angular/common": "8.0.0-rc.4",
+    "@angular/compiler": "8.0.0-rc.4",
+    "@angular/core": "8.0.0-rc.4",
+    "@angular/forms": "8.0.0-rc.4",
+    "@angular/http": "8.0.0-beta.10",
+    "@angular/platform-browser": "8.0.0-rc.4",
+    "@angular/platform-browser-dynamic": "8.0.0-rc.4",
+    "@angular/router": "8.0.0-rc.4",
     "nativescript-angular": "file:../nativescript-angular",
     "rxjs": "~6.3.3",
     "tns-core-modules": "next",
@@ -56,7 +56,7 @@
     "nativescript-dev-typescript": "next",
     "shelljs": "^0.7.0",
     "tslint": "^4.5.1",
-    "typescript": "~3.1.1"
+    "typescript": "~3.4.5"
   },
   "scripts": {
     "tslint": "tslint --project tsconfig.json --config tslint.json",

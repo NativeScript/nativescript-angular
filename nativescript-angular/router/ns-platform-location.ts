@@ -13,6 +13,15 @@ export class NativescriptPlatformLocation extends PlatformLocation {
         }
     }
 
+    getState(): any {
+        return undefined;
+    }
+
+    readonly hostname: string;
+    readonly href: string;
+    readonly port: string;
+    readonly protocol: string;
+
     getBaseHrefFromDOM(): string {
         return "/";
     }
