@@ -115,7 +115,7 @@ export class NSRouterLink { // tslint:disable-line:directive-class-suffix
     }
 
     private getTransition(): { animated: boolean, transition?: NavigationTransition } {
-        let transition: NavigationTransition = {};
+        let transition: NavigationTransition;
         let animated: boolean;
 
         if (typeof this.pageTransition === "boolean") {
@@ -125,7 +125,9 @@ export class NSRouterLink { // tslint:disable-line:directive-class-suffix
                 animated = false;
             } else {
                 animated = true;
-                transition.name = <string>this.pageTransition;
+                transition = {
+                    name: <string>this.pageTransition
+                };
             }
         } else {
             animated = true;
@@ -134,6 +136,7 @@ export class NSRouterLink { // tslint:disable-line:directive-class-suffix
 
         let duration = +this.pageTransitionDuration;
         if (!isNaN(duration)) {
+            transition = transition || {};
             transition.duration = duration;
         }
 
