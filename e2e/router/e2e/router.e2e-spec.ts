@@ -15,6 +15,12 @@ describe("Simple navigate and back", async function(){
         await driver.resetApp();
     });
 
+    afterEach(async function () {
+        if (this.currentTest.state === "failed") {
+            await driver.logTestArtifacts(this.currentTest.title);
+        }
+    });
+
     it("should find First", async function(){
         await assureFirstComponent(driver);
     });
@@ -39,6 +45,12 @@ describe("Navigate inside nested outlet", async function(){
         nsCapabilities.testReporter.context = this;
         driver = await createDriver();
         await driver.resetApp();
+    });
+
+    afterEach(async function () {
+        if (this.currentTest.state === "failed") {
+            await driver.logTestArtifacts(this.currentTest.title);
+        }
     });
 
     it("should find First", async function(){
@@ -89,6 +101,12 @@ describe("Navigate to same component with different param", async function(){
         await driver.resetApp();
     });
 
+    afterEach(async function () {
+        if (this.currentTest.state === "failed") {
+            await driver.logTestArtifacts(this.currentTest.title);
+        }
+    });
+
     it("should find First", async function(){
         await assureFirstComponent(driver);
     });
@@ -129,6 +147,12 @@ describe("Nested navigation + page navigation", async function(){
         nsCapabilities.testReporter.context = this;
         driver = await createDriver();
         await driver.resetApp();
+    });
+
+    afterEach(async function () {
+        if (this.currentTest.state === "failed") {
+            await driver.logTestArtifacts(this.currentTest.title);
+        }
     });
 
     it("should find First", async function(){
@@ -204,6 +228,12 @@ describe("Nested name navigation + page navigation", async function(){
         await driver.resetApp();
     });
 
+    afterEach(async function () {
+        if (this.currentTest.state === "failed") {
+            await driver.logTestArtifacts(this.currentTest.title);
+        }
+    });
+
     it("should find First", async function(){
         await assureFirstComponent(driver);
     });
@@ -252,6 +282,12 @@ describe("Shouldn't be able to navigate back on startup", async function(){
         await driver.resetApp();
     });
 
+    afterEach(async function () {
+        if (this.currentTest.state === "failed") {
+            await driver.logTestArtifacts(this.currentTest.title);
+        }
+    });
+
     it("should find First", async function(){
         await assureFirstComponent(driver);
     });
@@ -269,6 +305,12 @@ describe("Shouldn't be able to navigate back after cleared history", async funct
         nsCapabilities.testReporter.context = this;
         driver = await createDriver();
         await driver.resetApp();
+    });
+
+    afterEach(async function () {
+        if (this.currentTest.state === "failed") {
+            await driver.logTestArtifacts(this.currentTest.title);
+        }
     });
 
     it("should find First", async function(){
@@ -301,6 +343,12 @@ describe("Navigate to componentless route", async function(){
         nsCapabilities.testReporter.context = this;
         driver = await createDriver();
         await driver.resetApp();
+    });
+
+    afterEach(async function () {
+        if (this.currentTest.state === "failed") {
+            await driver.logTestArtifacts(this.currentTest.title);
+        }
     });
 
     it("should find First", async function(){
@@ -339,6 +387,12 @@ describe("Navigate to lazy module", async function(){
         nsCapabilities.testReporter.context = this;
         driver = await createDriver();
         await driver.resetApp();
+    });
+
+    afterEach(async function () {
+        if (this.currentTest.state === "failed") {
+            await driver.logTestArtifacts(this.currentTest.title);
+        }
     });
 
     it("should find First", async function(){
@@ -381,6 +435,12 @@ describe("Navigate to componentless lazy module route", async function(){
         nsCapabilities.testReporter.context = this;
         driver = await createDriver();
         await driver.resetApp();
+    });
+
+    afterEach(async function () {
+        if (this.currentTest.state === "failed") {
+            await driver.logTestArtifacts(this.currentTest.title);
+        }
     });
 
     it("should find First", async function(){
@@ -426,6 +486,12 @@ describe("Simple navigate and back should trigger only one CD on FirstComponent"
         await driver.resetApp();
     });
 
+    afterEach(async function () {
+        if (this.currentTest.state === "failed") {
+            await driver.logTestArtifacts(this.currentTest.title);
+        }
+    });
+
     it("should find First", async function(){
         await assureFirstComponent(driver);
     });
@@ -457,6 +523,12 @@ describe("Simple navigate and back should trigger only one CD on FirstComponent 
         await driver.resetApp();
     });
 
+    afterEach(async function () {
+        if (this.currentTest.state === "failed") {
+            await driver.logTestArtifacts(this.currentTest.title);
+        }
+    });
+    
     it("should find First", async () => {
         await assureFirstComponent(driver);
     });

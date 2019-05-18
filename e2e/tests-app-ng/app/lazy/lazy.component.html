@@ -1,0 +1,18 @@
+<StackLayout>
+    <GridLayout rows="auto" columns="auto" [visibility]="isModal ? 'visible' : 'collapsed'">
+        <Button
+            automationText="closeModal"
+            text="Close Lazy Modal"
+            (tap)="close()"
+            class="btn action-item"
+            row="0" col="0"></Button>
+    </GridLayout>
+    <StackLayout class="p-20">
+        <Label 
+            automationText="lazyLoaded"
+            [text]="'Lazily loaded via ' + (isModal ? 'modal' : 'route') + '!'"
+            textWrap="true"
+            class="h1"
+        ></Label>
+    </StackLayout>
+</StackLayout>

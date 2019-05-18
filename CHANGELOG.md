@@ -1,11 +1,11 @@
-## [7.2.4](https://github.com/NativeScript/nativescript-angular/compare/7.2.3...7.2.4) (2019-04-24)
+## [7.2.4](https://github.com/NativeScript/nativescript-angular/compare/7.2.3...7.2.4) (2019-05-14)
 
 
 ### Bug Fixes
 
 * **router:** routing services should be provided in forRoot only ([#1729](https://github.com/NativeScript/nativescript-angular/issues/1729)) ([0f6a975](https://github.com/NativeScript/nativescript-angular/commit/0f6a975))
-* ngOnDestroy not called on Android back button ([#923](https://github.com/NativeScript/nativescript-angular/issues/923))
-
+* mark reattached view for CD ([#1803](https://github.com/NativeScript/nativescript-angular/issues/1803)) ([b6dbe57](https://github.com/NativeScript/nativescript-angular/commit/b6dbe57))
+* Potentiel leak: NativeScript views not cleaned up on removal ([#1738](https://github.com/NativeScript/nativescript-angular/issues/1738)) ([59a1cde](https://github.com/NativeScript/nativescript-angular/commit/59a1cde))
 
 ### Features
 
