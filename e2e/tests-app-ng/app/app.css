@@ -1,0 +1,19 @@
+﻿@import '~nativescript-theme-core/css/core.light.css';
+
+button {
+    font-size: 13;
+}
+
+label {
+    text-align: center;
+}
+
+.tab-view-container { 
+    font-family: 'Courier'; /* Enabling this results in the error and shows a blank TabView */
+}
+
+.btnIcon {
+    font-family: 'FontAwesome';
+    font-size: 30 
+}
+
