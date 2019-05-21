@@ -45,7 +45,7 @@
     "nativescript-dev-appium": "next",
     "nativescript-dev-typescript": "^0.9.1-next-2019-03-12-162713-03",
     "nativescript-dev-webpack": "^0.22.0-next-2019-04-17-111030-01",
-    "typescript": "~3.1.1"
+    "typescript": "~3.4.5"
   },
   "scripts": {
     "u": "update-ns-webpack",

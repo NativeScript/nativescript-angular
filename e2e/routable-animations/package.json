@@ -38,7 +38,7 @@
     "nativescript-dev-appium": "^4.0.0",
     "nativescript-dev-typescript": "~0.7.1",
     "nativescript-dev-webpack": "next",
-    "typescript": "~2.7.2"
+    "typescript": "~3.4.5"
   },
   "scripts": {
     "ns-bundle": "ns-bundle",
