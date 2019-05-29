@@ -17,7 +17,7 @@ export interface ViewExtensions {
 }
 
 export interface ViewClass {
-    new (): View;
+    new(): View;
 }
 
 export abstract class InvisibleNode extends View implements NgView {
@@ -101,14 +101,10 @@ export function registerElement(
     resolver: ViewResolver,
     meta?: ViewClassMeta
 ): void {
-    if (elementMap.has(elementName)) {
-        throw new Error(`Element for ${elementName} already registered.`);
-    } else {
-        const entry = { resolver: resolver, meta: meta };
-        elementMap.set(elementName, entry);
-        elementMap.set(elementName.toLowerCase(), entry);
-        elementMap.set(elementName.replace(camelCaseSplit, "$1-$2").toLowerCase(), entry);
-    }
+    const entry = { resolver: resolver, meta: meta };
+    elementMap.set(elementName, entry);
+    elementMap.set(elementName.toLowerCase(), entry);
+    elementMap.set(elementName.replace(camelCaseSplit, "$1-$2").toLowerCase(), entry);
 }
 
 export function getViewClass(elementName: string): ViewClass {
