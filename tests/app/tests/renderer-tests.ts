@@ -222,10 +222,10 @@ registerElement("ButtonCounter", () => ButtonCounter);
         }`]
 })
 export class NgControlSettersCount {
-    @ViewChild("btn1", { read: ElementRef, static: false }) btn1: ElementRef;
-    @ViewChild("btn2", { read: ElementRef, static: false }) btn2: ElementRef;
-    @ViewChild("btn3", { read: ElementRef, static: false }) btn3: ElementRef;
-    @ViewChild("btn3", { read: ElementRef, static: false }) btn4: ElementRef;
+    @ViewChild("btn1", { static: false }) btn1: ElementRef;
+    @ViewChild("btn2", { static: false }) btn2: ElementRef;
+    @ViewChild("btn3", { static: false }) btn3: ElementRef;
+    @ViewChild("btn3", { static: false }) btn4: ElementRef;
 
     get buttons(): ElementRef[] { return [this.btn1, this.btn2, this.btn3, this.btn4]; }
 

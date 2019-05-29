@@ -13,8 +13,7 @@ import { NSRouteReuseStrategy } from "nativescript-angular/router/ns-route-reuse
     template: `<StackLayout><Label nsRouterLink text="COMPONENT"></Label></StackLayout>`
 })
 class RouterTestComponent {
-    @ViewChild(NSRouterLink, { read: NSRouterLink, static: false })
-    nsRouterLink: NSRouterLink;
+    @ViewChild(NSRouterLink, { static: false }) nsRouterLink: NSRouterLink;
 }
 
 describe("NativeScriptRouterModule.forRoot", () => {
