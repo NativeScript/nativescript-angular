@@ -1,3 +1,19 @@
+<a name="8.0.0"></a>
+# [8.0.0](https://github.com/NativeScript/nativescript-angular/compare/7.2.4...8.0.0) (2019-05-29)
+
+
+### Bug Fixes
+
+* **router:** fix return value for getTransition of NSRouterLink ([d20b645](https://github.com/NativeScript/nativescript-angular/commit/d20b645)), closes [#1784](https://github.com/NativeScript/nativescript-angular/issues/1784)
+* **tsconfig:** exclude aot files from compilation ([a4eb409](https://github.com/NativeScript/nativescript-angular/commit/a4eb409))
+
+
+### Features
+
+* upgrade to Angular 8 ([b16046d](https://github.com/NativeScript/nativescript-angular/commit/b16046d))
+
+
+
 ## [7.2.4](https://github.com/NativeScript/nativescript-angular/compare/7.2.3...7.2.4) (2019-05-14)
 
 
