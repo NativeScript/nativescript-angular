@@ -93,7 +93,7 @@ export class TestDefaultItemTemplateComponent {
             this.myItems.push(new DataItem(i, "Name " + i));
         }
     }
-    @ViewChild("listView") listViewElement: ListViewComponent;
+    @ViewChild("listView", { static: false }) listViewElement: ListViewComponent;
     onScrollListViewTo() { 
         this.listViewElement.nativeElement.scrollToIndex(100);
     }

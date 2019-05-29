@@ -12,7 +12,7 @@ import { NSLocationStrategy } from "nativescript-angular/router/ns-location-stra
 export class AppComponent {
     private isInitialNavigation = true;
 
-    @ViewChild(TabViewDirective) tabView: TabViewDirective;
+    @ViewChild(TabViewDirective, { static: false }) tabView: TabViewDirective;
 
     constructor(router: Router, location: NSLocationStrategy) {
         router.events.subscribe(e => {

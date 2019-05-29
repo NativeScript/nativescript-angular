@@ -13,15 +13,15 @@
     }
   },
   "dependencies": {
-    "@angular/animations": "~7.2.0",
-    "@angular/common": "~7.2.0",
-    "@angular/compiler": "~7.2.0",
-    "@angular/core": "~7.2.0",
-    "@angular/forms": "~7.2.0",
-    "@angular/http": "~7.2.0",
-    "@angular/platform-browser": "~7.2.0",
-    "@angular/platform-browser-dynamic": "~7.2.0",
-    "@angular/router": "~7.2.0",
+    "@angular/animations": "8.0.0",
+    "@angular/common": "8.0.0",
+    "@angular/compiler": "8.0.0",
+    "@angular/core": "8.0.0",
+    "@angular/forms": "8.0.0-beta.10",
+    "@angular/http": "8.0.0",
+    "@angular/platform-browser": "8.0.0",
+    "@angular/platform-browser-dynamic": "8.0.0",
+    "@angular/router": "8.0.0",
     "nativescript-angular": "file:../../nativescript-angular",
     "nativescript-theme-core": "~1.0.4",
     "reflect-metadata": "~0.1.8",
@@ -41,7 +41,7 @@
     "mochawesome": "~3.1.2",
     "nativescript-dev-appium": "next",
     "nativescript-dev-typescript": "next",
-    "typescript": "~3.1.1"
+    "typescript": "~3.4.5"
   },
   "scripts": {
     "e2e": "tsc -p e2e && mocha --opts ../config/mocha.opts --recursive e2e --appiumCapsLocation ../config/appium.capabilities.json",

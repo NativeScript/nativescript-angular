@@ -23,7 +23,7 @@ import { ModalViewComponent } from "~/modal-shared/modal-view.component";
 
 export class BasicsNavigationComponent {
 
-    @ViewChild("popoverButtonComp") popoverButtonComp: ElementRef;
+    @ViewChild("popoverButtonComp", { static: false }) popoverButtonComp: ElementRef;
     @Input() col: number;
     constructor(
         private modal: ModalDialogService,

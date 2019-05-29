@@ -7,8 +7,7 @@ import { Component, ViewChild } from '@angular/core';
     `
 })
 export class AnimationBuilderComponent {
-  @ViewChild('button')
-  private button;
+  @ViewChild('button', { static: false }) button;
 
   constructor(private _builder: AnimationBuilder) {}
  

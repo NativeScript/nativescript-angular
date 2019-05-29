@@ -10,7 +10,7 @@ class TestComponent { }
 
 
 class LoaderComponentBase {
-    @ViewChild(DetachedLoader) public loader: DetachedLoader;
+    @ViewChild(DetachedLoader, { static: false }) public loader: DetachedLoader;
 }
 
 @Component({

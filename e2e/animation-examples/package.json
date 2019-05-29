@@ -13,16 +13,16 @@
     }
   },
   "dependencies": {
-    "@angular/animations": "~7.2.0",
-    "@angular/common": "~7.2.0",
-    "@angular/compiler": "~7.2.0",
-    "@angular/core": "~7.2.0",
-    "@angular/forms": "~7.2.0",
-    "@angular/http": "~7.2.0",
-    "@angular/platform-browser": "~7.2.0",
-    "@angular/platform-browser-dynamic": "~7.2.0",
-    "@angular/router": "~7.2.0",
-    "nativescript-angular": "^7.2.4-next-2019-05-06-201428-01",
+    "@angular/animations": "8.0.0",
+    "@angular/common": "8.0.0",
+    "@angular/compiler": "8.0.0",
+    "@angular/core": "8.0.0",
+    "@angular/forms": "8.0.0",
+    "@angular/http": "8.0.0-beta.10",
+    "@angular/platform-browser": "8.0.0",
+    "@angular/platform-browser-dynamic": "8.0.0",
+    "@angular/router": "8.0.0",
+    "nativescript-angular": "file:../../nativescript-angular",
     "nativescript-theme-core": "~1.0.2",
     "reflect-metadata": "~0.1.8",
     "rxjs": "^6.3.3",
@@ -30,8 +30,8 @@
     "zone.js": "^0.8.4"
   },
   "devDependencies": {
-    "@angular/compiler-cli": "~7.2.0",
-    "@ngtools/webpack": "~7.2.0",
+    "@angular/compiler-cli": "8.0.0",
+    "@ngtools/webpack": "8.0.0",
     "@types/chai": "~4.1.7",
     "@types/mocha": "~5.2.5",
     "@types/node": "~10.12.18",
@@ -45,7 +45,7 @@
     "nativescript-dev-appium": "next",
     "nativescript-dev-typescript": "^0.9.1-next-2019-03-12-162713-03",
     "nativescript-dev-webpack": "^0.22.0-next-2019-04-17-111030-01",
-    "typescript": "~3.1.1"
+    "typescript": "~3.4.5"
   },
   "scripts": {
     "u": "update-ns-webpack",

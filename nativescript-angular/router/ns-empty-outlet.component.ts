@@ -7,7 +7,7 @@ import { PageRouterOutlet } from "./page-router-outlet";
     template: "<page-router-outlet isEmptyOutlet='true'></page-router-outlet>"
 })
 export class NSEmptyOutletComponent {
-    @ViewChild(PageRouterOutlet) pageRouterOutlet: PageRouterOutlet;
+    @ViewChild(PageRouterOutlet, { read: PageRouterOutlet, static: false }) pageRouterOutlet: PageRouterOutlet;
     constructor(private page: Page) {
         if (this.page) {
             this.page.actionBarHidden = true;
