@@ -13,6 +13,29 @@
 * upgrade to Angular 8 ([b16046d](https://github.com/NativeScript/nativescript-angular/commit/b16046d))
 
 
+### BREAKING CHANGES
+
+* In Angular version 8, it's required that all `@ViewChild` and `@ContentChild` queries have a `static` flag specifying whether the query is `static` or `dynamic`. More details about this change can be found [here](https://angular.io/guide/static-query-migration).
+
+Migration steps:
+
+Anywhere you previously had `@ViewChild` with a single param you now have to provide a second param with a `static` property set to either `true` or `false`
+
+**Previous code:**
+```
+import { ElementRef } from "@angular/core";
+
+@ViewChild("myElement") myElement: ElementRef;
+```
+
+**Migrated code:**
+```
+import { ElementRef } from "@angular/core";
+
+@ViewChild("myElement", { static: false }) myElement: ElementRef;
+```
+
+
 
 ## [7.2.4](https://github.com/NativeScript/nativescript-angular/compare/7.2.3...7.2.4) (2019-05-14)
 
