@@ -120,6 +120,13 @@
         "noReset": true,
         "fullReset": false
     },
+    "sim.iPhone7.ios12": {
+        "platformName": "iOS",
+        "platformVersion": "12.0",
+        "deviceName": "iPhone 7",
+        "noReset": true,
+        "fullReset": false
+    },
     "sim.iPhone8.iOS112": {
         "platformName": "iOS",
         "platformVersion": "11.2",
