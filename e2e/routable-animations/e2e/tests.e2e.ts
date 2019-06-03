@@ -5,11 +5,11 @@ describe("sample scenario", () => {
     const defaultWaitTime = 5000;
     let driver: AppiumDriver;
 
-    before(async () => {
+    before(async function () {
         driver = await createDriver();
     });
 
-    after(async () => {
+    after(async function () {
         await driver.quit();
         console.log("Quit driver!");
     });
@@ -20,7 +20,7 @@ describe("sample scenario", () => {
         }
     });
 
-    it("should go to support page", async () => {
+    it("should go to support page", async function () {
         const btnGoToSupportPage = await driver.findElementByAutomationText("go to support page");
         const homeImage = await driver.compareScreen("home");
         assert.isTrue(homeImage);
@@ -29,7 +29,7 @@ describe("sample scenario", () => {
         console.log(await titleSupportPage.text());
     });
 
-    it("should go back to home page", async () => {
+    it("should go back to home page", async function () {
         const btnGoBackToHomePage = await driver.findElementByAutomationText("go back to home page");
         const supportImage = await driver.compareScreen("support");
         assert.isTrue(supportImage);
