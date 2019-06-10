@@ -22,7 +22,13 @@
             ]
         }
     },
+    "include": [
+        "../nativescript-angular",
+        "**/*"
+    ],
     "exclude": [
+        "../nativescript-angular/node_modules",
+        "../nativescript-angular/**/*.d.ts",
         "node_modules",
         "platforms",
         "**/*.aot",
