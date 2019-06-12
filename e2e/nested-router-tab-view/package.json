@@ -6,7 +6,7 @@
   "nativescript": {
     "id": "org.nativescript.nestedroutertabview",
     "tns-ios": {
-      "version": "6.0.0-2019-06-10-154118-03"
+      "version": "next"
     },
     "tns-android": {
       "version": "next"
