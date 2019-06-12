@@ -16,6 +16,7 @@ import { View, fontInternalProperty, backgroundInternalProperty } from "tns-core
 import { nsTestBedAfterEach, nsTestBedBeforeEach, nsTestBedRender } from "nativescript-angular/testing";
 import { ComponentFixture, TestBed, async } from "@angular/core/testing";
 import { Observable, ReplaySubject } from "rxjs";
+import { Label } from "tns-core-modules/ui/label/label";
 
 @Component({
     template: `<StackLayout><Label text="Layout"></Label></StackLayout>`
@@ -94,6 +95,37 @@ export class StyledLabelCmp {
 })
 export class StyledLabelCmp2 {
     constructor(public elementRef: ElementRef) {
+    }
+}
+
+@Component({
+    selector: "host-styled",
+    styles: [`
+        Label {
+            color: blue;
+        }
+
+        :host Label {
+            color: red;
+        }
+    `
+    ],
+    template: `<Label text="Styled!"></Label>`
+})
+export class HostStyledCmp {
+    constructor(public elementRef: ElementRef<ProxyViewContainer>) {
+    }
+}
+
+@Component({
+    selector: "host-styled-parent",
+    template: `
+        <host-styled></host-styled>
+        <host-styled></host-styled>
+    `
+})
+export class HostStyledParentCmp {
+    constructor(public elementRef: ElementRef<ProxyViewContainer>) {
     }
 }
 
@@ -251,6 +283,7 @@ describe("Renderer E2E", () => {
         LayoutWithLabel, LabelCmp, LabelContainer,
         ProjectableCmp, ProjectionContainer,
         StyledLabelCmp, StyledLabelCmp2,
+        HostStyledCmp, HostStyledParentCmp,
         NgIfLabel, NgIfThenElseComponent, NgIfMultiple,
         NgIfTwoElements, NgIfMultiple,
         NgIfElseComponent, NgIfThenElseComponent,
@@ -290,6 +323,18 @@ describe("Renderer E2E", () => {
             const componentRoot = componentRef.instance.elementRef.nativeElement;
             const label = (<ProxyViewContainer>componentRoot).getChildAt(0);
             assert.equal(Red, label.style.color.hex);
+        });
+    });
+
+    it("applies component :host styles", () => {
+        return nsTestBedRender(HostStyledParentCmp).then((fixture) => {
+            const proxyView = fixture.componentRef.instance.elementRef.nativeElement;
+
+            for (let i = 0; i < 2; i += 1) {
+                const child = proxyView.getChildAt(i) as ProxyViewContainer;
+                const label = child.getChildAt(0) as Label;
+                assert.equal(Red, label.style.color.hex);
+            }
         });
     });
 
