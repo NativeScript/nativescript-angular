@@ -1,3 +1,14 @@
+<a name="8.0.1"></a>
+## [8.0.1](https://github.com/NativeScript/nativescript-angular/compare/8.0.0...8.0.1) (2019-06-12)
+
+
+### Bug Fixes
+
+* do not throw if element already registered ([#1838](https://github.com/NativeScript/nativescript-angular/issues/1838)) ([e90f8b5](https://github.com/NativeScript/nativescript-angular/commit/e90f8b5))
+* **1845:** CSS special selector ":host" only work first time ([#1852](https://github.com/NativeScript/nativescript-angular/issues/1852)) ([59a5bd8](https://github.com/NativeScript/nativescript-angular/commit/59a5bd8))
+
+
+
 <a name="8.0.0"></a>
 # [8.0.0](https://github.com/NativeScript/nativescript-angular/compare/7.2.4...8.0.0) (2019-05-29)
 
