@@ -57,8 +57,12 @@ export class NativeScriptRendererFactory implements RendererFactory2 {
             return this.defaultRenderer;
         }
 
-        let renderer: NativeScriptRenderer = this.componentRenderers.get(type.id);
+        let renderer = this.componentRenderers.get(type.id);
         if (renderer) {
+            if (renderer instanceof EmulatedRenderer) {
+                renderer.applyToHost(element);
+            }
+
             return renderer;
         }
 
