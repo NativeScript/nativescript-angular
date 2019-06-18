@@ -3,8 +3,8 @@ import {
     ComponentRef,
     Directive,
     Injectable,
+    Injector,
     NgModuleRef,
-    ReflectiveInjector,
     Type,
     ViewContainerRef
 } from "@angular/core";
@@ -18,7 +18,7 @@ import { DetachedLoader } from "../common/detached-loader";
 import { PageFactory, PAGE_FACTORY } from "../platform-providers";
 import { once } from "../common/utils";
 import { topmost, Frame } from "tns-core-modules/ui/frame";
-import { ShowModalOptions } from  "tns-core-modules/ui/core/view";
+import { ShowModalOptions } from "tns-core-modules/ui/core/view";
 
 export type BaseShowModalOptions = Pick<ShowModalOptions, Exclude<keyof ShowModalOptions, "closeCallback" | "context">>;
 
@@ -126,11 +126,11 @@ export class ModalDialogService {
         });
 
         const modalParams = new ModalDialogParams(options.context, closeCallback);
-        const providers = ReflectiveInjector.resolve([
-            { provide: ModalDialogParams, useValue: modalParams },
-        ]);
 
-        const childInjector = ReflectiveInjector.fromResolvedProviders(providers, options.containerRef.parentInjector);
+        const childInjector = Injector.create({
+            providers: [{ provide: ModalDialogParams, useValue: modalParams }],
+            parent: options.containerRef.injector
+        });
         const detachedFactory = options.resolver.resolveComponentFactory(DetachedLoader);
         detachedLoaderRef = options.containerRef.createComponent(detachedFactory, -1, childInjector, null);
         detachedLoaderRef.instance.loadComponent(options.type).then((compRef) => {
