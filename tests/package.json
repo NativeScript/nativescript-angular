@@ -45,7 +45,7 @@
     "@ngtools/webpack": "8.0.0",
     "@types/chai": "^4.1.4",
     "@types/karma-chai": "0.1.1",
-    "@types/mocha": "5.2.6",
+    "@types/mocha": "5.2.7",
     "@types/sinon": "^7.0.11",
     "babel-traverse": "6.8.0",
     "babel-types": "6.8.1",
