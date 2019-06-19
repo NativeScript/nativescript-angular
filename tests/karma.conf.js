@@ -11,10 +11,10 @@ module.exports = function (config) {
 
 
     // list of files / patterns to load in the browser
+    // TODO: changing this to .ts files causes the test to become lest from 126 to 106. ~20 tests are cutoff by something. Needs a future research
     files: [
       'app/tests/test-main.js',
-      'app/**/*.js',
-      'src/tests/**/*.js'
+      'app/**/*.js'
     ],
 
     // list of files to exclude
