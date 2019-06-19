@@ -45,7 +45,7 @@
     "rxjs": "~6.3.3",
     "tns-core-modules": "next",
     "tns-platform-declarations": "next",
-    "zone.js": "^0.8.4"
+    "zone.js": "^0.9.1"
   },
   "devDependencies": {
     "babel-traverse": "6.9.0",
