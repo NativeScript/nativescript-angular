@@ -56,7 +56,7 @@
     "rxjs": "^6.3.3",
     "tns-core-modules": "^5.1.0 || >5.1.0- || >5.2.0-",
     "typescript": "~3.4.5",
-    "zone.js": "^0.8.4"
+    "zone.js": "^0.9.1"
   },
   "devDependencies": {
     "@angular/animations": "8.0.0",
@@ -75,7 +75,7 @@
     "tns-core-modules": "next",
     "tslint": "^5.5.0",
     "typescript": "~3.4.5",
-    "zone.js": "^0.8.4",
+    "zone.js": "^0.9.1",
     "nativescript-typedoc-theme": "git://github.com/NativeScript/nativescript-typedoc-theme.git#master",
     "typedoc": "^0.13.0"
   }
