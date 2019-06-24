@@ -62,6 +62,7 @@
     "mocha": "6.1.4",
     "nativescript-dev-typescript": "next",
     "nativescript-dev-webpack": "webpack",
+    "remove-strict-webpack-plugin": "~0.1.2",
     "sinon": "^7.3.2",
     "tslint": "^4.5.1",
     "typescript": "~3.4.5"

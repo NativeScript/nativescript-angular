@@ -13,6 +13,7 @@ const { BundleAnalyzerPlugin } = require("webpack-bundle-analyzer");
 const { NativeScriptWorkerPlugin } = require("nativescript-worker-loader/NativeScriptWorkerPlugin");
 const TerserPlugin = require("terser-webpack-plugin");
 const { getAngularCompilerPlugin } = require("nativescript-dev-webpack/plugins/NativeScriptAngularCompilerPlugin");
+const RemoveStrictPlugin = require( 'remove-strict-webpack-plugin' );
 const hashSalt = Date.now().toString();
 
 module.exports = env => {
@@ -33,6 +34,9 @@ module.exports = env => {
     // Default destination inside platforms/<platform>/...
     const dist = resolve(projectRoot, nsWebpack.getAppPath(platform, projectRoot));
     const appResourcesPlatformDir = platform === "android" ? "Android" : "iOS";
+
+    // Workaround for CLI issue in version `6.0.0-2019-06-19-13454`
+    env.unitTesting = true;
 
     const {
         // The 'appPath' and 'appResourcesPath' values are fetched from
@@ -312,6 +316,12 @@ module.exports = env => {
 
     if (hmr) {
         config.plugins.push(new webpack.HotModuleReplacementPlugin());
+    }
+
+    // Workaround for issue caused by
+    // `https://github.com/NativeScript/nativescript-angular/blob/f506b3cb047180c7e208b49ab2def690fad6691e/nativescript-angular/http-client/http-client.module.ts#L5-L7
+    if (unitTesting) {
+        config.plugins.push(new RemoveStrictPlugin());
     }
 
     return config;
