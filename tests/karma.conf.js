@@ -1,3 +1,6 @@
+
+const RemoveStrictPlugin = require( 'remove-strict-webpack-plugin' );
+
 module.exports = function (config) {
   const options = {
 
@@ -108,5 +111,6 @@ function setWebpack(config, options) {
     delete options.webpack.output.libraryTarget;
     const invalidPluginsForUnitTesting = ["GenerateBundleStarterPlugin", "GenerateNativeScriptEntryPointsPlugin"];
     options.webpack.plugins = options.webpack.plugins.filter(p => !invalidPluginsForUnitTesting.includes(p.constructor.name));
+    options.webpack.plugins.push(new RemoveStrictPlugin());
   }
 }
