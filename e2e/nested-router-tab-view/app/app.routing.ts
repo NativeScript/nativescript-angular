@@ -9,6 +9,8 @@ import { TeamDetailComponent } from "./team/team-detail.component";
 import { LoginComponent } from "./login/login.component";
 import { TabsComponent } from "./tabs/tabs.component";
 import { HomeComponent } from "./home/home.component";
+import { HomeLazyModule } from "./home-lazy/home-lazy.module";
+import { CustomTabsModule } from "./custom-tabs/custom-tabs.module"
 import { AboutComponent } from "./about/about.component";
 import { AboutNestedComponent } from "./about/about-nested.component";
 
@@ -46,11 +48,11 @@ const routes: Routes = [
     },
     {
         path: "home-lazy",
-        loadChildren: "./home-lazy/home-lazy.module#HomeLazyModule",
+        loadChildren: () => HomeLazyModule,
     },
     {
         path: "custom-tabs",
-        loadChildren: "./custom-tabs/custom-tabs.module#CustomTabsModule",
+        loadChildren: () => CustomTabsModule,
     },
     {
         path: "tabs", component: TabsComponent, children: [

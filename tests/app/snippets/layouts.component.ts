@@ -2,7 +2,8 @@ import {Component} from "@angular/core";
 
 @Component({
     selector: "gestures",
-    templateUrl: "snippets/layouts.component.html",
+    moduleId: module.id,
+    templateUrl: "layouts.component.html",
     styles: [
         "Image { background-color: coral }",
         ".title { margin: 10; horizontal-align: center; font-size: 32 }",
