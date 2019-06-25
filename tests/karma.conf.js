@@ -102,6 +102,7 @@ function setWebpack(config, options) {
     const env = {};
     env[config.platform] = true;
     env.sourceMap = config.debugBrk;
+    env.unitTesting = true;
     options.webpack = require('./webpack.config')(env);
     delete options.webpack.entry;
     delete options.webpack.output.libraryTarget;

@@ -35,9 +35,6 @@ module.exports = env => {
     const dist = resolve(projectRoot, nsWebpack.getAppPath(platform, projectRoot));
     const appResourcesPlatformDir = platform === "android" ? "Android" : "iOS";
 
-    // Workaround for CLI issue in version `6.0.0-2019-06-19-13454`
-    env.unitTesting = true;
-
     const {
         // The 'appPath' and 'appResourcesPath' values are fetched from
         // the nsconfig.json configuration file
