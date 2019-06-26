@@ -14,10 +14,9 @@ module.exports = function (config) {
 
 
     // list of files / patterns to load in the browser
-    // TODO: changing this to .ts files causes the test to become lest from 126 to 106. ~20 tests are cutoff by something. Needs a future research
     files: [
-      'app/tests/test-main.js',
-      'app/**/*.js'
+      'app/tests/test-main.ts',
+      'app/**/*.ts'
     ],
 
     // list of files to exclude
@@ -34,7 +33,7 @@ module.exports = function (config) {
     // test results reporter to use
     // possible values: 'dots', 'progress'
     // available reporters: https://npmjs.org/browse/keyword/karma-reporter
-    reporters: ['progress'],
+    reporters: ['mocha'],
 
 
     // web server port
