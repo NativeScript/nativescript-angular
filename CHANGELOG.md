@@ -1,3 +1,11 @@
+<a name="8.0.2"></a>
+## [8.0.2](https://github.com/NativeScript/nativescript-angular/compare/8.0.1...8.0.2) (2019-06-27)
+
+### Bug Fixes
+
+* remove deprecated API usage ([#1874](https://github.com/NativeScript/nativescript-angular/pull/1874)) ([ab740cd](https://github.com/NativeScript/nativescript-angular/commit/ab740cd))
+
+
 <a name="8.0.1"></a>
 ## [8.0.1](https://github.com/NativeScript/nativescript-angular/compare/8.0.0...8.0.1) (2019-06-12)
 
