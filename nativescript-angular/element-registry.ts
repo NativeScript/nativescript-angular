@@ -205,7 +205,8 @@ registerElement("Switch", () => require("tns-core-modules/ui/switch").Switch);
 registerElement("TabView", () => require("tns-core-modules/ui/tab-view").TabView);
 registerElement("TabStrip", () => require("tns-core-modules/ui/tab-navigation-base/tab-strip").TabStrip);
 registerElement("TabStripItem", () => require("tns-core-modules/ui/tab-navigation-base/tab-strip-item").TabStripItem);
-registerElement("TabContentItem", () => require("tns-core-modules/ui/tab-navigation-base/tab-content-item").TabContentItem);
+registerElement("TabContentItem",
+    () => require("tns-core-modules/ui/tab-navigation-base/tab-content-item").TabContentItem);
 registerElement("Tabs", () => require("tns-core-modules/ui/tabs").Tabs);
 registerElement("TextField", () => require("tns-core-modules/ui/text-field").TextField);
 registerElement("TextView", () => require("tns-core-modules/ui/text-view").TextView);
