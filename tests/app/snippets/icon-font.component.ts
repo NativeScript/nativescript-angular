@@ -4,8 +4,9 @@ import {Component} from "@angular/core";
 @Component({
     // >> (hide)
     selector: "icon-font",
-    templateUrl: "snippets/icon-font.component.html",
-    styleUrls: ["snippets/icon-font.component.css"]
+    moduleId: module.id,
+    templateUrl: "icon-font.component.html",
+    styleUrls: ["icon-font.component.css"]
     // << (hide)
     // ...
 })

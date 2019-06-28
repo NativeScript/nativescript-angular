@@ -4,8 +4,9 @@ import { RouterExtensions } from "nativescript-angular/router";
 @Component({
     // ...
     // >> (hide)
+    moduleId: module.id,
     selector: "router-extensions-import",
-    templateUrl: "snippets/navigation/router-extensions.html"
+    templateUrl: "router-extensions.html"
     // << (hide)
 })
 export class MyComponent {

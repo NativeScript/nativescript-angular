@@ -365,7 +365,7 @@ export class ViewUtil {
         }
 
         if (XML_ATTRIBUTES.indexOf(attributeName) !== -1) {
-            view._applyXmlAttribute(attributeName, value);
+            view[attributeName] = value;
             return;
         }
 
