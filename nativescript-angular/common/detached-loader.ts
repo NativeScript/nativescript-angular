@@ -29,7 +29,7 @@ export class DetachedLoader { // tslint:disable-line:component-class-suffix
     private loadInLocation(componentType: Type<any>): Promise<ComponentRef<any>> {
         const factory = this.resolver.resolveComponentFactory(componentType);
         const componentRef = this.containerRef.createComponent(
-            factory, this.containerRef.length, this.containerRef.parentInjector);
+            factory, this.containerRef.length, this.containerRef.injector);
 
         // Component is created, built may not be checked if we are loading
         // inside component with OnPush CD strategy. Mark us for check to be sure CD will reach us.
@@ -52,6 +52,6 @@ export class DetachedLoader { // tslint:disable-line:component-class-suffix
 
     public loadWithFactory<T>(factory: ComponentFactory<T>): ComponentRef<T> {
         return this.containerRef.createComponent(factory,
-            this.containerRef.length, this.containerRef.parentInjector, null);
+            this.containerRef.length, this.containerRef.injector, null);
     }
 }
