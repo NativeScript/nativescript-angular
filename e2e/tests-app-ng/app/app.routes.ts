@@ -31,6 +31,7 @@ import { ModalViewMainPageComponent } from "./modal/modal-view-main-page.compone
 import { LazyLoadModalComponent } from "./modal/lazy/lazy-load-modal.component";
 
 import { TabViewComponent } from "./tab-view/tab-view.component";
+import { TabsComponent } from "./tabs/tabs.component";
 
 import { NavigationOptionsComponent } from "./navigation-options/navigation-options.component";
 import { NavigationInfoComponent } from "./navigation-options/navigation-info.component";
@@ -77,6 +78,7 @@ export const routableComponents = [
     LazyLoadModalComponent,
 
     TabViewComponent,
+    TabsComponent,
 
     NavigationOptionsComponent,
     NavigationInfoComponent,
@@ -156,6 +158,7 @@ export const routes = [
     { path: "modal/lazy", component: LazyLoadModalComponent, data: { title: "modal(lazy)" } },
 
     { path: "tab-view", component: TabViewComponent, data: { title: "tab-view", isNavigatable: true } },
+    { path: "tabs", component: TabsComponent, data: { title: "tabs", isNavigatable: true } },
 
     { path: "nav-options", component: NavigationOptionsComponent, data: { title: "nav-options", isNavigatable: true } },
     { path: "nav-info", component: NavigationInfoComponent, data: { title: "nav-info" } },
