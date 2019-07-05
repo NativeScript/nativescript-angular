@@ -1,3 +1,16 @@
+<a name="8.0.2"></a>
+## [8.0.2](https://github.com/NativeScript/nativescript-angular/compare/8.0.1...8.0.2) (2019-06-28)
+
+### Bug Fixes
+
+ * remove deprecated API usage ([#1874](https://github.com/NativeScript/nativescript-angular/pull/1874)) ([ab740cd](https://github.com/NativeScript/nativescript-angular/commit/ab740cd))
+ * migrate from ReflectiveInjector (deprecated) to StaticInjector ([#1868](https://github.com/NativeScript/nativescript-angular/pull/1868)) ([e432841](https://github.com/NativeScript/nativescript-angular/pull/1868/commits/e432841e9b474ad188f87044b74666b322d68b5d))
+
+ ### Features
+
+* Update peer dependencies to Angular 8.x.x ([#1857](https://github.com/NativeScript/nativescript-angular/pull/1857)) ([060aabf](https://github.com/NativeScript/nativescript-angular/pull/1857/commits/060aabf146aa0f132f3617dcfaeea0efa7baf228))
+
+
 <a name="8.0.1"></a>
 ## [8.0.1](https://github.com/NativeScript/nativescript-angular/compare/8.0.0...8.0.1) (2019-06-12)
 
