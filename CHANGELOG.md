@@ -9,6 +9,7 @@
  ### Features
 
 * Update peer dependencies to Angular 8.x.x ([#1857](https://github.com/NativeScript/nativescript-angular/pull/1857)) ([060aabf](https://github.com/NativeScript/nativescript-angular/pull/1857/commits/060aabf146aa0f132f3617dcfaeea0efa7baf228))
+* **tabs:** register tabs elements ([#1883](https://github.com/NativeScript/nativescript-angular/issues/1883)) ([092a833](https://github.com/NativeScript/nativescript-angular/commit/092a833))
 
 
 <a name="8.0.1"></a>
