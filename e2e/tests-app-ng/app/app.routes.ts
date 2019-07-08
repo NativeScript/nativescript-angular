@@ -11,6 +11,7 @@ import { NavigationComponent, NAVIGATION_SUBROUTES } from "./router/router-outle
 import { LazyNavigationComponent } from "./router/lazy-module-navigation/lazy-navigation.component";
 
 import { BindingComponent } from "./binding/binding-page.component";
+import { BottomNavigation } from "./bottom-navigation/bottom-navigation.component"
 
 import { ListViewComponent } from "./list-view/list-view-page.component";
 import { ListViewControlComponent } from "./list-view/list-view-item-template.component";
@@ -61,6 +62,7 @@ export const routableComponents = [
     SecondActionBarComponent,
 
     BindingComponent,
+    BottomNavigation,
 
     ListViewMainPageComponent,
     ListViewComponent,
@@ -90,7 +92,7 @@ export const routableComponents = [
     ButtonTextAlignmentComponent,
 ];
 
-// Set isNavigatable: true if the page is a mian page to other sub pages
+// Set `isNavigatable: true` if the page is a main page to other sub pages
 export const routes = [
     { path: "", component: MainComponent, data: { title: "" } },
     { path: "", component: ModalContentComponent, data: { title: "" } },
@@ -119,6 +121,7 @@ export const routes = [
     },
 
     { path: "binding", component: BindingComponent, data: { title: "Binding", isNavigatable: true } },
+    { path: "bottom-navigation", component: BottomNavigation, data: { title: "BottomNavigation", isNavigatable: true } },
 
     {
         path: "ListViewExamples",
@@ -158,7 +161,7 @@ export const routes = [
     { path: "modal/lazy", component: LazyLoadModalComponent, data: { title: "modal(lazy)" } },
 
     { path: "tab-view", component: TabViewComponent, data: { title: "tab-view", isNavigatable: true } },
-    { path: "tabs", component: TabsComponent, data: { title: "tabs", isNavigatable: true } },
+    { path: "tabs", component: TabsComponent, data: { title: "Tabs", isNavigatable: true } },
 
     { path: "nav-options", component: NavigationOptionsComponent, data: { title: "nav-options", isNavigatable: true } },
     { path: "nav-info", component: NavigationInfoComponent, data: { title: "nav-info" } },

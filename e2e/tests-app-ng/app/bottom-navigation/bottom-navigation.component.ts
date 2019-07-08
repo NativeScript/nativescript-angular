@@ -1,9 +1,9 @@
 import { Component, OnInit } from "@angular/core";
 
 @Component({
-  selector: "tabs-component",
+  selector: "bottom-navigation-component",
   template: `
-<Tabs #tabs>
+<BottomNavigation #bottomNavigation>
 
   <TabStrip>
 
@@ -30,7 +30,7 @@ import { Component, OnInit } from "@angular/core";
     <StackLayout>
       <Label text="TabContentItem 0">
       </Label>
-      <Button (tap)="goTo(tabs, 1)" text="go to 1">
+      <Button (tap)="goTo(bottomNavigation, 1)" text="go to 1">
       </Button>
     </StackLayout>
   </TabContentItem>
@@ -39,7 +39,7 @@ import { Component, OnInit } from "@angular/core";
     <StackLayout>
       <Label text="TabContentItem 1">
       </Label>
-      <Button (tap)="goTo(tabs, 2)" text="go to 2">
+      <Button (tap)="goTo(bottomNavigation, 2)" text="go to 2">
       </Button>
     </StackLayout>
   </TabContentItem>
@@ -48,21 +48,21 @@ import { Component, OnInit } from "@angular/core";
     <StackLayout>
       <Label text="TabContentItem 2">
       </Label>
-      <Button (tap)="goTo(tabs, 0)" text="go to 0">
+      <Button (tap)="goTo(bottomNavigation, 0)" text="go to 0">
       </Button>
     </StackLayout>
   </TabContentItem>
 
-</Tabs>
+</BottomNavigation>
   `,
 })
 
-export class TabsComponent implements OnInit {
+export class BottomNavigation implements OnInit {
 
   public ngOnInit(): void { }
 
-  goTo(tabs: any, index: number) {
-    tabs.selectedIndex = index;
+  goTo(bottomNavigation: any, index: number) {
+    bottomNavigation.selectedIndex = index;
   }
 
 }
