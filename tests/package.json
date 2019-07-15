@@ -1,12 +1,6 @@
 {
   "nativescript": {
-    "id": "org.nativescript.ngtests",
-    "tns-ios": {
-      "version": "next"
-    },
-    "tns-android": {
-      "version": "next"
-    }
+    "id": "org.nativescript.ngtests"
   },
   "name": "ngtests",
   "version": "1.0.0",
@@ -60,7 +54,6 @@
     "karma-webpack": "3.0.5",
     "lazy": "1.0.11",
     "mocha": "6.1.4",
-    "nativescript-dev-typescript": "next",
     "nativescript-dev-webpack": "next",
     "remove-strict-webpack-plugin": "~0.1.2",
     "sinon": "^7.3.2",

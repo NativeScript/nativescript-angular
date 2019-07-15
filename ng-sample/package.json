@@ -1,12 +1,6 @@
 {
   "nativescript": {
-    "id": "org.nativescript.ngsample",
-    "tns-android": {
-      "version": "next"
-    },
-    "tns-ios": {
-      "version": "next"
-    }
+    "id": "org.nativescript.ngsample"
   },
   "name": "tns-template-hello-world",
   "main": "app.js",
