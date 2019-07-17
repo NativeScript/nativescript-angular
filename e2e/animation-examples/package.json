@@ -43,7 +43,6 @@
     "mochawesome": "~3.1.2",
     "nativescript-css-loader": "~0.26.0",
     "nativescript-dev-appium": "next",
-    "nativescript-dev-typescript": "next",
     "nativescript-dev-webpack": "next",
     "typescript": "~3.4.5"
   },

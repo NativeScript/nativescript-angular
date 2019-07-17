@@ -4,13 +4,7 @@
   "readme": "NativeScript Application",
   "repository": "<fill-your-repository-here>",
   "nativescript": {
-    "id": "org.nativescript.modalnavigationng",
-    "tns-android": {
-      "version": "next"
-    },
-    "tns-ios": {
-      "version": "next"
-    }
+    "id": "org.nativescript.modalnavigationng"
   },
   "dependencies": {
     "@angular/animations": "~8.1.0",
@@ -23,7 +17,6 @@
     "@angular/platform-browser-dynamic": "~8.1.0",
     "@angular/router": "~8.1.0",
     "nativescript-angular": "file:../../nativescript-angular",
-    "nativescript-dev-webpack": "next",
     "nativescript-theme-core": "~1.0.4",
     "reflect-metadata": "~0.1.8",
     "rxjs": "~6.3.3",
@@ -43,7 +36,6 @@
     "mocha": "~5.2.0",
     "mochawesome": "~3.1.2",
     "nativescript-dev-appium": "next",
-    "nativescript-dev-typescript": "next",
     "nativescript-dev-webpack": "next",
     "tns-platform-declarations": "next",
     "typescript": "~3.4.5"
