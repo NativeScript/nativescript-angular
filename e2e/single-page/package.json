@@ -37,7 +37,7 @@
     "lazy": "1.0.11",
     "mocha": "~5.2.0",
     "mochawesome": "~3.1.2",
-    "nativescript-dev-appium": "next",
+    "nativescript-dev-appium": "^5.3.0",
     "nativescript-dev-webpack": "next",
     "tslib": "^1.7.1",
     "typescript": "~3.4.5"
