@@ -4,22 +4,16 @@
   "readme": "NativeScript Application",
   "repository": "<fill-your-repository-here>",
   "nativescript": {
-    "id": "org.nativescript.testsappng",
-    "tns-ios": {
-      "version": "next"
-    },
-    "tns-android": {
-      "version": "next"
-    }
+    "id": "org.nativescript.testsappng"
   },
   "dependencies": {
-    "@angular/common": "~8.0.0",
-    "@angular/compiler": "~8.0.0",
-    "@angular/core": "~8.0.0",
-    "@angular/forms": "~8.0.0",
-    "@angular/platform-browser": "~8.0.0",
-    "@angular/platform-browser-dynamic": "~8.0.0",
-    "@angular/router": "~8.0.0",
+    "@angular/common": "~8.1.0",
+    "@angular/compiler": "~8.1.0",
+    "@angular/core": "~8.1.0",
+    "@angular/forms": "~8.1.0",
+    "@angular/platform-browser": "~8.1.0",
+    "@angular/platform-browser-dynamic": "~8.1.0",
+    "@angular/router": "~8.1.0",
     "nativescript-angular": "next",
     "nativescript-intl": "~3.0.0",
     "nativescript-theme-core": "^1.0.4",
@@ -35,9 +29,11 @@
     "codelyzer": "^4.0.0",
     "filewalker": "^0.1.3",
     "lazy": "1.0.11",
-    "nativescript-dev-typescript": "next",
     "nativescript-dev-webpack": "next",
-    "tslint": "^5.4.3"
+    "tslint": "^5.4.3",
+    "typescript": "~3.4.5",
+    "@angular/compiler-cli": "~8.0.0",
+    "@ngtools/webpack": "~8.0.0"
   },
   "scripts": {
     "tslint": "tslint --config tslint.json 'app/**/*.ts'",
