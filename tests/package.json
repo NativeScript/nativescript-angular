@@ -1,12 +1,6 @@
 {
   "nativescript": {
-    "id": "org.nativescript.ngtests",
-    "tns-ios": {
-      "version": "next"
-    },
-    "tns-android": {
-      "version": "next"
-    }
+    "id": "org.nativescript.ngtests"
   },
   "name": "ngtests",
   "version": "1.0.0",
@@ -25,15 +19,15 @@
   ],
   "homepage": "http://nativescript.org",
   "dependencies": {
-    "@angular/animations": "~8.0.0",
-    "@angular/common": "~8.0.0",
-    "@angular/compiler": "~8.0.0",
-    "@angular/core": "~8.0.0",
-    "@angular/forms": "~8.0.0",
+    "@angular/animations": "~8.1.0",
+    "@angular/common": "~8.1.0",
+    "@angular/compiler": "~8.1.0",
+    "@angular/core": "~8.1.0",
+    "@angular/forms": "~8.1.0",
     "@angular/http": "8.0.0-beta.10",
-    "@angular/platform-browser": "~8.0.0",
-    "@angular/platform-browser-dynamic": "~8.0.0",
-    "@angular/router": "~8.0.0",
+    "@angular/platform-browser": "~8.1.0",
+    "@angular/platform-browser-dynamic": "~8.1.0",
+    "@angular/router": "~8.1.0",
     "nativescript-angular": "../nativescript-angular",
     "nativescript-unit-test-runner": "~0.6.3",
     "rxjs": "~6.3.3",
@@ -60,7 +54,6 @@
     "karma-webpack": "3.0.5",
     "lazy": "1.0.11",
     "mocha": "6.1.4",
-    "nativescript-dev-typescript": "next",
     "nativescript-dev-webpack": "next",
     "remove-strict-webpack-plugin": "~0.1.2",
     "sinon": "^7.3.2",
