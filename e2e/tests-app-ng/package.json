@@ -36,13 +36,6 @@
     "@ngtools/webpack": "~8.0.0"
   },
   "scripts": {
-    "tslint": "tslint --config tslint.json 'app/**/*.ts'",
-    "ns-bundle": "ns-bundle",
-    "start-android-bundle": "npm run ns-bundle --android --run-app",
-    "start-ios-bundle": "npm run ns-bundle --ios --run-app",
-    "build-android-bundle": "npm run ns-bundle --android --build-app",
-    "build-ios-bundle": "npm run ns-bundle --ios --build-app",
-    "publish-ios-bundle": "npm run ns-bundle --ios --publish-app",
-    "generate-android-snapshot": "generate-android-snapshot --targetArchs arm,arm64,ia32 --install"
+    "tslint": "tslint --config tslint.json 'app/**/*.ts'"
   }
 }
