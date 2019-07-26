@@ -1,3 +1,17 @@
+## [8.0.3](https://github.com/NativeScript/nativescript-angular/compare/8.0.2...8.0.3) (2019-07-26)
+
+
+### Bug Fixes
+
+* add backwards compatibility for 'tns-core-modules' version 5.4.x ([635bb36](https://github.com/NativeScript/nativescript-angular/commit/635bb36))
+
+
+### Features
+
+* **tabs:** register tabs elements ([#1883](https://github.com/NativeScript/nativescript-angular/issues/1883)) ([092a833](https://github.com/NativeScript/nativescript-angular/commit/092a833))
+
+
+
 <a name="8.0.2"></a>
 ## [8.0.2](https://github.com/NativeScript/nativescript-angular/compare/8.0.1...8.0.2) (2019-06-28)
 
