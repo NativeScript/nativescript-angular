@@ -175,7 +175,6 @@ const frameMeta: ViewClassMeta = {
 registerElement("AbsoluteLayout", () => require("tns-core-modules/ui/layouts/absolute-layout").AbsoluteLayout);
 registerElement("ActivityIndicator", () => require("tns-core-modules/ui/activity-indicator").ActivityIndicator);
 registerElement("Border", () => require("tns-core-modules/ui/border").Border);
-registerElement("BottomNavigation", () => require("tns-core-modules/ui/bottom-navigation").BottomNavigation);
 registerElement("Button", () => require("tns-core-modules/ui/button").Button);
 registerElement("ContentView", () => require("tns-core-modules/ui/content-view").ContentView);
 registerElement("DatePicker", () => require("tns-core-modules/ui/date-picker").DatePicker);
@@ -203,11 +202,7 @@ registerElement("StackLayout", () => require("tns-core-modules/ui/layouts/stack-
 registerElement("FlexboxLayout", () => require("tns-core-modules/ui/layouts/flexbox-layout").FlexboxLayout);
 registerElement("Switch", () => require("tns-core-modules/ui/switch").Switch);
 registerElement("TabView", () => require("tns-core-modules/ui/tab-view").TabView);
-registerElement("TabStrip", () => require("tns-core-modules/ui/tab-navigation-base/tab-strip").TabStrip);
-registerElement("TabStripItem", () => require("tns-core-modules/ui/tab-navigation-base/tab-strip-item").TabStripItem);
-registerElement("TabContentItem",
-    () => require("tns-core-modules/ui/tab-navigation-base/tab-content-item").TabContentItem);
-registerElement("Tabs", () => require("tns-core-modules/ui/tabs").Tabs);
+
 registerElement("TextField", () => require("tns-core-modules/ui/text-field").TextField);
 registerElement("TextView", () => require("tns-core-modules/ui/text-view").TextView);
 registerElement("TimePicker", () => require("tns-core-modules/ui/time-picker").TimePicker);
@@ -220,3 +215,16 @@ registerElement("DetachedContainer", () => require("tns-core-modules/ui/proxy-vi
     { skipAddToDom: true });
 
 registerElement("page-router-outlet", () => require("tns-core-modules/ui/frame").Frame);
+
+try {
+    let BottomNavigation = require("tns-core-modules/ui/bottom-navigation").BottomNavigation;
+    registerElement("BottomNavigation", function () { return BottomNavigation; });
+    let TabStrip = require("tns-core-modules/ui/tab-navigation-base/tab-strip").TabStrip;
+    registerElement("TabStrip", function () { return TabStrip; });
+    let TabStripItem = require("tns-core-modules/ui/tab-navigation-base/tab-strip-item").TabStripItem;
+    registerElement("TabStripItem", function () { return TabStripItem; });
+    let TabContentItem = require("tns-core-modules/ui/tab-navigation-base/tab-content-item").TabContentItem;
+    registerElement("TabContentItem", function () { return TabContentItem; });
+    let Tabs = require("tns-core-modules/ui/tabs").Tabs;
+    registerElement("Tabs", function () { return Tabs; });
+} catch (e) { }
