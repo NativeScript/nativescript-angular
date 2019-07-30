@@ -44,6 +44,12 @@ function updateDeps(deps, devDeps, newDeps) {
         logUpdatedDependency(compilerCliDependency, version);
     }
 
+    const ngToolsWebpackDependency = "@ngtools/webpack";
+    if (devDeps[ngToolsWebpackDependency]) {
+        devDeps[ngToolsWebpackDependency] = version;
+        logUpdatedDependency(ngToolsWebpackDependency, version);
+    }
+
     function logUpdatedDependency(dependencyName, version) {
         console.log(`Updated dependency ${dependencyName} to version: ${version}.`);
     }
