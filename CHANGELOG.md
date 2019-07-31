@@ -1,3 +1,13 @@
+<a name="8.1.0"></a>
+# [8.1.0](https://github.com/NativeScript/nativescript-angular/compare/8.0.3...8.1.0) (2019-07-31)
+
+
+### Features
+
+* update to Angular 8.1.x ([#1907](https://github.com/NativeScript/nativescript-angular/issues/1907)) ([e1db5f8](https://github.com/NativeScript/nativescript-angular/commit/e1db5f8))
+
+
+
 ## [8.0.3](https://github.com/NativeScript/nativescript-angular/compare/8.0.2...8.0.3) (2019-07-26)
 
 
