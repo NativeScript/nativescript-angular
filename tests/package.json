@@ -29,7 +29,7 @@
     "@angular/platform-browser-dynamic": "~8.1.0",
     "@angular/router": "~8.1.0",
     "nativescript-angular": "../nativescript-angular",
-    "nativescript-unit-test-runner": "~0.6.3",
+    "nativescript-unit-test-runner": "0.7.0",
     "rxjs": "~6.3.3",
     "tns-core-modules": "next",
     "zone.js": "^0.9.1"

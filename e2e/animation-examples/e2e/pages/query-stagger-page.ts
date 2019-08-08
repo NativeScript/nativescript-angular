@@ -21,18 +21,18 @@ export class QueryWithStaggerPage extends BasePage {
     }
 
     async getChildren() {
-        const children: Array<UIElement> = await this._driver.findElementsByXPath(`${this._elementHelper.getXPathByTextAtributes("//*", "container", true)}/*`);
+        const children: Array<UIElement> = await this._driver.findElementsByXPath(`${this._elementHelper.getXPathByTextAttributes("//*", "container", true)}/*`);
         const orderedList: Array<UIElement> = await sort(children);
 
         return orderedList;
     }
 
-    async assertItemPosition(text: string, itemIndex: number, expctedElementsCount: number) {
+    async assertItemPosition(text: string, itemIndex: number, expectedElementsCount: number) {
         const startTime = Date.now();
         let item = await this._driver.findElementByTextIfExists(text)
         while ((!item || !(await item.isDisplayed())) && Date.now() - startTime <= 3000) { }
         const children = await this.getChildren();
-        assert.isTrue(children.length === expctedElementsCount);
+        assert.isTrue(children.length === expectedElementsCount);
         const element = children[itemIndex];
         const elementText = await element.text();
         console.log("Element text: ", elementText);

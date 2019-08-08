@@ -10,7 +10,7 @@ export class SelectorPage extends BasePage {
 
     constructor(_driver: AppiumDriver) {
         super(_driver);
-        this._itemsContainerXpath = this._elementHelper.getXPathByTextAtributes("//*", "itemsContainer", true);
+        this._itemsContainerXpath = this._elementHelper.getXPathByTextAttributes("//*", "itemsContainer", true);
         this._itemsContainerChildrenXpath = `${this._itemsContainerXpath}/*`
     }
 
@@ -41,18 +41,18 @@ export class SelectorPage extends BasePage {
         return orderedList;
     }
 
-    async assertElementPossition(expctedElementsCount: number) {
+    async assertElementPosition(expectedElementsCount: number) {
         const children = await this.getChildren();
-        assert.isTrue(children.length === expctedElementsCount)
+        assert.isTrue(children.length === expectedElementsCount)
         for (let index = 0; index < children.length - 1; index++) {
             const element = children[index];
-            const el = await (<any>element.driver()).elementByXPathIfExists(this._elementHelper.getXPathByTextAtributes("//*", `Item No.${index}`, true));
+            const el = await (<any>element.driver()).elementByXPathIfExists(this._elementHelper.getXPathByTextAttributes("//*", `Item No.${index}`, true));
             console.log(await el.text());
             assert.isTrue(el && el !== null);
         }
     }
 
     private itemXpath(item) {
-        return `${this._itemsContainerXpath}${this._elementHelper.getXPathByTextAtributes("//*", item, false)}`;
+        return `${this._itemsContainerXpath}${this._elementHelper.getXPathByTextAttributes("//*", item, false)}`;
     }
 }
