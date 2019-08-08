@@ -55,14 +55,14 @@ describe("smoke-tests", async function () {
         await selectorPage.enterExample();
         await selectorPage.addItem();
         await selectorPage.waitItemToToggleVisibility("Item No.2", true);
-        await selectorPage.assertElementPossition(4);
+        await selectorPage.assertElementPosition(4);
 
         await selectorPage.clickOnItem("second");
         await selectorPage.waitItemToToggleVisibility("second", false);
-        await selectorPage.assertElementPossition(3);
+        await selectorPage.assertElementPosition(3);
     });
 
-    it("querry with stagger", async function () {
+    it("query with stagger", async function () {
         const queryWithStaggerPage = new QueryWithStaggerPage(driver);
         await queryWithStaggerPage.enterExample();
         await queryWithStaggerPage.addItem();
@@ -103,7 +103,7 @@ describe("smoke-tests", async function () {
 
         await animationWithOptionsPage.clickOnItem("Harley Quinn");
         examplesCount--;
-        await animationWithOptionsPage.awaitItemToDissapear("Harley Quinn");
+        await animationWithOptionsPage.awaitItemToDisappear("Harley Quinn");
         await animationWithOptionsPage.assertItemPosition("Wonder Woman", 1, examplesCount);
         await animationWithOptionsPage.assertItemPosition("Joker", 2, examplesCount);
         await animationWithOptionsPage.assertItemPosition("Aquaman", 3, examplesCount);

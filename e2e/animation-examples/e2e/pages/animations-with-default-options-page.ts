@@ -29,10 +29,10 @@ export class AnimationsWithDefaultOptionsPage extends BasePage {
     }
 
     private getItem(item) {
-        return this._driver.findElementByXPathIfExists(`${this._elementHelper.getXPathByTextAtributes("//*", "itemsContainer", true)}${this._elementHelper.getXPathByTextAtributes("//*", item, false)}`);
+        return this._driver.findElementByXPathIfExists(`${this._elementHelper.getXPathByTextAttributes("//*", "itemsContainer", true)}${this._elementHelper.getXPathByTextAttributes("//*", item, false)}`);
     }
 
-    async awaitItemToDissapear(item: string, wait: number = 3000) {
+    async awaitItemToDisappear(item: string, wait: number = 3000) {
         const startTime = Date.now();
         let btn = await this.getItem(item);
         while (btn && await btn.isDisplayed() && Date.now() - startTime <= wait) {
@@ -53,16 +53,16 @@ export class AnimationsWithDefaultOptionsPage extends BasePage {
     }
 
     async getChildren() {
-        const children: Array<UIElement> = await this._driver.findElementsByXPath(`${this._elementHelper.getXPathByTextAtributes("//*", "itemsContainer", true)}/*`);
+        const children: Array<UIElement> = await this._driver.findElementsByXPath(`${this._elementHelper.getXPathByTextAttributes("//*", "itemsContainer", true)}/*`);
         const orderedList: Array<UIElement> = await sort(children);
 
         return orderedList;
     }
 
-    async assertItemPosition(text: string, itemIndex: number, expctedElementsCount: number) {
+    async assertItemPosition(text: string, itemIndex: number, expectedElementsCount: number) {
         const children = this._children;
 
-        assert.isTrue(children.length === expctedElementsCount, `Expected items count: ${expctedElementsCount} is not as actual: ${children.length}`);
+        assert.isTrue(children.length === expectedElementsCount, `Expected items count: ${expectedElementsCount} is not as actual: ${children.length}`);
         const element = children[itemIndex];
         console.log("Element text: ", await element.text());
         const currentElementText = await element.text();
