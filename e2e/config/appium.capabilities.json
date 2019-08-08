@@ -106,6 +106,16 @@
         "noReset": true,
         "fullReset": false
     },
+    "android29": {
+        "platformName": "Android",
+        "platformVersion": "29",
+        "deviceName": "Emulator-Api29-Google",
+        "avd": "Emulator-Api29-Google",
+        "lt": 60000,
+        "newCommandTimeout": 720,
+        "noReset": true,
+        "fullReset": false
+    },
     "sim.iPhone7.iOS100": {
         "platformName": "iOS",
         "platformVersion": "10.0",
