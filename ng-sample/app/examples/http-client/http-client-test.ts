@@ -70,7 +70,7 @@ export class HttpClientTest {
     }
 
     public loadLocal() {
-        this.http.get<DataResults<LocalData>>("~/examples/http/data.json")
+        this.http.get<DataResults<LocalData>>("~/examples/http-client/data.json")
             .subscribe((response) => {
                 let user = response.results[0];
                 this.onSuccess(user.title, user.description);

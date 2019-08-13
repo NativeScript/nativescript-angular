@@ -41,12 +41,14 @@
     "zone.js": "^0.9.1"
   },
   "devDependencies": {
+    "@angular/compiler-cli": "~8.2.0",
+    "@ngtools/webpack": "~8.2.0",
     "babel-traverse": "6.9.0",
     "babel-types": "6.10.0",
     "babylon": "6.8.1",
     "filewalker": "0.1.2",
     "lazy": "1.0.11",
-    "nativescript-dev-typescript": "next",
+    "nativescript-dev-webpack": "~1.0.1",
     "shelljs": "^0.7.0",
     "tslint": "^4.5.1",
     "typescript": "~3.5.3"
