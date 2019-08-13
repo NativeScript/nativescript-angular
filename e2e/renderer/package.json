@@ -4,9 +4,13 @@
   "readme": "NativeScript Application",
   "repository": "<fill-your-repository-here>",
   "nativescript": {
-    "id": "org.nativescript.renderer"
+    "id": "org.nativescript.renderer",
+    "tns-android": {
+      "version": "6.0.1"
+    }
   },
   "dependencies": {
+    "@angular/animations": "~8.2.0",
     "@angular/common": "~8.2.0",
     "@angular/compiler": "~8.2.0",
     "@angular/core": "~8.2.0",
@@ -15,7 +19,7 @@
     "@angular/platform-browser-dynamic": "~8.2.0",
     "@angular/router": "~8.2.0",
     "nativescript-angular": "file:../../nativescript-angular",
-    "nativescript-intl": "^3.0.0",
+    "nativescript-theme-core": "~1.0.4",
     "reflect-metadata": "~0.1.8",
     "rxjs": "^6.4.0",
     "tns-core-modules": "next",
@@ -27,17 +31,14 @@
     "@types/chai": "~4.1.7",
     "@types/mocha": "~5.2.5",
     "@types/node": "~10.12.18",
-    "babel-traverse": "6.25.0",
-    "babel-types": "6.25.0",
-    "babylon": "6.17.4",
-    "chai-as-promised": "~7.1.1",
-    "colors": "^1.1.2",
+    "babel-traverse": "6.26.0",
+    "babel-types": "6.26.0",
+    "babylon": "6.18.0",
     "lazy": "1.0.11",
     "mocha": "~5.2.0",
     "mochawesome": "~3.1.2",
     "nativescript-dev-appium": "^5.3.0",
     "nativescript-dev-webpack": "next",
-    "tslib": "^1.7.1",
     "typescript": "~3.5.3"
   },
   "scripts": {
