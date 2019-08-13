@@ -10,7 +10,7 @@ class DataItem {
 
 @Component({
     selector: "item-component",
-    styleUrls: ["examples/list/styles.css"],
+    styleUrls: ["./styles.css"],
     changeDetection: ChangeDetectionStrategy.OnPush,
     template: `<Label class="item" [text]='"[" + data.id +"]" + data.name'></Label>`
 })
@@ -21,7 +21,7 @@ export class ItemComponent implements DoCheck {
 
 @Component({
     selector: "header-component",
-    styleUrls: ["examples/list/styles.css"],
+    styleUrls: ["./styles.css"],
     changeDetection: ChangeDetectionStrategy.OnPush,
     template: `<Label class="header" [text]='data.name'></Label>`
 })
@@ -32,7 +32,7 @@ export class HeaderComponent implements DoCheck {
 
 @Component({
     selector: "list-test",
-    styleUrls: ["examples/list/styles.css"],
+    styleUrls: ["./styles.css"],
     changeDetection: ChangeDetectionStrategy.OnPush,
     template: `
         <GridLayout rows="auto * auto">
