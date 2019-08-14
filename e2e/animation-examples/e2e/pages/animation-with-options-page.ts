@@ -12,30 +12,30 @@ export class AnimationWithOptionsPage extends BasePage {
     async enterExample() {
         const exampleBtn = await this._driver.findElementByAccessibilityId("options");
         await exampleBtn.click();
-        this.initialPositionOfAnimatedBtn = await (await this.animatedBtn).location();
+        this.initialPositionOfAnimatedBtn = await (await this.animatedBtn()).location();
     }
 
-    get btnToggleAnimation() {
-        return this._driver.findElementByAccessibilityId("toggleAnimation");
+    async btnToggleAnimation() {
+        return await this._driver.findElementByAccessibilityId("toggleAnimation");
     }
 
-    get animatedBtn() {
-        this._driver.findElementsByAccessibilityId("animatedBtn", 10000);
-        return this._driver.findElementByAccessibilityIdIfExists("animatedBtn");
+    async animatedBtn() {
+        await this._driver.findElementsByAccessibilityId("animatedBtn", 10000);
+        return await this._driver.findElementByAccessibilityIdIfExists("animatedBtn");
     }
 
     async toggleAnimation() {
-        const btnTapToDisappear = await this.btnToggleAnimation;
+        const btnTapToDisappear = await this.btnToggleAnimation();
         await btnTapToDisappear.click();
     }
 
     async waitElementToHide() {
-        return this.waitElementTo(() => this.animatedBtn, false, 10000);
+        return await this.waitElementTo(() => this.animatedBtn(), false, 10000);
     }
 
     async assertPositionOfToggleAnimationBtn() {
-        this.waitElementTo(() => this.btnToggleAnimation, true, 5000);
-        const point: Point = await (await this.btnToggleAnimation).location();
+        await this.waitElementTo(() => this.btnToggleAnimation(), true, 5000);
+        const point: Point = await (await this.btnToggleAnimation()).location();
         assert.isTrue(point.y === this.initialPositionOfAnimatedBtn.y);
     }
 }
