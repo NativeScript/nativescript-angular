@@ -20,10 +20,19 @@
             "*": [
                 "./node_modules/tns-core-modules/*",
                 "./node_modules/*"
+            ],
+            "~/*": [
+                "app/*"
             ]
         },
     },
+    "include": [
+        "../nativescript-angular",
+        "**/*"
+    ],
     "exclude": [
+        "../nativescript-angular/node_modules",
+        "../nativescript-angular/**/*.d.ts",
         "node_modules",
         "platforms"
     ]

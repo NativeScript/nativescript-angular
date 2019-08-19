@@ -8,7 +8,7 @@ class DataItem {
 
 @Component({
     selector: "item-component",
-    styleUrls: ["examples/list/styles.css"],
+    styleUrls: ["./styles.css"],
     changeDetection: ChangeDetectionStrategy.OnPush,
     template: `
         <StackLayout [class.odd]="odd" [class.even]="even">
@@ -35,7 +35,7 @@ export class ItemComponent implements AfterViewChecked, DoCheck {
 
 @Component({
     selector: "list-test",
-    styleUrls: ["examples/list/styles.css"],
+    styleUrls: ["./styles.css"],
     changeDetection: ChangeDetectionStrategy.OnPush,
     template: `
         <GridLayout rows="auto * auto">

@@ -5,7 +5,7 @@ import { combineLatest } from "rxjs/operators";
 
 @Component({
     selector: "list-test-async",
-    styleUrls: ["examples/list/styles.css"],
+    styleUrls: ["./styles.css"],
     providers: [DataService],
     changeDetection: ChangeDetectionStrategy.OnPush,
     template: `
@@ -58,7 +58,7 @@ export class ListTestAsync {
 
 @Component({
     selector: "list-test-async-filter",
-    styleUrls: ["examples/list/styles.css"],
+    styleUrls: ["./styles.css"],
     providers: [DataService],
     changeDetection: ChangeDetectionStrategy.OnPush,
     template: `

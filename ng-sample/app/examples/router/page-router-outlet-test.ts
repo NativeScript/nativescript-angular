@@ -7,7 +7,7 @@ import { map } from "rxjs/operators";
 
 @Component({
     selector: "first",
-    styleUrls: ["examples/router/styles.css"],
+    styleUrls: ["./styles.css"],
     template: `
     <StackLayout>
         <Label text="First component" class="title"></Label>
@@ -34,7 +34,7 @@ export class FirstComponent implements OnInit, OnDestroy {
 
 @Component({
     selector: "second",
-    styleUrls: ["examples/router/styles.css"],
+    styleUrls: ["./styles.css"],
     template: `
     <StackLayout>
         <Label [text]="'Second component: ' + (id | async)" class="title"></Label>
@@ -68,7 +68,7 @@ export class SecondComponent implements OnInit, OnDestroy {
 
 @Component({
     selector: "third",
-    styleUrls: ["examples/router/styles.css"],
+    styleUrls: ["./styles.css"],
     template: `
     <StackLayout>
         <Label [text]="'Third component: ' + (id | async)" class="title"></Label>

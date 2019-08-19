@@ -7,7 +7,6 @@ import { DOCUMENT } from "@angular/common";
 import { Router } from "@angular/router";
 import { NativeScriptRouterModule } from "nativescript-angular/router";
 import { NativeScriptFormsModule } from "nativescript-angular/forms";
-import { NativeScriptHttpModule } from "nativescript-angular/http";
 import { NativeScriptHttpClientModule } from "nativescript-angular/http-client";
 
 import {
@@ -42,7 +41,6 @@ import { ListTest } from "./examples/list/list-test";
 import { ListTemplateSelectorTest } from "./examples/list/template-selector";
 import { ListTestAsync, ListTestFilterAsync } from "./examples/list/list-test-async";
 import { ImageTest } from "./examples/image/image-test";
-import { HttpTest } from "./examples/http/http-test";
 import { HttpClientTest } from "./examples/http-client/http-client-test";
 import { ActionBarTest } from "./examples/action-bar/action-bar-test";
 import { PlatfromDirectivesTest } from "./examples/platform-directives/platform-directives-test";
@@ -73,14 +71,12 @@ import { AnimationStatesMultiTest } from "./examples/animation/animation-states-
     imports: [
         NativeScriptModule,
         NativeScriptFormsModule,
-        NativeScriptHttpModule,
         NativeScriptHttpClientModule,
         NativeScriptRouterModule,
     ],
     exports: [
         NativeScriptModule,
         NativeScriptFormsModule,
-        NativeScriptHttpModule,
         NativeScriptHttpClientModule,
         NativeScriptRouterModule,
     ],
@@ -146,7 +142,6 @@ class MyErrorHandler implements ErrorHandler {
 platformNativeScriptDynamic().bootstrapModule(makeExampleModule(ListTestAsync));
 // platformNativeScriptDynamic().bootstrapModule(makeExampleModule(ImageTest));
 // platformNativeScriptDynamic().bootstrapModule(makeExampleModule(ModalTest));
-// platformNativeScriptDynamic().bootstrapModule(makeExampleModule(HttpTest));
 // platformNativeScriptDynamic().bootstrapModule(makeExampleModule(HttpClientTest));
 // platformNativeScriptDynamic().bootstrapModule(makeExampleModule(PlatfromDirectivesTest));
 // platformNativeScriptDynamic().bootstrapModule(makeExampleModule(ActionBarTest));

@@ -45,6 +45,21 @@
         "noReset": false,
         "fullReset": false
     },
+    "android22.sauce": {
+        "platformName": "Android",
+        "platformVersion": "5.1",
+        "deviceName": "Android GoogleAPI Emulator",
+        "lt": 60000,
+        "newCommandTimeout": 720,
+        "appiumVersion": "1.13.0",
+        "noReset": true,
+        "fullReset": false,
+        "app": "",
+        "idleTimeout": 120,
+        "automationName": "Appium",
+        "density":3.2,
+        "offsetPixels":51
+    },
     "android23": {
         "platformName": "Android",
         "platformVersion": "6.0",
@@ -101,6 +116,16 @@
         "platformVersion": "28",
         "deviceName": "Emulator-Api28-Google",
         "avd": "Emulator-Api28-Google",
+        "lt": 60000,
+        "newCommandTimeout": 720,
+        "noReset": true,
+        "fullReset": false
+    },
+    "android29": {
+        "platformName": "Android",
+        "platformVersion": "29",
+        "deviceName": "Emulator-Api29-Google",
+        "avd": "Emulator-Api29-Google",
         "lt": 60000,
         "newCommandTimeout": 720,
         "noReset": true,
