@@ -56,7 +56,9 @@
         "fullReset": false,
         "app": "",
         "idleTimeout": 120,
-        "automationName": "Appium"
+        "automationName": "Appium",
+        "density":3.2,
+        "offsetPixels":51
     },
     "android23": {
         "platformName": "Android",

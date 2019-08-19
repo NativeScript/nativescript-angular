@@ -33,9 +33,8 @@ export class LoaderComponent extends LoaderComponentBase {}
     `
 })
 export class LoaderComponentOnPush extends LoaderComponentBase { }
-
-describe("DetachedLoader", () => {
-
+describe("DetachedLoader", function() {
+    this.timeout(4000);
     beforeEach(nsTestBedBeforeEach([LoaderComponent, LoaderComponentOnPush], [], [], [TestComponent]));
     afterEach(nsTestBedAfterEach());
 
@@ -47,7 +46,7 @@ describe("DetachedLoader", () => {
     });
 
 
-    it("creates component when ChangeDetectionStrategy is OnPush", () => {
+    it("creates component when ChangeDetectionStrategy is OnPush", function() {
         return nsTestBedRender(LoaderComponentOnPush).then((fixture) => {
             const component: LoaderComponentOnPush = fixture.componentRef.instance;
             return component.loader.loadComponent(TestComponent);

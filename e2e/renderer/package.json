@@ -4,10 +4,7 @@
   "readme": "NativeScript Application",
   "repository": "<fill-your-repository-here>",
   "nativescript": {
-    "id": "org.nativescript.renderer",
-    "tns-android": {
-      "version": "6.0.1"
-    }
+    "id": "org.nativescript.renderer"
   },
   "dependencies": {
     "@angular/animations": "~8.2.0",

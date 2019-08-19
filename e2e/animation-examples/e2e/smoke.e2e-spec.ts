@@ -87,7 +87,7 @@ describe("smoke-tests", async function () {
         await animationWithOptionsPage.enterExample();
         await animationWithOptionsPage.toggleAnimation();
         const result = await animationWithOptionsPage.waitElementToHide();
-        assert.isFalse(result.isVisible, "The button should disappear!");
+        assert.isUndefined(result, "The button should disappear!");
 
         await animationWithOptionsPage.assertPositionOfToggleAnimationBtn();
     });
