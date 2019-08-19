@@ -38,7 +38,7 @@ describe("page-router-outlet-scenario", async function () {
 
         it("should not hide action bar when hidden by page", async function () {
             const hideActionBarButton = await driver.findElementByAutomationText("HideActionBar");
-            hideActionBarButton.click();
+            await hideActionBarButton.click();
 
             const screenMatches = await driver.compareScreen("actionBarVisibility-always-hidden", 5);
             assert(screenMatches);
@@ -46,7 +46,7 @@ describe("page-router-outlet-scenario", async function () {
 
         it("should not do anything when shown action bar by page", async function () {
             const showActionBarButton = await driver.findElementByAutomationText("ShowActionBar");
-            showActionBarButton.click();
+            await showActionBarButton.click();
 
             const screenMatches = await driver.compareScreen("actionBarVisibility-always-shown", 5);
             assert(screenMatches);
@@ -81,7 +81,7 @@ describe("page-router-outlet-scenario", async function () {
 
         it("should not show action bar when shown by page", async function () {
             const showActionBarButton = await driver.findElementByAutomationText("ShowActionBar");
-            showActionBarButton.click();
+            await showActionBarButton.click();
 
             const screenMatches = await driver.compareScreen("actionBarVisibility-never-shown", 5);
             assert(screenMatches);
@@ -89,7 +89,7 @@ describe("page-router-outlet-scenario", async function () {
 
         it("should not do anything when hidden action bar by page", async function () {
             const hideActionBarButton = await driver.findElementByAutomationText("HideActionBar");
-            hideActionBarButton.click();
+            await hideActionBarButton.click();
 
             const screenMatches = await driver.compareScreen("actionBarVisibility-never-hidden", 5);
             assert(screenMatches);
@@ -128,7 +128,7 @@ describe("page-router-outlet-scenario", async function () {
 
         it("should not show action bar when shown by page", async function () {
             const showActionBarButton = await driver.findElementByAutomationText("ShowActionBar");
-            showActionBarButton.click();
+            await showActionBarButton.click();
 
             const screenMatches = await driver.compareScreen(`actionBarVisibility-never-shown${imagePostFix}`, 5);
             assert(screenMatches);
@@ -136,7 +136,7 @@ describe("page-router-outlet-scenario", async function () {
 
         it("should not do anything when hidden action bar by page", async function () {
             const hideActionBarButton = await driver.findElementByAutomationText("HideActionBar");
-            hideActionBarButton.click();
+            await hideActionBarButton.click();
 
             const screenMatches = await driver.compareScreen(`actionBarVisibility-never-hidden${imagePostFix}`, 5);
             assert(screenMatches);
@@ -171,16 +171,14 @@ describe("page-router-outlet-scenario", async function () {
 
         it("should hide action bar when hidden by page", async function () {
             const hideActionBarButton = await driver.findElementByAutomationText("HideActionBar");
-            hideActionBarButton.click();
-
+            await hideActionBarButton.click();
             const screenMatches = await driver.compareScreen("actionBarVisibility-auto-hidden", 5);
             assert(screenMatches);
         });
 
         it("should show action bar when shown by page", async function () {
             const showActionBarButton = await driver.findElementByAutomationText("ShowActionBar");
-            showActionBarButton.click();
-
+            await showActionBarButton.click();
             const screenMatches = await driver.compareScreen("actionBarVisibility-auto-shown", 5);
             assert(screenMatches);
         });
