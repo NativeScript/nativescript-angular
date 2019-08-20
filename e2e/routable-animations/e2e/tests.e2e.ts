@@ -1,4 +1,4 @@
-import { AppiumDriver, createDriver, SearchOptions } from "nativescript-dev-appium";
+import { AppiumDriver, createDriver, SearchOptions, nsCapabilities } from "nativescript-dev-appium";
 import { assert } from "chai";
 
 describe("sample scenario", () => {
@@ -6,6 +6,7 @@ describe("sample scenario", () => {
     let driver: AppiumDriver;
 
     before(async function () {
+        nsCapabilities.testReporter.context = this;
         driver = await createDriver();
     });
 

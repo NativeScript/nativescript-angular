@@ -12,10 +12,11 @@
                     "--timeout",
                     "999999",
                     "--colors",
-                    "--reuseDevice",
-                    "--runType", 
-                    "sim.iPhone7.iOS110", 
-                    "${workspaceRoot}/e2e"
+                    "${workspaceRoot}/e2e",
+                    "-a",
+                    "--grep",
+                    "actionBarVisibility 'auto' shows action bars based on page"
+
                 ],
                 "internalConsoleOptions": "openOnSessionStart"
             }
