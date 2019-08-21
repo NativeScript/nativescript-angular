@@ -1,3 +1,22 @@
+<a name="8.2.0"></a>
+# [8.2.0](https://github.com/NativeScript/nativescript-angular/compare/8.1.0...8.2.0) (2019-08-13)
+
+
+### Features
+
+* Update to Angular 8.2.x ([dbe983b](https://github.com/NativeScript/nativescript-angular/commit/dbe983b))
+* Remove `@angular/http` from the dependecies ([#1842](https://github.com/NativeScript/nativescript-angular/issues/1842)) ([c6af21d](https://github.com/NativeScript/nativescript-angular/commit/c6af21d))
+
+### BREAKING CHANGES:
+
+* The `NativeScriptHttpModule` is removed
+* `@angular/http` is removed from the dependencies
+
+Migration steps:
+* If using `NativeScriptHttpModule`, replace with `NativeScriptHttpClientModule` as done [here](https://github.com/NativeScript/nativescript-sdk-examples-ng/commit/16d3caee2b0ee2d88d328b75bde49eea6c96920a)
+* as `@angular/http` is no longer a peerDependency of `nativescript-angular`, you can remove if from your dependencies
+
+
 <a name="8.1.0"></a>
 # [8.1.0](https://github.com/NativeScript/nativescript-angular/compare/8.0.3...8.1.0) (2019-07-31)
 
