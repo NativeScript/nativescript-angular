@@ -1,3 +1,13 @@
+<a name="8.2.1"></a>
+## [8.2.1](https://github.com/NativeScript/nativescript-angular/compare/8.2.0...8.2.1) (2019-08-28)
+
+
+### Bug Fixes
+
+* **hmr:** close modal views during livesync [#7669](https://github.com/NativeScript/nativescript-angular/issues/7669) ([#1944](https://github.com/NativeScript/nativescript-angular/issues/1944)) ([73d83ed](https://github.com/NativeScript/nativescript-angular/commit/73d83ed))
+
+
+
 <a name="8.2.0"></a>
 # [8.2.0](https://github.com/NativeScript/nativescript-angular/compare/8.1.0...8.2.0) (2019-08-13)
 
