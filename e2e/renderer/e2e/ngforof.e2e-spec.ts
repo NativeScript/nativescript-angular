@@ -75,7 +75,7 @@ describe("ngForOf scenario", function () {
     });
 
     it("should render new elements correctly after all old ones are removed", async function () {
-        for (let i = 0; i < 5; i += 1) {
+        for (let i = 0; i < 3; i += 1) {
             await addElement();
             await checkCorrectOrderAll();
         }

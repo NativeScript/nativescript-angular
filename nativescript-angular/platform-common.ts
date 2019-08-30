@@ -6,6 +6,7 @@ import "./zone-js/dist/zone-nativescript";
 import "./polyfills/array";
 import "./polyfills/console";
 import { profile, uptime } from "tns-core-modules/profiling";
+import { getRootView } from "tns-core-modules/application";
 import "./dom-adapter";
 
 import {
@@ -153,6 +154,11 @@ export class NativeScriptPlatformRef extends PlatformRef {
     private bootstrapApp() {
         (<any>global).__onLiveSyncCore = () => {
             if (this.appOptions.hmrOptions) {
+                const rootView = getRootView();
+                if (rootView) {
+                    rootView._closeAllModalViewsInternal();
+                }
+
                 this.appOptions.hmrOptions.livesyncCallback(() => this._livesync());
             } else {
                 this._livesync();

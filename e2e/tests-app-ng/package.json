@@ -4,9 +4,16 @@
   "readme": "NativeScript Application",
   "repository": "<fill-your-repository-here>",
   "nativescript": {
-    "id": "org.nativescript.testsappng"
+    "id": "org.nativescript.testsappng",
+    "tns-ios": {
+      "version": "6.0.2"
+    },
+    "tns-android": {
+      "version": "6.0.2"
+    }
   },
   "dependencies": {
+    "@angular/animations": "~8.2.0",
     "@angular/common": "~8.2.0",
     "@angular/compiler": "~8.2.0",
     "@angular/core": "~8.2.0",
@@ -14,7 +21,7 @@
     "@angular/platform-browser": "~8.2.0",
     "@angular/platform-browser-dynamic": "~8.2.0",
     "@angular/router": "~8.2.0",
-    "nativescript-angular": "next",
+    "nativescript-angular": "file:../../nativescript-angular",
     "nativescript-intl": "~3.0.0",
     "nativescript-theme-core": "^1.0.4",
     "reflect-metadata": "~0.1.8",
@@ -23,6 +30,8 @@
     "zone.js": "^0.9.1"
   },
   "devDependencies": {
+    "@angular/compiler-cli": "~8.2.0",
+    "@ngtools/webpack": "~8.2.0",
     "babel-traverse": "6.24.1",
     "babel-types": "6.24.1",
     "babylon": "6.17.0",
@@ -31,9 +40,7 @@
     "lazy": "1.0.11",
     "nativescript-dev-webpack": "next",
     "tslint": "^5.4.3",
-    "typescript": "~3.5.3",
-    "@angular/compiler-cli": "~8.0.0",
-    "@ngtools/webpack": "~8.0.0"
+    "typescript": "~3.5.3"
   },
   "scripts": {
     "tslint": "tslint --config tslint.json 'app/**/*.ts'"
