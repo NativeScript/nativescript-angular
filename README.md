@@ -24,10 +24,10 @@ This repository contains the code for integration of NativeScript with Angular.
 
 The `ng-sample` app is meant for testing stuff while developing the renderer code, and isn't the best example out there. You can take a look at these sample apps that use the published builds from npm:
 
-* [Hello world starter](https://github.com/NativeScript/template-hello-world-ng)
-* [Master-detail template](https://github.com/NativeScript/template-master-detail-ng)
-* [Drawer navigation template](https://github.com/NativeScript/template-drawer-navigation-ng)
-* [TabView navigation template](https://github.com/NativeScript/template-tab-navigation-ng)
+* [Hello world starter](https://github.com/NativeScript/nativescript-app-templates/tree/master/packages/template-hello-world-ng)
+* [Master-detail template](https://github.com/NativeScript/nativescript-app-templates/tree/master/packages/template-master-detail-ng)
+* [Drawer navigation template](https://github.com/NativeScript/nativescript-app-templates/tree/master/packages/template-drawer-navigation-ng)
+* [TabView navigation template](https://github.com/NativeScript/nativescript-app-templates/tree/master/packages/template-tab-navigation-ng)
 * [NativeScript Angular SDK examples](https://github.com/NativeScript/nativescript-sdk-examples-ng)
 
 ## Contribute
