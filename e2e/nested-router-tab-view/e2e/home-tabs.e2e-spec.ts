@@ -3,12 +3,12 @@ import { Screen } from "./screen"
 import {
     testPlayerNavigated,
     testTeamNavigated,
-    testPlayerNextNavigated,
-    testTeamNextNavigated,
-    testPlayersNavigated,
-    canGoBack,
-    testTeamsNavigated
-} from "./shared.e2e-spec"
+    testPlayerNextNavigated
+} from "./shared.e2e-spec";
+import { isSauceLab } from "nativescript-dev-appium/lib/parser";
+
+const QUEUE_WAIT_TIME: number = 600000; // Sometimes SauceLabs threads are not available and the tests wait in a queue to start. Wait 10 min before timeout.
+const isSauceRun = isSauceLab;
 
 const pages = ["Go To Home Page", "Go To Lazy Home Page"];
 
@@ -17,12 +17,18 @@ describe("home-tabs:", async function () {
     let screen: Screen;
 
     before(async function () {
+        this.timeout(QUEUE_WAIT_TIME);
         nsCapabilities.testReporter.context = this;
         driver = await createDriver();
         screen = new Screen(driver);
     });
 
     after(async function () {
+        if (isSauceRun) {
+            driver.sessionId().then(function (sessionId) {
+                console.log("Report https://saucelabs.com/beta/tests/" + sessionId);
+            });
+        }
         await driver.quit();
         console.log("Quit driver!");
     });
@@ -67,7 +73,7 @@ describe("home-tabs:", async function () {
                 await screen.loadedTeamList();
             });
 
-            it("should navigate to Tabs without Players/Teams navigation", async function () {
+            it("should navigate to Tabs without Players\\Teams navigation", async function () {
                 await screen.navigateToTabsPage();
                 await screen.loadedTabs();
                 await screen.loadedPlayersList();
@@ -77,7 +83,7 @@ describe("home-tabs:", async function () {
                 await screen.loadedTeamList();
             });
 
-            it("should navigate Player One/Team One then go to Tabs and back", async function () {
+            it("should navigate Player One\\Team One then go to Tabs and back", async function () {
                 await testPlayerNavigated(screen, screen.playerOne);
                 await testTeamNavigated(screen, screen.teamOne);
                 await screen.navigateToTabsPage();
