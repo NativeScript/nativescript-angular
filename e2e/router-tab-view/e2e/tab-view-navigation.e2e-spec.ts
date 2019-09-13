@@ -1,12 +1,26 @@
 import { AppiumDriver, createDriver, SearchOptions, nsCapabilities } from "nativescript-dev-appium";
 import { assert } from "chai";
+import { isSauceLab } from "nativescript-dev-appium/lib/parser";
+
+const QUEUE_WAIT_TIME: number = 600000; // Sometimes SauceLabs threads are not available and the tests wait in a queue to start. Wait 10 min before timeout.
 
 describe("TabView with page-router-outlet in each tab", async function () {
     let driver: AppiumDriver;
 
     before(async function () {
+        this.timeout(QUEUE_WAIT_TIME);
         nsCapabilities.testReporter.context = this;
         driver = await createDriver();
+    });
+
+    after(async function () {
+        if (isSauceLab) {
+            driver.sessionId().then(function (sessionId) {
+                console.log("Report https://saucelabs.com/beta/tests/" + sessionId);
+            });
+        }
+        await driver.quit();
+        console.log("Quit driver!");
     });
 
     afterEach(async function () {
@@ -31,8 +45,17 @@ describe("TabView with page-router-outlet in each tab", async function () {
 
     it("should go forward and go back on first(player) tab", async function () {
         await driver.findElementByAutomationText("Player List");
-
-        await navigateToPlayerItem(driver, "Player One", "1");
+        let player = await driver.findElementByAutomationText("Player One");
+        await player.click();
+        await driver.wait(1000);
+        player = await driver.findElementByAutomationText("Player One");
+        if (player) {
+            await player.click(); // First click does not open the details page
+            await driver.wait(2000); // Even its clicked twice it takes time to open the view
+        }
+        await driver.findElementByAutomationText("Player Details");
+        await driver.findElementByAutomationText("1");
+        await driver.findElementByAutomationText("Player One");
 
         await driver.navBack();
         await driver.findElementByAutomationText("Player List");

@@ -4,17 +4,33 @@ import {
     roots,
     testNestedModalPageBackground,
     testDialogBackground,
-} from "./screens/shared-screen"
+} from "./screens/shared-screen";
+import { isSauceLab } from "nativescript-dev-appium/lib/parser";
+
+const QUEUE_WAIT_TIME: number = 600000; // Sometimes SauceLabs threads are not available and the tests wait in a queue to start. Wait 10 min before timeout.
+const isSauceRun = isSauceLab;
 
 describe("modal-layout:", async function () {
     let driver: AppiumDriver;
     let screen: Screen;
 
     before(async function () {
+        this.timeout(QUEUE_WAIT_TIME);
         nsCapabilities.testReporter.context = this;
         driver = await createDriver();
         screen = new Screen(driver);
     });
+
+    after(async function () {
+        if (isSauceRun) {
+            driver.sessionId().then(function (sessionId) {
+                console.log("Report https://saucelabs.com/beta/tests/" + sessionId);
+            });
+        }
+        await driver.quit();
+        console.log("Quit driver!");
+    });
+
     for (let index = 0; index < roots.length; index++) {
         const root = roots[index];
         describe(`${root} modal no frame background scenarios:`, async function () {

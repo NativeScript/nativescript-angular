@@ -5,6 +5,10 @@ import {
     UIElement,
     nsCapabilities
 } from "nativescript-dev-appium";
+import { isSauceLab } from "nativescript-dev-appium/lib/parser";
+
+const QUEUE_WAIT_TIME: number = 600000; // Sometimes SauceLabs threads are not available and the tests wait in a queue to start. Wait 10 min before timeout.
+const isSauceRun = isSauceLab;
 
 import { isOnTheLeft } from "./helpers/location";
 import { assert } from "chai";
@@ -12,7 +16,31 @@ import { assert } from "chai";
 describe("Action Bar scenario", async function () {
     let driver: AppiumDriver;
 
-    describe("dynamically add/remove ActionItems", async function () {
+    before(async function () {
+        this.timeout(QUEUE_WAIT_TIME);
+        nsCapabilities.testReporter.context = this;
+        driver = await createDriver();
+        await driver.driver.resetApp();
+    });
+
+    after(async function () {
+        if (isSauceRun) {
+            driver.sessionId().then(function (sessionId) {
+                console.log("Report https://saucelabs.com/beta/tests/" + sessionId);
+            });
+        }
+        await driver.quit();
+        console.log("Quit driver!");
+    });
+
+    afterEach(async function () {
+        if (this.currentTest.state === "failed") {
+            await driver.logTestArtifacts(this.currentTest.title);
+        }
+    });
+
+
+    describe("dynamically add\\remove ActionItems", async function () {
         let firstActionItem: UIElement;
         let secondActionItem: UIElement;
         let toggleFirstButton: UIElement;
@@ -20,14 +48,6 @@ describe("Action Bar scenario", async function () {
 
         before(async function () {
             nsCapabilities.testReporter.context = this;
-            driver = await createDriver();
-            await driver.driver.resetApp();
-        });
-
-        afterEach(async function () {
-            if (this.currentTest.state === "failed") {
-                await driver.logTestArtifacts(this.currentTest.title);
-            }
         });
 
         it("should navigate to page", async function () {
@@ -115,14 +135,7 @@ describe("Action Bar scenario", async function () {
 
         before(async function () {
             nsCapabilities.testReporter.context = this;
-            driver = await createDriver();
             await driver.driver.resetApp();
-        });
-
-        afterEach(async function () {
-            if (this.currentTest.state === "failed") {
-                await driver.logTestArtifacts(this.currentTest.title);
-            }
         });
 
         it("should navigate to page", async function () {
