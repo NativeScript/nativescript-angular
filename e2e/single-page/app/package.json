@@ -1,5 +1,9 @@
 {
   "main": "main.js",
   "name": "nativescript-template-ng-tutorial",
-  "version": "3.1.0"
+  "version": "3.1.0",
+  "android": {
+    "v8Flags": "--expose_gc",
+    "markingMode": "none"
+  }
 }
