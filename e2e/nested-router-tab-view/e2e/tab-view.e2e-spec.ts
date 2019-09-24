@@ -5,19 +5,29 @@ import {
     testTeamNavigated,
     testPlayerNextNavigated,
     testTeamNextNavigated,
-} from "./shared.e2e-spec"
+} from "./shared.e2e-spec";
+import { isSauceLab } from "nativescript-dev-appium/lib/parser";
+
+const QUEUE_WAIT_TIME: number = 600000; // Sometimes SauceLabs threads are not available and the tests wait in a queue to start. Wait 10 min before timeout.
+const isSauceRun = isSauceLab;
 
 describe("tab-view:", async function () {
     let driver: AppiumDriver;
     let screen: Screen;
 
     before(async function () {
+        this.timeout(QUEUE_WAIT_TIME);
         nsCapabilities.testReporter.context = this;
         driver = await createDriver();
         screen = new Screen(driver);
     });
 
     after(async function () {
+        if (isSauceRun) {
+            driver.sessionId().then(function (sessionId) {
+                console.log("Report https://saucelabs.com/beta/tests/" + sessionId);
+            });
+        }
         await driver.quit();
         console.log("Quit driver!");
     });
@@ -45,7 +55,7 @@ describe("tab-view:", async function () {
         await screen.loadedPlayersList();
     });
 
-    it("should navigate Player One/Team One then back separately", async function () {
+    it("should navigate Player One\\Team One then back separately", async function () {
         this.retries(2);
         await testPlayerNavigated(screen, screen.playerOne);
         await gotoTeamsTab(driver);
@@ -57,7 +67,7 @@ describe("tab-view:", async function () {
         await screen.loadedPlayersList();
     });
 
-    it("should navigate Player One/Team One then next Player/Team then back", async function () {
+    it("should navigate Player One\\Team One then next Player\\Team then back", async function () {
         await testPlayerNavigated(screen, screen.playerOne);
         await testPlayerNextNavigated(screen, screen.playerTwo);
         await gotoTeamsTab(driver);

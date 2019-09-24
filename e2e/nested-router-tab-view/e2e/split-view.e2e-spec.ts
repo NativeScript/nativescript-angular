@@ -7,7 +7,11 @@ import {
     testTeamNextNavigated,
     testPlayersNavigated,
     canGoBack
-} from "./shared.e2e-spec"
+} from "./shared.e2e-spec";
+import { isSauceLab } from "nativescript-dev-appium/lib/parser";
+
+const QUEUE_WAIT_TIME: number = 600000; // Sometimes SauceLabs threads are not available and the tests wait in a queue to start. Wait 10 min before timeout.
+const isSauceRun = isSauceLab;
 
 const pages = ["Go To Home Page", "Go To Lazy Home Page"];
 
@@ -16,16 +20,21 @@ describe("split-view:", async function () {
     let screen: Screen;
 
     before(async function () {
+        this.timeout(QUEUE_WAIT_TIME);
         nsCapabilities.testReporter.context = this;
         driver = await createDriver();
         screen = new Screen(driver);
     });
 
     after(async function () {
+        if (isSauceRun) {
+            driver.sessionId().then(function (sessionId) {
+                console.log("Report https://saucelabs.com/beta/tests/" + sessionId);
+            });
+        }
         await driver.quit();
         console.log("Quit driver!");
     });
-
 
     for (let index = 0; index < pages.length; index++) {
         const page = pages[index];
@@ -49,7 +58,7 @@ describe("split-view:", async function () {
                 await canGoBack(screen, screen.canGoBackActivatedRoute, true);
             });
 
-            it("should navigate Player One/Team One then back separately", async function () {
+            it("should navigate Player One\\Team One then back separately", async function () {
                 await testPlayerNavigated(screen, screen.playerOne);
                 await testTeamNavigated(screen, screen.teamOne);
                 await canGoBack(screen, screen.canGoBackPlayers, true);
@@ -61,7 +70,7 @@ describe("split-view:", async function () {
                 await screen.loadedTeamList();
             });
 
-            it("should navigate Player One/Team One then back separately (keep order)", async function () {
+            it("should navigate Player One\\Team One then back separately (keep order)", async function () {
                 await testPlayerNavigated(screen, screen.playerOne);
                 await testTeamNavigated(screen, screen.teamOne);
                 await backTeams(driver);
@@ -70,7 +79,7 @@ describe("split-view:", async function () {
                 await screen.loadedPlayersList();
             });
 
-            it("should navigate Player One/Team One then back simultaneously", async function () {
+            it("should navigate Player One\\Team One then back simultaneously", async function () {
                 await testPlayerNavigated(screen, screen.playerOne);
                 await testTeamNavigated(screen, screen.teamOne);
                 await canGoBack(screen, screen.canGoBackBoth, true);
@@ -80,7 +89,7 @@ describe("split-view:", async function () {
                 await screen.loadedPlayersList();
             });
 
-            it("should navigate Player One/Team One then next Player/Team then back separately", async function () {
+            it("should navigate Player One\\Team One then next Player/Team then back separately", async function () {
                 await testPlayerNavigated(screen, screen.playerOne);
                 await testTeamNavigated(screen, screen.teamOne);
                 await testPlayerNextNavigated(screen, screen.playerTwo);
@@ -95,7 +104,7 @@ describe("split-view:", async function () {
                 await screen.loadedPlayersList();
             });
 
-            it("should navigate Player One/Team One then back", async function () {
+            it("should navigate Player One\\Team One then back", async function () {
                 await testPlayerNavigated(screen, screen.playerOne);
                 await testTeamNavigated(screen, screen.teamOne);
                 await back(driver);
@@ -118,7 +127,7 @@ describe("split-view:", async function () {
                 await screen.loadedPlayersList();
             });
 
-            it("should navigate Player One/Team One then Android back button", async function () {
+            it("should navigate Player One\\Team One then Android back button", async function () {
                 if (driver.isAndroid) {
                     await testPlayerNavigated(screen, screen.playerOne);
                     await testTeamNavigated(screen, screen.teamOne);
