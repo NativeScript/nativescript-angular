@@ -43,10 +43,13 @@ export class ListViewAsyncPipeComponent {
             counter++;
             items.push(new DataItem(counter, "data item " + counter));
             subscr.next(items);
+            if (counter == 11) {
+                clearInterval(intervalId);
+            }
         }, 1000);
 
         setTimeout(() => {
             clearInterval(intervalId);
-        }, 10000);
+        }, 11000);
     }
 }

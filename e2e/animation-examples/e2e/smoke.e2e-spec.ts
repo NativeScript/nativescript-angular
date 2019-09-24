@@ -9,13 +9,28 @@ import { AnimationWithOptionsPage } from "./pages/animation-with-options-page";
 import { AnimationsWithDefaultOptionsPage } from "./pages/animations-with-default-options-page";
 import { AnimateChildPage } from "./pages/animate-child-page";
 import { HeroPage } from "./pages/hero-page";
+import { isSauceLab } from "nativescript-dev-appium/lib/parser";
+
+const QUEUE_WAIT_TIME: number = 600000; // Sometimes SauceLabs threads are not available and the tests wait in a queue to start. Wait 10 min before timeout.
+const isSauceRun = isSauceLab;
 
 describe("smoke-tests", async function () {
     let driver: AppiumDriver;
 
     before(async function () {
+        this.timeout(QUEUE_WAIT_TIME);
         nsCapabilities.testReporter.context = this;
         driver = await createDriver();
+    });
+
+    after(async function () {
+        if (isSauceRun) {
+            driver.sessionId().then(function (sessionId) {
+                console.log("Report https://saucelabs.com/beta/tests/" + sessionId);
+            });
+        }
+        await driver.quit();
+        console.log("Quit driver!");
     });
 
     afterEach(async function () {
