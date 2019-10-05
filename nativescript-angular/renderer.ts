@@ -356,13 +356,18 @@ class EmulatedRenderer extends NativeScriptRenderer {
     private addStyles(styles: (string | any[])[], componentId: string) {
         styles.map(s => s.toString())
             .map(s => replaceNgAttribute(s, componentId))
-            .forEach(addStyleToCss);
+            .forEach(addScopedStyleToCss);
     }
 }
 
 // tslint:disable-next-line
 const addStyleToCss = profile('"renderer".addStyleToCss', function addStyleToCss(style: string): void {
     addCss(style);
+});
+
+// tslint:disable-next-line
+const addScopedStyleToCss = profile('"renderer".addStyleToCss', function addStyleToCss(style: string): void {
+    addCss(style, true);
 });
 
 function replaceNgAttribute(input: string, componentId: string): string {
