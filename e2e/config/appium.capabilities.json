@@ -201,6 +201,13 @@
         "noReset": true,
         "fullReset": false
     },
+    "sim.iPhoneXR.ios12": {
+        "platformName": "iOS",
+        "platformVersion": "12.0",
+        "deviceName": "iPhone XR 12",
+        "noReset": true,
+        "fullReset": false
+    },
     "sim.iPhoneXR.ios13": {
         "platformName": "iOS",
         "platformVersion": "13.0",
