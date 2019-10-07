@@ -15,6 +15,9 @@ export * from "./renderer";
 export * from "./view-util";
 export * from "./resource-loader";
 
+export * from "./nativescript.module";
+export * from "./platform";
+
 export {
     ViewClass,
     ViewClassMeta,
