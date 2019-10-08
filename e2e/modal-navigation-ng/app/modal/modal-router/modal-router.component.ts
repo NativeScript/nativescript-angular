@@ -1,7 +1,7 @@
 import { Component, OnInit } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
-import { RouterExtensions } from "@nativescript/angular/router";
-import { ModalDialogParams } from "@nativescript/angular/directives/dialogs";
+import { RouterExtensions } from "nativescript-angular/router";
+import { ModalDialogParams } from "nativescript-angular/directives/dialogs";
 
 @Component({
     moduleId: module.id,

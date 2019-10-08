@@ -1,9 +1,9 @@
 import { Component } from "@angular/core";
-import { ModalDialogOptions, ModalDialogService } from "@nativescript/angular/modal-dialog";
+import { ModalDialogOptions, ModalDialogService } from "nativescript-angular/modal-dialog";
 
 import { ViewContainerRefService } from "../shared/ViewContainerRefService";
 import { ModalViewComponent } from "../modal-shared/modal-view.component";
-import { RouterExtensions } from "@nativescript/angular/router";
+import { RouterExtensions } from "nativescript-angular/router";
 
 @Component({
     selector: "ns-second",

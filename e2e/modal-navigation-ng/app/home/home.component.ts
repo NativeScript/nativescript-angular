@@ -1,5 +1,5 @@
 import { Component, ViewContainerRef } from "@angular/core";
-import { ModalDialogService, RouterExtensions } from "@nativescript/angular";
+import { ModalDialogService, RouterExtensions } from "nativescript-angular";
 import { ViewContainerRefService } from "../shared/ViewContainerRefService";
 
 @Component({
