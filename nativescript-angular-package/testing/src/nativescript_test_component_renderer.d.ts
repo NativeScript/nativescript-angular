@@ -1,7 +1,1 @@
-import { TestComponentRenderer } from "@angular/core/testing";
-/**
- * A NativeScript based implementation of the TestComponentRenderer.
- */
-export declare class NativeScriptTestComponentRenderer extends TestComponentRenderer {
-    insertRootElement(rootElId: string): void;
-}
+export * from "@nativescript/angular/testing/src/nativescript_test_component_renderer";

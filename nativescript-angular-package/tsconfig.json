@@ -13,9 +13,9 @@
     "noEmitOnError": true,
     "noImplicitAny": false,
     "lib": [
-      "dom",
-      "es6",
-      "es2015.iterable"
+        "dom",
+        "es6",
+        "es2015.iterable"
     ],
     "baseUrl": "."
   },
@@ -27,5 +27,5 @@
   },
   "include": [
     "**/*.ts"
-  ]   
+  ]
 }

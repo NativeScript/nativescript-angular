@@ -5,8 +5,7 @@ import { AppComponent } from "./app.component";
 
 import { DataService } from "./data.service";
 
-import { enable as traceEnable, addCategories } from "tns-core-modules/trace";
-import { routerTraceCategory } from "nativescript-angular/trace";
+import { enable as traceEnable } from "tns-core-modules/trace";
 
 // addCategories(routerTraceCategory);
 traceEnable();
