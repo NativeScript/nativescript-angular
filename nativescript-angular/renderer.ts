@@ -366,7 +366,7 @@ const addStyleToCss = profile('"renderer".addStyleToCss', function addStyleToCss
 });
 
 // tslint:disable-next-line
-const addScopedStyleToCss = profile('"renderer".addStyleToCss', function addScopedStyleToCss(style: string): void {
+const addScopedStyleToCss = profile('"renderer".addScopedStyleToCss', function addScopedStyleToCss(style: string): void {
     addCss(style, true);
 });
 
