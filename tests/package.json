@@ -1,6 +1,12 @@
 {
   "nativescript": {
-    "id": "org.nativescript.ngtests"
+    "id": "org.nativescript.ngtests",
+    "tns-ios": {
+      "version": "6.1.1"
+    },
+    "tns-android": {
+      "version": "6.1.2"
+    }
   },
   "name": "ngtests",
   "version": "1.0.0",
@@ -27,7 +33,7 @@
     "@angular/platform-browser": "~8.2.0",
     "@angular/platform-browser-dynamic": "~8.2.0",
     "@angular/router": "~8.2.0",
-    "nativescript-angular": "../nativescript-angular",
+    "nativescript-angular": "../nativescript-angular-package",
     "nativescript-unit-test-runner": "0.7.0",
     "rxjs": "^6.4.0",
     "tns-core-modules": "next",

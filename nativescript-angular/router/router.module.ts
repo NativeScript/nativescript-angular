@@ -16,11 +16,7 @@ export { PageRoute } from "./page-router-outlet";
 export { RouterExtensions } from "./router-extensions";
 export { NSModuleFactoryLoader } from "./ns-module-factory-loader";
 
-export { NSRouterLink } from "./ns-router-link";
-export { NSRouterLinkActive } from "./ns-router-link-active";
-export { PageRouterOutlet } from "./page-router-outlet";
-export { NSEmptyOutletComponent } from "./ns-empty-outlet.component";
-export { NSLocationStrategy } from "./ns-location-strategy";
+export { NSRouterLink, NSRouterLinkActive, PageRouterOutlet, NSEmptyOutletComponent, NSLocationStrategy };
 
 const ROUTER_DIRECTIVES = [NSRouterLink, NSRouterLinkActive, PageRouterOutlet, NSEmptyOutletComponent];
 

@@ -33,6 +33,8 @@ export function errorHandlerFactory() {
     return new ErrorHandler();
 }
 
+export { DetachedLoader };
+
 @NgModule({
     declarations: [
         DetachedLoader,
