@@ -200,5 +200,25 @@
         "deviceName": "iPhone XR",
         "noReset": true,
         "fullReset": false
+    },
+    "sim.iPhoneXR.ios12": {
+        "platformName": "iOS",
+        "platformVersion": "12.0",
+        "deviceName": "iPhone XR 12",
+        "noReset": true,
+        "fullReset": false
+    },
+    "sim.iPhoneXR.ios13": {
+        "platformName": "iOS",
+        "platformVersion": "13.0",
+        "deviceName": "iPhone XR 13",
+        "appiumVersion": "1.15.0",
+        "noReset": true,
+        "fullReset": false,
+        "density": 3,
+        "offsetPixels": 87,
+        "app": "",
+        "idleTimeout": 120,
+        "automationName": "Appium"
     }
 }
