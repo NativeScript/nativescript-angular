@@ -1,6 +1,6 @@
 import { Component, ViewContainerRef } from "@angular/core";
 import { Router, NavigationEnd } from "@angular/router";
-import { NSLocationStrategy } from "nativescript-angular";
+import { NSLocationStrategy } from "nativescript-angular/router/ns-location-strategy";
 
 import { ViewContainerRefService } from "./shared/ViewContainerRefService";
 import { AppModule } from "./app.module";

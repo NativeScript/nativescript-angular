@@ -1,6 +1,6 @@
 import { Component, ViewContainerRef } from "@angular/core";
 import { Router, NavigationEnd } from "@angular/router";
-// import { NSLocationStrategy } from "nativescript-angular";
+import { NSLocationStrategy } from "nativescript-angular/router/ns-location-strategy";
 
 import { ViewContainerRefService } from "./shared/ViewContainerRefService";
 import { AppModule } from "./app.module";
@@ -14,14 +14,14 @@ import { ModalViewComponent } from "./modal-shared/modal-view.component";
 export class TabComponent  {
     constructor(
     router: Router,
-    // location: NSLocationStrategy,
+    location: NSLocationStrategy,
     private _vcRef: ViewContainerRef,
     private _viewContainerRefService: ViewContainerRefService,
     private modal: ModalDialogService) {
     router.events.subscribe(e => {
       if (e instanceof NavigationEnd) {
         console.log("[ROUTER]: " + e.toString());
-        // console.log(location.toString());
+        console.log(location.toString());
       }
     });
 

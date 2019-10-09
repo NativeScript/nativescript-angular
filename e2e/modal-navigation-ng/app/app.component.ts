@@ -1,11 +1,11 @@
 import { Component, ViewContainerRef } from "@angular/core";
 import { Router, NavigationEnd } from "@angular/router";
-// import { NSLocationStrategy } from "nativescript-angular/router/ns-location-strategy";
+import { NSLocationStrategy } from "nativescript-angular/router/ns-location-strategy";
 
 import { ViewContainerRefService } from "./shared/ViewContainerRefService";
 
 import { AppModule } from "./app.module";
-import { ModalDialogOptions, ModalDialogService, NSLocationStrategy } from "nativescript-angular";
+import { ModalDialogOptions, ModalDialogService } from "nativescript-angular";
 import { ModalViewComponent } from "./modal-shared/modal-view.component";
 
 @Component({
