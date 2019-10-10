@@ -82,7 +82,7 @@ export class StyledLabelCmp {
     styles: [
         `Label { color: red; }`,
         `
-        StackLayout { color: brick; }
+        StackLayout { color: brown; }
         TextField { color: red; background-color: lime; }
         `,
     ],
