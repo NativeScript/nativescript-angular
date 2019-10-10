@@ -2,7 +2,6 @@
 // It's needed to handle __metadata calls inside @angular/core
 import "reflect-metadata";
 
-console.log(">>>>>>>>>>>import reflect-metadata;");
 // Import platform-common immediately after reflect-metadata - because rest of the polyfills.
 import {
     NativeScriptPlatformRef,
