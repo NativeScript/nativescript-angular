@@ -32,5 +32,9 @@
   },
   "dependencies": {
     "@nativescript/angular": "file:../nativescript-angular"
+  },
+  "scripts": {
+    "pack": "cd ../build && npm pack ../nativescript-angular-package",
+    "pack-with-scoped-version": "cd ../build/pack-script && npx ts-node index.ts"
   }
 }
