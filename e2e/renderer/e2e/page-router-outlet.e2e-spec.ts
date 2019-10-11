@@ -7,6 +7,7 @@ import {
 } from "nativescript-dev-appium";
 import { assert } from "chai";
 import { isSauceLab } from "nativescript-dev-appium/lib/parser";
+import { ImageOptions } from "nativescript-dev-appium/lib/image-options";
 
 const QUEUE_WAIT_TIME: number = 600000; // Sometimes SauceLabs threads are not available and the tests wait in a queue to start. Wait 10 min before timeout.
 
@@ -49,7 +50,7 @@ describe("page-router-outlet-scenario", async function () {
         });
 
         it("should not hide action bar by default", async function () {
-            const screenMatches = await driver.compareScreen("actionBarVisibility-always-default", 5);
+            const screenMatches = await driver.compareScreen("actionBarVisibility-always-default", 5, 50, ImageOptions.pixel);
             assert(screenMatches);
         });
 
@@ -57,7 +58,7 @@ describe("page-router-outlet-scenario", async function () {
             const hideActionBarButton = await driver.findElementByAutomationText("HideActionBar");
             await hideActionBarButton.click();
 
-            const screenMatches = await driver.compareScreen("actionBarVisibility-always-hidden", 5);
+            const screenMatches = await driver.compareScreen("actionBarVisibility-always-hidden", 5, 50, ImageOptions.pixel);
             assert(screenMatches);
         });
 
@@ -65,7 +66,7 @@ describe("page-router-outlet-scenario", async function () {
             const showActionBarButton = await driver.findElementByAutomationText("ShowActionBar");
             await showActionBarButton.click();
 
-            const screenMatches = await driver.compareScreen("actionBarVisibility-always-shown", 5);
+            const screenMatches = await driver.compareScreen("actionBarVisibility-always-shown", 5, 50, ImageOptions.pixel);
             assert(screenMatches);
         });
     });
@@ -167,21 +168,21 @@ describe("page-router-outlet-scenario", async function () {
         });
 
         it("should show action bar by default", async function () {
-            const screenMatches = await driver.compareScreen("actionBarVisibility-auto-default", 5);
+            const screenMatches = await driver.compareScreen("actionBarVisibility-auto-default", 5, 50, ImageOptions.pixel);
             assert(screenMatches);
         });
 
         it("should hide action bar when hidden by page", async function () {
             const hideActionBarButton = await driver.findElementByAutomationText("HideActionBar");
             await hideActionBarButton.click();
-            const screenMatches = await driver.compareScreen("actionBarVisibility-auto-hidden", 5);
+            const screenMatches = await driver.compareScreen("actionBarVisibility-auto-hidden", 5, 50, ImageOptions.pixel);
             assert(screenMatches);
         });
 
         it("should show action bar when shown by page", async function () {
             const showActionBarButton = await driver.findElementByAutomationText("ShowActionBar");
             await showActionBarButton.click();
-            const screenMatches = await driver.compareScreen("actionBarVisibility-auto-shown", 5);
+            const screenMatches = await driver.compareScreen("actionBarVisibility-auto-shown", 5, 50, ImageOptions.pixel);
             assert(screenMatches);
         });
     });

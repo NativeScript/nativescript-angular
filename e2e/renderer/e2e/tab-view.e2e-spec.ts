@@ -7,6 +7,7 @@ import {
 } from "nativescript-dev-appium";
 import { assert } from "chai";
 import { isSauceLab } from "nativescript-dev-appium/lib/parser";
+import { ImageOptions } from "nativescript-dev-appium/lib/image-options";
 
 const QUEUE_WAIT_TIME: number = 600000; // Sometimes SauceLabs threads are not available and the tests wait in a queue to start. Wait 10 min before timeout.
 
@@ -58,7 +59,7 @@ describe("TabView-scenario", async function(){
             secondTabItem = notSelectedTabItems[0];
             thirdTabItem = notSelectedTabItems[1];
 
-            const screenMatches = await driver.compareScreen("tab-view-binding-first-tab", 5);
+            const screenMatches = await driver.compareScreen("tab-view-binding-first-tab", 5, 50, ImageOptions.pixel);
             assert(screenMatches);
         });
 
@@ -73,7 +74,7 @@ describe("TabView-scenario", async function(){
             secondTabItem = await driver.findElementByAutomationText("SELECTED");
             thirdTabItem = notSelectedTabItems[1];
 
-            const screenMatches = await driver.compareScreen("tab-view-binding-second-tab", 5);
+            const screenMatches = await driver.compareScreen("tab-view-binding-second-tab", 5, 50, ImageOptions.pixel);
             assert(screenMatches);
         });
 
@@ -88,7 +89,7 @@ describe("TabView-scenario", async function(){
             secondTabItem = notSelectedTabItems[1];
             thirdTabItem = await driver.findElementByAutomationText("SELECTED");
 
-            const screenMatches = await driver.compareScreen("tab-view-binding-third-tab", 5);
+            const screenMatches = await driver.compareScreen("tab-view-binding-third-tab", 5, 50, ImageOptions.pixel);
             assert(screenMatches);
         });
     });
