@@ -7,6 +7,8 @@ var scopedVersion = process.argv[2];
 console.log(`Packing nativescript-angular package with @nativescript/angular: ${scopedVersion}`);
 
 const distFolderPath = path.resolve("../../dist");
+const outFileName = "nativescript-angular-compat.tgz";
+
 const nsAngularPackagePath = path.resolve("../../nativescript-angular-package");
 const packageJsonPath = path.resolve(`${nsAngularPackagePath}/package.json`);
 console.log("Getting package.json from", packageJsonPath);
@@ -16,18 +18,18 @@ const packageJsonObject = JSON.parse(fs.readFileSync(packageJsonPath, { encoding
 packageJsonObject.dependencies["@nativescript/angular"] = scopedVersion;
 fs.writeFileSync(packageJsonPath, JSON.stringify(packageJsonObject, null, 4));
 
-// create .tgz in dist folder
 execSync(`npm install`, {
     cwd: nsAngularPackagePath
 });
-// ensures empty ../dist folder
+
+// ensure empty dist folder
 fs.emptyDirSync(distFolderPath);
-// cd to dist folder
+
+// create .tgz
 execSync(`npm pack ${nsAngularPackagePath}`, {
     cwd: distFolderPath
 });
 
-const fileName = fs.readdirSync(distFolderPath)[0];
-const newName = "nativescript-angular-compat.tgz";
+const currentFileName = fs.readdirSync(distFolderPath)[0];
 // rename file
-fs.moveSync(`${distFolderPath}/${fileName}`, `${distFolderPath}/${newName}`);
+fs.moveSync(`${distFolderPath}/${currentFileName}`, `${distFolderPath}/${outFileName}`);
