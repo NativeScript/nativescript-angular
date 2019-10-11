@@ -26,3 +26,8 @@ fs.emptyDirSync(distFolderPath);
 execSync(`npm pack ${nsAngularPackagePath}`, {
     cwd: distFolderPath
 });
+
+const fileName = fs.readdirSync(distFolderPath)[0];
+const newName = "nativescript-angular-compat.tgz";
+// rename file
+fs.moveSync(`${distFolderPath}/${fileName}`, `${distFolderPath}/${newName}`);
