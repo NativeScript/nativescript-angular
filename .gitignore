@@ -2,6 +2,7 @@ node_modules
 platforms
 hooks
 tags
+dist
 **/*.js.map
 **/*.metadata.json
 
@@ -46,3 +47,4 @@ tsconfig.tns.json
 !.vscode/tasks.json
 !.vscode/launch.json
 !.vscode/extensions.json
+

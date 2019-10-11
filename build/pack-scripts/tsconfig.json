@@ -11,19 +11,15 @@
             "dom",
             "es2015.iterable"
         ],
-        "baseUrl": ".",
-        "paths": {
-            "*": [
-                "./node_modules/*"
-            ]
-        },
         "types": [
             "node"
         ],
-        "typeRoots": [
-            // add path to @types
-            "node_modules/@types"
-        ],
-        "strict": false
-    }
+        "typeRoots": [ "./node_modules/@types" ]
+    },
+    "include": [
+        "./**/*.ts"
+    ],
+    "exclude": [
+        "node_modules"
+    ]
 }

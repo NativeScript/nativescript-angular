@@ -10,6 +10,9 @@
   "license": "ISC",
   "devDependencies": {
     "@types/node": "^12.7.12",
-    "ts-node": "^8.4.1"
+    "fs-extra": "^8.1.0",
+    "rimraf": "^3.0.0",
+    "ts-node": "^8.4.1",
+    "typescript": "^3.6.4"
   }
 }
