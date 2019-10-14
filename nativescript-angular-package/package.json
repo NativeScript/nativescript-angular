@@ -34,7 +34,6 @@
         "@nativescript/angular": "file:../nativescript-angular"
     },
     "scripts": {
-        "pack": "cd ../build && npm pack ../nativescript-angular-package",
         "pack-with-scoped-version": "cd ../build/pack-scripts && npm i && npx ts-node pack-compat.ts"
     }
 }
