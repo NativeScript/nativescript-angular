@@ -7,6 +7,7 @@ var scopedVersion = process.argv[2];
 console.log(`Packing nativescript-angular package with @nativescript/angular: ${scopedVersion}`);
 
 const distFolderPath = path.resolve("../../dist");
+const tempFolderPath = path.resolve("./temp-compat");
 const outFileName = "nativescript-angular-compat.tgz";
 
 const nsAngularPackagePath = path.resolve("../../nativescript-angular-package");
@@ -22,14 +23,18 @@ execSync(`npm install --save-exact`, {
     cwd: nsAngularPackagePath
 });
 
-// ensure empty dist folder
+// ensure empty temp and dist folders
+fs.emptyDirSync(tempFolderPath);
 fs.emptyDirSync(distFolderPath);
 
-// create .tgz
+// create .tgz in temp folder
 execSync(`npm pack ${nsAngularPackagePath}`, {
-    cwd: distFolderPath
+    cwd: tempFolderPath
 });
 
-const currentFileName = fs.readdirSync(distFolderPath)[0];
-// rename file
-fs.moveSync(`${distFolderPath}/${currentFileName}`, `${distFolderPath}/${outFileName}`);
+// assume we have a single file built in temp folder, take its name
+const currentFileName = fs.readdirSync(tempFolderPath)[0];
+
+// move built file and remove temp folder
+fs.moveSync(`${tempFolderPath}/${currentFileName}`, `${distFolderPath}/${outFileName}`);
+fs.removeSync(`${tempFolderPath}`);
