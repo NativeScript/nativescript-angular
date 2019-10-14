@@ -18,7 +18,7 @@ const packageJsonObject = JSON.parse(fs.readFileSync(packageJsonPath, { encoding
 packageJsonObject.dependencies["@nativescript/angular"] = scopedVersion;
 fs.writeFileSync(packageJsonPath, JSON.stringify(packageJsonObject, null, 4));
 
-execSync(`npm install`, {
+execSync(`npm install --save-exact`, {
     cwd: nsAngularPackagePath
 });
 
