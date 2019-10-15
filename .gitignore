@@ -15,6 +15,15 @@ dist
 !/nativescript-angular/gulpfile.js
 !/nativescript-angular/zone-js/dist/*.js
 
+/nativescript-angular-package/**/*.d.ts
+/nativescript-angular-package/**/*.js
+
+!/nativescript-angular-package/global.d.ts
+!/nativescript-angular-package/postinstall.js
+!/nativescript-angular-package/hooks/**/*.js
+!/nativescript-angular-package/gulpfile.js
+!/nativescript-angular-package/zone-js/dist/*.js
+
 .tscache
 .nvm
 .vscode

@@ -23,9 +23,9 @@ execSync(`npm install --save-exact`, {
     cwd: nsAngularPackagePath
 });
 
-// ensure empty temp and dist folders
+// ensure empty temp and existing dist folders
 fs.emptyDirSync(tempFolderPath);
-fs.emptyDirSync(distFolderPath);
+fs.ensureDirSync(distFolderPath);
 
 // create .tgz in temp folder
 execSync(`npm pack ${nsAngularPackagePath}`, {
@@ -36,5 +36,5 @@ execSync(`npm pack ${nsAngularPackagePath}`, {
 const currentFileName = fs.readdirSync(tempFolderPath)[0];
 
 // move built file and remove temp folder
-fs.moveSync(`${tempFolderPath}/${currentFileName}`, `${distFolderPath}/${outFileName}`);
+fs.moveSync(`${tempFolderPath}/${currentFileName}`, `${distFolderPath}/${outFileName}`, { overwrite: true });
 fs.removeSync(`${tempFolderPath}`);

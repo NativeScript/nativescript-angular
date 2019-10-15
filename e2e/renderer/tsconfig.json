@@ -23,8 +23,7 @@
         }
     },
     "include": [
-        "../../nativescript-angular-package",
-        "../../nativescript-angular",
+        "./node_modules/nativescript-angular",
         "**/*"
     ],
     "exclude": [

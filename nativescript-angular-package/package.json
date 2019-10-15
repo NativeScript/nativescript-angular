@@ -33,7 +33,20 @@
     "dependencies": {
         "@nativescript/angular": "file:../nativescript-angular"
     },
+    "devDependencies": {
+        "@angular/animations": "~8.2.0",
+        "@angular/common": "~8.2.0",
+        "@angular/compiler": "~8.2.0",
+        "@angular/compiler-cli": "~8.2.0",
+        "@angular/core": "~8.2.0",
+        "@angular/forms": "~8.2.0",
+        "@angular/platform-browser": "~8.2.0",
+        "@angular/platform-browser-dynamic": "~8.2.0",
+        "@angular/router": "~8.2.0",
+        "rxjs": "^6.4.0",
+        "tns-core-modules": "next"
+    },
     "scripts": {
-        "pack-with-scoped-version": "cd ../build/pack-scripts && npm i && npx ts-node pack-compat.ts"
+        "pack-with-scoped-version": "npm i && tsc && cd ../build/pack-scripts && npm i && npx ts-node pack-compat.ts"
     }
 }

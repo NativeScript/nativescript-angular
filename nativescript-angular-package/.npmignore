@@ -1,0 +1,12 @@
+*.tgz
+
+*.ts
+!*.d.ts
+
+*.js.map
+
+tsconfig.json
+global.d.ts
+.npmignore
+gulpfile.js
+tslint.json
