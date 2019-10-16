@@ -1,3 +1,12 @@
+<a name="8.2.2"></a>
+## [8.2.2](https://github.com/NativeScript/nativescript-angular/compare/8.2.1...8.2.2) (2019-10-16)
+
+### Features
+
+* Support for adding scoped CSS without triggering global refresh ([#1999](https://github.com/NativeScript/nativescript-angular/pull/1999)) ([662c122](https://github.com/NativeScript/nativescript-angular/commit/662c122))
+
+
+
 <a name="8.2.1"></a>
 ## [8.2.1](https://github.com/NativeScript/nativescript-angular/compare/8.2.0...8.2.1) (2019-08-28)
 
