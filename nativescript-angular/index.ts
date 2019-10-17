@@ -9,6 +9,11 @@ export * from "./resource-loader";
 export * from "./nativescript.module";
 export * from "./common";
 
+export * from "./router";
+export * from "./file-system";
+export * from "./http-client";
+export * from "./forms";
+
 export {
     ViewClass,
     ViewClassMeta,

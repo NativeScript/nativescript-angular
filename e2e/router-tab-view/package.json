@@ -23,8 +23,6 @@
     "zone.js": "^0.9.1"
   },
   "devDependencies": {
-    "@angular/compiler-cli": "8.2.0",
-    "@ngtools/webpack": "8.2.0",
     "@types/chai": "~4.1.7",
     "@types/mocha": "~5.2.5",
     "@types/node": "~10.12.18",
@@ -35,12 +33,13 @@
     "mocha": "~5.2.0",
     "mochawesome": "~3.1.2",
     "nativescript-dev-appium": "^6.0.0",
-    "nativescript-dev-webpack": "^1.3.0-next-2019-10-02-144239-03",
-    "typescript": "~3.5.3"
+    "nativescript-dev-webpack": "next",
+    "typescript": "~3.5.3",
+    "@angular/compiler-cli": "~8.2.0",
+    "@ngtools/webpack": "~8.2.0"
   },
   "scripts": {
     "e2e": "tsc -p e2e && mocha --opts ../config/mocha.opts --recursive e2e --appiumCapsLocation ../config/appium.capabilities.json",
-    "compile-tests": "tsc -p e2e --watch",
-    "update-app-ng-deps": "update-app-ng-deps"
+    "compile-tests": "tsc -p e2e --watch"
   }
 }
