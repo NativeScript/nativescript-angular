@@ -27,9 +27,6 @@
         "type": "git",
         "url": "https://github.com/NativeScript/nativescript-angular.git"
     },
-    "bin": {
-        "update-app-ng-deps": "node_modules/@nativescript/angular/bin/update-app-ng-deps"
-    },
     "dependencies": {
         "@nativescript/angular": "file:../nativescript-angular"
     },
