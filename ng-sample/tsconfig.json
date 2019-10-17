@@ -28,10 +28,13 @@
     },
     "include": [
         "../nativescript-angular",
+        "../nativescript-angular-package",
         "**/*"
     ],
     "exclude": [
+        "../nativescript-angular-package/node_modules",
         "../nativescript-angular/node_modules",
+        "../nativescript-angular-package/**/*.d.ts",
         "../nativescript-angular/**/*.d.ts",
         "node_modules",
         "platforms"
