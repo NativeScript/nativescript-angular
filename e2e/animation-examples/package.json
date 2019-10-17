@@ -6,7 +6,7 @@
   "nativescript": {
     "id": "org.nativescript.ng4animations",
     "tns-ios": {
-      "version": "6.1.1"
+      "version": "latest"
     },
     "tns-android": {
       "version": "latest"

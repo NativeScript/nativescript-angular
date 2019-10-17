@@ -1,9 +1,6 @@
 {
   "nativescript": {
-    "id": "org.nativescript.ngsample",
-    "tns-ios": {
-      "version": "6.1.1"
-    }
+    "id": "org.nativescript.ngsample"
   },
   "name": "tns-template-hello-world",
   "main": "app.js",
