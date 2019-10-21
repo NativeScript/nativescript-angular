@@ -4,7 +4,7 @@ import { LocationStrategy, PlatformLocation } from "@angular/common";
 import { NSRouterLink } from "./ns-router-link";
 import { NSRouterLinkActive } from "./ns-router-link-active";
 import { PageRouterOutlet } from "./page-router-outlet";
-import { NSLocationStrategy, LocationState } from "./ns-location-strategy";
+import { NSLocationStrategy } from "./ns-location-strategy";
 import { NativescriptPlatformLocation } from "./ns-platform-location";
 import { NSRouteReuseStrategy } from "./ns-route-reuse-strategy";
 import { RouterExtensions } from "./router-extensions";
@@ -15,9 +15,8 @@ import { NSEmptyOutletComponent } from "./ns-empty-outlet.component";
 export { PageRoute } from "./page-router-outlet";
 export { RouterExtensions } from "./router-extensions";
 export { NSModuleFactoryLoader } from "./ns-module-factory-loader";
-export { NSEmptyOutletComponent } from "./ns-empty-outlet.component";
 
-export type LocationState = LocationState;
+export { NSRouterLink, NSRouterLinkActive, PageRouterOutlet, NSEmptyOutletComponent, NSLocationStrategy };
 
 const ROUTER_DIRECTIVES = [NSRouterLink, NSRouterLinkActive, PageRouterOutlet, NSEmptyOutletComponent];
 

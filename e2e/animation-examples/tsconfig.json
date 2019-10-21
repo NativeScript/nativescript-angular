@@ -23,10 +23,13 @@
         }
     },
     "include": [
+        "../../nativescript-angular-package",
         "../../nativescript-angular",
         "**/*"
     ],
     "exclude": [
+        "../../nativescript-angular-package/node_modules",
+        "../../nativescript-angular-package/**/*.d.ts",
         "../../nativescript-angular/node_modules",
         "../../nativescript-angular/**/*.d.ts",
         "node_modules",
