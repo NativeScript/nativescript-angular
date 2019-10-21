@@ -58,7 +58,7 @@ export class NativeScriptAnimationPlayer implements AnimationPlayer {
 
         // When this issue https://github.com/NativeScript/NativeScript/issues/7984 is fixes in @nativescript/core
         // we can change this fix and apply the one that is recommended in that issue.
-        if (this.target.nativeViewProtected) {
+        if (this.target.isLoaded) {
             this.playAnimation();
         } else {
             this.target.on(View.loadedEvent, this.onTargetLoaded.bind(this));
