@@ -18,6 +18,15 @@ export const FORMS_DIRECTIVES = [
     NumberValueAccessor,
 ];
 
+export {
+    TextValueAccessor,
+    CheckedValueAccessor,
+    DateValueAccessor,
+    TimeValueAccessor,
+    SelectedIndexValueAccessor,
+    NumberValueAccessor
+};
+
 @NgModule({
     declarations: FORMS_DIRECTIVES,
     providers: [

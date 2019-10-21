@@ -38,3 +38,5 @@ import { NS_DIRECTIVES } from "./directives";
 })
 export class NativeScriptCommonModule {
 }
+
+export * from "./directives";
