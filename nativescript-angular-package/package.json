@@ -1,0 +1,51 @@
+{
+    "name": "nativescript-angular",
+    "version": "8.3.0",
+    "description": "An Angular renderer that lets you build mobile apps with NativeScript.",
+    "homepage": "https://www.nativescript.org/",
+    "bugs": "https://github.com/NativeScript/nativescript-angular/issues",
+    "author": {
+        "name": "NativeScript Team"
+    },
+    "contributors": [
+        "Hristo Deshev <hristo.deshev@telerik.com>",
+        "Alexander Vakrilov <alexander.vakrilov@progress.com>",
+        "Stanimira Vlaeva <Stanimira.Vlaeva@progress.com>"
+    ],
+    "nativescript": {
+        "platforms": {
+            "android": "6.0.0",
+            "ios": "6.0.0"
+        }
+    },
+    "keywords": [
+        "NativeScript",
+        "Angular"
+    ],
+    "license": "Apache-2.0",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/NativeScript/nativescript-angular.git"
+    },
+    "dependencies": {
+        "@nativescript/angular": "file:../nativescript-angular"
+    },
+    "devDependencies": {
+        "@angular/animations": "~8.2.0",
+        "@angular/common": "~8.2.0",
+        "@angular/compiler": "~8.2.0",
+        "@angular/compiler-cli": "~8.2.0",
+        "@angular/core": "~8.2.0",
+        "@angular/forms": "~8.2.0",
+        "@angular/platform-browser": "~8.2.0",
+        "@angular/platform-browser-dynamic": "~8.2.0",
+        "@angular/router": "~8.2.0",
+        "rxjs": "^6.4.0",
+        "tns-core-modules": "next",
+        "typescript": "~3.5.3"
+    },
+    "scripts": {
+        "ngc": "ngc -p tsconfig.json",
+        "pack-with-scoped-version": "npm i && tsc && npm run ngc && cd ../build/pack-scripts && npm i && npx ts-node pack-compat.ts"
+    }
+}
