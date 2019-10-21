@@ -14,12 +14,17 @@ const nsAngularPackagePath = path.resolve("../../nativescript-angular-package");
 const packageJsonPath = path.resolve(`${nsAngularPackagePath}/package.json`);
 console.log("Getting package.json from", packageJsonPath);
 
-// rewrite dependency in package.json
-const packageJsonObject = JSON.parse(fs.readFileSync(packageJsonPath, { encoding: "utf8" }));
-packageJsonObject.dependencies["@nativescript/angular"] = scopedVersion;
-fs.writeFileSync(packageJsonPath, JSON.stringify(packageJsonObject, null, 4));
+let npmInstallParams = "";
+if (scopedVersion.indexOf(".tgz") > 0) {
+    // rewrite dependency in package.json
+    const packageJsonObject = JSON.parse(fs.readFileSync(packageJsonPath, { encoding: "utf8" }));
+    packageJsonObject.dependencies["@nativescript/angular"] = scopedVersion;
+    fs.writeFileSync(packageJsonPath, JSON.stringify(packageJsonObject, null, 4));
+} else {
+    npmInstallParams = `@nativescript/angular@${scopedVersion}`;
+}
 
-execSync(`npm install --save-exact`, {
+execSync(`npm install --save-exact ${npmInstallParams}`, {
     cwd: nsAngularPackagePath
 });
 
