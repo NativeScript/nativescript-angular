@@ -1,6 +1,7 @@
 import { AnimationPlayer } from "@angular/animations";
 import { KeyframeAnimation }
     from "tns-core-modules/ui/animation/keyframe-animation";
+import { View, EventData } from "tns-core-modules/ui/core/view";
 
 import { Keyframe, createKeyframeAnimation } from "./utils";
 import { NgView } from "../element-registry";
@@ -55,6 +56,19 @@ export class NativeScriptAnimationPlayer implements AnimationPlayer {
             this._startSubscriptions = [];
         }
 
+        if (this.target.nativeViewProtected) {
+            this.playAnimation();
+        } else {
+            this.target.on(View.loadedEvent, this.onTargetLoaded.bind(this));
+        }
+    }
+
+    private onTargetLoaded(args: EventData) {
+        this.target.off(View.loadedEvent, this.onTargetLoaded);
+        this.playAnimation();
+    }
+
+    private playAnimation() {
         this.animation.play(this.target)
             .then(() => this.onFinish())
             .catch((_e) => {});
