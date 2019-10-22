@@ -1,0 +1,1 @@
+export * from "@nativescript/angular/directives/templated-items-comp";
