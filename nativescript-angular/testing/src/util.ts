@@ -1,6 +1,6 @@
 
 import { View } from "tns-core-modules/ui/core/view";
-import { topmost } from "tns-core-modules/ui/frame";
+import { Frame } from "tns-core-modules/ui/frame";
 import { LayoutBase } from "tns-core-modules/ui/layouts/layout-base";
 import { ComponentFixture, TestBed } from "@angular/core/testing";
 import { NgModule, Type } from "@angular/core";
@@ -17,7 +17,7 @@ const TESTING_ROOT_ID = "__testing_container";
  * Get a reference to the fixtures container.
  */
 export function testingRootView(): LayoutBase {
-    const rootPageLayout = topmost().currentPage.content as LayoutBase;
+    const rootPageLayout = Frame.topmost().currentPage.content as LayoutBase;
 
     let testingRoot: LayoutBase;
     rootPageLayout.eachChild(child => {
