@@ -126,7 +126,7 @@ const customPageFactoryProvider = {
     },
 };
 
-class MyErrorHandler implements ErrorHandler {
+export class MyErrorHandler implements ErrorHandler {
     handleError(error) {
         console.log("### ErrorHandler Error: " + error.toString());
         console.log("### ErrorHandler Stack: " + error.stack);
