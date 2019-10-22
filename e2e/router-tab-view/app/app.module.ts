@@ -10,7 +10,7 @@ import { enable as traceEnable } from "tns-core-modules/trace";
 // addCategories(routerTraceCategory);
 traceEnable();
 
-class MyErrorHandler implements ErrorHandler {
+export class MyErrorHandler implements ErrorHandler {
     handleError(error) {
         console.log("### ErrorHandler Error: " + error.toString());
         console.log("### ErrorHandler Stack: " + error.stack);
