@@ -1,5 +1,5 @@
 import { ListViewComponent } from "./list-view-comp";
-import { TemplateKeyDirective, SetupItemViewArgs } from "./templated-items-comp";
+import { TemplateKeyDirective, SetupItemViewArgs, TemplatedItemsComponent } from "./templated-items-comp";
 import { TabViewDirective, TabViewItemDirective } from "./tab-view";
 import {
     ActionBarComponent,
@@ -27,6 +27,7 @@ export {
     ListViewComponent,
     TemplateKeyDirective,
     SetupItemViewArgs,
+    TemplatedItemsComponent,
     TabViewDirective,
     TabViewItemDirective,
     ActionBarComponent,
