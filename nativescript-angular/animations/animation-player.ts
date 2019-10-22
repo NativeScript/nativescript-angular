@@ -1,6 +1,7 @@
 import { AnimationPlayer } from "@angular/animations";
 import { KeyframeAnimation }
     from "tns-core-modules/ui/animation/keyframe-animation";
+import { View, EventData } from "tns-core-modules/ui/core/view";
 
 import { Keyframe, createKeyframeAnimation } from "./utils";
 import { NgView } from "../element-registry";
@@ -55,6 +56,21 @@ export class NativeScriptAnimationPlayer implements AnimationPlayer {
             this._startSubscriptions = [];
         }
 
+        // When this issue https://github.com/NativeScript/NativeScript/issues/7984 is fixes in @nativescript/core
+        // we can change this fix and apply the one that is recommended in that issue.
+        if (this.target.isLoaded) {
+            this.playAnimation();
+        } else {
+            this.target.on(View.loadedEvent, this.onTargetLoaded.bind(this));
+        }
+    }
+
+    private onTargetLoaded(args: EventData) {
+        this.target.off(View.loadedEvent, this.onTargetLoaded);
+        this.playAnimation();
+    }
+
+    private playAnimation() {
         this.animation.play(this.target)
             .then(() => this.onFinish())
             .catch((_e) => {});
