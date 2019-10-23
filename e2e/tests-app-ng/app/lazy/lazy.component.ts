@@ -7,6 +7,7 @@ import { ModalDialogParams } from "nativescript-angular/directives/dialogs";
     selector: "ns-lazy",
     moduleId: module.id,
     templateUrl: "./lazy.component.html",
+    styleUrls: ["./lazy.component.css"]
 })
 export class LazyComponent {
     public isModal: boolean;
