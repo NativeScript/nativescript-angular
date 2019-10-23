@@ -1,3 +1,14 @@
+<a name="8.20.0"></a>
+# [8.20.0](https://github.com/NativeScript/nativescript-angular/compare/8.2.2...8.20.0) (2019-10-23)
+
+### Features
+* add scoped package @nativescript/angular ([#2014](https://github.com/NativeScript/nativescript-angular/pull/2014))
+
+### Bug Fixes
+
+* **animations:** resolve issue with "query animations" on iOS 13 ([#2022](https://github.com/NativeScript/nativescript-angular/issues/2022)) ([c382682](https://github.com/NativeScript/nativescript-angular/commit/c382682))
+
+
 <a name="8.2.2"></a>
 ## [8.2.2](https://github.com/NativeScript/nativescript-angular/compare/8.2.1...8.2.2) (2019-10-16)
 
