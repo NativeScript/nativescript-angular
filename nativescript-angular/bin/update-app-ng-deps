@@ -56,7 +56,7 @@ function updateDeps(deps, devDeps, newDeps) {
 }
 
 const pluginDeps = pluginPackageJson.peerDependencies;
-const projectPath = process.env.INIT_CWD || path.dirname(path.dirname(pluginPath));
+const projectPath = process.env.INIT_CWD || path.dirname(path.dirname(path.dirname(pluginPath)));
 const appPackageJsonPath = path.join(projectPath, "package.json");
 const appPackageJson = JSON.parse(fs.readFileSync(appPackageJsonPath, "utf8"));
 

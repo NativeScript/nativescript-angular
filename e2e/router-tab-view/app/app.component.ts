@@ -1,8 +1,7 @@
-import { Component, OnInit, AfterViewInit, AfterContentInit, ViewChild } from "@angular/core";
+import { Component, ViewChild } from "@angular/core";
 import { TabViewDirective } from "nativescript-angular/directives";
 import { Router, NavigationEnd } from "@angular/router";
 import { NSLocationStrategy } from "nativescript-angular/router/ns-location-strategy";
-
 
 @Component({
     selector: "ns-app",

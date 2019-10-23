@@ -1,5 +1,5 @@
 import { ListViewComponent } from "./list-view-comp";
-import { TemplateKeyDirective } from "./templated-items-comp";
+import { TemplateKeyDirective, SetupItemViewArgs, TemplatedItemsComponent } from "./templated-items-comp";
 import { TabViewDirective, TabViewItemDirective } from "./tab-view";
 import {
     ActionBarComponent,
@@ -8,18 +8,7 @@ import {
     NavigationButtonDirective
 } from "./action-bar";
 import { AndroidFilterComponent, IosFilterComponent } from "./platform-filters";
-
-export { ListViewComponent } from "./list-view-comp";
-export { SetupItemViewArgs, TemplateKeyDirective } from "./templated-items-comp";
-
-export { TabViewDirective, TabViewItemDirective } from "./tab-view";
-export {
-    ActionBarComponent,
-    ActionBarScope,
-    ActionItemDirective,
-    NavigationButtonDirective
-} from "./action-bar";
-export { AndroidFilterComponent, IosFilterComponent } from "./platform-filters";
+import { ModalDialogHost, ModalDialogOptions, ModalDialogParams, ModalDialogService } from "./dialogs";
 
 export const NS_DIRECTIVES = [
     ListViewComponent,
@@ -33,3 +22,22 @@ export const NS_DIRECTIVES = [
     AndroidFilterComponent,
     IosFilterComponent,
 ];
+
+export {
+    ListViewComponent,
+    TemplateKeyDirective,
+    SetupItemViewArgs,
+    TemplatedItemsComponent,
+    TabViewDirective,
+    TabViewItemDirective,
+    ActionBarComponent,
+    ActionBarScope,
+    ActionItemDirective,
+    NavigationButtonDirective,
+    AndroidFilterComponent,
+    IosFilterComponent,
+    ModalDialogHost,
+    ModalDialogOptions,
+    ModalDialogParams,
+    ModalDialogService
+};

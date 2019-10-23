@@ -17,7 +17,7 @@ import { AppHostView } from "../app-host-view";
 import { DetachedLoader } from "../common/detached-loader";
 import { PageFactory, PAGE_FACTORY } from "../platform-providers";
 import { once } from "../common/utils";
-import { topmost, Frame } from "tns-core-modules/ui/frame";
+import { Frame } from "tns-core-modules/ui/frame";
 import { ShowModalOptions } from "tns-core-modules/ui/core/view";
 
 export type BaseShowModalOptions = Pick<ShowModalOptions, Exclude<keyof ShowModalOptions, "closeCallback" | "context">>;
@@ -86,7 +86,7 @@ export class ModalDialogService {
 
         let frame = parentView;
         if (!(parentView instanceof Frame)) {
-            frame = (parentView.page && parentView.page.frame) || topmost();
+            frame = (parentView.page && parentView.page.frame) || Frame.topmost();
         }
 
         this.location._beginModalNavigation(frame);

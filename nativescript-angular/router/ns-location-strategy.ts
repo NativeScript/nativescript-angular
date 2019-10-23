@@ -411,7 +411,7 @@ export class NSLocationStrategy extends LocationStrategy {
             this._modalNavigationDepth--;
         }
 
-        // currentOutlet should be the one that corresponds to the topmost() frame
+        // currentOutlet should be the one that corresponds to the topmost frame
         const topmostOutlet = this.getOutletByFrame(this.frameService.getFrame());
         const outlet = this.findOutletByModal(this._modalNavigationDepth, isShowingModal) || topmostOutlet;
 
