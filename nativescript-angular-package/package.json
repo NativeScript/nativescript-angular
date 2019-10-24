@@ -46,6 +46,6 @@
     },
     "scripts": {
         "ngc": "ngc -p tsconfig.json",
-        "pack-with-scoped-version": "npm i && tsc && npm run ngc && cd ../build/pack-scripts && npm i && npx ts-node pack-compat.ts"
+        "pack-with-scoped-version": "cd ../build/pack-scripts && npm i && npx ts-node pack-compat.ts"
     }
 }
