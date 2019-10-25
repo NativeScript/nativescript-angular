@@ -1,6 +1,6 @@
 {
     "name": "nativescript-angular",
-    "version": "8.20.0",
+    "version": "8.30.0",
     "description": "An Angular renderer that lets you build mobile apps with NativeScript.",
     "homepage": "https://www.nativescript.org/",
     "bugs": "https://github.com/NativeScript/nativescript-angular/issues",
@@ -46,6 +46,6 @@
     },
     "scripts": {
         "ngc": "ngc -p tsconfig.json",
-        "pack-with-scoped-version": "npm i && tsc && npm run ngc && cd ../build/pack-scripts && npm i && npx ts-node pack-compat.ts"
+        "pack-with-scoped-version": "cd ../build/pack-scripts && npm i && npx ts-node pack-compat.ts"
     }
 }

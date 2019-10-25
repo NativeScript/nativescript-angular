@@ -1,0 +1,8 @@
+
+.system-background-color-stack-layout {
+    background-color: white;
+}
+
+.ns-dark .system-background-color-stack-layout {
+    background-color: gray;
+}
