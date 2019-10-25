@@ -101,8 +101,9 @@ In this case the commits should be merge firstly from release in master branch a
 2. Execute `npm i` to install dependencies:
 ```
 cd nativescript-angular && npm i
+cd nativescript-angular-package && npm i
 ```
-3. Execute [`npm version`](https://docs.npmjs.com/cli/version) to bump the version:
+3. Execute [`npm version`](https://docs.npmjs.com/cli/version) to bump the version in both `nativescript-angular` and `nativescript-angular-package` folders:
 ```
 npm --no-git-tag-version version [patch|minor|major] -m "release: cut the %s release"
 ```
