@@ -16,12 +16,12 @@ export class FileSystemResourceLoader extends ResourceLoader {
         super();
     }
 
-    get(url: string): Promise<string> {
+    get(url: string): string {
         const resolvedPath = this.resolve(url);
 
         const templateFile = this.fs.fileFromPath(resolvedPath);
 
-        return templateFile.readText();
+        return templateFile.readTextSync();
     }
 
     resolve(url: string): string {
