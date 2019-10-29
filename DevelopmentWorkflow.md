@@ -2,13 +2,15 @@
 
 <!-- TOC depthFrom:2 -->
 
-- [Running locally](#running-locally)
+- [Development Workflow](#development-workflow)
+  - [Running locally](#running-locally)
     - [Prerequisites](#prerequisites)
-    - [Install dependencies](#install-dependencies)
-    - [Run the sample application (ng-sample)](#run-the-sample-application-ng-sample)
-- [Running the tests](#running-the-tests)
-- [Testing locally by running e2e tests](#testing-locally-by-running-e2e-tests)
-- [Developer workflow](#developer-workflow)
+    - [Clone repository](#clone-repository)
+    - [Install dependencies of the compatibility package (nativescript-angular)](#install-dependencies-of-the-compatibility-package-nativescript-angular)
+    - [Install dependencies of the scoped package (@nativescript/angular)](#install-dependencies-of-the-scoped-package-nativescriptangular)
+    - [Run some of the e2e applications e.g. router-tab-view](#run-some-of-the-e2e-applications-eg-router-tab-view)
+  - [Running the tests](#running-the-tests)
+  - [Testing locally by running e2e tests](#testing-locally-by-running-e2e-tests)
 
 <!-- /TOC -->
 
@@ -27,18 +29,25 @@ $ git clone git@github.com:NativeScript/nativescript-angular.git
 $ cd nativescript-angular
 ```
 
-### Install dependencies
+### Install dependencies of the compatibility package (nativescript-angular)
 
 ```
 $ cd nativescript-angular
 $ npm install
 ```
 
-### Run the sample application (ng-sample)
+### Install dependencies of the scoped package (@nativescript/angular)
+
+```
+$ cd nativescript-angular-package
+$ npm install
+```
+
+### Run some of the e2e applications e.g. router-tab-view
 
 Install NPM packages (use the local copy of `nativescript-angular`):
 ```
-$ cd ng-sample
+$ cd e2e/router-tab-view
 $ npm install
 ```
 
@@ -48,6 +57,8 @@ Start the app:
 $ tns run android
 $ tns run ios
 ```
+
+Make changes to `nativescript-angular` (in `./nativescript-angular-package` folder) or `@nativescript/angular` (in `./nativescript-angular` folder) and see them applied in the running app.
 
 ## Running the tests
 
@@ -95,9 +106,4 @@ NOTE: The steps below describe how to run `renderer` tests, but the same approac
     ``` bash
     npm run e2e -- --runType capabilityName
     ```
-
-## Developer workflow
-
-1. Open the `nativescript-angular` folder and start a typescript watcher in it `tsc -w`.
-2. Make changes to the `test`, `ng-sample`, `e2e` app projects or in `nativescript-angular` folder.
-3. Run the `tests`, `ng-sample` or `e2e` apps as shown above.
+    
