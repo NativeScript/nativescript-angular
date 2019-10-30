@@ -7,11 +7,6 @@
   "author": {
     "name": "NativeScript Team"
   },
-  "contributors": [
-    "Hristo Deshev <hristo.deshev@telerik.com>",
-    "Alexander Vakrilov <alexander.vakrilov@progress.com>",
-    "Stanimira Vlaeva <Stanimira.Vlaeva@progress.com>"
-  ],
   "nativescript": {
     "platforms": {
       "android": "6.0.0",
