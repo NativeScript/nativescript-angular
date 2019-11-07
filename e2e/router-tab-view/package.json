@@ -7,14 +7,14 @@
     "id": "org.nativescript.routertabview"
   },
   "dependencies": {
-    "@angular/animations": "~8.2.0",
-    "@angular/common": "~8.2.0",
-    "@angular/compiler": "~8.2.0",
-    "@angular/core": "~8.2.0",
-    "@angular/forms": "~8.2.0",
-    "@angular/platform-browser": "~8.2.0",
-    "@angular/platform-browser-dynamic": "~8.2.0",
-    "@angular/router": "~8.2.0",
+    "@angular/animations": "next",
+    "@angular/common": "next",
+    "@angular/compiler": "next",
+    "@angular/core": "next",
+    "@angular/forms": "next",
+    "@angular/platform-browser": "next",
+    "@angular/platform-browser-dynamic": "next",
+    "@angular/router": "next",
     "nativescript-angular": "file:../../nativescript-angular-package",
     "nativescript-theme-core": "~1.0.4",
     "reflect-metadata": "~0.1.8",
@@ -34,9 +34,9 @@
     "mochawesome": "~3.1.2",
     "nativescript-dev-appium": "^6.0.0",
     "nativescript-dev-webpack": "next",
-    "typescript": "~3.5.3",
-    "@angular/compiler-cli": "~8.2.0",
-    "@ngtools/webpack": "~8.2.0"
+    "typescript": "~3.6.4",
+    "@angular/compiler-cli": "next",
+    "@ngtools/webpack": "next"
   },
   "scripts": {
     "e2e": "tsc -p e2e && mocha --opts ../config/mocha.opts --recursive e2e --appiumCapsLocation ../config/appium.capabilities.json",
