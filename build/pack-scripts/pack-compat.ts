@@ -56,7 +56,7 @@ fs.emptyDirSync(tempFolderPath);
 fs.ensureDirSync(distFolderPath);
 
 // Install, run tsc and run ngc
-execSync(`npm i && tsc && npm run ngc`, {
+execSync(`npm i && npm run tsc && npm run ngc`, {
     cwd: nsAngularPackagePath
 });
 
