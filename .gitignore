@@ -57,3 +57,5 @@ tsconfig.tns.json
 !.vscode/launch.json
 !.vscode/extensions.json
 
+# Ivy configuration files
+!ngcc.config.js

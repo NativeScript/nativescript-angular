@@ -15,7 +15,7 @@ import {
     SystemJsNgModuleLoader,
     Optional,
     SkipSelf,
-    ɵAPP_ROOT as APP_ROOT,
+    ɵINJECTOR_SCOPE,
 } from "@angular/core";
 
 import {
@@ -43,7 +43,7 @@ export { DetachedLoader };
         FrameService,
         NativeScriptRendererFactory,
         SystemJsNgModuleLoader,
-        { provide: APP_ROOT, useValue: true },
+        { provide: ɵINJECTOR_SCOPE, useValue: "root" },
         { provide: ErrorHandler, useFactory: errorHandlerFactory },
         { provide: RendererFactory2, useExisting: NativeScriptRendererFactory },
         { provide: ViewportScroller, useClass: NullViewportScroller },
