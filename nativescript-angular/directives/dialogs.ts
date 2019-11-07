@@ -132,7 +132,7 @@ export class ModalDialogService {
             parent: options.containerRef.injector
         });
         const detachedFactory = options.resolver.resolveComponentFactory(DetachedLoader);
-        detachedLoaderRef = options.containerRef.createComponent(detachedFactory, -1, childInjector, null);
+        detachedLoaderRef = options.containerRef.createComponent(detachedFactory, 0, childInjector, null);
         detachedLoaderRef.instance.loadComponent(options.type).then((compRef) => {
             const detachedProxy = <ProxyViewContainer>compRef.location.nativeElement;
 
