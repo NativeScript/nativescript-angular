@@ -27,7 +27,8 @@
     "tsc": "tsc -p tsconfig.json",
     "tsc-w": "tsc -p tsconfig.json -w",
     "ngc": "ngc -p tsconfig.json",
-    "prepare": "npm run ngc",
+    "ngcc": "ngcc",
+    "prepare": "npm run ngcc && npm run ngc",
     "pack": "npm i && tsc && cd ../build/pack-scripts && npm i && npx ts-node pack-scoped.ts",
     "version": "rm -rf package-lock.json && conventional-changelog -p angular -i ../CHANGELOG.md -s && git add ../CHANGELOG.md",
     "typedoc": "typedoc --tsconfig \"./tsconfig.typedoc.json\" --out ./bin/dist/ng-api-reference --includeDeclarations --name \"NativeScript Angular\" --theme ./node_modules/nativescript-typedoc-theme --excludeExternals --externalPattern \"**/+(tns-core-modules|module|declarations).d.ts\""

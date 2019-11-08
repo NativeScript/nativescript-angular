@@ -23,7 +23,8 @@
     "genDir": ".",
     "skipMetadataEmit": false,
     "skipTemplateCodegen": true,
-    "strictMetadataEmit": true
+    "strictMetadataEmit": true,
+    "enableIvy": false
   },
   "include": [
     "**/*.ts"
