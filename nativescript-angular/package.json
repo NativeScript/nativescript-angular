@@ -51,7 +51,7 @@
     "rxjs": "^6.4.0",
     "tns-core-modules": "^6.2.0 || >6.3.0-",
     "typescript": "~3.6.4",
-    "zone.js": "^0.9.1"
+    "zone.js": "^0.10.2"
   },
   "devDependencies": {
     "@angular/animations": "next",
