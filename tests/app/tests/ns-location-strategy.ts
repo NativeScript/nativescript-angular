@@ -270,6 +270,22 @@ describe("NSLocationStrategy", () => {
         assert.equal(popCount, 0); // no onPopState when replacing
     });
 
+    it("back() preserves query params", () => {
+        const { strategy } = initStrategy("/?param=1");
+        let popCount = 0;
+        strategy.onPopState(() => {
+            popCount++;
+        });
+
+        strategy.pushState(null, "test", "/test", null);
+        assert.equal(strategy.path(), "/test");
+        assert.equal(popCount, 0);
+
+        strategy.back();
+        assert.equal(strategy.path(), "/?param=1");
+        assert.equal(popCount, 1);
+    });
+
     it("pushState() with page navigation", () => {
         const { strategy } = initStrategy("/");
         const outletName = "primary";
