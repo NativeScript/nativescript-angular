@@ -281,9 +281,33 @@ describe("NSLocationStrategy", () => {
         assert.equal(strategy.path(), "/test");
         assert.equal(popCount, 0);
 
+        strategy.pushState(null, "test2", "/test2?param2=2", null);
+        assert.equal(strategy.path(), "/test2?param2=2");
+        assert.equal(popCount, 0);
+
+        strategy.pushState(null, "test3", "/test3?param3=3", null);
+        assert.equal(strategy.path(), "/test3?param3=3");
+        assert.equal(popCount, 0);
+
+        strategy.pushState(null, "test4", "/test4", null);
+        assert.equal(strategy.path(), "/test4");
+        assert.equal(popCount, 0);
+        
+        strategy.back();
+        assert.equal(strategy.path(), "/test3?param3=3");
+        assert.equal(popCount, 1);
+
+        strategy.back();
+        assert.equal(strategy.path(), "/test2?param2=2");
+        assert.equal(popCount, 2);
+
+        strategy.back();
+        assert.equal(strategy.path(), "/test");
+        assert.equal(popCount, 3);
+
         strategy.back();
         assert.equal(strategy.path(), "/?param=1");
-        assert.equal(popCount, 1);
+        assert.equal(popCount, 4);
     });
 
     it("pushState() with page navigation", () => {
