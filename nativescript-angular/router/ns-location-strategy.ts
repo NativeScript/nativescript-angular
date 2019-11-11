@@ -170,7 +170,7 @@ export class NSLocationStrategy extends LocationStrategy {
             if (outlet && this.updateStates(outlet, segmentGroup, this.currentUrlTree.queryParams)) {
                 this.currentOutlet = outlet; // If states updated
             } else if (!outlet) {
-                const rootOutlet = this.createOutlet("primary", null, segmentGroup, null);
+                const rootOutlet = this.createOutlet("primary", null, segmentGroup, null, null, this.currentUrlTree.queryParams);
                 this.currentOutlet = rootOutlet;
             }
 
@@ -615,7 +615,7 @@ export class NSLocationStrategy extends LocationStrategy {
             segmentGroup: currentSegmentGroup,
             isRootSegmentGroup: false,
             isPageNavigation: isNewPage,
-            queryParams
+            queryParams: {...queryParams}
         };
 
         if (!lastState || !equalStateUrls) {
@@ -656,7 +656,7 @@ export class NSLocationStrategy extends LocationStrategy {
             segmentGroup: segmentGroup,
             isRootSegmentGroup: false,
             isPageNavigation: true, // It is a new OutletNode.
-            queryParams
+            queryParams: {...queryParams}
         };
 
         newOutlet.states = [locationState];
