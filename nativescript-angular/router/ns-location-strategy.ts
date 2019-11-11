@@ -1,6 +1,6 @@
 import { Injectable } from "@angular/core";
 import { LocationStrategy } from "@angular/common";
-import { DefaultUrlSerializer, UrlSegmentGroup, UrlTree, ActivatedRouteSnapshot } from "@angular/router";
+import { DefaultUrlSerializer, UrlSegmentGroup, UrlTree, ActivatedRouteSnapshot, Params } from "@angular/router";
 import { routerLog, routerError, isLogEnabled } from "../trace";
 import { NavigationTransition, Frame } from "tns-core-modules/ui/frame";
 import { isPresent } from "../lang-facade";
@@ -85,7 +85,7 @@ const defaultNavOptions: NavigationOptions = {
 };
 
 export interface LocationState {
-    queryParams: any;
+    queryParams: Params;
     segmentGroup: UrlSegmentGroup;
     isRootSegmentGroup: boolean;
     isPageNavigation: boolean;
@@ -606,7 +606,7 @@ export class NSLocationStrategy extends LocationStrategy {
         return outlet;
     }
 
-    private updateStates(outlet: Outlet, currentSegmentGroup: UrlSegmentGroup, queryParams: any): boolean {
+    private updateStates(outlet: Outlet, currentSegmentGroup: UrlSegmentGroup, queryParams: Params): boolean {
         const isNewPage = outlet.states.length === 0;
         const lastState = outlet.states[outlet.states.length - 1];
         const equalStateUrls = outlet.containsTopState(currentSegmentGroup.toString());
@@ -648,7 +648,7 @@ export class NSLocationStrategy extends LocationStrategy {
     }
 
     // tslint:disable-next-line:max-line-length
-    private createOutlet(outletKey: string, path: string, segmentGroup: any, parent: Outlet, modalNavigation?: number, queryParams: any = {}): Outlet {
+    private createOutlet(outletKey: string, path: string, segmentGroup: any, parent: Outlet, modalNavigation?: number, queryParams: Params = {}): Outlet {
         const pathByOutlets = this.getPathByOutlets(segmentGroup);
         const newOutlet = new Outlet(outletKey, path, pathByOutlets, modalNavigation);
 
@@ -723,7 +723,7 @@ export class NSLocationStrategy extends LocationStrategy {
         }
     }
 
-    private upsertModalOutlet(parentOutlet: Outlet, segmentedGroup: UrlSegmentGroup, queryParams: any) {
+    private upsertModalOutlet(parentOutlet: Outlet, segmentedGroup: UrlSegmentGroup, queryParams: Params) {
         let currentModalOutlet = this.findOutletByModal(this._modalNavigationDepth);
 
         // We want to treat every p-r-o as a standalone Outlet.
