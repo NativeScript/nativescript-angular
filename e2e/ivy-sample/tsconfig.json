@@ -6,6 +6,7 @@
         "emitDecoratorMetadata": true,
         "noEmitHelpers": true,
         "noEmitOnError": true,
+        "skipLibCheck": true,
         "lib": [
             "es6",
             "dom",
@@ -13,32 +14,16 @@
         ],
         "baseUrl": ".",
         "paths": {
-            "*": [
-                "./node_modules/tns-core-modules/*",
-                "./node_modules/*",
-                "./node_modules/nativescript-angular/node_modules/*"
-            ],
             "~/*": [
-                "app/*"
+                "src/*"
+            ],
+            "*": [
+                "./node_modules/*"
             ]
         }
     },
-    "include": [
-        "../../nativescript-angular-package",
-        "../../nativescript-angular",
-        "**/*"
-    ],
     "exclude": [
-        "../../nativescript-angular-package/node_modules",
-        "../../nativescript-angular-package/**/*.d.ts",
-        "../../nativescript-angular/node_modules",
-        "../../nativescript-angular/**/*.d.ts",
         "node_modules",
-        "platforms",
-        "**/*.aot",
-        "e2e"
-    ],
-    "angularCompilerOptions": {
-        "enableIvy": true
-      }
+        "platforms"
+    ]
 }
