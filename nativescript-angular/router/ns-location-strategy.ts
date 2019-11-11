@@ -170,6 +170,7 @@ export class NSLocationStrategy extends LocationStrategy {
             if (outlet && this.updateStates(outlet, segmentGroup, this.currentUrlTree.queryParams)) {
                 this.currentOutlet = outlet; // If states updated
             } else if (!outlet) {
+                // tslint:disable-next-line:max-line-length
                 const rootOutlet = this.createOutlet("primary", null, segmentGroup, null, null, this.currentUrlTree.queryParams);
                 this.currentOutlet = rootOutlet;
             }
