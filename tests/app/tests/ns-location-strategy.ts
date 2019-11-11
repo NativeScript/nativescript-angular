@@ -135,6 +135,7 @@ function createState(
         segmentGroup: isRoot ? stateUrlTree.root : rootOutlets[outletName],
         isPageNavigation: isPageNav,
         isRootSegmentGroup: isRoot,
+        queryParams: stateUrlTree.queryParams
     };
 }
 
