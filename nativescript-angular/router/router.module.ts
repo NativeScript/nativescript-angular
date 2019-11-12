@@ -18,7 +18,7 @@ export { NSModuleFactoryLoader } from "./ns-module-factory-loader";
 
 export { NSRouterLink, NSRouterLinkActive, PageRouterOutlet, NSEmptyOutletComponent, NSLocationStrategy };
 
-const ROUTER_DIRECTIVES = [NSRouterLink, NSRouterLinkActive, PageRouterOutlet, NSEmptyOutletComponent];
+// const ROUTER_DIRECTIVES = [NSRouterLink, NSRouterLinkActive, PageRouterOutlet, NSEmptyOutletComponent];
 
 const NS_ROUTER_PROVIDERS = [
     {
@@ -35,10 +35,15 @@ const NS_ROUTER_PROVIDERS = [
 ];
 
 @NgModule({
-    declarations: ROUTER_DIRECTIVES,
+    declarations: [
+      NSRouterLink, NSRouterLinkActive, PageRouterOutlet, NSEmptyOutletComponent
+    ],
     entryComponents: [NSEmptyOutletComponent],
     imports: [RouterModule, NativeScriptCommonModule],
-    exports: [RouterModule, ...ROUTER_DIRECTIVES],
+    exports: [
+      RouterModule,
+      NSRouterLink, NSRouterLinkActive, PageRouterOutlet, NSEmptyOutletComponent
+    ],
     schemas: [NO_ERRORS_SCHEMA],
 })
 export class NativeScriptRouterModule {

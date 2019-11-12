@@ -8,7 +8,7 @@ import {
     NavigationButtonDirective
 } from "./action-bar";
 import { AndroidFilterComponent, IosFilterComponent } from "./platform-filters";
-import { ModalDialogHost, ModalDialogOptions, ModalDialogParams, ModalDialogService } from "./dialogs";
+import { ModalDialogOptions, ModalDialogParams, ModalDialogService } from "./dialogs";
 
 export const NS_DIRECTIVES = [
     ListViewComponent,
@@ -36,7 +36,6 @@ export {
     NavigationButtonDirective,
     AndroidFilterComponent,
     IosFilterComponent,
-    ModalDialogHost,
     ModalDialogOptions,
     ModalDialogParams,
     ModalDialogService

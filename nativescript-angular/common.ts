@@ -5,7 +5,6 @@ import {
 } from "@angular/core";
 
 import {
-    ModalDialogHost,
     ModalDialogService,
 } from "./directives/dialogs";
 import {
@@ -13,12 +12,30 @@ import {
     defaultFrameProvider,
     defaultPageProvider,
 } from "./platform-providers";
-import { NS_DIRECTIVES } from "./directives";
+// import { NS_DIRECTIVES } from "./directives";
+import { ListViewComponent } from "./directives/list-view-comp";
+import { TemplateKeyDirective, SetupItemViewArgs, TemplatedItemsComponent } from "./directives/templated-items-comp";
+import { TabViewDirective, TabViewItemDirective } from "./directives/tab-view";
+import {
+    ActionBarComponent,
+    ActionBarScope,
+    ActionItemDirective,
+    NavigationButtonDirective
+} from "./directives/action-bar";
+import { AndroidFilterComponent, IosFilterComponent } from "./directives/platform-filters";
 
 @NgModule({
     declarations: [
-        ModalDialogHost,
-        ...NS_DIRECTIVES,
+      ListViewComponent,
+      TemplateKeyDirective,
+      TabViewDirective,
+      TabViewItemDirective,
+      ActionBarComponent,
+      ActionBarScope,
+      ActionItemDirective,
+      NavigationButtonDirective,
+      AndroidFilterComponent,
+      IosFilterComponent
     ],
     providers: [
         ModalDialogService,
@@ -30,9 +47,17 @@ import { NS_DIRECTIVES } from "./directives";
         CommonModule,
     ],
     exports: [
-        CommonModule,
-        ModalDialogHost,
-        ...NS_DIRECTIVES,
+      CommonModule,
+      ListViewComponent,
+      TemplateKeyDirective,
+      TabViewDirective,
+      TabViewItemDirective,
+      ActionBarComponent,
+      ActionBarScope,
+      ActionItemDirective,
+      NavigationButtonDirective,
+      AndroidFilterComponent,
+      IosFilterComponent,
     ],
     schemas: [NO_ERRORS_SCHEMA]
 })

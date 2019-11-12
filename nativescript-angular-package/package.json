@@ -1,6 +1,6 @@
 {
     "name": "nativescript-angular",
-    "version": "8.21.0",
+    "version": "9.0.0",
     "description": "An Angular renderer that lets you build mobile apps with NativeScript.",
     "homepage": "https://www.nativescript.org/",
     "bugs": "https://github.com/NativeScript/nativescript-angular/issues",
@@ -23,21 +23,22 @@
         "url": "https://github.com/NativeScript/nativescript-angular.git"
     },
     "dependencies": {
-        "@nativescript/angular": "file:../nativescript-angular"
+        "@nativescript/angular": "../dist/nativescript-angular-scoped.tgz"
     },
     "devDependencies": {
-        "@angular/animations": "next",
-        "@angular/common": "next",
-        "@angular/compiler": "next",
-        "@angular/compiler-cli": "next",
-        "@angular/core": "next",
-        "@angular/forms": "next",
-        "@angular/platform-browser": "next",
-        "@angular/platform-browser-dynamic": "next",
-        "@angular/router": "next",
+        "@angular/animations": "9.0.0-rc.1",
+        "@angular/common": "9.0.0-rc.1",
+        "@angular/compiler": "9.0.0-rc.1",
+        "@angular/compiler-cli": "9.0.0-rc.1",
+        "@angular/core": "9.0.0-rc.1",
+        "@angular/forms": "9.0.0-rc.1",
+        "@angular/platform-browser": "9.0.0-rc.1",
+        "@angular/platform-browser-dynamic": "9.0.0-rc.1",
+        "@angular/router": "9.0.0-rc.1",
         "rxjs": "^6.4.0",
         "tns-core-modules": "next",
-        "typescript": "~3.5.3"
+        "typescript": "~3.6.4",
+        "zone.js": "~0.10.2"
     },
     "scripts": {
         "ngc": "ngc -p tsconfig.json",

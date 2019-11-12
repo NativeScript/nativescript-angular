@@ -24,13 +24,13 @@
     "@nativescript/theme": "~2.2.0",
     "reflect-metadata": "~0.1.12",
     "rxjs": "^6.4.0",
-    "tns-core-modules": "~6.2.0",
+    "tns-core-modules": "~6.3.0",
     "zone.js": "~0.10.2"
   },
   "devDependencies": {
     "@angular/compiler-cli": "next",
     "@ngtools/webpack": "next",
-    "nativescript-dev-webpack": "~1.3.0",
+    "nativescript-dev-webpack": "~1.4.0",
     "typescript": "~3.6.4"
   },
   "gitHead": "f0bdb5bcc6c991497ddf34d446ed0cb4ae4da091",
