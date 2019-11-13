@@ -1,3 +1,13 @@
+<a name="8.20.3"></a>
+## [8.20.3](https://github.com/NativeScript/nativescript-angular/compare/8.20.0...8.20.3) (2019-11-13)
+
+
+### Bug Fixes
+
+* add exports for backwards compatibility ([4a5d022](https://github.com/NativeScript/nativescript-angular/commit/4a5d022))
+
+
+
 <a name="8.20.2"></a>
 ## [8.20.2](https://github.com/NativeScript/nativescript-angular/compare/8.20.0...8.20.2) (2019-11-12)
 
