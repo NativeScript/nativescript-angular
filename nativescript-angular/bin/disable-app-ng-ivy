@@ -1,0 +1,36 @@
+#!/usr/bin/env node
+// First param (optional, default value 'true'): 'false' (enable Ivy) or 'true' (default value, will disable Ivy)
+
+const path = require("path");
+const fs = require("fs");
+
+const shouldEnable = process.argv[2] === "false";
+const binPath = __dirname;
+const pluginPath = path.dirname(binPath);
+const enableIvyKey = "enableIvy";
+
+function disableIvyInAngularCompilerOptions(angularCompilerOptions) {
+    if (angularCompilerOptions[enableIvyKey] != null) {
+        angularCompilerOptions[enableIvyKey] = shouldEnable;
+        logUpdatedDependency(enableIvyKey, shouldEnable);
+    }
+
+    function logUpdatedDependency(dependencyName, version) {
+        console.log(`Updated ${dependencyName} to : ${version}.`);
+    }
+}
+
+const projectPath = process.env.INIT_CWD || path.dirname(path.dirname(path.dirname(pluginPath)));
+const appTsConfigPath = path.join(projectPath, "tsconfig.json");
+const appTsConfigJson = JSON.parse(fs.readFileSync(appTsConfigPath, "utf8"));
+
+let { angularCompilerOptions } = appTsConfigJson;
+if (!angularCompilerOptions) {
+    appTsConfigJson["angularCompilerOptions"] = { "enableIvy": shouldEnable };
+} else {
+    disableIvyInAngularCompilerOptions(angularCompilerOptions);
+}
+
+fs.writeFileSync(appTsConfigPath, JSON.stringify(appTsConfigJson, null, 4));
+
+console.log("\nIvy has been disable. Don't forget to run `rm -rf node_modules && npm i`.");
