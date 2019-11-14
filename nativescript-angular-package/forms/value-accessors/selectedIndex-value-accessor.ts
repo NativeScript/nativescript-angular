@@ -1,1 +1,1 @@
-export * from "@nativescript/angular/forms/value-accessors/selectedindex-value-accessor";
+export * from "@nativescript/angular/forms/value-accessors/selectedIndex-value-accessor";
