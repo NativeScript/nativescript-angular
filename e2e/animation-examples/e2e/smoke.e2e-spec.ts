@@ -148,16 +148,16 @@ describe("smoke-tests", async function () {
         const heroPage = new HeroPage(driver);
         await heroPage.enterExample();
         await heroPage.addActive();
-        let result = await driver.compareScreen("add_active_items", 5, 0.01);
+        let result = await driver.compareScreen("add_active_items", 5);
 
         await heroPage.addInactive();
-        result = await driver.compareScreen("add_inactive_items", 5, 0.01) && result;
+        result = await driver.compareScreen("add_inactive_items", 5) && result;
 
         await heroPage.remove();
-        result = await driver.compareScreen("add_remove_items", 5, 0.01) && result;
+        result = await driver.compareScreen("add_remove_items", 5) && result;
 
         await heroPage.reset();
-        result = await driver.compareScreen("add_reset_items", 5, 0.01) && result;
+        result = await driver.compareScreen("add_reset_items", 5) && result;
 
         assert.isTrue(result, "Image verification failed!");
 
