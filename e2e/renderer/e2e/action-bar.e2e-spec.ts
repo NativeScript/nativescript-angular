@@ -12,6 +12,7 @@ const isSauceRun = isSauceLab;
 
 import { isOnTheLeft } from "./helpers/location";
 import { assert } from "chai";
+import { ImageOptions } from "nativescript-dev-appium/lib/image-options";
 
 describe("Action Bar scenario", async function () {
     let driver: AppiumDriver;
@@ -20,6 +21,8 @@ describe("Action Bar scenario", async function () {
         this.timeout(QUEUE_WAIT_TIME);
         nsCapabilities.testReporter.context = this;
         driver = await createDriver();
+        driver.imageHelper.defaultTolerance = 50;
+        driver.imageHelper.defaultToleranceType = ImageOptions.pixel;
         await driver.driver.resetApp();
     });
 
