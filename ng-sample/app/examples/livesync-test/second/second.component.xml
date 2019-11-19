@@ -1,4 +1,0 @@
-<StackLayout>
-    <Label text="Second Page" class="title"></Label>
-    <Button text="Go to first" nsRouterLink=""></Button>
-</StackLayout>
