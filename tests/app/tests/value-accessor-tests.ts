@@ -111,7 +111,7 @@ describe("two-way binding via ng-model", () => {
         let diff = Math.abs(accessor.view.date.getTime() - defaultDate.getTime());
         assert.isTrue(diff < 1000, "setting null should reset the value");
 
-        accessor.writeValue("2010-03-17");
+        accessor.writeValue("2010/03/17");
         assert.equal(formatDate(new Date(2010, 2, 17)), formatDate(accessor.view.date));
         
         accessor.writeValue(null);
