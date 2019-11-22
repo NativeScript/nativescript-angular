@@ -53,6 +53,7 @@
     "reflect-metadata": "~0.1.12",
     "rxjs": "^6.4.0",
     "tns-core-modules": "next",
+    "tslib": "~1.10.0",
     "zone.js": "~0.10.2"
   },
   "devDependencies": {

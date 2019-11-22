@@ -31,7 +31,8 @@
     "nativescript-unit-test-runner": "0.7.0",
     "rxjs": "^6.4.0",
     "tns-core-modules": "next",
-    "zone.js": "^0.9.1"
+    "tslib": "~1.10.0",
+    "zone.js": "~0.10.2"
   },
   "devDependencies": {
     "@angular/compiler-cli": "8.0.0",
