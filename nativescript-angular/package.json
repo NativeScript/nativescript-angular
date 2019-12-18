@@ -7,11 +7,6 @@
   "author": {
     "name": "NativeScript Team"
   },
-  "contributors": [
-    "Hristo Deshev <hristo.deshev@telerik.com>",
-    "Alexander Vakrilov <alexander.vakrilov@progress.com>",
-    "Stanimira Vlaeva <Stanimira.Vlaeva@progress.com>"
-  ],
   "nativescript": {
     "platforms": {
       "android": "6.0.0",
@@ -53,7 +48,7 @@
     "@angular/platform-browser": "~8.2.0",
     "@angular/router": "~8.2.0",
     "rxjs": "^6.4.0",
-    "tns-core-modules": "^6.0.0 || >6.1.0-",
+    "tns-core-modules": "^6.2.0 || >6.3.0-",
     "typescript": "~3.5.3",
     "zone.js": "^0.9.1"
   },

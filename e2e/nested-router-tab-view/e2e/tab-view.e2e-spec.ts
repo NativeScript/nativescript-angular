@@ -7,6 +7,7 @@ import {
     testTeamNextNavigated,
 } from "./shared.e2e-spec";
 import { isSauceLab } from "nativescript-dev-appium/lib/parser";
+import { ImageOptions } from "nativescript-dev-appium/lib/image-options";
 
 const QUEUE_WAIT_TIME: number = 600000; // Sometimes SauceLabs threads are not available and the tests wait in a queue to start. Wait 10 min before timeout.
 const isSauceRun = isSauceLab;
@@ -19,6 +20,8 @@ describe("tab-view:", async function () {
         this.timeout(QUEUE_WAIT_TIME);
         nsCapabilities.testReporter.context = this;
         driver = await createDriver();
+        driver.imageHelper.defaultTolerance = 50;
+        driver.imageHelper.defaultToleranceType = ImageOptions.pixel;
         screen = new Screen(driver);
     });
 

@@ -18,6 +18,8 @@ describe("TabView-scenario", async function(){
         this.timeout(QUEUE_WAIT_TIME);
         nsCapabilities.testReporter.context = this;
         driver = await createDriver();
+        driver.imageHelper.defaultTolerance = 50;
+        driver.imageHelper.defaultToleranceType = ImageOptions.pixel;
         await driver.driver.resetApp();
     });
 
