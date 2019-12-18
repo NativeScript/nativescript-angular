@@ -348,13 +348,13 @@ export class PageRouterOutlet implements OnDestroy { // tslint:disable-line:dire
         this.changeDetector.markForCheck();
 
         this.activated = loaderRef.instance.loadWithFactory(factory);
-        this.loadComponentInPage(page, this.activated);
+        this.loadComponentInPage(page, this.activated, { activatedRoute });
 
         this.activated[loaderRefSymbol] = loaderRef;
     }
 
     @profile
-    private loadComponentInPage(page: Page, componentRef: ComponentRef<any>): void {
+    private loadComponentInPage(page: Page, componentRef: ComponentRef<any>, navigationContext): void {
         // Component loaded. Find its root native view.
         const componentView = componentRef.location.nativeElement;
         // Remove it from original native parent.
@@ -393,6 +393,7 @@ export class PageRouterOutlet implements OnDestroy { // tslint:disable-line:dire
             create() {
                 return page;
             },
+            context: navigationContext,
             clearHistory: navOptions.clearHistory,
             animated: navOptions.animated,
             transition: navOptions.transition
