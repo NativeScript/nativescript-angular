@@ -70,6 +70,6 @@
     "typescript": "~3.5.3",
     "zone.js": "^0.9.1",
     "nativescript-typedoc-theme": "git://github.com/NativeScript/nativescript-typedoc-theme.git#master",
-    "typedoc": "^0.13.0"
+    "typedoc": "0.15.0"
   }
 }
