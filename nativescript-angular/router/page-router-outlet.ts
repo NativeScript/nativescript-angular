@@ -48,7 +48,7 @@ export function destroyComponentRef(componentRef: ComponentRef<any>) {
     }
 }
 
-class DestructableInjector implements Injector {
+class DestructibleInjector implements Injector {
     private refs = new Set<any>();
     constructor(private destructableProviders: ProviderSet, private parent: Injector) {
     }
@@ -354,7 +354,7 @@ export class PageRouterOutlet implements OnDestroy { // tslint:disable-line:dire
             parent: this.location.injector
         });
 
-        const childInjector = new DestructableInjector(destructables, injector);
+        const childInjector = new DestructibleInjector(destructables, injector);
         const loaderRef = this.location.createComponent(
             this.detachedLoaderFactory, this.location.length, childInjector, []);
         loaderRef.onDestroy(() => childInjector.destroy());
