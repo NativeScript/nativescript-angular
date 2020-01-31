@@ -10,6 +10,7 @@ import { ModalViewComponent } from "../modal-shared/modal-view.component";
 import { confirm } from "tns-core-modules/ui/dialogs";
 
 import { AppModule } from "../app.module";
+import { PageService } from "nativescript-angular";
 
 @Component({
   moduleId: module.id,
@@ -21,7 +22,10 @@ export class HomeComponent {
     private modal: ModalDialogService,
     private vcRef: ViewContainerRef,
     private viewContainerRefService: ViewContainerRefService,
-    private routerExtension: RouterExtensions) { }
+    private pageService: PageService,
+    private routerExtension: RouterExtensions) {
+      this.pageService.inPage$.subscribe((inPage) => console.log("HomeComponent - inPage", inPage));
+    }
   
   onNavigateSecond() {
       this.routerExtension.navigate(["second"]);
