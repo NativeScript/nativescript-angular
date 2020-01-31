@@ -1,3 +1,17 @@
+<a name="8.21.0"></a>
+## 8.21.0 (2020-01-31)
+
+
+### Bug Fixes
+
+* wrong import path in compat package ([6984c26](https://github.com/NativeScript/nativescript-angular/commit/6984c26))
+* **hmr:** After HMR app is blank when re-launched ([#2108](https://github.com/NativeScript/nativescript-angular/issues/2108)) ([a479099](https://github.com/NativeScript/nativescript-angular/commit/a479099))
+
+
+### Features
+
+* introduce PageService ([#2111](https://github.com/NativeScript/nativescript-angular/issues/2111)) ([362e893](https://github.com/NativeScript/nativescript-angular/commit/362e893))
+
 <a name="8.20.4"></a>
 ## [8.20.4](https://github.com/NativeScript/nativescript-angular/compare/8.20.3...8.20.4) (2020-01-07)
 
