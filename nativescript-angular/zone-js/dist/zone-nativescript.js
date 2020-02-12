@@ -1676,5 +1676,6 @@ var clear = 'clear';
 patchTimer(global, set, clear, 'Timeout');
 patchTimer(global, set, clear, 'Interval');
 patchTimer(global, set, clear, 'Immediate');
+patchTimer(global, 'request', 'cancel', 'AnimationFrame');
 
 })));
