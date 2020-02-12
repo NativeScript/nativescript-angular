@@ -3,7 +3,8 @@ import {
     Component,
     ElementRef,
     IterableDiffers,
-    forwardRef
+    forwardRef,
+    NgZone
 } from "@angular/core";
 import { ListView } from "tns-core-modules/ui/list-view";
 import { TEMPLATED_ITEMS_COMPONENT, TemplatedItemsComponent } from "./templated-items-comp";
@@ -25,7 +26,7 @@ export class ListViewComponent extends TemplatedItemsComponent {
     protected templatedItemsView: ListView;
 
     constructor(_elementRef: ElementRef,
-        _iterableDiffers: IterableDiffers) {
-        super(_elementRef, _iterableDiffers);
+        _iterableDiffers: IterableDiffers, zone: NgZone) {
+        super(_elementRef, _iterableDiffers, zone);
     }
 }
