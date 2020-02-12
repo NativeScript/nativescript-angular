@@ -12,6 +12,7 @@ import {
     Input,
     IterableDiffer,
     IterableDiffers,
+    NgZone,
     OnDestroy,
     Output,
     TemplateRef,
@@ -84,7 +85,8 @@ export abstract class TemplatedItemsComponent implements DoCheck, OnDestroy, Aft
     }
 
     constructor(_elementRef: ElementRef,
-        private _iterableDiffers: IterableDiffers) {
+        private _iterableDiffers: IterableDiffers,
+        private zone: NgZone) {
         this.templatedItemsView = _elementRef.nativeElement;
 
         this.templatedItemsView.on("itemLoading", this.onItemLoading, this);
@@ -218,8 +220,10 @@ export abstract class TemplatedItemsComponent implements DoCheck, OnDestroy, Aft
             listViewLog(`Manually detect changes in child: ${index}`);
         }
 
-        viewRef.markForCheck();
-        viewRef.detectChanges();
+        this.zone.run(() => {
+            viewRef.markForCheck();
+            viewRef.detectChanges();
+        });
     }
 
     ngDoCheck() {
