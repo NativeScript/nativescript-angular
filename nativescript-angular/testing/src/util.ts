@@ -91,23 +91,29 @@ export function nsTestBedBeforeEach(
     entryComponents: any[] = []) {
     return (done) => {
         activeTestFixtures.push([]);
+        imports.unshift(NativeScriptModule);
         // If there are no entry components we can take the simple path.
         if (entryComponents.length === 0) {
             TestBed.configureTestingModule({
-                declarations: [...components],
-                providers: [...providers],
-                imports: [NativeScriptModule, ...imports]
+                declarations: components,
+                providers: providers,
+                imports: imports
             });
         } else {
             // If there are entry components, we have to reset the testing platform.
             //
             // There's got to be a better way... (o_O)
             TestBed.resetTestEnvironment();
-            @NgModule({
-                declarations: entryComponents,
-                exports: entryComponents,
-                entryComponents: entryComponents
-            })
+            // TODO: this currently causes:
+            /**
+             * ../nativescript-angular/testing/src/util.ts:108:31 - error NG1010: Expected array when reading the NgModule.declarations of EntryComponentsTestModule
+                   declarations: entryComponents,
+             */
+            // @NgModule({
+            //     declarations: entryComponents,
+            //     exports: entryComponents,
+            //     entryComponents: entryComponents
+            // })
             class EntryComponentsTestModule {
             }
             TestBed.initTestEnvironment(
