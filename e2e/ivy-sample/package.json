@@ -23,7 +23,7 @@
     "@angular/router": "~9.0.1",
     "@nativescript/theme": "~2.2.0",
     "kinvey-nativescript-sdk": "~4.2.5",
-    "@nativescript/angular": "file:../../nativescript-angular/nativescript-angular-9.0.0.tgz",
+    "@nativescript/angular": "file:../../dist/nativescript-angular-compat.tgz",
     "nativescript-background-http": "~4.2.1",
     "nativescript-bottom-navigation": "~2.0.5",
     "nativescript-brightness": "~1.0.1",
