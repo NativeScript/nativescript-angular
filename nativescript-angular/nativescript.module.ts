@@ -1,7 +1,6 @@
 import "tns-core-modules/globals";
 // Require application early to work around a circular import
 import "tns-core-modules/application";
-import "./zone-js/dist/zone-nativescript";
 
 import "./polyfills/array";
 import "./polyfills/console";

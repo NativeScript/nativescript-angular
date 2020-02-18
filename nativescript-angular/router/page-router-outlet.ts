@@ -343,8 +343,8 @@ export class PageRouterOutlet implements OnDestroy { // tslint:disable-line:dire
         const destructables = new Set([PageService]);
         const injector = Injector.create({
             providers: [
-                { provide: PageService, useClass: PageService, deps: [Page] },
                 { provide: Page, useValue: page },
+                { provide: PageService, useClass: PageService, deps: [Page] },
                 { provide: Frame, useValue: this.frame },
                 { provide: PageRoute, useValue: new PageRoute(activatedRoute) },
                 { provide: ActivatedRoute, useValue: activatedRoute },
