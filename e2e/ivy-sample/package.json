@@ -12,8 +12,8 @@
   "license": "SEE LICENSE IN <your-license-filename>",
   "repository": "<fill-your-repository-here>",
   "scripts": {
-    "ngcc": "ngcc",
-    "postinstall": "ngcc"
+    "ngcc": "ngcc --properties es2015 module main --first-only",
+    "postinstall": "npm run ngcc"
   },
   "dependencies": {
     "@angular/animations": "~9.0.1",
@@ -28,7 +28,6 @@
     "@nativescript/theme": "~2.2.0",
     "@nativescript/angular": "file:../../dist/nativescript-angular-scoped.tgz",
     "nativescript-angular": "file:../../dist/nativescript-angular-compat.tgz",
-    "reflect-metadata": "~0.1.12",
     "rxjs": "^6.5.0",
     "tns-core-modules": "~6.3.0",
     "tslib": "~1.10.0",
@@ -37,7 +36,7 @@
   "devDependencies": {
     "@angular/compiler-cli": "~9.0.1",
     "@ngtools/webpack": "~9.0.1",
-    "nativescript-dev-webpack": "~1.4.0",
+    "nativescript-dev-webpack": "~1.5.0",
     "typescript": "~3.6.4"
   },
   "gitHead": "f0bdb5bcc6c991497ddf34d446ed0cb4ae4da091",

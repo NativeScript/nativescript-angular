@@ -26,7 +26,6 @@ export const NS_DIRECTIVES = [
 export {
     ListViewComponent,
     TemplateKeyDirective,
-    SetupItemViewArgs,
     TemplatedItemsComponent,
     TabViewDirective,
     TabViewItemDirective,

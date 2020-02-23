@@ -1,7 +1,6 @@
 import {
     ComponentFactoryResolver,
     ComponentRef,
-    Directive,
     Injectable,
     Injector,
     NgModuleRef,

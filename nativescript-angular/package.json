@@ -38,8 +38,7 @@
     "disable-app-ng-ivy": "./bin/disable-app-ng-ivy"
   },
   "dependencies": {
-    "nativescript-intl": "^3.0.0",
-    "reflect-metadata": "^0.1.8"
+    "nativescript-intl": "^3.0.0"
   },
   "peerDependencies": {
     "@angular/platform-browser-dynamic": "~9.0.0",

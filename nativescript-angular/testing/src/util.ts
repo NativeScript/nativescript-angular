@@ -3,7 +3,7 @@ import { View } from "tns-core-modules/ui/core/view";
 import { Frame } from "tns-core-modules/ui/frame";
 import { LayoutBase } from "tns-core-modules/ui/layouts/layout-base";
 import { ComponentFixture, TestBed } from "@angular/core/testing";
-import { NgModule, Type } from "@angular/core";
+import { Type } from "@angular/core";
 import { NativeScriptModule } from "../../nativescript.module";
 import { platformBrowserDynamicTesting } from "@angular/platform-browser-dynamic/testing";
 import { NS_COMPILER_PROVIDERS } from "../../platform";
@@ -105,10 +105,7 @@ export function nsTestBedBeforeEach(
             // There's got to be a better way... (o_O)
             TestBed.resetTestEnvironment();
             // TODO: this currently causes:
-            /**
-             * ../nativescript-angular/testing/src/util.ts:108:31 - error NG1010: Expected array when reading the NgModule.declarations of EntryComponentsTestModule
-                   declarations: entryComponents,
-             */
+            // NG1010: Expected array when reading
             // @NgModule({
             //     declarations: entryComponents,
             //     exports: entryComponents,

@@ -14,7 +14,7 @@ import {
 } from "./platform-providers";
 // import { NS_DIRECTIVES } from "./directives";
 import { ListViewComponent } from "./directives/list-view-comp";
-import { TemplateKeyDirective, SetupItemViewArgs, TemplatedItemsComponent } from "./directives/templated-items-comp";
+import { TemplateKeyDirective } from "./directives/templated-items-comp";
 import { TabViewDirective, TabViewItemDirective } from "./directives/tab-view";
 import {
     ActionBarComponent,
