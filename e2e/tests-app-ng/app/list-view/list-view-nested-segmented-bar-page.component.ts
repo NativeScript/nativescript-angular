@@ -32,8 +32,8 @@ interface DataItem {
 
                 <ng-template nsTemplateKey="dataItemTemplate" let-item="item">
                     <StackLayout>
-                        <Label [text]="'index: ' + item.index" height="50"></Label>
-                        <Label [text]="'[' + item.id + '] ' + item.name" height="50"></Label>
+                        <Label [text]="'Item ID: ' + item.id" height="50"></Label>
+                        <Label [text]="item.name" height="50"></Label>
                     </StackLayout>
                 </ng-template>
 
