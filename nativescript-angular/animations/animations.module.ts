@@ -3,7 +3,6 @@ import {
     Injectable,
     Inject,
     NgZone,
-    Provider,
     RendererFactory2,
     Optional,
     SkipSelf,
