@@ -48,21 +48,19 @@ export function instantiateDefaultStyleNormalizer() {
     return new WebAnimationsStyleNormalizer();
 }
 
-export const NATIVESCRIPT_ANIMATIONS_PROVIDERS: Provider[] = [
-    {provide: AnimationDriver, useFactory: instantiateSupportedAnimationDriver},
-    {provide: AnimationBuilder, useClass: BrowserAnimationBuilder},
-    {provide: AnimationStyleNormalizer, useFactory: instantiateDefaultStyleNormalizer},
-    {provide: AnimationEngine, useClass: InjectableAnimationEngine},
-    {
-        provide: RendererFactory2,
-        useFactory: instantiateRendererFactory,
-        deps: [NativeScriptRendererFactory, AnimationEngine, NgZone]
-    }
-];
-
 @NgModule({
     imports: [NativeScriptModule],
-    providers: NATIVESCRIPT_ANIMATIONS_PROVIDERS,
+    providers: [
+      {provide: AnimationDriver, useFactory: instantiateSupportedAnimationDriver},
+      {provide: AnimationBuilder, useClass: BrowserAnimationBuilder},
+      {provide: AnimationStyleNormalizer, useFactory: instantiateDefaultStyleNormalizer},
+      {provide: AnimationEngine, useClass: InjectableAnimationEngine},
+      {
+          provide: RendererFactory2,
+          useFactory: instantiateRendererFactory,
+          deps: [NativeScriptRendererFactory, AnimationEngine, NgZone]
+      }
+  ]
 })
 export class NativeScriptAnimationsModule {
     constructor(@Optional() @SkipSelf() parentModule: NativeScriptAnimationsModule) {

@@ -9,15 +9,6 @@ import {
     SelectedIndexValueAccessor
 } from "./value-accessors";
 
-export const FORMS_DIRECTIVES = [
-    TextValueAccessor,
-    CheckedValueAccessor,
-    DateValueAccessor,
-    TimeValueAccessor,
-    SelectedIndexValueAccessor,
-    NumberValueAccessor,
-];
-
 export {
     TextValueAccessor,
     CheckedValueAccessor,
@@ -28,7 +19,14 @@ export {
 };
 
 @NgModule({
-    declarations: FORMS_DIRECTIVES,
+    declarations: [
+      TextValueAccessor,
+      CheckedValueAccessor,
+      DateValueAccessor,
+      TimeValueAccessor,
+      SelectedIndexValueAccessor,
+      NumberValueAccessor
+    ],
     providers: [
     ],
     imports: [
@@ -36,7 +34,12 @@ export {
     ],
     exports: [
         FormsModule,
-        FORMS_DIRECTIVES,
+        TextValueAccessor,
+        CheckedValueAccessor,
+        DateValueAccessor,
+        TimeValueAccessor,
+        SelectedIndexValueAccessor,
+        NumberValueAccessor
     ]
 })
 export class NativeScriptFormsModule {
