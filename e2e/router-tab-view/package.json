@@ -41,6 +41,8 @@
   },
   "scripts": {
     "e2e": "tsc -p e2e && mocha --opts ../config/mocha.opts --recursive e2e --appiumCapsLocation ../config/appium.capabilities.json",
-    "compile-tests": "tsc -p e2e --watch"
+    "compile-tests": "tsc -p e2e --watch",
+    "ngcc": "ngcc --properties es2015 module main --first-only",
+    "postinstall": "npm run ngcc"
   }
 }

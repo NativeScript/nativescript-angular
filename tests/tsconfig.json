@@ -36,5 +36,8 @@
         "platforms",
         "**/*.aot",
         "e2e"
-    ]
+    ],
+    "angularCompilerOptions": {
+        "enableIvy": false
+    }
 }

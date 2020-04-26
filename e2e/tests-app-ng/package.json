@@ -13,14 +13,14 @@
     }
   },
   "dependencies": {
-    "@angular/animations": "~8.2.0",
-    "@angular/common": "~8.2.0",
-    "@angular/compiler": "~8.2.0",
-    "@angular/core": "~8.2.0",
-    "@angular/forms": "~8.2.0",
-    "@angular/platform-browser": "~8.2.0",
-    "@angular/platform-browser-dynamic": "~8.2.0",
-    "@angular/router": "~8.2.0",
+    "@angular/animations": "~9.1.0",
+    "@angular/common": "~9.1.0",
+    "@angular/compiler": "~9.1.0",
+    "@angular/core": "~9.1.0",
+    "@angular/forms": "~9.1.0",
+    "@angular/platform-browser": "~9.1.0",
+    "@angular/platform-browser-dynamic": "~9.1.0",
+    "@angular/router": "~9.1.0",
     "nativescript-angular": "file:../../nativescript-angular-package",
     "nativescript-intl": "~3.0.0",
     "nativescript-theme-core": "^1.0.4",
@@ -31,8 +31,8 @@
     "zone.js": "~0.10.2"
   },
   "devDependencies": {
-    "@angular/compiler-cli": "~8.2.0",
-    "@ngtools/webpack": "~8.2.0",
+    "@angular/compiler-cli": "~9.1.0",
+    "@ngtools/webpack": "~9.1.0",
     "babel-traverse": "6.24.1",
     "babel-types": "6.24.1",
     "babylon": "6.17.0",
@@ -41,9 +41,11 @@
     "lazy": "1.0.11",
     "nativescript-dev-webpack": "next",
     "tslint": "^5.4.3",
-    "typescript": "~3.5.3"
+    "typescript": "~3.8.3"
   },
   "scripts": {
-    "tslint": "tslint --config tslint.json 'app/**/*.ts'"
+    "tslint": "tslint --config tslint.json 'app/**/*.ts'",
+    "ngcc": "ngcc --properties es2015 module main --first-only",
+    "postinstall": "npm run ngcc"
   }
 }

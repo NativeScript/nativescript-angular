@@ -7,14 +7,14 @@
     "id": "org.nativescript.renderer"
   },
   "dependencies": {
-    "@angular/animations": "~8.2.0",
-    "@angular/common": "~8.2.0",
-    "@angular/compiler": "~8.2.0",
-    "@angular/core": "~8.2.0",
-    "@angular/forms": "~8.2.0",
-    "@angular/platform-browser": "~8.2.0",
-    "@angular/platform-browser-dynamic": "~8.2.0",
-    "@angular/router": "~8.2.0",
+    "@angular/animations": "~9.1.0",
+    "@angular/common": "~9.1.0",
+    "@angular/compiler": "~9.1.0",
+    "@angular/core": "~9.1.0",
+    "@angular/forms": "~9.1.0",
+    "@angular/platform-browser": "~9.1.0",
+    "@angular/platform-browser-dynamic": "~9.1.0",
+    "@angular/router": "~9.1.0",
     "nativescript-angular": "file:../../nativescript-angular-package",
     "nativescript-theme-core": "~1.0.4",
     "reflect-metadata": "~0.1.8",
@@ -24,8 +24,8 @@
     "zone.js": "~0.10.2"
   },
   "devDependencies": {
-    "@angular/compiler-cli": "~8.2.0",
-    "@ngtools/webpack": "~8.2.0",
+    "@angular/compiler-cli": "~9.1.0",
+    "@ngtools/webpack": "~9.1.0",
     "@types/chai": "~4.1.7",
     "@types/mocha": "~5.2.5",
     "@types/node": "~10.12.18",
@@ -38,11 +38,13 @@
     "mochawesome": "~3.1.2",
     "nativescript-dev-appium": "^6.0.0",
     "nativescript-dev-webpack": "next",
-    "typescript": "~3.5.3"
+    "typescript": "~3.8.3"
   },
   "scripts": {
     "e2e": "tsc -p e2e && mocha --opts ../config/mocha.opts --recursive e2e --appiumCapsLocation ../config/appium.capabilities.json",
     "compile-tests-w": "tsc -p e2e --watch",
-    "update-app-ng-deps": "update-app-ng-deps"
+    "update-app-ng-deps": "update-app-ng-deps",
+    "ngcc": "ngcc --properties es2015 module main --first-only",
+    "postinstall": "npm run ngcc"
   }
 }

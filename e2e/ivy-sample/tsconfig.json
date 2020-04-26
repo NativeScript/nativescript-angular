@@ -27,6 +27,6 @@
         "platforms"
     ],
     "angularCompilerOptions": {
-        "enableIvy": true
+        "enableIvy": false
     }
 }
