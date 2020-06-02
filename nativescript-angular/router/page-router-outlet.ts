@@ -12,10 +12,10 @@ import {
     PRIMARY_OUTLET,
 } from "@angular/router";
 
-import { Device } from "tns-core-modules/platform";
-import { Frame } from "tns-core-modules/ui/frame";
-import { Page, NavigatedData } from "tns-core-modules/ui/page";
-import { profile } from "tns-core-modules/profiling";
+import { Device } from "@nativescript/core/platform";
+import { Frame } from "@nativescript/core/ui/frame";
+import { Page, NavigatedData } from "@nativescript/core/ui/page";
+import { profile } from "@nativescript/core/profiling";
 
 import { BehaviorSubject } from "rxjs";
 
@@ -343,8 +343,8 @@ export class PageRouterOutlet implements OnDestroy { // tslint:disable-line:dire
         const destructables = new Set([PageService]);
         const injector = Injector.create({
             providers: [
-                { provide: PageService, useClass: PageService, deps: [Page] },
                 { provide: Page, useValue: page },
+                { provide: PageService, useClass: PageService, deps: [Page] },
                 { provide: Frame, useValue: this.frame },
                 { provide: PageRoute, useValue: new PageRoute(activatedRoute) },
                 { provide: ActivatedRoute, useValue: activatedRoute },

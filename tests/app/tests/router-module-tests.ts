@@ -1,13 +1,13 @@
 // make sure you import mocha-config before @angular/core
 import { Component, ViewChild } from "@angular/core";
-import { nsTestBedAfterEach, nsTestBedBeforeEach, nsTestBedRender } from "nativescript-angular/testing";
-import { NativeScriptRouterModule, RouterExtensions } from "nativescript-angular/router";
-import { NSRouterLink } from "nativescript-angular/router/ns-router-link";
-import { NSLocationStrategy } from "nativescript-angular/router/ns-location-strategy";
+import { nsTestBedAfterEach, nsTestBedBeforeEach, nsTestBedRender } from "@nativescript/angular/testing";
+import { NativeScriptRouterModule, RouterExtensions } from "@nativescript/angular/router";
+import { NSRouterLink } from "@nativescript/angular/router/ns-router-link";
+import { NSLocationStrategy } from "@nativescript/angular";
 import { assert } from "~/tests/test-config";
 import { ActivatedRoute, Router, RouteReuseStrategy } from "@angular/router";
 import { LocationStrategy, PlatformLocation } from "@angular/common";
-import { NSRouteReuseStrategy } from "nativescript-angular/router/ns-route-reuse-strategy";
+import { NSRouteReuseStrategy } from "@nativescript/angular/router/ns-route-reuse-strategy";
 
 @Component({
     template: `<StackLayout><Label nsRouterLink text="COMPONENT"></Label></StackLayout>`

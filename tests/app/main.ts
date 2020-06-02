@@ -2,20 +2,20 @@
 // should be first in order to load some required settings
 // (like globals and reflect-metadata)
 
-import { NativeScriptModule } from "nativescript-angular/nativescript.module";
-import { platformNativeScriptDynamic } from "nativescript-angular/platform";
-import { NativeScriptRouterModule } from "nativescript-angular/router";
-import { NativeScriptFormsModule } from "nativescript-angular/forms";
+import { NativeScriptModule } from "@nativescript/angular";
+import { platformNativeScriptDynamic } from "@nativescript/angular/platform";
+import { NativeScriptRouterModule } from "@nativescript/angular/router";
+import { NativeScriptFormsModule } from "@nativescript/angular/forms";
 
 import { AppComponent } from "./app.component";
 import { GestureComponent } from "./snippets/gestures.component";
 import { LayoutsComponent } from "./snippets/layouts.component";
 import { IconFontComponent } from "./snippets/icon-font.component";
-import { APP_ROOT_VIEW } from "nativescript-angular/platform-providers";
-import { Page } from "tns-core-modules/ui/page";
-import { StackLayout } from "tns-core-modules/ui/layouts/stack-layout";
+import { APP_ROOT_VIEW } from "@nativescript/angular/platform-providers";
+import { Page } from "@nativescript/core/ui/page";
+import { StackLayout } from "@nativescript/core/ui/layouts/stack-layout";
 
-import * as application from "tns-core-modules/application";
+import * as application from "@nativescript/core/application";
 import "tns-core-modules/ui/styling/style";
 import "tns-core-modules/ui/frame";
 import { HOOKS_LOG } from "./base.component";
@@ -29,14 +29,14 @@ import { InjectionToken, NgModule, NgModuleFactoryLoader } from "@angular/core";
 import { PageNavigationApp } from "./snippets/navigation/page-outlet";
 import { NavigationApp } from "./snippets/navigation/router-outlet";
 
-import { rendererTraceCategory, routerTraceCategory } from "nativescript-angular/trace";
+import { rendererTraceCategory, routerTraceCategory } from "@nativescript/angular/trace";
 
 import { BehaviorSubject } from "rxjs";
 
-import { GridLayout, ItemSpec } from "tns-core-modules/ui/layouts/grid-layout/grid-layout";
+import { GridLayout, ItemSpec } from "@nativescript/core/ui/layouts/grid-layout/grid-layout";
 
-import { enable, addCategories, categories } from "tns-core-modules/trace";
-import { Color } from "tns-core-modules/color/color";
+import { enable, addCategories, categories } from "@nativescript/core/trace";
+import { Color } from "@nativescript/core/color/color";
 
 addCategories(rendererTraceCategory);
 // addCategories(routerTraceCategory);

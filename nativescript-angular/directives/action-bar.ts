@@ -4,8 +4,8 @@ import {
     ActionItem,
     ActionItems,
     NavigationButton,
-} from "tns-core-modules/ui/action-bar";
-import { Page } from "tns-core-modules/ui/page";
+} from "@nativescript/core/ui/action-bar";
+import { Page } from "@nativescript/core/ui/page";
 
 import { isBlank } from "../lang-facade";
 import {

@@ -1,7 +1,7 @@
 import {
     AfterContentInit, ContentChildren, Directive,
     ElementRef, Input, OnChanges, OnDestroy,
-    QueryList, Renderer
+    QueryList, Renderer2
 } from "@angular/core";
 import { Subscription } from "rxjs";
 
@@ -66,7 +66,7 @@ export class NSRouterLinkActive implements OnChanges, OnDestroy, AfterContentIni
 
     @Input() nsRouterLinkActiveOptions: { exact: boolean } = { exact: false };
 
-    constructor(private router: Router, private element: ElementRef, private renderer: Renderer) {
+    constructor(private router: Router, private element: ElementRef, private renderer: Renderer2) {
         this.subscription = router.events.subscribe(s => {
             if (s instanceof NavigationEnd) {
                 this.update();
@@ -105,7 +105,7 @@ export class NSRouterLinkActive implements OnChanges, OnDestroy, AfterContentIni
             const currentUrlTree = this.router.parseUrl(this.router.url);
             const isActiveLinks = this.reduceList(currentUrlTree, this.links);
             this.classes.forEach(
-                c => this.renderer.setElementClass(
+                c => this.renderer.setStyle(
                     this.element.nativeElement, c, isActiveLinks));
         }
         Promise.resolve(hasActiveLinks).then(active => this.active = active);

@@ -2,7 +2,7 @@ import {
     ComponentRef, ComponentFactory, ViewContainerRef,
     Component, Type, ComponentFactoryResolver, ChangeDetectorRef
 } from "@angular/core";
-import { write } from "tns-core-modules/trace";
+import { write } from "@nativescript/core/trace";
 
 export const CATEGORY = "detached-loader";
 function log(message: string) {

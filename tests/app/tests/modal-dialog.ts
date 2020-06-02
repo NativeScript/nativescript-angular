@@ -1,16 +1,21 @@
 // make sure you import mocha-config before @angular/core
 import { assert } from "./test-config";
-import { Component, ViewContainerRef } from "@angular/core";
-import { Page } from "tns-core-modules/ui/page";
-import { topmost } from "tns-core-modules/ui/frame";
-import { ModalDialogParams, ModalDialogService } from "nativescript-angular/directives/dialogs";
+import { NgModule, Component, ViewContainerRef } from "@angular/core";
+import { Page } from "@nativescript/core/ui/page";
+import { topmost } from "@nativescript/core/ui/frame";
+import { ModalDialogParams, ModalDialogService } from "@nativescript/angular/directives/dialogs";
 
-import { device, isIOS } from "tns-core-modules/platform";
+import { device, isIOS } from "@nativescript/core/platform";
 
-import { ComponentFixture, async } from "@angular/core/testing";
-import { nsTestBedRender, nsTestBedAfterEach, nsTestBedBeforeEach } from "nativescript-angular/testing";
-import { NSLocationStrategy, Outlet } from "nativescript-angular/router/ns-location-strategy";
-import { FrameService } from "nativescript-angular";
+import { ComponentFixture, TestBed, async } from "@angular/core/testing";
+import { nsTestBedRender, nsTestBedAfterEach, nsTestBedBeforeEach, NATIVESCRIPT_TESTING_PROVIDERS, NativeScriptTestingModule } from "@nativescript/angular/testing";
+import { NSLocationStrategy, Outlet } from "@nativescript/angular";
+import { FrameService } from "@nativescript/angular";
+import { DetachedLoader, NativeScriptModule } from "@nativescript/angular";
+import { platformBrowserDynamicTesting } from "@angular/platform-browser-dynamic/testing";
+import { NS_COMPILER_PROVIDERS } from "@nativescript/angular/platform";
+import { CommonModule } from "@angular/common";
+
 import { FakeFrameService } from "./ns-location-strategy";
 const CLOSE_WAIT = isIOS ? 1000 : 0;
 
@@ -57,11 +62,39 @@ export class SuccessComponent {
 
 describe("modal-dialog", () => {
 
-    beforeEach(nsTestBedBeforeEach(
-        [FailComponent, SuccessComponent],
-        [{ provide: FrameService, useValue: new FakeFrameService() }, NSLocationStrategy],
-        [],
-        [ModalComponent]));
+    // beforeEach(nsTestBedBeforeEach(
+    //     [FailComponent, SuccessComponent],
+    //     [{ provide: FrameService, useValue: new FakeFrameService() }, NSLocationStrategy],
+    //     [],
+    //     [ModalComponent]));
+    beforeEach((done) => {
+      TestBed.resetTestEnvironment();
+      @NgModule({
+          declarations: [FailComponent, SuccessComponent, ModalComponent],
+          exports: [FailComponent, SuccessComponent, ModalComponent],
+          entryComponents: [ModalComponent]
+      })
+      class EntryComponentsTestModule {
+      }
+      TestBed.initTestEnvironment(
+          EntryComponentsTestModule,
+          platformBrowserDynamicTesting(NS_COMPILER_PROVIDERS)
+      );
+      TestBed.configureTestingModule({
+          declarations: [FailComponent, SuccessComponent, ModalComponent],
+          imports: [
+              NativeScriptModule, NativeScriptTestingModule, CommonModule,
+          ],
+          providers: [{ provide: FrameService, useValue: new FakeFrameService() }, NSLocationStrategy, ...NATIVESCRIPT_TESTING_PROVIDERS],
+      });
+      TestBed.compileComponents()
+          .then(() => done())
+          .catch((e) => {
+              console.log(`Failed to instantiate test component with error: ${e}`);
+              console.log(e.stack);
+              done();
+      });
+    });
     afterEach(nsTestBedAfterEach());
     before((done) => {
         // HACK: Wait for the navigations from the test runner app

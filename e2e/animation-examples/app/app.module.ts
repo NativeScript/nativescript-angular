@@ -4,9 +4,9 @@ import {
     NgModuleFactoryLoader
 } from "@angular/core";
 
-import { NativeScriptModule } from "nativescript-angular/nativescript.module";
-import { NativeScriptAnimationsModule } from "nativescript-angular/animations";
-import { NSModuleFactoryLoader } from "nativescript-angular/router";
+import { NativeScriptModule } from "@nativescript/angular";
+import { NativeScriptAnimationsModule } from "@nativescript/angular/animations";
+import { NSModuleFactoryLoader } from "@nativescript/angular/router";
 
 import { AppRoutingModule, routedComponents } from "./app.routing";
 import { AppComponent } from "./app.component";

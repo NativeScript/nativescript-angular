@@ -1,8 +1,8 @@
-import { isDefined } from "tns-core-modules/utils/types";
-import { View, unsetValue } from "tns-core-modules/ui/core/view";
-import { Placeholder } from "tns-core-modules/ui/placeholder";
-import { ContentView } from "tns-core-modules/ui/content-view";
-import { LayoutBase } from "tns-core-modules/ui/layouts/layout-base";
+import { isDefined } from "@nativescript/core/utils/types";
+import { View, unsetValue } from "@nativescript/core/ui/core/view";
+import { Placeholder } from "@nativescript/core/ui/placeholder";
+import { ContentView } from "@nativescript/core/ui/content-view";
+import { LayoutBase } from "@nativescript/core/ui/layouts/layout-base";
 import {
     CommentNode,
     InvisibleNode,
@@ -17,15 +17,15 @@ import {
     isView,
 } from "./element-registry";
 
-import { platformNames, Device } from "tns-core-modules/platform";
+import { platformNames, Device } from "@nativescript/core/platform";
 import { viewUtilLog as traceLog, isLogEnabled } from "./trace";
 
 const ELEMENT_NODE_TYPE = 1;
 const XML_ATTRIBUTES = Object.freeze(["style", "rows", "columns", "fontAttributes"]);
 const whiteSpaceSplitter = /\s+/;
 
-export type ViewExtensions = ViewExtensions;
-export type NgView = NgView;
+// export type ViewExtensions = ViewExtensions;
+// export type NgView = NgView;
 export type NgLayoutBase = LayoutBase & ViewExtensions;
 export type NgContentView = ContentView & ViewExtensions;
 export type NgPlaceholder = Placeholder & ViewExtensions;

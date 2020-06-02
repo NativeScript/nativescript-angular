@@ -19,19 +19,19 @@
   ],
   "homepage": "http://nativescript.org",
   "dependencies": {
-    "@angular/animations": "~8.2.0",
-    "@angular/common": "~8.2.0",
-    "@angular/compiler": "~8.2.0",
-    "@angular/core": "~8.2.0",
-    "@angular/forms": "~8.2.0",
-    "@angular/platform-browser": "~8.2.0",
-    "@angular/platform-browser-dynamic": "~8.2.0",
-    "@angular/router": "~8.2.0",
+    "@angular/animations": "~9.1.0",
+    "@angular/common": "~9.1.0",
+    "@angular/compiler": "~9.1.0",
+    "@angular/core": "~9.1.0",
+    "@angular/forms": "~9.1.0",
+    "@angular/platform-browser": "~9.1.0",
+    "@angular/platform-browser-dynamic": "~9.1.0",
+    "@angular/router": "~9.1.0",
     "nativescript-angular": "../nativescript-angular-package",
     "nativescript-unit-test-runner": "0.7.0",
-    "rxjs": "^6.4.0",
-    "tns-core-modules": "next",
-    "zone.js": "^0.9.1"
+    "rxjs": "~6.5.5",
+    "@nativescript/core": "next",
+    "zone.js": "^0.10.3"
   },
   "devDependencies": {
     "@angular/compiler-cli": "8.0.0",
@@ -57,7 +57,7 @@
     "remove-strict-webpack-plugin": "~0.1.2",
     "sinon": "^7.3.2",
     "tslint": "^4.5.1",
-    "typescript": "~3.5.3"
+    "typescript": "~3.8.3"
   },
   "scripts": {
     "e2e": "tsc -p e2e && mocha --opts ../e2e/config/mocha.opts --recursive e2e --appiumCapsLocation ../e2e/config/appium.capabilities.json",

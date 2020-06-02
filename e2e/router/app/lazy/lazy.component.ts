@@ -1,9 +1,9 @@
 import { Component, OnInit, OnDestroy, OnChanges } from "@angular/core";
 import { ActivatedRoute, Router, Route } from "@angular/router";
 import { Location } from "@angular/common";
-import { RouterExtensions } from "nativescript-angular/router";
+import { RouterExtensions } from "@nativescript/angular/router";
 
-import { Page } from "tns-core-modules/ui/page";
+import { Page } from "@nativescript/core/ui/page";
 
 @Component({
     selector: "lazy",

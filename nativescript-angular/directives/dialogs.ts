@@ -10,15 +10,15 @@ import {
 } from "@angular/core";
 
 import { NSLocationStrategy } from "../router/ns-location-strategy";
-import { View, ViewBase } from "tns-core-modules/ui/core/view";
-import { ProxyViewContainer } from "tns-core-modules/ui/proxy-view-container/proxy-view-container";
+import { View, ViewBase } from "@nativescript/core/ui/core/view";
+import { ProxyViewContainer } from "@nativescript/core/ui/proxy-view-container/proxy-view-container";
 
 import { AppHostView } from "../app-host-view";
 import { DetachedLoader } from "../common/detached-loader";
 import { PageFactory, PAGE_FACTORY } from "../platform-providers";
 import { once } from "../common/utils";
-import { Frame } from "tns-core-modules/ui/frame";
-import { ShowModalOptions } from "tns-core-modules/ui/core/view";
+import { Frame } from "@nativescript/core/ui/frame";
+import { ShowModalOptions } from "@nativescript/core/ui/core/view";
 
 export type BaseShowModalOptions = Pick<ShowModalOptions, Exclude<keyof ShowModalOptions, "closeCallback" | "context">>;
 

@@ -4,10 +4,10 @@ import {
     RendererStyleFlags2, ViewEncapsulation,
 } from "@angular/core";
 
-import { Device } from "tns-core-modules/platform";
-import { View, getViewById } from "tns-core-modules/ui/core/view";
-import { addCss } from "tns-core-modules/application";
-import { profile } from "tns-core-modules/profiling";
+import { Device } from "@nativescript/core/platform";
+import { View, getViewById } from "@nativescript/core/ui/core/view";
+import { addCss } from "@nativescript/core/application";
+import { profile } from "@nativescript/core/profiling";
 
 import { APP_ROOT_VIEW, DEVICE, getRootPage } from "./platform-providers";
 import { ViewUtil } from "./view-util";

@@ -1,5 +1,5 @@
 import { NgModule, NO_ERRORS_SCHEMA } from "@angular/core";
-import { NativeScriptModule } from "nativescript-angular/nativescript.module";
+import { NativeScriptModule } from "@nativescript/angular";
 import { AppRoutingModule } from "./app.routing";
 import { AppComponent } from "./app.component";
 import { NamedRouterComponent } from "./named-router.component";
@@ -19,9 +19,9 @@ import { ModalViewContentComponent } from "./modal-shared/modal-view-content.com
 import { ModalSharedSecondComponent } from "./modal-shared/modal-shared-second.component";
 import { ViewContainerRefService } from "./shared/ViewContainerRefService";
 
-import { enable as traceEnable, addCategories } from "tns-core-modules/trace";
-import { routerTraceCategory } from "nativescript-angular/trace";
-import { NativeScriptPlatformRef } from "nativescript-angular";
+import { enable as traceEnable, addCategories } from "@nativescript/core/trace";
+import { routerTraceCategory } from "@nativescript/angular/trace";
+import { NativeScriptPlatformRef } from "@nativescript/angular";
 
 addCategories(routerTraceCategory);
 traceEnable();

@@ -19,11 +19,11 @@ import {
     ViewContainerRef,
     ɵisListLikeIterable as isListLikeIterable
 } from "@angular/core";
-import { ItemEventData, TemplatedItemsView } from "tns-core-modules/ui/list-view";
-import { View, KeyedTemplate } from "tns-core-modules/ui/core/view";
-import { LayoutBase } from "tns-core-modules/ui/layouts/layout-base";
-import { ObservableArray } from "tns-core-modules/data/observable-array";
-import { profile } from "tns-core-modules/profiling";
+import { ItemEventData, TemplatedItemsView } from "@nativescript/core/ui/list-view";
+import { View, KeyedTemplate } from "@nativescript/core/ui/core/view";
+import { LayoutBase } from "@nativescript/core/ui/layouts/layout-base";
+import { ObservableArray } from "@nativescript/core/data/observable-array";
+import { profile } from "@nativescript/core/profiling";
 
 import { getSingleViewRecursive } from "../element-registry";
 import { listViewLog, listViewError, isLogEnabled } from "../trace";

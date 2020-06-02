@@ -1,7 +1,7 @@
 
-import { View } from "tns-core-modules/ui/core/view";
-import { Frame } from "tns-core-modules/ui/frame";
-import { LayoutBase } from "tns-core-modules/ui/layouts/layout-base";
+import { View } from "@nativescript/core/ui/core/view";
+import { Frame } from "@nativescript/core/ui/frame";
+import { LayoutBase } from "@nativescript/core/ui/layouts/layout-base";
 import { ComponentFixture, TestBed } from "@angular/core/testing";
 import { NgModule, Type } from "@angular/core";
 import { NativeScriptModule } from "../../nativescript.module";
@@ -9,7 +9,7 @@ import { platformBrowserDynamicTesting } from "@angular/platform-browser-dynamic
 import { NS_COMPILER_PROVIDERS } from "../../platform";
 import { NATIVESCRIPT_TESTING_PROVIDERS, NativeScriptTestingModule } from "../index";
 import { CommonModule } from "@angular/common";
-import { GridLayout } from "tns-core-modules/ui/layouts/grid-layout";
+import { GridLayout } from "@nativescript/core/ui/layouts/grid-layout";
 
 const TESTING_ROOT_ID = "__testing_container";
 
@@ -102,26 +102,26 @@ export function nsTestBedBeforeEach(
             // If there are entry components, we have to reset the testing platform.
             //
             // There's got to be a better way... (o_O)
-            TestBed.resetTestEnvironment();
-            @NgModule({
-                declarations: entryComponents,
-                exports: entryComponents,
-                entryComponents: entryComponents
-            })
-            class EntryComponentsTestModule {
-            }
-            TestBed.initTestEnvironment(
-                EntryComponentsTestModule,
-                platformBrowserDynamicTesting(NS_COMPILER_PROVIDERS)
-            );
-            TestBed.configureTestingModule({
-                declarations: components,
-                imports: [
-                    NativeScriptModule, NativeScriptTestingModule, CommonModule,
-                    ...imports
-                ],
-                providers: [...providers, ...NATIVESCRIPT_TESTING_PROVIDERS],
-            });
+            // TestBed.resetTestEnvironment();
+            // @NgModule({
+            //     declarations: entryComponents,
+            //     exports: entryComponents,
+            //     entryComponents: entryComponents
+            // })
+            // class EntryComponentsTestModule {
+            // }
+            // TestBed.initTestEnvironment(
+            //     EntryComponentsTestModule,
+            //     platformBrowserDynamicTesting(NS_COMPILER_PROVIDERS)
+            // );
+            // TestBed.configureTestingModule({
+            //     declarations: components,
+            //     imports: [
+            //         NativeScriptModule, NativeScriptTestingModule, CommonModule,
+            //         ...imports
+            //     ],
+            //     providers: [...providers, ...NATIVESCRIPT_TESTING_PROVIDERS],
+            // });
         }
         TestBed.compileComponents()
             .then(() => done())

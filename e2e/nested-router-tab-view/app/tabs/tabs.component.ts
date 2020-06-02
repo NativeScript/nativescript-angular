@@ -1,10 +1,10 @@
 import { Component, ViewContainerRef } from "@angular/core";
-import { ModalDialogService, ModalDialogOptions } from "nativescript-angular/directives/dialogs";
-import { RouterExtensions } from "nativescript-angular/router";
-import { EventData } from "tns-core-modules/data/observable";
+import { ModalDialogService, ModalDialogOptions } from "@nativescript/angular/directives/dialogs";
+import { RouterExtensions } from "@nativescript/angular/router";
+import { EventData } from "@nativescript/core/data/observable";
 import { ActivatedRoute } from "@angular/router";
-import { confirm } from "tns-core-modules/ui/dialogs";
-import { Page } from "tns-core-modules/ui/page";
+import { confirm } from "@nativescript/core/ui/dialogs";
+import { Page } from "@nativescript/core/ui/page";
 import { AppModule } from "../app.module";
 
 @Component({

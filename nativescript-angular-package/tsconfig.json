@@ -11,11 +11,12 @@
     "declaration": true,
     "removeComments": false,
     "noEmitOnError": true,
+    "skipLibCheck": true,
     "noImplicitAny": false,
     "lib": [
-        "dom",
-        "es6",
-        "es2015.iterable"
+      "es2017",
+      "dom",
+      "es6"
     ],
     "baseUrl": "."
   },

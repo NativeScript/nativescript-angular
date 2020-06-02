@@ -649,7 +649,7 @@ Angular apps described in [this](https://angular.io/guide/ngmodule-faq#q-browser
 Migration steps:
 In all NgModules, except the root one (`AppModule`), replace:
 ```
-import { NativeScriptModule } from "nativescript-angular/nativescript.module";
+import { NativeScriptModule } from "@nativescript/angular";
 …
 @NgModule({
     imports: [

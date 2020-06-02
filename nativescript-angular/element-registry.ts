@@ -1,7 +1,7 @@
-import { View } from "tns-core-modules/ui/core/view";
-import { LayoutBase } from "tns-core-modules/ui/layouts/layout-base";
-import { Page } from "tns-core-modules/ui/page";
-import { Frame } from "tns-core-modules/ui/frame";
+import { View } from "@nativescript/core/ui/core/view";
+import { LayoutBase } from "@nativescript/core/ui/layouts/layout-base";
+import { Page } from "@nativescript/core/ui/page";
+import { Frame } from "@nativescript/core/ui/frame";
 
 export type NgView = (View & ViewExtensions);
 

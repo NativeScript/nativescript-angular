@@ -1,8 +1,8 @@
 import { assert } from "./test-config";
 import { Component, Input, ViewChild } from "@angular/core";
 import { ComponentFixture, async } from "@angular/core/testing";
-import { nsTestBedAfterEach, nsTestBedBeforeEach, nsTestBedRender } from "nativescript-angular/testing";
-import { ListViewComponent } from "nativescript-angular/directives";
+import { nsTestBedAfterEach, nsTestBedBeforeEach, nsTestBedRender } from "@nativescript/angular/testing";
+import { ListViewComponent } from "@nativescript/angular/directives";
 // import trace = require("trace");
 // trace.setCategories("ns-list-view, " + trace.categories.Navigation);
 // trace.enable();

@@ -1,5 +1,5 @@
-import { write, categories, messageType } from "tns-core-modules/trace";
-export { isEnabled as isLogEnabled } from "tns-core-modules/trace";
+import { write, categories, messageType } from "@nativescript/core/trace";
+export { isEnabled as isLogEnabled } from "@nativescript/core/trace";
 
 export const animationsTraceCategory = "ns-animations";
 export const rendererTraceCategory = "ns-renderer";

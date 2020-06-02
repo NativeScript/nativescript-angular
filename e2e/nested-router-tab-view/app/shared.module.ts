@@ -1,9 +1,9 @@
 import { NgModule, NO_ERRORS_SCHEMA, ErrorHandler, NgModuleFactoryLoader } from "@angular/core";
-// import { NativeScriptModule } from "nativescript-angular/nativescript.module";
+// import { NativeScriptModule } from "@nativescript/angular";
 // import { AppRoutingModule, COMPONENTS } from "./app.routing";
 // import { AppComponent } from "./app.component";
-import { NativeScriptCommonModule } from "nativescript-angular/common";
-import { NativeScriptRouterModule } from "nativescript-angular/router";
+import { NativeScriptCommonModule } from "@nativescript/angular/common";
+import { NativeScriptRouterModule } from "@nativescript/angular/router";
 import { DataService } from "./data.service";
 
 import { HomeComponent } from "./home/home.component";
