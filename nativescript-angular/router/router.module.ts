@@ -18,6 +18,13 @@ export { NSModuleFactoryLoader } from "./ns-module-factory-loader";
 
 export { NSRouterLink, NSRouterLinkActive, PageRouterOutlet, NSEmptyOutletComponent, NSLocationStrategy };
 
+export function provideLocationStrategy(
+  locationStrategy: NSLocationStrategy,
+  frameService: FrameService
+): NSLocationStrategy {
+  return locationStrategy ? locationStrategy : new NSLocationStrategy(frameService);
+}
+
 @NgModule({
     declarations: [
       NSRouterLink, NSRouterLinkActive, PageRouterOutlet, NSEmptyOutletComponent
@@ -51,11 +58,4 @@ export class NativeScriptRouterModule {
     static forChild(routes: Routes): ModuleWithProviders<NativeScriptRouterModule> {
         return { ngModule: NativeScriptRouterModule, providers: RouterModule.forChild(routes).providers };
     }
-}
-
-export function provideLocationStrategy(
-    locationStrategy: NSLocationStrategy,
-    frameService: FrameService
-): NSLocationStrategy {
-    return locationStrategy ? locationStrategy : new NSLocationStrategy(frameService);
 }

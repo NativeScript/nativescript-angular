@@ -23,7 +23,7 @@ const routes: Routes = [
     { path: "animate-child", component: AnimateChildComponent },
     { path: "selector", component: SelectorAllComponent },
     { path: "query-stagger", component: QueryStaggerComponent },
-    { path: "hero", loadChildren: "./hero/hero.module#HeroModule" },
+    { path: "hero", loadChildren: () => import("./hero/hero.module").then(m => m.HeroModule) },
 ];
 
 @NgModule({
@@ -31,15 +31,3 @@ const routes: Routes = [
   exports: [NativeScriptRouterModule],
 })
 export class AppRoutingModule { }
-
-export const routedComponents = [
-    AnimationsListComponent,
-    AnimationBuilderComponent,
-    ExternalAnimationComponent,
-    FadeInOutComponent,
-    OptionsComponent,
-    OptionsDefaultComponent,
-    AnimateChildComponent,
-    SelectorAllComponent,
-    QueryStaggerComponent,
-];

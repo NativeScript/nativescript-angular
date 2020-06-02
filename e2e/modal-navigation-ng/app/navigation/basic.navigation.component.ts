@@ -8,6 +8,8 @@ import { confirm } from "@nativescript/core/ui/dialogs";
 import { ViewContainerRefService } from "../shared/ViewContainerRefService";
 import { ModalViewComponent } from "~/modal-shared/modal-view.component";
 
+declare var UIModalPresentationStyle;
+
 @Component({
     selector: "basic-nav",
     template: `

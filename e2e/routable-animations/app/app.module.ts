@@ -8,7 +8,7 @@ import { HomeComponent } from './home/home.component';
 import { SupportComponent } from './support/support.component';
 
 import { animationsTraceCategory } from "@nativescript/angular/trace";
-import { setCategories, enable } from "trace";
+import { setCategories, enable } from "@nativescript/core/trace";
 setCategories(animationsTraceCategory);
 enable();
 

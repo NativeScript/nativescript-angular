@@ -1,9 +1,9 @@
 import { Directive, Component, ElementRef, Optional, OnDestroy } from "@angular/core";
 import {
-    ActionBar,
-    ActionItem,
-    ActionItems,
-    NavigationButton,
+  ActionBar,
+  ActionItem,
+  ActionItems,
+  NavigationButton,
 } from "@nativescript/core/ui/action-bar";
 import { Page } from "@nativescript/core/ui/page";
 
@@ -82,9 +82,9 @@ const appendActionItem = (bar: NgActionBar, item: ActionItem) => {
     bar.actionItems.addItem(item);
 };
 
-registerElement("ActionBar", () => require("tns-core-modules/ui/action-bar").ActionBar, actionBarMeta);
-registerElement("ActionItem", () => require("tns-core-modules/ui/action-bar").ActionItem);
-registerElement("NavigationButton", () => require("tns-core-modules/ui/action-bar").NavigationButton);
+registerElement("ActionBar", () => ActionBar, actionBarMeta);
+registerElement("ActionItem", () => <any>ActionItem);
+registerElement("NavigationButton", () => <any>NavigationButton);
 
 @Component({
     selector: "ActionBar",

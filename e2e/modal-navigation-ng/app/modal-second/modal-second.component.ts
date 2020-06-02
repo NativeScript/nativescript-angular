@@ -11,7 +11,7 @@ import { RouterExtensions } from "@nativescript/angular/router";
 export class ModalSecondComponent {
     constructor(private routerExtension: RouterExtensions, private activeRoute: ActivatedRoute) { }
 
-    onLoaded() {
+    onLoaded(args) {
         console.log("modal-second loaded");
     }
 

@@ -20,7 +20,6 @@
     "baseUrl": ".",
     "paths": {
         "*": [
-            "./node_modules/tns-core-modules/*",
             "./node_modules/*"
         ]
     }
@@ -33,9 +32,9 @@
   },
 "exclude": [
         "./node_modules",
-        "tns-core-modules/references.d.ts",
-        "tns-core-modules/node_modules",
-        "tns-core-modules/ui/frame/transition-definitions.android.d.ts",
+        "@nativescript/core/references.d.ts",
+        "@nativescript/core/node_modules",
+        "@nativescript/core/ui/frame/transition-definitions.android.d.ts",
         "./zone-js",
         "./index.ts",
         "./bin",

@@ -1,7 +1,6 @@
 import {
     ComponentFactoryResolver,
     ComponentRef,
-    Directive,
     Injectable,
     Injector,
     NgModuleRef,
@@ -132,7 +131,7 @@ export class ModalDialogService {
             parent: options.containerRef.injector
         });
         const detachedFactory = options.resolver.resolveComponentFactory(DetachedLoader);
-        detachedLoaderRef = options.containerRef.createComponent(detachedFactory, -1, childInjector, null);
+        detachedLoaderRef = options.containerRef.createComponent(detachedFactory, 0, childInjector, null);
         detachedLoaderRef.instance.loadComponent(options.type).then((compRef) => {
             const detachedProxy = <ProxyViewContainer>compRef.location.nativeElement;
 
@@ -148,17 +147,5 @@ export class ModalDialogService {
 
             options.parentView.showModal(componentView, { ...options, closeCallback });
         });
-    }
-}
-
-@Directive({
-    selector: "[modal-dialog-host]" // tslint:disable-line:directive-selector
-})
-export class ModalDialogHost { // tslint:disable-line:directive-class-suffix
-    constructor() {
-        throw new Error("ModalDialogHost is deprecated. " +
-            "Call ModalDialogService.showModal() " +
-            "by passing ViewContainerRef in the options instead."
-        );
     }
 }

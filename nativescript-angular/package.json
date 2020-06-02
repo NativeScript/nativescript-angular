@@ -4,6 +4,8 @@
   "description": "An Angular renderer that lets you build mobile apps with NativeScript.",
   "homepage": "https://www.nativescript.org/",
   "bugs": "https://github.com/NativeScript/nativescript-angular/issues",
+  "main": "index.js",
+  "types": "index.d.ts",
   "author": {
     "name": "NativeScript Team"
   },

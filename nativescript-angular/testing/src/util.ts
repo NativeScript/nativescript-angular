@@ -1,4 +1,3 @@
-
 import { View } from "@nativescript/core/ui/core/view";
 import { Frame } from "@nativescript/core/ui/frame";
 import { LayoutBase } from "@nativescript/core/ui/layouts/layout-base";

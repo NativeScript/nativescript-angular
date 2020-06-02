@@ -21,6 +21,11 @@ export class AppHostView extends ContentView {
     }
 
     set content(value: View) {
+        // TODO: WIP, determine how to handle this
+        if (this._content) {
+            return;
+        }
+
         if (this._content) {
             this._content.parentNode = undefined;
         }

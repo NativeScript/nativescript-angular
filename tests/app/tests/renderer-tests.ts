@@ -2,21 +2,14 @@
 
 import { assert } from "./test-config";
 import { Component, ComponentRef, ElementRef, NgZone, Renderer2, ViewChild } from "@angular/core";
-import { ProxyViewContainer } from "@nativescript/core/ui/proxy-view-container";
+import { ProxyViewContainer, LayoutBase, StackLayout, ContentView, Button, isIOS, View, Label } from "@nativescript/core";
 import { Red } from "@nativescript/core/color/known-colors";
 import { dumpView } from "./test-utils";
-import { LayoutBase } from "@nativescript/core/ui/layouts/layout-base";
-import { StackLayout } from "@nativescript/core/ui/layouts/stack-layout";
-import { ContentView } from "@nativescript/core/ui/content-view";
-import { NgView, registerElement } from "@nativescript/angular/element-registry";
-import { Button } from "@nativescript/core/ui/button";
-import * as view from "@nativescript/core/ui/core/view";
-import { isIOS } from "@nativescript/core/platform";
-import { View, fontInternalProperty, backgroundInternalProperty } from "@nativescript/core/ui/core/view"
+import { registerElement } from "@nativescript/angular";
+import { fontInternalProperty, backgroundInternalProperty } from "@nativescript/core/ui/core/view"
 import { nsTestBedAfterEach, nsTestBedBeforeEach, nsTestBedRender } from "@nativescript/angular/testing";
 import { ComponentFixture, TestBed, async } from "@angular/core/testing";
 import { Observable, ReplaySubject } from "rxjs";
-import { Label } from "@nativescript/core/ui/label/label";
 
 @Component({
     template: `<StackLayout><Label text="Layout"></Label></StackLayout>`
