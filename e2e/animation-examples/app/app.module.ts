@@ -1,7 +1,8 @@
 import {
     NgModule,
     NO_ERRORS_SCHEMA,
-    NgModuleFactoryLoader
+    NgModuleFactoryLoader,
+    APP_INITIALIZER
 } from "@angular/core";
 
 import { NativeScriptModule } from "@nativescript/angular";
@@ -20,6 +21,14 @@ import { SelectorAllComponent } from "./selector-all.component";
 import { QueryStaggerComponent } from "./query-stagger.component";
 
 import { AppComponent } from "./app.component";
+
+export function asyncBoot(): Function {
+  return (): Promise<any> => new Promise(resolve => {
+    setTimeout(() => {
+      resolve();
+    }, 2000);
+  })
+}
 
 @NgModule({
     bootstrap: [
@@ -42,6 +51,16 @@ import { AppComponent } from "./app.component";
         NativeScriptAnimationsModule,
         AppRoutingModule,
     ],
+    /**
+     * Uncomment to test APP_INITIALIZER 
+     */
+    // providers: [
+    //   {
+    //     provide: APP_INITIALIZER,
+    //     useFactory: asyncBoot,
+    //     multi: true
+    //   },
+    // ],
     schemas: [NO_ERRORS_SCHEMA],
 })
 export class AppModule {}
