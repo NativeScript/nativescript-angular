@@ -1,6 +1,6 @@
 import { Component, OnInit } from "@angular/core";
 import { DataService, DataItem } from "../data.service";
-import { RouterExtensions } from "nativescript-angular/router";
+import { RouterExtensions } from "@nativescript/angular/router";
 
 @Component({
     selector: "ns-players",

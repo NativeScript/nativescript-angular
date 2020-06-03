@@ -1,11 +1,11 @@
 // make sure you import mocha-config before @angular/core
 import { assert } from "./test-config";
 import { DefaultUrlSerializer, UrlTree } from "@angular/router";
-import { NSLocationStrategy, LocationState, Outlet } from "nativescript-angular/router/ns-location-strategy";
-import { Frame, BackstackEntry, NavigationEntry } from "tns-core-modules/ui/frame";
-import { Page } from "tns-core-modules/ui/page";
-import { View } from "tns-core-modules/ui/core/view";
-import { FrameService } from "nativescript-angular/platform-providers";
+import { NSLocationStrategy, LocationState, Outlet } from "@nativescript/angular";
+import { Frame, BackstackEntry, NavigationEntry } from "@nativescript/core/ui/frame";
+import { Page } from "@nativescript/core/ui/page";
+import { View } from "@nativescript/core/ui/core/view";
+import { FrameService } from "@nativescript/angular/platform-providers";
 
 export class FakeFrameService extends FrameService {
     private frame: Frame;

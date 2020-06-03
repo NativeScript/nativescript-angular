@@ -1,6 +1,6 @@
 import { Component, OnInit, OnDestroy, OnChanges, DoCheck } from "@angular/core";
-import { RouterExtensions } from "nativescript-angular/router";
-import { Page } from "tns-core-modules/ui/page";
+import { RouterExtensions } from "@nativescript/angular/router";
+import { Page } from "@nativescript/core/ui/page";
 
 import { CounterService } from "../counter.service";
 import { ActivatedRoute } from "@angular/router";

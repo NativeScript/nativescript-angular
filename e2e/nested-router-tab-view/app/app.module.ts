@@ -1,14 +1,14 @@
 import { NgModule, NO_ERRORS_SCHEMA, ErrorHandler, NgModuleFactoryLoader } from "@angular/core";
-import { NativeScriptModule } from "nativescript-angular/nativescript.module";
+import { NativeScriptModule } from "@nativescript/angular";
 import { AppRoutingModule, COMPONENTS, MODALCOMPONENTS } from "./app.routing";
 import { AppComponent } from "./app.component";
 
 import { DataService } from "./data.service";
-import { NSModuleFactoryLoader } from "nativescript-angular/router";
+import { NSModuleFactoryLoader } from "@nativescript/angular/router";
 
 import { SharedModule } from "./shared.module";
-import { enable as traceEnable, addCategories } from "tns-core-modules/trace";
-import { routerTraceCategory } from "nativescript-angular/trace";
+import { enable as traceEnable, addCategories } from "@nativescript/core/trace";
+import { routerTraceCategory } from "@nativescript/angular/trace";
 
 // addCategories(routerTraceCategory);
 traceEnable();

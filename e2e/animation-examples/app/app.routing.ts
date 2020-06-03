@@ -1,6 +1,6 @@
 import { NgModule } from "@angular/core";
 import { Routes } from "@angular/router";
-import { NativeScriptRouterModule } from "nativescript-angular/router";
+import { NativeScriptRouterModule } from "@nativescript/angular/router";
 
 import { AnimationsListComponent } from "./animations-list.component";
 import { AnimationBuilderComponent } from "./animation-builder.component";
@@ -23,7 +23,7 @@ const routes: Routes = [
     { path: "animate-child", component: AnimateChildComponent },
     { path: "selector", component: SelectorAllComponent },
     { path: "query-stagger", component: QueryStaggerComponent },
-    { path: "hero", loadChildren: "./hero/hero.module#HeroModule" },
+    { path: "hero", loadChildren: () => import("./hero/hero.module").then(m => m.HeroModule) },
 ];
 
 @NgModule({
@@ -31,15 +31,3 @@ const routes: Routes = [
   exports: [NativeScriptRouterModule],
 })
 export class AppRoutingModule { }
-
-export const routedComponents = [
-    AnimationsListComponent,
-    AnimationBuilderComponent,
-    ExternalAnimationComponent,
-    FadeInOutComponent,
-    OptionsComponent,
-    OptionsDefaultComponent,
-    AnimateChildComponent,
-    SelectorAllComponent,
-    QueryStaggerComponent,
-];

@@ -1,6 +1,6 @@
-import {NSRouterLink} from "nativescript-angular/router/ns-router-link";
+import {NSRouterLink} from "@nativescript/angular/router/ns-router-link";
 import {ActivatedRoute, Router} from "@angular/router";
-import {RouterExtensions} from "nativescript-angular/router";
+import {RouterExtensions} from "@nativescript/angular/router";
 import {assert, fake, spy, stub} from "./test-config";
 import {SinonStub} from "sinon";
 

@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewContainerRef } from "@angular/core";
 import { DataService, DataItem } from "../data.service";
 
-import { ModalDialogService, ModalDialogOptions } from "nativescript-angular/directives/dialogs";
+import { ModalDialogService, ModalDialogOptions } from "@nativescript/angular/directives/dialogs";
 import { ModalRouterComponent } from "../modal/modal-router/modal-router.component";
 @Component({
     selector: "ns-players",

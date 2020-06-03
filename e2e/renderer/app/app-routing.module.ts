@@ -1,5 +1,5 @@
 import { NgModule, NO_ERRORS_SCHEMA } from "@angular/core";
-import { NativeScriptRouterModule, NSEmptyOutletComponent } from "nativescript-angular/router";
+import { NativeScriptRouterModule, NSEmptyOutletComponent } from "@nativescript/angular/router";
 
 import { ActionBarDynamicItemsComponent } from "./action-bar/action-bar-dynamic-items.component";
 import { ActionBarExtensionComponent } from "./action-bar/action-bar-extension.component";

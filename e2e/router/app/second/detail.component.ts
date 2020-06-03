@@ -1,6 +1,6 @@
 import { Component} from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
-import { Page } from "tns-core-modules/ui/page";
+import { Page } from "@nativescript/core/ui/page";
 import { Observable } from "rxjs";
 import { map } from "rxjs/operators";
 

@@ -3,7 +3,7 @@ import {
     ComponentFactory, ComponentFactoryResolver, ComponentRef,
     Directive, Inject, InjectionToken, Injector,
     OnDestroy, EventEmitter, Output,
-    Type, ViewContainerRef, ElementRef
+    Type, ViewContainerRef, ElementRef, InjectFlags
 } from "@angular/core";
 import {
     ActivatedRoute,
@@ -12,14 +12,14 @@ import {
     PRIMARY_OUTLET,
 } from "@angular/router";
 
-import { Device } from "tns-core-modules/platform";
-import { Frame } from "tns-core-modules/ui/frame";
-import { Page, NavigatedData } from "tns-core-modules/ui/page";
-import { profile } from "tns-core-modules/profiling";
+import { Device } from "@nativescript/core/platform";
+import { Frame } from "@nativescript/core/ui/frame";
+import { Page, NavigatedData } from "@nativescript/core/ui/page";
+import { profile } from "@nativescript/core/profiling";
 
 import { BehaviorSubject } from "rxjs";
 
-import { DEVICE, PAGE_FACTORY, PageFactory } from "../platform-providers";
+import { DEVICE, PAGE_FACTORY, PageFactory, PageService } from "../platform-providers";
 import { routerLog as log, routerError as error, isLogEnabled } from "../trace";
 import { DetachedLoader } from "../common/detached-loader";
 import { ViewUtil } from "../view-util";
@@ -48,23 +48,28 @@ export function destroyComponentRef(componentRef: ComponentRef<any>) {
     }
 }
 
-class ChildInjector implements Injector {
-    constructor(
-        private providers: ProviderMap,
-        private parent: Injector
-    ) { }
-
-    get<T>(token: Type<T> | InjectionToken<T>, notFoundValue?: T): T {
-        let localValue = this.providers.get(token);
-        if (localValue) {
-            return localValue;
+class DestructibleInjector implements Injector {
+    private refs = new Set<any>();
+    constructor(private destructableProviders: ProviderSet, private parent: Injector) {
+    }
+    get<T>(token: Type<T> | InjectionToken<T>, notFoundValue?: T, flags?: InjectFlags): T {
+        const ref = this.parent.get(token, notFoundValue, flags);
+        if (this.destructableProviders.has(token)) {
+            this.refs.add(ref);
         }
-
-        return this.parent.get(token, notFoundValue);
+        return ref;
+    }
+    destroy() {
+        this.refs.forEach((ref) => {
+            if (ref.ngOnDestroy instanceof Function) {
+                ref.ngOnDestroy();
+            }
+        });
+        this.refs.clear();
     }
 }
 
-type ProviderMap = Map<Type<any> | InjectionToken<any>, any>;
+type ProviderSet = Set<Type<any> | InjectionToken<any>>;
 
 /**
  * There are cases where multiple activatedRoute nodes should be associated/handled by the same PageRouterOutlet.
@@ -335,26 +340,34 @@ export class PageRouterOutlet implements OnDestroy { // tslint:disable-line:dire
             componentType: factory.componentType,
         });
 
-        const providers = new Map();
-        providers.set(Page, page);
-        providers.set(Frame, this.frame);
-        providers.set(PageRoute, new PageRoute(activatedRoute));
-        providers.set(ActivatedRoute, activatedRoute);
-        providers.set(ChildrenOutletContexts, this.parentContexts.getOrCreateContext(this.name).children);
+        const destructables = new Set([PageService]);
+        const injector = Injector.create({
+            providers: [
+                { provide: Page, useValue: page },
+                { provide: PageService, useClass: PageService, deps: [Page] },
+                { provide: Frame, useValue: this.frame },
+                { provide: PageRoute, useValue: new PageRoute(activatedRoute) },
+                { provide: ActivatedRoute, useValue: activatedRoute },
+                { provide: ChildrenOutletContexts,
+                    useValue: this.parentContexts.getOrCreateContext(this.name).children }
+            ],
+            parent: this.location.injector
+        });
 
-        const childInjector = new ChildInjector(providers, this.location.injector);
+        const childInjector = new DestructibleInjector(destructables, injector);
         const loaderRef = this.location.createComponent(
             this.detachedLoaderFactory, this.location.length, childInjector, []);
+        loaderRef.onDestroy(() => childInjector.destroy());
         this.changeDetector.markForCheck();
 
         this.activated = loaderRef.instance.loadWithFactory(factory);
-        this.loadComponentInPage(page, this.activated);
+        this.loadComponentInPage(page, this.activated, { activatedRoute });
 
         this.activated[loaderRefSymbol] = loaderRef;
     }
 
     @profile
-    private loadComponentInPage(page: Page, componentRef: ComponentRef<any>): void {
+    private loadComponentInPage(page: Page, componentRef: ComponentRef<any>, navigationContext): void {
         // Component loaded. Find its root native view.
         const componentView = componentRef.location.nativeElement;
         // Remove it from original native parent.
@@ -393,6 +406,7 @@ export class PageRouterOutlet implements OnDestroy { // tslint:disable-line:dire
             create() {
                 return page;
             },
+            context: navigationContext,
             clearHistory: navOptions.clearHistory,
             animated: navOptions.animated,
             transition: navOptions.transition

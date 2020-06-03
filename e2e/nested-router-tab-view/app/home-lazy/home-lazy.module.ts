@@ -1,8 +1,8 @@
 import { NgModule, NO_ERRORS_SCHEMA } from "@angular/core";
 import { Route } from "@angular/router";
 
-import { NativeScriptCommonModule } from "nativescript-angular/common";
-import { NativeScriptRouterModule } from "nativescript-angular/router";
+import { NativeScriptCommonModule } from "@nativescript/angular/common";
+import { NativeScriptRouterModule } from "@nativescript/angular/router";
 import { PlayerComponent } from "../player/players.component";
 import { PlayerDetailComponent } from "../player/player-detail.component";
 import { TeamsComponent } from "../team/teams.component";

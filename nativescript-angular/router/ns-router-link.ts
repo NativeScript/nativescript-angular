@@ -4,8 +4,8 @@ import { ActivatedRoute, Router, UrlTree } from "@angular/router";
 import { routerLog, isLogEnabled } from "../trace";
 import { RouterExtensions } from "./router-extensions";
 import { NavigationOptions } from "./ns-location-strategy";
-import { NavigationTransition } from "tns-core-modules/ui/frame";
-import { isString } from "tns-core-modules/utils/types";
+import { NavigationTransition } from "@nativescript/core/ui/frame";
+import { isString } from "@nativescript/core/utils/types";
 
 // Copied from "@angular/router/src/config"
 export type QueryParamsHandling = "merge" | "preserve" | "";

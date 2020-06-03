@@ -1,8 +1,8 @@
 import { ApplicationRef } from "@angular/core";
 // >> router-outlet-example
 import { Component, NgModule } from "@angular/core";
-import { platformNativeScriptDynamic } from "nativescript-angular/platform";
-import { NativeScriptRouterModule } from "nativescript-angular/router";
+import { platformNativeScriptDynamic } from "@nativescript/angular/platform";
+import { NativeScriptRouterModule } from "@nativescript/angular/router";
 import { Router, NavigationStart, NavigationEnd } from "@angular/router";
 import { routes } from "./app.routes";
 import { FirstComponent, SecondComponent } from "./navigation-common";

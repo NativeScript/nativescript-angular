@@ -1,9 +1,9 @@
 import { AnimationPlayer } from "@angular/animations";
 import { AnimationDriver } from "@angular/animations/browser";
-import { createSelector, SelectorCore } from "tns-core-modules/ui/styling/css-selector";
-import { CssAnimationProperty } from "tns-core-modules/ui/core/properties";
-import { eachDescendant } from "tns-core-modules/ui/core/view";
-import { ProxyViewContainer } from "tns-core-modules/ui/proxy-view-container";
+import { createSelector, SelectorCore } from "@nativescript/core/ui/styling/css-selector";
+import { CssAnimationProperty } from "@nativescript/core/ui/core/properties";
+import { eachDescendant } from "@nativescript/core/ui/core/view";
+import { ProxyViewContainer } from "@nativescript/core/ui/proxy-view-container";
 
 import { NativeScriptAnimationPlayer } from "./animation-player";
 import {

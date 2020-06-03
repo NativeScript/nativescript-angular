@@ -1,7 +1,7 @@
 import { Directive, ElementRef, forwardRef } from "@angular/core";
 import { NG_VALUE_ACCESSOR } from "@angular/forms";
 import { BaseValueAccessor } from "./base-value-accessor";
-import { Switch } from "tns-core-modules/ui/switch";
+import { Switch } from "@nativescript/core/ui/switch";
 
 const CHECKED_VALUE_ACCESSOR = {
     provide: NG_VALUE_ACCESSOR,

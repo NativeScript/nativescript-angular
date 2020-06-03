@@ -1,14 +1,14 @@
 import { NgModule, NO_ERRORS_SCHEMA } from "@angular/core";
-import { NativeScriptModule } from "nativescript-angular/nativescript.module";
-import { NativeScriptAnimationsModule } from "nativescript-angular/animations";
+import { NativeScriptModule } from "@nativescript/angular";
+import { NativeScriptAnimationsModule } from "@nativescript/angular/animations";
 
 import { AppComponent } from "./app.component";
 import { AppRoutingModule } from './app-routing.module';
 import { HomeComponent } from './home/home.component';
 import { SupportComponent } from './support/support.component';
 
-import { animationsTraceCategory } from "nativescript-angular/trace";
-import { setCategories, enable } from "trace";
+import { animationsTraceCategory } from "@nativescript/angular/trace";
+import { setCategories, enable } from "@nativescript/core/trace";
 setCategories(animationsTraceCategory);
 enable();
 
