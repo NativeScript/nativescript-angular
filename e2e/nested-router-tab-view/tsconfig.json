@@ -1,40 +1,34 @@
 {
-    "compilerOptions": {
-        "module": "commonjs",
-        "target": "es5",
-        "experimentalDecorators": true,
-        "emitDecoratorMetadata": true,
-        "noEmitHelpers": true,
-        "noEmitOnError": true,
-        "skipLibCheck": true,
-        "lib": [
-            "es2017",
-            "dom",
-            "es6"
-        ],
-        "baseUrl": ".",
-        "paths": {
-            "~/*": [
-                "app/*"
-            ],
-            "*": [
-                "./node_modules/*"
-            ]
-        }
-    },
-    "include": [
-        "../../nativescript-angular-package",
-        "../../nativescript-angular",
-        "**/*"
-    ],
-    "exclude": [
-        "../../nativescript-angular-package/node_modules",
-        "../../nativescript-angular-package/**/*.d.ts",
-        "../../nativescript-angular/node_modules",
-        "../../nativescript-angular/**/*.d.ts",
-        "node_modules",
-        "platforms",
-        "**/*.aot",
-        "e2e"
-    ]
+  "compilerOptions": {
+      "module": "commonjs",
+      "target": "es5",
+      "experimentalDecorators": true,
+      "emitDecoratorMetadata": true,
+      "noEmitHelpers": true,
+      "noEmitOnError": true,
+      "skipLibCheck": true,
+      "lib": [
+          "es2017",
+          "dom",
+          "es6"
+      ],
+      "baseUrl": ".",
+      "paths": {
+          "~/*": [
+              "app/*"
+          ]
+      }
+  },
+  "includes": [
+    "./references.d.ts"
+  ],
+  "files": [
+    "./app/main.ts"
+  ],
+  "exclude": [
+      "node_modules",
+      "platforms",
+      "**/*.aot",
+      "e2e"
+  ]
 }
