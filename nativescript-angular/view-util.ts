@@ -260,6 +260,10 @@ export class ViewUtil {
     }
 
     private removeLayoutChild(parent: NgLayoutBase, child: NgView): void {
+        if (isLogEnabled()) {
+            traceLog(`ViewUtil.removeLayoutChild parent: ${parent} child: ${child}`);
+        }
+
         const index = parent.getChildIndex(child);
 
         if (index !== -1) {
@@ -371,6 +375,12 @@ export class ViewUtil {
 
         const propMap = this.getProperties(view);
         const propertyName = propMap.get(attributeName);
+
+        // Ensure the children of a collection currently have no parent set.
+        if (Array.isArray(value)) {
+            this.removeParentReferencesFromItems(value);
+        }
+
         if (propertyName) {
             // We have a lower-upper case mapped property.
             view[propertyName] = value;
@@ -379,6 +389,18 @@ export class ViewUtil {
 
         // Unknown attribute value -- just set it to our object as is.
         view[attributeName] = value;
+    }
+
+    private removeParentReferencesFromItems(items: any[]): void {
+        for (const item of items) {
+            if (item.parent && item.parentNode) {
+                if (isLogEnabled()) {
+                    traceLog(`Unassigning parent ${item.parentNode} on value: ${item}`);
+                }
+                item.parent = undefined;
+                item.parentNode = undefined;
+            }
+        }
     }
 
     private getProperties(instance: any): Map<string, string> {
