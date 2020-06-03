@@ -5,8 +5,6 @@
 ### Features
 
 * angular 9 ivy ([fbe2450](https://github.com/NativeScript/nativescript-angular/commit/fbe2450))
-* angular 9 ivy ([e7cfb11](https://github.com/NativeScript/nativescript-angular/commit/e7cfb11))
-
 
 
 <a name="8.20.4"></a>
