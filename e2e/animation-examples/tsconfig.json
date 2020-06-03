@@ -6,33 +6,26 @@
         "emitDecoratorMetadata": true,
         "noEmitHelpers": true,
         "noEmitOnError": true,
+        "skipLibCheck": true,
         "lib": [
-            "es6",
+            "es2017",
             "dom",
-            "es2015.iterable"
+            "es6"
         ],
         "baseUrl": ".",
         "paths": {
-            "*": [
-                "./node_modules/tns-core-modules/*",
-                "./node_modules/*",
-                "./node_modules/nativescript-angular/node_modules/*"
-            ],
             "~/*": [
                 "app/*"
+            ],
+            "*": [
+                "./node_modules/*"
             ]
         }
     },
-    "include": [
-        "../../nativescript-angular-package",
-        "../../nativescript-angular",
-        "**/*"
+    "files": [
+      "./app/main.ts"
     ],
     "exclude": [
-        "../../nativescript-angular-package/node_modules",
-        "../../nativescript-angular-package/**/*.d.ts",
-        "../../nativescript-angular/node_modules",
-        "../../nativescript-angular/**/*.d.ts",
         "node_modules",
         "platforms",
         "**/*.aot",

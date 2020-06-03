@@ -1,5 +1,5 @@
 import { Component } from "@angular/core";
-import * as platform from "tns-core-modules/platform";
+import * as platform from "@nativescript/core/platform";
 
 @Component({
     selector: "main",

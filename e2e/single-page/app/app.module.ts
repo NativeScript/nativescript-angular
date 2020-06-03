@@ -1,7 +1,7 @@
 import { NgModule, NgModuleFactoryLoader, NO_ERRORS_SCHEMA } from "@angular/core";
-import { NativeScriptModule } from "nativescript-angular/nativescript.module";
-import { NSModuleFactoryLoader } from "nativescript-angular/router";
- import { isNavigationButton } from "nativescript-angular/directives/action-bar";
+import { NativeScriptModule } from "@nativescript/angular";
+import { NSModuleFactoryLoader } from "@nativescript/angular/router";
+ import { isNavigationButton } from "@nativescript/angular/directives/action-bar";
 
 import {
     AppRoutingModule,
@@ -10,8 +10,8 @@ import {
 
 import { AppComponent } from "./app.component";
 
-import { routeReuseStrategyTraceCategory, routerTraceCategory } from "nativescript-angular/trace";
-import { setCategories, enable } from "tns-core-modules/trace";
+import { routeReuseStrategyTraceCategory, routerTraceCategory } from "@nativescript/angular/trace";
+import { setCategories, enable } from "@nativescript/core/trace";
 import { ModalComponent } from "./second/modal/modal.component";
 setCategories(routerTraceCategory + "," + routeReuseStrategyTraceCategory);
 enable();

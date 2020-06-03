@@ -1,11 +1,11 @@
 import { Component, OnInit, OnDestroy, ViewContainerRef } from "@angular/core";
 import { ActivatedRoute, Router, Route } from "@angular/router";
 
-import { ModalDialogService, ModalDialogOptions } from "nativescript-angular";
-import { Page } from "tns-core-modules/ui/page";
+import { ModalDialogService, ModalDialogOptions } from "@nativescript/angular";
+import { Page } from "@nativescript/core/ui/page";
 import { Observable } from "rxjs";
 import { map } from "rxjs/operators";
-import { RouterExtensions } from "nativescript-angular/router";
+import { RouterExtensions } from "@nativescript/angular/router";
 import { ModalComponent } from "./modal/modal.component";
 
 @Component({

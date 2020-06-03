@@ -1,7 +1,7 @@
 import { NSFileSystem } from "../file-system/ns-file-system";
 
 import { Observable, Observer } from "rxjs";
-import { path } from "tns-core-modules/file-system/file-system";
+import { path } from "@nativescript/core/file-system/file-system";
 
 export type httpResponseFactory<T> = (url: string, body: any, status: number) => T;
 export type httpErrorFactory = (url: string, body: any, status: number) => any;

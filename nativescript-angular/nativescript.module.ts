@@ -1,7 +1,6 @@
-import "tns-core-modules/globals";
+import "@nativescript/core/globals";
 // Require application early to work around a circular import
-import "tns-core-modules/application";
-import "./zone-js/dist/zone-nativescript";
+import "@nativescript/core/application";
 
 import "./polyfills/array";
 import "./polyfills/console";
@@ -15,7 +14,7 @@ import {
     SystemJsNgModuleLoader,
     Optional,
     SkipSelf,
-    ɵAPP_ROOT as APP_ROOT,
+    ɵINJECTOR_SCOPE,
 } from "@angular/core";
 
 import {
@@ -44,7 +43,7 @@ export { DetachedLoader };
         PageService,
         NativeScriptRendererFactory,
         SystemJsNgModuleLoader,
-        { provide: APP_ROOT, useValue: true },
+        { provide: ɵINJECTOR_SCOPE, useValue: "root" },
         { provide: ErrorHandler, useFactory: errorHandlerFactory },
         { provide: RendererFactory2, useExisting: NativeScriptRendererFactory },
         { provide: ViewportScroller, useClass: NullViewportScroller },

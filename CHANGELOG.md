@@ -1,3 +1,12 @@
+<a name="9.0.0"></a>
+# [9.0.0](https://github.com/NativeScript/nativescript-angular/compare/8.20.4...9.0.0) (2020-06-03)
+
+
+### Features
+
+* angular 9 ivy ([fbe2450](https://github.com/NativeScript/nativescript-angular/commit/fbe2450))
+
+
 <a name="8.20.4"></a>
 ## [8.20.4](https://github.com/NativeScript/nativescript-angular/compare/8.20.3...8.20.4) (2020-01-07)
 
@@ -649,7 +658,7 @@ Angular apps described in [this](https://angular.io/guide/ngmodule-faq#q-browser
 Migration steps:
 In all NgModules, except the root one (`AppModule`), replace:
 ```
-import { NativeScriptModule } from "nativescript-angular/nativescript.module";
+import { NativeScriptModule } from "@nativescript/angular";
 …
 @NgModule({
     imports: [

@@ -1,5 +1,5 @@
 import { ControlValueAccessor } from "@angular/forms";
-import { View, unsetValue } from "tns-core-modules/ui/core/view";
+import { View, unsetValue } from "@nativescript/core/ui/core/view";
 
 import { isBlank } from "../../lang-facade";
 

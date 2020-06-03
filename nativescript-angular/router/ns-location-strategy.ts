@@ -2,7 +2,7 @@ import { Injectable } from "@angular/core";
 import { LocationStrategy } from "@angular/common";
 import { DefaultUrlSerializer, UrlSegmentGroup, UrlTree, ActivatedRouteSnapshot } from "@angular/router";
 import { routerLog, routerError, isLogEnabled } from "../trace";
-import { NavigationTransition, Frame } from "tns-core-modules/ui/frame";
+import { NavigationTransition, Frame } from "@nativescript/core/ui/frame";
 import { isPresent } from "../lang-facade";
 import { FrameService } from "../platform-providers";
 

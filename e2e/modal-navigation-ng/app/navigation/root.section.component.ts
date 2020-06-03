@@ -9,22 +9,22 @@ import { AppModule } from "../app.module";
 export class RootSectionComponent {
   constructor() { }
 
-  onFrameRootViewReset(showModal) {
+  onFrameRootViewReset(showModal?: boolean) {
     AppModule.root = showModal ? "page-router-modal" : "page-router";
     AppModule.platformRef._livesync();
   }
 
-  onNamedFrameRootViewReset(showModal) {
+  onNamedFrameRootViewReset(showModal?: boolean) {
     AppModule.root = showModal ? "named-page-router-modal" : "named-page-router";
     AppModule.platformRef._livesync();
   }
 
-  onTabRootViewReset(showModal) {
+  onTabRootViewReset(showModal?: boolean) {
     AppModule.root = showModal ? "tab-modal" : "tab";
     AppModule.platformRef._livesync();
   }
 
-  onLayoutRootViewReset(showModal) {
+  onLayoutRootViewReset(showModal?: boolean) {
     AppModule.root = showModal ? "layout-modal" : "layout";
     AppModule.platformRef._livesync();
   }

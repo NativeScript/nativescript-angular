@@ -1,13 +1,18 @@
 // Initial imports and polyfills
-import "tns-core-modules/globals";
+import "@nativescript/core/globals";
 // Require application early to work around a circular import
-import "tns-core-modules/application";
+import "@nativescript/core/application";
 import "./zone-js/dist/zone-nativescript";
 import "./polyfills/array";
 import "./polyfills/console";
-import { profile, uptime } from "tns-core-modules/profiling";
-import { getRootView } from "tns-core-modules/application";
+import { profile, uptime } from "@nativescript/core/profiling";
+import { getRootView } from "@nativescript/core/application";
 import "./dom-adapter";
+import "nativescript-intl";
+// TODO: refactor core module imports to not require these deep imports
+import { TextView } from "@nativescript/core/ui/text-view";
+import { Color, View } from "@nativescript/core/ui/core/view";
+import { Frame } from "@nativescript/core/ui/frame";
 
 import {
     Type,
@@ -36,12 +41,7 @@ import {
     LaunchEventData,
     exitEvent,
     ApplicationEventData,
-} from "tns-core-modules/application";
-import { TextView } from "tns-core-modules/ui/text-view";
-
-import "nativescript-intl";
-import { Color, View } from "tns-core-modules/ui/core/view/view";
-import { Frame } from "tns-core-modules/ui/frame";
+} from "@nativescript/core/application";
 
 export const onBeforeLivesync = new EventEmitter<NgModuleRef<any>>();
 export const onAfterLivesync = new EventEmitter<{ moduleRef?: NgModuleRef<any>; error?: Error }>();

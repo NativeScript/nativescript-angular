@@ -1,10 +1,10 @@
 // make sure you import mocha-config before @angular/core
 import { assert } from "./test-config";
-import { NSFileSystem } from "nativescript-angular/file-system/ns-file-system";
-import { NsHttpBackEnd } from "nativescript-angular/http-client";
+import { NSFileSystem } from "@nativescript/angular/file-system/ns-file-system";
+import { NsHttpBackEnd } from "@nativescript/angular/http-client";
 
 import { XhrFactory, HttpRequest, HttpResponse, HttpErrorResponse } from "@angular/common/http";
-import { File } from "tns-core-modules/file-system";
+import { File } from "@nativescript/core/file-system";
 
 class NSFileSystemMock implements NSFileSystem {
     public currentApp(): any {
