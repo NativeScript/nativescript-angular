@@ -1,8 +1,8 @@
 import { Component, OnInit, OnDestroy } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
 
-import { RouterExtensions } from "nativescript-angular/router";
-import { Page } from "tns-core-modules/ui/page";
+import { RouterExtensions } from "@nativescript/angular/router";
+import { Page } from "@nativescript/core/ui/page";
 import { Observable } from "rxjs";
 import { map } from "rxjs/operators";
 import { CounterService } from "../counter.service";

@@ -1,4 +1,4 @@
-import "tns-core-modules/application";
+import "@nativescript/core/application";
 
 export * from "./platform-common";
 export * from "./platform";
@@ -9,6 +9,7 @@ export * from "./resource-loader";
 export * from "./nativescript.module";
 export * from "./common";
 
+export * from "./animations";
 export * from "./router";
 export * from "./file-system";
 export * from "./http-client";

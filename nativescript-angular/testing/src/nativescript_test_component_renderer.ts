@@ -1,6 +1,6 @@
 import { Injectable } from "@angular/core";
 import { TestComponentRenderer } from "@angular/core/testing";
-import { ProxyViewContainer } from "tns-core-modules/ui/proxy-view-container";
+import { ProxyViewContainer } from "@nativescript/core/ui/proxy-view-container";
 import { testingRootView } from "./util";
 
 /**

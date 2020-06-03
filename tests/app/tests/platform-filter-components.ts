@@ -2,9 +2,9 @@
 import { assert } from "./test-config";
 import { Component, ElementRef } from "@angular/core";
 import { dumpView, createDevice } from "./test-utils";
-import { DEVICE } from "nativescript-angular/platform-providers";
-import { platformNames } from "tns-core-modules/platform";
-import { nsTestBedAfterEach, nsTestBedBeforeEach, nsTestBedRender } from "nativescript-angular/testing";
+import { DEVICE } from "@nativescript/angular/platform-providers";
+import { platformNames } from "@nativescript/core/platform";
+import { nsTestBedAfterEach, nsTestBedBeforeEach, nsTestBedRender } from "@nativescript/angular/testing";
 
 @Component({
     template: `

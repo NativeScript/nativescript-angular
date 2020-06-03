@@ -19,11 +19,15 @@ import {
     ViewContainerRef,
     ɵisListLikeIterable as isListLikeIterable
 } from "@angular/core";
-import { ItemEventData, TemplatedItemsView } from "tns-core-modules/ui/list-view";
-import { View, KeyedTemplate } from "tns-core-modules/ui/core/view";
-import { LayoutBase } from "tns-core-modules/ui/layouts/layout-base";
-import { ObservableArray } from "tns-core-modules/data/observable-array";
-import { profile } from "tns-core-modules/profiling";
+// TODO: refactor core module imports to allow this to work properly
+// import { View, LayoutBase, KeyedTemplate, ItemEventData, TemplatedItemsView, ObservableArray } from "@nativescript/core";
+// Ivy entry points get out of order and will cause issues like this:
+// node_modules/@nativescript/core/ui/html-view/html-view-common.js:26:0: JS ERROR TypeError: undefined is not an object (evaluating 'color_1.Color.equals') if not using deep imports like the following for the moment
+import { ItemEventData, TemplatedItemsView } from "@nativescript/core/ui/list-view";
+import { View, KeyedTemplate } from "@nativescript/core/ui/core/view";
+import { LayoutBase } from "@nativescript/core/ui/layouts/layout-base";
+import { ObservableArray } from "@nativescript/core/data/observable-array";
+import { profile } from "@nativescript/core/profiling";
 
 import { getSingleViewRecursive } from "../element-registry";
 import { listViewLog, listViewError, isLogEnabled } from "../trace";

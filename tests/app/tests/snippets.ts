@@ -5,7 +5,7 @@ import { GestureComponent } from "../snippets/gestures.component";
 import { LayoutsComponent } from "../snippets/layouts.component";
 import { IconFontComponent } from "../snippets/icon-font.component";
 
-import { nsTestBedAfterEach, nsTestBedBeforeEach, nsTestBedRender } from "nativescript-angular/testing";
+import { nsTestBedAfterEach, nsTestBedBeforeEach, nsTestBedRender } from "@nativescript/angular/testing";
 import { ComponentRef } from "@angular/core";
 
 describe("Snippets", () => {

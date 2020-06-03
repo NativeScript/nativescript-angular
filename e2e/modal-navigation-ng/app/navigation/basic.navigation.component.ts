@@ -1,12 +1,14 @@
 import { Component, ViewContainerRef, Input, ViewChild, ElementRef } from "@angular/core";
 import { Router, NavigationEnd } from "@angular/router";
-import { ModalDialogService, ModalDialogOptions } from "nativescript-angular/directives/dialogs";
+import { ModalDialogService, ModalDialogOptions } from "@nativescript/angular/directives/dialogs";
 import { ModalComponent } from "../modal/modal.component";
 import { ModalRouterComponent } from "../modal/modal-router/modal-router.component";
-import { confirm } from "tns-core-modules/ui/dialogs";
+import { confirm } from "@nativescript/core/ui/dialogs";
 
 import { ViewContainerRefService } from "../shared/ViewContainerRefService";
 import { ModalViewComponent } from "~/modal-shared/modal-view.component";
+
+declare var UIModalPresentationStyle;
 
 @Component({
     selector: "basic-nav",

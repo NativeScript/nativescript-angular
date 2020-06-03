@@ -1,7 +1,7 @@
-import { ContentView } from "tns-core-modules/ui/content-view";
-import { GridLayout } from "tns-core-modules/ui/layouts/grid-layout";
-import { ProxyViewContainer } from "tns-core-modules/ui/proxy-view-container";
-import { View } from "tns-core-modules/ui/core/view";
+import { ContentView } from "@nativescript/core/ui/content-view";
+import { GridLayout } from "@nativescript/core/ui/layouts/grid-layout";
+import { ProxyViewContainer } from "@nativescript/core/ui/proxy-view-container";
+import { View } from "@nativescript/core/ui/core/view";
 
 export class AppHostView extends ContentView {
 
@@ -21,6 +21,11 @@ export class AppHostView extends ContentView {
     }
 
     set content(value: View) {
+        // TODO: WIP, determine how to handle this
+        if (this._content) {
+            return;
+        }
+
         if (this._content) {
             this._content.parentNode = undefined;
         }

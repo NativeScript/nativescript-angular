@@ -6,10 +6,11 @@
         "emitDecoratorMetadata": true,
         "noEmitHelpers": true,
         "noEmitOnError": true,
+        "skipLibCheck": true,
         "lib": [
-            "es6",
+            "es2017",
             "dom",
-            "es2015.iterable"
+            "es6"
         ],
         "types": [
             "node"

@@ -1,4 +1,4 @@
-import {ContentView} from "tns-core-modules/ui/content-view";
+import {ContentView} from "@nativescript/core/ui/content-view";
 
 // >> third-party-simple-view
 export class SimpleTag extends ContentView {

@@ -1,7 +1,7 @@
 import { AnimationPlayer } from "@angular/animations";
 import { KeyframeAnimation }
-    from "tns-core-modules/ui/animation/keyframe-animation";
-import { View, EventData } from "tns-core-modules/ui/core/view";
+    from "@nativescript/core/ui/animation/keyframe-animation";
+import { View, EventData } from "@nativescript/core/ui/core/view";
 
 import { Keyframe, createKeyframeAnimation } from "./utils";
 import { NgView } from "../element-registry";

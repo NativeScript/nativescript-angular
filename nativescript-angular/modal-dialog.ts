@@ -1,5 +1,4 @@
 export {
-    ModalDialogHost,
     ModalDialogOptions,
     ModalDialogParams,
     ModalDialogService
