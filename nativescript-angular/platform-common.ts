@@ -13,6 +13,7 @@ import "nativescript-intl";
 import { TextView } from "@nativescript/core/ui/text-view";
 import { Color, View } from "@nativescript/core/ui/core/view";
 import { Frame } from "@nativescript/core/ui/frame";
+import { GridLayout } from '@nativescript/core/ui/layouts/grid-layout';
 
 import {
     Type,
@@ -29,8 +30,7 @@ import {
 import { DOCUMENT } from "@angular/common";
 
 import { bootstrapLog, bootstrapLogError, isLogEnabled } from "./trace";
-import { defaultPageFactoryProvider, setRootPage, PageFactory, PAGE_FACTORY } from "./platform-providers";
-import { AppHostView } from "./app-host-view";
+import { defaultPageFactoryProvider, setRootPage, PageFactory, PAGE_FACTORY, getRootPage } from "./platform-providers";
 
 import {
     setCssFileName,
@@ -75,13 +75,18 @@ export interface HmrOptions {
 }
 // tslint:enable:max-line-length
 
+export interface AppLaunchView extends View {
+  startAnimation?: () => void;
+  cleanup?: () => void;
+}
 
 export interface AppOptions {
     bootInExistingPage?: boolean;
     cssFile?: string;
     startPageActionBarHidden?: boolean;
-    createFrameOnBootstrap?: boolean;
     hmrOptions?: HmrOptions;
+    backgroundColor?: string;
+    launchView?: AppLaunchView;
 }
 
 export type PlatformFactory = (extraProviders?: StaticProvider[]) => PlatformRef;
@@ -190,81 +195,68 @@ export class NativeScriptPlatformRef extends PlatformRef {
 
     @profile
     private bootstrapNativeScriptApp() {
-        const autoCreateFrame = !!this.appOptions.createFrameOnBootstrap;
         let rootContent: View;
+        let launchView: AppLaunchView;
 
         if (isLogEnabled()) {
             bootstrapLog("NativeScriptPlatform bootstrap started.");
         }
         const launchCallback = profile(
-            "nativescript-angular/platform-common.launchCallback",
+            "@nativescript/angular/platform-common.launchCallback",
             (args: LaunchEventData) => {
                 if (isLogEnabled()) {
                     bootstrapLog("Application launch event fired");
                 }
 
-                let tempAppHostView: AppHostView;
-                if (autoCreateFrame) {
-                    const { page, frame } = this.createFrameAndPage(false);
-                    setRootPage(page);
-                    rootContent = frame;
+                if (this.appOptions && this.appOptions.launchView) {
+                  launchView = this.appOptions.launchView;
+                  if (this.appOptions.launchView.startAnimation) {
+                    setTimeout(() => {
+                      // ensure launch animation is executed after launchView added to view stack
+                      this.appOptions.launchView.startAnimation();
+                    });
+                  }
                 } else {
-                    // Create a temp page for root of the renderer
-                    tempAppHostView = new AppHostView();
-                    setRootPage(<any>tempAppHostView);
+                  launchView = new GridLayout();
+                  // Custom launch view color (useful when doing async app intializers where you don't want a flash of undesirable color)
+                  launchView.backgroundColor = new Color(this.appOptions && this.appOptions.backgroundColor ? this.appOptions.backgroundColor : '#fff');
                 }
+                args.root = launchView;
+                setRootPage(<any>launchView);
 
-                let bootstrapPromiseCompleted = false;
+                // Launch Angular app
                 this._bootstrapper().then(
-                    moduleRef => {
-                        bootstrapPromiseCompleted = true;
+                  moduleRef => {
 
-                        if (isLogEnabled()) {
-                            bootstrapLog(`Angular bootstrap bootstrap done. uptime: ${uptime()}`);
-                        }
+                      if (isLogEnabled()) {
+                          bootstrapLog(`Angular bootstrap bootstrap done. uptime: ${uptime()}`);
+                      }
 
-                        if (!autoCreateFrame) {
-                            rootContent = tempAppHostView.content;
-                        }
+                      rootContent = launchView;
+                      if (launchView && launchView.cleanup) {
+                        // cleanup any custom launch views
+                        launchView.cleanup();
+                      }
 
-                        lastBootstrappedModule = new WeakRef(moduleRef);
-                    },
-                    err => {
-                        bootstrapPromiseCompleted = true;
+                      lastBootstrappedModule = new WeakRef(moduleRef);
+                  },
+                  err => {
 
-                        const errorMessage = err.message + "\n\n" + err.stack;
-                        if (isLogEnabled()) {
-                            bootstrapLogError("ERROR BOOTSTRAPPING ANGULAR");
-                        }
-                        if (isLogEnabled()) {
-                            bootstrapLogError(errorMessage);
-                        }
+                      const errorMessage = err.message + "\n\n" + err.stack;
+                      if (isLogEnabled()) {
+                          bootstrapLogError("ERROR BOOTSTRAPPING ANGULAR");
+                      }
+                      if (isLogEnabled()) {
+                          bootstrapLogError(errorMessage);
+                      }
 
-                        rootContent = this.createErrorUI(errorMessage);
-                    }
-                );
-
-                if (isLogEnabled()) {
-                    bootstrapLog("bootstrapAction called, draining micro tasks queue. Root: " + rootContent);
-                }
-                (<any>global).Zone.drainMicroTaskQueue();
-                if (isLogEnabled()) {
-                    bootstrapLog("bootstrapAction called, draining micro tasks queue finished! Root: " + rootContent);
-                }
-
-                if (!bootstrapPromiseCompleted) {
-                    const errorMessage = "Bootstrap promise didn't resolve";
-                    if (isLogEnabled()) {
-                        bootstrapLogError(errorMessage);
-                    }
-                    rootContent = this.createErrorUI(errorMessage);
-                }
-
-                args.root = rootContent;
+                      rootContent = this.createErrorUI(errorMessage);
+                  }
+              );
             }
         );
         const exitCallback = profile(
-            "nativescript-angular/platform-common.exitCallback", (args: ApplicationEventData) => {
+            "@nativescript/angular/platform-common.exitCallback", (args: ApplicationEventData) => {
                 const androidActivity = args.android;
                 if (androidActivity && !androidActivity.isFinishing()) {
                     // Exit event was triggered as a part of a restart of the app.
@@ -279,9 +271,7 @@ export class NativeScriptPlatformRef extends PlatformRef {
                     lastModuleRef.destroy();
                 }
 
-                if (!autoCreateFrame) {
-                    rootContent = null;
-                }
+                rootContent = null;
             }
         );
         on(launchEvent, launchCallback);
@@ -302,72 +292,33 @@ export class NativeScriptPlatformRef extends PlatformRef {
             lastModuleRef.destroy();
         }
 
-        const autoCreateFrame = !!this.appOptions.createFrameOnBootstrap;
-        let tempAppHostView: AppHostView;
-        let rootContent: View;
-
-        if (autoCreateFrame) {
-            const { page, frame } = this.createFrameAndPage(true);
-            setRootPage(page);
-            rootContent = frame;
-        } else {
-            // Create a temp page for root of the renderer
-            tempAppHostView = new AppHostView();
-            setRootPage(<any>tempAppHostView);
-        }
-
-        let bootstrapPromiseCompleted = false;
         this._bootstrapper().then(
-            moduleRef => {
-                bootstrapPromiseCompleted = true;
-                if (isLogEnabled()) {
-                    bootstrapLog("Angular livesync done.");
-                }
-                onAfterLivesync.next({ moduleRef });
+          moduleRef => {
+              if (isLogEnabled()) {
+                  bootstrapLog("Angular livesync done.");
+              }
+              onAfterLivesync.next({ moduleRef });
 
-                if (!autoCreateFrame) {
-                    rootContent = tempAppHostView.content;
-                }
+              lastBootstrappedModule = new WeakRef(moduleRef);
+              applicationRerun({
+                create: () => getRootPage(),
+              });
+          },
+          error => {
+              if (isLogEnabled()) {
+                  bootstrapLogError("ERROR LIVESYNC BOOTSTRAPPING ANGULAR");
+              }
+              const errorMessage = error.message + "\n\n" + error.stack;
+              if (isLogEnabled()) {
+                  bootstrapLogError(errorMessage);
+              }
 
-                lastBootstrappedModule = new WeakRef(moduleRef);
-            },
-            error => {
-                bootstrapPromiseCompleted = true;
-                if (isLogEnabled()) {
-                    bootstrapLogError("ERROR LIVESYNC BOOTSTRAPPING ANGULAR");
-                }
-                const errorMessage = error.message + "\n\n" + error.stack;
-                if (isLogEnabled()) {
-                    bootstrapLogError(errorMessage);
-                }
-
-                rootContent = this.createErrorUI(errorMessage);
-
-                onAfterLivesync.next({ error });
-            }
-        );
-
-        if (isLogEnabled()) {
-            bootstrapLog("livesync bootstrapAction called, draining micro tasks queue. Root: " + rootContent);
-        }
-        (<any>global).Zone.drainMicroTaskQueue();
-        if (isLogEnabled()) {
-            bootstrapLog("livesync bootstrapAction called, draining micro tasks queue finished! Root: " + rootContent);
-        }
-
-        if (!bootstrapPromiseCompleted) {
-            const result = "Livesync bootstrap promise didn't resolve";
-            if (isLogEnabled()) {
-                bootstrapLogError(result);
-            }
-            rootContent = this.createErrorUI(result);
-
-            onAfterLivesync.next({ error: new Error(result) });
-        }
-
-        applicationRerun({
-            create: () => rootContent,
-        });
+              applicationRerun({
+                create: () => this.createErrorUI(errorMessage),
+              });
+              onAfterLivesync.next({ error });
+          }
+      );
     }
 
     private createErrorUI(message: string): View {
