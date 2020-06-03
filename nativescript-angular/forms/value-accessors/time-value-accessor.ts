@@ -1,7 +1,7 @@
 import { Directive, ElementRef, forwardRef } from "@angular/core";
 import { NG_VALUE_ACCESSOR } from "@angular/forms";
 import { BaseValueAccessor } from "./base-value-accessor";
-import { TimePicker } from "tns-core-modules/ui/time-picker";
+import { TimePicker } from "@nativescript/core/ui/time-picker";
 
 const TIME_VALUE_ACCESSOR = {
     provide: NG_VALUE_ACCESSOR,

@@ -1,5 +1,5 @@
 import { Component } from "@angular/core";
-import { isAndroid } from "tns-core-modules/platform";
+import { isAndroid } from "@nativescript/core/platform";
 
 function getIconSource(icon: string): string {
     const iconPrefix = isAndroid ? "res://" : "res://tabIcons/";

@@ -1,5 +1,5 @@
 import { NgModule, NO_ERRORS_SCHEMA } from "@angular/core";
-import { NativeScriptRouterModule, NSEmptyOutletComponent } from "nativescript-angular/router";
+import { NativeScriptRouterModule, NSEmptyOutletComponent } from "@nativescript/angular/router";
 
 import { FirstComponent } from "./first/first.component"
 import { SecondComponent } from "./second/second.component"

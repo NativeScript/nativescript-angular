@@ -1,7 +1,6 @@
 import {
     ComponentFactoryResolver,
     ComponentRef,
-    Directive,
     Injectable,
     Injector,
     NgModuleRef,
@@ -11,15 +10,15 @@ import {
 } from "@angular/core";
 
 import { NSLocationStrategy } from "../router/ns-location-strategy";
-import { View, ViewBase } from "tns-core-modules/ui/core/view";
-import { ProxyViewContainer } from "tns-core-modules/ui/proxy-view-container/proxy-view-container";
+import { View, ViewBase } from "@nativescript/core/ui/core/view";
+import { ProxyViewContainer } from "@nativescript/core/ui/proxy-view-container/proxy-view-container";
 
 import { AppHostView } from "../app-host-view";
 import { DetachedLoader } from "../common/detached-loader";
 import { PageFactory, PAGE_FACTORY } from "../platform-providers";
 import { once } from "../common/utils";
-import { Frame } from "tns-core-modules/ui/frame";
-import { ShowModalOptions } from "tns-core-modules/ui/core/view";
+import { Frame } from "@nativescript/core/ui/frame";
+import { ShowModalOptions } from "@nativescript/core/ui/core/view";
 
 export type BaseShowModalOptions = Pick<ShowModalOptions, Exclude<keyof ShowModalOptions, "closeCallback" | "context">>;
 
@@ -136,7 +135,7 @@ export class ModalDialogService {
         });
         const detachedFactory = options.resolver.resolveComponentFactory(DetachedLoader);
         this.zone.run(() => {
-            detachedLoaderRef = options.containerRef.createComponent(detachedFactory, -1, childInjector, null);
+            detachedLoaderRef = options.containerRef.createComponent(detachedFactory, 0, childInjector, null);
             detachedLoaderRef.instance.loadComponent(options.type).then((compRef) => {
                 const detachedProxy = <ProxyViewContainer>compRef.location.nativeElement;
 
@@ -153,17 +152,5 @@ export class ModalDialogService {
                 options.parentView.showModal(componentView, { ...options, closeCallback });
             });
         });
-    }
-}
-
-@Directive({
-    selector: "[modal-dialog-host]" // tslint:disable-line:directive-selector
-})
-export class ModalDialogHost { // tslint:disable-line:directive-class-suffix
-    constructor() {
-        throw new Error("ModalDialogHost is deprecated. " +
-            "Call ModalDialogService.showModal() " +
-            "by passing ViewContainerRef in the options instead."
-        );
     }
 }

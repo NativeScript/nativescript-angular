@@ -1,6 +1,6 @@
 {
     "name": "nativescript-angular",
-    "version": "8.21.0",
+    "version": "9.0.0",
     "description": "An Angular renderer that lets you build mobile apps with NativeScript.",
     "homepage": "https://www.nativescript.org/",
     "bugs": "https://github.com/NativeScript/nativescript-angular/issues",
@@ -26,18 +26,18 @@
         "@nativescript/angular": "file:../nativescript-angular"
     },
     "devDependencies": {
-        "@angular/animations": "~8.2.0",
-        "@angular/common": "~8.2.0",
-        "@angular/compiler": "~8.2.0",
-        "@angular/compiler-cli": "~8.2.0",
-        "@angular/core": "~8.2.0",
-        "@angular/forms": "~8.2.0",
-        "@angular/platform-browser": "~8.2.0",
-        "@angular/platform-browser-dynamic": "~8.2.0",
-        "@angular/router": "~8.2.0",
-        "rxjs": "^6.4.0",
-        "tns-core-modules": "next",
-        "typescript": "~3.5.3"
+        "@angular/animations": "~9.1.0",
+        "@angular/common": "~9.1.0",
+        "@angular/compiler": "~9.1.0",
+        "@angular/compiler-cli": "~9.1.0",
+        "@angular/core": "~9.1.0",
+        "@angular/forms": "~9.1.0",
+        "@angular/platform-browser": "~9.1.0",
+        "@angular/platform-browser-dynamic": "~9.1.0",
+        "@angular/router": "~9.1.0",
+        "rxjs": "~6.5.5",
+        "@nativescript/core": "next",
+        "typescript": "~3.8.3"
     },
     "scripts": {
         "ngc": "ngc -p tsconfig.json",

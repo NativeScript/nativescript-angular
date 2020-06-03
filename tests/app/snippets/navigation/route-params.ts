@@ -11,7 +11,7 @@ class MyComponent {
 
 
 // >> router-params-page-route
-import { PageRoute } from "nativescript-angular/router";
+import { PageRoute } from "@nativescript/angular/router";
 import { switchMap } from "rxjs/operators";
 
 class MyPageComponent {

@@ -1,5 +1,5 @@
 import { NgModule, NO_ERRORS_SCHEMA, ErrorHandler } from "@angular/core";
-import { NativeScriptModule } from "nativescript-angular/nativescript.module";
+import { NativeScriptModule } from "@nativescript/angular";
 
 import {
     AppRoutingModule,
@@ -9,8 +9,8 @@ import {
 import { AppComponent } from "./app.component";
 import { ItemsService } from "./items.service";
 
-import { rendererTraceCategory, viewUtilCategory, bootstrapCategory } from "nativescript-angular/trace";
-import { addCategories, enable, categories } from "tns-core-modules/trace";
+import { rendererTraceCategory, viewUtilCategory, bootstrapCategory } from "@nativescript/angular/trace";
+import { addCategories, enable, categories } from "@nativescript/core/trace";
 import { SharedModule } from "./shared.module";
 
 addCategories(bootstrapCategory);

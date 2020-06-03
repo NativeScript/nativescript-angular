@@ -7,8 +7,8 @@ import {
     TemplateRef,
     ViewContainerRef,
 } from "@angular/core";
-import { TabView, TabViewItem } from "tns-core-modules/ui/tab-view";
-import { TextTransform  } from "tns-core-modules/ui/text-base";
+import { TabView, TabViewItem } from "@nativescript/core/ui/tab-view";
+import { TextTransform  } from "@nativescript/core/ui/text-base";
 
 import { InvisibleNode } from "../element-registry";
 import { rendererLog, isLogEnabled } from "../trace";

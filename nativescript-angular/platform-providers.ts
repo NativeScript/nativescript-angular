@@ -1,9 +1,9 @@
 import { InjectionToken, Injectable, OnDestroy } from "@angular/core";
 
-import { Frame, NavigatedData } from "tns-core-modules/ui/frame";
-import { View } from "tns-core-modules/ui/core/view";
-import { Page } from "tns-core-modules/ui/page";
-import { device, Device } from "tns-core-modules/platform";
+import { Frame, NavigatedData } from "@nativescript/core/ui/frame";
+import { View } from "@nativescript/core/ui/core/view";
+import { Page } from "@nativescript/core/ui/page";
+import { device, Device } from "@nativescript/core/platform";
 import { BehaviorSubject, Subject, Observable } from "rxjs";
 import { distinctUntilChanged } from "rxjs/operators";
 

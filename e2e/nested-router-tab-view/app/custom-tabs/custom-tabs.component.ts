@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { ModalDialogService, ModalDialogOptions } from "nativescript-angular/directives/dialogs";
-import { RouterExtensions } from "nativescript-angular/router";
+import { ModalDialogService, ModalDialogOptions } from "@nativescript/angular/directives/dialogs";
+import { RouterExtensions } from "@nativescript/angular/router";
 import { ActivatedRoute } from "@angular/router";
-import { confirm } from "tns-core-modules/ui/dialogs";
+import { confirm } from "@nativescript/core/ui/dialogs";
 import { Page } from 'tns-core-modules/ui/page/page';
 
 @Component({

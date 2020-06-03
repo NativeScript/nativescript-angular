@@ -107,3 +107,19 @@ NOTE: The steps below describe how to run `renderer` tests, but the same approac
     npm run e2e -- --runType capabilityName
     ```
     
+## Building Packages
+
+1. Build `@nativescript/angular` (a.k.a. "scoped package"):
+    ```
+    cd nativescript-angular
+    npm install
+    npm run pack
+    ```
+
+2. Build `nativescript-angular` (a.k.a. "compat-package"): 
+    ```
+    cd nativescript-angular-package
+    npm install
+    npm run pack-with-scoped-version -- ../dist/nativescript-angular-scoped.tgz
+    ```
+Packages are available in the `dist` folder.

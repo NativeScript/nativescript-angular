@@ -1,12 +1,12 @@
 // make sure you import mocha-config before @angular/core
 import { assert } from "./test-config";
-import { View } from "tns-core-modules/ui/core/view";
-import { Slider } from "tns-core-modules/ui/slider";
-import { Switch } from "tns-core-modules/ui/switch";
-import { DatePicker } from "tns-core-modules/ui/date-picker";
-import { TimePicker } from "tns-core-modules/ui/time-picker";
-import { ListPicker } from "tns-core-modules/ui/list-picker";
-import { TextField } from "tns-core-modules/ui/text-field";
+import { View } from "@nativescript/core/ui/core/view";
+import { Slider } from "@nativescript/core/ui/slider";
+import { Switch } from "@nativescript/core/ui/switch";
+import { DatePicker } from "@nativescript/core/ui/date-picker";
+import { TimePicker } from "@nativescript/core/ui/time-picker";
+import { ListPicker } from "@nativescript/core/ui/list-picker";
+import { TextField } from "@nativescript/core/ui/text-field";
 import {
     NumberValueAccessor,
     CheckedValueAccessor,
@@ -14,7 +14,7 @@ import {
     TimeValueAccessor,
     SelectedIndexValueAccessor,
     TextValueAccessor
-} from "nativescript-angular/forms/value-accessors";
+} from "@nativescript/angular/forms/value-accessors";
 import { ElementRef } from "@angular/core";
 
 class TestElementRef implements ElementRef {
