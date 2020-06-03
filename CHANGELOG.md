@@ -1,3 +1,14 @@
+<a name="9.0.0"></a>
+# [9.0.0](https://github.com/NativeScript/nativescript-angular/compare/8.20.4...9.0.0) (2020-06-03)
+
+
+### Features
+
+* angular 9 ivy ([fbe2450](https://github.com/NativeScript/nativescript-angular/commit/fbe2450))
+* angular 9 ivy ([e7cfb11](https://github.com/NativeScript/nativescript-angular/commit/e7cfb11))
+
+
+
 <a name="8.20.4"></a>
 ## [8.20.4](https://github.com/NativeScript/nativescript-angular/compare/8.20.3...8.20.4) (2020-01-07)
 

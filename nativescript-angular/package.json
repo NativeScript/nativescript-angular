@@ -33,7 +33,8 @@
     "ngcc": "ngcc",
     "prepare": "npm run ngcc && ngc -p tsconfig.json",
     "pack": "npm i && tsc && npm run prepare && cd ../build/pack-scripts && npm i && npx ts-node pack-scoped.ts",
-    "version": "rm -rf package-lock.json && conventional-changelog -p angular -i ../CHANGELOG.md -s && git add ../CHANGELOG.md",
+    "changelog": "conventional-changelog -p angular -i ../CHANGELOG.md -s",
+    "version": "rm -rf package-lock.json && npm run changelog && git add ../CHANGELOG.md",
     "typedoc": "typedoc --tsconfig \"./tsconfig.typedoc.json\" --out ./bin/dist/ng-api-reference --includeDeclarations --name \"NativeScript Angular\" --theme ./node_modules/nativescript-typedoc-theme --excludeExternals --externalPattern \"**/+(tns-core-modules|module|declarations).d.ts\""
   },
   "bin": {
