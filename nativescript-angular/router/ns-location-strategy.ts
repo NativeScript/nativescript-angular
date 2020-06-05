@@ -1,6 +1,6 @@
 import { Injectable } from "@angular/core";
 import { LocationStrategy } from "@angular/common";
-import { DefaultUrlSerializer, UrlSegmentGroup, UrlTree, ActivatedRouteSnapshot } from "@angular/router";
+import { DefaultUrlSerializer, UrlSegmentGroup, UrlTree, ActivatedRouteSnapshot, Params } from "@angular/router";
 import { routerLog, routerError, isLogEnabled } from "../trace";
 import { NavigationTransition, Frame } from "@nativescript/core/ui/frame";
 import { isPresent } from "../lang-facade";
@@ -85,6 +85,7 @@ const defaultNavOptions: NavigationOptions = {
 };
 
 export interface LocationState {
+    queryParams: Params;
     segmentGroup: UrlSegmentGroup;
     isRootSegmentGroup: boolean;
     isPageNavigation: boolean;
@@ -131,6 +132,7 @@ export class NSLocationStrategy extends LocationStrategy {
         }
 
         const urlSerializer = new DefaultUrlSerializer();
+        tree.queryParams = state.queryParams;
         const url = urlSerializer.serialize(tree);
         if (isLogEnabled()) {
             routerLog("NSLocationStrategy.path(): " + url);
@@ -165,10 +167,11 @@ export class NSLocationStrategy extends LocationStrategy {
             const outletKey = this.getOutletKey(this.getSegmentGroupFullPath(segmentGroup), "primary");
             const outlet = this.findOutlet(outletKey);
 
-            if (outlet && this.updateStates(outlet, segmentGroup)) {
+            if (outlet && this.updateStates(outlet, segmentGroup, this.currentUrlTree.queryParams)) {
                 this.currentOutlet = outlet; // If states updated
             } else if (!outlet) {
-                const rootOutlet = this.createOutlet("primary", null, segmentGroup, null);
+                // tslint:disable-next-line:max-line-length
+                const rootOutlet = this.createOutlet("primary", null, segmentGroup, null, null, this.currentUrlTree.queryParams);
                 this.currentOutlet = rootOutlet;
             }
 
@@ -197,15 +200,15 @@ export class NSLocationStrategy extends LocationStrategy {
                 const containsLastState = outlet && outlet.containsTopState(currentSegmentGroup.toString());
                 if (!outlet) {
                     // tslint:disable-next-line:max-line-length
-                    outlet = this.createOutlet(outletKey, outletPath, currentSegmentGroup, parentOutlet, this._modalNavigationDepth);
+                    outlet = this.createOutlet(outletKey, outletPath, currentSegmentGroup, parentOutlet, this._modalNavigationDepth, this.currentUrlTree.queryParams);
                     this.currentOutlet = outlet;
                 } else if (this._modalNavigationDepth > 0 && outlet.showingModal && !containsLastState) {
                     // Navigation inside modal view.
-                    this.upsertModalOutlet(outlet, currentSegmentGroup);
+                    this.upsertModalOutlet(outlet, currentSegmentGroup, this.currentUrlTree.queryParams);
                 } else {
                     outlet.parent = parentOutlet;
 
-                    if (this.updateStates(outlet, currentSegmentGroup)) {
+                    if (this.updateStates(outlet, currentSegmentGroup, this.currentUrlTree.queryParams)) {
                         this.currentOutlet = outlet; // If states updated
                     }
                 }
@@ -604,7 +607,7 @@ export class NSLocationStrategy extends LocationStrategy {
         return outlet;
     }
 
-    private updateStates(outlet: Outlet, currentSegmentGroup: UrlSegmentGroup): boolean {
+    private updateStates(outlet: Outlet, currentSegmentGroup: UrlSegmentGroup, queryParams: Params): boolean {
         const isNewPage = outlet.states.length === 0;
         const lastState = outlet.states[outlet.states.length - 1];
         const equalStateUrls = outlet.containsTopState(currentSegmentGroup.toString());
@@ -612,7 +615,8 @@ export class NSLocationStrategy extends LocationStrategy {
         const locationState: LocationState = {
             segmentGroup: currentSegmentGroup,
             isRootSegmentGroup: false,
-            isPageNavigation: isNewPage
+            isPageNavigation: isNewPage,
+            queryParams: {...queryParams}
         };
 
         if (!lastState || !equalStateUrls) {
@@ -645,14 +649,15 @@ export class NSLocationStrategy extends LocationStrategy {
     }
 
     // tslint:disable-next-line:max-line-length
-    private createOutlet(outletKey: string, path: string, segmentGroup: any, parent: Outlet, modalNavigation?: number): Outlet {
+    private createOutlet(outletKey: string, path: string, segmentGroup: any, parent: Outlet, modalNavigation?: number, queryParams: Params = {}): Outlet {
         const pathByOutlets = this.getPathByOutlets(segmentGroup);
         const newOutlet = new Outlet(outletKey, path, pathByOutlets, modalNavigation);
 
         const locationState: LocationState = {
             segmentGroup: segmentGroup,
             isRootSegmentGroup: false,
-            isPageNavigation: true // It is a new OutletNode.
+            isPageNavigation: true, // It is a new OutletNode.
+            queryParams: {...queryParams}
         };
 
         newOutlet.states = [locationState];
@@ -719,7 +724,7 @@ export class NSLocationStrategy extends LocationStrategy {
         }
     }
 
-    private upsertModalOutlet(parentOutlet: Outlet, segmentedGroup: UrlSegmentGroup) {
+    private upsertModalOutlet(parentOutlet: Outlet, segmentedGroup: UrlSegmentGroup, queryParams: Params) {
         let currentModalOutlet = this.findOutletByModal(this._modalNavigationDepth);
 
         // We want to treat every p-r-o as a standalone Outlet.
@@ -734,9 +739,9 @@ export class NSLocationStrategy extends LocationStrategy {
             const outletPath = parentOutlet.peekState().segmentGroup.toString();
             const outletKey = this.getOutletKey(outletPath, outletName);
             // tslint:disable-next-line:max-line-length
-            currentModalOutlet = this.createOutlet(outletKey, outletPath, segmentedGroup, parentOutlet, this._modalNavigationDepth);
+            currentModalOutlet = this.createOutlet(outletKey, outletPath, segmentedGroup, parentOutlet, this._modalNavigationDepth, queryParams);
             this.currentOutlet = currentModalOutlet;
-        } else if (this.updateStates(currentModalOutlet, segmentedGroup)) {
+        } else if (this.updateStates(currentModalOutlet, segmentedGroup, queryParams)) {
             this.currentOutlet = currentModalOutlet; // If states updated
         }
     }
