@@ -3,6 +3,9 @@ import "@nativescript/core/globals";
 // Require application early to work around a circular import
 import "@nativescript/core/application";
 import "./zone-js/dist/zone-nativescript";
+// TODO: migrate to standard zone.js if possible
+// investigate Ivy with templated-items-comp to allow standard zone below to be used instead of patched {N} zone above
+// import 'zone.js/dist/zone';
 import "./polyfills/array";
 import "./polyfills/console";
 import { profile, uptime } from "@nativescript/core/profiling";
@@ -210,12 +213,6 @@ export class NativeScriptPlatformRef extends PlatformRef {
 
                 if (this.appOptions && this.appOptions.launchView) {
                   launchView = this.appOptions.launchView;
-                  if (this.appOptions.launchView.startAnimation) {
-                    setTimeout(() => {
-                      // ensure launch animation is executed after launchView added to view stack
-                      this.appOptions.launchView.startAnimation();
-                    });
-                  }
                 } else {
                   launchView = new GridLayout();
                   // Custom launch view color (useful when doing async app intializers where you don't want a flash of undesirable color)
@@ -224,35 +221,42 @@ export class NativeScriptPlatformRef extends PlatformRef {
                 args.root = launchView;
                 setRootPage(<any>launchView);
 
-                // Launch Angular app
-                this._bootstrapper().then(
-                  moduleRef => {
-
-                      if (isLogEnabled()) {
-                          bootstrapLog(`Angular bootstrap bootstrap done. uptime: ${uptime()}`);
-                      }
-
-                      rootContent = launchView;
-                      if (launchView && launchView.cleanup) {
-                        // cleanup any custom launch views
-                        launchView.cleanup();
-                      }
-
-                      lastBootstrappedModule = new WeakRef(moduleRef);
-                  },
-                  err => {
-
-                      const errorMessage = err.message + "\n\n" + err.stack;
-                      if (isLogEnabled()) {
-                          bootstrapLogError("ERROR BOOTSTRAPPING ANGULAR");
-                      }
-                      if (isLogEnabled()) {
-                          bootstrapLogError(errorMessage);
-                      }
-
-                      rootContent = this.createErrorUI(errorMessage);
+                // Launch Angular app on next tick
+                setTimeout(() => {
+                  if (this.appOptions && this.appOptions.launchView && this.appOptions.launchView.startAnimation) {
+                    // ensure launch animation is executed after launchView added to view stack
+                    this.appOptions.launchView.startAnimation();
                   }
-              );
+                  this._bootstrapper().then(
+                    moduleRef => {
+
+                        if (isLogEnabled()) {
+                            bootstrapLog(`Angular bootstrap bootstrap done. uptime: ${uptime()}`);
+                        }
+
+                        rootContent = launchView;
+                        if (launchView && launchView.cleanup) {
+                          // cleanup any custom launch views
+                          launchView.cleanup();
+                        }
+
+                        lastBootstrappedModule = new WeakRef(moduleRef);
+                    },
+                    err => {
+
+                        const errorMessage = err.message + "\n\n" + err.stack;
+                        if (isLogEnabled()) {
+                            bootstrapLogError("ERROR BOOTSTRAPPING ANGULAR");
+                        }
+                        if (isLogEnabled()) {
+                            bootstrapLogError(errorMessage);
+                        }
+
+                        rootContent = this.createErrorUI(errorMessage);
+                    }
+                );
+                // (<any>global).Zone.drainMicroTaskQueue();
+              });
             }
         );
         const exitCallback = profile(

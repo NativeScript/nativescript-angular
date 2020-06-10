@@ -22,10 +22,11 @@ import {
   ɵBrowserAnimationBuilder as BrowserAnimationBuilder,
 } from "@angular/platform-browser/animations";
 
-import { NativeScriptModule } from "../nativescript.module";
+// import { NativeScriptModule } from "../nativescript.module";
 import { NativeScriptRendererFactory } from "../renderer";
 import { NativeScriptAnimationDriver } from "./animation-driver";
 import { throwIfAlreadyLoaded } from "../common/utils";
+import { NativeScriptCommonModule } from "../common";
 
 @Injectable()
 export class InjectableAnimationEngine extends AnimationEngine {
@@ -55,7 +56,7 @@ export function instantiateDefaultStyleNormalizer() {
 }
 
 @NgModule({
-  imports: [NativeScriptModule],
+  imports: [NativeScriptCommonModule],
   providers: [
     {
       provide: AnimationDriver,

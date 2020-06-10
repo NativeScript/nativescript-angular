@@ -10,10 +10,11 @@ export * from "./nativescript.module";
 export * from "./common";
 
 export * from "./animations";
-export * from "./router";
 export * from "./file-system";
 export * from "./http-client";
 export * from "./forms";
+export * from "./directives/dialogs";
+export * from "./router";
 
 export {
     ViewClass,

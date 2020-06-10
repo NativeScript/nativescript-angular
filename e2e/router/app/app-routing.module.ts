@@ -1,5 +1,5 @@
 import { NgModule, NO_ERRORS_SCHEMA } from "@angular/core";
-import { NativeScriptRouterModule, NSEmptyOutletComponent } from "@nativescript/angular/router";
+import { NativeScriptRouterModule, NSEmptyOutletComponent } from "@nativescript/angular";
 
 import { FirstComponent } from "./first/first.component"
 import { SecondComponent } from "./second/second.component"
@@ -26,7 +26,7 @@ export const routes = [
                 path: "lazy-named",
                 outlet: "lazyNameOutlet",
                 component: NSEmptyOutletComponent,
-                loadChildren: "./lazy-named/lazy-named.module#LazyNamedModule",
+                loadChildren: () => import('./lazy-named/lazy-named.module').then(m => m.LazyNamedModule),
             }
         ]
     },
@@ -45,15 +45,9 @@ export const routes = [
     },
     {
         path: "lazy",
-        loadChildren: "./lazy/lazy.module#LazyModule",
+        component: NSEmptyOutletComponent,
+        loadChildren: () => import('./lazy/lazy.module').then(m => m.LazyModule),
     }
-];
-
-export const navigatableComponents = [
-    FirstComponent,
-    SecondComponent,
-    MasterComponent,
-    DetailComponent
 ];
 
 @NgModule({

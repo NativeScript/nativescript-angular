@@ -46,8 +46,8 @@
     "compile-tests": "tsc -p e2e --watch",
     "e2e": "tsc -p e2e && mocha --opts ../config/mocha.opts --recursive e2e --appiumCapsLocation ../config/appium.capabilities.json",
     "e2e-watch": "tsc -p e2e --watch",
-    "clean": "npx rimraf hooks node_modules package-lock.json",
-    "setup": "cd ../../nativescript-angular && npm run pack && cd ../e2e/animation-examples && npm run clean",
+    "clean": "npx rimraf hooks node_modules platforms package-lock.json",
+    "setup": "cd ../../nativescript-angular && npm run pack && cd ../e2e/nested-router-tab-view && npm run clean",
     "ngcc": "ngcc --properties es2015 module main --first-only",
     "postinstall": "npm run ngcc"
   }

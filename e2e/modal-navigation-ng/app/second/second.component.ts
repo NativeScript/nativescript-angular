@@ -1,11 +1,10 @@
 import { Component, ViewContainerRef } from "@angular/core";
-import { ModalDialogService, ModalDialogOptions } from "@nativescript/angular/directives/dialogs";
-import { EventData } from "@nativescript/core/data/observable";
-import { Frame } from "@nativescript/core/ui/frame";
-import { View } from "@nativescript/core/ui/core/view";
+import { ModalDialogService, ModalDialogOptions } from "@nativescript/angular";
+import { EventData } from "@nativescript/core";
+import { Frame } from "@nativescript/core";
+import { View } from "@nativescript/core";
 import { ModalRouterComponent } from "../modal/modal-router/modal-router.component";
-import { PageRouterOutlet } from "@nativescript/angular/router/page-router-outlet";
-import { RouterExtensions } from "@nativescript/angular/router";
+import { RouterExtensions } from "@nativescript/angular";
 import { ModalComponent } from "../modal/modal.component";
 import { AppModule } from "../app.module";
 @Component({

@@ -1,7 +1,6 @@
 import { Component, ViewContainerRef } from "@angular/core";
-import { ModalDialogService, ModalDialogOptions } from "@nativescript/angular/directives/dialogs";
-import { RouterExtensions } from "@nativescript/angular/router";
-import { EventData } from "@nativescript/core/data/observable";
+import { ModalDialogService, ModalDialogOptions, RouterExtensions } from "@nativescript/angular";
+import { EventData } from "@nativescript/core";
 
 import { ViewContainerRefService } from "../shared/ViewContainerRefService";
 import { ModalRouterComponent } from "../modal/modal-router/modal-router.component";

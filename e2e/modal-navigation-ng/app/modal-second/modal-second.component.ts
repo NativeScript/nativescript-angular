@@ -1,7 +1,7 @@
 import { Component } from "@angular/core";
 import { View } from "@nativescript/core/ui/core/view"
 import { ActivatedRoute } from "@angular/router";
-import { RouterExtensions } from "@nativescript/angular/router";
+import { RouterExtensions } from "@nativescript/angular";
 
 @Component({
     moduleId: module.id,
