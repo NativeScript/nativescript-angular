@@ -14,7 +14,7 @@ import * as platform from "@nativescript/core/platform";
         <Button class="main-btn"
              *ngFor="let page of pages"
             [text]="page.data.title"
-            [nsRouterLink]="page.path" height="40">
+            [nsRouterLink]="['../' + page.path]" height="40">
         </Button>
     </WrapLayout>
     `,
