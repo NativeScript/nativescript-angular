@@ -1,7 +1,7 @@
 import { Component } from "@angular/core";
 
 @Component({
-    selector: "main",
+    selector: "main-listview",
     template: `
     <StackLayout>
         <Button text="ListView" [nsRouterLink]="'commonTemplate'"></Button>

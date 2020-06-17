@@ -96,7 +96,7 @@ export const routableComponents = [
 
 // Set `isNavigatable: true` if the page is a main page to other sub pages
 export const routes = [
-    { path: "", pathMatch: "full", redirectTo: "binding" },
+    { path: "", pathMatch: "full", redirectTo: "main" },
     { path: "main", component: MainComponent, data: { title: "" } },
     // { path: "", component: ModalContentComponent, data: { title: "" } },
     { path: "template", component: AppComponent, data: { title: "Template", isNavigatable: true } },

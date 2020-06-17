@@ -218,8 +218,9 @@ export class NativeScriptPlatformRef extends PlatformRef {
                   // Custom launch view color (useful when doing async app intializers where you don't want a flash of undesirable color)
                   launchView.backgroundColor = new Color(this.appOptions && this.appOptions.backgroundColor ? this.appOptions.backgroundColor : '#fff');
                 }
-                args.root = launchView;
+                
                 setRootPage(<any>launchView);
+                args.root = launchView;
 
                 // Launch Angular app on next tick
                 setTimeout(() => {
@@ -255,7 +256,13 @@ export class NativeScriptPlatformRef extends PlatformRef {
                         rootContent = this.createErrorUI(errorMessage);
                     }
                 );
-                // (<any>global).Zone.drainMicroTaskQueue();
+                if (isLogEnabled()) {
+                  bootstrapLog("bootstrapAction called, draining micro tasks queue. Root: " + rootContent);
+                }
+                (<any>global).Zone.drainMicroTaskQueue();
+                if (isLogEnabled()) {
+                    bootstrapLog("bootstrapAction called, draining micro tasks queue finished! Root: " + rootContent);
+                } 
               });
             }
         );

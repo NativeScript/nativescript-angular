@@ -2,7 +2,7 @@ import { Component } from "@angular/core";
 import * as platform from "@nativescript/core/platform";
 
 @Component({
-    selector: "main",
+    selector: "main-page",
     styles: [
         ".main-btn{" +
         "margin-right:5; margin-bottom:5;" +
