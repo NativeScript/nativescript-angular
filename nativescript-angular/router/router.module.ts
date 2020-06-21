@@ -39,7 +39,7 @@ export class NativeScriptRouterModule {
         return {
             ngModule: NativeScriptRouterModule,
             providers: [
-              ...RouterModule.forRoot(routes, config).providers, 
+              ...RouterModule.forRoot(routes, config).providers,
               {
                 provide: NSLocationStrategy,
                 useFactory: provideLocationStrategy,
