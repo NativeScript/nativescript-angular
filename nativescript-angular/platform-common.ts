@@ -76,8 +76,8 @@ export interface HmrOptions {
 // tslint:enable:max-line-length
 
 export interface AppLaunchView extends View {
-  startAnimation?: () => void;
-  cleanup?: () => void;
+    startAnimation?: () => void;
+    cleanup?: () => void;
 }
 
 export interface AppOptions {
@@ -209,50 +209,50 @@ export class NativeScriptPlatformRef extends PlatformRef {
                 }
 
                 if (this.appOptions && this.appOptions.launchView) {
-                  launchView = this.appOptions.launchView;
-                  if (this.appOptions.launchView.startAnimation) {
-                    setTimeout(() => {
-                      // ensure launch animation is executed after launchView added to view stack
-                      this.appOptions.launchView.startAnimation();
-                    });
-                  }
+                    launchView = this.appOptions.launchView;
+                    if (this.appOptions.launchView.startAnimation) {
+                        setTimeout(() => {
+                            // ensure launch animation is executed after launchView added to view stack
+                            this.appOptions.launchView.startAnimation();
+                        });
+                    }
                 } else {
-                  launchView = new GridLayout();
-                  // Custom launch view color (useful when doing async app intializers where you don't want a flash of undesirable color)
-                  launchView.backgroundColor = new Color(this.appOptions && this.appOptions.backgroundColor ? this.appOptions.backgroundColor : '#fff');
+                    launchView = new GridLayout();
+                    // Custom launch view color (useful when doing async app intializers where you don't want a flash of undesirable color)
+                    launchView.backgroundColor = new Color(this.appOptions && this.appOptions.backgroundColor ? this.appOptions.backgroundColor : '#fff');
                 }
                 args.root = launchView;
                 setRootPage(<any>launchView);
 
                 // Launch Angular app
                 this._bootstrapper().then(
-                  moduleRef => {
+                    moduleRef => {
 
-                      if (isLogEnabled()) {
-                          bootstrapLog(`Angular bootstrap bootstrap done. uptime: ${uptime()}`);
-                      }
+                        if (isLogEnabled()) {
+                            bootstrapLog(`Angular bootstrap bootstrap done. uptime: ${uptime()}`);
+                        }
 
-                      rootContent = launchView;
-                      if (launchView && launchView.cleanup) {
-                        // cleanup any custom launch views
-                        launchView.cleanup();
-                      }
+                        rootContent = launchView;
+                        if (launchView && launchView.cleanup) {
+                            // cleanup any custom launch views
+                            launchView.cleanup();
+                        }
 
-                      lastBootstrappedModule = new WeakRef(moduleRef);
-                  },
-                  err => {
+                        lastBootstrappedModule = new WeakRef(moduleRef);
+                    },
+                    err => {
 
-                      const errorMessage = err.message + "\n\n" + err.stack;
-                      if (isLogEnabled()) {
-                          bootstrapLogError("ERROR BOOTSTRAPPING ANGULAR");
-                      }
-                      if (isLogEnabled()) {
-                          bootstrapLogError(errorMessage);
-                      }
+                        const errorMessage = err.message + "\n\n" + err.stack;
+                        if (isLogEnabled()) {
+                            bootstrapLogError("ERROR BOOTSTRAPPING ANGULAR");
+                        }
+                        if (isLogEnabled()) {
+                            bootstrapLogError(errorMessage);
+                        }
 
-                      rootContent = this.createErrorUI(errorMessage);
-                  }
-              );
+                        rootContent = this.createErrorUI(errorMessage);
+                    }
+                );
             }
         );
         const exitCallback = profile(
@@ -293,32 +293,32 @@ export class NativeScriptPlatformRef extends PlatformRef {
         }
 
         this._bootstrapper().then(
-          moduleRef => {
-              if (isLogEnabled()) {
-                  bootstrapLog("Angular livesync done.");
-              }
-              onAfterLivesync.next({ moduleRef });
+            moduleRef => {
+                if (isLogEnabled()) {
+                    bootstrapLog("Angular livesync done.");
+                }
+                onAfterLivesync.next({ moduleRef });
 
-              lastBootstrappedModule = new WeakRef(moduleRef);
-              applicationRerun({
-                create: () => getRootPage(),
-              });
-          },
-          error => {
-              if (isLogEnabled()) {
-                  bootstrapLogError("ERROR LIVESYNC BOOTSTRAPPING ANGULAR");
-              }
-              const errorMessage = error.message + "\n\n" + error.stack;
-              if (isLogEnabled()) {
-                  bootstrapLogError(errorMessage);
-              }
+                lastBootstrappedModule = new WeakRef(moduleRef);
+                applicationRerun({
+                    create: () => getRootPage(),
+                });
+            },
+            error => {
+                if (isLogEnabled()) {
+                    bootstrapLogError("ERROR LIVESYNC BOOTSTRAPPING ANGULAR");
+                }
+                const errorMessage = error.message + "\n\n" + error.stack;
+                if (isLogEnabled()) {
+                    bootstrapLogError(errorMessage);
+                }
 
-              applicationRerun({
-                create: () => this.createErrorUI(errorMessage),
-              });
-              onAfterLivesync.next({ error });
-          }
-      );
+                applicationRerun({
+                    create: () => this.createErrorUI(errorMessage),
+                });
+                onAfterLivesync.next({ error });
+            }
+        );
     }
 
     private createErrorUI(message: string): View {
