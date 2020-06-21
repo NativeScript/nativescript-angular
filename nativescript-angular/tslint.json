@@ -5,6 +5,8 @@
   "rules":{
     "directive-selector": [true, "attribute", "ns", "camelCase"],
     "component-selector": [true, "element", "", "camelCase"],
+    "no-inputs-metadata-property": true,
+    "no-outputs-metadata-property": true,
     "no-input-rename": true,
     "no-output-rename": true,
     "use-pipe-transform-interface": true,
