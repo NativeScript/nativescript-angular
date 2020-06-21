@@ -13,7 +13,7 @@ import "nativescript-intl";
 import { TextView } from "@nativescript/core/ui/text-view";
 import { Color, View } from "@nativescript/core/ui/core/view";
 import { Frame } from "@nativescript/core/ui/frame";
-import { GridLayout } from '@nativescript/core/ui/layouts/grid-layout';
+import { GridLayout } from "@nativescript/core/ui/layouts/grid-layout";
 
 import {
     Type,
@@ -218,8 +218,10 @@ export class NativeScriptPlatformRef extends PlatformRef {
                     }
                 } else {
                     launchView = new GridLayout();
-                    // Custom launch view color (useful when doing async app intializers where you don't want a flash of undesirable color)
-                    launchView.backgroundColor = new Color(this.appOptions && this.appOptions.backgroundColor ? this.appOptions.backgroundColor : '#fff');
+                    // Custom launch view color (useful when doing async app intializers
+                    // where you don't want a flash of undesirable color).
+                    const bgCol = this.appOptions && this.appOptions.backgroundColor ? this.appOptions.backgroundColor : "#fff";
+                    launchView.backgroundColor = new Color(bgCol);
                 }
                 args.root = launchView;
                 setRootPage(<any>launchView);
