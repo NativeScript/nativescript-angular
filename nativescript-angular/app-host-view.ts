@@ -24,7 +24,7 @@ export class AppHostView extends ContentView {
         // TODO: Find a prettier way to perform parent -> child relationship
         if (this._content) {
             if (value) {
-                value.parent = this;
+                this._addView(value);
             }
             return;
         }
