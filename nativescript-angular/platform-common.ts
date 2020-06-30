@@ -215,10 +215,8 @@ export class NativeScriptPlatformRef extends PlatformRef {
                     launchView = this.appOptions.launchView;
                 } else {
                     launchView = new GridLayout();
-                    // Custom launch view color (useful when doing async app intializers
-                    // where you don't want a flash of undesirable color).
-                    const bgCol = this.appOptions && this.appOptions.backgroundColor ? this.appOptions.backgroundColor : "#fff";
-                    launchView.backgroundColor = new Color(bgCol);
+                    // Custom launch view color (useful when doing async app intializers where you don't want a flash of undesirable color)
+                    launchView.backgroundColor = new Color(this.appOptions && this.appOptions.backgroundColor ? this.appOptions.backgroundColor : '#fff');
                 }
                 
                 setRootPage(<any>launchView);
