@@ -96,8 +96,9 @@ export const routableComponents = [
 
 // Set `isNavigatable: true` if the page is a main page to other sub pages
 export const routes = [
-    { path: "", component: MainComponent, data: { title: "" } },
-    { path: "", component: ModalContentComponent, data: { title: "" } },
+    { path: "", pathMatch: "full", redirectTo: "main" },
+    { path: "main", component: MainComponent, data: { title: "" } },
+    // { path: "", component: ModalContentComponent, data: { title: "" } },
     { path: "template", component: AppComponent, data: { title: "Template", isNavigatable: true } },
 
     {
@@ -192,6 +193,6 @@ export const routes = [
     // Needed for AoT compilation
     {
         path: "lazy",
-        loadChildren: "./lazy/lazy.module#LazyModule"
+        loadChildren: () => import("./lazy/lazy.module").then(m => m.LazyModule)
     },
 ];

@@ -1,11 +1,13 @@
-import { NgModule, NgModuleFactoryLoader, NO_ERRORS_SCHEMA } from "@angular/core";
-import { NativeScriptModule } from "@nativescript/angular";
-import { NSModuleFactoryLoader } from "@nativescript/angular/router";
+import { NgModule, NO_ERRORS_SCHEMA } from "@angular/core";
+import { NativeScriptModule, NativeScriptAnimationsModule } from "@nativescript/angular";
 
 import {
     AppRoutingModule,
-    navigatableComponents,
 } from "./app-routing.module";
+import { FirstComponent } from "./first/first.component"
+import { SecondComponent } from "./second/second.component"
+import { MasterComponent } from "./second/master.component"
+import { DetailComponent } from "./second/detail.component"
 
 import { AppComponent } from "./app.component";
 
@@ -17,14 +19,15 @@ enable();
 @NgModule({
     declarations: [
         AppComponent,
-        ...navigatableComponents,
+        FirstComponent,
+        SecondComponent,
+        MasterComponent,
+        DetailComponent,
     ],
     bootstrap: [AppComponent],
-    providers: [
-        { provide: NgModuleFactoryLoader, useClass: NSModuleFactoryLoader }
-    ],
     imports: [
         NativeScriptModule,
+        // NativeScriptAnimationsModule,
         AppRoutingModule,
     ],
     schemas: [NO_ERRORS_SCHEMA],

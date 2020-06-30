@@ -3,6 +3,9 @@ import "@nativescript/core/globals";
 // Require application early to work around a circular import
 import "@nativescript/core/application";
 import "./zone-js/dist/zone-nativescript";
+// TODO: migrate to standard zone.js if possible
+// investigate Ivy with templated-items-comp to allow standard zone below to be used instead of patched {N} zone above
+// import 'zone.js/dist/zone';
 import "./polyfills/array";
 import "./polyfills/console";
 import { profile, uptime } from "@nativescript/core/profiling";
@@ -210,25 +213,24 @@ export class NativeScriptPlatformRef extends PlatformRef {
 
                 if (this.appOptions && this.appOptions.launchView) {
                     launchView = this.appOptions.launchView;
-                    if (this.appOptions.launchView.startAnimation) {
-                        setTimeout(() => {
-                            // ensure launch animation is executed after launchView added to view stack
-                            this.appOptions.launchView.startAnimation();
-                        });
-                    }
                 } else {
                     launchView = new GridLayout();
-                    // Custom launch view color (useful when doing async app intializers
-                    // where you don't want a flash of undesirable color).
-                    const bgCol = this.appOptions && this.appOptions.backgroundColor ? this.appOptions.backgroundColor : "#fff";
-                    launchView.backgroundColor = new Color(bgCol);
+                    // Custom launch view color
+                    // Useful when using async app intializers to avoid flash of undesirable color
+                    launchView.backgroundColor = new Color(this.appOptions
+                        && this.appOptions.backgroundColor ? this.appOptions.backgroundColor : "#fff");
                 }
-                args.root = launchView;
-                setRootPage(<any>launchView);
 
-                // Launch Angular app
-                this._bootstrapper().then(
-                    moduleRef => {
+                setRootPage(<any>launchView);
+                args.root = launchView;
+
+                // Launch Angular app on next tick
+                setTimeout(() => {
+                    if (this.appOptions && this.appOptions.launchView && this.appOptions.launchView.startAnimation) {
+                        // ensure launch animation is executed after launchView added to view stack
+                        this.appOptions.launchView.startAnimation();
+                    }
+                  this._bootstrapper().then(moduleRef => {
 
                         if (isLogEnabled()) {
                             bootstrapLog(`Angular bootstrap bootstrap done. uptime: ${uptime()}`);
@@ -255,6 +257,14 @@ export class NativeScriptPlatformRef extends PlatformRef {
                         rootContent = this.createErrorUI(errorMessage);
                     }
                 );
+                if (isLogEnabled()) {
+                  bootstrapLog("bootstrapAction called, draining micro tasks queue. Root: " + rootContent);
+                }
+                (<any>global).Zone.drainMicroTaskQueue();
+                if (isLogEnabled()) {
+                    bootstrapLog("bootstrapAction called, draining micro tasks queue finished! Root: " + rootContent);
+                }
+              });
             }
         );
         const exitCallback = profile(

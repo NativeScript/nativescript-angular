@@ -1,8 +1,8 @@
 import { Component, OnInit, OnDestroy } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
 
-import { RouterExtensions } from "@nativescript/angular/router";
-import { Page } from "@nativescript/core/ui/page";
+import { RouterExtensions } from "@nativescript/angular";
+import { Page } from "@nativescript/core";
 import { Observable, Subscription } from "rxjs";
 import { map } from "rxjs/operators";
 import { CounterService } from "../counter.service";
@@ -50,11 +50,7 @@ export class SecondComponent implements OnInit, OnDestroy {
 
     ngOnInit() {
         this.sub = this.route.queryParams.subscribe((params) => {
-            console.log("");
-            console.log("");
-            console.log(params);
-            console.log("");
-            console.log("");
+            console.log("route.queryParams:", params);
         });
         console.log("SecondComponent - ngOnInit()");
     }

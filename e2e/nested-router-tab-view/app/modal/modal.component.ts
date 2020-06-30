@@ -26,7 +26,8 @@ export class ModalComponent {
     }
 
     close(layoutRoot: View) {
-        layoutRoot.closeModal();
+      this.modal.closeModal();
+        // layoutRoot.closeModal();
     }
 
     ngOnInit() {

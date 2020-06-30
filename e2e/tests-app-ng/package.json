@@ -6,10 +6,10 @@
   "nativescript": {
     "id": "org.nativescript.testsappng",
     "tns-ios": {
-      "version": "6.0.2"
+      "version": "6.5.0"
     },
     "tns-android": {
-      "version": "6.0.2"
+      "version": "6.5.0"
     }
   },
   "dependencies": {
@@ -43,6 +43,18 @@
     "typescript": "~3.8.3"
   },
   "scripts": {
-    "tslint": "tslint --config tslint.json 'app/**/*.ts'"
+    "tslint": "tslint --config tslint.json 'app/**/*.ts'",
+    "clean": "npx rimraf hooks node_modules platforms package-lock.json",
+    "setup": "cd ../../nativescript-angular && npm run pack && cd ../e2e/tests-app-ng && npm run clean",
+    "u": "update-ns-webpack",
+    "e2e": "tsc -p e2e && mocha --opts ../config/mocha.opts --recursive e2e --appiumCapsLocation ../config/appium.capabilities.json",
+    "e2e-watch": "tsc -p e2e --watch",
+    "update-app-ng-deps": "update-app-ng-deps",
+    "ns-verify-bundle": "ns-verify-bundle",
+    "update-ns-webpack": "update-ns-webpack",
+    "ngcc": "ngcc --properties es2015 module main --first-only",
+    "postinstall": "npm run ngcc",
+    "ios": "tns debug ios --env.aot --emulator --no-hmr",
+    "android": "tns debug android --env.aot --emulator --no-hmr"
   }
 }

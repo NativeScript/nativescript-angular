@@ -5,9 +5,7 @@ import {
     APP_INITIALIZER
 } from "@angular/core";
 
-import { NativeScriptModule } from "@nativescript/angular";
-import { NativeScriptAnimationsModule } from "@nativescript/angular/animations";
-import { NSModuleFactoryLoader } from "@nativescript/angular/router";
+import { NativeScriptModule, NativeScriptAnimationsModule } from "@nativescript/angular";
 
 import { AppRoutingModule } from "./app.routing";
 import { AnimationsListComponent } from "./animations-list.component";

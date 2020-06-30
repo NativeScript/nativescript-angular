@@ -1,6 +1,6 @@
 import { Component, OnInit, OnDestroy, OnChanges, DoCheck } from "@angular/core";
-import { RouterExtensions } from "@nativescript/angular/router";
-import { Page } from "@nativescript/core/ui/page";
+import { RouterExtensions } from "@nativescript/angular";
+import { Page } from "@nativescript/core";
 
 import { CounterService } from "../counter.service";
 import { ActivatedRoute } from "@angular/router";
@@ -37,6 +37,10 @@ export class FirstComponent implements OnInit, OnDestroy, DoCheck {
         page: Page) {
 
         console.log("FirstComponent - constructor() page: " + page);
+    }
+
+    tapMe() {
+      console.log('here!!!')
     }
 
     ngOnInit() {

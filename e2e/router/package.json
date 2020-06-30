@@ -4,7 +4,10 @@
   "readme": "NativeScript Application",
   "repository": "<fill-your-repository-here>",
   "nativescript": {
-    "id": "org.nativescript.router"
+    "id": "org.nativescript.router",
+    "tns-ios": {
+      "version": "6.5.1"
+    }
   },
   "dependencies": {
     "@angular/animations": "~9.1.0",
@@ -42,8 +45,18 @@
     "typescript": "~3.8.3"
   },
   "scripts": {
+    "clean": "npx rimraf hooks node_modules platforms package-lock.json",
     "e2e": "tsc -p e2e && mocha --opts ../config/mocha.opts --recursive e2e --appiumCapsLocation ../config/appium.capabilities.json",
+    "e2e-watch": "tsc -p e2e --watch",
     "compile-tests-w": "tsc -p e2e --watch",
-    "update-app-ng-deps": "update-app-ng-deps"
+    "update-app-ng-deps": "update-app-ng-deps",
+    "setup": "cd ../../nativescript-angular && npm run pack && cd ../e2e/router && npm run clean",
+    "u": "update-ns-webpack",
+    "ns-verify-bundle": "ns-verify-bundle",
+    "update-ns-webpack": "update-ns-webpack",
+    "ngcc": "ngcc --properties es2015 module main --first-only",
+    "postinstall": "npm run ngcc",
+    "ios": "tns debug ios --env.aot --emulator --no-hmr",
+    "android": "tns debug android --env.aot --emulator --no-hmr"
   }
 }
