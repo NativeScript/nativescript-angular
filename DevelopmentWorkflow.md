@@ -20,7 +20,7 @@
 
 Install your native toolchain and NativeScript as described in the docs:
 
-https://docs.nativescript.org/setup/quick-setup
+https://docs.nativescript.org/angular/start/quick-setup
 
 ### Clone repository
 
