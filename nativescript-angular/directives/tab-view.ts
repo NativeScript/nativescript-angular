@@ -11,7 +11,7 @@ import { TabView, TabViewItem } from "@nativescript/core/ui/tab-view";
 import { TextTransform  } from "@nativescript/core/ui/text-base";
 
 import { InvisibleNode } from "../element-registry";
-import { rendererLog, isLogEnabled } from "../trace";
+import { NativeScriptDebug } from "../trace";
 import { isBlank } from "../lang-facade";
 
 export interface TabViewItemDef {
@@ -46,8 +46,8 @@ export class TabViewDirective implements AfterViewInit {
 
     ngAfterViewInit() {
         this.viewInitialized = true;
-        if (isLogEnabled()) {
-            rendererLog("this._selectedIndex: " + this._selectedIndex);
+        if (NativeScriptDebug.isLogEnabled()) {
+            NativeScriptDebug.rendererLog("this._selectedIndex: " + this._selectedIndex);
         }
         if (!isBlank(this._selectedIndex)) {
             this.tabView.selectedIndex = this._selectedIndex;

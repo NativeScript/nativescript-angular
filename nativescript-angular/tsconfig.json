@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
-    "target": "es5",
-    "module": "commonjs",
+    "target": "es2017",
+    "module": "es2015",
     "moduleResolution": "node",
     "sourceMap": true,
     "emitDecoratorMetadata": true,
@@ -9,7 +9,7 @@
     "noImplicitUseStrict": true,
     "noEmitHelpers": true,
     "declaration": true,
-    "removeComments": false,
+    "removeComments": true,
     "noEmitOnError": true,
     "skipLibCheck": true,
     "noImplicitAny": false,
@@ -24,10 +24,12 @@
     "genDir": ".",
     "skipMetadataEmit": false,
     "skipTemplateCodegen": true,
-    "strictMetadataEmit": true,
-    "enableIvy": false
+    "strictMetadataEmit": true
   },
   "include": [
     "**/*.ts"
-  ]   
+  ],
+  "exclude": [
+    "dist"
+  ]
 }

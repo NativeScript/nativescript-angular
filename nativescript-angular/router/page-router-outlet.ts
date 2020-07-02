@@ -19,12 +19,15 @@ import { profile } from "@nativescript/core/profiling";
 
 import { BehaviorSubject } from "rxjs";
 
-import { DEVICE, PAGE_FACTORY, PageFactory, PageService } from "../platform-providers";
-import { routerLog as log, routerError as error, isLogEnabled } from "../trace";
+import { DEVICE, PAGE_FACTORY, PageFactory } from "../platform-providers";
+import { PageService } from "../page.service";
+import { NativeScriptDebug } from "../trace";
 import { DetachedLoader } from "../common/detached-loader";
 import { ViewUtil } from "../view-util";
-import { NSLocationStrategy, Outlet } from "./ns-location-strategy";
+import { NSLocationStrategy } from "./ns-location-strategy";
+import { Outlet } from "./ns-location-utils";
 import { NSRouteReuseStrategy } from "./ns-route-reuse-strategy";
+import { findTopActivatedRouteNodeForOutlet, pageRouterActivatedSymbol, loaderRefSymbol, destroyComponentRef } from './page-router-outlet-utils';
 
 export class PageRoute {
     activatedRoute: BehaviorSubject<ActivatedRoute>;
@@ -34,21 +37,7 @@ export class PageRoute {
     }
 }
 
-// Used to "mark" ActivatedRoute snapshots that are handled in PageRouterOutlet
-export const pageRouterActivatedSymbol = Symbol("page-router-activated");
-export const loaderRefSymbol = Symbol("loader-ref");
-
-export function destroyComponentRef(componentRef: ComponentRef<any>) {
-    if (componentRef) {
-        const loaderRef = componentRef[loaderRefSymbol];
-        if (loaderRef) {
-            loaderRef.destroy();
-        }
-        componentRef.destroy();
-    }
-}
-
-class DestructibleInjector implements Injector {
+export class DestructibleInjector implements Injector {
     private refs = new Set<any>();
     constructor(private destructableProviders: ProviderSet, private parent: Injector) {
     }
@@ -71,39 +60,8 @@ class DestructibleInjector implements Injector {
 
 type ProviderSet = Set<Type<any> | InjectionToken<any>>;
 
-/**
- * There are cases where multiple activatedRoute nodes should be associated/handled by the same PageRouterOutlet.
- * We can gat additional ActivatedRoutes nodes when there is:
- *  - Lazy loading - there is an additional ActivatedRoute node for the RouteConfig with the `loadChildren` setup
- *  - Componentless routes - there is an additional ActivatedRoute node for the componentless RouteConfig
- *
- * Example:
- *   R  <-- root
- *   |
- * feature (lazy module) <-- RouteConfig: { path: "lazy", loadChildren: "./feature/feature.module#FeatureModule" }
- *   |
- * module (componentless route) <-- RouteConfig: { path: "module", children: [...] } // Note: No 'component'
- *   |
- *  home <-- RouteConfig: { path: "module", component: MyComponent } - this is what we get as activatedRoute param
- *
- *  In these cases we will mark the top-most node (feature). NSRouteReuseStrategy will detach the tree there and
- *  use this ActivateRoute as a kay for caching.
- */
-export function findTopActivatedRouteNodeForOutlet(activatedRoute: ActivatedRouteSnapshot): ActivatedRouteSnapshot {
-    let outletActivatedRoute = activatedRoute;
-
-    while (outletActivatedRoute.parent &&
-        outletActivatedRoute.parent.routeConfig &&
-        !outletActivatedRoute.parent.routeConfig.component) {
-
-        outletActivatedRoute = outletActivatedRoute.parent;
-    }
-
-    return outletActivatedRoute;
-}
-
-function routeToString(activatedRoute: ActivatedRoute | ActivatedRouteSnapshot): string {
-    return activatedRoute.pathFromRoot.join("->");
+const routeToString = function(activatedRoute: ActivatedRoute | ActivatedRouteSnapshot): string {
+  return activatedRoute.pathFromRoot.join("->");
 }
 
 @Directive({ selector: "page-router-outlet" }) // tslint:disable-line:directive-selector
@@ -132,8 +90,8 @@ export class PageRouterOutlet implements OnDestroy { // tslint:disable-line:dire
 
     get component(): Object {
         if (!this.activated) {
-            if (isLogEnabled()) {
-                log("Outlet is not activated");
+            if (NativeScriptDebug.isLogEnabled()) {
+                NativeScriptDebug.routerLog("Outlet is not activated");
             }
             return;
         }
@@ -142,8 +100,8 @@ export class PageRouterOutlet implements OnDestroy { // tslint:disable-line:dire
     }
     get activatedRoute(): ActivatedRoute {
         if (!this.activated) {
-            if (isLogEnabled()) {
-                log("Outlet is not activated");
+            if (NativeScriptDebug.isLogEnabled()) {
+                NativeScriptDebug.routerLog("Outlet is not activated");
             }
             return;
         }
@@ -169,8 +127,8 @@ export class PageRouterOutlet implements OnDestroy { // tslint:disable-line:dire
         this.isEmptyOutlet = isEmptyOutlet;
         this.frame = elRef.nativeElement;
         this.setActionBarVisibility(actionBarVisibility);
-        if (isLogEnabled()) {
-            log(`PageRouterOutlet.constructor frame: ${this.frame}`);
+        if (NativeScriptDebug.isLogEnabled()) {
+            NativeScriptDebug.routerLog(`PageRouterOutlet.constructor frame: ${this.frame}`);
         }
 
         this.name = name || PRIMARY_OUTLET;
@@ -203,7 +161,7 @@ export class PageRouterOutlet implements OnDestroy { // tslint:disable-line:dire
             });
             this.locationStrategy.clearOutlet(this.frame);
         } else {
-            log("PageRouterOutlet.ngOnDestroy: no outlet available for page-router-outlet");
+            NativeScriptDebug.routerLog("PageRouterOutlet.ngOnDestroy: no outlet available for page-router-outlet");
         }
 
         if (this.isActivated) {
@@ -218,14 +176,14 @@ export class PageRouterOutlet implements OnDestroy { // tslint:disable-line:dire
 
     deactivate(): void {
         if (!this.outlet || !this.outlet.isPageNavigationBack) {
-            if (isLogEnabled()) {
-                log("Currently not in page back navigation - component should be detached instead of deactivated.");
+            if (NativeScriptDebug.isLogEnabled()) {
+                NativeScriptDebug.routerLog("Currently not in page back navigation - component should be detached instead of deactivated.");
             }
             return;
         }
 
-        if (isLogEnabled()) {
-            log("PageRouterOutlet.deactivate() while going back - should destroy");
+        if (NativeScriptDebug.isLogEnabled()) {
+            NativeScriptDebug.routerLog("PageRouterOutlet.deactivate() while going back - should destroy");
         }
 
         if (!this.isActivated) {
@@ -246,14 +204,14 @@ export class PageRouterOutlet implements OnDestroy { // tslint:disable-line:dire
      */
     detach(): ComponentRef<any> {
         if (!this.isActivated) {
-            if (isLogEnabled()) {
-                log("Outlet is not activated");
+            if (NativeScriptDebug.isLogEnabled()) {
+                NativeScriptDebug.routerLog("Outlet is not activated");
             }
             return;
         }
 
-        if (isLogEnabled()) {
-            log(`PageRouterOutlet.detach() - ${routeToString(this._activatedRoute)}`);
+        if (NativeScriptDebug.isLogEnabled()) {
+            NativeScriptDebug.routerLog(`PageRouterOutlet.detach() - ${routeToString(this._activatedRoute)}`);
         }
 
         // Detach from ChangeDetection
@@ -269,8 +227,8 @@ export class PageRouterOutlet implements OnDestroy { // tslint:disable-line:dire
      * Called when the `RouteReuseStrategy` instructs to re-attach a previously detached subtree
      */
     attach(ref: ComponentRef<any>, activatedRoute: ActivatedRoute) {
-        if (isLogEnabled()) {
-            log(`PageRouterOutlet.attach() - ${routeToString(activatedRoute)}`);
+        if (NativeScriptDebug.isLogEnabled()) {
+            NativeScriptDebug.routerLog(`PageRouterOutlet.attach() - ${routeToString(activatedRoute)}`);
         }
 
         this.activated = ref;
@@ -295,8 +253,8 @@ export class PageRouterOutlet implements OnDestroy { // tslint:disable-line:dire
 
         this.outlet = this.outlet || this.getOutlet(activatedRoute.snapshot);
         if (!this.outlet) {
-            if (isLogEnabled()) {
-                error("No outlet found relative to activated route");
+            if (NativeScriptDebug.isLogEnabled()) {
+                NativeScriptDebug.routerError("No outlet found relative to activated route");
             }
             return;
         }
@@ -305,14 +263,14 @@ export class PageRouterOutlet implements OnDestroy { // tslint:disable-line:dire
         this.locationStrategy.updateOutletFrame(this.outlet, this.frame, this.isEmptyOutlet);
 
         if (this.outlet && this.outlet.isPageNavigationBack) {
-            if (isLogEnabled()) {
-                log("Currently in page back navigation - component should be reattached instead of activated.");
+            if (NativeScriptDebug.isLogEnabled()) {
+                NativeScriptDebug.routerLog("Currently in page back navigation - component should be reattached instead of activated.");
             }
             this.locationStrategy._finishBackPageNavigation(this.frame);
         }
 
-        if (isLogEnabled()) {
-            log(`PageRouterOutlet.activateWith() - ${routeToString(activatedRoute)}`);
+        if (NativeScriptDebug.isLogEnabled()) {
+            NativeScriptDebug.routerLog(`PageRouterOutlet.activateWith() - ${routeToString(activatedRoute)}`);
         }
 
         this._activatedRoute = activatedRoute;
@@ -329,8 +287,8 @@ export class PageRouterOutlet implements OnDestroy { // tslint:disable-line:dire
         activatedRoute: ActivatedRoute,
         loadedResolver: ComponentFactoryResolver
     ): void {
-        if (isLogEnabled()) {
-            log("PageRouterOutlet.activate() forward navigation - " +
+        if (NativeScriptDebug.isLogEnabled()) {
+            NativeScriptDebug.routerLog("PageRouterOutlet.activate() forward navigation - " +
                 "create detached loader in the loader container");
         }
 
@@ -432,8 +390,8 @@ export class PageRouterOutlet implements OnDestroy { // tslint:disable-line:dire
 
             if (outlet && outlet.frames.length) {
                 topActivatedRoute[pageRouterActivatedSymbol] = true;
-                if (isLogEnabled()) {
-                    log("Activated route marked as page: " + routeToString(topActivatedRoute));
+                if (NativeScriptDebug.isLogEnabled()) {
+                    NativeScriptDebug.routerLog("Activated route marked as page: " + routeToString(topActivatedRoute));
                 }
             }
 

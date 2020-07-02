@@ -28,21 +28,21 @@ export interface ModalDialogOptions extends BaseShowModalOptions {
     target?: View;
 }
 
+export interface ShowDialogOptions extends BaseShowModalOptions {
+  containerRef: ViewContainerRef;
+  context: any;
+  doneCallback;
+  pageFactory: PageFactory;
+  parentView: ViewBase;
+  resolver: ComponentFactoryResolver;
+  type: Type<any>;
+}
+
 export class ModalDialogParams {
     constructor(
         public context: any = {},
         public closeCallback: (...args) => any) {
     }
-}
-
-interface ShowDialogOptions extends BaseShowModalOptions {
-    containerRef: ViewContainerRef;
-    context: any;
-    doneCallback;
-    pageFactory: PageFactory;
-    parentView: ViewBase;
-    resolver: ComponentFactoryResolver;
-    type: Type<any>;
 }
 
 @Injectable()

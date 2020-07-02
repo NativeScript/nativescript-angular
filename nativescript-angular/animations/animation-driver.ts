@@ -11,7 +11,7 @@ import {
     dashCaseToCamelCase,
 } from "./utils";
 import { NgView, InvisibleNode } from "../element-registry";
-import { animationsLog as traceLog } from "../trace";
+import { NativeScriptDebug } from "../trace";
 
 
 interface ViewMatchResult {
@@ -75,12 +75,12 @@ export class NativeScriptAnimationDriver implements AnimationDriver {
     ];
 
     validateStyleProperty(property: string): boolean {
-        traceLog(`CssAnimationProperty.validateStyleProperty: ${property}`);
+        NativeScriptDebug.animationsLog(`CssAnimationProperty.validateStyleProperty: ${property}`);
         return NativeScriptAnimationDriver.validProperties.indexOf(property) !== -1;
     }
 
     matchesElement(element: NgView, rawSelector: string): boolean {
-        traceLog(
+        NativeScriptDebug.animationsLog(
             `NativeScriptAnimationDriver.matchesElement ` +
             `element: ${element}, selector: ${rawSelector}`
         );
@@ -91,7 +91,7 @@ export class NativeScriptAnimationDriver implements AnimationDriver {
 
 
     containsElement(elm1: NgView, elm2: NgView): boolean {
-        traceLog(
+        NativeScriptDebug.animationsLog(
             `NativeScriptAnimationDriver.containsElement ` +
             `element1: ${elm1}, element2: ${elm2}`
         );
@@ -108,7 +108,7 @@ export class NativeScriptAnimationDriver implements AnimationDriver {
     }
 
     query(element: NgView, rawSelector: string, multi: boolean): NgView[] {
-        traceLog(
+        NativeScriptDebug.animationsLog(
             `NativeScriptAnimationDriver.query ` +
             `element: ${element}, selector: ${rawSelector} ` +
             `multi: ${multi}`
@@ -122,7 +122,7 @@ export class NativeScriptAnimationDriver implements AnimationDriver {
     }
 
     computeStyle(element: NgView, prop: string): string {
-        traceLog(
+        NativeScriptDebug.animationsLog(
             `NativeScriptAnimationDriver.computeStyle ` +
             `element: ${element}, prop: ${prop}`
         );
@@ -138,7 +138,7 @@ export class NativeScriptAnimationDriver implements AnimationDriver {
         delay: number,
         easing: string
     ): AnimationPlayer {
-        traceLog(
+        NativeScriptDebug.animationsLog(
             `NativeScriptAnimationDriver.animate ` +
             `element: ${element}, keyframes: ${keyframes} ` +
             `duration: ${duration}, delay: ${delay} ` +

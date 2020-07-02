@@ -5,7 +5,7 @@ import { View, EventData } from "@nativescript/core/ui/core/view";
 
 import { Keyframe, createKeyframeAnimation } from "./utils";
 import { NgView } from "../element-registry";
-import { animationsLog as traceLog, isLogEnabled } from "../trace";
+import { NativeScriptDebug } from "../trace";
 
 export class NativeScriptAnimationPlayer implements AnimationPlayer {
     public parentPlayer: AnimationPlayer = null;
@@ -42,8 +42,8 @@ export class NativeScriptAnimationPlayer implements AnimationPlayer {
     onDestroy(fn: Function): void { this._doneSubscriptions.push(fn); }
 
     play(): void {
-        if (isLogEnabled()) {
-            traceLog(`NativeScriptAnimationPlayer.play`);
+        if (NativeScriptDebug.isLogEnabled()) {
+            NativeScriptDebug.animationsLog(`NativeScriptAnimationPlayer.play`);
         }
 
         if (!this.animation) {
@@ -84,8 +84,8 @@ export class NativeScriptAnimationPlayer implements AnimationPlayer {
     }
 
     reset(): void {
-        if (isLogEnabled()) {
-            traceLog(`NativeScriptAnimationPlayer.reset`);
+        if (NativeScriptDebug.isLogEnabled()) {
+            NativeScriptDebug.animationsLog(`NativeScriptAnimationPlayer.reset`);
         }
 
         if (this.animation && this.animation.isPlaying) {
@@ -94,8 +94,8 @@ export class NativeScriptAnimationPlayer implements AnimationPlayer {
     }
 
     restart(): void {
-        if (isLogEnabled()) {
-            traceLog(`NativeScriptAnimationPlayer.restart`);
+        if (NativeScriptDebug.isLogEnabled()) {
+            NativeScriptDebug.animationsLog(`NativeScriptAnimationPlayer.restart`);
         }
 
         this.reset();
@@ -103,8 +103,8 @@ export class NativeScriptAnimationPlayer implements AnimationPlayer {
     }
 
     destroy(): void {
-        if (isLogEnabled()) {
-            traceLog(`NativeScriptAnimationPlayer.destroy`);
+        if (NativeScriptDebug.isLogEnabled()) {
+            NativeScriptDebug.animationsLog(`NativeScriptAnimationPlayer.destroy`);
         }
         this.onFinish();
     }
@@ -118,16 +118,16 @@ export class NativeScriptAnimationPlayer implements AnimationPlayer {
     }
 
     private initKeyframeAnimation(keyframes: Keyframe[], duration: number, delay: number, easing: string) {
-        if (isLogEnabled()) {
-            traceLog(`NativeScriptAnimationPlayer.initKeyframeAnimation`);
+        if (NativeScriptDebug.isLogEnabled()) {
+            NativeScriptDebug.animationsLog(`NativeScriptAnimationPlayer.initKeyframeAnimation`);
         }
 
         this.animation = createKeyframeAnimation(keyframes, duration, delay, easing);
     }
 
     private onFinish() {
-        if (isLogEnabled()) {
-            traceLog(`NativeScriptAnimationPlayer.onFinish`);
+        if (NativeScriptDebug.isLogEnabled()) {
+            NativeScriptDebug.animationsLog(`NativeScriptAnimationPlayer.onFinish`);
         }
 
         if (this._finished) {

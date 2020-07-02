@@ -1,13 +1,3 @@
-// Initial imports and polyfills
-import "@nativescript/core/globals";
-// Require application early to work around a circular import
-import "@nativescript/core/application";
-import "./zone-js/dist/zone-nativescript";
-// TODO: migrate to standard zone.js if possible
-// investigate Ivy with templated-items-comp to allow standard zone below to be used instead of patched {N} zone above
-// import 'zone.js/dist/zone';
-import "./polyfills/array";
-import "./polyfills/console";
 import { profile, uptime } from "@nativescript/core/profiling";
 import { getRootView } from "@nativescript/core/application";
 import "./dom-adapter";
@@ -32,7 +22,7 @@ import {
 } from "@angular/core";
 import { DOCUMENT } from "@angular/common";
 
-import { bootstrapLog, bootstrapLogError, isLogEnabled } from "./trace";
+import { NativeScriptDebug } from "./trace";
 import { defaultPageFactoryProvider, setRootPage, PageFactory, PAGE_FACTORY, getRootPage } from "./platform-providers";
 
 import {
@@ -52,11 +42,11 @@ let lastBootstrappedModule: WeakRef<NgModuleRef<any>>;
 type BootstrapperAction = () => Promise<NgModuleRef<any>>;
 
 // Work around a TS bug requiring an import of OpaqueToken without using it
-if ((<any>global).___TS_UNUSED) {
-    (() => {
-        return InjectionToken;
-    })();
-}
+// if ((<any>global).___TS_UNUSED) {
+//     (() => {
+//         return InjectionToken;
+//     })();
+// }
 
 // tslint:disable:max-line-length
 /**
@@ -201,14 +191,14 @@ export class NativeScriptPlatformRef extends PlatformRef {
         let rootContent: View;
         let launchView: AppLaunchView;
 
-        if (isLogEnabled()) {
-            bootstrapLog("NativeScriptPlatform bootstrap started.");
+        if (NativeScriptDebug.isLogEnabled()) {
+            NativeScriptDebug.bootstrapLog("NativeScriptPlatform bootstrap started.");
         }
         const launchCallback = profile(
             "@nativescript/angular/platform-common.launchCallback",
             (args: LaunchEventData) => {
-                if (isLogEnabled()) {
-                    bootstrapLog("Application launch event fired");
+                if (NativeScriptDebug.isLogEnabled()) {
+                    NativeScriptDebug.bootstrapLog("Application launch event fired");
                 }
 
                 if (this.appOptions && this.appOptions.launchView) {
@@ -232,8 +222,8 @@ export class NativeScriptPlatformRef extends PlatformRef {
                     }
                   this._bootstrapper().then(moduleRef => {
 
-                        if (isLogEnabled()) {
-                            bootstrapLog(`Angular bootstrap bootstrap done. uptime: ${uptime()}`);
+                        if (NativeScriptDebug.isLogEnabled()) {
+                            NativeScriptDebug.bootstrapLog(`Angular bootstrap bootstrap done. uptime: ${uptime()}`);
                         }
 
                         rootContent = launchView;
@@ -247,22 +237,22 @@ export class NativeScriptPlatformRef extends PlatformRef {
                     err => {
 
                         const errorMessage = err.message + "\n\n" + err.stack;
-                        if (isLogEnabled()) {
-                            bootstrapLogError("ERROR BOOTSTRAPPING ANGULAR");
+                        if (NativeScriptDebug.isLogEnabled()) {
+                            NativeScriptDebug.bootstrapLogError("ERROR BOOTSTRAPPING ANGULAR");
                         }
-                        if (isLogEnabled()) {
-                            bootstrapLogError(errorMessage);
+                        if (NativeScriptDebug.isLogEnabled()) {
+                            NativeScriptDebug.bootstrapLogError(errorMessage);
                         }
 
                         rootContent = this.createErrorUI(errorMessage);
                     }
                 );
-                if (isLogEnabled()) {
-                  bootstrapLog("bootstrapAction called, draining micro tasks queue. Root: " + rootContent);
+                if (NativeScriptDebug.isLogEnabled()) {
+                    NativeScriptDebug.bootstrapLog("bootstrapAction called, draining micro tasks queue. Root: " + rootContent);
                 }
                 (<any>global).Zone.drainMicroTaskQueue();
-                if (isLogEnabled()) {
-                    bootstrapLog("bootstrapAction called, draining micro tasks queue finished! Root: " + rootContent);
+                if (NativeScriptDebug.isLogEnabled()) {
+                    NativeScriptDebug.bootstrapLog("bootstrapAction called, draining micro tasks queue finished! Root: " + rootContent);
                 }
               });
             }
@@ -294,8 +284,8 @@ export class NativeScriptPlatformRef extends PlatformRef {
 
     @profile
     public _livesync() {
-        if (isLogEnabled()) {
-            bootstrapLog("Angular livesync started.");
+        if (NativeScriptDebug.isLogEnabled()) {
+            NativeScriptDebug.bootstrapLog("Angular livesync started.");
         }
 
         const lastModuleRef = lastBootstrappedModule ? lastBootstrappedModule.get() : null;
@@ -306,8 +296,8 @@ export class NativeScriptPlatformRef extends PlatformRef {
 
         this._bootstrapper().then(
             moduleRef => {
-                if (isLogEnabled()) {
-                    bootstrapLog("Angular livesync done.");
+                if (NativeScriptDebug.isLogEnabled()) {
+                    NativeScriptDebug.bootstrapLog("Angular livesync done.");
                 }
                 onAfterLivesync.next({ moduleRef });
 
@@ -317,12 +307,12 @@ export class NativeScriptPlatformRef extends PlatformRef {
                 });
             },
             error => {
-                if (isLogEnabled()) {
-                    bootstrapLogError("ERROR LIVESYNC BOOTSTRAPPING ANGULAR");
+                if (NativeScriptDebug.isLogEnabled()) {
+                    NativeScriptDebug.bootstrapLogError("ERROR LIVESYNC BOOTSTRAPPING ANGULAR");
                 }
                 const errorMessage = error.message + "\n\n" + error.stack;
-                if (isLogEnabled()) {
-                    bootstrapLogError(errorMessage);
+                if (NativeScriptDebug.isLogEnabled()) {
+                    NativeScriptDebug.bootstrapLogError(errorMessage);
                 }
 
                 applicationRerun({

@@ -1,5 +1,4 @@
-import { platformNativeScriptDynamic } from "@nativescript/angular/platform";
-import { animationsTraceCategory } from "@nativescript/angular/trace";
+import { platformNativeScript, NativeScriptDebug } from "@nativescript/angular";
 import { setCategories, enable } from "@nativescript/core/trace";
 import {
   GridLayout,
@@ -13,7 +12,7 @@ import {
 
 import { AppModule } from "./app.module";
 
-setCategories(animationsTraceCategory);
+setCategories(NativeScriptDebug.animationsTraceCategory);
 enable();
 
 class LaunchAnimation extends GridLayout {
@@ -97,7 +96,7 @@ class LaunchAnimation extends GridLayout {
   }
 }
 
-platformNativeScriptDynamic({
+platformNativeScript({
   launchView: new LaunchAnimation(),
   // backgroundColor: 'purple'
 }).bootstrapModule(AppModule);

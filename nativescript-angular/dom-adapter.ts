@@ -1,12 +1,12 @@
 /* tslint:disable */
 import { Type } from "@angular/core";
 import { ɵDomAdapter, ɵsetRootDomAdapter } from "@angular/common";
-import { rendererLog, isLogEnabled } from "./trace";
+import { NativeScriptDebug } from "./trace";
 
 export class NativeScriptDomAdapter implements ɵDomAdapter {
   static makeCurrent() {
-    if (isLogEnabled()) {
-      rendererLog("Setting root DOM adapter...");
+    if (NativeScriptDebug.isLogEnabled()) {
+      NativeScriptDebug.rendererLog("Setting root DOM adapter...");
     }
 
     ɵsetRootDomAdapter(new NativeScriptDomAdapter());

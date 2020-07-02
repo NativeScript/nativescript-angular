@@ -1,9 +1,10 @@
 import { Injectable } from "@angular/core";
 import { Router, UrlTree, NavigationExtras, ActivatedRoute } from "@angular/router";
-import { NSLocationStrategy, NavigationOptions, Outlet } from "./ns-location-strategy";
-import { FrameService } from "../platform-providers";
-import { routerError } from "../trace";
-import { findTopActivatedRouteNodeForOutlet } from "./page-router-outlet";
+import { NSLocationStrategy } from "./ns-location-strategy";
+import { NavigationOptions, Outlet } from "./ns-location-utils";
+import { FrameService } from "../frame.service";
+import { NativeScriptDebug } from "../trace";
+import { findTopActivatedRouteNodeForOutlet } from "./page-router-outlet-utils";
 
 export type ExtendedNavigationExtras = NavigationExtras & NavigationOptions;
 
@@ -12,7 +13,9 @@ export interface BackNavigationOptions {
     relativeTo?: ActivatedRoute | null;
 }
 
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class RouterExtensions {
 
     constructor(
@@ -49,7 +52,7 @@ export class RouterExtensions {
             const { outletsToBack, outlets } = this.findOutletsToBack(backNavigationOptions);
 
             if (outletsToBack.length !== outlets.length) {
-                routerError("No outlet found relative to activated route");
+                NativeScriptDebug.routerError("No outlet found relative to activated route");
             } else {
                 outletsToBack.forEach(outletToBack => {
                     if (!this.locationStrategy.canGoBack(outletToBack)) {
@@ -76,11 +79,11 @@ export class RouterExtensions {
         const { outletsToBack, outlets } = this.findOutletsToBack(options);
 
         if (outletsToBack.length !== outlets.length) {
-            routerError("No outlet found relative to activated route");
+            NativeScriptDebug.routerError("No outlet found relative to activated route");
         } else {
             outletsToBack.forEach(outletToBack => {
                 if (outletToBack.isPageNavigationBack) {
-                    routerError("Attempted to call startGoBack while going back:");
+                    NativeScriptDebug.routerError("Attempted to call startGoBack while going back:");
                 } else {
                     this.locationStrategy.back(outletToBack);
                 }

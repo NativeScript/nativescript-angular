@@ -3,8 +3,6 @@ import { LayoutBase } from "@nativescript/core/ui/layouts/layout-base";
 import { Page } from "@nativescript/core/ui/page";
 import { Frame } from "@nativescript/core/ui/frame";
 
-export type NgView = (View & ViewExtensions);
-
 export interface ViewExtensions {
     meta: ViewClassMeta;
     nodeType: number;
@@ -15,6 +13,8 @@ export interface ViewExtensions {
     lastChild: NgView;
     ngCssClasses: Map<string, boolean>;
 }
+
+export type NgView = (View & ViewExtensions);
 
 export interface ViewClass {
     new(): View;

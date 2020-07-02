@@ -41,7 +41,6 @@
   },
   "scripts": {
     "e2e": "tsc -p e2e && mocha --opts ../config/mocha.opts --recursive e2e --appiumCapsLocation ../config/appium.capabilities.json",
-    "compile-tests-w": "tsc -p e2e --watch",
-    "update-app-ng-deps": "update-app-ng-deps"
+    "compile-tests-w": "tsc -p e2e --watch"
   }
 }

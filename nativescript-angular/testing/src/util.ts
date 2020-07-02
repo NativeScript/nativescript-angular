@@ -5,7 +5,7 @@ import { ComponentFixture, TestBed } from "@angular/core/testing";
 import { NgModule, Type } from "@angular/core";
 import { NativeScriptModule } from "../../nativescript.module";
 import { platformBrowserDynamicTesting } from "@angular/platform-browser-dynamic/testing";
-import { NS_COMPILER_PROVIDERS } from "../../platform";
+// import { NS_COMPILER_PROVIDERS } from "../../platform";
 import { NATIVESCRIPT_TESTING_PROVIDERS, NativeScriptTestingModule } from "../index";
 import { CommonModule } from "@angular/common";
 import { GridLayout } from "@nativescript/core/ui/layouts/grid-layout";
@@ -59,7 +59,7 @@ export function promiseWait(durationMs: number) {
 export function nsTestBedInit() {
     TestBed.initTestEnvironment(
         NativeScriptTestingModule,
-        platformBrowserDynamicTesting(NS_COMPILER_PROVIDERS)
+        platformBrowserDynamicTesting()//NS_COMPILER_PROVIDERS)
     );
 }
 

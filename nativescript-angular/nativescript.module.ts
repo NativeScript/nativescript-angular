@@ -1,9 +1,9 @@
-import "@nativescript/core/globals";
+// import "@nativescript/core/globals";
 // Require application early to work around a circular import
-import "@nativescript/core/application";
+// import "@nativescript/core/application";
 
-import "./polyfills/array";
-import "./polyfills/console";
+// import "./polyfills/array";
+// import "./polyfills/console";
 
 import {
     ApplicationModule,
@@ -26,13 +26,14 @@ import { NativeScriptCommonModule } from "./common";
 import { NativeScriptRendererFactory } from "./renderer";
 import { DetachedLoader } from "./common/detached-loader";
 import { throwIfAlreadyLoaded } from "./common/utils";
-import { FrameService, PageService } from "./platform-providers";
+import { FrameService } from "./frame.service";
+import { PageService } from "./page.service";
 
 export function errorHandlerFactory() {
     return new ErrorHandler();
 }
 
-export { DetachedLoader };
+export { DetachedLoader } from "./common/detached-loader";
 
 @NgModule({
     declarations: [

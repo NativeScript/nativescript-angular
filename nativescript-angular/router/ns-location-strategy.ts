@@ -1,98 +1,15 @@
 import { Injectable } from "@angular/core";
 import { LocationStrategy } from "@angular/common";
 import { DefaultUrlSerializer, UrlSegmentGroup, UrlTree, ActivatedRouteSnapshot, Params } from "@angular/router";
-import { routerLog, routerError, isLogEnabled } from "../trace";
-import { NavigationTransition, Frame } from "@nativescript/core/ui/frame";
+import { Frame } from "@nativescript/core/ui/frame";
+import { NativeScriptDebug } from "../trace";
 import { isPresent } from "../lang-facade";
-import { FrameService } from "../platform-providers";
+import { FrameService } from "../frame.service";
+import { Outlet, NavigationOptions, LocationState, defaultNavOptions } from "./ns-location-utils";
 
-export class Outlet {
-    showingModal: boolean;
-    modalNavigationDepth: number;
-    parent: Outlet;
-    isPageNavigationBack: boolean;
-
-    // More than one key available when using NSEmptyOutletComponent component
-    // in module that lazy loads children (loadChildren) and has outlet name.
-    outletKeys: Array<string>;
-
-    // More than one frame available when using NSEmptyOutletComponent component
-    // in module that lazy loads children (loadChildren) and has outlet name.
-    frames: Array<Frame> = [];
-    // The url path to the Outlet.
-    // E.G: the path to Outlet3 that is nested Outlet1(home)->Outlet2(nested1)->Outlet3(nested2)
-    // will be 'home/nested1'
-    path: string;
-    pathByOutlets: string;
-    states: Array<LocationState> = [];
-    isNSEmptyOutlet: boolean;
-
-    // Used in reuse-strategy by its children to determine if they should be detached too.
-    shouldDetach: boolean = true;
-    constructor(outletKey: string, path: string, pathByOutlets: string, modalNavigationDepth?: number) {
-        this.outletKeys = [outletKey];
-        this.isPageNavigationBack = false;
-        this.showingModal = false;
-        this.modalNavigationDepth = modalNavigationDepth || 0;
-        this.pathByOutlets = pathByOutlets;
-        this.path = path;
-    }
-
-    containsFrame(frame: Frame): boolean {
-        return this.frames.indexOf(frame) > -1;
-    }
-
-    peekState(): LocationState {
-        if (this.states.length > 0) {
-            return this.states[this.states.length - 1];
-        }
-        return null;
-    }
-
-    containsTopState(stateUrl: string): boolean {
-        const lastState = this.peekState();
-        return lastState && lastState.segmentGroup.toString() === stateUrl;
-    }
-
-    // Search for frame that can go back.
-    // Nested 'primary' outlets could result in Outlet with multiple navigatable frames.
-    getFrameToBack(): Frame {
-        let frame = this.frames[this.frames.length - 1];
-
-        if (!this.isNSEmptyOutlet) {
-            for (let index = this.frames.length - 1; index >= 0; index--) {
-                const currentFrame = this.frames[index];
-                if (currentFrame.canGoBack()) {
-                    frame = currentFrame;
-                    break;
-                }
-            }
-        }
-
-        return frame;
-    }
-}
-
-export interface NavigationOptions {
-    clearHistory?: boolean;
-    animated?: boolean;
-    transition?: NavigationTransition;
-}
-
-const defaultNavOptions: NavigationOptions = {
-    clearHistory: false,
-    animated: true
-};
-
-export interface LocationState {
-    queryParams: Params;
-    segmentGroup: UrlSegmentGroup;
-    isRootSegmentGroup: boolean;
-    isPageNavigation: boolean;
-    frame?: Frame;
-}
-
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class NSLocationStrategy extends LocationStrategy {
     private outlets: Array<Outlet> = [];
     private currentOutlet: Outlet;
@@ -105,8 +22,8 @@ export class NSLocationStrategy extends LocationStrategy {
 
     constructor(private frameService: FrameService) {
         super();
-        if (isLogEnabled()) {
-            routerLog("NSLocationStrategy.constructor()");
+        if (NativeScriptDebug.isLogEnabled()) {
+            NativeScriptDebug.routerLog("NSLocationStrategy.constructor()");
         }
     }
 
@@ -134,22 +51,22 @@ export class NSLocationStrategy extends LocationStrategy {
         const urlSerializer = new DefaultUrlSerializer();
         tree.queryParams = state.queryParams;
         const url = urlSerializer.serialize(tree);
-        if (isLogEnabled()) {
-            routerLog("NSLocationStrategy.path(): " + url);
+        if (NativeScriptDebug.isLogEnabled()) {
+            NativeScriptDebug.routerLog("NSLocationStrategy.path(): " + url);
         }
         return url;
     }
 
     prepareExternalUrl(internal: string): string {
-        if (isLogEnabled()) {
-            routerLog("NSLocationStrategy.prepareExternalUrl() internal: " + internal);
+        if (NativeScriptDebug.isLogEnabled()) {
+            NativeScriptDebug.routerLog("NSLocationStrategy.prepareExternalUrl() internal: " + internal);
         }
         return internal;
     }
 
     pushState(state: any, title: string, url: string, queryParams: string): void {
-        if (isLogEnabled()) {
-            routerLog("NSLocationStrategy.pushState state: " +
+        if (NativeScriptDebug.isLogEnabled()) {
+            NativeScriptDebug.routerLog("NSLocationStrategy.pushState state: " +
                 `${state}, title: ${title}, url: ${url}, queryParams: ${queryParams}`);
         }
         this.pushStateInternal(state, title, url, queryParams);
@@ -224,13 +141,13 @@ export class NSLocationStrategy extends LocationStrategy {
         const states = this.currentOutlet && this.currentOutlet.states;
 
         if (states && states.length > 0) {
-            if (isLogEnabled()) {
-                routerLog("NSLocationStrategy.replaceState changing existing state: " +
+            if (NativeScriptDebug.isLogEnabled()) {
+                NativeScriptDebug.routerLog("NSLocationStrategy.replaceState changing existing state: " +
                     `${state}, title: ${title}, url: ${url}, queryParams: ${queryParams}`);
             }
         } else {
-            if (isLogEnabled()) {
-                routerLog("NSLocationStrategy.replaceState pushing new state: " +
+            if (NativeScriptDebug.isLogEnabled()) {
+                NativeScriptDebug.routerLog("NSLocationStrategy.replaceState pushing new state: " +
                     `${state}, title: ${title}, url: ${url}, queryParams: ${queryParams}`);
             }
             this.pushStateInternal(state, title, url, queryParams);
@@ -263,16 +180,16 @@ export class NSLocationStrategy extends LocationStrategy {
                 count++;
             }
 
-            if (isLogEnabled()) {
-                routerLog(`NSLocationStrategy.back() while navigating back. States popped: ${count}`);
+            if (NativeScriptDebug.isLogEnabled()) {
+                NativeScriptDebug.routerLog(`NSLocationStrategy.back() while navigating back. States popped: ${count}`);
             }
             this.callPopState(state, true);
         } else {
             let state = this.currentOutlet.peekState();
             if (state && state.isPageNavigation) {
                 // This was a page navigation - so navigate through frame.
-                if (isLogEnabled()) {
-                    routerLog("NSLocationStrategy.back() while not navigating back but top" +
+                if (NativeScriptDebug.isLogEnabled()) {
+                    NativeScriptDebug.routerLog("NSLocationStrategy.back() while not navigating back but top" +
                         " state is page - will call frame.goBack()");
                 }
 
@@ -287,8 +204,8 @@ export class NSLocationStrategy extends LocationStrategy {
                 }
             } else {
                 // Nested navigation - just pop the state
-                if (isLogEnabled()) {
-                    routerLog("NSLocationStrategy.back() while not navigating back but top" +
+                if (NativeScriptDebug.isLogEnabled()) {
+                    NativeScriptDebug.routerLog("NSLocationStrategy.back() while not navigating back but top" +
                         " state is not page - just pop");
                 }
 
@@ -303,15 +220,15 @@ export class NSLocationStrategy extends LocationStrategy {
     }
 
     onPopState(fn: (_: any) => any): void {
-        if (isLogEnabled()) {
-            routerLog("NSLocationStrategy.onPopState");
+        if (NativeScriptDebug.isLogEnabled()) {
+            NativeScriptDebug.routerLog("NSLocationStrategy.onPopState");
         }
         this.popStateCallbacks.push(fn);
     }
 
     getBaseHref(): string {
-        if (isLogEnabled()) {
-            routerLog("NSLocationStrategy.getBaseHref()");
+        if (NativeScriptDebug.isLogEnabled()) {
+            NativeScriptDebug.routerLog("NSLocationStrategy.getBaseHref()");
         }
         return "";
     }
@@ -357,14 +274,14 @@ export class NSLocationStrategy extends LocationStrategy {
         const outlet: Outlet = this.getOutletByFrame(frame);
 
         if (!outlet || outlet.isPageNavigationBack) {
-            if (isLogEnabled()) {
-                routerError("Attempted to call startGoBack while going back.");
+            if (NativeScriptDebug.isLogEnabled()) {
+                NativeScriptDebug.routerError("Attempted to call startGoBack while going back.");
             }
             return;
         }
 
-        if (isLogEnabled()) {
-            routerLog("NSLocationStrategy.startGoBack()");
+        if (NativeScriptDebug.isLogEnabled()) {
+            NativeScriptDebug.routerLog("NSLocationStrategy.startGoBack()");
         }
         outlet.isPageNavigationBack = true;
 
@@ -375,21 +292,21 @@ export class NSLocationStrategy extends LocationStrategy {
         const outlet: Outlet = this.getOutletByFrame(frame);
 
         if (!outlet || !outlet.isPageNavigationBack) {
-            if (isLogEnabled()) {
-                routerError("Attempted to call endGoBack while not going back.");
+            if (NativeScriptDebug.isLogEnabled()) {
+                NativeScriptDebug.routerError("Attempted to call endGoBack while not going back.");
             }
             return;
         }
 
-        if (isLogEnabled()) {
-            routerLog("NSLocationStrategy.finishBackPageNavigation()");
+        if (NativeScriptDebug.isLogEnabled()) {
+            NativeScriptDebug.routerLog("NSLocationStrategy.finishBackPageNavigation()");
         }
         outlet.isPageNavigationBack = false;
     }
 
     public _beginModalNavigation(frame: Frame): void {
-        if (isLogEnabled()) {
-            routerLog("NSLocationStrategy._beginModalNavigation()");
+        if (NativeScriptDebug.isLogEnabled()) {
+            NativeScriptDebug.routerLog("NSLocationStrategy._beginModalNavigation()");
         }
 
         this.currentOutlet = this.getOutletByFrame(frame) || this.currentOutlet;
@@ -404,8 +321,8 @@ export class NSLocationStrategy extends LocationStrategy {
     }
 
     public _closeModalNavigation() {
-        if (isLogEnabled()) {
-            routerLog("NSLocationStrategy.closeModalNavigation()");
+        if (NativeScriptDebug.isLogEnabled()) {
+            NativeScriptDebug.routerLog("NSLocationStrategy.closeModalNavigation()");
         }
 
         const isShowingModal = this._modalNavigationDepth > 0;
@@ -426,8 +343,8 @@ export class NSLocationStrategy extends LocationStrategy {
     }
 
     public _beginPageNavigation(frame: Frame): NavigationOptions {
-        if (isLogEnabled()) {
-            routerLog("NSLocationStrategy._beginPageNavigation()");
+        if (NativeScriptDebug.isLogEnabled()) {
+            NativeScriptDebug.routerLog("NSLocationStrategy._beginPageNavigation()");
         }
 
         this.currentOutlet = this.getOutletByFrame(frame);
@@ -439,8 +356,8 @@ export class NSLocationStrategy extends LocationStrategy {
 
         const navOptions = this._currentNavigationOptions || defaultNavOptions;
         if (navOptions.clearHistory) {
-            if (isLogEnabled()) {
-                routerLog("NSLocationStrategy._beginPageNavigation clearing states history");
+            if (NativeScriptDebug.isLogEnabled()) {
+                NativeScriptDebug.routerLog("NSLocationStrategy._beginPageNavigation clearing states history");
             }
             this.currentOutlet.states = [lastState];
         }
@@ -456,8 +373,8 @@ export class NSLocationStrategy extends LocationStrategy {
             transition: options.transition
         };
 
-        if (isLogEnabled()) {
-            routerLog("NSLocationStrategy._setNavigationOptions(" +
+        if (NativeScriptDebug.isLogEnabled()) {
+            NativeScriptDebug.routerLog("NSLocationStrategy._setNavigationOptions(" +
                 `${JSON.stringify(this._currentNavigationOptions)})`);
         }
     }
@@ -751,8 +668,8 @@ export class NSLocationStrategy extends LocationStrategy {
     }
 
     ngOnDestroy() {
-        if (isLogEnabled()) {
-            routerLog("NSLocationStrategy.ngOnDestroy()");
+        if (NativeScriptDebug.isLogEnabled()) {
+            NativeScriptDebug.routerLog("NSLocationStrategy.ngOnDestroy()");
         }
 
         this.outlets = [];

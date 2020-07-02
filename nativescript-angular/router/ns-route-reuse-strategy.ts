@@ -1,18 +1,22 @@
 import { Injectable } from "@angular/core";
 import { RouteReuseStrategy, ActivatedRouteSnapshot, DetachedRouteHandle } from "@angular/router";
 
-import { routeReuseStrategyLog as log, isLogEnabled } from "../trace";
+import { NativeScriptDebug } from "../trace";
 import { NSLocationStrategy } from "./ns-location-strategy";
 import {
     destroyComponentRef,
     findTopActivatedRouteNodeForOutlet,
     pageRouterActivatedSymbol
-} from "./page-router-outlet";
+} from "./page-router-outlet-utils";
 
 interface CacheItem {
     key: string;
     state: DetachedRouteHandle;
     isModal: boolean;
+}
+
+const getSnapshotKey = function(snapshot: ActivatedRouteSnapshot): string {
+  return snapshot.pathFromRoot.join("->");
 }
 
 /**
@@ -38,8 +42,8 @@ class DetachedStateCache {
     }
 
     public clear() {
-        if (isLogEnabled()) {
-            log(`DetachedStateCache.clear() ${this.cache.length} items will be destroyed`);
+        if (NativeScriptDebug.isLogEnabled()) {
+            NativeScriptDebug.routeReuseStrategyLog(`DetachedStateCache.clear() ${this.cache.length} items will be destroyed`);
         }
 
         while (this.cache.length > 0) {
@@ -79,8 +83,8 @@ class DetachedStateCache {
             }
         }
 
-        if (isLogEnabled()) {
-            log(`DetachedStateCache.clearModalCache() ${removedItemsCount} items will be destroyed`);
+        if (NativeScriptDebug.isLogEnabled()) {
+            NativeScriptDebug.routeReuseStrategyLog(`DetachedStateCache.clearModalCache() ${removedItemsCount} items will be destroyed`);
         }
     }
 }
@@ -114,8 +118,8 @@ export class NSRouteReuseStrategy implements RouteReuseStrategy {
             outlet.shouldDetach = shouldDetach;
         }
 
-        if (isLogEnabled()) {
-            log(`shouldDetach isBack: ${isBack} key: ${key} result: ${shouldDetach}`);
+        if (NativeScriptDebug.isLogEnabled()) {
+            NativeScriptDebug.routeReuseStrategyLog(`shouldDetach isBack: ${isBack} key: ${key} result: ${shouldDetach}`);
         }
 
         return shouldDetach;
@@ -135,8 +139,8 @@ export class NSRouteReuseStrategy implements RouteReuseStrategy {
         const isBack = outlet ? outlet.isPageNavigationBack : false;
         const shouldAttach = isBack && cache.peek().key === key;
 
-        if (isLogEnabled()) {
-            log(`shouldAttach isBack: ${isBack} key: ${key} result: ${shouldAttach}`);
+        if (NativeScriptDebug.isLogEnabled()) {
+            NativeScriptDebug.routeReuseStrategyLog(`shouldAttach isBack: ${isBack} key: ${key} result: ${shouldAttach}`);
         }
 
         if (outlet) {
@@ -150,8 +154,8 @@ export class NSRouteReuseStrategy implements RouteReuseStrategy {
         route = findTopActivatedRouteNodeForOutlet(route);
 
         const key = getSnapshotKey(route);
-        if (isLogEnabled()) {
-            log(`store key: ${key}, state: ${state}`);
+        if (NativeScriptDebug.isLogEnabled()) {
+            NativeScriptDebug.routeReuseStrategyLog(`store key: ${key}, state: ${state}`);
         }
 
         const outletKey = this.location.getRouteFullPath(route);
@@ -200,8 +204,8 @@ export class NSRouteReuseStrategy implements RouteReuseStrategy {
             state = cachedItem.state;
         }
 
-        if (isLogEnabled()) {
-            log(`retrieved isBack: ${isBack} key: ${key} state: ${state}`);
+        if (NativeScriptDebug.isLogEnabled()) {
+            NativeScriptDebug.routeReuseStrategyLog(`retrieved isBack: ${isBack} key: ${key} state: ${state}`);
         }
 
         return state;
@@ -216,8 +220,8 @@ export class NSRouteReuseStrategy implements RouteReuseStrategy {
             future[pageRouterActivatedSymbol] = curr[pageRouterActivatedSymbol];
         }
 
-        if (isLogEnabled()) {
-            log(`shouldReuseRoute result: ${shouldReuse}`);
+        if (NativeScriptDebug.isLogEnabled()) {
+            NativeScriptDebug.routeReuseStrategyLog(`shouldReuseRoute result: ${shouldReuse}`);
         }
 
         return shouldReuse;
@@ -238,8 +242,4 @@ export class NSRouteReuseStrategy implements RouteReuseStrategy {
             cache.clearModalCache();
         }
     }
-}
-
-function getSnapshotKey(snapshot: ActivatedRouteSnapshot): string {
-    return snapshot.pathFromRoot.join("->");
 }

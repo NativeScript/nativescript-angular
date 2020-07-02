@@ -18,7 +18,7 @@ import {
 } from "./element-registry";
 
 import { platformNames, Device } from "@nativescript/core/platform";
-import { viewUtilLog as traceLog, isLogEnabled } from "./trace";
+import { NativeScriptDebug } from "./trace";
 
 const ELEMENT_NODE_TYPE = 1;
 const XML_ATTRIBUTES = Object.freeze(["style", "rows", "columns", "fontAttributes"]);
@@ -84,8 +84,8 @@ export class ViewUtil {
         previous: NgView,
         next: NgView
     ): void {
-        if (isLogEnabled()) {
-            traceLog(`ViewUtil.addToQueue parent: ${parent}, view: ${child}, ` +
+        if (NativeScriptDebug.isLogEnabled()) {
+            NativeScriptDebug.viewUtilLog(`ViewUtil.addToQueue parent: ${parent}, view: ${child}, ` +
                 `previous: ${previous}, next: ${next}`);
         }
 
@@ -103,8 +103,8 @@ export class ViewUtil {
     }
 
     private appendToQueue(parent: NgView, view: NgView) {
-        if (isLogEnabled()) {
-            traceLog(`ViewUtil.appendToQueue parent: ${parent} view: ${view}`);
+        if (NativeScriptDebug.isLogEnabled()) {
+            NativeScriptDebug.viewUtilLog(`ViewUtil.appendToQueue parent: ${parent} view: ${view}`);
         }
 
         if (parent.lastChild) {
@@ -115,8 +115,8 @@ export class ViewUtil {
     }
 
     private addToVisualTree(parent: NgView, child: NgView, next: NgView): void {
-        if (isLogEnabled()) {
-            traceLog(`ViewUtil.addToVisualTree parent: ${parent}, view: ${child}, next: ${next}`);
+        if (NativeScriptDebug.isLogEnabled()) {
+            NativeScriptDebug.viewUtilLog(`ViewUtil.addToVisualTree parent: ${parent}, view: ${child}, next: ${next}`);
         }
 
         if (parent.meta && parent.meta.insertChild) {
@@ -158,8 +158,8 @@ export class ViewUtil {
     }
 
     public removeChild(parent: View, child: View) {
-        if (isLogEnabled()) {
-           traceLog(`ViewUtil.removeChild parent: ${parent} child: ${child}`);
+        if (NativeScriptDebug.isLogEnabled()) {
+           NativeScriptDebug.viewUtilLog(`ViewUtil.removeChild parent: ${parent} child: ${child}`);
         }
 
         if (!parent) {
@@ -176,8 +176,8 @@ export class ViewUtil {
     }
 
     private removeFromQueue(parent: NgView, child: NgView) {
-        if (isLogEnabled()) {
-            traceLog(`ViewUtil.removeFromQueue parent: ${parent} child: ${child}`);
+        if (NativeScriptDebug.isLogEnabled()) {
+            NativeScriptDebug.viewUtilLog(`ViewUtil.removeFromQueue parent: ${parent} child: ${child}`);
         }
 
         if (parent.firstChild === child && parent.lastChild === child) {
@@ -205,8 +205,8 @@ export class ViewUtil {
 
     // NOTE: This one is O(n) - use carefully
     private findPreviousElement(parent: NgView, child: NgView): NgView {
-        if (isLogEnabled()) {
-            traceLog(`ViewUtil.findPreviousElement parent: ${parent} child: ${child}`);
+        if (NativeScriptDebug.isLogEnabled()) {
+            NativeScriptDebug.viewUtilLog(`ViewUtil.findPreviousElement parent: ${parent} child: ${child}`);
         }
 
         let previousVisual;
@@ -244,8 +244,8 @@ export class ViewUtil {
     }
 
     private removeFromVisualTree(parent: NgView, child: NgView) {
-        if (isLogEnabled()) {
-            traceLog(`ViewUtil.removeFromVisualTree parent: ${parent} child: ${child}`);
+        if (NativeScriptDebug.isLogEnabled()) {
+            NativeScriptDebug.viewUtilLog(`ViewUtil.removeFromVisualTree parent: ${parent} child: ${child}`);
         }
 
         if (parent.meta && parent.meta.removeChild) {
@@ -260,8 +260,8 @@ export class ViewUtil {
     }
 
     private removeLayoutChild(parent: NgLayoutBase, child: NgView): void {
-        if (isLogEnabled()) {
-            traceLog(`ViewUtil.removeLayoutChild parent: ${parent} child: ${child}`);
+        if (NativeScriptDebug.isLogEnabled()) {
+            NativeScriptDebug.viewUtilLog(`ViewUtil.removeLayoutChild parent: ${parent} child: ${child}`);
         }
 
         const index = parent.getChildIndex(child);
@@ -285,8 +285,8 @@ export class ViewUtil {
             name = "ProxyViewContainer";
         }
 
-        if (isLogEnabled()) {
-            traceLog(`Creating view: ${originalName} ${name}`);
+        if (NativeScriptDebug.isLogEnabled()) {
+            NativeScriptDebug.viewUtilLog(`Creating view: ${originalName} ${name}`);
         }
 
         const viewClass = getViewClass(name);
@@ -308,8 +308,8 @@ export class ViewUtil {
     }
 
     private setNgViewExtensions(view: View, name: string): NgView {
-        if (isLogEnabled()) {
-            traceLog(`Make into a NgView view: ${view} name: "${name}"`);
+        if (NativeScriptDebug.isLogEnabled()) {
+            NativeScriptDebug.viewUtilLog(`Make into a NgView view: ${view} name: "${name}"`);
         }
 
         const ngView = view as NgView;
@@ -359,8 +359,8 @@ export class ViewUtil {
     }
 
     private setPropertyInternal(view: NgView, attributeName: string, value: any): void {
-        if (isLogEnabled()) {
-            traceLog(`Setting attribute: ${attributeName}=${value} to ${view}`);
+        if (NativeScriptDebug.isLogEnabled()) {
+            NativeScriptDebug.viewUtilLog(`Setting attribute: ${attributeName}=${value} to ${view}`);
         }
 
         if (attributeName === "class") {
@@ -394,8 +394,8 @@ export class ViewUtil {
     private removeParentReferencesFromItems(items: any[]): void {
         for (const item of items) {
             if (item.parent && item.parentNode) {
-                if (isLogEnabled()) {
-                    traceLog(`Unassigning parent ${item.parentNode} on value: ${item}`);
+                if (NativeScriptDebug.isLogEnabled()) {
+                    NativeScriptDebug.viewUtilLog(`Unassigning parent ${item.parentNode} on value: ${item}`);
                 }
                 item.parent = undefined;
                 item.parentNode = undefined;

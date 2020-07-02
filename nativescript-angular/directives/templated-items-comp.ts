@@ -17,7 +17,8 @@ import {
     TemplateRef,
     ViewChild,
     ViewContainerRef,
-    ɵisListLikeIterable as isListLikeIterable
+    ɵisListLikeIterable as isListLikeIterable,
+    Injectable
 } from "@angular/core";
 // tslint:disable: max-line-length
 // TODO: refactor core module imports to allow this to work properly
@@ -32,7 +33,7 @@ import { ObservableArray } from "@nativescript/core/data/observable-array";
 import { profile } from "@nativescript/core/profiling";
 
 import { getSingleViewRecursive } from "../element-registry";
-import { listViewLog, listViewError, isLogEnabled } from "../trace";
+import { NativeScriptDebug } from "../trace";
 
 const NG_VIEW = "_ngViewRef";
 
@@ -54,6 +55,7 @@ export interface SetupItemViewArgs {
     context: ItemContext;
 }
 
+@Injectable()
 export abstract class TemplatedItemsComponent implements DoCheck, OnDestroy, AfterContentInit {
     public abstract get nativeElement(): TemplatedItemsView;
 
@@ -97,8 +99,8 @@ export abstract class TemplatedItemsComponent implements DoCheck, OnDestroy, Aft
     }
 
     ngAfterContentInit() {
-        if (isLogEnabled()) {
-            listViewLog("TemplatedItemsView.ngAfterContentInit()");
+        if (NativeScriptDebug.isLogEnabled()) {
+            NativeScriptDebug.listViewLog("TemplatedItemsView.ngAfterContentInit()");
         }
 
         this.setItemTemplates();
@@ -119,8 +121,8 @@ export abstract class TemplatedItemsComponent implements DoCheck, OnDestroy, Aft
         this.itemTemplate = this.itemTemplateQuery;
 
         if (this._templateMap) {
-            if (isLogEnabled()) {
-                listViewLog("Setting templates");
+            if (NativeScriptDebug.isLogEnabled()) {
+                NativeScriptDebug.listViewLog("Setting templates");
             }
 
             const templates: KeyedTemplate[] = [];
@@ -132,8 +134,8 @@ export abstract class TemplatedItemsComponent implements DoCheck, OnDestroy, Aft
     }
 
     public registerTemplate(key: string, template: TemplateRef<ItemContext>) {
-        if (isLogEnabled()) {
-            listViewLog(`registerTemplate for key: ${key}`);
+        if (NativeScriptDebug.isLogEnabled()) {
+            NativeScriptDebug.listViewLog(`registerTemplate for key: ${key}`);
         }
 
         if (!this._templateMap) {
@@ -160,8 +162,8 @@ export abstract class TemplatedItemsComponent implements DoCheck, OnDestroy, Aft
         let viewRef: EmbeddedViewRef<ItemContext>;
 
         if (args.view) {
-            if (isLogEnabled()) {
-                listViewLog(`onItemLoading: ${index} - Reusing existing view`);
+            if (NativeScriptDebug.isLogEnabled()) {
+                NativeScriptDebug.listViewLog(`onItemLoading: ${index} - Reusing existing view`);
             }
 
             viewRef = args.view[NG_VIEW];
@@ -172,8 +174,8 @@ export abstract class TemplatedItemsComponent implements DoCheck, OnDestroy, Aft
                 viewRef = args.view.getChildAt(0)[NG_VIEW];
             }
 
-            if (!viewRef && isLogEnabled()) {
-                listViewError(`ViewReference not found for item ${index}. View recycling is not working`);
+            if (!viewRef && NativeScriptDebug.isLogEnabled()) {
+                NativeScriptDebug.listViewError(`ViewReference not found for item ${index}. View recycling is not working`);
             }
 
             // No ng-template is setup, continue with 'defaultTemplate'
@@ -183,8 +185,8 @@ export abstract class TemplatedItemsComponent implements DoCheck, OnDestroy, Aft
         }
 
         if (!viewRef) {
-            if (isLogEnabled()) {
-                listViewLog(`onItemLoading: ${index} - Creating view from template`);
+            if (NativeScriptDebug.isLogEnabled()) {
+                NativeScriptDebug.listViewLog(`onItemLoading: ${index} - Creating view from template`);
             }
 
             viewRef = this.loader.createEmbeddedView(this.itemTemplate, new ItemContext(), 0);
@@ -220,8 +222,8 @@ export abstract class TemplatedItemsComponent implements DoCheck, OnDestroy, Aft
 
     @profile
     private detectChangesOnChild(viewRef: EmbeddedViewRef<ItemContext>, index: number) {
-        if (isLogEnabled()) {
-            listViewLog(`Manually detect changes in child: ${index}`);
+        if (NativeScriptDebug.isLogEnabled()) {
+            NativeScriptDebug.listViewLog(`Manually detect changes in child: ${index}`);
         }
 
         viewRef.markForCheck();
@@ -230,14 +232,14 @@ export abstract class TemplatedItemsComponent implements DoCheck, OnDestroy, Aft
 
     ngDoCheck() {
         if (this._differ) {
-            if (isLogEnabled()) {
-                listViewLog("ngDoCheck() - execute differ");
+            if (NativeScriptDebug.isLogEnabled()) {
+                NativeScriptDebug.listViewLog("ngDoCheck() - execute differ");
             }
 
             const changes = this._differ.diff(this._items);
             if (changes) {
-                if (isLogEnabled()) {
-                    listViewLog("ngDoCheck() - refresh");
+                if (NativeScriptDebug.isLogEnabled()) {
+                    NativeScriptDebug.listViewLog("ngDoCheck() - refresh");
                 }
 
                 this.templatedItemsView.refresh();
