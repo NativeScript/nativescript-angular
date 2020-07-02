@@ -1,7 +1,7 @@
-import { Directive, ElementRef, forwardRef } from "@angular/core";
-import { NG_VALUE_ACCESSOR } from "@angular/forms";
-import { BaseValueAccessor } from "./base-value-accessor";
-import { TimePicker } from "@nativescript/core/ui/time-picker";
+import { Directive, ElementRef, forwardRef } from '@angular/core';
+import { NG_VALUE_ACCESSOR } from '@angular/forms';
+import { BaseValueAccessor } from './base-value-accessor';
+import { TimePicker } from '@nativescript/core/ui/time-picker';
 
 const TIME_VALUE_ACCESSOR = {
     provide: NG_VALUE_ACCESSOR,
@@ -20,13 +20,13 @@ const TIME_VALUE_ACCESSOR = {
  */
 @Directive({
     selector:
-        "TimePicker[ngModel],TimePicker[formControlName],TimePicker[formControl]," +
-        "timepicker[ngModel],timepicker[formControlName],timepicker[formControl]," +
-        "timePicker[ngModel],timePicker[formControlName],timePicker[formControl]," +
-        "time-picker[ngModel],time-picker[formControlName],time-picker[formControl]",
+        'TimePicker[ngModel],TimePicker[formControlName],TimePicker[formControl],' +
+        'timepicker[ngModel],timepicker[formControlName],timepicker[formControl],' +
+        'timePicker[ngModel],timePicker[formControlName],timePicker[formControl],' +
+        'time-picker[ngModel],time-picker[formControlName],time-picker[formControl]',
     providers: [TIME_VALUE_ACCESSOR],
     host: {
-        "(timeChange)": "onChange($event.value)",
+        '(timeChange)': 'onChange($event.value)',
     },
 })
 export class TimeValueAccessor extends BaseValueAccessor<TimePicker> { // tslint:disable-line:directive-class-suffix

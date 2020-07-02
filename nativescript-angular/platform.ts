@@ -3,7 +3,7 @@ import {
     AppOptions,
     PlatformFactory,
     COMMON_PROVIDERS
-} from "./platform-common";
+} from './platform-common';
 
 // import { NSFileSystem } from "./file-system/ns-file-system";
 
@@ -24,7 +24,7 @@ import {
     createPlatformFactory,
     MissingTranslationStrategy,
     StaticProvider,
-} from "@angular/core";
+} from '@angular/core';
 
 // Work around a TS bug requiring an imports of
 // InjectionToken, ViewEncapsulation and MissingTranslationStrategy
@@ -69,11 +69,11 @@ import {
 // }
 
 
-import { platformCore } from "@angular/core";
+import { platformCore } from '@angular/core';
 
 // "Static" platform
 const _platformNativeScript: PlatformFactory = createPlatformFactory(
-  platformCore, "nativeScript", [...COMMON_PROVIDERS]);
+  platformCore, 'nativeScript', [...COMMON_PROVIDERS]);
 
 export function platformNativeScript(options?: AppOptions, extraProviders?: any[]): PlatformRef {
   // Return raw platform to advanced users only if explicitly requested

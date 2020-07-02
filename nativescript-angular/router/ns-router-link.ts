@@ -1,14 +1,14 @@
-import { Directive, HostListener, Input } from "@angular/core";
-import { NavigationExtras } from "@angular/router";
-import { ActivatedRoute, Router, UrlTree } from "@angular/router";
-import { NativeScriptDebug } from "../trace";
-import { RouterExtensions } from "./router-extensions";
-import { NavigationOptions } from "./ns-location-utils";
-import { NavigationTransition } from "@nativescript/core/ui/frame";
-import { isString } from "@nativescript/core/utils/types";
+import { Directive, HostListener, Input } from '@angular/core';
+import { NavigationExtras } from '@angular/router';
+import { ActivatedRoute, Router, UrlTree } from '@angular/router';
+import { NativeScriptDebug } from '../trace';
+import { RouterExtensions } from './router-extensions';
+import { NavigationOptions } from './ns-location-utils';
+import { NavigationTransition } from '@nativescript/core/ui/frame';
+import { isString } from '@nativescript/core/utils/types';
 
 // Copied from "@angular/router/src/config"
-export type QueryParamsHandling = "merge" | "preserve" | "";
+export type QueryParamsHandling = 'merge' | 'preserve' | '';
 
 /**
  * The nsRouterLink directive lets you link to specific parts of your app.
@@ -34,7 +34,7 @@ export type QueryParamsHandling = "merge" | "preserve" | "";
  * instead look in the current component"s children for the route.
  * And if the segment begins with `../`, the router will go up one level.
  */
-@Directive({ selector: "[nsRouterLink]" })
+@Directive({ selector: '[nsRouterLink]' })
 export class NSRouterLink { // tslint:disable-line:directive-class-suffix
     @Input() target: string;
     @Input() queryParams: { [k: string]: any };
@@ -58,7 +58,7 @@ export class NSRouterLink { // tslint:disable-line:directive-class-suffix
         private route: ActivatedRoute) {
     }
 
-    @Input("nsRouterLink")
+    @Input('nsRouterLink')
     set params(data: any[] | string) {
         if (Array.isArray(data)) {
             this.commands = data;
@@ -67,7 +67,7 @@ export class NSRouterLink { // tslint:disable-line:directive-class-suffix
         }
     }
 
-    @HostListener("tap")
+    @HostListener('tap')
     onTap() {
         if (NativeScriptDebug.isLogEnabled()) {
             NativeScriptDebug.routerLog(`nsRouterLink.tapped: ${this.commands} ` +
@@ -111,17 +111,17 @@ export class NSRouterLink { // tslint:disable-line:directive-class-suffix
 
 
     private convertClearHistory(value: boolean | string): boolean {
-        return value === true || value === "true";
+        return value === true || value === 'true';
     }
 
     private getTransition(): { animated: boolean, transition?: NavigationTransition } {
         let transition: NavigationTransition;
         let animated: boolean;
 
-        if (typeof this.pageTransition === "boolean") {
+        if (typeof this.pageTransition === 'boolean') {
             animated = this.pageTransition;
         } else if (isString(this.pageTransition)) {
-            if (this.pageTransition === "none" || this.pageTransition === "false") {
+            if (this.pageTransition === 'none' || this.pageTransition === 'false') {
                 animated = false;
             } else {
                 animated = true;
@@ -145,5 +145,5 @@ export class NSRouterLink { // tslint:disable-line:directive-class-suffix
 }
 
 function attrBoolValue(s: any): boolean {
-    return s === "" || !!s;
+    return s === '' || !!s;
 }

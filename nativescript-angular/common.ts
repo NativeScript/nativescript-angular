@@ -1,25 +1,25 @@
-import { CommonModule } from "@angular/common";
-import { NO_ERRORS_SCHEMA, NgModule } from "@angular/core";
+import { CommonModule } from '@angular/common';
+import { NO_ERRORS_SCHEMA, NgModule } from '@angular/core';
 
-import { ModalDialogService } from "./directives/dialogs";
+import { ModalDialogService } from './directives/dialogs';
 import {
   defaultDeviceProvider,
   defaultFrameProvider,
   defaultPageProvider,
-} from "./platform-providers";
-import { ListViewComponent } from "./directives/list-view-comp";
-import { TemplateKeyDirective } from "./directives/templated-items-comp";
-import { TabViewDirective, TabViewItemDirective } from "./directives/tab-view";
+} from './platform-providers';
+import { ListViewComponent } from './directives/list-view-comp';
+import { TemplateKeyDirective } from './directives/templated-items-comp';
+import { TabViewDirective, TabViewItemDirective } from './directives/tab-view';
 import {
   ActionBarComponent,
   ActionBarScope,
   ActionItemDirective,
   NavigationButtonDirective,
-} from "./directives/action-bar";
+} from './directives/action-bar';
 import {
   AndroidFilterComponent,
   IosFilterComponent,
-} from "./directives/platform-filters";
+} from './directives/platform-filters';
 
 @NgModule({
   declarations: [
@@ -58,4 +58,4 @@ import {
 })
 export class NativeScriptCommonModule {}
 
-export * from "./directives";
+export * from './directives';

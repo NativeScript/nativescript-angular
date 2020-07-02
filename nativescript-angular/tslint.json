@@ -2,6 +2,14 @@
   "rulesDirectory": [
     "node_modules/codelyzer"
   ],
+  "linterOptions": {
+    "exclude": [
+      "**/node_modules",
+      "**/__test__",
+      "**/*.d.ts",
+      "**/zone-js/dist/*.ts"
+    ]
+  },
   "rules":{
     "directive-selector": [true, "attribute", "ns", "camelCase"],
     "component-selector": [true, "element", "", "camelCase"],
@@ -73,7 +81,7 @@
     ],
     "max-line-length": [
       true,
-      120
+      600
     ],
     "no-require-imports": false,
     "no-trailing-whitespace": true,
@@ -93,7 +101,7 @@
       "check-space"
     ],
     "interface-name": false,
-    "jsdoc-format": true,
+    "jsdoc-format": false,
     "no-consecutive-blank-lines": [
         true, 2
     ],
@@ -107,7 +115,7 @@
     ],
     "quotemark": [
       true,
-      "double",
+      "single",
       "avoid-escape"
     ],
     "semicolon": [true, "always"],

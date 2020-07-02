@@ -1,10 +1,10 @@
-import { Injectable } from "@angular/core";
-import { Router, UrlTree, NavigationExtras, ActivatedRoute } from "@angular/router";
-import { NSLocationStrategy } from "./ns-location-strategy";
-import { NavigationOptions, Outlet } from "./ns-location-utils";
-import { FrameService } from "../frame.service";
-import { NativeScriptDebug } from "../trace";
-import { findTopActivatedRouteNodeForOutlet } from "./page-router-outlet-utils";
+import { Injectable } from '@angular/core';
+import { Router, UrlTree, NavigationExtras, ActivatedRoute } from '@angular/router';
+import { NSLocationStrategy } from './ns-location-strategy';
+import { NavigationOptions, Outlet } from './ns-location-utils';
+import { FrameService } from '../frame.service';
+import { NativeScriptDebug } from '../trace';
+import { findTopActivatedRouteNodeForOutlet } from './page-router-outlet-utils';
 
 export type ExtendedNavigationExtras = NavigationExtras & NavigationOptions;
 
@@ -52,7 +52,7 @@ export class RouterExtensions {
             const { outletsToBack, outlets } = this.findOutletsToBack(backNavigationOptions);
 
             if (outletsToBack.length !== outlets.length) {
-                NativeScriptDebug.routerError("No outlet found relative to activated route");
+                NativeScriptDebug.routerError('No outlet found relative to activated route');
             } else {
                 outletsToBack.forEach(outletToBack => {
                     if (!this.locationStrategy.canGoBack(outletToBack)) {
@@ -79,11 +79,11 @@ export class RouterExtensions {
         const { outletsToBack, outlets } = this.findOutletsToBack(options);
 
         if (outletsToBack.length !== outlets.length) {
-            NativeScriptDebug.routerError("No outlet found relative to activated route");
+            NativeScriptDebug.routerError('No outlet found relative to activated route');
         } else {
             outletsToBack.forEach(outletToBack => {
                 if (outletToBack.isPageNavigationBack) {
-                    NativeScriptDebug.routerError("Attempted to call startGoBack while going back:");
+                    NativeScriptDebug.routerError('Attempted to call startGoBack while going back:');
                 } else {
                     this.locationStrategy.back(outletToBack);
                 }
@@ -103,7 +103,7 @@ export class RouterExtensions {
 
         // Lazy named outlet has added 'primary' inner NSEmptyOutlet child.
         // Take parent route when `relativeTo` option points to the outer named outlet.
-        if (isNSEmptyOutlet && relativeRoute.outlet !== "primary") {
+        if (isNSEmptyOutlet && relativeRoute.outlet !== 'primary') {
             relativeRoute = relativeRoute.parent || relativeRoute;
         }
 

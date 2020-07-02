@@ -31,6 +31,7 @@
     "build": "ng-packagr -p package.json",
     "build.pack": "npm run tsc && npm run build && cd dist && npm pack",
     "tslint": "tslint --project tsconfig.json --config tslint.json",
+    "tslint-fix": "tslint --fix **/**/*.ts -t verbose",
     "tsc": "tsc -p tsconfig.json",
     "tsc-w": "tsc -p tsconfig.json -w",
     "ngc": "ngc",

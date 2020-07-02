@@ -1,11 +1,11 @@
-import { Injectable } from "@angular/core";
-import { LocationStrategy } from "@angular/common";
-import { DefaultUrlSerializer, UrlSegmentGroup, UrlTree, ActivatedRouteSnapshot, Params } from "@angular/router";
-import { Frame } from "@nativescript/core/ui/frame";
-import { NativeScriptDebug } from "../trace";
-import { isPresent } from "../lang-facade";
-import { FrameService } from "../frame.service";
-import { Outlet, NavigationOptions, LocationState, defaultNavOptions } from "./ns-location-utils";
+import { Injectable } from '@angular/core';
+import { LocationStrategy } from '@angular/common';
+import { DefaultUrlSerializer, UrlSegmentGroup, UrlTree, ActivatedRouteSnapshot, Params } from '@angular/router';
+import { Frame } from '@nativescript/core/ui/frame';
+import { NativeScriptDebug } from '../trace';
+import { isPresent } from '../lang-facade';
+import { FrameService } from '../frame.service';
+import { Outlet, NavigationOptions, LocationState, defaultNavOptions } from './ns-location-utils';
 
 @Injectable({
   providedIn: 'root'
@@ -23,18 +23,18 @@ export class NSLocationStrategy extends LocationStrategy {
     constructor(private frameService: FrameService) {
         super();
         if (NativeScriptDebug.isLogEnabled()) {
-            NativeScriptDebug.routerLog("NSLocationStrategy.constructor()");
+            NativeScriptDebug.routerLog('NSLocationStrategy.constructor()');
         }
     }
 
     path(): string {
         if (!this.currentUrlTree) {
-            return "/";
+            return '/';
         }
 
         const state = this.currentOutlet && this.currentOutlet.peekState();
         if (!state) {
-            return "/";
+            return '/';
         }
 
         let tree = this.currentUrlTree;
@@ -52,21 +52,21 @@ export class NSLocationStrategy extends LocationStrategy {
         tree.queryParams = state.queryParams;
         const url = urlSerializer.serialize(tree);
         if (NativeScriptDebug.isLogEnabled()) {
-            NativeScriptDebug.routerLog("NSLocationStrategy.path(): " + url);
+            NativeScriptDebug.routerLog('NSLocationStrategy.path(): ' + url);
         }
         return url;
     }
 
     prepareExternalUrl(internal: string): string {
         if (NativeScriptDebug.isLogEnabled()) {
-            NativeScriptDebug.routerLog("NSLocationStrategy.prepareExternalUrl() internal: " + internal);
+            NativeScriptDebug.routerLog('NSLocationStrategy.prepareExternalUrl() internal: ' + internal);
         }
         return internal;
     }
 
     pushState(state: any, title: string, url: string, queryParams: string): void {
         if (NativeScriptDebug.isLogEnabled()) {
-            NativeScriptDebug.routerLog("NSLocationStrategy.pushState state: " +
+            NativeScriptDebug.routerLog('NSLocationStrategy.pushState state: ' +
                 `${state}, title: ${title}, url: ${url}, queryParams: ${queryParams}`);
         }
         this.pushStateInternal(state, title, url, queryParams);
@@ -81,14 +81,14 @@ export class NSLocationStrategy extends LocationStrategy {
         // The url serializer doesn't parse this url as having a primary outlet.
         if (!Object.keys(urlTreeRoot.children).length) {
             const segmentGroup = this.currentUrlTree && this.currentUrlTree.root;
-            const outletKey = this.getOutletKey(this.getSegmentGroupFullPath(segmentGroup), "primary");
+            const outletKey = this.getOutletKey(this.getSegmentGroupFullPath(segmentGroup), 'primary');
             const outlet = this.findOutlet(outletKey);
 
             if (outlet && this.updateStates(outlet, segmentGroup, this.currentUrlTree.queryParams)) {
                 this.currentOutlet = outlet; // If states updated
             } else if (!outlet) {
                 // tslint:disable-next-line:max-line-length
-                const rootOutlet = this.createOutlet("primary", null, segmentGroup, null, null, this.currentUrlTree.queryParams);
+                const rootOutlet = this.createOutlet('primary', null, segmentGroup, null, null, this.currentUrlTree.queryParams);
                 this.currentOutlet = rootOutlet;
             }
 
@@ -109,7 +109,7 @@ export class NSLocationStrategy extends LocationStrategy {
                 let outletKey = this.getOutletKey(outletPath, outletName);
                 let outlet = this.findOutlet(outletKey);
 
-                const parentOutletName = currentTree.outlet || "";
+                const parentOutletName = currentTree.outlet || '';
                 const parentOutletPath = this.getSegmentGroupFullPath(currentTree.parent);
                 const parentOutletKey = this.getOutletKey(parentOutletPath, parentOutletName);
                 const parentOutlet = this.findOutlet(parentOutletKey);
@@ -142,12 +142,12 @@ export class NSLocationStrategy extends LocationStrategy {
 
         if (states && states.length > 0) {
             if (NativeScriptDebug.isLogEnabled()) {
-                NativeScriptDebug.routerLog("NSLocationStrategy.replaceState changing existing state: " +
+                NativeScriptDebug.routerLog('NSLocationStrategy.replaceState changing existing state: ' +
                     `${state}, title: ${title}, url: ${url}, queryParams: ${queryParams}`);
             }
         } else {
             if (NativeScriptDebug.isLogEnabled()) {
-                NativeScriptDebug.routerLog("NSLocationStrategy.replaceState pushing new state: " +
+                NativeScriptDebug.routerLog('NSLocationStrategy.replaceState pushing new state: ' +
                     `${state}, title: ${title}, url: ${url}, queryParams: ${queryParams}`);
             }
             this.pushStateInternal(state, title, url, queryParams);
@@ -155,7 +155,7 @@ export class NSLocationStrategy extends LocationStrategy {
     }
 
     forward(): void {
-        throw new Error("NSLocationStrategy.forward() - not implemented");
+        throw new Error('NSLocationStrategy.forward() - not implemented');
     }
 
     back(outlet?: Outlet, frame?: Frame): void {
@@ -189,8 +189,8 @@ export class NSLocationStrategy extends LocationStrategy {
             if (state && state.isPageNavigation) {
                 // This was a page navigation - so navigate through frame.
                 if (NativeScriptDebug.isLogEnabled()) {
-                    NativeScriptDebug.routerLog("NSLocationStrategy.back() while not navigating back but top" +
-                        " state is page - will call frame.goBack()");
+                    NativeScriptDebug.routerLog('NSLocationStrategy.back() while not navigating back but top' +
+                        ' state is page - will call frame.goBack()');
                 }
 
                 if (!outlet) {
@@ -205,8 +205,8 @@ export class NSLocationStrategy extends LocationStrategy {
             } else {
                 // Nested navigation - just pop the state
                 if (NativeScriptDebug.isLogEnabled()) {
-                    NativeScriptDebug.routerLog("NSLocationStrategy.back() while not navigating back but top" +
-                        " state is not page - just pop");
+                    NativeScriptDebug.routerLog('NSLocationStrategy.back() while not navigating back but top' +
+                        ' state is not page - just pop');
                 }
 
                 this.callPopState(this.currentOutlet.states.pop(), true);
@@ -221,16 +221,16 @@ export class NSLocationStrategy extends LocationStrategy {
 
     onPopState(fn: (_: any) => any): void {
         if (NativeScriptDebug.isLogEnabled()) {
-            NativeScriptDebug.routerLog("NSLocationStrategy.onPopState");
+            NativeScriptDebug.routerLog('NSLocationStrategy.onPopState');
         }
         this.popStateCallbacks.push(fn);
     }
 
     getBaseHref(): string {
         if (NativeScriptDebug.isLogEnabled()) {
-            NativeScriptDebug.routerLog("NSLocationStrategy.getBaseHref()");
+            NativeScriptDebug.routerLog('NSLocationStrategy.getBaseHref()');
         }
-        return "";
+        return '';
     }
 
     private callPopState(state: LocationState, pop: boolean = true, outlet?: Outlet) {
@@ -260,13 +260,13 @@ export class NSLocationStrategy extends LocationStrategy {
             const outletStates = outlet.states;
             const outletLog = outletStates
                 // tslint:disable-next-line:max-line-length
-                .map((v, i) => `${outlet.outletKeys}.${i}.[${v.isPageNavigation ? "PAGE" : "INTERNAL"}].[${outlet.modalNavigationDepth ? "MODAL" : "BASE"}] "${v.segmentGroup.toString()}"`)
+                .map((v, i) => `${outlet.outletKeys}.${i}.[${v.isPageNavigation ? 'PAGE' : 'INTERNAL'}].[${outlet.modalNavigationDepth ? 'MODAL' : 'BASE'}] "${v.segmentGroup.toString()}"`)
                 .reverse();
 
             result = result.concat(outletLog);
         });
 
-        return result.join("\n");
+        return result.join('\n');
     }
 
     // Methods for syncing with page navigation in PageRouterOutlet
@@ -275,13 +275,13 @@ export class NSLocationStrategy extends LocationStrategy {
 
         if (!outlet || outlet.isPageNavigationBack) {
             if (NativeScriptDebug.isLogEnabled()) {
-                NativeScriptDebug.routerError("Attempted to call startGoBack while going back.");
+                NativeScriptDebug.routerError('Attempted to call startGoBack while going back.');
             }
             return;
         }
 
         if (NativeScriptDebug.isLogEnabled()) {
-            NativeScriptDebug.routerLog("NSLocationStrategy.startGoBack()");
+            NativeScriptDebug.routerLog('NSLocationStrategy.startGoBack()');
         }
         outlet.isPageNavigationBack = true;
 
@@ -293,20 +293,20 @@ export class NSLocationStrategy extends LocationStrategy {
 
         if (!outlet || !outlet.isPageNavigationBack) {
             if (NativeScriptDebug.isLogEnabled()) {
-                NativeScriptDebug.routerError("Attempted to call endGoBack while not going back.");
+                NativeScriptDebug.routerError('Attempted to call endGoBack while not going back.');
             }
             return;
         }
 
         if (NativeScriptDebug.isLogEnabled()) {
-            NativeScriptDebug.routerLog("NSLocationStrategy.finishBackPageNavigation()");
+            NativeScriptDebug.routerLog('NSLocationStrategy.finishBackPageNavigation()');
         }
         outlet.isPageNavigationBack = false;
     }
 
     public _beginModalNavigation(frame: Frame): void {
         if (NativeScriptDebug.isLogEnabled()) {
-            NativeScriptDebug.routerLog("NSLocationStrategy._beginModalNavigation()");
+            NativeScriptDebug.routerLog('NSLocationStrategy._beginModalNavigation()');
         }
 
         this.currentOutlet = this.getOutletByFrame(frame) || this.currentOutlet;
@@ -322,7 +322,7 @@ export class NSLocationStrategy extends LocationStrategy {
 
     public _closeModalNavigation() {
         if (NativeScriptDebug.isLogEnabled()) {
-            NativeScriptDebug.routerLog("NSLocationStrategy.closeModalNavigation()");
+            NativeScriptDebug.routerLog('NSLocationStrategy.closeModalNavigation()');
         }
 
         const isShowingModal = this._modalNavigationDepth > 0;
@@ -344,7 +344,7 @@ export class NSLocationStrategy extends LocationStrategy {
 
     public _beginPageNavigation(frame: Frame): NavigationOptions {
         if (NativeScriptDebug.isLogEnabled()) {
-            NativeScriptDebug.routerLog("NSLocationStrategy._beginPageNavigation()");
+            NativeScriptDebug.routerLog('NSLocationStrategy._beginPageNavigation()');
         }
 
         this.currentOutlet = this.getOutletByFrame(frame);
@@ -357,7 +357,7 @@ export class NSLocationStrategy extends LocationStrategy {
         const navOptions = this._currentNavigationOptions || defaultNavOptions;
         if (navOptions.clearHistory) {
             if (NativeScriptDebug.isLogEnabled()) {
-                NativeScriptDebug.routerLog("NSLocationStrategy._beginPageNavigation clearing states history");
+                NativeScriptDebug.routerLog('NSLocationStrategy._beginPageNavigation clearing states history');
             }
             this.currentOutlet.states = [lastState];
         }
@@ -374,7 +374,7 @@ export class NSLocationStrategy extends LocationStrategy {
         };
 
         if (NativeScriptDebug.isLogEnabled()) {
-            NativeScriptDebug.routerLog("NSLocationStrategy._setNavigationOptions(" +
+            NativeScriptDebug.routerLog('NSLocationStrategy._setNavigationOptions(' +
                 `${JSON.stringify(this._currentNavigationOptions)})`);
         }
     }
@@ -420,13 +420,13 @@ export class NSLocationStrategy extends LocationStrategy {
     }
 
     getSegmentGroupFullPath(segmentGroup: UrlSegmentGroup): string {
-        let fullPath = "";
+        let fullPath = '';
 
         while (segmentGroup) {
             const url = segmentGroup.toString();
 
             if (fullPath) {
-                fullPath = (url ? url + "/" : "") + fullPath;
+                fullPath = (url ? url + '/' : '') + fullPath;
             } else {
                 fullPath = url;
             }
@@ -447,33 +447,33 @@ export class NSLocationStrategy extends LocationStrategy {
             let url = urls;
 
             if (Array.isArray(urls)) {
-                url = url.join("/");
+                url = url.join('/');
             }
 
-            fullPath = fullPath ? (url ? url + "/" : url) + fullPath : url;
+            fullPath = fullPath ? (url ? url + '/' : url) + fullPath : url;
             currentRoute = currentRoute.parent;
         }
 
-        return fullPath ? fullPath + "-" + outletName : outletName;
+        return fullPath ? fullPath + '-' + outletName : outletName;
     }
 
 
     getPathByOutlets(urlSegmentGroup: any): string {
         if (!urlSegmentGroup) {
-            return "";
+            return '';
         }
 
         let pathToOutlet;
-        let lastPath = urlSegmentGroup.outlet || "primary";
+        let lastPath = urlSegmentGroup.outlet || 'primary';
         let parent = urlSegmentGroup.parent;
 
         while (parent && urlSegmentGroup.root !== parent) {
             if (parent && parent.outlet !== lastPath) {
-                if (lastPath === "primary") {
+                if (lastPath === 'primary') {
                     lastPath = parent.outlet;
                 } else {
                     lastPath = parent.outlet;
-                    pathToOutlet = lastPath + "-" + (pathToOutlet || urlSegmentGroup.outlet);
+                    pathToOutlet = lastPath + '-' + (pathToOutlet || urlSegmentGroup.outlet);
                 }
             }
 
@@ -590,7 +590,7 @@ export class NSLocationStrategy extends LocationStrategy {
     }
 
     private getSegmentGroupByOutlet(outlet: Outlet): UrlSegmentGroup {
-        const pathList = outlet.pathByOutlets.split("-");
+        const pathList = outlet.pathByOutlets.split('-');
         let segmentGroup = this.currentUrlTree.root;
         let pathToOutlet;
 
@@ -600,7 +600,7 @@ export class NSLocationStrategy extends LocationStrategy {
 
             if (childrenCount && segmentGroup.children[currentPath]) {
                 const url = segmentGroup.toString();
-                pathToOutlet = pathToOutlet ? pathToOutlet + "/" + url : url;
+                pathToOutlet = pathToOutlet ? pathToOutlet + '/' + url : url;
                 segmentGroup = segmentGroup.children[currentPath];
             } else {
                 // If no child outlet found with the given name - forget about all previously found outlets.
@@ -652,7 +652,7 @@ export class NSLocationStrategy extends LocationStrategy {
             }
 
             // No currentModalOutlet available when opening 'primary' p-r-o.
-            const outletName = "primary";
+            const outletName = 'primary';
             const outletPath = parentOutlet.peekState().segmentGroup.toString();
             const outletKey = this.getOutletKey(outletPath, outletName);
             // tslint:disable-next-line:max-line-length
@@ -664,12 +664,12 @@ export class NSLocationStrategy extends LocationStrategy {
     }
 
     private getOutletKey(path: string, outletName: string): string {
-        return path ? path + "-" + outletName : outletName;
+        return path ? path + '-' + outletName : outletName;
     }
 
     ngOnDestroy() {
         if (NativeScriptDebug.isLogEnabled()) {
-            NativeScriptDebug.routerLog("NSLocationStrategy.ngOnDestroy()");
+            NativeScriptDebug.routerLog('NSLocationStrategy.ngOnDestroy()');
         }
 
         this.outlets = [];

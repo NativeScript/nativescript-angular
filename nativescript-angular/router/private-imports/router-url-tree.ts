@@ -1,6 +1,6 @@
 /* tslint:disable:forin */
 // Copied unexported functions from @angular/router/src/url_tree
-import { UrlTree, UrlSegment, PRIMARY_OUTLET } from "@angular/router";
+import { UrlTree, UrlSegment, PRIMARY_OUTLET } from '@angular/router';
 // UrlSegmentGroup not exported, just use any.
 type UrlSegmentGroup = any;
 

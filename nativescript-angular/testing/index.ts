@@ -1,10 +1,10 @@
-import { NgModule } from "@angular/core";
-import { TestComponentRenderer } from "@angular/core/testing";
-import { NativeScriptTestComponentRenderer } from "./src/nativescript_test_component_renderer";
-import { COMMON_PROVIDERS } from "../platform-common";
-import { APP_ROOT_VIEW } from "../platform-providers";
-import { testingRootView } from "./src/util";
-export * from "./src/util";
+import { NgModule } from '@angular/core';
+import { TestComponentRenderer } from '@angular/core/testing';
+import { NativeScriptTestComponentRenderer } from './src/nativescript_test_component_renderer';
+import { COMMON_PROVIDERS } from '../platform-common';
+import { APP_ROOT_VIEW } from '../platform-providers';
+import { testingRootView } from './src/util';
+export * from './src/util';
 
 /**
  * Providers array is exported for cases where a custom module has to be constructed

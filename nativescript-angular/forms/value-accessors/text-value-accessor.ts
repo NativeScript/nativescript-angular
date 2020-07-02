@@ -1,7 +1,7 @@
-import { Directive, ElementRef, forwardRef } from "@angular/core";
-import { NG_VALUE_ACCESSOR } from "@angular/forms";
-import { BaseValueAccessor } from "./base-value-accessor";
-import { View } from "@nativescript/core/ui/core/view";
+import { Directive, ElementRef, forwardRef } from '@angular/core';
+import { NG_VALUE_ACCESSOR } from '@angular/forms';
+import { BaseValueAccessor } from './base-value-accessor';
+import { View } from '@nativescript/core/ui/core/view';
 
 const TEXT_VALUE_ACCESSOR = {
     provide: NG_VALUE_ACCESSOR,
@@ -22,24 +22,24 @@ export type TextView = {text: string} & View;
  */
 @Directive({
     selector:
-        "TextField[ngModel],TextField[formControlName],TextField[formControl]," +
-        "textField[ngModel],textField[formControlName],textField[formControl]," +
-        "textfield[ngModel],textfield[formControlName],textfield[formControl]," +
-        "text-field[ngModel],text-field[formControlName],text-field[formControl]," +
+        'TextField[ngModel],TextField[formControlName],TextField[formControl],' +
+        'textField[ngModel],textField[formControlName],textField[formControl],' +
+        'textfield[ngModel],textfield[formControlName],textfield[formControl],' +
+        'text-field[ngModel],text-field[formControlName],text-field[formControl],' +
 
-        "TextView[ngModel],TextView[formControlName],TextView[formControl]," +
-        "textView[ngModel],textView[formControlName],textView[formControl]," +
-        "textview[ngModel],textview[formControlName],textview[formControl]," +
-        "text-view[ngModel],text-view[formControlName],text-view[formControl]," +
+        'TextView[ngModel],TextView[formControlName],TextView[formControl],' +
+        'textView[ngModel],textView[formControlName],textView[formControl],' +
+        'textview[ngModel],textview[formControlName],textview[formControl],' +
+        'text-view[ngModel],text-view[formControlName],text-view[formControl],' +
 
-        "SearchBar[ngModel],SearchBar[formControlName],SearchBar[formControl]," +
-        "searchBar[ngModel],searchBar[formControlName],searchBar[formControl]," +
-        "searchbar[ngModel],searchbar[formControlName],searchbar[formControl]," +
-        "search-bar[ngModel], search-bar[formControlName],search-bar[formControl]",
+        'SearchBar[ngModel],SearchBar[formControlName],SearchBar[formControl],' +
+        'searchBar[ngModel],searchBar[formControlName],searchBar[formControl],' +
+        'searchbar[ngModel],searchbar[formControlName],searchbar[formControl],' +
+        'search-bar[ngModel], search-bar[formControlName],search-bar[formControl]',
     providers: [TEXT_VALUE_ACCESSOR],
     host: {
-        "(blur)": "onTouched()",
-        "(textChange)": "onChange($event.value)",
+        '(blur)': 'onTouched()',
+        '(textChange)': 'onChange($event.value)',
     },
 })
 export class TextValueAccessor extends BaseValueAccessor<TextView> { // tslint:disable-line:directive-class-suffix

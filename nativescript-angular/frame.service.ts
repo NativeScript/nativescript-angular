@@ -1,5 +1,5 @@
-import { Injectable } from "@angular/core";
-import { Frame } from "@nativescript/core/ui/frame";
+import { Injectable } from '@angular/core';
+import { Frame } from '@nativescript/core/ui/frame';
 
 @Injectable({
   providedIn: 'root'

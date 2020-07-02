@@ -1,13 +1,13 @@
-import { Injectable } from "@angular/core";
-import { ResourceLoader } from "@angular/compiler";
-import { path } from "@nativescript/core/file-system";
+import { Injectable } from '@angular/core';
+import { ResourceLoader } from '@angular/compiler';
+import { path } from '@nativescript/core/file-system';
 
-import { NSFileSystem } from "./file-system/ns-file-system";
+import { NSFileSystem } from './file-system/ns-file-system';
 
 const sourceExtensionsMap = {
-    ".scss": ".css",
-    ".sass": ".css",
-    ".less": ".css"
+    '.scss': '.css',
+    '.sass': '.css',
+    '.less': '.css'
 };
 
 @Injectable()
@@ -44,7 +44,7 @@ export class FileSystemResourceLoader extends ResourceLoader {
 
     private resolveRelativeUrls(url: string): string {
         // Angular assembles absolute URLs and prefixes them with //
-        if (url.indexOf("/") !== 0) {
+        if (url.indexOf('/') !== 0) {
             // Resolve relative URLs based on the app root.
             return path.join(this.fs.currentApp().path, url);
         } else {

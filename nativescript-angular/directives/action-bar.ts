@@ -1,13 +1,13 @@
-import { Directive, Component, ElementRef, Optional, OnDestroy } from "@angular/core";
+import { Directive, Component, ElementRef, Optional, OnDestroy } from '@angular/core';
 import {
   ActionBar,
   ActionItem,
   ActionItems,
   NavigationButton,
-} from "@nativescript/core/ui/action-bar";
-import { Page } from "@nativescript/core/ui/page";
+} from '@nativescript/core/ui/action-bar';
+import { Page } from '@nativescript/core/ui/page';
 
-import { isBlank } from "../lang-facade";
+import { isBlank } from '../lang-facade';
 import {
     NgView,
     ViewClassMeta,
@@ -15,7 +15,7 @@ import {
     isInvisibleNode,
     isView,
     registerElement,
-} from "../element-registry";
+} from '../element-registry';
 
 export function isActionItem(view: any): view is ActionItem {
     return view instanceof ActionItem;
@@ -82,18 +82,18 @@ const appendActionItem = (bar: NgActionBar, item: ActionItem) => {
     bar.actionItems.addItem(item);
 };
 
-registerElement("ActionBar", () => ActionBar, actionBarMeta);
-registerElement("ActionItem", () => <any>ActionItem);
-registerElement("NavigationButton", () => <any>NavigationButton);
+registerElement('ActionBar', () => ActionBar, actionBarMeta);
+registerElement('ActionItem', () => <any>ActionItem);
+registerElement('NavigationButton', () => <any>NavigationButton);
 
 @Component({
-    selector: "ActionBar",
-    template: "<ng-content></ng-content>"
+    selector: 'ActionBar',
+    template: '<ng-content></ng-content>'
 })
 export class ActionBarComponent {
     constructor(public element: ElementRef, private page: Page) {
         if (!this.page) {
-            throw new Error("Inside ActionBarComponent but no Page found in DI.");
+            throw new Error('Inside ActionBarComponent but no Page found in DI.');
         }
 
         if (isBlank(this.page.actionBarHidden)) {
@@ -105,13 +105,13 @@ export class ActionBarComponent {
 }
 
 @Component({
-    selector: "ActionBarExtension",
-    template: ""
+    selector: 'ActionBarExtension',
+    template: ''
 })
 export class ActionBarScope { // tslint:disable-line:component-class-suffix
     constructor(private page: Page) {
         if (!this.page) {
-            throw new Error("Inside ActionBarScope but no Page found in DI.");
+            throw new Error('Inside ActionBarScope but no Page found in DI.');
         }
     }
 
@@ -138,7 +138,7 @@ export class ActionBarScope { // tslint:disable-line:component-class-suffix
 }
 
 @Directive({
-    selector: "ActionItem" // tslint:disable-line:directive-selector
+    selector: 'ActionItem' // tslint:disable-line:directive-selector
 })
 export class ActionItemDirective implements OnDestroy {
     constructor(public element: ElementRef, @Optional() private ownerScope: ActionBarScope) {
@@ -155,7 +155,7 @@ export class ActionItemDirective implements OnDestroy {
 }
 
 @Directive({
-    selector: "NavigationButton" // tslint:disable-line:directive-selector
+    selector: 'NavigationButton' // tslint:disable-line:directive-selector
 })
 export class NavigationButtonDirective implements OnDestroy {
     constructor(public element: ElementRef, @Optional() private ownerScope: ActionBarScope) {

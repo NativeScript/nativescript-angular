@@ -6,27 +6,27 @@ import {
   RendererFactory2,
   Optional,
   SkipSelf,
-} from "@angular/core";
-import { DOCUMENT } from "@angular/common";
-import { AnimationBuilder } from "@angular/animations";
+} from '@angular/core';
+import { DOCUMENT } from '@angular/common';
+import { AnimationBuilder } from '@angular/animations';
 
 import {
   AnimationDriver,
   ɵAnimationStyleNormalizer as AnimationStyleNormalizer,
   ɵWebAnimationsStyleNormalizer as WebAnimationsStyleNormalizer,
   ɵAnimationEngine as AnimationEngine,
-} from "@angular/animations/browser";
+} from '@angular/animations/browser';
 
 import {
   ɵAnimationRendererFactory as AnimationRendererFactory,
   ɵBrowserAnimationBuilder as BrowserAnimationBuilder,
-} from "@angular/platform-browser/animations";
+} from '@angular/platform-browser/animations';
 
 // import { NativeScriptModule } from "../nativescript.module";
-import { NativeScriptRendererFactory } from "../renderer";
-import { NativeScriptAnimationDriver } from "./animation-driver";
-import { throwIfAlreadyLoaded } from "../common/utils";
-import { NativeScriptCommonModule } from "../common";
+import { NativeScriptRendererFactory } from '../renderer';
+import { NativeScriptAnimationDriver } from './animation-driver';
+import { throwIfAlreadyLoaded } from '../common/utils';
+import { NativeScriptCommonModule } from '../common';
 
 @Injectable()
 export class InjectableAnimationEngine extends AnimationEngine {
@@ -80,6 +80,6 @@ export class NativeScriptAnimationsModule {
     @Optional() @SkipSelf() parentModule: NativeScriptAnimationsModule
   ) {
     // Prevents NativeScriptAnimationsModule from getting imported multiple times
-    throwIfAlreadyLoaded(parentModule, "NativeScriptAnimationsModule");
+    throwIfAlreadyLoaded(parentModule, 'NativeScriptAnimationsModule');
   }
 }

@@ -1,7 +1,7 @@
-import { Directive, ElementRef, forwardRef } from "@angular/core";
-import { NG_VALUE_ACCESSOR } from "@angular/forms";
-import { BaseValueAccessor } from "./base-value-accessor";
-import { Slider } from "@nativescript/core/ui/slider";
+import { Directive, ElementRef, forwardRef } from '@angular/core';
+import { NG_VALUE_ACCESSOR } from '@angular/forms';
+import { BaseValueAccessor } from './base-value-accessor';
+import { Slider } from '@nativescript/core/ui/slider';
 
 const NUMBER_VALUE_ACCESSOR = {
     provide: NG_VALUE_ACCESSOR,
@@ -20,11 +20,11 @@ const NUMBER_VALUE_ACCESSOR = {
  */
 @Directive({
     selector:
-        "Slider[ngModel],Slider[formControlName],Slider[formControl]," +
-        "slider[ngModel],slider[formControlName],slider[formControl]",
+        'Slider[ngModel],Slider[formControlName],Slider[formControl],' +
+        'slider[ngModel],slider[formControlName],slider[formControl]',
     providers: [NUMBER_VALUE_ACCESSOR],
     host: {
-        "(valueChange)": "onChange($event.value)",
+        '(valueChange)': 'onChange($event.value)',
     },
 })
 export class NumberValueAccessor extends BaseValueAccessor<Slider> { // tslint:disable-line:directive-class-suffix

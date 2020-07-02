@@ -1,17 +1,17 @@
-import { NSFileSystem } from "../file-system/ns-file-system";
+import { NSFileSystem } from '../file-system/ns-file-system';
 
-import { Observable, Observer } from "rxjs";
-import { path } from "@nativescript/core/file-system/file-system";
+import { Observable, Observer } from 'rxjs';
+import { path } from '@nativescript/core/file-system/file-system';
 
 export type httpResponseFactory<T> = (url: string, body: any, status: number) => T;
 export type httpErrorFactory = (url: string, body: any, status: number) => any;
 
 export function isLocalRequest(url: string): boolean {
-    return url.indexOf("~") === 0 || url.indexOf("/") === 0;
+    return url.indexOf('~') === 0 || url.indexOf('/') === 0;
 }
 
 export function getAbsolutePath(url: string, nsFileSystem: NSFileSystem): string {
-    url = url.replace("~", "").replace("/", "");
+    url = url.replace('~', '').replace('/', '');
     url = path.join(nsFileSystem.currentApp().path, url);
     return url;
 }
@@ -45,7 +45,7 @@ export function processLocalFileRequest<T>(
 
                 });
         } else {
-            observer.error(errorResponse(url, "Not Found", 404));
+            observer.error(errorResponse(url, 'Not Found', 404));
         }
     });
 }

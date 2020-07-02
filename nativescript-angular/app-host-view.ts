@@ -1,7 +1,7 @@
-import { ContentView } from "@nativescript/core/ui/content-view";
-import { GridLayout } from "@nativescript/core/ui/layouts/grid-layout";
-import { ProxyViewContainer } from "@nativescript/core/ui/proxy-view-container";
-import { View } from "@nativescript/core/ui/core/view";
+import { ContentView } from '@nativescript/core/ui/content-view';
+import { GridLayout } from '@nativescript/core/ui/layouts/grid-layout';
+import { ProxyViewContainer } from '@nativescript/core/ui/proxy-view-container';
+import { View } from '@nativescript/core/ui/core/view';
 
 export class AppHostView extends ContentView {
 

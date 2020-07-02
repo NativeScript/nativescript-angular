@@ -4,7 +4,7 @@ import {
     Optional,
     SystemJsNgModuleLoader,
     SystemJsNgModuleLoaderConfig,
-} from "@angular/core";
+} from '@angular/core';
 
 @Injectable()
 export class NSModuleFactoryLoader extends SystemJsNgModuleLoader {

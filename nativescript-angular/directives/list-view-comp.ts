@@ -4,12 +4,12 @@ import {
     ElementRef,
     IterableDiffers,
     forwardRef
-} from "@angular/core";
-import { ListView } from "@nativescript/core/ui/list-view";
-import { TEMPLATED_ITEMS_COMPONENT, TemplatedItemsComponent } from "./templated-items-comp";
+} from '@angular/core';
+import { ListView } from '@nativescript/core/ui/list-view';
+import { TEMPLATED_ITEMS_COMPONENT, TemplatedItemsComponent } from './templated-items-comp';
 
 @Component({
-    selector: "ListView",
+    selector: 'ListView',
     template: `
         <DetachedContainer>
             <Placeholder #loader></Placeholder>

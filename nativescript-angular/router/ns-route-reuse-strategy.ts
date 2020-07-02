@@ -1,13 +1,13 @@
-import { Injectable } from "@angular/core";
-import { RouteReuseStrategy, ActivatedRouteSnapshot, DetachedRouteHandle } from "@angular/router";
+import { Injectable } from '@angular/core';
+import { RouteReuseStrategy, ActivatedRouteSnapshot, DetachedRouteHandle } from '@angular/router';
 
-import { NativeScriptDebug } from "../trace";
-import { NSLocationStrategy } from "./ns-location-strategy";
+import { NativeScriptDebug } from '../trace';
+import { NSLocationStrategy } from './ns-location-strategy';
 import {
     destroyComponentRef,
     findTopActivatedRouteNodeForOutlet,
     pageRouterActivatedSymbol
-} from "./page-router-outlet-utils";
+} from './page-router-outlet-utils';
 
 interface CacheItem {
     key: string;
@@ -16,8 +16,8 @@ interface CacheItem {
 }
 
 const getSnapshotKey = function(snapshot: ActivatedRouteSnapshot): string {
-  return snapshot.pathFromRoot.join("->");
-}
+  return snapshot.pathFromRoot.join('->');
+};
 
 /**
  * Detached state cache
@@ -49,7 +49,7 @@ class DetachedStateCache {
         while (this.cache.length > 0) {
             const state = <any>this.cache.pop().state;
             if (!state.componentRef) {
-                throw new Error("No componentRed found in DetachedRouteHandle");
+                throw new Error('No componentRed found in DetachedRouteHandle');
             }
 
             destroyComponentRef(state.componentRef);
@@ -70,7 +70,7 @@ class DetachedStateCache {
                 const state = <any>cacheItem.state;
 
                 if (!state.componentRef) {
-                    throw new Error("No componentRef found in DetachedRouteHandle");
+                    throw new Error('No componentRef found in DetachedRouteHandle');
                 }
 
                 destroyComponentRef(state.componentRef);

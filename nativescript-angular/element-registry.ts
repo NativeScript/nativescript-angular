@@ -1,7 +1,7 @@
-import { View } from "@nativescript/core/ui/core/view";
-import { LayoutBase } from "@nativescript/core/ui/layouts/layout-base";
-import { Page } from "@nativescript/core/ui/page";
-import { Frame } from "@nativescript/core/ui/frame";
+import { View } from '@nativescript/core/ui/core/view';
+import { LayoutBase } from '@nativescript/core/ui/layouts/layout-base';
+import { Page } from '@nativescript/core/ui/page';
+import { Frame } from '@nativescript/core/ui/frame';
 
 export interface ViewExtensions {
     meta: ViewClassMeta;
@@ -104,7 +104,7 @@ export function registerElement(
     const entry = { resolver: resolver, meta: meta };
     elementMap.set(elementName, entry);
     elementMap.set(elementName.toLowerCase(), entry);
-    elementMap.set(elementName.replace(camelCaseSplit, "$1-$2").toLowerCase(), entry);
+    elementMap.set(elementName.replace(camelCaseSplit, '$1-$2').toLowerCase(), entry);
 }
 
 export function getViewClass(elementName: string): ViewClass {
@@ -165,58 +165,58 @@ const frameMeta: ViewClassMeta = {
         } else if (child instanceof Page) {
             parent.navigate({ create: () => child });
         } else {
-            throw new Error("Only a Page can be a child of Frame");
+            throw new Error('Only a Page can be a child of Frame');
         }
     }
 };
 
 // Register default NativeScript components
 // Note: ActionBar related components are registerd together with action-bar directives.
-registerElement("AbsoluteLayout", () => require("@nativescript/core/ui/layouts/absolute-layout").AbsoluteLayout);
-registerElement("ActivityIndicator", () => require("@nativescript/core/ui/activity-indicator").ActivityIndicator);
-registerElement("Border", () => require("@nativescript/core/ui/border").Border);
-registerElement("BottomNavigation", () => require("@nativescript/core/ui/bottom-navigation").BottomNavigation);
-registerElement("Button", () => require("@nativescript/core/ui/button").Button);
-registerElement("ContentView", () => require("@nativescript/core/ui/content-view").ContentView);
-registerElement("DatePicker", () => require("@nativescript/core/ui/date-picker").DatePicker);
-registerElement("DockLayout", () => require("@nativescript/core/ui/layouts/dock-layout").DockLayout);
-registerElement("Frame", () => require("@nativescript/core/ui/frame").Frame, frameMeta);
-registerElement("GridLayout", () => require("@nativescript/core/ui/layouts/grid-layout").GridLayout);
-registerElement("HtmlView", () => require("@nativescript/core/ui/html-view").HtmlView);
-registerElement("Image", () => require("@nativescript/core/ui/image").Image);
+registerElement('AbsoluteLayout', () => require('@nativescript/core/ui/layouts/absolute-layout').AbsoluteLayout);
+registerElement('ActivityIndicator', () => require('@nativescript/core/ui/activity-indicator').ActivityIndicator);
+registerElement('Border', () => require('@nativescript/core/ui/border').Border);
+registerElement('BottomNavigation', () => require('@nativescript/core/ui/bottom-navigation').BottomNavigation);
+registerElement('Button', () => require('@nativescript/core/ui/button').Button);
+registerElement('ContentView', () => require('@nativescript/core/ui/content-view').ContentView);
+registerElement('DatePicker', () => require('@nativescript/core/ui/date-picker').DatePicker);
+registerElement('DockLayout', () => require('@nativescript/core/ui/layouts/dock-layout').DockLayout);
+registerElement('Frame', () => require('@nativescript/core/ui/frame').Frame, frameMeta);
+registerElement('GridLayout', () => require('@nativescript/core/ui/layouts/grid-layout').GridLayout);
+registerElement('HtmlView', () => require('@nativescript/core/ui/html-view').HtmlView);
+registerElement('Image', () => require('@nativescript/core/ui/image').Image);
 // Parse5 changes <Image> tags to <img>. WTF!
-registerElement("img", () => require("@nativescript/core/ui/image").Image);
-registerElement("Label", () => require("@nativescript/core/ui/label").Label);
-registerElement("ListPicker", () => require("@nativescript/core/ui/list-picker").ListPicker);
-registerElement("ListView", () => require("@nativescript/core/ui/list-view").ListView);
-registerElement("Page", () => require("@nativescript/core/ui/page").Page);
-registerElement("Placeholder", () => require("@nativescript/core/ui/placeholder").Placeholder);
-registerElement("Progress", () => require("@nativescript/core/ui/progress").Progress);
-registerElement("ProxyViewContainer", () => require("@nativescript/core/ui/proxy-view-container").ProxyViewContainer);
-registerElement("Repeater", () => require("@nativescript/core/ui/repeater").Repeater);
-registerElement("ScrollView", () => require("@nativescript/core/ui/scroll-view").ScrollView);
-registerElement("SearchBar", () => require("@nativescript/core/ui/search-bar").SearchBar);
-registerElement("SegmentedBar", () => require("@nativescript/core/ui/segmented-bar").SegmentedBar);
-registerElement("SegmentedBarItem", () => require("@nativescript/core/ui/segmented-bar").SegmentedBarItem);
-registerElement("Slider", () => require("@nativescript/core/ui/slider").Slider);
-registerElement("StackLayout", () => require("@nativescript/core/ui/layouts/stack-layout").StackLayout);
-registerElement("FlexboxLayout", () => require("@nativescript/core/ui/layouts/flexbox-layout").FlexboxLayout);
-registerElement("Switch", () => require("@nativescript/core/ui/switch").Switch);
-registerElement("TabView", () => require("@nativescript/core/ui/tab-view").TabView);
-registerElement("TabStrip", () => require("@nativescript/core/ui/tab-navigation-base/tab-strip").TabStrip);
-registerElement("TabStripItem", () => require("@nativescript/core/ui/tab-navigation-base/tab-strip-item").TabStripItem);
-registerElement("TabContentItem",
-    () => require("@nativescript/core/ui/tab-navigation-base/tab-content-item").TabContentItem);
-registerElement("Tabs", () => require("@nativescript/core/ui/tabs").Tabs);
-registerElement("TextField", () => require("@nativescript/core/ui/text-field").TextField);
-registerElement("TextView", () => require("@nativescript/core/ui/text-view").TextView);
-registerElement("TimePicker", () => require("@nativescript/core/ui/time-picker").TimePicker);
-registerElement("WebView", () => require("@nativescript/core/ui/web-view").WebView);
-registerElement("WrapLayout", () => require("@nativescript/core/ui/layouts/wrap-layout").WrapLayout);
-registerElement("FormattedString", () => require("@nativescript/core/text/formatted-string").FormattedString);
-registerElement("Span", () => require("@nativescript/core/text/span").Span);
+registerElement('img', () => require('@nativescript/core/ui/image').Image);
+registerElement('Label', () => require('@nativescript/core/ui/label').Label);
+registerElement('ListPicker', () => require('@nativescript/core/ui/list-picker').ListPicker);
+registerElement('ListView', () => require('@nativescript/core/ui/list-view').ListView);
+registerElement('Page', () => require('@nativescript/core/ui/page').Page);
+registerElement('Placeholder', () => require('@nativescript/core/ui/placeholder').Placeholder);
+registerElement('Progress', () => require('@nativescript/core/ui/progress').Progress);
+registerElement('ProxyViewContainer', () => require('@nativescript/core/ui/proxy-view-container').ProxyViewContainer);
+registerElement('Repeater', () => require('@nativescript/core/ui/repeater').Repeater);
+registerElement('ScrollView', () => require('@nativescript/core/ui/scroll-view').ScrollView);
+registerElement('SearchBar', () => require('@nativescript/core/ui/search-bar').SearchBar);
+registerElement('SegmentedBar', () => require('@nativescript/core/ui/segmented-bar').SegmentedBar);
+registerElement('SegmentedBarItem', () => require('@nativescript/core/ui/segmented-bar').SegmentedBarItem);
+registerElement('Slider', () => require('@nativescript/core/ui/slider').Slider);
+registerElement('StackLayout', () => require('@nativescript/core/ui/layouts/stack-layout').StackLayout);
+registerElement('FlexboxLayout', () => require('@nativescript/core/ui/layouts/flexbox-layout').FlexboxLayout);
+registerElement('Switch', () => require('@nativescript/core/ui/switch').Switch);
+registerElement('TabView', () => require('@nativescript/core/ui/tab-view').TabView);
+registerElement('TabStrip', () => require('@nativescript/core/ui/tab-navigation-base/tab-strip').TabStrip);
+registerElement('TabStripItem', () => require('@nativescript/core/ui/tab-navigation-base/tab-strip-item').TabStripItem);
+registerElement('TabContentItem',
+    () => require('@nativescript/core/ui/tab-navigation-base/tab-content-item').TabContentItem);
+registerElement('Tabs', () => require('@nativescript/core/ui/tabs').Tabs);
+registerElement('TextField', () => require('@nativescript/core/ui/text-field').TextField);
+registerElement('TextView', () => require('@nativescript/core/ui/text-view').TextView);
+registerElement('TimePicker', () => require('@nativescript/core/ui/time-picker').TimePicker);
+registerElement('WebView', () => require('@nativescript/core/ui/web-view').WebView);
+registerElement('WrapLayout', () => require('@nativescript/core/ui/layouts/wrap-layout').WrapLayout);
+registerElement('FormattedString', () => require('@nativescript/core/text/formatted-string').FormattedString);
+registerElement('Span', () => require('@nativescript/core/text/span').Span);
 
-registerElement("DetachedContainer", () => require("@nativescript/core/ui/proxy-view-container").ProxyViewContainer,
+registerElement('DetachedContainer', () => require('@nativescript/core/ui/proxy-view-container').ProxyViewContainer,
     { skipAddToDom: true });
 
-registerElement("page-router-outlet", () => require("@nativescript/core/ui/frame").Frame);
+registerElement('page-router-outlet', () => require('@nativescript/core/ui/frame').Frame);

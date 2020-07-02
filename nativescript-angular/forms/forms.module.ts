@@ -1,5 +1,5 @@
-import { NgModule } from "@angular/core";
-import { FormsModule } from "@angular/forms";
+import { NgModule } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 import {
   TextValueAccessor,
   CheckedValueAccessor,
@@ -7,7 +7,7 @@ import {
   TimeValueAccessor,
   NumberValueAccessor,
   SelectedIndexValueAccessor,
-} from "./value-accessors";
+} from './value-accessors';
 
 export {
   TextValueAccessor,

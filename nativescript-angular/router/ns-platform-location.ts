@@ -1,7 +1,7 @@
-import { NSLocationStrategy } from "./ns-location-strategy";
-import { PlatformLocation, LocationChangeListener } from "@angular/common";
-import { Injectable } from "@angular/core";
-import { NativeScriptDebug } from "../trace";
+import { NSLocationStrategy } from './ns-location-strategy';
+import { PlatformLocation, LocationChangeListener } from '@angular/common';
+import { Injectable } from '@angular/core';
+import { NativeScriptDebug } from '../trace';
 
 @Injectable()
 export class NativescriptPlatformLocation extends PlatformLocation {
@@ -9,7 +9,7 @@ export class NativescriptPlatformLocation extends PlatformLocation {
     constructor(private locationStrategy: NSLocationStrategy) {
         super();
         if (NativeScriptDebug.isLogEnabled()) {
-            NativeScriptDebug.routerLog("NativescriptPlatformLocation.constructor()");
+            NativeScriptDebug.routerLog('NativescriptPlatformLocation.constructor()');
         }
     }
 
@@ -23,7 +23,7 @@ export class NativescriptPlatformLocation extends PlatformLocation {
     readonly protocol: string;
 
     getBaseHrefFromDOM(): string {
-        return "/";
+        return '/';
     }
 
     onPopState(fn: LocationChangeListener): void {
@@ -34,16 +34,16 @@ export class NativescriptPlatformLocation extends PlatformLocation {
     }
 
     get search(): string {
-        return "";
+        return '';
     }
     get hash(): string {
-        return "";
+        return '';
     }
     get pathname(): string {
         return this.locationStrategy.path();
     }
     set pathname(_newPath: string) {
-        throw new Error("NativescriptPlatformLocation set pathname - not implemented");
+        throw new Error('NativescriptPlatformLocation set pathname - not implemented');
     }
 
     pushState(state: any, title: string, url: string): void {
@@ -55,7 +55,7 @@ export class NativescriptPlatformLocation extends PlatformLocation {
     }
 
     forward(): void {
-        throw new Error("NativescriptPlatformLocation.forward() - not implemented");
+        throw new Error('NativescriptPlatformLocation.forward() - not implemented');
     }
 
     back(): void {

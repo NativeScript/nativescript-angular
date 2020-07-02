@@ -1,21 +1,21 @@
-import { ListViewComponent } from "./list-view-comp";
+import { ListViewComponent } from './list-view-comp';
 import {
   TemplateKeyDirective,
   TemplatedItemsComponent,
-} from "./templated-items-comp";
-import { TabViewDirective, TabViewItemDirective } from "./tab-view";
+} from './templated-items-comp';
+import { TabViewDirective, TabViewItemDirective } from './tab-view';
 import {
   ActionBarComponent,
   ActionBarScope,
   ActionItemDirective,
   NavigationButtonDirective,
-} from "./action-bar";
-import { AndroidFilterComponent, IosFilterComponent } from "./platform-filters";
+} from './action-bar';
+import { AndroidFilterComponent, IosFilterComponent } from './platform-filters';
 export {
   ModalDialogOptions,
   ModalDialogParams,
   ModalDialogService,
-} from "./dialogs";
+} from './dialogs';
 
 export const NS_DIRECTIVES = [
   ListViewComponent,

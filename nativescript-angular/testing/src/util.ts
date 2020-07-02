@@ -1,16 +1,16 @@
-import { View } from "@nativescript/core/ui/core/view";
-import { Frame } from "@nativescript/core/ui/frame";
-import { LayoutBase } from "@nativescript/core/ui/layouts/layout-base";
-import { ComponentFixture, TestBed } from "@angular/core/testing";
-import { NgModule, Type } from "@angular/core";
-import { NativeScriptModule } from "../../nativescript.module";
-import { platformBrowserDynamicTesting } from "@angular/platform-browser-dynamic/testing";
+import { View } from '@nativescript/core/ui/core/view';
+import { Frame } from '@nativescript/core/ui/frame';
+import { LayoutBase } from '@nativescript/core/ui/layouts/layout-base';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { NgModule, Type } from '@angular/core';
+import { NativeScriptModule } from '../../nativescript.module';
+import { platformBrowserDynamicTesting } from '@angular/platform-browser-dynamic/testing';
 // import { NS_COMPILER_PROVIDERS } from "../../platform";
-import { NATIVESCRIPT_TESTING_PROVIDERS, NativeScriptTestingModule } from "../index";
-import { CommonModule } from "@angular/common";
-import { GridLayout } from "@nativescript/core/ui/layouts/grid-layout";
+import { NATIVESCRIPT_TESTING_PROVIDERS, NativeScriptTestingModule } from '../index';
+import { CommonModule } from '@angular/common';
+import { GridLayout } from '@nativescript/core/ui/layouts/grid-layout';
 
-const TESTING_ROOT_ID = "__testing_container";
+const TESTING_ROOT_ID = '__testing_container';
 
 /**
  * Get a reference to the fixtures container.
@@ -59,7 +59,7 @@ export function promiseWait(durationMs: number) {
 export function nsTestBedInit() {
     TestBed.initTestEnvironment(
         NativeScriptTestingModule,
-        platformBrowserDynamicTesting()//NS_COMPILER_PROVIDERS)
+        platformBrowserDynamicTesting()// NS_COMPILER_PROVIDERS)
     );
 }
 
@@ -179,9 +179,9 @@ export function nsTestBedRender<T>(componentType: Type<T>): Promise<ComponentFix
             const list = activeTestFixtures[activeTestFixtures.length - 1];
             if (!list) {
                 console.warn(
-                    "nsTestBedRender called without nsTestBedBeforeEach/nsTestBedAfter each. " +
+                    'nsTestBedRender called without nsTestBedBeforeEach/nsTestBedAfter each. ' +
                     "You are responsible for calling 'fixture.destroy()' when your test is done " +
-                    "in order to clean up the components that are created."
+                    'in order to clean up the components that are created.'
                 );
             } else {
                 list.push(fixture);

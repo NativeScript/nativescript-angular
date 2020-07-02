@@ -6,13 +6,13 @@ import {
     OnInit,
     TemplateRef,
     ViewContainerRef,
-} from "@angular/core";
-import { TabView, TabViewItem } from "@nativescript/core/ui/tab-view";
-import { TextTransform  } from "@nativescript/core/ui/text-base";
+} from '@angular/core';
+import { TabView, TabViewItem } from '@nativescript/core/ui/tab-view';
+import { TextTransform  } from '@nativescript/core/ui/text-base';
 
-import { InvisibleNode } from "../element-registry";
-import { NativeScriptDebug } from "../trace";
-import { isBlank } from "../lang-facade";
+import { InvisibleNode } from '../element-registry';
+import { NativeScriptDebug } from '../trace';
+import { isBlank } from '../lang-facade';
 
 export interface TabViewItemDef {
     title?: string;
@@ -21,7 +21,7 @@ export interface TabViewItemDef {
 }
 
 @Directive({
-    selector: "TabView", // tslint:disable-line:directive-selector
+    selector: 'TabView', // tslint:disable-line:directive-selector
 })
 export class TabViewDirective implements AfterViewInit {
     public tabView: TabView;
@@ -47,7 +47,7 @@ export class TabViewDirective implements AfterViewInit {
     ngAfterViewInit() {
         this.viewInitialized = true;
         if (NativeScriptDebug.isLogEnabled()) {
-            NativeScriptDebug.rendererLog("this._selectedIndex: " + this._selectedIndex);
+            NativeScriptDebug.rendererLog('this._selectedIndex: ' + this._selectedIndex);
         }
         if (!isBlank(this._selectedIndex)) {
             this.tabView.selectedIndex = this._selectedIndex;
@@ -56,7 +56,7 @@ export class TabViewDirective implements AfterViewInit {
 }
 
 @Directive({
-    selector: "[tabItem]" // tslint:disable-line:directive-selector
+    selector: '[tabItem]' // tslint:disable-line:directive-selector
 })
 export class TabViewItemDirective implements OnInit {
     private item: TabViewItem;
@@ -69,7 +69,7 @@ export class TabViewItemDirective implements OnInit {
     ) {
     }
 
-    @Input("tabItem")
+    @Input('tabItem')
     set config(config: TabViewItemDef) {
         if (!this._config
             || this._config.iconSource !== config.iconSource

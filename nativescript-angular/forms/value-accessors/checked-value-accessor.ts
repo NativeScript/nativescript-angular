@@ -1,7 +1,7 @@
-import { Directive, ElementRef, forwardRef } from "@angular/core";
-import { NG_VALUE_ACCESSOR } from "@angular/forms";
-import { BaseValueAccessor } from "./base-value-accessor";
-import { Switch } from "@nativescript/core/ui/switch";
+import { Directive, ElementRef, forwardRef } from '@angular/core';
+import { NG_VALUE_ACCESSOR } from '@angular/forms';
+import { BaseValueAccessor } from './base-value-accessor';
+import { Switch } from '@nativescript/core/ui/switch';
 
 const CHECKED_VALUE_ACCESSOR = {
     provide: NG_VALUE_ACCESSOR,
@@ -20,11 +20,11 @@ const CHECKED_VALUE_ACCESSOR = {
  */
 @Directive({
     selector:
-        "Switch[ngModel],Switch[formControlName],Switch[formControl]," +
-        "switch[ngModel],switch[formControlName],switch[formControl]",
+        'Switch[ngModel],Switch[formControlName],Switch[formControl],' +
+        'switch[ngModel],switch[formControlName],switch[formControl]',
     providers: [CHECKED_VALUE_ACCESSOR],
     host: {
-        "(checkedChange)": "onChange($event.value)",
+        '(checkedChange)': 'onChange($event.value)',
     },
 })
 export class CheckedValueAccessor extends BaseValueAccessor<Switch> { // tslint:disable-line:directive-class-suffix

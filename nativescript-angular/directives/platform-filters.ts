@@ -1,9 +1,9 @@
-import { Component, Inject } from "@angular/core";
-import { Device, platformNames } from "@nativescript/core/platform";
-import { DEVICE } from "../platform-providers";
+import { Component, Inject } from '@angular/core';
+import { Device, platformNames } from '@nativescript/core/platform';
+import { DEVICE } from '../platform-providers';
 
 @Component({
-    selector: "android",
+    selector: 'android',
     template: `<ng-content *ngIf="show"></ng-content>`,
 })
 export class AndroidFilterComponent {
@@ -14,7 +14,7 @@ export class AndroidFilterComponent {
 }
 
 @Component({
-    selector: "ios",
+    selector: 'ios',
     template: `<ng-content *ngIf="show"></ng-content>`,
 })
 export class IosFilterComponent {

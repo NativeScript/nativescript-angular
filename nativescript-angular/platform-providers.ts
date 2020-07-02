@@ -1,15 +1,15 @@
-import { InjectionToken, Injectable, OnDestroy } from "@angular/core";
+import { InjectionToken, Injectable, OnDestroy } from '@angular/core';
 
-import { Frame, NavigatedData } from "@nativescript/core/ui/frame";
-import { View } from "@nativescript/core/ui/core/view";
-import { Page } from "@nativescript/core/ui/page";
-import { device, Device } from "@nativescript/core/platform";
-import { BehaviorSubject, Subject, Observable } from "rxjs";
-import { distinctUntilChanged } from "rxjs/operators";
+import { Frame, NavigatedData } from '@nativescript/core/ui/frame';
+import { View } from '@nativescript/core/ui/core/view';
+import { Page } from '@nativescript/core/ui/page';
+import { device, Device } from '@nativescript/core/platform';
+import { BehaviorSubject, Subject, Observable } from 'rxjs';
+import { distinctUntilChanged } from 'rxjs/operators';
 
-export const APP_ROOT_VIEW = new InjectionToken<View>("App Root View");
-export const DEVICE = new InjectionToken<Device>("platform device");
-export const PAGE_FACTORY = new InjectionToken<PageFactory>("page factory");
+export const APP_ROOT_VIEW = new InjectionToken<View>('App Root View');
+export const DEVICE = new InjectionToken<Device>('platform device');
+export const PAGE_FACTORY = new InjectionToken<PageFactory>('page factory');
 
 let _rootPageRef: WeakRef<Page>;
 

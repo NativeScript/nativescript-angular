@@ -1,5 +1,5 @@
-import { ElementSchemaRegistry } from "@angular/compiler";
-import { SchemaMetadata } from "@angular/core";
+import { ElementSchemaRegistry } from '@angular/compiler';
+import { SchemaMetadata } from '@angular/core';
 
 export enum SecurityContext {
   NONE,
@@ -25,7 +25,7 @@ export class NativeScriptElementSchemaRegistry extends ElementSchemaRegistry {
   }
 
   getDefaultComponentElementName(): string {
-    return "ng-component";
+    return 'ng-component';
   }
 
   securityContext(_tagName: string, _propName: string): any {

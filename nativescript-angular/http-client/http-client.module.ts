@@ -1,9 +1,9 @@
-import { NgModule } from "@angular/core";
+import { NgModule } from '@angular/core';
 
-import { HttpClientModule, HttpBackend } from "@angular/common/http";
+import { HttpClientModule, HttpBackend } from '@angular/common/http';
 
-import { NSFileSystem } from "../file-system/ns-file-system";
-import { NsHttpBackEnd } from "./ns-http-backend";
+import { NSFileSystem } from '../file-system/ns-file-system';
+import { NsHttpBackEnd } from './ns-http-backend';
 
 @NgModule({
     providers: [

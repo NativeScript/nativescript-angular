@@ -1,7 +1,7 @@
-import { Injectable } from "@angular/core";
-import { TestComponentRenderer } from "@angular/core/testing";
-import { ProxyViewContainer } from "@nativescript/core/ui/proxy-view-container";
-import { testingRootView } from "./util";
+import { Injectable } from '@angular/core';
+import { TestComponentRenderer } from '@angular/core/testing';
+import { ProxyViewContainer } from '@nativescript/core/ui/proxy-view-container';
+import { testingRootView } from './util';
 
 /**
  * A NativeScript based implementation of the TestComponentRenderer.

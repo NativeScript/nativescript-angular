@@ -1,8 +1,8 @@
-import { isDefined } from "@nativescript/core/utils/types";
-import { View, unsetValue } from "@nativescript/core/ui/core/view";
-import { Placeholder } from "@nativescript/core/ui/placeholder";
-import { ContentView } from "@nativescript/core/ui/content-view";
-import { LayoutBase } from "@nativescript/core/ui/layouts/layout-base";
+import { isDefined } from '@nativescript/core/utils/types';
+import { View, unsetValue } from '@nativescript/core/ui/core/view';
+import { Placeholder } from '@nativescript/core/ui/placeholder';
+import { ContentView } from '@nativescript/core/ui/content-view';
+import { LayoutBase } from '@nativescript/core/ui/layouts/layout-base';
 import {
     CommentNode,
     InvisibleNode,
@@ -15,13 +15,13 @@ import {
     isInvisibleNode,
     isKnownView,
     isView,
-} from "./element-registry";
+} from './element-registry';
 
-import { platformNames, Device } from "@nativescript/core/platform";
-import { NativeScriptDebug } from "./trace";
+import { platformNames, Device } from '@nativescript/core/platform';
+import { NativeScriptDebug } from './trace';
 
 const ELEMENT_NODE_TYPE = 1;
-const XML_ATTRIBUTES = Object.freeze(["style", "rows", "columns", "fontAttributes"]);
+const XML_ATTRIBUTES = Object.freeze(['style', 'rows', 'columns', 'fontAttributes']);
 const whiteSpaceSplitter = /\s+/;
 
 // export type ViewExtensions = ViewExtensions;
@@ -282,7 +282,7 @@ export class ViewUtil {
     public createView(name: string): NgView {
         const originalName = name;
         if (!isKnownView(name)) {
-            name = "ProxyViewContainer";
+            name = 'ProxyViewContainer';
         }
 
         if (NativeScriptDebug.isLogEnabled()) {
@@ -297,7 +297,7 @@ export class ViewUtil {
     }
 
     private ensureNgViewExtensions(view: View): NgView {
-        if (view.hasOwnProperty("meta")) {
+        if (view.hasOwnProperty('meta')) {
             return view as NgView;
         } else {
             const name = view.cssType;
@@ -329,9 +329,9 @@ export class ViewUtil {
             return;
         }
 
-        if (attributeName.indexOf(".") !== -1) {
+        if (attributeName.indexOf('.') !== -1) {
             // Handle nested properties
-            const properties = attributeName.split(".");
+            const properties = attributeName.split('.');
             attributeName = properties[properties.length - 1];
 
             let propMap = this.getProperties(view);
@@ -354,8 +354,8 @@ export class ViewUtil {
     }
 
     private runsIn(platform: string): boolean {
-        return (platform === "ios" && this.isIos) ||
-            (platform === "android" && this.isAndroid);
+        return (platform === 'ios' && this.isIos) ||
+            (platform === 'android' && this.isAndroid);
     }
 
     private setPropertyInternal(view: NgView, attributeName: string, value: any): void {
@@ -363,7 +363,7 @@ export class ViewUtil {
             NativeScriptDebug.viewUtilLog(`Setting attribute: ${attributeName}=${value} to ${view}`);
         }
 
-        if (attributeName === "class") {
+        if (attributeName === 'class') {
             this.setClasses(view, value);
             return;
         }
@@ -445,7 +445,7 @@ export class ViewUtil {
     }
 
     private syncClasses(view: NgView): void {
-        let classValue = (<any>Array).from(this.cssClasses(view).keys()).join(" ");
+        let classValue = (<any>Array).from(this.cssClasses(view).keys()).join(' ');
         view.className = classValue;
     }
 

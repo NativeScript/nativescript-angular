@@ -19,23 +19,23 @@ import {
     ViewContainerRef,
     ɵisListLikeIterable as isListLikeIterable,
     Injectable
-} from "@angular/core";
+} from '@angular/core';
 // tslint:disable: max-line-length
 // TODO: refactor core module imports to allow this to work properly
 // import { View, LayoutBase, KeyedTemplate, ItemEventData, TemplatedItemsView, ObservableArray } from "@nativescript/core";
 // Ivy entry points get out of order and will cause issues like this:
 // node_modules/@nativescript/core/ui/html-view/html-view-common.js:26:0: JS ERROR TypeError: undefined is not an object (evaluating 'color_1.Color.equals') if not using deep imports like the following for the moment
 // tslint:enable: max-line-length
-import { ItemEventData, TemplatedItemsView } from "@nativescript/core/ui/list-view";
-import { View, KeyedTemplate } from "@nativescript/core/ui/core/view";
-import { LayoutBase } from "@nativescript/core/ui/layouts/layout-base";
-import { ObservableArray } from "@nativescript/core/data/observable-array";
-import { profile } from "@nativescript/core/profiling";
+import { ItemEventData, TemplatedItemsView } from '@nativescript/core/ui/list-view';
+import { View, KeyedTemplate } from '@nativescript/core/ui/core/view';
+import { LayoutBase } from '@nativescript/core/ui/layouts/layout-base';
+import { ObservableArray } from '@nativescript/core/data/observable-array';
+import { profile } from '@nativescript/core/profiling';
 
-import { getSingleViewRecursive } from "../element-registry";
-import { NativeScriptDebug } from "../trace";
+import { getSingleViewRecursive } from '../element-registry';
+import { NativeScriptDebug } from '../trace';
 
-const NG_VIEW = "_ngViewRef";
+const NG_VIEW = '_ngViewRef';
 
 export class ItemContext {
     constructor(
@@ -64,7 +64,7 @@ export abstract class TemplatedItemsComponent implements DoCheck, OnDestroy, Aft
     protected _differ: IterableDiffer<KeyedTemplate>;
     protected _templateMap: Map<string, KeyedTemplate>;
 
-    @ViewChild("loader", { read: ViewContainerRef, static: false }) loader: ViewContainerRef;
+    @ViewChild('loader', { read: ViewContainerRef, static: false }) loader: ViewContainerRef;
 
     @Output() public setupItemView = new EventEmitter<SetupItemViewArgs>();
 
@@ -95,19 +95,19 @@ export abstract class TemplatedItemsComponent implements DoCheck, OnDestroy, Aft
         private _iterableDiffers: IterableDiffers) {
         this.templatedItemsView = _elementRef.nativeElement;
 
-        this.templatedItemsView.on("itemLoading", this.onItemLoading, this);
+        this.templatedItemsView.on('itemLoading', this.onItemLoading, this);
     }
 
     ngAfterContentInit() {
         if (NativeScriptDebug.isLogEnabled()) {
-            NativeScriptDebug.listViewLog("TemplatedItemsView.ngAfterContentInit()");
+            NativeScriptDebug.listViewLog('TemplatedItemsView.ngAfterContentInit()');
         }
 
         this.setItemTemplates();
     }
 
     ngOnDestroy() {
-        this.templatedItemsView.off("itemLoading", this.onItemLoading, this);
+        this.templatedItemsView.off('itemLoading', this.onItemLoading, this);
         this.templatedItemsView = null;
 
         if (this._templateMap) {
@@ -122,7 +122,7 @@ export abstract class TemplatedItemsComponent implements DoCheck, OnDestroy, Aft
 
         if (this._templateMap) {
             if (NativeScriptDebug.isLogEnabled()) {
-                NativeScriptDebug.listViewLog("Setting templates");
+                NativeScriptDebug.listViewLog('Setting templates');
             }
 
             const templates: KeyedTemplate[] = [];
@@ -158,7 +158,7 @@ export abstract class TemplatedItemsComponent implements DoCheck, OnDestroy, Aft
 
         const index = args.index;
         const items = (<any>args.object).items;
-        const currentItem = typeof items.getItem === "function" ? items.getItem(index) : items[index];
+        const currentItem = typeof items.getItem === 'function' ? items.getItem(index) : items[index];
         let viewRef: EmbeddedViewRef<ItemContext>;
 
         if (args.view) {
@@ -233,13 +233,13 @@ export abstract class TemplatedItemsComponent implements DoCheck, OnDestroy, Aft
     ngDoCheck() {
         if (this._differ) {
             if (NativeScriptDebug.isLogEnabled()) {
-                NativeScriptDebug.listViewLog("ngDoCheck() - execute differ");
+                NativeScriptDebug.listViewLog('ngDoCheck() - execute differ');
             }
 
             const changes = this._differ.diff(this._items);
             if (changes) {
                 if (NativeScriptDebug.isLogEnabled()) {
-                    NativeScriptDebug.listViewLog("ngDoCheck() - refresh");
+                    NativeScriptDebug.listViewLog('ngDoCheck() - refresh');
                 }
 
                 this.templatedItemsView.refresh();
@@ -260,9 +260,9 @@ export function getItemViewRoot(viewRef: ComponentView, rootLocator: RootLocator
     return rootView;
 }
 
-export const TEMPLATED_ITEMS_COMPONENT = new InjectionToken<TemplatedItemsComponent>("TemplatedItemsComponent");
+export const TEMPLATED_ITEMS_COMPONENT = new InjectionToken<TemplatedItemsComponent>('TemplatedItemsComponent');
 
-@Directive({ selector: "[nsTemplateKey]" })
+@Directive({ selector: '[nsTemplateKey]' })
 export class TemplateKeyDirective {
     constructor(
         private templateRef: TemplateRef<any>,

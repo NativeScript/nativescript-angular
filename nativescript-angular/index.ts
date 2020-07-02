@@ -1,31 +1,31 @@
 // Initial imports and polyfills
-import "@nativescript/core/globals";
-import "@nativescript/core/application";
-import "./zone-js/dist/zone-nativescript";
+import '@nativescript/core/globals';
+import '@nativescript/core/application';
+import './zone-js/dist/zone-nativescript';
 // TODO: migrate to standard zone.js if possible
 // investigate Ivy with templated-items-comp to allow standard zone below to be used instead of patched {N} zone above
 // import 'zone.js/dist/zone';
 // import "./polyfills/array";
-import "./polyfills/console";
+import './polyfills/console';
 
-export * from "./platform-common";
+export * from './platform-common';
 // export * from "./platform-static";
-export * from "./platform-providers";
-export * from "./platform";
-export * from "./resource-loader";
+export * from './platform-providers';
+export * from './platform';
+export * from './resource-loader';
 
-export * from "./nativescript.module";
-export * from "./common";
+export * from './nativescript.module';
+export * from './common';
 
-export * from "./animations";
-export * from "./file-system";
-export * from "./http-client";
-export * from "./forms";
-export * from "./directives";
-export * from "./router";
-export * from "./frame.service";
-export * from "./page.service";
-export { NativeScriptDebug } from "./trace";
+export * from './animations';
+export * from './file-system';
+export * from './http-client';
+export * from './forms';
+export * from './directives';
+export * from './router';
+export * from './frame.service';
+export * from './page.service';
+export { NativeScriptDebug } from './trace';
 
 export {
     ViewClass,
@@ -35,4 +35,4 @@ export {
     getViewMeta,
     isKnownView,
     registerElement,
-} from "./element-registry";
+} from './element-registry';

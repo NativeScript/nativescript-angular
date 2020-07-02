@@ -1,13 +1,13 @@
-import { Injectable } from "@angular/core";
+import { Injectable } from '@angular/core';
 import {
     HttpRequest, HttpEvent,
     XhrFactory, HttpResponse,
     HttpErrorResponse, HttpXhrBackend
-} from "@angular/common/http";
-import { Observable } from "rxjs";
+} from '@angular/common/http';
+import { Observable } from 'rxjs';
 
-import { NSFileSystem } from "../file-system/ns-file-system";
-import { isLocalRequest, processLocalFileRequest } from "./http-utils";
+import { NSFileSystem } from '../file-system/ns-file-system';
+import { isLocalRequest, processLocalFileRequest } from './http-utils';
 
 @Injectable()
 export class NsHttpBackEnd extends HttpXhrBackend {
@@ -45,7 +45,7 @@ function createSuccessResponse(
         url,
         body,
         status,
-        statusText: "OK"
+        statusText: 'OK'
     });
 }
 
@@ -57,6 +57,6 @@ function createErrorResponse(
         url,
         error: body,
         status,
-        statusText: "ERROR"
+        statusText: 'ERROR'
     });
 }

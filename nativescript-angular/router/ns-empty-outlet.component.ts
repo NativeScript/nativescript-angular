@@ -1,9 +1,9 @@
-import { Component, ViewChild } from "@angular/core";
-import { Page } from "@nativescript/core/ui/page";
-import { PageRouterOutlet } from "./page-router-outlet";
+import { Component, ViewChild } from '@angular/core';
+import { Page } from '@nativescript/core/ui/page';
+import { PageRouterOutlet } from './page-router-outlet';
 @Component({
     // tslint:disable-next-line:component-selector
-    selector: "ns-empty-outlet",
+    selector: 'ns-empty-outlet',
     template: "<page-router-outlet isEmptyOutlet='true'></page-router-outlet>"
 })
 export class NSEmptyOutletComponent {
@@ -12,7 +12,7 @@ export class NSEmptyOutletComponent {
         if (this.page) {
             this.page.actionBarHidden = true;
 
-            this.page.on("loaded", () => {
+            this.page.on('loaded', () => {
                 if (this.pageRouterOutlet && this.page.frame) {
                     this.pageRouterOutlet.setActionBarVisibility(this.page.frame.actionBarVisibility);
                 }

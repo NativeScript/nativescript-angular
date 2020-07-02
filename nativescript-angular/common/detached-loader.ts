@@ -1,10 +1,10 @@
 import {
     ComponentRef, ComponentFactory, ViewContainerRef,
     Component, Type, ComponentFactoryResolver, ChangeDetectorRef
-} from "@angular/core";
-import { write } from "@nativescript/core/trace";
+} from '@angular/core';
+import { write } from '@nativescript/core/trace';
 
-export const CATEGORY = "detached-loader";
+export const CATEGORY = 'detached-loader';
 function log(message: string) {
     write(message, CATEGORY);
 }
@@ -16,7 +16,7 @@ function log(message: string) {
  * the visual tree.
  */
 @Component({
-    selector: "DetachedContainer",
+    selector: 'DetachedContainer',
     template: `<Placeholder #loader></Placeholder>`
 })
 export class DetachedLoader { // tslint:disable-line:component-class-suffix
@@ -35,7 +35,7 @@ export class DetachedLoader { // tslint:disable-line:component-class-suffix
         // inside component with OnPush CD strategy. Mark us for check to be sure CD will reach us.
         // We are inside a promise here so no need for setTimeout - CD should trigger
         // after the promise.
-        log("DetachedLoader.loadInLocation component loaded -> markForCheck");
+        log('DetachedLoader.loadInLocation component loaded -> markForCheck');
 
         return Promise.resolve(componentRef);
     }
@@ -46,7 +46,7 @@ export class DetachedLoader { // tslint:disable-line:component-class-suffix
 
     // TODO: change this API -- async promises not needed here anymore.
     public loadComponent(componentType: Type<any>): Promise<ComponentRef<any>> {
-        log("DetachedLoader.loadComponent");
+        log('DetachedLoader.loadComponent');
         return this.loadInLocation(componentType);
     }
 

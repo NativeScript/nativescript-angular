@@ -2,13 +2,13 @@ import {
     AfterContentInit, ContentChildren, Directive,
     ElementRef, Input, OnChanges, OnDestroy,
     QueryList, Renderer2
-} from "@angular/core";
-import { Subscription } from "rxjs";
+} from '@angular/core';
+import { Subscription } from 'rxjs';
 
-import { NavigationEnd, Router, UrlTree } from "@angular/router";
-import { containsTree } from "./private-imports/router-url-tree";
+import { NavigationEnd, Router, UrlTree } from '@angular/router';
+import { containsTree } from './private-imports/router-url-tree';
 
-import { NSRouterLink } from "./ns-router-link";
+import { NSRouterLink } from './ns-router-link';
 
 
 /**
@@ -54,8 +54,8 @@ import { NSRouterLink } from "./ns-router-link";
  * @stable
  */
 @Directive({
-    selector: "[nsRouterLinkActive]",
-    exportAs: "routerLinkActive",
+    selector: '[nsRouterLinkActive]',
+    exportAs: 'routerLinkActive',
 })
 export class NSRouterLinkActive implements OnChanges, OnDestroy, AfterContentInit { // tslint:disable-line:max-line-length directive-class-suffix
     @ContentChildren(NSRouterLink) links: QueryList<NSRouterLink>;
@@ -83,12 +83,12 @@ export class NSRouterLinkActive implements OnChanges, OnDestroy, AfterContentIni
         this.update();
     }
 
-    @Input("nsRouterLinkActive")
+    @Input('nsRouterLinkActive')
     set nsRouterLinkActive(data: string[] | string) {
         if (Array.isArray(data)) {
             this.classes = <any>data;
         } else {
-            this.classes = data.split(" ");
+            this.classes = data.split(' ');
         }
     }
 

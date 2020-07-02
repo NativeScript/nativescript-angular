@@ -1,17 +1,17 @@
-import { AnimationPlayer } from "@angular/animations";
-import { AnimationDriver } from "@angular/animations/browser";
-import { createSelector, SelectorCore } from "@nativescript/core/ui/styling/css-selector";
-import { CssAnimationProperty } from "@nativescript/core/ui/core/properties";
-import { eachDescendant } from "@nativescript/core/ui/core/view";
-import { ProxyViewContainer } from "@nativescript/core/ui/proxy-view-container";
+import { AnimationPlayer } from '@angular/animations';
+import { AnimationDriver } from '@angular/animations/browser';
+import { createSelector, SelectorCore } from '@nativescript/core/ui/styling/css-selector';
+import { CssAnimationProperty } from '@nativescript/core/ui/core/properties';
+import { eachDescendant } from '@nativescript/core/ui/core/view';
+import { ProxyViewContainer } from '@nativescript/core/ui/proxy-view-container';
 
-import { NativeScriptAnimationPlayer } from "./animation-player";
+import { NativeScriptAnimationPlayer } from './animation-player';
 import {
     Keyframe,
     dashCaseToCamelCase,
-} from "./utils";
-import { NgView, InvisibleNode } from "../element-registry";
-import { NativeScriptDebug } from "../trace";
+} from './utils';
+import { NgView, InvisibleNode } from '../element-registry';
+import { NativeScriptDebug } from '../trace';
 
 
 interface ViewMatchResult {
@@ -44,11 +44,11 @@ class Selector {
     }
 
     private parse(rawSelector: string) {
-        const selectors = rawSelector.split(",").map(s => s.trim());
+        const selectors = rawSelector.split(',').map(s => s.trim());
 
         this.nsSelectors = selectors.map(createSelector);
         this.classSelectors = selectors
-            .filter(s => s.startsWith("."))
+            .filter(s => s.startsWith('.'))
             .map(s => s.substring(1));
     }
 
@@ -64,14 +64,14 @@ class Selector {
     // that are dynamically added by the animation engine
     // such as .ng-trigger, that's added for every :enter view
     private hasClass(element: NgView, cls: string) {
-        return element && element["$$classes"] && element["$$classes"][cls];
+        return element && element['$$classes'] && element['$$classes'][cls];
     }
 }
 
 export class NativeScriptAnimationDriver implements AnimationDriver {
     private static validProperties = [
         ...CssAnimationProperty._getPropertyNames(),
-        "transform",
+        'transform',
     ];
 
     validateStyleProperty(property: string): boolean {
@@ -97,7 +97,7 @@ export class NativeScriptAnimationDriver implements AnimationDriver {
         );
 
         // Checking if the parent is our fake body object
-        if (elm1["isOverride"]) {
+        if (elm1['isOverride']) {
             return true;
         }
 

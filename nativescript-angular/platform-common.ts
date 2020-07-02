@@ -1,12 +1,12 @@
-import { profile, uptime } from "@nativescript/core/profiling";
-import { getRootView } from "@nativescript/core/application";
-import "./dom-adapter";
-import "nativescript-intl";
+import { profile, uptime } from '@nativescript/core/profiling';
+import { getRootView } from '@nativescript/core/application';
+import './dom-adapter';
+import 'nativescript-intl';
 // TODO: refactor core module imports to not require these deep imports
-import { TextView } from "@nativescript/core/ui/text-view";
-import { Color, View } from "@nativescript/core/ui/core/view";
-import { Frame } from "@nativescript/core/ui/frame";
-import { GridLayout } from "@nativescript/core/ui/layouts/grid-layout";
+import { TextView } from '@nativescript/core/ui/text-view';
+import { Color, View } from '@nativescript/core/ui/core/view';
+import { Frame } from '@nativescript/core/ui/frame';
+import { GridLayout } from '@nativescript/core/ui/layouts/grid-layout';
 
 import {
     Type,
@@ -19,11 +19,11 @@ import {
     Sanitizer,
     InjectionToken,
     StaticProvider,
-} from "@angular/core";
-import { DOCUMENT } from "@angular/common";
+} from '@angular/core';
+import { DOCUMENT } from '@angular/common';
 
-import { NativeScriptDebug } from "./trace";
-import { defaultPageFactoryProvider, setRootPage, PageFactory, PAGE_FACTORY, getRootPage } from "./platform-providers";
+import { NativeScriptDebug } from './trace';
+import { defaultPageFactoryProvider, setRootPage, PageFactory, PAGE_FACTORY, getRootPage } from './platform-providers';
 
 import {
     setCssFileName,
@@ -34,7 +34,7 @@ import {
     LaunchEventData,
     exitEvent,
     ApplicationEventData,
-} from "@nativescript/core/application";
+} from '@nativescript/core/application';
 
 export const onBeforeLivesync = new EventEmitter<NgModuleRef<any>>();
 export const onAfterLivesync = new EventEmitter<{ moduleRef?: NgModuleRef<any>; error?: Error }>();
@@ -97,7 +97,7 @@ export class NativeScriptDocument {
     };
 
     createElement(tag: string) {
-        throw new Error("NativeScriptDocument is not DOM Document. There is no createElement() method.");
+        throw new Error('NativeScriptDocument is not DOM Document. There is no createElement() method.');
     }
 }
 
@@ -163,7 +163,7 @@ export class NativeScriptPlatformRef extends PlatformRef {
             }
         };
 
-        if (this.appOptions && typeof this.appOptions.cssFile === "string") {
+        if (this.appOptions && typeof this.appOptions.cssFile === 'string') {
             setCssFileName(this.appOptions.cssFile);
         }
 
@@ -192,13 +192,13 @@ export class NativeScriptPlatformRef extends PlatformRef {
         let launchView: AppLaunchView;
 
         if (NativeScriptDebug.isLogEnabled()) {
-            NativeScriptDebug.bootstrapLog("NativeScriptPlatform bootstrap started.");
+            NativeScriptDebug.bootstrapLog('NativeScriptPlatform bootstrap started.');
         }
         const launchCallback = profile(
-            "@nativescript/angular/platform-common.launchCallback",
+            '@nativescript/angular/platform-common.launchCallback',
             (args: LaunchEventData) => {
                 if (NativeScriptDebug.isLogEnabled()) {
-                    NativeScriptDebug.bootstrapLog("Application launch event fired");
+                    NativeScriptDebug.bootstrapLog('Application launch event fired');
                 }
 
                 if (this.appOptions && this.appOptions.launchView) {
@@ -208,7 +208,7 @@ export class NativeScriptPlatformRef extends PlatformRef {
                     // Custom launch view color
                     // Useful when using async app intializers to avoid flash of undesirable color
                     launchView.backgroundColor = new Color(this.appOptions
-                        && this.appOptions.backgroundColor ? this.appOptions.backgroundColor : "#fff");
+                        && this.appOptions.backgroundColor ? this.appOptions.backgroundColor : '#fff');
                 }
 
                 setRootPage(<any>launchView);
@@ -236,9 +236,9 @@ export class NativeScriptPlatformRef extends PlatformRef {
                     },
                     err => {
 
-                        const errorMessage = err.message + "\n\n" + err.stack;
+                        const errorMessage = err.message + '\n\n' + err.stack;
                         if (NativeScriptDebug.isLogEnabled()) {
-                            NativeScriptDebug.bootstrapLogError("ERROR BOOTSTRAPPING ANGULAR");
+                            NativeScriptDebug.bootstrapLogError('ERROR BOOTSTRAPPING ANGULAR');
                         }
                         if (NativeScriptDebug.isLogEnabled()) {
                             NativeScriptDebug.bootstrapLogError(errorMessage);
@@ -248,17 +248,17 @@ export class NativeScriptPlatformRef extends PlatformRef {
                     }
                 );
                 if (NativeScriptDebug.isLogEnabled()) {
-                    NativeScriptDebug.bootstrapLog("bootstrapAction called, draining micro tasks queue. Root: " + rootContent);
+                    NativeScriptDebug.bootstrapLog('bootstrapAction called, draining micro tasks queue. Root: ' + rootContent);
                 }
                 (<any>global).Zone.drainMicroTaskQueue();
                 if (NativeScriptDebug.isLogEnabled()) {
-                    NativeScriptDebug.bootstrapLog("bootstrapAction called, draining micro tasks queue finished! Root: " + rootContent);
+                    NativeScriptDebug.bootstrapLog('bootstrapAction called, draining micro tasks queue finished! Root: ' + rootContent);
                 }
               });
             }
         );
         const exitCallback = profile(
-            "@nativescript/angular/platform-common.exitCallback", (args: ApplicationEventData) => {
+            '@nativescript/angular/platform-common.exitCallback', (args: ApplicationEventData) => {
                 const androidActivity = args.android;
                 if (androidActivity && !androidActivity.isFinishing()) {
                     // Exit event was triggered as a part of a restart of the app.
@@ -285,7 +285,7 @@ export class NativeScriptPlatformRef extends PlatformRef {
     @profile
     public _livesync() {
         if (NativeScriptDebug.isLogEnabled()) {
-            NativeScriptDebug.bootstrapLog("Angular livesync started.");
+            NativeScriptDebug.bootstrapLog('Angular livesync started.');
         }
 
         const lastModuleRef = lastBootstrappedModule ? lastBootstrappedModule.get() : null;
@@ -297,7 +297,7 @@ export class NativeScriptPlatformRef extends PlatformRef {
         this._bootstrapper().then(
             moduleRef => {
                 if (NativeScriptDebug.isLogEnabled()) {
-                    NativeScriptDebug.bootstrapLog("Angular livesync done.");
+                    NativeScriptDebug.bootstrapLog('Angular livesync done.');
                 }
                 onAfterLivesync.next({ moduleRef });
 
@@ -308,9 +308,9 @@ export class NativeScriptPlatformRef extends PlatformRef {
             },
             error => {
                 if (NativeScriptDebug.isLogEnabled()) {
-                    NativeScriptDebug.bootstrapLogError("ERROR LIVESYNC BOOTSTRAPPING ANGULAR");
+                    NativeScriptDebug.bootstrapLogError('ERROR LIVESYNC BOOTSTRAPPING ANGULAR');
                 }
-                const errorMessage = error.message + "\n\n" + error.stack;
+                const errorMessage = error.message + '\n\n' + error.stack;
                 if (NativeScriptDebug.isLogEnabled()) {
                     NativeScriptDebug.bootstrapLogError(errorMessage);
                 }
@@ -326,7 +326,7 @@ export class NativeScriptPlatformRef extends PlatformRef {
     private createErrorUI(message: string): View {
         const errorTextBox = new TextView();
         errorTextBox.text = message;
-        errorTextBox.color = new Color("red");
+        errorTextBox.color = new Color('red');
         return errorTextBox;
     }
 

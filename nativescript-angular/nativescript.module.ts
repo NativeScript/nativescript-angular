@@ -15,25 +15,25 @@ import {
     Optional,
     SkipSelf,
     ɵINJECTOR_SCOPE,
-} from "@angular/core";
+} from '@angular/core';
 
 import {
     ViewportScroller,
     ɵNullViewportScroller as NullViewportScroller,
-} from "@angular/common";
+} from '@angular/common';
 
-import { NativeScriptCommonModule } from "./common";
-import { NativeScriptRendererFactory } from "./renderer";
-import { DetachedLoader } from "./common/detached-loader";
-import { throwIfAlreadyLoaded } from "./common/utils";
-import { FrameService } from "./frame.service";
-import { PageService } from "./page.service";
+import { NativeScriptCommonModule } from './common';
+import { NativeScriptRendererFactory } from './renderer';
+import { DetachedLoader } from './common/detached-loader';
+import { throwIfAlreadyLoaded } from './common/utils';
+import { FrameService } from './frame.service';
+import { PageService } from './page.service';
 
 export function errorHandlerFactory() {
     return new ErrorHandler();
 }
 
-export { DetachedLoader } from "./common/detached-loader";
+export { DetachedLoader } from './common/detached-loader';
 
 @NgModule({
     declarations: [
@@ -44,7 +44,7 @@ export { DetachedLoader } from "./common/detached-loader";
         PageService,
         NativeScriptRendererFactory,
         SystemJsNgModuleLoader,
-        { provide: ɵINJECTOR_SCOPE, useValue: "root" },
+        { provide: ɵINJECTOR_SCOPE, useValue: 'root' },
         { provide: ErrorHandler, useFactory: errorHandlerFactory },
         { provide: RendererFactory2, useExisting: NativeScriptRendererFactory },
         { provide: ViewportScroller, useClass: NullViewportScroller },
@@ -66,6 +66,6 @@ export { DetachedLoader } from "./common/detached-loader";
 export class NativeScriptModule {
     constructor(@Optional() @SkipSelf() parentModule: NativeScriptModule) {
         // Prevents NativeScriptModule from getting imported multiple times
-        throwIfAlreadyLoaded(parentModule, "NativeScriptModule");
+        throwIfAlreadyLoaded(parentModule, 'NativeScriptModule');
     }
 }

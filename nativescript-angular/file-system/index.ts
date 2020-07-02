@@ -1,1 +1,1 @@
-export * from "./ns-file-system";
+export * from './ns-file-system';

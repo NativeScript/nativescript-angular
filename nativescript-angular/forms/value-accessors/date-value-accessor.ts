@@ -1,7 +1,7 @@
-import { Directive, ElementRef, forwardRef } from "@angular/core";
-import { NG_VALUE_ACCESSOR } from "@angular/forms";
-import { BaseValueAccessor } from "./base-value-accessor";
-import { DatePicker } from "@nativescript/core/ui/date-picker";
+import { Directive, ElementRef, forwardRef } from '@angular/core';
+import { NG_VALUE_ACCESSOR } from '@angular/forms';
+import { BaseValueAccessor } from './base-value-accessor';
+import { DatePicker } from '@nativescript/core/ui/date-picker';
 
 const DATE_VALUE_ACCESSOR = {
     provide: NG_VALUE_ACCESSOR,
@@ -19,13 +19,13 @@ const DATE_VALUE_ACCESSOR = {
  *  ```
  */
 @Directive({
-    selector: "DatePicker[ngModel],DatePicker[formControlName],DatePicker[formControl]," +
-        "datepicker[ngModel],datepicker[formControlName],datepicker[formControl]," +
-        "datePicker[ngModel],datePicker[formControlName],datePicker[formControl]," +
-        "date-picker[ngModel],date-picker[formControlName],date-picker[formControl]",
+    selector: 'DatePicker[ngModel],DatePicker[formControlName],DatePicker[formControl],' +
+        'datepicker[ngModel],datepicker[formControlName],datepicker[formControl],' +
+        'datePicker[ngModel],datePicker[formControlName],datePicker[formControl],' +
+        'date-picker[ngModel],date-picker[formControlName],date-picker[formControl]',
     providers: [DATE_VALUE_ACCESSOR],
     host: {
-        "(dateChange)": "onChange($event.value)",
+        '(dateChange)': 'onChange($event.value)',
     },
 })
 export class DateValueAccessor extends BaseValueAccessor<DatePicker> { // tslint:disable-line:directive-class-suffix

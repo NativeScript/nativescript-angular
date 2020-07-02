@@ -1,11 +1,11 @@
-import { AnimationPlayer } from "@angular/animations";
+import { AnimationPlayer } from '@angular/animations';
 import { KeyframeAnimation }
-    from "@nativescript/core/ui/animation/keyframe-animation";
-import { View, EventData } from "@nativescript/core/ui/core/view";
+    from '@nativescript/core/ui/animation/keyframe-animation';
+import { View, EventData } from '@nativescript/core/ui/core/view';
 
-import { Keyframe, createKeyframeAnimation } from "./utils";
-import { NgView } from "../element-registry";
-import { NativeScriptDebug } from "../trace";
+import { Keyframe, createKeyframeAnimation } from './utils';
+import { NgView } from '../element-registry';
+import { NativeScriptDebug } from '../trace';
 
 export class NativeScriptAnimationPlayer implements AnimationPlayer {
     public parentPlayer: AnimationPlayer = null;
@@ -110,7 +110,7 @@ export class NativeScriptAnimationPlayer implements AnimationPlayer {
     }
 
     setPosition(_p: any): void {
-        throw new Error("AnimationPlayer.setPosition method is not supported!");
+        throw new Error('AnimationPlayer.setPosition method is not supported!');
     }
 
     getPosition(): number {

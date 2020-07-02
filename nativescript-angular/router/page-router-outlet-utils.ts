@@ -1,10 +1,10 @@
-import { ComponentRef } from "@angular/core";
+import { ComponentRef } from '@angular/core';
 import {
   ActivatedRoute,
   ActivatedRouteSnapshot,
   ChildrenOutletContexts,
   PRIMARY_OUTLET,
-} from "@angular/router";
+} from '@angular/router';
 
 /**
  * There are cases where multiple activatedRoute nodes should be associated/handled by the same PageRouterOutlet.
@@ -40,8 +40,8 @@ export function findTopActivatedRouteNodeForOutlet(
   return outletActivatedRoute;
 }
 
-export const pageRouterActivatedSymbol = Symbol("page-router-activated");
-export const loaderRefSymbol = Symbol("loader-ref");
+export const pageRouterActivatedSymbol = Symbol('page-router-activated');
+export const loaderRefSymbol = Symbol('loader-ref');
 
 export function destroyComponentRef(componentRef: ComponentRef<any>) {
   if (componentRef) {

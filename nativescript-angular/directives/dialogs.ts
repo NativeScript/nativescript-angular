@@ -6,20 +6,20 @@ import {
     NgModuleRef,
     Type,
     ViewContainerRef
-} from "@angular/core";
+} from '@angular/core';
 
-import { NSLocationStrategy } from "../router/ns-location-strategy";
-import { View, ViewBase } from "@nativescript/core/ui/core/view";
-import { ProxyViewContainer } from "@nativescript/core/ui/proxy-view-container/proxy-view-container";
+import { NSLocationStrategy } from '../router/ns-location-strategy';
+import { View, ViewBase } from '@nativescript/core/ui/core/view';
+import { ProxyViewContainer } from '@nativescript/core/ui/proxy-view-container/proxy-view-container';
 
-import { AppHostView } from "../app-host-view";
-import { DetachedLoader } from "../common/detached-loader";
-import { PageFactory, PAGE_FACTORY } from "../platform-providers";
-import { once } from "../common/utils";
-import { Frame } from "@nativescript/core/ui/frame";
-import { ShowModalOptions } from "@nativescript/core/ui/core/view";
+import { AppHostView } from '../app-host-view';
+import { DetachedLoader } from '../common/detached-loader';
+import { PageFactory, PAGE_FACTORY } from '../platform-providers';
+import { once } from '../common/utils';
+import { Frame } from '@nativescript/core/ui/frame';
+import { ShowModalOptions } from '@nativescript/core/ui/core/view';
 
-export type BaseShowModalOptions = Pick<ShowModalOptions, Exclude<keyof ShowModalOptions, "closeCallback" | "context">>;
+export type BaseShowModalOptions = Pick<ShowModalOptions, Exclude<keyof ShowModalOptions, 'closeCallback' | 'context'>>;
 
 export interface ModalDialogOptions extends BaseShowModalOptions {
     context?: any;
@@ -55,8 +55,8 @@ export class ModalDialogService {
     ): Promise<any> {
         if (!options.viewContainerRef) {
             throw new Error(
-                "No viewContainerRef: " +
-                "Make sure you pass viewContainerRef in ModalDialogOptions."
+                'No viewContainerRef: ' +
+                'Make sure you pass viewContainerRef in ModalDialogOptions.'
             );
         }
 
@@ -136,7 +136,7 @@ export class ModalDialogService {
             const detachedProxy = <ProxyViewContainer>compRef.location.nativeElement;
 
             if (detachedProxy.getChildrenCount() > 1) {
-                throw new Error("Modal content has more than one root view.");
+                throw new Error('Modal content has more than one root view.');
             }
             componentView = detachedProxy.getChildAt(0);
 
