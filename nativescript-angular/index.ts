@@ -1,7 +1,9 @@
 // Initial imports and polyfills
 import '@nativescript/core/globals';
 import '@nativescript/core/application';
-import './zone-js/dist/zone-nativescript';
+import '@nativescript/zone-js';
+import './dom-adapter';
+import 'nativescript-intl';
 // TODO: migrate to standard zone.js if possible
 // investigate Ivy with templated-items-comp to allow standard zone below to be used instead of patched {N} zone above
 // import 'zone.js/dist/zone';
@@ -9,7 +11,6 @@ import './zone-js/dist/zone-nativescript';
 import './polyfills/console';
 
 export * from './platform-common';
-// export * from "./platform-static";
 export * from './platform-providers';
 export * from './platform';
 export * from './resource-loader';
@@ -17,7 +18,7 @@ export * from './resource-loader';
 export * from './nativescript.module';
 export * from './common';
 
-export * from './animations';
+export { NativeScriptAnimationsModule } from './animations';
 export * from './file-system';
 export * from './http-client';
 export * from './forms';

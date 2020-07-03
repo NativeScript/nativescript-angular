@@ -1,6 +1,6 @@
 {
   "name": "@nativescript/angular",
-  "version": "9.0.0",
+  "version": "10.0.0-alpha.0",
   "description": "An Angular renderer that lets you build mobile apps with NativeScript.",
   "homepage": "https://www.nativescript.org/",
   "bugs": "https://github.com/NativeScript/nativescript-angular/issues",
@@ -41,7 +41,11 @@
     "version": "rm -rf package-lock.json && npm run changelog && git add ../CHANGELOG.md",
     "typedoc": "typedoc --tsconfig \"./tsconfig.typedoc.json\" --out ./bin/dist/ng-api-reference --includeDeclarations --name \"NativeScript Angular\" --theme ./node_modules/nativescript-typedoc-theme --excludeExternals --externalPattern \"**/+(tns-core-modules|module|declarations).d.ts\""
   },
+  "sideEffects": false,
   "ngPackage": {
+    "assets": [
+      "../README.md"
+    ],
     "lib": {
       "entryFile": "index.ts"
     },
@@ -50,19 +54,17 @@
     ]
   },
   "dependencies": {
-    "nativescript-intl": "^3.0.0"
+    "@nativescript/zone-js": "~1.0.0",
+    "nativescript-intl": "^4.0.0"
   },
   "peerDependencies": {
-    "@angular/platform-browser-dynamic": "~10.0.0",
-    "@angular/common": "~10.0.0",
-    "@angular/compiler": "~10.0.0",
-    "@angular/core": "~10.0.0",
-    "@angular/forms": "~10.0.0",
-    "@angular/platform-browser": "~10.0.0",
-    "@angular/router": "~10.0.0",
-    "rxjs": "~6.5.5",
-    "typescript": "~3.9.0",
-    "zone.js": "^0.10.3"
+    "@angular/common": "^10.0.0",
+    "@angular/compiler": "^10.0.0",
+    "@angular/core": "^10.0.0",
+    "@angular/forms": "^10.0.0",
+    "@angular/platform-browser": "^10.0.0",
+    "@angular/platform-browser-dynamic": "^10.0.0",
+    "@angular/router": "^10.0.0"
   },
   "devDependencies": {
     "@angular/animations": "~10.0.0",
@@ -77,7 +79,7 @@
     "codelyzer": "^5.2.0",
     "conventional-changelog-cli": "^2.0.34",
     "rxjs": "~6.5.5",
-    "@nativescript/core": "next",
+    "@nativescript/core": "~6.5.8",
     "ng-packagr": "~10.0.0",
     "tslint": "^6.1.2",
     "typescript": "~3.9.0",

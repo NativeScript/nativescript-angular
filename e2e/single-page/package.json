@@ -16,7 +16,6 @@
     "@angular/platform-browser-dynamic": "~9.1.0",
     "@angular/router": "~9.1.0",
     "@nativescript/angular": "file:../../dist/nativescript-angular-scoped.tgz",
-    "nativescript-intl": "^3.0.0",
     "reflect-metadata": "~0.1.8",
     "rxjs": "~6.5.5",
     "@nativescript/core": "next",

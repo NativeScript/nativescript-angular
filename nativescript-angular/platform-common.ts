@@ -1,7 +1,7 @@
-import { profile, uptime } from '@nativescript/core/profiling';
+import { Profiling } from '@nativescript/core';
 import { getRootView } from '@nativescript/core/application';
-import './dom-adapter';
-import 'nativescript-intl';
+// import './dom-adapter';
+// import 'nativescript-intl';
 // TODO: refactor core module imports to not require these deep imports
 import { TextView } from '@nativescript/core/ui/text-view';
 import { Color, View } from '@nativescript/core/ui/core/view';
@@ -114,7 +114,7 @@ export class NativeScriptPlatformRef extends PlatformRef {
         super();
     }
 
-    @profile
+    @Profiling.profile
     bootstrapModuleFactory<M>(moduleFactory: NgModuleFactory<M>): Promise<NgModuleRef<M>> {
         this._bootstrapper = () => {
             let bootstrapFactory = moduleFactory;
@@ -148,7 +148,7 @@ export class NativeScriptPlatformRef extends PlatformRef {
         return null; // Make the compiler happy
     }
 
-    @profile
+    @Profiling.profile
     private bootstrapApp() {
         (<any>global).__onLiveSyncCore = () => {
             if (this.appOptions.hmrOptions) {
@@ -186,7 +186,7 @@ export class NativeScriptPlatformRef extends PlatformRef {
         return this.platform.destroyed;
     }
 
-    @profile
+    @Profiling.profile
     private bootstrapNativeScriptApp() {
         let rootContent: View;
         let launchView: AppLaunchView;
@@ -194,7 +194,7 @@ export class NativeScriptPlatformRef extends PlatformRef {
         if (NativeScriptDebug.isLogEnabled()) {
             NativeScriptDebug.bootstrapLog('NativeScriptPlatform bootstrap started.');
         }
-        const launchCallback = profile(
+        const launchCallback = Profiling.profile(
             '@nativescript/angular/platform-common.launchCallback',
             (args: LaunchEventData) => {
                 if (NativeScriptDebug.isLogEnabled()) {
@@ -223,7 +223,7 @@ export class NativeScriptPlatformRef extends PlatformRef {
                   this._bootstrapper().then(moduleRef => {
 
                         if (NativeScriptDebug.isLogEnabled()) {
-                            NativeScriptDebug.bootstrapLog(`Angular bootstrap bootstrap done. uptime: ${uptime()}`);
+                            NativeScriptDebug.bootstrapLog(`Angular bootstrap bootstrap done. uptime: ${Profiling.uptime()}`);
                         }
 
                         rootContent = launchView;
@@ -257,7 +257,7 @@ export class NativeScriptPlatformRef extends PlatformRef {
               });
             }
         );
-        const exitCallback = profile(
+        const exitCallback = Profiling.profile(
             '@nativescript/angular/platform-common.exitCallback', (args: ApplicationEventData) => {
                 const androidActivity = args.android;
                 if (androidActivity && !androidActivity.isFinishing()) {
@@ -282,7 +282,7 @@ export class NativeScriptPlatformRef extends PlatformRef {
         applicationRun();
     }
 
-    @profile
+    @Profiling.profile
     public _livesync() {
         if (NativeScriptDebug.isLogEnabled()) {
             NativeScriptDebug.bootstrapLog('Angular livesync started.');
