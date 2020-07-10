@@ -1,6 +1,4 @@
-import { View } from '@nativescript/core/ui/core/view';
-import { Frame } from '@nativescript/core/ui/frame';
-import { LayoutBase } from '@nativescript/core/ui/layouts/layout-base';
+import { View, Frame, LayoutBase, GridLayout } from '@nativescript/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { NgModule, Type } from '@angular/core';
 import { NativeScriptModule } from '../../nativescript.module';
@@ -8,7 +6,6 @@ import { platformBrowserDynamicTesting } from '@angular/platform-browser-dynamic
 // import { NS_COMPILER_PROVIDERS } from "../../platform";
 import { NATIVESCRIPT_TESTING_PROVIDERS, NativeScriptTestingModule } from '../index';
 import { CommonModule } from '@angular/common';
-import { GridLayout } from '@nativescript/core/ui/layouts/grid-layout';
 
 const TESTING_ROOT_ID = '__testing_container';
 

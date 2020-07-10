@@ -4,10 +4,7 @@ import {
     RendererStyleFlags2, ViewEncapsulation,
 } from '@angular/core';
 
-import { Device } from '@nativescript/core/platform';
-import { View, getViewById } from '@nativescript/core/ui/core/view';
-import { addCss } from '@nativescript/core/application';
-import { profile } from '@nativescript/core/profiling';
+import { View, getViewById, IDevice, Application, profile } from '@nativescript/core';
 
 import { APP_ROOT_VIEW, DEVICE, getRootPage } from './platform-providers';
 import { ViewUtil } from './view-util';
@@ -35,7 +32,7 @@ export class NativeScriptRendererFactory implements RendererFactory2 {
 
     constructor(
         @Optional() @Inject(APP_ROOT_VIEW) rootView: View,
-        @Inject(DEVICE) device: Device,
+        @Inject(DEVICE) device: IDevice,
         private zone: NgZone
     ) {
         this.viewUtil = new ViewUtil(device);
@@ -362,12 +359,12 @@ class EmulatedRenderer extends NativeScriptRenderer {
 
 // tslint:disable-next-line
 const addStyleToCss = profile('"renderer".addStyleToCss', function addStyleToCss(style: string): void {
-    addCss(style);
+  Application.addCss(style);
 });
 
 // tslint:disable-next-line
 const addScopedStyleToCss = profile('"renderer".addScopedStyleToCss', function addScopedStyleToCss(style: string): void {
-    addCss(style, true);
+  Application.addCss(style, true);
 });
 
 function replaceNgAttribute(input: string, componentId: string): string {

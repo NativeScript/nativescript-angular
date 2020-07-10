@@ -1,19 +1,10 @@
 import { platformNativeScript, NativeScriptDebug } from "@nativescript/angular";
-import { setCategories, enable } from "@nativescript/core/trace";
-import {
-  GridLayout,
-  ItemSpec,
-  GridUnitType,
-} from '@nativescript/core/ui/layouts/grid-layout';
-import {
-  HorizontalAlignment,
-  VerticalAlignment,
-} from '@nativescript/core/ui/enums/enums';
+import { Trace, GridLayout, GridUnitType, ItemSpec, VerticalAlignment } from "@nativescript/core";
 
 import { AppModule } from "./app.module";
 
-setCategories(NativeScriptDebug.animationsTraceCategory);
-enable();
+Trace.setCategories(NativeScriptDebug.animationsTraceCategory);
+Trace.enable();
 
 class LaunchAnimation extends GridLayout {
   circle: GridLayout;
@@ -34,8 +25,8 @@ class LaunchAnimation extends GridLayout {
     this.circle.width = 30;
     this.circle.height = 30;
     this.circle.borderRadius = 15;
-    this.circle.horizontalAlignment = HorizontalAlignment.center;
-    this.circle.verticalAlignment = VerticalAlignment.center;
+    this.circle.horizontalAlignment = 'center';
+    this.circle.verticalAlignment = 'middle';
     this.circle.backgroundColor = '#fff';
     this.animatedContainer.addRow(new ItemSpec(1, GridUnitType.STAR));
     this.animatedContainer.addRow(new ItemSpec(1, GridUnitType.AUTO));

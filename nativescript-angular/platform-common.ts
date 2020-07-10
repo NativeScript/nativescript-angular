@@ -1,43 +1,46 @@
-import { Profiling } from '@nativescript/core';
-import { getRootView } from '@nativescript/core/application';
+import {
+  Application,
+  TextView,
+  Color,
+  View,
+  Frame,
+  GridLayout,
+  LaunchEventData,
+  ApplicationEventData,
+  profile,
+  profilingUptime,
+} from "@nativescript/core";
 // import './dom-adapter';
 // import 'nativescript-intl';
-// TODO: refactor core module imports to not require these deep imports
-import { TextView } from '@nativescript/core/ui/text-view';
-import { Color, View } from '@nativescript/core/ui/core/view';
-import { Frame } from '@nativescript/core/ui/frame';
-import { GridLayout } from '@nativescript/core/ui/layouts/grid-layout';
 
 import {
-    Type,
-    Injector,
-    CompilerOptions,
-    PlatformRef,
-    NgModuleFactory,
-    NgModuleRef,
-    EventEmitter,
-    Sanitizer,
-    InjectionToken,
-    StaticProvider,
-} from '@angular/core';
-import { DOCUMENT } from '@angular/common';
+  Type,
+  Injector,
+  CompilerOptions,
+  PlatformRef,
+  NgModuleFactory,
+  NgModuleRef,
+  EventEmitter,
+  Sanitizer,
+  InjectionToken,
+  StaticProvider,
+} from "@angular/core";
+import { DOCUMENT } from "@angular/common";
 
-import { NativeScriptDebug } from './trace';
-import { defaultPageFactoryProvider, setRootPage, PageFactory, PAGE_FACTORY, getRootPage } from './platform-providers';
-
+import { NativeScriptDebug } from "./trace";
 import {
-    setCssFileName,
-    run as applicationRun,
-    _resetRootView as applicationRerun,
-    on,
-    launchEvent,
-    LaunchEventData,
-    exitEvent,
-    ApplicationEventData,
-} from '@nativescript/core/application';
+  defaultPageFactoryProvider,
+  setRootPage,
+  PageFactory,
+  PAGE_FACTORY,
+  getRootPage,
+} from "./platform-providers";
 
 export const onBeforeLivesync = new EventEmitter<NgModuleRef<any>>();
-export const onAfterLivesync = new EventEmitter<{ moduleRef?: NgModuleRef<any>; error?: Error }>();
+export const onAfterLivesync = new EventEmitter<{
+  moduleRef?: NgModuleRef<any>;
+  error?: Error;
+}>();
 let lastBootstrappedModule: WeakRef<NgModuleRef<any>>;
 type BootstrapperAction = () => Promise<NgModuleRef<any>>;
 
@@ -53,289 +56,331 @@ type BootstrapperAction = () => Promise<NgModuleRef<any>>;
  * Options to be passed when HMR is enabled
  */
 export interface HmrOptions {
-    /**
-     * A factory function that returns either Module type or NgModuleFactory type.
-     * This needs to be a factory function as the types will change when modules are replaced.
-     */
-    moduleTypeFactory?: () => Type<any> | NgModuleFactory<any>;
+  /**
+   * A factory function that returns either Module type or NgModuleFactory type.
+   * This needs to be a factory function as the types will change when modules are replaced.
+   */
+  moduleTypeFactory?: () => Type<any> | NgModuleFactory<any>;
 
-    /**
-     * A livesync callback that will be called instead of the original livesync.
-     * It gives the HMR a hook to apply the module replacement.
-     * @param bootstrapPlatform - A bootstrap callback to be called after HMR is done. It will bootstrap a new angular app within the exisiting platform, using the moduleTypeFactory to get the Module or NgModuleFactory to be used.
-     */
-    livesyncCallback: (bootstrapPlatform: () => void) => void;
+  /**
+   * A livesync callback that will be called instead of the original livesync.
+   * It gives the HMR a hook to apply the module replacement.
+   * @param bootstrapPlatform - A bootstrap callback to be called after HMR is done. It will bootstrap a new angular app within the exisiting platform, using the moduleTypeFactory to get the Module or NgModuleFactory to be used.
+   */
+  livesyncCallback: (bootstrapPlatform: () => void) => void;
 }
 // tslint:enable:max-line-length
 
 export interface AppLaunchView extends View {
-    startAnimation?: () => void;
-    cleanup?: () => void;
+  startAnimation?: () => void;
+  cleanup?: () => void;
 }
 
 export interface AppOptions {
-    bootInExistingPage?: boolean;
-    cssFile?: string;
-    startPageActionBarHidden?: boolean;
-    hmrOptions?: HmrOptions;
-    backgroundColor?: string;
-    launchView?: AppLaunchView;
+  bootInExistingPage?: boolean;
+  cssFile?: string;
+  startPageActionBarHidden?: boolean;
+  hmrOptions?: HmrOptions;
+  backgroundColor?: string;
+  launchView?: AppLaunchView;
 }
 
-export type PlatformFactory = (extraProviders?: StaticProvider[]) => PlatformRef;
+export type PlatformFactory = (
+  extraProviders?: StaticProvider[]
+) => PlatformRef;
 
 export class NativeScriptSanitizer extends Sanitizer {
-    sanitize(_context: any, value: string): string {
-        return value;
-    }
+  sanitize(_context: any, value: string): string {
+    return value;
+  }
 }
 
 export class NativeScriptDocument {
-    // Required by the AnimationDriver
-    public body: any = {
-        isOverride: true,
-    };
+  // Required by the AnimationDriver
+  public body: any = {
+    isOverride: true,
+  };
 
-    createElement(tag: string) {
-        throw new Error('NativeScriptDocument is not DOM Document. There is no createElement() method.');
-    }
+  createElement(tag: string) {
+    throw new Error(
+      "NativeScriptDocument is not DOM Document. There is no createElement() method."
+    );
+  }
 }
 
 export const COMMON_PROVIDERS = [
-    defaultPageFactoryProvider,
-    { provide: Sanitizer, useClass: NativeScriptSanitizer, deps: [] },
-    { provide: DOCUMENT, useClass: NativeScriptDocument, deps: [] },
+  defaultPageFactoryProvider,
+  { provide: Sanitizer, useClass: NativeScriptSanitizer, deps: [] },
+  { provide: DOCUMENT, useClass: NativeScriptDocument, deps: [] },
 ];
 
 export class NativeScriptPlatformRef extends PlatformRef {
-    private _bootstrapper: BootstrapperAction;
+  private _bootstrapper: BootstrapperAction;
 
-    constructor(private platform: PlatformRef, private appOptions: AppOptions = {}) {
-        super();
-    }
+  constructor(
+    private platform: PlatformRef,
+    private appOptions: AppOptions = {}
+  ) {
+    super();
+  }
 
-    @Profiling.profile
-    bootstrapModuleFactory<M>(moduleFactory: NgModuleFactory<M>): Promise<NgModuleRef<M>> {
-        this._bootstrapper = () => {
-            let bootstrapFactory = moduleFactory;
-            if (this.appOptions.hmrOptions) {
-                bootstrapFactory = <NgModuleFactory<M>>this.appOptions.hmrOptions.moduleTypeFactory();
-            }
+  @profile
+  bootstrapModuleFactory<M>(
+    moduleFactory: NgModuleFactory<M>
+  ): Promise<NgModuleRef<M>> {
+    this._bootstrapper = () => {
+      let bootstrapFactory = moduleFactory;
+      if (this.appOptions.hmrOptions) {
+        bootstrapFactory = <NgModuleFactory<M>>(
+          this.appOptions.hmrOptions.moduleTypeFactory()
+        );
+      }
 
-            return this.platform.bootstrapModuleFactory(bootstrapFactory);
-        };
+      return this.platform.bootstrapModuleFactory(bootstrapFactory);
+    };
 
-        this.bootstrapApp();
+    this.bootstrapApp();
 
-        return null; // Make the compiler happy
-    }
+    return null; // Make the compiler happy
+  }
 
-    @profile
-    bootstrapModule<M>(
-        moduleType: Type<M>,
-        compilerOptions: CompilerOptions | CompilerOptions[] = []
-    ): Promise<NgModuleRef<M>> {
-        this._bootstrapper = () => {
-            let bootstrapType = moduleType;
-            if (this.appOptions.hmrOptions) {
-                bootstrapType = <Type<M>>this.appOptions.hmrOptions.moduleTypeFactory();
-            }
+  @profile
+  bootstrapModule<M>(
+    moduleType: Type<M>,
+    compilerOptions: CompilerOptions | CompilerOptions[] = []
+  ): Promise<NgModuleRef<M>> {
+    this._bootstrapper = () => {
+      let bootstrapType = moduleType;
+      if (this.appOptions.hmrOptions) {
+        bootstrapType = <Type<M>>this.appOptions.hmrOptions.moduleTypeFactory();
+      }
 
-            return this.platform.bootstrapModule(bootstrapType, compilerOptions);
-        };
-        this.bootstrapApp();
+      return this.platform.bootstrapModule(bootstrapType, compilerOptions);
+    };
+    this.bootstrapApp();
 
-        return null; // Make the compiler happy
-    }
+    return null; // Make the compiler happy
+  }
 
-    @Profiling.profile
-    private bootstrapApp() {
-        (<any>global).__onLiveSyncCore = () => {
-            if (this.appOptions.hmrOptions) {
-                const rootView = getRootView();
-                if (rootView) {
-                    rootView._closeAllModalViewsInternal();
-                }
-
-                this.appOptions.hmrOptions.livesyncCallback(() => this._livesync());
-            } else {
-                this._livesync();
-            }
-        };
-
-        if (this.appOptions && typeof this.appOptions.cssFile === 'string') {
-            setCssFileName(this.appOptions.cssFile);
+  @profile
+  private bootstrapApp() {
+    (<any>global).__onLiveSyncCore = () => {
+      if (this.appOptions.hmrOptions) {
+        const rootView = Application.getRootView();
+        if (rootView) {
+          rootView._closeAllModalViewsInternal();
         }
 
-        this.bootstrapNativeScriptApp();
+        this.appOptions.hmrOptions.livesyncCallback(() => this._livesync());
+      } else {
+        this._livesync();
+      }
+    };
+
+    if (this.appOptions && typeof this.appOptions.cssFile === "string") {
+      Application.setCssFileName(this.appOptions.cssFile);
     }
 
-    onDestroy(callback: () => void): void {
-        this.platform.onDestroy(callback);
+    this.bootstrapNativeScriptApp();
+  }
+
+  onDestroy(callback: () => void): void {
+    this.platform.onDestroy(callback);
+  }
+
+  get injector(): Injector {
+    return this.platform.injector;
+  }
+
+  destroy(): void {
+    this.platform.destroy();
+  }
+
+  get destroyed(): boolean {
+    return this.platform.destroyed;
+  }
+
+  @profile
+  private bootstrapNativeScriptApp() {
+    let rootContent: View;
+    let launchView: AppLaunchView;
+
+    if (NativeScriptDebug.isLogEnabled()) {
+      NativeScriptDebug.bootstrapLog("NativeScriptPlatform bootstrap started.");
     }
-
-    get injector(): Injector {
-        return this.platform.injector;
-    }
-
-    destroy(): void {
-        this.platform.destroy();
-    }
-
-    get destroyed(): boolean {
-        return this.platform.destroyed;
-    }
-
-    @Profiling.profile
-    private bootstrapNativeScriptApp() {
-        let rootContent: View;
-        let launchView: AppLaunchView;
-
+    const launchCallback = profile(
+      "@nativescript/angular/platform-common.launchCallback",
+      (args: LaunchEventData) => {
         if (NativeScriptDebug.isLogEnabled()) {
-            NativeScriptDebug.bootstrapLog('NativeScriptPlatform bootstrap started.');
+          NativeScriptDebug.bootstrapLog("Application launch event fired");
         }
-        const launchCallback = Profiling.profile(
-            '@nativescript/angular/platform-common.launchCallback',
-            (args: LaunchEventData) => {
-                if (NativeScriptDebug.isLogEnabled()) {
-                    NativeScriptDebug.bootstrapLog('Application launch event fired');
-                }
 
-                if (this.appOptions && this.appOptions.launchView) {
-                    launchView = this.appOptions.launchView;
-                } else {
-                    launchView = new GridLayout();
-                    // Custom launch view color
-                    // Useful when using async app intializers to avoid flash of undesirable color
-                    launchView.backgroundColor = new Color(this.appOptions
-                        && this.appOptions.backgroundColor ? this.appOptions.backgroundColor : '#fff');
-                }
+        if (this.appOptions && this.appOptions.launchView) {
+          launchView = this.appOptions.launchView;
+        } else {
+          launchView = new GridLayout();
+          // Custom launch view color
+          // Useful when using async app intializers to avoid flash of undesirable color
+          launchView.backgroundColor = new Color(
+            this.appOptions && this.appOptions.backgroundColor
+              ? this.appOptions.backgroundColor
+              : "#fff"
+          );
+        }
 
-                setRootPage(<any>launchView);
-                args.root = launchView;
+        setRootPage(<any>launchView);
+        args.root = launchView;
 
-                // Launch Angular app on next tick
-                setTimeout(() => {
-                    if (this.appOptions && this.appOptions.launchView && this.appOptions.launchView.startAnimation) {
-                        // ensure launch animation is executed after launchView added to view stack
-                        this.appOptions.launchView.startAnimation();
-                    }
-                  this._bootstrapper().then(moduleRef => {
-
-                        if (NativeScriptDebug.isLogEnabled()) {
-                            NativeScriptDebug.bootstrapLog(`Angular bootstrap bootstrap done. uptime: ${Profiling.uptime()}`);
-                        }
-
-                        rootContent = launchView;
-                        if (launchView && launchView.cleanup) {
-                            // cleanup any custom launch views
-                            launchView.cleanup();
-                        }
-
-                        lastBootstrappedModule = new WeakRef(moduleRef);
-                    },
-                    err => {
-
-                        const errorMessage = err.message + '\n\n' + err.stack;
-                        if (NativeScriptDebug.isLogEnabled()) {
-                            NativeScriptDebug.bootstrapLogError('ERROR BOOTSTRAPPING ANGULAR');
-                        }
-                        if (NativeScriptDebug.isLogEnabled()) {
-                            NativeScriptDebug.bootstrapLogError(errorMessage);
-                        }
-
-                        rootContent = this.createErrorUI(errorMessage);
-                    }
+        // Launch Angular app on next tick
+        setTimeout(() => {
+          if (
+            this.appOptions &&
+            this.appOptions.launchView &&
+            this.appOptions.launchView.startAnimation
+          ) {
+            // ensure launch animation is executed after launchView added to view stack
+            this.appOptions.launchView.startAnimation();
+          }
+          this._bootstrapper().then(
+            (moduleRef) => {
+              if (NativeScriptDebug.isLogEnabled()) {
+                NativeScriptDebug.bootstrapLog(
+                  `Angular bootstrap bootstrap done. uptime: ${profilingUptime()}`
                 );
-                if (NativeScriptDebug.isLogEnabled()) {
-                    NativeScriptDebug.bootstrapLog('bootstrapAction called, draining micro tasks queue. Root: ' + rootContent);
-                }
-                (<any>global).Zone.drainMicroTaskQueue();
-                if (NativeScriptDebug.isLogEnabled()) {
-                    NativeScriptDebug.bootstrapLog('bootstrapAction called, draining micro tasks queue finished! Root: ' + rootContent);
-                }
-              });
-            }
-        );
-        const exitCallback = Profiling.profile(
-            '@nativescript/angular/platform-common.exitCallback', (args: ApplicationEventData) => {
-                const androidActivity = args.android;
-                if (androidActivity && !androidActivity.isFinishing()) {
-                    // Exit event was triggered as a part of a restart of the app.
-                    return;
-                }
+                NativeScriptDebug.bootstrapLog(
+                  `Angular bootstrap bootstrap done.`
+                );
+              }
 
-                const lastModuleRef = lastBootstrappedModule ? lastBootstrappedModule.get() : null;
-                if (lastModuleRef) {
-                    // Make sure the module is only destroyed once
-                    lastBootstrappedModule = null;
+              rootContent = launchView;
+              if (launchView && launchView.cleanup) {
+                // cleanup any custom launch views
+                launchView.cleanup();
+              }
 
-                    lastModuleRef.destroy();
-                }
-
-                rootContent = null;
-            }
-        );
-        on(launchEvent, launchCallback);
-        on(exitEvent, exitCallback);
-
-        applicationRun();
-    }
-
-    @Profiling.profile
-    public _livesync() {
-        if (NativeScriptDebug.isLogEnabled()) {
-            NativeScriptDebug.bootstrapLog('Angular livesync started.');
-        }
-
-        const lastModuleRef = lastBootstrappedModule ? lastBootstrappedModule.get() : null;
-        onBeforeLivesync.next(lastModuleRef);
-        if (lastModuleRef) {
-            lastModuleRef.destroy();
-        }
-
-        this._bootstrapper().then(
-            moduleRef => {
-                if (NativeScriptDebug.isLogEnabled()) {
-                    NativeScriptDebug.bootstrapLog('Angular livesync done.');
-                }
-                onAfterLivesync.next({ moduleRef });
-
-                lastBootstrappedModule = new WeakRef(moduleRef);
-                applicationRerun({
-                    create: () => getRootPage(),
-                });
+              lastBootstrappedModule = new WeakRef(moduleRef);
             },
-            error => {
-                if (NativeScriptDebug.isLogEnabled()) {
-                    NativeScriptDebug.bootstrapLogError('ERROR LIVESYNC BOOTSTRAPPING ANGULAR');
-                }
-                const errorMessage = error.message + '\n\n' + error.stack;
-                if (NativeScriptDebug.isLogEnabled()) {
-                    NativeScriptDebug.bootstrapLogError(errorMessage);
-                }
+            (err) => {
+              const errorMessage = err.message + "\n\n" + err.stack;
+              if (NativeScriptDebug.isLogEnabled()) {
+                NativeScriptDebug.bootstrapLogError(
+                  "ERROR BOOTSTRAPPING ANGULAR"
+                );
+              }
+              if (NativeScriptDebug.isLogEnabled()) {
+                NativeScriptDebug.bootstrapLogError(errorMessage);
+              }
 
-                applicationRerun({
-                    create: () => this.createErrorUI(errorMessage),
-                });
-                onAfterLivesync.next({ error });
+              rootContent = this.createErrorUI(errorMessage);
             }
-        );
+          );
+          if (NativeScriptDebug.isLogEnabled()) {
+            NativeScriptDebug.bootstrapLog(
+              "bootstrapAction called, draining micro tasks queue. Root: " +
+                rootContent
+            );
+          }
+          (<any>global).Zone.drainMicroTaskQueue();
+          if (NativeScriptDebug.isLogEnabled()) {
+            NativeScriptDebug.bootstrapLog(
+              "bootstrapAction called, draining micro tasks queue finished! Root: " +
+                rootContent
+            );
+          }
+        });
+      }
+    );
+    const exitCallback = profile(
+      "@nativescript/angular/platform-common.exitCallback",
+      (args: ApplicationEventData) => {
+        const androidActivity = args.android;
+        if (androidActivity && !androidActivity.isFinishing()) {
+          // Exit event was triggered as a part of a restart of the app.
+          return;
+        }
+
+        const lastModuleRef = lastBootstrappedModule
+          ? lastBootstrappedModule.get()
+          : null;
+        if (lastModuleRef) {
+          // Make sure the module is only destroyed once
+          lastBootstrappedModule = null;
+
+          lastModuleRef.destroy();
+        }
+
+        rootContent = null;
+      }
+    );
+
+    Application.on(Application.launchEvent, launchCallback);
+    Application.on(Application.exitEvent, exitCallback);
+
+    Application.run();
+  }
+
+  @profile
+  public _livesync() {
+    if (NativeScriptDebug.isLogEnabled()) {
+      NativeScriptDebug.bootstrapLog("Angular livesync started.");
     }
 
-    private createErrorUI(message: string): View {
-        const errorTextBox = new TextView();
-        errorTextBox.text = message;
-        errorTextBox.color = new Color('red');
-        return errorTextBox;
+    const lastModuleRef = lastBootstrappedModule
+      ? lastBootstrappedModule.get()
+      : null;
+    onBeforeLivesync.next(lastModuleRef);
+    if (lastModuleRef) {
+      lastModuleRef.destroy();
     }
 
-    private createFrameAndPage(isLivesync: boolean) {
-        const frame = new Frame();
-        const pageFactory: PageFactory = this.platform.injector.get(PAGE_FACTORY);
-        const page = pageFactory({ isBootstrap: true, isLivesync });
+    this._bootstrapper().then(
+      (moduleRef) => {
+        if (NativeScriptDebug.isLogEnabled()) {
+          NativeScriptDebug.bootstrapLog("Angular livesync done.");
+        }
+        onAfterLivesync.next({ moduleRef });
 
-        frame.navigate({ create: () => { return page; } });
-        return { page, frame };
-    }
+        lastBootstrappedModule = new WeakRef(moduleRef);
+        Application.resetRootView({
+          create: () => getRootPage(),
+        });
+      },
+      (error) => {
+        if (NativeScriptDebug.isLogEnabled()) {
+          NativeScriptDebug.bootstrapLogError(
+            "ERROR LIVESYNC BOOTSTRAPPING ANGULAR"
+          );
+        }
+        const errorMessage = error.message + "\n\n" + error.stack;
+        if (NativeScriptDebug.isLogEnabled()) {
+          NativeScriptDebug.bootstrapLogError(errorMessage);
+        }
+
+        Application.resetRootView({
+          create: () => this.createErrorUI(errorMessage),
+        });
+        onAfterLivesync.next({ error });
+      }
+    );
+  }
+
+  private createErrorUI(message: string): View {
+    const errorTextBox = new TextView();
+    errorTextBox.text = message;
+    errorTextBox.color = new Color("red");
+    return errorTextBox;
+  }
+
+  private createFrameAndPage(isLivesync: boolean) {
+    const frame = new Frame();
+    const pageFactory: PageFactory = this.platform.injector.get(PAGE_FACTORY);
+    const page = pageFactory({ isBootstrap: true, isLivesync });
+
+    frame.navigate({
+      create: () => {
+        return page;
+      },
+    });
+    return { page, frame };
+  }
 }

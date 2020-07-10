@@ -5,7 +5,7 @@ import {
     PinchGestureEventData,
     RotationGestureEventData,
     SwipeGestureEventData,
-    TouchGestureEventData} from "@nativescript/core/ui/gestures";
+    TouchGestureEventData} from "@nativescript/core";
 
 @Component({
     selector: "gestures",

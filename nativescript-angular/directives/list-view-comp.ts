@@ -5,7 +5,7 @@ import {
     IterableDiffers,
     forwardRef
 } from '@angular/core';
-import { ListView } from '@nativescript/core/ui/list-view';
+import { ListView } from '@nativescript/core';
 import { TEMPLATED_ITEMS_COMPONENT, TemplatedItemsComponent } from './templated-items-comp';
 
 @Component({

@@ -3,9 +3,9 @@ import {
     KeyframeAnimationInfo,
     KeyframeDeclaration,
     KeyframeInfo,
-} from '@nativescript/core/ui/animation/keyframe-animation';
-import { parseKeyframeDeclarations } from '@nativescript/core/ui/styling/css-animation-parser';
-import { animationTimingFunctionConverter } from '@nativescript/core/ui/styling/converters';
+    parseKeyframeDeclarations,
+    animationTimingFunctionConverter
+} from '@nativescript/core';
 
 export interface Keyframe {
     [key: string]: string | number;

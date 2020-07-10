@@ -1,8 +1,4 @@
-import { isDefined } from '@nativescript/core/utils/types';
-import { View, unsetValue } from '@nativescript/core/ui/core/view';
-import { Placeholder } from '@nativescript/core/ui/placeholder';
-import { ContentView } from '@nativescript/core/ui/content-view';
-import { LayoutBase } from '@nativescript/core/ui/layouts/layout-base';
+import { View, unsetValue, Placeholder, ContentView, LayoutBase, platformNames, Device } from '@nativescript/core';
 import {
     CommentNode,
     InvisibleNode,
@@ -17,7 +13,6 @@ import {
     isView,
 } from './element-registry';
 
-import { platformNames, Device } from '@nativescript/core/platform';
 import { NativeScriptDebug } from './trace';
 
 const ELEMENT_NODE_TYPE = 1;
@@ -45,7 +40,7 @@ export class ViewUtil {
     private isIos: boolean;
     private isAndroid: boolean;
 
-    constructor(device: Device) {
+    constructor(device: typeof Device) {
         this.isIos = device.os === platformNames.ios;
         this.isAndroid = device.os === platformNames.android;
     }
@@ -336,7 +331,7 @@ export class ViewUtil {
 
             let propMap = this.getProperties(view);
             let i = 0;
-            while (i < properties.length - 1 && isDefined(view)) {
+            while (i < properties.length - 1 && typeof view !== 'undefined') {
                 let prop = properties[i];
                 if (propMap.has(prop)) {
                     prop = propMap.get(prop);
@@ -348,7 +343,7 @@ export class ViewUtil {
             }
         }
 
-        if (isDefined(view)) {
+        if (typeof view !== 'undefined') {
             this.setPropertyInternal(view, attributeName, value);
         }
     }

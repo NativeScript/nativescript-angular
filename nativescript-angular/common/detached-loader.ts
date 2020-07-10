@@ -2,11 +2,11 @@ import {
     ComponentRef, ComponentFactory, ViewContainerRef,
     Component, Type, ComponentFactoryResolver, ChangeDetectorRef
 } from '@angular/core';
-import { write } from '@nativescript/core/trace';
+import { Trace } from '@nativescript/core';
 
 export const CATEGORY = 'detached-loader';
 function log(message: string) {
-    write(message, CATEGORY);
+  Trace.write(message, CATEGORY);
 }
 
 

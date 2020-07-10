@@ -1,9 +1,6 @@
 import { AnimationPlayer } from '@angular/animations';
 import { AnimationDriver } from '@angular/animations/browser';
-import { createSelector, SelectorCore } from '@nativescript/core/ui/styling/css-selector';
-import { CssAnimationProperty } from '@nativescript/core/ui/core/properties';
-import { eachDescendant } from '@nativescript/core/ui/core/view';
-import { ProxyViewContainer } from '@nativescript/core/ui/proxy-view-container';
+import { ProxyViewContainer, eachDescendant, CssAnimationProperty, CSSHelper } from '@nativescript/core';
 
 import { NativeScriptAnimationPlayer } from './animation-player';
 import {
@@ -32,7 +29,7 @@ interface QueryResult {
 }
 
 class Selector {
-    private nsSelectors: SelectorCore[];
+    private nsSelectors: CSSHelper.SelectorCore[];
     private classSelectors: string[];
 
     constructor(rawSelector: string) {
@@ -46,7 +43,7 @@ class Selector {
     private parse(rawSelector: string) {
         const selectors = rawSelector.split(',').map(s => s.trim());
 
-        this.nsSelectors = selectors.map(createSelector);
+        this.nsSelectors = selectors.map(CSSHelper.createSelector);
         this.classSelectors = selectors
             .filter(s => s.startsWith('.'))
             .map(s => s.substring(1));

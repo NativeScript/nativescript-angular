@@ -1,4 +1,4 @@
-import { Frame, NavigationTransition } from '@nativescript/core/ui/frame';
+import { Frame, NavigationTransition } from '@nativescript/core';
 import { DefaultUrlSerializer, UrlSegmentGroup, UrlTree, ActivatedRouteSnapshot, Params } from '@angular/router';
 
 export interface LocationState {

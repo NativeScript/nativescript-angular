@@ -4,7 +4,8 @@ import { Component, ViewChild } from '@angular/core';
 @Component({
     template: `
         <Button #button (tap)="makeAnimation()" class="btn btn-primary" automationText="tapToDisappear" text="Tap to disappear!"></Button>
-    `
+    `,
+    styleUrls: ['./animation-builder.component.scss']
 })
 export class AnimationBuilderComponent {
   @ViewChild('button', { static: false }) button;

@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { ResourceLoader } from '@angular/compiler';
-import { path } from '@nativescript/core/file-system';
+import { path } from '@nativescript/core';
 
 import { NSFileSystem } from './file-system/ns-file-system';
 

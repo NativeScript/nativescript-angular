@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { LocationStrategy } from '@angular/common';
 import { DefaultUrlSerializer, UrlSegmentGroup, UrlTree, ActivatedRouteSnapshot, Params } from '@angular/router';
-import { Frame } from '@nativescript/core/ui/frame';
+import { Frame } from '@nativescript/core';
 import { NativeScriptDebug } from '../trace';
 import { isPresent } from '../lang-facade';
 import { FrameService } from '../frame.service';

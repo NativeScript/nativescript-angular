@@ -47,7 +47,10 @@
       "../README.md"
     ],
     "lib": {
-      "entryFile": "index.ts"
+      "entryFile": "index.ts",
+      "umdModuleIds": {
+        "@nativescript/core": "ns-core"
+      }
     },
     "whitelistedNonPeerDependencies": [
       "."
@@ -79,7 +82,7 @@
     "codelyzer": "^5.2.0",
     "conventional-changelog-cli": "^2.0.34",
     "rxjs": "~6.5.5",
-    "@nativescript/core": "~6.5.8",
+    "@nativescript/core": "~7.0.0-rc.9",
     "ng-packagr": "~10.0.0",
     "tslint": "^6.1.2",
     "typescript": "~3.9.0",

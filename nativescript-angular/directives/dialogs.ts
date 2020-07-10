@@ -7,17 +7,13 @@ import {
     Type,
     ViewContainerRef
 } from '@angular/core';
+import { Frame, View, ViewBase, ProxyViewContainer, ShowModalOptions } from '@nativescript/core';
 
 import { NSLocationStrategy } from '../router/ns-location-strategy';
-import { View, ViewBase } from '@nativescript/core/ui/core/view';
-import { ProxyViewContainer } from '@nativescript/core/ui/proxy-view-container/proxy-view-container';
-
 import { AppHostView } from '../app-host-view';
 import { DetachedLoader } from '../common/detached-loader';
 import { PageFactory, PAGE_FACTORY } from '../platform-providers';
 import { once } from '../common/utils';
-import { Frame } from '@nativescript/core/ui/frame';
-import { ShowModalOptions } from '@nativescript/core/ui/core/view';
 
 export type BaseShowModalOptions = Pick<ShowModalOptions, Exclude<keyof ShowModalOptions, 'closeCallback' | 'context'>>;
 

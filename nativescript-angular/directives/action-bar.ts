@@ -4,8 +4,8 @@ import {
   ActionItem,
   ActionItems,
   NavigationButton,
-} from '@nativescript/core/ui/action-bar';
-import { Page } from '@nativescript/core/ui/page';
+  Page,
+} from '@nativescript/core';
 
 import { isBlank } from '../lang-facade';
 import {

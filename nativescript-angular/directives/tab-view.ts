@@ -7,13 +7,13 @@ import {
     TemplateRef,
     ViewContainerRef,
 } from '@angular/core';
-import { TabView, TabViewItem } from '@nativescript/core/ui/tab-view';
-import { TextTransform  } from '@nativescript/core/ui/text-base';
+import { TabView, TabViewItem } from '@nativescript/core';
 
 import { InvisibleNode } from '../element-registry';
 import { NativeScriptDebug } from '../trace';
 import { isBlank } from '../lang-facade';
 
+type TextTransform = 'initial' | 'none' | 'capitalize' | 'uppercase' | 'lowercase';
 export interface TabViewItemDef {
     title?: string;
     iconSource?: string;

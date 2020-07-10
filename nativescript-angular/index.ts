@@ -1,6 +1,5 @@
 // Initial imports and polyfills
-import '@nativescript/core/globals';
-import '@nativescript/core/application';
+import '@nativescript/core';
 import '@nativescript/zone-js';
 import './dom-adapter';
 import 'nativescript-intl';
@@ -25,7 +24,6 @@ export * from './forms';
 export * from './directives';
 export * from './router';
 export * from './frame.service';
-export * from './page.service';
 export { NativeScriptDebug } from './trace';
 
 export {

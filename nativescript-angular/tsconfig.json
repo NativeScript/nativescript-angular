@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
     "target": "es2017",
-    "module": "es2015",
+    "module": "esnext",
     "moduleResolution": "node",
     "sourceMap": true,
     "emitDecoratorMetadata": true,
@@ -24,7 +24,8 @@
     "genDir": ".",
     "skipMetadataEmit": false,
     "skipTemplateCodegen": true,
-    "strictMetadataEmit": true
+    "strictMetadataEmit": true,
+    "enableIvy": true
   },
   "include": [
     "**/*.ts"

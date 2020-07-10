@@ -20,7 +20,6 @@ import { NativeScriptRendererFactory } from './renderer';
 import { DetachedLoader } from './common/detached-loader';
 import { throwIfAlreadyLoaded } from './common/utils';
 import { FrameService } from './frame.service';
-import { PageService } from './page.service';
 
 export function errorHandlerFactory() {
     return new ErrorHandler();
@@ -34,7 +33,6 @@ export { DetachedLoader } from './common/detached-loader';
     ],
     providers: [
         FrameService,
-        PageService,
         NativeScriptRendererFactory,
         SystemJsNgModuleLoader,
         { provide: ɵINJECTOR_SCOPE, useValue: 'root' },

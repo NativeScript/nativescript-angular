@@ -1,11 +1,10 @@
 import { Directive, HostListener, Input } from '@angular/core';
 import { NavigationExtras } from '@angular/router';
 import { ActivatedRoute, Router, UrlTree } from '@angular/router';
+import { NavigationTransition } from '@nativescript/core';
 import { NativeScriptDebug } from '../trace';
 import { RouterExtensions } from './router-extensions';
 import { NavigationOptions } from './ns-location-utils';
-import { NavigationTransition } from '@nativescript/core/ui/frame';
-import { isString } from '@nativescript/core/utils/types';
 
 // Copied from "@angular/router/src/config"
 export type QueryParamsHandling = 'merge' | 'preserve' | '';
@@ -120,7 +119,7 @@ export class NSRouterLink { // tslint:disable-line:directive-class-suffix
 
         if (typeof this.pageTransition === 'boolean') {
             animated = this.pageTransition;
-        } else if (isString(this.pageTransition)) {
+        } else if (typeof this.pageTransition === 'string') {
             if (this.pageTransition === 'none' || this.pageTransition === 'false') {
                 animated = false;
             } else {

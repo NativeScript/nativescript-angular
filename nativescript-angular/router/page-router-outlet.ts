@@ -12,15 +12,11 @@ import {
     PRIMARY_OUTLET,
 } from '@angular/router';
 
-import { Device } from '@nativescript/core/platform';
-import { Frame } from '@nativescript/core/ui/frame';
-import { Page, NavigatedData } from '@nativescript/core/ui/page';
-import { profile } from '@nativescript/core/profiling';
+import { IDevice, Frame, Page, NavigatedData, profile } from '@nativescript/core';
 
 import { BehaviorSubject } from 'rxjs';
 
 import { DEVICE, PAGE_FACTORY, PageFactory } from '../platform-providers';
-import { PageService } from '../page.service';
 import { NativeScriptDebug } from '../trace';
 import { DetachedLoader } from '../common/detached-loader';
 import { ViewUtil } from '../view-util';
@@ -119,7 +115,7 @@ export class PageRouterOutlet implements OnDestroy { // tslint:disable-line:dire
         private componentFactoryResolver: ComponentFactoryResolver,
         private resolver: ComponentFactoryResolver,
         private changeDetector: ChangeDetectorRef,
-        @Inject(DEVICE) device: Device,
+        @Inject(DEVICE) device: IDevice,
         @Inject(PAGE_FACTORY) private pageFactory: PageFactory,
         private routeReuseStrategy: NSRouteReuseStrategy,
         elRef: ElementRef
@@ -298,11 +294,10 @@ export class PageRouterOutlet implements OnDestroy { // tslint:disable-line:dire
             componentType: factory.componentType,
         });
 
-        const destructables = new Set([PageService]);
+        const destructables = new Set([]);
         const injector = Injector.create({
             providers: [
                 { provide: Page, useValue: page },
-                { provide: PageService, useClass: PageService, deps: [Page] },
                 { provide: Frame, useValue: this.frame },
                 { provide: PageRoute, useValue: new PageRoute(activatedRoute) },
                 { provide: ActivatedRoute, useValue: activatedRoute },
