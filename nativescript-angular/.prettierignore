@@ -1,0 +1,14 @@
+.github
+*.yml
+.vscode
+build
+dist
+doc
+e2e
+tests
+coverage
+platforms
+temp
+*.md
+*.json
+*.js

@@ -4,9 +4,9 @@ import { BaseValueAccessor } from './base-value-accessor';
 import { Slider } from '@nativescript/core';
 
 const NUMBER_VALUE_ACCESSOR = {
-    provide: NG_VALUE_ACCESSOR,
-    useExisting: forwardRef(() => NumberValueAccessor),
-    multi: true,
+	provide: NG_VALUE_ACCESSOR,
+	useExisting: forwardRef(() => NumberValueAccessor),
+	multi: true,
 };
 
 /**
@@ -19,21 +19,20 @@ const NUMBER_VALUE_ACCESSOR = {
  *  ```
  */
 @Directive({
-    selector:
-        'Slider[ngModel],Slider[formControlName],Slider[formControl],' +
-        'slider[ngModel],slider[formControlName],slider[formControl]',
-    providers: [NUMBER_VALUE_ACCESSOR],
-    host: {
-        '(valueChange)': 'onChange($event.value)',
-    },
+	selector: 'Slider[ngModel],Slider[formControlName],Slider[formControl],' + 'slider[ngModel],slider[formControlName],slider[formControl]',
+	providers: [NUMBER_VALUE_ACCESSOR],
+	host: {
+		'(valueChange)': 'onChange($event.value)',
+	},
 })
-export class NumberValueAccessor extends BaseValueAccessor<Slider> { // tslint:disable-line:directive-class-suffix
-    constructor(elementRef: ElementRef) {
-        super(elementRef.nativeElement);
-    }
+export class NumberValueAccessor extends BaseValueAccessor<Slider> {
+	// tslint:disable-line:directive-class-suffix
+	constructor(elementRef: ElementRef) {
+		super(elementRef.nativeElement);
+	}
 
-    writeValue(value: any): void {
-        const normalized = super.normalizeValue(value);
-        this.view.value = normalized;
-    }
+	writeValue(value: any): void {
+		const normalized = super.normalizeValue(value);
+		this.view.value = normalized;
+	}
 }

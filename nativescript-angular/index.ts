@@ -26,12 +26,4 @@ export * from './router';
 export * from './frame.service';
 export { NativeScriptDebug } from './trace';
 
-export {
-    ViewClass,
-    ViewClassMeta,
-    ViewResolver,
-    getViewClass,
-    getViewMeta,
-    isKnownView,
-    registerElement,
-} from './element-registry';
+export { ViewClass, ViewClassMeta, ViewResolver, getViewClass, getViewMeta, isKnownView, registerElement } from './element-registry';

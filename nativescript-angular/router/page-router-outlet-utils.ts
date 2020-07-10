@@ -1,10 +1,5 @@
 import { ComponentRef } from '@angular/core';
-import {
-  ActivatedRoute,
-  ActivatedRouteSnapshot,
-  ChildrenOutletContexts,
-  PRIMARY_OUTLET,
-} from '@angular/router';
+import { ActivatedRoute, ActivatedRouteSnapshot, ChildrenOutletContexts, PRIMARY_OUTLET } from '@angular/router';
 
 /**
  * There are cases where multiple activatedRoute nodes should be associated/handled by the same PageRouterOutlet.
@@ -24,31 +19,25 @@ import {
  *  In these cases we will mark the top-most node (feature). NSRouteReuseStrategy will detach the tree there and
  *  use this ActivateRoute as a kay for caching.
  */
-export function findTopActivatedRouteNodeForOutlet(
-  activatedRoute: ActivatedRouteSnapshot
-): ActivatedRouteSnapshot {
-  let outletActivatedRoute = activatedRoute;
+export function findTopActivatedRouteNodeForOutlet(activatedRoute: ActivatedRouteSnapshot): ActivatedRouteSnapshot {
+	let outletActivatedRoute = activatedRoute;
 
-  while (
-    outletActivatedRoute.parent &&
-    outletActivatedRoute.parent.routeConfig &&
-    !outletActivatedRoute.parent.routeConfig.component
-  ) {
-    outletActivatedRoute = outletActivatedRoute.parent;
-  }
+	while (outletActivatedRoute.parent && outletActivatedRoute.parent.routeConfig && !outletActivatedRoute.parent.routeConfig.component) {
+		outletActivatedRoute = outletActivatedRoute.parent;
+	}
 
-  return outletActivatedRoute;
+	return outletActivatedRoute;
 }
 
 export const pageRouterActivatedSymbol = Symbol('page-router-activated');
 export const loaderRefSymbol = Symbol('loader-ref');
 
 export function destroyComponentRef(componentRef: ComponentRef<any>) {
-  if (componentRef) {
-    const loaderRef = componentRef[loaderRefSymbol];
-    if (loaderRef) {
-      loaderRef.destroy();
-    }
-    componentRef.destroy();
-  }
+	if (componentRef) {
+		const loaderRef = componentRef[loaderRefSymbol];
+		if (loaderRef) {
+			loaderRef.destroy();
+		}
+		componentRef.destroy();
+	}
 }

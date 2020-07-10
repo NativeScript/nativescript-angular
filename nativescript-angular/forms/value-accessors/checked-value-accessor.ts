@@ -4,9 +4,9 @@ import { BaseValueAccessor } from './base-value-accessor';
 import { Switch } from '@nativescript/core';
 
 const CHECKED_VALUE_ACCESSOR = {
-    provide: NG_VALUE_ACCESSOR,
-    useExisting: forwardRef(() => CheckedValueAccessor),
-    multi: true,
+	provide: NG_VALUE_ACCESSOR,
+	useExisting: forwardRef(() => CheckedValueAccessor),
+	multi: true,
 };
 
 /**
@@ -19,21 +19,20 @@ const CHECKED_VALUE_ACCESSOR = {
  *  ```
  */
 @Directive({
-    selector:
-        'Switch[ngModel],Switch[formControlName],Switch[formControl],' +
-        'switch[ngModel],switch[formControlName],switch[formControl]',
-    providers: [CHECKED_VALUE_ACCESSOR],
-    host: {
-        '(checkedChange)': 'onChange($event.value)',
-    },
+	selector: 'Switch[ngModel],Switch[formControlName],Switch[formControl],' + 'switch[ngModel],switch[formControlName],switch[formControl]',
+	providers: [CHECKED_VALUE_ACCESSOR],
+	host: {
+		'(checkedChange)': 'onChange($event.value)',
+	},
 })
-export class CheckedValueAccessor extends BaseValueAccessor<Switch> { // tslint:disable-line:directive-class-suffix
-    constructor(elementRef: ElementRef) {
-        super(elementRef.nativeElement);
-    }
+export class CheckedValueAccessor extends BaseValueAccessor<Switch> {
+	// tslint:disable-line:directive-class-suffix
+	constructor(elementRef: ElementRef) {
+		super(elementRef.nativeElement);
+	}
 
-    writeValue(value: any): void {
-        const normalized = super.normalizeValue(value);
-        this.view.checked = normalized;
-    }
+	writeValue(value: any): void {
+		const normalized = super.normalizeValue(value);
+		this.view.checked = normalized;
+	}
 }

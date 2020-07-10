@@ -12,18 +12,13 @@ export * from './src/util';
  * to test dynamic component loading and need to specify an entryComponent for the testing
  * module.
  */
-export const NATIVESCRIPT_TESTING_PROVIDERS: any[] = [
-    COMMON_PROVIDERS,
-    {provide: APP_ROOT_VIEW, useFactory: testingRootView},
-    {provide: TestComponentRenderer, useClass: NativeScriptTestComponentRenderer},
-];
+export const NATIVESCRIPT_TESTING_PROVIDERS: any[] = [COMMON_PROVIDERS, { provide: APP_ROOT_VIEW, useFactory: testingRootView }, { provide: TestComponentRenderer, useClass: NativeScriptTestComponentRenderer }];
 
 /**
  * NativeScript testing support module. Enables use of TestBed for angular components, directives,
  * pipes, and services.
  */
 @NgModule({
-    providers: NATIVESCRIPT_TESTING_PROVIDERS
+	providers: NATIVESCRIPT_TESTING_PROVIDERS,
 })
-export class NativeScriptTestingModule {
-}
+export class NativeScriptTestingModule {}

@@ -30,8 +30,8 @@
     "prep.apps": "npm run build.pack && cd ../build/pack-scripts && npm i && npx ts-node pack-scoped.ts",
     "build": "ng-packagr -p package.json",
     "build.pack": "npm run tsc && npm run build && cd dist && npm pack",
-    "tslint": "tslint --project tsconfig.json --config tslint.json",
-    "tslint-fix": "tslint --fix **/**/*.ts -t verbose",
+    "format": "npx prettier --write .",
+    "format-check": "npx prettier --check .",
     "tsc": "tsc -p tsconfig.json",
     "tsc-w": "tsc -p tsconfig.json -w",
     "ngc": "ngc",
@@ -79,15 +79,29 @@
     "@angular/platform-browser": "~10.0.0",
     "@angular/platform-browser-dynamic": "~10.0.0",
     "@angular/router": "~10.0.0",
+    "@nativescript/core": "~7.0.0-rc.9",
     "codelyzer": "^5.2.0",
     "conventional-changelog-cli": "^2.0.34",
-    "rxjs": "~6.5.5",
-    "@nativescript/core": "~7.0.0-rc.9",
-    "ng-packagr": "~10.0.0",
-    "tslint": "^6.1.2",
-    "typescript": "~3.9.0",
-    "zone.js": "^0.10.3",
+    "husky": "^4.2.5",
+    "lint-staged": "^10.2.11",
     "nativescript-typedoc-theme": "git://github.com/NativeScript/nativescript-typedoc-theme.git#master",
-    "typedoc": "~0.17.0"
+    "ng-packagr": "~10.0.0",
+    "prettier": "^2.0.5",
+    "rxjs": "~6.5.5",
+    "tslint": "^6.1.2",
+    "tslint-config-prettier": "^1.18.0",
+    "typedoc": "~0.17.0",
+    "typescript": "~3.9.0",
+    "zone.js": "^0.10.3"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    ".": [
+      "prettier --write ."
+    ]
   }
 }

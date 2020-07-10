@@ -8,12 +8,11 @@ import { testingRootView } from './util';
  */
 @Injectable()
 export class NativeScriptTestComponentRenderer extends TestComponentRenderer {
+	insertRootElement(rootElId: string) {
+		const layout = new ProxyViewContainer();
+		layout.id = rootElId;
 
-  insertRootElement(rootElId: string) {
-    const layout = new ProxyViewContainer();
-    layout.id = rootElId;
-
-    const rootLayout = testingRootView();
-    rootLayout.addChild(layout);
-  }
+		const rootLayout = testingRootView();
+		rootLayout.addChild(layout);
+	}
 }

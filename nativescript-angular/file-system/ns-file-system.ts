@@ -6,15 +6,15 @@ import { knownFolders, Folder, File } from '@nativescript/core';
 
 @Injectable()
 export class NSFileSystem {
-    public currentApp(): Folder {
-        return knownFolders.currentApp();
-    }
+	public currentApp(): Folder {
+		return knownFolders.currentApp();
+	}
 
-    public fileFromPath(path: string): File {
-        return File.fromPath(path);
-    }
+	public fileFromPath(path: string): File {
+		return File.fromPath(path);
+	}
 
-    public fileExists(path: string): boolean {
-        return File.exists(path);
-    }
+	public fileExists(path: string): boolean {
+		return File.exists(path);
+	}
 }
