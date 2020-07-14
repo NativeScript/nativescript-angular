@@ -25,7 +25,7 @@
     "nativescript-theme-core": "^1.0.4",
     "reflect-metadata": "~0.1.8",
     "rxjs": "~6.5.5",
-    "@nativescript/core": "~6.5.8",
+    "@nativescript/core": "~7.0.0-rc.12",
     "zone.js": "^0.10.3"
   },
   "devDependencies": {
@@ -38,22 +38,20 @@
     "copy-webpack-plugin": "~6.0.3",
     "filewalker": "^0.1.3",
     "lazy": "1.0.11",
-    "nativescript-dev-webpack": "~1.5.1",
-    "terser-webpack-plugin": "~2.2.0",
-    "tslint": "^5.4.3",
-    "typescript": "~3.9.0",
-    "webpack": "~4.43.0"
+    "@nativescript/webpack": "~2.0.0-alpha.3",
+    "typescript": "~3.9.0"
   },
   "scripts": {
-    "tslint": "tslint --config tslint.json 'app/**/*.ts'",
     "clean": "npx rimraf hooks node_modules platforms package-lock.json",
     "setup": "cd ../../nativescript-angular && npm run prep.apps && cd ../e2e/tests-app-ng && npm run clean",
+    "ngcc": "ngcc --properties es2015 module main --first-only",
+    "postinstall": "npm run ngcc",
     "u": "update-ns-webpack",
     "e2e": "tsc -p e2e && mocha --opts ../config/mocha.opts --recursive e2e --appiumCapsLocation ../config/appium.capabilities.json",
     "e2e-watch": "tsc -p e2e --watch",
     "ns-verify-bundle": "ns-verify-bundle",
     "update-ns-webpack": "update-ns-webpack",
-    "ios": "tns debug ios --env.aot --emulator --no-hmr",
-    "android": "tns debug android --env.aot --emulator --no-hmr"
+    "ios": "tns debug ios --emulator --no-hmr",
+    "android": "tns debug android --emulator --no-hmr"
   }
 }

@@ -25,7 +25,7 @@ interface QueryResult {
 }
 
 class Selector {
-	private nsSelectors: CSSHelper.SelectorCore[];
+	private nsSelectors: Array<any>;
 	private classSelectors: string[];
 
 	constructor(rawSelector: string) {
