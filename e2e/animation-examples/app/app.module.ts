@@ -52,13 +52,13 @@ export function asyncBoot(): Function {
     /**
      * Uncomment to test APP_INITIALIZER 
      */
-    // providers: [
-    //   {
-    //     provide: APP_INITIALIZER,
-    //     useFactory: asyncBoot,
-    //     multi: true
-    //   },
-    // ],
+    providers: [
+      {
+        provide: APP_INITIALIZER,
+        useFactory: asyncBoot,
+        multi: true
+      },
+    ],
     schemas: [NO_ERRORS_SCHEMA],
 })
 export class AppModule {}

@@ -15,8 +15,12 @@ import { NSEmptyOutletComponent } from './ns-empty-outlet.component';
 export { PageRoute } from './page-router-outlet';
 export { RouterExtensions } from './router-extensions';
 export { NSModuleFactoryLoader } from './ns-module-factory-loader';
-
-export { NSRouterLink, NSRouterLinkActive, PageRouterOutlet, NSEmptyOutletComponent, NSLocationStrategy };
+export { Outlet, NavigationOptions, LocationState, defaultNavOptions } from './ns-location-utils';
+export { NSRouterLink } from './ns-router-link';
+export { NSRouterLinkActive } from './ns-router-link-active';
+export { PageRouterOutlet } from './page-router-outlet';
+export { NSLocationStrategy } from './ns-location-strategy';
+export { NSEmptyOutletComponent } from './ns-empty-outlet.component';
 
 export function provideLocationStrategy(locationStrategy: NSLocationStrategy, frameService: FrameService): NSLocationStrategy {
 	return locationStrategy ? locationStrategy : new NSLocationStrategy(frameService);

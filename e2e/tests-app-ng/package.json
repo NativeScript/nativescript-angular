@@ -6,7 +6,7 @@
   "nativescript": {
     "id": "org.nativescript.testsappng",
     "tns-ios": {
-      "version": "6.5.0"
+      "version": "6.5.2"
     },
     "tns-android": {
       "version": "6.5.0"
@@ -25,7 +25,7 @@
     "nativescript-theme-core": "^1.0.4",
     "reflect-metadata": "~0.1.8",
     "rxjs": "~6.5.5",
-    "@nativescript/core": "~7.0.0-rc.12",
+    "@nativescript/core": "~7.0.0-rc.18",
     "zone.js": "^0.10.3"
   },
   "devDependencies": {
@@ -35,7 +35,6 @@
     "babel-types": "6.24.1",
     "babylon": "6.17.0",
     "codelyzer": "^5.1.0",
-    "copy-webpack-plugin": "~6.0.3",
     "filewalker": "^0.1.3",
     "lazy": "1.0.11",
     "@nativescript/webpack": "~2.0.0-alpha.3",

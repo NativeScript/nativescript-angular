@@ -1,39 +1,12 @@
 import { View, Frame, LayoutBase, GridLayout } from '@nativescript/core';
-import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { NgModule, Type } from '@angular/core';
-import { NativeScriptModule } from '../../nativescript.module';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { CommonModule } from '@angular/common';
+import { NativeScriptModule } from '@nativescript/angular';
 import { platformBrowserDynamicTesting } from '@angular/platform-browser-dynamic/testing';
 // import { NS_COMPILER_PROVIDERS } from "../../platform";
-import { NATIVESCRIPT_TESTING_PROVIDERS, NativeScriptTestingModule } from '../index';
-import { CommonModule } from '@angular/common';
-
-const TESTING_ROOT_ID = '__testing_container';
-
-/**
- * Get a reference to the fixtures container.
- */
-export function testingRootView(): LayoutBase {
-	const rootPageLayout = Frame.topmost().currentPage.content as LayoutBase;
-
-	let testingRoot: LayoutBase;
-	rootPageLayout.eachChild((child) => {
-		if (child.id === TESTING_ROOT_ID) {
-			testingRoot = child as LayoutBase;
-			return false;
-		}
-		return true;
-	});
-
-	if (!testingRoot) {
-		testingRoot = new GridLayout();
-		testingRoot.id = TESTING_ROOT_ID;
-		GridLayout.setColumnSpan(testingRoot, 100);
-		GridLayout.setRowSpan(testingRoot, 100);
-		rootPageLayout.addChild(testingRoot);
-	}
-
-	return testingRoot;
-}
+import { NATIVESCRIPT_TESTING_PROVIDERS, NativeScriptTestingModule } from './nativescript-testing.module';
+import { testingRootView } from './test-root-view';
 
 /**
  * Declared test contexts. When the suite is done this map should be empty if all lifecycle

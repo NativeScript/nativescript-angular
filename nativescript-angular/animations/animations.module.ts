@@ -7,7 +7,7 @@ import { AnimationDriver, ɵAnimationStyleNormalizer as AnimationStyleNormalizer
 import { ɵAnimationRendererFactory as AnimationRendererFactory, ɵBrowserAnimationBuilder as BrowserAnimationBuilder } from '@angular/platform-browser/animations';
 
 // import { NativeScriptModule } from "../nativescript.module";
-import { NativeScriptRendererFactory } from '../renderer';
+import { NativeScriptRendererFactory } from '../renderer-factory';
 import { NativeScriptAnimationDriver } from './animation-driver';
 import { throwIfAlreadyLoaded } from '../common/utils';
 import { NativeScriptCommonModule } from '../common';

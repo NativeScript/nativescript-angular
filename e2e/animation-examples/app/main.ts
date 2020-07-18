@@ -1,4 +1,4 @@
-import { platformNativeScript, NativeScriptDebug } from "@nativescript/angular";
+import { platformNativeScriptDynamic, NativeScriptDebug } from "@nativescript/angular";
 import { Trace, GridLayout, GridUnitType, ItemSpec, VerticalAlignment } from "@nativescript/core";
 
 import { AppModule } from "./app.module";
@@ -87,7 +87,7 @@ class LaunchAnimation extends GridLayout {
   }
 }
 
-platformNativeScript({
+platformNativeScriptDynamic({
   launchView: new LaunchAnimation(),
   // backgroundColor: 'purple'
 }).bootstrapModule(AppModule);

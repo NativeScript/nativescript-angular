@@ -1,7 +1,7 @@
 {
     "name": "nativescript-angular",
-    "version": "9.0.0",
-    "description": "An Angular renderer that lets you build mobile apps with NativeScript.",
+    "version": "10.0.0-rc.4",
+    "description": "Compatibility with old style nativescript-angular imports.",
     "homepage": "https://www.nativescript.org/",
     "bugs": "https://github.com/NativeScript/nativescript-angular/issues",
     "author": {
@@ -22,24 +22,38 @@
         "type": "git",
         "url": "https://github.com/NativeScript/nativescript-angular.git"
     },
-    "dependencies": {
-        "@nativescript/angular": "file:../nativescript-angular"
+    "ngPackage": {
+        "lib": {
+            "entryFile": "index.ts",
+            "umdModuleIds": {
+                "@nativescript/core": "ns-core",
+                "@nativescript/angular": "ns-angular"
+            }
+        },
+        "whitelistedNonPeerDependencies": [
+            "."
+        ]
     },
     "devDependencies": {
-        "@angular/animations": "~9.1.0",
-        "@angular/common": "~9.1.0",
-        "@angular/compiler": "~9.1.0",
-        "@angular/compiler-cli": "~9.1.0",
-        "@angular/core": "~9.1.0",
-        "@angular/forms": "~9.1.0",
-        "@angular/platform-browser": "~9.1.0",
-        "@angular/platform-browser-dynamic": "~9.1.0",
-        "@angular/router": "~9.1.0",
+        "@angular/animations": "~10.0.0",
+        "@angular/common": "~10.0.0",
+        "@angular/compiler": "~10.0.0",
+        "@angular/compiler-cli": "~10.0.0",
+        "@angular/core": "~10.0.0",
+        "@angular/forms": "~10.0.0",
+        "@angular/platform-browser": "~10.0.0",
+        "@angular/platform-browser-dynamic": "~10.0.0",
+        "@angular/router": "~10.0.0",
+        "@nativescript/angular": "rc",
+        "@nativescript/core": "rc",
+        "ng-packagr": "^10.0.1",
         "rxjs": "~6.5.5",
-        "@nativescript/core": "next",
-        "typescript": "~3.8.3"
+        "typescript": "~3.9.0"
     },
     "scripts": {
+        "setup": "npx rimraf hooks node_modules package-lock.json && npm i",
+        "build": "ng-packagr -p package.json",
+        "build.pack": "npm run tsc && npm run build && cd dist && npm pack",
         "ngc": "ngc -p tsconfig.json",
         "tsc": "tsc",
         "pack-with-scoped-version": "cd ../build/pack-scripts && npm i && npx ts-node pack-compat.ts"

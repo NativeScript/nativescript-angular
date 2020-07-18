@@ -1,1 +1,1 @@
-export * from "@nativescript/angular/schema-registry";
+export * from "@nativescript/angular";

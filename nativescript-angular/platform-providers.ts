@@ -32,7 +32,10 @@ export function getRootPage(): Page {
 // Use an exported function to make the AoT compiler happy.
 export function getDefaultPage(): Page {
 	const rootPage = getRootPage();
-	if (rootPage instanceof Page) {
+	// if (rootPage instanceof Page) {
+	// 	return rootPage;
+  // }
+  if (rootPage) {
 		return rootPage;
 	}
 

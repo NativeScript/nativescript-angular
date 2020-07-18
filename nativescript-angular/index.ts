@@ -26,4 +26,7 @@ export * from './router';
 export * from './frame.service';
 export { NativeScriptDebug } from './trace';
 
-export { ViewClass, ViewClassMeta, ViewResolver, getViewClass, getViewMeta, isKnownView, registerElement } from './element-registry';
+export { NativeScriptRenderer } from './renderer';
+export { EmulatedRenderer } from './renderer-emulated';
+export { NativeScriptRendererFactory } from './renderer-factory';
+export { ViewClass, ViewClassMeta, ViewResolver, getViewClass, getViewMeta, isKnownView, registerElement, NgView, CommentNode, getSingleViewRecursive } from './element-registry';

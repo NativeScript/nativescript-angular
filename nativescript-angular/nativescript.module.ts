@@ -3,7 +3,7 @@ import { ApplicationModule, ErrorHandler, NO_ERRORS_SCHEMA, NgModule, RendererFa
 import { ViewportScroller, ɵNullViewportScroller as NullViewportScroller } from '@angular/common';
 
 import { NativeScriptCommonModule } from './common';
-import { NativeScriptRendererFactory } from './renderer';
+import { NativeScriptRendererFactory } from './renderer-factory';
 import { DetachedLoader } from './common/detached-loader';
 import { throwIfAlreadyLoaded } from './common/utils';
 import { FrameService } from './frame.service';

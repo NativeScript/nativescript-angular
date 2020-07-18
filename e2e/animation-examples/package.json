@@ -6,7 +6,7 @@
   "nativescript": {
     "id": "org.nativescript.ng4animations",
     "tns-ios": {
-      "version": "6.5.1"
+      "version": "6.5.2"
     },
     "tns-android": {
       "version": "latest"
@@ -25,7 +25,7 @@
     "nativescript-theme-core": "~1.0.2",
     "reflect-metadata": "~0.1.8",
     "rxjs": "~6.5.5",
-    "@nativescript/core": "~7.0.0-rc.12",
+    "@nativescript/core": "rc",
     "zone.js": "^0.10.3"
   },
   "devDependencies": {
@@ -43,7 +43,7 @@
     "mochawesome": "~6.1.1",
     "node-sass": "~4.14.1",
     "nativescript-css-loader": "~0.26.0",
-    "@nativescript/webpack": "~2.0.0-alpha.3",
+    "@nativescript/webpack": "rc",
     "typescript": "~3.9.0"
   },
   "scripts": {

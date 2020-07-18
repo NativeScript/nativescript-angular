@@ -17,7 +17,7 @@ export interface SetupItemViewArgs {
 	context: ItemContext;
 }
 
-@Injectable()
+@Directive()
 export abstract class TemplatedItemsComponent implements DoCheck, OnDestroy, AfterContentInit {
 	public abstract get nativeElement(): TemplatedItemsView;
 
