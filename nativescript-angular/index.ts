@@ -1,11 +1,11 @@
 // Initial imports and polyfills
 import '@nativescript/core';
 import '@nativescript/zone-js';
-import './dom-adapter';
-import 'nativescript-intl';
 // TODO: migrate to standard zone.js if possible
 // investigate Ivy with templated-items-comp to allow standard zone below to be used instead of patched {N} zone above
 // import 'zone.js/dist/zone';
+import './dom-adapter';
+import 'nativescript-intl';
 // import "./polyfills/array";
 import './polyfills/console';
 

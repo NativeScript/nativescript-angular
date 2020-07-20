@@ -177,15 +177,10 @@ export class NativeScriptPlatformRef extends PlatformRef {
 			}
 
 			setRootPage(<any>launchView);
-			args.root = launchView;
-
-			// Launch Angular app on next tick
-			setTimeout(() => {
-				if (this.appOptions && this.appOptions.launchView && this.appOptions.launchView.startAnimation) {
-					// ensure launch animation is executed after launchView added to view stack
-					this.appOptions.launchView.startAnimation();
-				}
-				this._bootstrapper().then(
+      args.root = launchView;
+      
+      const bootstrap = () => {
+        this._bootstrapper().then(
 					(moduleRef) => {
 						if (NativeScriptDebug.isLogEnabled()) {
 							NativeScriptDebug.bootstrapLog(`Angular bootstrap bootstrap done. uptime: ${profilingUptime()}`);
@@ -219,7 +214,20 @@ export class NativeScriptPlatformRef extends PlatformRef {
 				if (NativeScriptDebug.isLogEnabled()) {
 					NativeScriptDebug.bootstrapLog('bootstrapAction called, draining micro tasks queue finished! Root: ' + rootContent);
 				}
-			});
+      };
+
+      if (this.appOptions && this.appOptions.launchView) {
+        // Since custom LaunchView could engage with animations, Launch Angular app on next tick
+			  setTimeout(() => {
+          if (this.appOptions.launchView.startAnimation) {
+            // ensure launch animation is executed after launchView added to view stack
+            this.appOptions.launchView.startAnimation();
+          }
+          bootstrap();
+        });
+      } else {
+        bootstrap();
+      }
 		});
 		const exitCallback = profile('@nativescript/angular/platform-common.exitCallback', (args: ApplicationEventData) => {
 			const androidActivity = args.android;
