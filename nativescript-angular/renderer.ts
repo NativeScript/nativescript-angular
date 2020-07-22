@@ -1,8 +1,7 @@
 import { Inject, Injectable, Optional, NgZone, Renderer2, RendererFactory2, RendererType2, RendererStyleFlags2, ViewEncapsulation } from '@angular/core';
 
-import { View, getViewById, IDevice, Application, profile } from '@nativescript/core';
+import { View, getViewById, profile } from '@nativescript/core';
 
-import { APP_ROOT_VIEW, DEVICE, getRootPage } from './platform-providers';
 import { ViewUtil } from './view-util';
 import { NgView, InvisibleNode } from './element-registry';
 import { NativeScriptDebug } from './trace';

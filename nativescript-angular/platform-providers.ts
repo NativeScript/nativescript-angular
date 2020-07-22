@@ -3,7 +3,7 @@ import { InjectionToken, Injectable, OnDestroy } from '@angular/core';
 import { Frame, View, Page, IDevice, Device } from '@nativescript/core';
 
 export const APP_ROOT_VIEW = new InjectionToken<View>('NativeScriptAppRootView');
-export const DEVICE = new InjectionToken<IDevice>('NativeScriptPlatformDevice');
+export const DeviceToken = new InjectionToken<IDevice>('NativeScriptPlatformDeviceToken');
 
 export type PageFactory = (options: PageFactoryOptions) => Page;
 export interface PageFactoryOptions {
@@ -32,12 +32,12 @@ export function getRootPage(): Page {
 // Use an exported function to make the AoT compiler happy.
 export function getDefaultPage(): Page {
 	const rootPage = getRootPage();
-	// if (rootPage instanceof Page) {
-	// 	return rootPage;
-  // }
-  if (rootPage) {
+	if (rootPage instanceof Page) {
 		return rootPage;
 	}
+	// if (rootPage) {
+	// 	return rootPage;
+	// }
 
 	const frame = Frame.topmost();
 	if (frame && frame.currentPage) {
@@ -61,4 +61,4 @@ export function getDefaultDevice(): IDevice {
 	return Device;
 }
 
-export const defaultDeviceProvider = { provide: DEVICE, useFactory: getDefaultDevice };
+export const defaultDeviceProvider = { provide: DeviceToken, useFactory: getDefaultDevice };

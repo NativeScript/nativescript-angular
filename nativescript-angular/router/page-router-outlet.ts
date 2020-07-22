@@ -1,11 +1,11 @@
-import { Attribute, ChangeDetectorRef, ComponentFactory, ComponentFactoryResolver, ComponentRef, Directive, Inject, InjectionToken, Injector, OnDestroy, EventEmitter, Output, Type, ViewContainerRef, ElementRef, InjectFlags } from '@angular/core';
+import { Attribute, ChangeDetectorRef, ComponentFactory, ComponentFactoryResolver, ComponentRef, Directive, Inject, InjectionToken, Injector, OnDestroy, EventEmitter, Output, Type, ViewContainerRef, ElementRef, InjectFlags, NgZone } from '@angular/core';
 import { ActivatedRoute, ActivatedRouteSnapshot, ChildrenOutletContexts, PRIMARY_OUTLET } from '@angular/router';
 
-import { IDevice, Frame, Page, NavigatedData, profile } from '@nativescript/core';
+import { Frame, Page, NavigatedData, profile, Device } from '@nativescript/core';
 
 import { BehaviorSubject } from 'rxjs';
 
-import { DEVICE, PAGE_FACTORY, PageFactory } from '../platform-providers';
+import { PAGE_FACTORY, PageFactory } from '../platform-providers';
 import { NativeScriptDebug } from '../trace';
 import { DetachedLoader } from '../common/detached-loader';
 import { ViewUtil } from '../view-util';
@@ -98,7 +98,7 @@ export class PageRouterOutlet implements OnDestroy {
 		return this._activatedRoute;
 	}
 
-	constructor(private parentContexts: ChildrenOutletContexts, private location: ViewContainerRef, @Attribute('name') name: string, @Attribute('actionBarVisibility') actionBarVisibility: string, @Attribute('isEmptyOutlet') isEmptyOutlet: boolean, private locationStrategy: NSLocationStrategy, private componentFactoryResolver: ComponentFactoryResolver, private resolver: ComponentFactoryResolver, private changeDetector: ChangeDetectorRef, @Inject(DEVICE) device: IDevice, @Inject(PAGE_FACTORY) private pageFactory: PageFactory, private routeReuseStrategy: NSRouteReuseStrategy, elRef: ElementRef) {
+	constructor(private parentContexts: ChildrenOutletContexts, private location: ViewContainerRef, @Attribute('name') name: string, @Attribute('actionBarVisibility') actionBarVisibility: string, @Attribute('isEmptyOutlet') isEmptyOutlet: boolean, private locationStrategy: NSLocationStrategy, private componentFactoryResolver: ComponentFactoryResolver, private resolver: ComponentFactoryResolver, private changeDetector: ChangeDetectorRef, @Inject(PAGE_FACTORY) private pageFactory: PageFactory, private routeReuseStrategy: NSRouteReuseStrategy, private ngZone: NgZone, elRef: ElementRef) {
 		this.isEmptyOutlet = isEmptyOutlet;
 		this.frame = elRef.nativeElement;
 		this.setActionBarVisibility(actionBarVisibility);
@@ -109,7 +109,7 @@ export class PageRouterOutlet implements OnDestroy {
 		this.name = name || PRIMARY_OUTLET;
 		parentContexts.onChildOutletCreated(this.name, <any>this);
 
-		this.viewUtil = new ViewUtil(device);
+		this.viewUtil = new ViewUtil(Device);
 		this.detachedLoaderFactory = resolver.resolveComponentFactory(DetachedLoader);
 	}
 
@@ -304,6 +304,16 @@ export class PageRouterOutlet implements OnDestroy {
 				this.locationStrategy.back(null, this.frame);
 			}
 		});
+		// TODO: experiment with using NgZone instead of global above
+		// const navigatedFromCallback = (args: NavigatedData) => {
+		// 	if (args.isBackNavigation) {
+		//     this.ngZone.run(() => {
+		//       this.locationStrategy._beginBackPageNavigation(this.frame);
+		//       this.locationStrategy.back(null, this.frame);
+		//     });
+		// 	}
+		// };
+
 		page.on(Page.navigatedFromEvent, navigatedFromCallback);
 		componentRef.onDestroy(() => {
 			if (page) {

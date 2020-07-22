@@ -1,4 +1,4 @@
-import { LayoutBase, GridLayout, Frame } from "@nativescript/core";
+import { LayoutBase, GridLayout, Frame } from '@nativescript/core';
 
 const TESTING_ROOT_ID = '__testing_container';
 

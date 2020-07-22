@@ -1,15 +1,16 @@
-import { platformNativeScriptDynamic, NativeScriptDebug } from "@nativescript/angular";
-import { Trace, GridLayout, GridUnitType, ItemSpec, VerticalAlignment } from "@nativescript/core";
+import { platformNativeScriptDynamic, NativeScriptDebug, AppLaunchView } from "@nativescript/angular";
+import { Trace, GridLayout, GridUnitType, ItemSpec, Application } from "@nativescript/core";
 
 import { AppModule } from "./app.module";
 
 Trace.setCategories(NativeScriptDebug.animationsTraceCategory);
 Trace.enable();
 
-class LaunchAnimation extends GridLayout {
+class LaunchAnimation extends GridLayout implements AppLaunchView {
   circle: GridLayout;
   animatedContainer: GridLayout;
   finished = false;
+  resolve: () => void;
 
   constructor() {
     super();
@@ -70,7 +71,10 @@ class LaunchAnimation extends GridLayout {
   }
 
   cleanup() {
-    this.finished = true;
+    return new Promise(resolve => {
+      this.resolve = resolve;
+      this.finished = true;
+    })
   }
 
   fadeOut() {
@@ -80,9 +84,13 @@ class LaunchAnimation extends GridLayout {
         duration: 400,
       })
       .then(() => {
-        this._removeView(this.animatedContainer);
+        // done with animation, can safely remove to reveal bootstrapped app
+        (<any>this).removeChild(this.animatedContainer);
         this.animatedContainer = null;
         this.circle = null;
+        if (this.resolve) {
+          this.resolve();
+        }
       });
   }
 }

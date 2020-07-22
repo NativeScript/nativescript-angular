@@ -1,6 +1,5 @@
 import { Component, Inject } from '@angular/core';
-import { IDevice, platformNames } from '@nativescript/core';
-import { DEVICE } from '../platform-providers';
+import { isIOS, isAndroid } from '@nativescript/core';
 
 @Component({
 	selector: 'android',
@@ -8,8 +7,8 @@ import { DEVICE } from '../platform-providers';
 })
 export class AndroidFilterComponent {
 	public show: boolean;
-	constructor(@Inject(DEVICE) device: IDevice) {
-		this.show = device.os === platformNames.android;
+	constructor() {
+		this.show = isAndroid;
 	}
 }
 
@@ -19,7 +18,7 @@ export class AndroidFilterComponent {
 })
 export class IosFilterComponent {
 	public show: boolean;
-	constructor(@Inject(DEVICE) device: IDevice) {
-		this.show = device.os === platformNames.ios;
+	constructor() {
+		this.show = isIOS;
 	}
 }

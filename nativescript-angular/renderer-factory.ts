@@ -1,6 +1,6 @@
-import { Inject, Injectable, RendererFactory2, Optional, NgZone, RendererType2, ViewEncapsulation } from "@angular/core";
-import { View, getViewById, IDevice, Application, profile } from '@nativescript/core';
-import { APP_ROOT_VIEW, DEVICE, getRootPage } from './platform-providers';
+import { Inject, Injectable, RendererFactory2, Optional, NgZone, RendererType2, ViewEncapsulation } from '@angular/core';
+import { View, getViewById, Application, profile, Device } from '@nativescript/core';
+import { APP_ROOT_VIEW, getRootPage } from './platform-providers';
 import { ViewUtil } from './view-util';
 import { NgView, InvisibleNode } from './element-registry';
 import { NativeScriptDebug } from './trace';
@@ -13,13 +13,13 @@ const addStyleToCss = profile('"renderer".addStyleToCss', function addStyleToCss
 
 @Injectable()
 export class NativeScriptRendererFactory implements RendererFactory2 {
-	private componentRenderers = new Map<string, NativeScriptRenderer>();
-	private viewUtil: ViewUtil;
-	private defaultRenderer: NativeScriptRenderer;
-	private rootNgView: NgView;
+	componentRenderers = new Map<string, NativeScriptRenderer>();
+	viewUtil: ViewUtil;
+	defaultRenderer: NativeScriptRenderer;
+	rootNgView: NgView;
 
-	constructor(@Optional() @Inject(APP_ROOT_VIEW) rootView: View, @Inject(DEVICE) device: IDevice, private zone: NgZone) {
-		this.viewUtil = new ViewUtil(device);
+	constructor(@Optional() @Inject(APP_ROOT_VIEW) rootView: View, private zone: NgZone) {
+		this.viewUtil = new ViewUtil(Device);
 		this.setRootNgView(rootView);
 		this.defaultRenderer = new NativeScriptRenderer(this.rootNgView, zone, this.viewUtil);
 	}

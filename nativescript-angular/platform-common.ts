@@ -1,4 +1,4 @@
-import { Application, TextView, Color, View, Frame, GridLayout, LaunchEventData, ApplicationEventData, profile, profilingUptime } from '@nativescript/core';
+import { Application, TextView, Color, View, Frame, GridLayout, LaunchEventData, ApplicationEventData, profile, profilingUptime, Page, LayoutBase } from '@nativescript/core';
 // import './dom-adapter';
 // import 'nativescript-intl';
 
@@ -7,6 +7,7 @@ import { DOCUMENT } from '@angular/common';
 
 import { NativeScriptDebug } from './trace';
 import { defaultPageFactoryProvider, setRootPage, PageFactory, PAGE_FACTORY, getRootPage } from './platform-providers';
+import { AppHostView } from './app-host-view';
 
 export const onBeforeLivesync = new EventEmitter<NgModuleRef<any>>();
 export const onAfterLivesync = new EventEmitter<{
@@ -43,9 +44,12 @@ export interface HmrOptions {
 }
 // tslint:enable:max-line-length
 
-export interface AppLaunchView extends View {
+export interface AppLaunchView extends LayoutBase {
+	// called when the animation is to begin
 	startAnimation?: () => void;
-	cleanup?: () => void;
+	// called when bootstrap is complete and cleanup can begin
+	// should resolve when animation is completely finished
+	cleanup?: () => Promise<any>;
 }
 
 export interface AppOptions {
@@ -167,35 +171,51 @@ export class NativeScriptPlatformRef extends PlatformRef {
 				NativeScriptDebug.bootstrapLog('Application launch event fired');
 			}
 
+			let tempAppHostView: AppHostView;
+			let usingCustomLaunchView = false;
 			if (this.appOptions && this.appOptions.launchView) {
 				launchView = this.appOptions.launchView;
+				usingCustomLaunchView = true;
+				rootContent = launchView;
+				setRootPage(<any>rootContent);
 			} else {
-				launchView = new GridLayout();
-				// Custom launch view color
-				// Useful when using async app intializers to avoid flash of undesirable color
-				launchView.backgroundColor = new Color(this.appOptions && this.appOptions.backgroundColor ? this.appOptions.backgroundColor : '#fff');
+				// Create a temp page for root of the renderer
+				tempAppHostView = new AppHostView(new Color(this.appOptions && this.appOptions.backgroundColor ? this.appOptions.backgroundColor : '#fff'));
+				setRootPage(<any>tempAppHostView);
 			}
 
-			setRootPage(<any>launchView);
-      args.root = launchView;
-      
-      const bootstrap = () => {
-        this._bootstrapper().then(
+			let bootstrapPromiseCompleted = false;
+			const bootstrap = () => {
+				this._bootstrapper().then(
 					(moduleRef) => {
+						bootstrapPromiseCompleted = true;
 						if (NativeScriptDebug.isLogEnabled()) {
 							NativeScriptDebug.bootstrapLog(`Angular bootstrap bootstrap done. uptime: ${profilingUptime()}`);
-							NativeScriptDebug.bootstrapLog(`Angular bootstrap bootstrap done.`);
 						}
 
-						rootContent = launchView;
 						if (launchView && launchView.cleanup) {
 							// cleanup any custom launch views
-							launchView.cleanup();
+							launchView.cleanup().then(() => {
+								// swap launchView with actual booted view
+								// todo: experiment in Angular 11 with a setup like this
+								// Application.resetRootView({
+								//   create: () => {
+								//     // const { page, frame } = this.createFrameAndPage(false);
+								//     // frame._addView(launchView.getChildAt(0));
+								//     const rootView = launchView.getChildAt(0);
+								//     // launchView.parent._removeView(launchView);
+								//     return rootView;//launchView.getChildAt(0);//page;
+								//   },
+								// });
+							});
+						} else {
+							rootContent = tempAppHostView.content;
 						}
 
 						lastBootstrappedModule = new WeakRef(moduleRef);
 					},
 					(err) => {
+						bootstrapPromiseCompleted = true;
 						const errorMessage = err.message + '\n\n' + err.stack;
 						if (NativeScriptDebug.isLogEnabled()) {
 							NativeScriptDebug.bootstrapLogError('ERROR BOOTSTRAPPING ANGULAR');
@@ -214,20 +234,28 @@ export class NativeScriptPlatformRef extends PlatformRef {
 				if (NativeScriptDebug.isLogEnabled()) {
 					NativeScriptDebug.bootstrapLog('bootstrapAction called, draining micro tasks queue finished! Root: ' + rootContent);
 				}
-      };
+			};
 
-      if (this.appOptions && this.appOptions.launchView) {
-        // Since custom LaunchView could engage with animations, Launch Angular app on next tick
-			  setTimeout(() => {
-          if (this.appOptions.launchView.startAnimation) {
-            // ensure launch animation is executed after launchView added to view stack
-            this.appOptions.launchView.startAnimation();
-          }
-          bootstrap();
-        });
-      } else {
-        bootstrap();
-      }
+			if (usingCustomLaunchView) {
+				// Since custom LaunchView could engage with animations, Launch Angular app on next tick
+				setTimeout(() => {
+					if (this.appOptions.launchView.startAnimation) {
+						// ensure launch animation is executed after launchView added to view stack
+						this.appOptions.launchView.startAnimation();
+					}
+					bootstrap();
+				});
+			} else {
+				bootstrap();
+			}
+			if (!bootstrapPromiseCompleted && !usingCustomLaunchView) {
+				const errorMessage = "Bootstrap promise didn't resolve";
+				if (NativeScriptDebug.isLogEnabled()) {
+					NativeScriptDebug.bootstrapLogError(errorMessage);
+				}
+				rootContent = this.createErrorUI(errorMessage);
+			}
+			args.root = rootContent;
 		});
 		const exitCallback = profile('@nativescript/angular/platform-common.exitCallback', (args: ApplicationEventData) => {
 			const androidActivity = args.android;
