@@ -2,7 +2,7 @@ import { ComponentFactoryResolver, ComponentRef, Injectable, Injector, NgModuleR
 import { Frame, View, ViewBase, ProxyViewContainer, ShowModalOptions } from '@nativescript/core';
 
 import { NSLocationStrategy } from '../router/ns-location-strategy';
-import { AppHostView } from '../app-host-view';
+import { AppHostView, AppHostAsyncView } from '../app-host-view';
 import { DetachedLoader } from '../common/detached-loader';
 import { PageFactory, PAGE_FACTORY } from '../platform-providers';
 import { once } from '../common/utils';
@@ -44,7 +44,7 @@ export class ModalDialogService {
 			parentView = options.target;
 		}
 
-		if (parentView instanceof AppHostView && parentView.ngAppRoot) {
+		if ((parentView instanceof AppHostView || parentView instanceof AppHostAsyncView) && parentView.ngAppRoot) {
 			parentView = parentView.ngAppRoot;
 		}
 

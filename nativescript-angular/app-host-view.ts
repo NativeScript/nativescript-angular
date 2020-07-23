@@ -43,7 +43,7 @@ export class AppHostView extends ContentView {
 	}
 }
 
-export class AppHostLaunchAnimationView extends GridLayout {
+export class AppHostAsyncView extends GridLayout {
 	constructor(backgroundColor: Color) {
 		super();
 		this.backgroundColor = backgroundColor;

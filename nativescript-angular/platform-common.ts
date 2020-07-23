@@ -7,7 +7,7 @@ import { DOCUMENT } from '@angular/common';
 
 import { NativeScriptDebug } from './trace';
 import { defaultPageFactoryProvider, setRootPage, PageFactory, PAGE_FACTORY, getRootPage } from './platform-providers';
-import { AppHostView, AppHostLaunchAnimationView } from './app-host-view';
+import { AppHostView, AppHostAsyncView } from './app-host-view';
 
 export const onBeforeLivesync = new EventEmitter<NgModuleRef<any>>();
 export const onAfterLivesync = new EventEmitter<{
@@ -57,8 +57,19 @@ export interface AppOptions {
 	cssFile?: string;
 	startPageActionBarHidden?: boolean;
 	hmrOptions?: HmrOptions;
+	/**
+	 * Background color of the root view
+	 */
 	backgroundColor?: string;
+	/**
+	 * Use animated launch view (async by default)
+	 */
 	launchView?: AppLaunchView;
+	/**
+	 * When using Async APP_INITIALIZER, set this to `true`.
+	 * (Not needed when using launchView)
+	 */
+	async?: boolean;
 }
 
 export type PlatformFactory = (extraProviders?: StaticProvider[]) => PlatformRef;
@@ -170,16 +181,18 @@ export class NativeScriptPlatformRef extends PlatformRef {
 				NativeScriptDebug.bootstrapLog('Application launch event fired');
 			}
 
+			// Create a temp page for root of the renderer
 			let tempAppHostView: AppHostView;
-			let animatedHostView: AppHostLaunchAnimationView;
-			if (this.appOptions && this.appOptions.launchView) {
-				animatedHostView = new AppHostLaunchAnimationView(new Color(this.appOptions && this.appOptions.backgroundColor ? this.appOptions.backgroundColor : '#fff'));
-				this.appOptions.launchView.style.zIndex = 1000;
-				animatedHostView.addChild(this.appOptions.launchView);
-				rootContent = animatedHostView.ngAppRoot;
-				setRootPage(<any>animatedHostView);
+			let tempAppHostAsyncView: AppHostAsyncView;
+			if (this.appOptions && (this.appOptions.async || this.appOptions.launchView)) {
+				tempAppHostAsyncView = new AppHostAsyncView(new Color(this.appOptions && this.appOptions.backgroundColor ? this.appOptions.backgroundColor : '#fff'));
+				if (this.appOptions.launchView) {
+					this.appOptions.launchView.style.zIndex = 1000;
+					tempAppHostAsyncView.addChild(this.appOptions.launchView);
+				}
+				rootContent = tempAppHostAsyncView.ngAppRoot;
+				setRootPage(<any>tempAppHostAsyncView);
 			} else {
-				// Create a temp page for root of the renderer
 				tempAppHostView = new AppHostView(new Color(this.appOptions && this.appOptions.backgroundColor ? this.appOptions.backgroundColor : '#fff'));
 				setRootPage(<any>tempAppHostView);
 			}
@@ -196,10 +209,10 @@ export class NativeScriptPlatformRef extends PlatformRef {
 						if (this.appOptions.launchView && this.appOptions.launchView.cleanup) {
 							this.appOptions.launchView.cleanup().then(() => {
 								// cleanup any custom launch views
-								animatedHostView.removeChild(this.appOptions.launchView);
+								tempAppHostAsyncView.removeChild(this.appOptions.launchView);
 								this.appOptions.launchView = null;
 							});
-						} else {
+						} else if (tempAppHostView) {
 							rootContent = tempAppHostView.content;
 						}
 
@@ -235,13 +248,13 @@ export class NativeScriptPlatformRef extends PlatformRef {
 				});
 			}
 			bootstrap();
-			if (!bootstrapPromiseCompleted) {
-				const errorMessage = "Bootstrap promise didn't resolve";
-				if (NativeScriptDebug.isLogEnabled()) {
-					NativeScriptDebug.bootstrapLogError(errorMessage);
-				}
-				rootContent = this.createErrorUI(errorMessage);
-			}
+			// if (!bootstrapPromiseCompleted) {
+			// 	const errorMessage = "Bootstrap promise didn't resolve";
+			// 	if (NativeScriptDebug.isLogEnabled()) {
+			// 		NativeScriptDebug.bootstrapLogError(errorMessage);
+			// 	}
+			// 	rootContent = this.createErrorUI(errorMessage);
+			// }
 			args.root = rootContent;
 		});
 		const exitCallback = profile('@nativescript/angular/platform-common.exitCallback', (args: ApplicationEventData) => {

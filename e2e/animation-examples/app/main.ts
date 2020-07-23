@@ -10,7 +10,7 @@ class LaunchAnimation extends GridLayout implements AppLaunchView {
   circle: GridLayout;
   animatedContainer: GridLayout;
   finished = false;
-  resolve: () => void;
+  complete: () => void;
 
   constructor() {
     super();
@@ -18,17 +18,17 @@ class LaunchAnimation extends GridLayout implements AppLaunchView {
     // setup container to house launch animation
     this.animatedContainer = new GridLayout();
     this.animatedContainer.style.zIndex = 100;
-    this.animatedContainer.backgroundColor = '#4caef7';
-    this.animatedContainer.className = 'w-full h-full';
+    this.animatedContainer.backgroundColor = "#4caef7";
+    this.animatedContainer.className = "w-full h-full";
 
     // any creative animation can be put inside
     this.circle = new GridLayout();
     this.circle.width = 30;
     this.circle.height = 30;
     this.circle.borderRadius = 15;
-    this.circle.horizontalAlignment = 'center';
-    this.circle.verticalAlignment = 'middle';
-    this.circle.backgroundColor = '#fff';
+    this.circle.horizontalAlignment = "center";
+    this.circle.verticalAlignment = "middle";
+    this.circle.backgroundColor = "#fff";
     this.animatedContainer.addRow(new ItemSpec(1, GridUnitType.STAR));
     this.animatedContainer.addRow(new ItemSpec(1, GridUnitType.AUTO));
     this.animatedContainer.addRow(new ItemSpec(1, GridUnitType.STAR));
@@ -40,62 +40,51 @@ class LaunchAnimation extends GridLayout implements AppLaunchView {
     this.addChild(this.animatedContainer);
   }
 
-  startAnimation() {
-    this.circle
-      .animate({
-        scale: { x: 2, y: 2 },
-        duration: 800,
-      })
-      .then(() => {
-        this.circle
-          .animate({
-            scale: { x: 1, y: 1 },
-            duration: 800,
-          })
-          .then(() => {
-            if (this.finished) {
-              this.circle
-                .animate({
-                  scale: { x: 30, y: 30 },
-                  duration: 400,
-                })
-                .then(() => {
-                  this.fadeOut();
-                });
-            } else {
-              // keep looping
-              this.startAnimation();
-            }
-          });
+  async startAnimation() {
+    await this.circle.animate({
+      scale: { x: 2, y: 2 },
+      duration: 800,
+    });
+
+    await this.circle.animate({
+      scale: { x: 1, y: 1 },
+      duration: 800,
+    });
+
+    if (this.finished) {
+      await this.circle.animate({
+        scale: { x: 30, y: 30 },
+        duration: 400,
       });
+      this.fadeOut();
+    } else {
+      // keep looping
+      this.startAnimation();
+    }
   }
 
   cleanup() {
-    return new Promise(resolve => {
-      this.resolve = resolve;
+    return new Promise((resolve) => {
+      this.complete = resolve;
       this.finished = true;
-    })
+    });
   }
 
-  fadeOut() {
-    this.animatedContainer
-      .animate({
-        opacity: 0,
-        duration: 400,
-      })
-      .then(() => {
-        // done with animation, can safely remove to reveal bootstrapped app
-        this.removeChild(this.animatedContainer);
-        this.animatedContainer = null;
-        this.circle = null;
-        if (this.resolve) {
-          this.resolve();
-        }
-      });
+  async fadeOut() {
+    await this.animatedContainer.animate({
+      opacity: 0,
+      duration: 400,
+    });
+    // done with animation, can safely remove to reveal bootstrapped app
+    this.removeChild(this.animatedContainer);
+    this.animatedContainer = null;
+    this.circle = null;
+    this.complete();
   }
 }
 
 platformNativeScriptDynamic({
   launchView: new LaunchAnimation(),
-  // backgroundColor: 'purple'
+  // backgroundColor: 'purple',
+  // async: true
 }).bootstrapModule(AppModule);
