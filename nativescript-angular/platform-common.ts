@@ -7,7 +7,7 @@ import { DOCUMENT } from '@angular/common';
 
 import { NativeScriptDebug } from './trace';
 import { defaultPageFactoryProvider, setRootPage, PageFactory, PAGE_FACTORY, getRootPage } from './platform-providers';
-import { AppHostView } from './app-host-view';
+import { AppHostView, AppHostLaunchAnimationView } from './app-host-view';
 
 export const onBeforeLivesync = new EventEmitter<NgModuleRef<any>>();
 export const onAfterLivesync = new EventEmitter<{
@@ -161,7 +161,6 @@ export class NativeScriptPlatformRef extends PlatformRef {
 	@profile
 	private bootstrapNativeScriptApp() {
 		let rootContent: View;
-		let launchView: AppLaunchView;
 
 		if (NativeScriptDebug.isLogEnabled()) {
 			NativeScriptDebug.bootstrapLog('NativeScriptPlatform bootstrap started.');
@@ -172,12 +171,13 @@ export class NativeScriptPlatformRef extends PlatformRef {
 			}
 
 			let tempAppHostView: AppHostView;
-			let usingCustomLaunchView = false;
+			let animatedHostView: AppHostLaunchAnimationView;
 			if (this.appOptions && this.appOptions.launchView) {
-				launchView = this.appOptions.launchView;
-				usingCustomLaunchView = true;
-				rootContent = launchView;
-				setRootPage(<any>rootContent);
+				animatedHostView = new AppHostLaunchAnimationView(new Color(this.appOptions && this.appOptions.backgroundColor ? this.appOptions.backgroundColor : '#fff'));
+				this.appOptions.launchView.style.zIndex = 1000;
+				animatedHostView.addChild(this.appOptions.launchView);
+				rootContent = animatedHostView.ngAppRoot;
+				setRootPage(<any>animatedHostView);
 			} else {
 				// Create a temp page for root of the renderer
 				tempAppHostView = new AppHostView(new Color(this.appOptions && this.appOptions.backgroundColor ? this.appOptions.backgroundColor : '#fff'));
@@ -193,20 +193,11 @@ export class NativeScriptPlatformRef extends PlatformRef {
 							NativeScriptDebug.bootstrapLog(`Angular bootstrap bootstrap done. uptime: ${profilingUptime()}`);
 						}
 
-						if (launchView && launchView.cleanup) {
-							// cleanup any custom launch views
-							launchView.cleanup().then(() => {
-								// swap launchView with actual booted view
-								// todo: experiment in Angular 11 with a setup like this
-								// Application.resetRootView({
-								//   create: () => {
-								//     // const { page, frame } = this.createFrameAndPage(false);
-								//     // frame._addView(launchView.getChildAt(0));
-								//     const rootView = launchView.getChildAt(0);
-								//     // launchView.parent._removeView(launchView);
-								//     return rootView;//launchView.getChildAt(0);//page;
-								//   },
-								// });
+						if (this.appOptions.launchView && this.appOptions.launchView.cleanup) {
+							this.appOptions.launchView.cleanup().then(() => {
+								// cleanup any custom launch views
+								animatedHostView.removeChild(this.appOptions.launchView);
+								this.appOptions.launchView = null;
 							});
 						} else {
 							rootContent = tempAppHostView.content;
@@ -236,19 +227,15 @@ export class NativeScriptPlatformRef extends PlatformRef {
 				}
 			};
 
-			if (usingCustomLaunchView) {
-				// Since custom LaunchView could engage with animations, Launch Angular app on next tick
+			if (this.appOptions && this.appOptions.launchView && this.appOptions.launchView.startAnimation) {
+				// start animations on next tick (after initial boot)
 				setTimeout(() => {
-					if (this.appOptions.launchView.startAnimation) {
-						// ensure launch animation is executed after launchView added to view stack
-						this.appOptions.launchView.startAnimation();
-					}
-					bootstrap();
+					// ensure launch animation is executed after launchView added to view stack
+					this.appOptions.launchView.startAnimation();
 				});
-			} else {
-				bootstrap();
 			}
-			if (!bootstrapPromiseCompleted && !usingCustomLaunchView) {
+			bootstrap();
+			if (!bootstrapPromiseCompleted) {
 				const errorMessage = "Bootstrap promise didn't resolve";
 				if (NativeScriptDebug.isLogEnabled()) {
 					NativeScriptDebug.bootstrapLogError(errorMessage);

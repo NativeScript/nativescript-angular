@@ -42,3 +42,18 @@ export class AppHostView extends ContentView {
 		}
 	}
 }
+
+export class AppHostLaunchAnimationView extends GridLayout {
+	constructor(backgroundColor: Color) {
+		super();
+		this.backgroundColor = backgroundColor;
+	}
+
+	get ngAppRoot(): View {
+		return this;
+	}
+
+	set ngAppRoot(value: View) {
+		// ignored
+	}
+}

@@ -1,5 +1,8 @@
 import { View, LayoutBase, Page, Frame, AbsoluteLayout, ActivityIndicator, BottomNavigation, Button, ContentView, DatePicker, DockLayout, GridLayout, HtmlView, Image, Label, ListPicker, ListView, Placeholder, Progress, ProxyViewContainer, Repeater, ScrollView, SearchBar, SegmentedBar, SegmentedBarItem, Slider, StackLayout, FlexboxLayout, Switch, TabView, TabStrip, TabStripItem, TabContentItem, Tabs, TextField, TextView, TimePicker, WebView, WrapLayout, FormattedString, Span } from '@nativescript/core';
 
+export interface ViewClass {
+	new (): View;
+}
 export interface ViewExtensions {
 	meta: ViewClassMeta;
 	nodeType: number;
@@ -12,10 +15,6 @@ export interface ViewExtensions {
 }
 
 export type NgView = View & ViewExtensions;
-
-export interface ViewClass {
-	new (): View;
-}
 
 export abstract class InvisibleNode extends View implements NgView {
 	meta: { skipAddToDom: boolean };
@@ -87,20 +86,20 @@ export function isInvisibleNode(view: any): view is InvisibleNode {
 	return view instanceof InvisibleNode;
 }
 
-export type ViewResolver = () => ViewClass;
+export type ViewResolver = () => any;
 
 const elementMap = new Map<string, { resolver: ViewResolver; meta?: ViewClassMeta }>();
 const camelCaseSplit = /([a-z0-9])([A-Z])/g;
 const defaultViewMeta: ViewClassMeta = { skipAddToDom: false };
 
 export function registerElement(elementName: string, resolver: ViewResolver, meta?: ViewClassMeta): void {
-	const entry = { resolver: resolver, meta: meta };
+	const entry = { resolver, meta };
 	elementMap.set(elementName, entry);
 	elementMap.set(elementName.toLowerCase(), entry);
 	elementMap.set(elementName.replace(camelCaseSplit, '$1-$2').toLowerCase(), entry);
 }
 
-export function getViewClass(elementName: string): ViewClass {
+export function getViewClass(elementName: string): any {
 	const entry = elementMap.get(elementName) || elementMap.get(elementName.toLowerCase());
 	if (!entry) {
 		throw new TypeError(`No known component for element ${elementName}.`);

@@ -85,7 +85,7 @@ class LaunchAnimation extends GridLayout implements AppLaunchView {
       })
       .then(() => {
         // done with animation, can safely remove to reveal bootstrapped app
-        (<any>this).removeChild(this.animatedContainer);
+        this.removeChild(this.animatedContainer);
         this.animatedContainer = null;
         this.circle = null;
         if (this.resolve) {
