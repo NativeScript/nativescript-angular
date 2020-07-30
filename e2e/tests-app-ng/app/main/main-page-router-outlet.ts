@@ -58,6 +58,6 @@ export class MainComponent {
 
 @Component({
     selector: "navigation-main",
-    template: `<page-router-outlet></page-router-outlet>`
+    template: `<GridLayout><page-router-outlet></page-router-outlet></GridLayout>`
 })
 export class NavigationMainPageRouterComponent { }

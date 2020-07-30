@@ -1,1 +1,1 @@
-export * from "@nativescript/angular/app-host-view";
+export * from "@nativescript/angular";

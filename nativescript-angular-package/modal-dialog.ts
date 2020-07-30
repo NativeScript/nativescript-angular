@@ -1,1 +1,1 @@
-export * from "@nativescript/angular/modal-dialog"
+export * from "@nativescript/angular";

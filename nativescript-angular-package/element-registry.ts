@@ -1,1 +1,1 @@
-export * from "@nativescript/angular/element-registry";
+export * from "@nativescript/angular";

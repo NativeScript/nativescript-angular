@@ -1,20 +1,20 @@
-import { Injectable } from "@angular/core";
-import { knownFolders, Folder, File } from "@nativescript/core/file-system";
+import { Injectable } from '@angular/core';
+import { knownFolders, Folder, File } from '@nativescript/core';
 
 // Allows greater flexibility with `file-system` and Angular
 // Also provides a way for `file-system` to be mocked for testing
 
 @Injectable()
 export class NSFileSystem {
-    public currentApp(): Folder {
-        return knownFolders.currentApp();
-    }
+	public currentApp(): Folder {
+		return knownFolders.currentApp();
+	}
 
-    public fileFromPath(path: string): File {
-        return File.fromPath(path);
-    }
+	public fileFromPath(path: string): File {
+		return File.fromPath(path);
+	}
 
-    public fileExists(path: string): boolean {
-        return File.exists(path);
-    }
+	public fileExists(path: string): boolean {
+		return File.exists(path);
+	}
 }

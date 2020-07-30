@@ -6,8 +6,7 @@ import {
     ViewContainerRef,
 } from "@angular/core";
 
-import { NSModuleFactoryLoader } from "@nativescript/angular/router";
-import { ModalDialogService } from "@nativescript/angular/directives/dialogs";
+import { NSModuleFactoryLoader, ModalDialogService } from "@nativescript/angular";
 
 import { LazyComponent } from "../../lazy/lazy.component";
 

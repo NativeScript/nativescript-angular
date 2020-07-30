@@ -1,7 +1,5 @@
 import { Component, ViewChild, ElementRef, OnInit } from "@angular/core";
-import { SegmentedBarItem, SegmentedBar } from "tns-core-modules/ui/segmented-bar/segmented-bar";
-import { ListView } from "tns-core-modules/ui/list-view/list-view";
-import { EventData } from "tns-core-modules/ui/page/page";
+import { SegmentedBarItem, SegmentedBar, ListView, EventData } from "@nativescript/core";
 
 interface DataItem {
     id: number;

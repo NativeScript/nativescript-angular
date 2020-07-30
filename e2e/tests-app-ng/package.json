@@ -6,55 +6,51 @@
   "nativescript": {
     "id": "org.nativescript.testsappng",
     "tns-ios": {
-      "version": "6.5.0"
+      "version": "6.5.2"
     },
     "tns-android": {
       "version": "6.5.0"
     }
   },
   "dependencies": {
-    "@angular/animations": "~9.1.0",
-    "@angular/common": "~9.1.0",
-    "@angular/compiler": "~9.1.0",
-    "@angular/core": "~9.1.0",
-    "@angular/forms": "~9.1.0",
-    "@angular/platform-browser": "~9.1.0",
-    "@angular/platform-browser-dynamic": "~9.1.0",
-    "@angular/router": "~9.1.0",
+    "@angular/animations": "~10.0.0",
+    "@angular/common": "~10.0.0",
+    "@angular/compiler": "~10.0.0",
+    "@angular/core": "~10.0.0",
+    "@angular/forms": "~10.0.0",
+    "@angular/platform-browser": "~10.0.0",
+    "@angular/platform-browser-dynamic": "~10.0.0",
+    "@angular/router": "~10.0.0",
     "@nativescript/angular": "file:../../dist/nativescript-angular-scoped.tgz",
-    "nativescript-intl": "~3.0.0",
     "nativescript-theme-core": "^1.0.4",
     "reflect-metadata": "~0.1.8",
     "rxjs": "~6.5.5",
-    "@nativescript/core": "next",
+    "@nativescript/core": "rc",
     "zone.js": "^0.10.3"
   },
   "devDependencies": {
-    "@angular/compiler-cli": "~9.1.0",
-    "@ngtools/webpack": "~9.1.0",
+    "@angular/compiler-cli": "~10.0.0",
+    "@ngtools/webpack": "~10.0.0",
     "babel-traverse": "6.24.1",
     "babel-types": "6.24.1",
     "babylon": "6.17.0",
     "codelyzer": "^5.1.0",
     "filewalker": "^0.1.3",
     "lazy": "1.0.11",
-    "nativescript-dev-webpack": "next",
-    "tslint": "^5.4.3",
-    "typescript": "~3.8.3"
+    "@nativescript/webpack": "rc",
+    "typescript": "~3.9.0"
   },
   "scripts": {
-    "tslint": "tslint --config tslint.json 'app/**/*.ts'",
     "clean": "npx rimraf hooks node_modules platforms package-lock.json",
-    "setup": "cd ../../nativescript-angular && npm run pack && cd ../e2e/tests-app-ng && npm run clean",
+    "setup": "cd ../../nativescript-angular && npm run prep.apps && cd ../e2e/tests-app-ng && npm run clean",
+    "ngcc": "ngcc --properties es2015 module main --first-only",
+    "postinstall": "npm run ngcc",
     "u": "update-ns-webpack",
     "e2e": "tsc -p e2e && mocha --opts ../config/mocha.opts --recursive e2e --appiumCapsLocation ../config/appium.capabilities.json",
     "e2e-watch": "tsc -p e2e --watch",
-    "update-app-ng-deps": "update-app-ng-deps",
     "ns-verify-bundle": "ns-verify-bundle",
     "update-ns-webpack": "update-ns-webpack",
-    "ngcc": "ngcc --properties es2015 module main --first-only",
-    "postinstall": "npm run ngcc",
-    "ios": "tns debug ios --env.aot --emulator --no-hmr",
-    "android": "tns debug android --env.aot --emulator --no-hmr"
+    "ios": "tns debug ios --emulator --no-hmr",
+    "android": "tns debug android --emulator --no-hmr"
   }
 }

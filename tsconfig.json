@@ -4,8 +4,8 @@
         "noImplicitUseStrict": true,
         "noEmitHelpers": true,
         "experimentalDecorators": true,
-        "target": "es5",
-        "module": "commonjs",
+        "target": "es2015",
+        "module": "esnext",
         "declaration": false,
         "noImplicitAny": false
     },

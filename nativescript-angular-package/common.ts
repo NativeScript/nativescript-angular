@@ -1,1 +1,1 @@
-export * from "@nativescript/angular/common";
+export * from "@nativescript/angular";

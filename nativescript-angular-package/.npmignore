@@ -1,4 +1,5 @@
 *.tgz
+dist
 
 *.ts
 !*.d.ts

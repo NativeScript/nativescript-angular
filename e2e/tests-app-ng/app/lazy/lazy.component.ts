@@ -1,7 +1,6 @@
 import { Component } from "@angular/core";
 
-import { RouterExtensions } from "@nativescript/angular/router";
-import { ModalDialogParams } from "@nativescript/angular/directives/dialogs";
+import { RouterExtensions, ModalDialogParams } from "@nativescript/angular";
 
 @Component({
     selector: "ns-lazy",

@@ -1,6 +1,4 @@
-import { NativeScriptCommonModule } from "@nativescript/angular/common";
-import { NativeScriptRouterModule } from "@nativescript/angular/router";
-import { ModalDialogParams } from "@nativescript/angular/directives/dialogs";
+import { NativeScriptCommonModule, NativeScriptRouterModule, ModalDialogParams } from "@nativescript/angular";
 
 import { NgModule, NO_ERRORS_SCHEMA } from "@angular/core";
 import { Routes } from "@angular/router";

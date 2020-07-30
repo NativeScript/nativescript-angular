@@ -4,7 +4,7 @@ import { ComponentFixture, TestBed } from "@angular/core/testing";
 import { DetachedLoader, NativeScriptModule } from "@nativescript/angular";
 import { nsTestBedAfterEach, nsTestBedBeforeEach, nsTestBedRender, NATIVESCRIPT_TESTING_PROVIDERS, NativeScriptTestingModule } from "@nativescript/angular/testing";
 import { platformBrowserDynamicTesting } from "@angular/platform-browser-dynamic/testing";
-import { NS_COMPILER_PROVIDERS } from "@nativescript/angular/platform";
+// import { NS_COMPILER_PROVIDERS } from "@nativescript/angular/platform";
 import { CommonModule } from "@angular/common";
 
 @Component({
@@ -51,7 +51,7 @@ describe("DetachedLoader", function() {
           }
           TestBed.initTestEnvironment(
               EntryComponentsTestModule,
-              platformBrowserDynamicTesting(NS_COMPILER_PROVIDERS)
+              platformBrowserDynamicTesting()//NS_COMPILER_PROVIDERS)
           );
           TestBed.configureTestingModule({
               declarations: [LoaderComponent, LoaderComponentOnPush, TestComponent],

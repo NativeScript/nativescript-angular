@@ -8,7 +8,7 @@ import {
     ModalDialogService,
     ModalDialogOptions,
     ModalDialogParams
-} from "@nativescript/angular/directives/dialogs";
+} from "@nativescript/angular";
 
 @Component({
     selector: "modal-content",

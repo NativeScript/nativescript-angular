@@ -1,88 +1,88 @@
-import { Injectable } from "@angular/core";
-import { RouteReuseStrategy, ActivatedRouteSnapshot, DetachedRouteHandle } from "@angular/router";
+import { Injectable } from '@angular/core';
+import { RouteReuseStrategy, ActivatedRouteSnapshot, DetachedRouteHandle } from '@angular/router';
 
-import { routeReuseStrategyLog as log, isLogEnabled } from "../trace";
-import { NSLocationStrategy } from "./ns-location-strategy";
-import {
-    destroyComponentRef,
-    findTopActivatedRouteNodeForOutlet,
-    pageRouterActivatedSymbol
-} from "./page-router-outlet";
+import { NativeScriptDebug } from '../trace';
+import { NSLocationStrategy } from './ns-location-strategy';
+import { destroyComponentRef, findTopActivatedRouteNodeForOutlet, pageRouterActivatedSymbol } from './page-router-outlet-utils';
 
 interface CacheItem {
-    key: string;
-    state: DetachedRouteHandle;
-    isModal: boolean;
+	key: string;
+	state: DetachedRouteHandle;
+	isModal: boolean;
 }
+
+const getSnapshotKey = function (snapshot: ActivatedRouteSnapshot): string {
+	return snapshot.pathFromRoot.join('->');
+};
 
 /**
  * Detached state cache
  */
 class DetachedStateCache {
-    private cache = new Array<CacheItem>();
+	private cache = new Array<CacheItem>();
 
-    public get length(): number {
-        return this.cache.length;
-    }
+	public get length(): number {
+		return this.cache.length;
+	}
 
-    public push(cacheItem: CacheItem) {
-        this.cache.push(cacheItem);
-    }
+	public push(cacheItem: CacheItem) {
+		this.cache.push(cacheItem);
+	}
 
-    public pop(): CacheItem {
-        return this.cache.pop();
-    }
+	public pop(): CacheItem {
+		return this.cache.pop();
+	}
 
-    public peek(): CacheItem {
-        return this.cache[this.cache.length - 1];
-    }
+	public peek(): CacheItem {
+		return this.cache[this.cache.length - 1];
+	}
 
-    public clear() {
-        if (isLogEnabled()) {
-            log(`DetachedStateCache.clear() ${this.cache.length} items will be destroyed`);
-        }
+	public clear() {
+		if (NativeScriptDebug.isLogEnabled()) {
+			NativeScriptDebug.routeReuseStrategyLog(`DetachedStateCache.clear() ${this.cache.length} items will be destroyed`);
+		}
 
-        while (this.cache.length > 0) {
-            const state = <any>this.cache.pop().state;
-            if (!state.componentRef) {
-                throw new Error("No componentRed found in DetachedRouteHandle");
-            }
+		while (this.cache.length > 0) {
+			const state = <any>this.cache.pop().state;
+			if (!state.componentRef) {
+				throw new Error('No componentRed found in DetachedRouteHandle');
+			}
 
-            destroyComponentRef(state.componentRef);
-        }
-    }
+			destroyComponentRef(state.componentRef);
+		}
+	}
 
-    public clearModalCache() {
-        let removedItemsCount = 0;
-        const hasModalPages = this.cache.some(cacheItem => {
-            return cacheItem.isModal;
-        });
+	public clearModalCache() {
+		let removedItemsCount = 0;
+		const hasModalPages = this.cache.some((cacheItem) => {
+			return cacheItem.isModal;
+		});
 
-        if (hasModalPages) {
-            let modalCacheCleared = false;
+		if (hasModalPages) {
+			let modalCacheCleared = false;
 
-            while (!modalCacheCleared) {
-                let cacheItem = this.peek();
-                const state = <any>cacheItem.state;
+			while (!modalCacheCleared) {
+				let cacheItem = this.peek();
+				const state = <any>cacheItem.state;
 
-                if (!state.componentRef) {
-                    throw new Error("No componentRef found in DetachedRouteHandle");
-                }
+				if (!state.componentRef) {
+					throw new Error('No componentRef found in DetachedRouteHandle');
+				}
 
-                destroyComponentRef(state.componentRef);
-                if (cacheItem.isModal) {
-                    modalCacheCleared = true;
-                }
+				destroyComponentRef(state.componentRef);
+				if (cacheItem.isModal) {
+					modalCacheCleared = true;
+				}
 
-                this.pop();
-                removedItemsCount++;
-            }
-        }
+				this.pop();
+				removedItemsCount++;
+			}
+		}
 
-        if (isLogEnabled()) {
-            log(`DetachedStateCache.clearModalCache() ${removedItemsCount} items will be destroyed`);
-        }
-    }
+		if (NativeScriptDebug.isLogEnabled()) {
+			NativeScriptDebug.routeReuseStrategyLog(`DetachedStateCache.clearModalCache() ${removedItemsCount} items will be destroyed`);
+		}
+	}
 }
 
 /**
@@ -92,154 +92,149 @@ class DetachedStateCache {
  */
 @Injectable()
 export class NSRouteReuseStrategy implements RouteReuseStrategy {
-    private cacheByOutlet: { [key: string]: DetachedStateCache } = {};
+	private cacheByOutlet: { [key: string]: DetachedStateCache } = {};
 
-    constructor(private location: NSLocationStrategy) { }
+	constructor(private location: NSLocationStrategy) {}
 
-    shouldDetach(route: ActivatedRouteSnapshot): boolean {
-        route = findTopActivatedRouteNodeForOutlet(route);
+	shouldDetach(route: ActivatedRouteSnapshot): boolean {
+		route = findTopActivatedRouteNodeForOutlet(route);
 
-        const outletKey = this.location.getRouteFullPath(route);
-        const outlet = this.location.findOutlet(outletKey, route);
-        const key = getSnapshotKey(route);
-        const isPageActivated = route[pageRouterActivatedSymbol];
-        const isBack = outlet ? outlet.isPageNavigationBack : false;
-        let shouldDetach = outlet && !isBack && isPageActivated;
+		const outletKey = this.location.getRouteFullPath(route);
+		const outlet = this.location.findOutlet(outletKey, route);
+		const key = getSnapshotKey(route);
+		const isPageActivated = route[pageRouterActivatedSymbol];
+		const isBack = outlet ? outlet.isPageNavigationBack : false;
+		let shouldDetach = outlet && !isBack && isPageActivated;
 
-        if (outlet) {
-            if (outlet.parent && !outlet.parent.shouldDetach) {
-                shouldDetach = false;
-            }
+		if (outlet) {
+			if (outlet.parent && !outlet.parent.shouldDetach) {
+				shouldDetach = false;
+			}
 
-            outlet.shouldDetach = shouldDetach;
-        }
+			outlet.shouldDetach = shouldDetach;
+		}
 
-        if (isLogEnabled()) {
-            log(`shouldDetach isBack: ${isBack} key: ${key} result: ${shouldDetach}`);
-        }
+		if (NativeScriptDebug.isLogEnabled()) {
+			NativeScriptDebug.routeReuseStrategyLog(`shouldDetach isBack: ${isBack} key: ${key} result: ${shouldDetach}`);
+		}
 
-        return shouldDetach;
-    }
+		return shouldDetach;
+	}
 
-    shouldAttach(route: ActivatedRouteSnapshot): boolean {
-        route = findTopActivatedRouteNodeForOutlet(route);
+	shouldAttach(route: ActivatedRouteSnapshot): boolean {
+		route = findTopActivatedRouteNodeForOutlet(route);
 
-        const outletKey = this.location.getRouteFullPath(route);
-        const outlet = this.location.findOutlet(outletKey, route);
-        const cache = this.cacheByOutlet[outletKey];
-        if (!cache) {
-            return false;
-        }
+		const outletKey = this.location.getRouteFullPath(route);
+		const outlet = this.location.findOutlet(outletKey, route);
+		const cache = this.cacheByOutlet[outletKey];
+		if (!cache) {
+			return false;
+		}
 
-        const key = getSnapshotKey(route);
-        const isBack = outlet ? outlet.isPageNavigationBack : false;
-        const shouldAttach = isBack && cache.peek().key === key;
+		const key = getSnapshotKey(route);
+		const isBack = outlet ? outlet.isPageNavigationBack : false;
+		const shouldAttach = isBack && cache.peek().key === key;
 
-        if (isLogEnabled()) {
-            log(`shouldAttach isBack: ${isBack} key: ${key} result: ${shouldAttach}`);
-        }
+		if (NativeScriptDebug.isLogEnabled()) {
+			NativeScriptDebug.routeReuseStrategyLog(`shouldAttach isBack: ${isBack} key: ${key} result: ${shouldAttach}`);
+		}
 
-        if (outlet) {
-            outlet.shouldDetach = true;
-        }
+		if (outlet) {
+			outlet.shouldDetach = true;
+		}
 
-        return shouldAttach;
-    }
+		return shouldAttach;
+	}
 
-    store(route: ActivatedRouteSnapshot, state: DetachedRouteHandle): void {
-        route = findTopActivatedRouteNodeForOutlet(route);
+	store(route: ActivatedRouteSnapshot, state: DetachedRouteHandle): void {
+		route = findTopActivatedRouteNodeForOutlet(route);
 
-        const key = getSnapshotKey(route);
-        if (isLogEnabled()) {
-            log(`store key: ${key}, state: ${state}`);
-        }
+		const key = getSnapshotKey(route);
+		if (NativeScriptDebug.isLogEnabled()) {
+			NativeScriptDebug.routeReuseStrategyLog(`store key: ${key}, state: ${state}`);
+		}
 
-        const outletKey = this.location.getRouteFullPath(route);
+		const outletKey = this.location.getRouteFullPath(route);
 
-        // tslint:disable-next-line:max-line-length
-        const cache = this.cacheByOutlet[outletKey] = this.cacheByOutlet[outletKey] || new DetachedStateCache();
+		// tslint:disable-next-line:max-line-length
+		const cache = (this.cacheByOutlet[outletKey] = this.cacheByOutlet[outletKey] || new DetachedStateCache());
 
-        if (state) {
-            let isModal = false;
-            if (this.location._modalNavigationDepth > 0) {
-                isModal = true;
-            }
+		if (state) {
+			let isModal = false;
+			if (this.location._modalNavigationDepth > 0) {
+				isModal = true;
+			}
 
-            cache.push({ key, state, isModal });
-        } else {
-            const topItem = cache.peek();
-            if (topItem.key === key) {
-                cache.pop();
+			cache.push({ key, state, isModal });
+		} else {
+			const topItem = cache.peek();
+			if (topItem.key === key) {
+				cache.pop();
 
-                if (!cache.length) {
-                    delete this.cacheByOutlet[outletKey];
-                }
-            } else {
-                throw new Error("Trying to pop from DetachedStateCache but keys don't match. " +
-                    `expected: ${topItem.key} actual: ${key}`);
-            }
-        }
-    }
+				if (!cache.length) {
+					delete this.cacheByOutlet[outletKey];
+				}
+			} else {
+				throw new Error("Trying to pop from DetachedStateCache but keys don't match. " + `expected: ${topItem.key} actual: ${key}`);
+			}
+		}
+	}
 
-    retrieve(route: ActivatedRouteSnapshot): DetachedRouteHandle | null {
-        route = findTopActivatedRouteNodeForOutlet(route);
+	retrieve(route: ActivatedRouteSnapshot): DetachedRouteHandle | null {
+		route = findTopActivatedRouteNodeForOutlet(route);
 
-        const outletKey = this.location.getRouteFullPath(route);
-        const outlet = this.location.findOutlet(outletKey, route);
-        const cache = this.cacheByOutlet[outletKey];
-        if (!cache) {
-            return null;
-        }
+		const outletKey = this.location.getRouteFullPath(route);
+		const outlet = this.location.findOutlet(outletKey, route);
+		const cache = this.cacheByOutlet[outletKey];
+		if (!cache) {
+			return null;
+		}
 
-        const key = getSnapshotKey(route);
-        const isBack = outlet ? outlet.isPageNavigationBack : false;
-        const cachedItem = cache.peek();
+		const key = getSnapshotKey(route);
+		const isBack = outlet ? outlet.isPageNavigationBack : false;
+		const cachedItem = cache.peek();
 
-        let state = null;
-        if (isBack && cachedItem && cachedItem.key === key) {
-            state = cachedItem.state;
-        }
+		let state = null;
+		if (isBack && cachedItem && cachedItem.key === key) {
+			state = cachedItem.state;
+		}
 
-        if (isLogEnabled()) {
-            log(`retrieved isBack: ${isBack} key: ${key} state: ${state}`);
-        }
+		if (NativeScriptDebug.isLogEnabled()) {
+			NativeScriptDebug.routeReuseStrategyLog(`retrieved isBack: ${isBack} key: ${key} state: ${state}`);
+		}
 
-        return state;
-    }
+		return state;
+	}
 
-    shouldReuseRoute(future: ActivatedRouteSnapshot, curr: ActivatedRouteSnapshot): boolean {
-        const shouldReuse = future.routeConfig === curr.routeConfig;
+	shouldReuseRoute(future: ActivatedRouteSnapshot, curr: ActivatedRouteSnapshot): boolean {
+		const shouldReuse = future.routeConfig === curr.routeConfig;
 
-        if (shouldReuse && curr && curr[pageRouterActivatedSymbol]) {
-            // When reusing route - copy the pageRouterActivated to the new snapshot
-            // It's needed in shouldDetach to determine if the route should be detached.
-            future[pageRouterActivatedSymbol] = curr[pageRouterActivatedSymbol];
-        }
+		if (shouldReuse && curr && curr[pageRouterActivatedSymbol]) {
+			// When reusing route - copy the pageRouterActivated to the new snapshot
+			// It's needed in shouldDetach to determine if the route should be detached.
+			future[pageRouterActivatedSymbol] = curr[pageRouterActivatedSymbol];
+		}
 
-        if (isLogEnabled()) {
-            log(`shouldReuseRoute result: ${shouldReuse}`);
-        }
+		if (NativeScriptDebug.isLogEnabled()) {
+			NativeScriptDebug.routeReuseStrategyLog(`shouldReuseRoute result: ${shouldReuse}`);
+		}
 
-        return shouldReuse;
-    }
+		return shouldReuse;
+	}
 
-    clearCache(outletKey: string) {
-        const cache = this.cacheByOutlet[outletKey];
+	clearCache(outletKey: string) {
+		const cache = this.cacheByOutlet[outletKey];
 
-        if (cache) {
-            cache.clear();
-        }
-    }
+		if (cache) {
+			cache.clear();
+		}
+	}
 
-    clearModalCache(outletKey: string) {
-        const cache = this.cacheByOutlet[outletKey];
+	clearModalCache(outletKey: string) {
+		const cache = this.cacheByOutlet[outletKey];
 
-        if (cache) {
-            cache.clearModalCache();
-        }
-    }
-}
-
-function getSnapshotKey(snapshot: ActivatedRouteSnapshot): string {
-    return snapshot.pathFromRoot.join("->");
+		if (cache) {
+			cache.clearModalCache();
+		}
+	}
 }

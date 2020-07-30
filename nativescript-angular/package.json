@@ -1,10 +1,11 @@
 {
   "name": "@nativescript/angular",
-  "version": "9.0.0",
+  "version": "10.0.0",
   "description": "An Angular renderer that lets you build mobile apps with NativeScript.",
   "homepage": "https://www.nativescript.org/",
   "bugs": "https://github.com/NativeScript/nativescript-angular/issues",
   "main": "index.js",
+  "module": "index.js",
   "types": "index.d.ts",
   "author": {
     "name": "NativeScript Team"
@@ -25,54 +26,83 @@
     "url": "https://github.com/NativeScript/nativescript-angular.git"
   },
   "scripts": {
-    "setup": "npx rimraf hooks node_modules package-lock.json && npm run pack",
-    "tslint": "tslint --project tsconfig.json --config tslint.json",
+    "setup": "npx rimraf hooks node_modules package-lock.json && npm i && npm run prep.apps",
+    "prep.apps": "npm run build.pack && cd ../build/pack-scripts && npm i && npx ts-node pack-scoped.ts",
+    "build": "ng-packagr -p package.json",
+    "build.pack": "npm run tsc && npm run build && cd dist && npm pack",
+    "format": "npx prettier --write .",
+    "format-check": "npx prettier --check .",
     "tsc": "tsc -p tsconfig.json",
     "tsc-w": "tsc -p tsconfig.json -w",
     "ngc": "ngc",
     "ngcc": "ngcc",
-    "prepare": "npm run ngcc && ngc -p tsconfig.json",
-    "pack": "npm i && tsc && npm run prepare && cd ../build/pack-scripts && npm i && npx ts-node pack-scoped.ts",
+    "ngcc-run": "npm run ngcc && ngc -p tsconfig.json",
     "changelog": "conventional-changelog -p angular -i ../CHANGELOG.md -s",
     "version": "rm -rf package-lock.json && npm run changelog && git add ../CHANGELOG.md",
     "typedoc": "typedoc --tsconfig \"./tsconfig.typedoc.json\" --out ./bin/dist/ng-api-reference --includeDeclarations --name \"NativeScript Angular\" --theme ./node_modules/nativescript-typedoc-theme --excludeExternals --externalPattern \"**/+(tns-core-modules|module|declarations).d.ts\""
   },
-  "bin": {
-    "update-app-ng-deps": "./bin/update-app-ng-deps"
+  "sideEffects": false,
+  "ngPackage": {
+    "assets": [
+      "../README.md"
+    ],
+    "lib": {
+      "entryFile": "index.ts",
+      "umdModuleIds": {
+        "@nativescript/core": "ns-core"
+      }
+    },
+    "whitelistedNonPeerDependencies": [
+      "."
+    ]
   },
   "dependencies": {
-    "nativescript-intl": "^3.0.0"
+    "@nativescript/zone-js": "~1.0.0",
+    "nativescript-angular": "~10.0.0",
+    "nativescript-intl": "^4.0.0"
   },
   "peerDependencies": {
-    "@angular/platform-browser-dynamic": "~9.1.0",
-    "@angular/common": "~9.1.0",
-    "@angular/compiler": "~9.1.0",
-    "@angular/core": "~9.1.0",
-    "@angular/forms": "~9.1.0",
-    "@angular/platform-browser": "~9.1.0",
-    "@angular/router": "~9.1.0",
-    "rxjs": "~6.5.5",
-    "typescript": "~3.8.3",
-    "zone.js": "^0.10.3"
+    "@angular/common": "^10.0.0",
+    "@angular/compiler": "^10.0.0",
+    "@angular/core": "^10.0.0",
+    "@angular/forms": "^10.0.0",
+    "@angular/platform-browser": "^10.0.0",
+    "@angular/platform-browser-dynamic": "^10.0.0",
+    "@angular/router": "^10.0.0"
   },
   "devDependencies": {
-    "@angular/animations": "~9.1.0",
-    "@angular/common": "~9.1.0",
-    "@angular/compiler": "~9.1.0",
-    "@angular/compiler-cli": "~9.1.0",
-    "@angular/core": "~9.1.0",
-    "@angular/forms": "~9.1.0",
-    "@angular/platform-browser": "~9.1.0",
-    "@angular/platform-browser-dynamic": "~9.1.0",
-    "@angular/router": "~9.1.0",
-    "codelyzer": "^5.1.0",
-    "conventional-changelog-cli": "^1.3.22",
-    "rxjs": "~6.5.5",
-    "@nativescript/core": "next",
-    "tslint": "^5.5.0",
-    "typescript": "~3.8.3",
-    "zone.js": "^0.10.3",
+    "@angular/animations": "~10.0.0",
+    "@angular/common": "~10.0.0",
+    "@angular/compiler": "~10.0.0",
+    "@angular/compiler-cli": "~10.0.0",
+    "@angular/core": "~10.0.0",
+    "@angular/forms": "~10.0.0",
+    "@angular/platform-browser": "~10.0.0",
+    "@angular/platform-browser-dynamic": "~10.0.0",
+    "@angular/router": "~10.0.0",
+    "@nativescript/core": "rc",
+    "codelyzer": "^5.2.0",
+    "conventional-changelog-cli": "^2.0.34",
+    "husky": "^4.2.5",
+    "lint-staged": "^10.2.11",
     "nativescript-typedoc-theme": "git://github.com/NativeScript/nativescript-typedoc-theme.git#master",
-    "typedoc": "0.15.0"
+    "ng-packagr": "~10.0.0",
+    "prettier": "^2.0.5",
+    "rxjs": "~6.5.5",
+    "tslint": "^6.1.2",
+    "tslint-config-prettier": "^1.18.0",
+    "typedoc": "~0.17.0",
+    "typescript": "~3.9.0",
+    "zone.js": "^0.10.3"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    ".": [
+      "prettier --write ."
+    ]
   }
 }

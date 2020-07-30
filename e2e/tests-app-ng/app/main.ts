@@ -1,8 +1,8 @@
-import { platformNativeScriptDynamic } from "@nativescript/angular/platform";
+import { platformNativeScriptDynamic } from "@nativescript/angular";
 
 import { AppModule } from "./app.module";
-import { enable } from "@nativescript/core/trace";
+import { Trace } from "@nativescript/core";
 
-enable();
+Trace.enable();
 
 platformNativeScriptDynamic().bootstrapModule(AppModule);

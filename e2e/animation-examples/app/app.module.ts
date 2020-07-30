@@ -24,7 +24,7 @@ export function asyncBoot(): Function {
   return (): Promise<any> => new Promise(resolve => {
     setTimeout(() => {
       resolve();
-    }, 2000);
+    }, 5000);
   })
 }
 
