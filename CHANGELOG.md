@@ -1,3 +1,18 @@
+# [10.0.0](https://github.com/NativeScript/nativescript-angular/compare/8.20.4...10.0.0) (2020-07-30)
+
+### Features
+
+* **angular:** support for v10 ([#2189](https://github.com/NativeScript/nativescript-angular/issues/2189)) ([fd71458](https://github.com/NativeScript/nativescript-angular/commit/fd714588dc93762c2d5a129d3a08c92317df68e4))
+* ivy support ([#2169](https://github.com/NativeScript/nativescript-angular/issues/2169)) ([f10a8fb](https://github.com/NativeScript/nativescript-angular/commit/f10a8fb9f7c8bbe35be10c736210a451f8c52670)), closes [#2152](https://github.com/NativeScript/nativescript-angular/issues/2152) [#2060](https://github.com/NativeScript/nativescript-angular/issues/2060)
+* support for async APP_INITIALIZER and animated launch screens ([#2170](https://github.com/NativeScript/nativescript-angular/issues/2170)) ([b6ac290](https://github.com/NativeScript/nativescript-angular/commit/b6ac29038e27c310803ce956f7d93aca4d8ecd2a))
+
+### Bug Fixes
+
+* **router:** query params are now preserved when navigating back ([#2062](https://github.com/NativeScript/nativescript-angular/issues/2062)) ([221e404](https://github.com/NativeScript/nativescript-angular/commit/221e404da244b64004cfb3cd3e947858133af347))
+* **segmented-bar:** listview crash when scrolling ([#2128](https://github.com/NativeScript/nativescript-angular/issues/2128)) ([1b191b0](https://github.com/NativeScript/nativescript-angular/commit/1b191b06ccd0df2871ef741ab97f14c04911864e))
+
+
+
 <a name="9.0.0"></a>
 # [9.0.0](https://github.com/NativeScript/nativescript-angular/compare/8.20.4...9.0.0) (2020-06-03)
 
