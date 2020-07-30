@@ -1,6 +1,6 @@
 {
   "name": "@nativescript/angular",
-  "version": "10.0.0-rc.8",
+  "version": "10.0.0",
   "description": "An Angular renderer that lets you build mobile apps with NativeScript.",
   "homepage": "https://www.nativescript.org/",
   "bugs": "https://github.com/NativeScript/nativescript-angular/issues",
@@ -58,7 +58,7 @@
   },
   "dependencies": {
     "@nativescript/zone-js": "~1.0.0",
-    "nativescript-angular": "rc",
+    "nativescript-angular": "~10.0.0",
     "nativescript-intl": "^4.0.0"
   },
   "peerDependencies": {

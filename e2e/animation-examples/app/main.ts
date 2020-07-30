@@ -8,20 +8,15 @@ Trace.enable();
 
 class LaunchAnimation extends GridLayout implements AppLaunchView {
   circle: GridLayout;
-  animatedContainer: GridLayout;
   finished = false;
   complete: () => void;
 
   constructor() {
     super();
+    this.backgroundColor = "#4caef7";
+    this.className = "w-full h-full";
 
-    // setup container to house launch animation
-    this.animatedContainer = new GridLayout();
-    this.animatedContainer.style.zIndex = 100;
-    this.animatedContainer.backgroundColor = "#4caef7";
-    this.animatedContainer.className = "w-full h-full";
-
-    // any creative animation can be put inside
+    // construct any creative animation
     this.circle = new GridLayout();
     this.circle.width = 30;
     this.circle.height = 30;
@@ -29,15 +24,8 @@ class LaunchAnimation extends GridLayout implements AppLaunchView {
     this.circle.horizontalAlignment = "center";
     this.circle.verticalAlignment = "middle";
     this.circle.backgroundColor = "#fff";
-    this.animatedContainer.addRow(new ItemSpec(1, GridUnitType.STAR));
-    this.animatedContainer.addRow(new ItemSpec(1, GridUnitType.AUTO));
-    this.animatedContainer.addRow(new ItemSpec(1, GridUnitType.STAR));
-    GridLayout.setRow(this.circle, 1);
-    this.animatedContainer.addChild(this.circle);
 
-    // add animation to top row since booted app will insert into bottom row
-    GridLayout.setRow(this.animatedContainer, 1);
-    this.addChild(this.animatedContainer);
+    this.addChild(this.circle);
   }
 
   async startAnimation() {
@@ -71,14 +59,10 @@ class LaunchAnimation extends GridLayout implements AppLaunchView {
   }
 
   async fadeOut() {
-    await this.animatedContainer.animate({
+    await this.animate({
       opacity: 0,
       duration: 400,
     });
-    // done with animation, can safely remove to reveal bootstrapped app
-    this.removeChild(this.animatedContainer);
-    this.animatedContainer = null;
-    this.circle = null;
     this.complete();
   }
 }

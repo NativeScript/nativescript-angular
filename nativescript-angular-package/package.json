@@ -1,6 +1,6 @@
 {
     "name": "nativescript-angular",
-    "version": "10.0.0-rc.5",
+    "version": "10.0.0",
     "description": "Compatibility with old style nativescript-angular imports.",
     "homepage": "https://www.nativescript.org/",
     "bugs": "https://github.com/NativeScript/nativescript-angular/issues",
@@ -44,7 +44,7 @@
         "@angular/platform-browser": "~10.0.0",
         "@angular/platform-browser-dynamic": "~10.0.0",
         "@angular/router": "~10.0.0",
-        "@nativescript/angular": "rc",
+        "@nativescript/angular": "~10.0.0",
         "@nativescript/core": "rc",
         "ng-packagr": "^10.0.1",
         "rxjs": "~6.5.5",

@@ -16,6 +16,8 @@ export * from './resource-loader';
 
 export * from './nativescript.module';
 export * from './common';
+export * from './common/detached-loader';
+export * from './common/utils';
 
 export { NativeScriptAnimationsModule } from './animations';
 export * from './file-system';
@@ -24,9 +26,13 @@ export * from './forms';
 export * from './directives';
 export * from './router';
 export * from './frame.service';
-export { NativeScriptDebug } from './trace';
 
 export { NativeScriptRenderer } from './renderer';
 export { EmulatedRenderer } from './renderer-emulated';
 export { NativeScriptRendererFactory } from './renderer-factory';
-export { ViewClass, ViewClassMeta, ViewResolver, getViewClass, getViewMeta, isKnownView, registerElement, NgView, CommentNode, getSingleViewRecursive } from './element-registry';
+
+// utils
+export { NativeScriptDebug } from './trace';
+export * from './app-host-view';
+export { getViewClass, getViewMeta, isKnownView, registerElement, CommentNode, getSingleViewRecursive, isInvisibleNode, isView } from './element-registry';
+export type { NgView, ViewClass, ViewClassMeta, ViewResolver, ViewExtensions } from './element-registry';

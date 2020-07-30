@@ -1,11 +1,6 @@
 import { ComponentRef, ComponentFactory, ViewContainerRef, Component, Type, ComponentFactoryResolver, ChangeDetectorRef } from '@angular/core';
 import { Trace } from '@nativescript/core';
 
-export const CATEGORY = 'detached-loader';
-function log(message: string) {
-	Trace.write(message, CATEGORY);
-}
-
 /**
  * Wrapper component used for loading components when navigating
  * It uses DetachedContainer as selector so that it is containerRef is not attached to
@@ -27,7 +22,7 @@ export class DetachedLoader {
 		// inside component with OnPush CD strategy. Mark us for check to be sure CD will reach us.
 		// We are inside a promise here so no need for setTimeout - CD should trigger
 		// after the promise.
-		log('DetachedLoader.loadInLocation component loaded -> markForCheck');
+		Trace.write('DetachedLoader.loadInLocation component loaded -> markForCheck', 'detached-loader');
 
 		return Promise.resolve(componentRef);
 	}
@@ -38,7 +33,7 @@ export class DetachedLoader {
 
 	// TODO: change this API -- async promises not needed here anymore.
 	public loadComponent(componentType: Type<any>): Promise<ComponentRef<any>> {
-		log('DetachedLoader.loadComponent');
+		Trace.write('DetachedLoader.loadComponent', 'detached-loader');
 		return this.loadInLocation(componentType);
 	}
 
