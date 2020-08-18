@@ -1,4 +1,4 @@
-import { Directive, HostListener, Input } from '@angular/core';
+import { Directive, Input, ElementRef, NgZone } from '@angular/core';
 import { NavigationExtras } from '@angular/router';
 import { ActivatedRoute, Router, UrlTree } from '@angular/router';
 import { NavigationTransition } from '@nativescript/core';
@@ -52,7 +52,30 @@ export class NSRouterLink {
 
 	private commands: any[] = [];
 
-	constructor(private router: Router, private navigator: RouterExtensions, private route: ActivatedRoute) {}
+	constructor(private ngZone: NgZone, private router: Router, private navigator: RouterExtensions, private route: ActivatedRoute, private el: ElementRef) {
+  }
+
+  ngAfterViewInit() {
+    this.el.nativeElement.on('tap', () => {
+      this.ngZone.run(() => {
+        if (NativeScriptDebug.isLogEnabled()) {
+          NativeScriptDebug.routerLog(`nsRouterLink.tapped: ${this.commands} ` + `clear: ${this.clearHistory} ` + `transition: ${JSON.stringify(this.pageTransition)} ` + `duration: ${this.pageTransitionDuration}`);
+        }
+    
+        const extras = this.getExtras();
+        // this.navigator.navigateByUrl(this.urlTree, extras);
+        this.navigator.navigate(this.commands, {
+          ...extras,
+          relativeTo: this.route,
+          queryParams: this.queryParams,
+          fragment: this.fragment,
+          preserveQueryParams: attrBoolValue(this.preserveQueryParams),
+          queryParamsHandling: this.queryParamsHandling,
+          preserveFragment: attrBoolValue(this.preserveFragment),
+        });
+      });
+    });
+  }
 
 	@Input('nsRouterLink')
 	set params(data: any[] | string) {
@@ -61,16 +84,6 @@ export class NSRouterLink {
 		} else {
 			this.commands = [data];
 		}
-	}
-
-	@HostListener('tap')
-	onTap() {
-		if (NativeScriptDebug.isLogEnabled()) {
-			NativeScriptDebug.routerLog(`nsRouterLink.tapped: ${this.commands} ` + `clear: ${this.clearHistory} ` + `transition: ${JSON.stringify(this.pageTransition)} ` + `duration: ${this.pageTransitionDuration}`);
-		}
-
-		const extras = this.getExtras();
-		this.navigator.navigateByUrl(this.urlTree, extras);
 	}
 
 	private getExtras(): NavigationExtras & NavigationOptions {
