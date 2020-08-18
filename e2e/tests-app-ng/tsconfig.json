@@ -1,7 +1,8 @@
 {
   "compilerOptions": {
-      "module": "esnext",
+      "module": "ESNext",
       "target": "es2015",
+      "moduleResolution": "node",
       "experimentalDecorators": true,
       "emitDecoratorMetadata": true,
       "noEmitHelpers": true,
@@ -20,6 +21,7 @@
       }
   },
   "files": [
+    "./references.d.ts",
     "./app/main.ts"
   ],
   "exclude": [

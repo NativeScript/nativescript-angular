@@ -9,7 +9,7 @@
       "version": "6.5.2"
     },
     "tns-android": {
-      "version": "6.5.0"
+      "version": "6.5.3"
     }
   },
   "dependencies": {
@@ -37,11 +37,11 @@
     "codelyzer": "^5.1.0",
     "filewalker": "^0.1.3",
     "lazy": "1.0.11",
-    "@nativescript/webpack": "rc",
+    "@nativescript/webpack": "~2.1.1",
     "typescript": "~3.9.0"
   },
   "scripts": {
-    "clean": "npx rimraf hooks node_modules platforms package-lock.json",
+    "clean": "npx rimraf hooks node_modules platforms package-lock.json webpack.config.js && npm i",
     "setup": "cd ../../nativescript-angular && npm run prep.apps && cd ../e2e/tests-app-ng && npm run clean",
     "ngcc": "ngcc --properties es2015 module main --first-only",
     "postinstall": "npm run ngcc",
