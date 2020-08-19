@@ -106,9 +106,9 @@ export class NSRouterLinkActive implements OnChanges, OnDestroy, AfterContentIni
 			const isActiveLinks = this.reduceList(currentUrlTree, this.links);
 			this.classes.forEach((c) => {
         if (isActiveLinks) {
-          this.renderer.removeClass(this.element.nativeElement, c);
-        } else {
           this.renderer.addClass(this.element.nativeElement, c);
+        } else {
+          this.renderer.removeClass(this.element.nativeElement, c);
         }
       });
 		}
