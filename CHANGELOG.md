@@ -1,9 +1,9 @@
-## [10.0.1](https://github.com/NativeScript/nativescript-angular/compare/10.0.0...10.0.1) (2020-08-18)
+## [10.0.2](https://github.com/NativeScript/nativescript-angular/compare/10.0.1...10.0.2) (2020-08-19)
 
 
 ### Bug Fixes
 
-* **router:** link active directive ([#2225](https://github.com/NativeScript/nativescript-angular/issues/2225)) ([b2e467f](https://github.com/NativeScript/nativescript-angular/commit/b2e467f7a9901995d4cf344efd25e82850b72cef))
+* **router:** link active directive ([#2227](https://github.com/NativeScript/nativescript-angular/issues/2227)) ([5e165b5](https://github.com/NativeScript/nativescript-angular/commit/5e165b56c7a61d28fdb279ed8da07288e6dbb7af))
 
 
 
