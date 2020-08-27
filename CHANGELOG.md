@@ -1,3 +1,12 @@
+## [10.0.3](https://github.com/NativeScript/nativescript-angular/compare/10.0.2...10.0.3) (2020-08-27)
+
+
+### Bug Fixes
+
+* **router:** page navigation bug if there's not outlet for frame after clearing history ([#2233](https://github.com/NativeScript/nativescript-angular/issues/2233)) ([8bedc2d](https://github.com/NativeScript/nativescript-angular/commit/8bedc2d14fccc8d6c1ea18151bda7ce7c87fddae))
+
+
+
 ## [10.0.2](https://github.com/NativeScript/nativescript-angular/compare/10.0.1...10.0.2) (2020-08-19)
 
 
