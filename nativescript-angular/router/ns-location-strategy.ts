@@ -342,7 +342,7 @@ export class NSLocationStrategy extends LocationStrategy {
 			NativeScriptDebug.routerLog('NSLocationStrategy._beginPageNavigation()');
 		}
 
-		this.currentOutlet = this.getOutletByFrame(frame);
+		this.currentOutlet = this.getOutletByFrame(frame) || this.currentOutlet;
 		const lastState = this.currentOutlet.peekState();
 
 		if (lastState) {
