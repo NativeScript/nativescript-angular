@@ -27,12 +27,12 @@ export interface ShowDialogOptions extends BaseShowModalOptions {
 }
 
 export class ModalDialogParams {
-	constructor(public context: any = {}, public closeCallback: (...args) => any) { }
+	constructor(public context: any = {}, public closeCallback: (...args) => any) {}
 }
 
 @Injectable()
 export class ModalDialogService {
-	constructor(private location: NSLocationStrategy, private zone: NgZone) { }
+	constructor(private location: NSLocationStrategy, private zone: NgZone) {}
 
 	public showModal(type: Type<any>, options: ModalDialogOptions): Promise<any> {
 		if (!options.viewContainerRef) {

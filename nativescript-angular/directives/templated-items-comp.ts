@@ -7,7 +7,7 @@ import { NativeScriptDebug } from '../trace';
 const NG_VIEW = '_ngViewRef';
 
 export class ItemContext {
-	constructor(public $implicit?: any, public item?: any, public index?: number, public even?: boolean, public odd?: boolean) { }
+	constructor(public $implicit?: any, public item?: any, public index?: number, public even?: boolean, public odd?: boolean) {}
 }
 
 export interface SetupItemViewArgs {
@@ -228,7 +228,7 @@ export const TEMPLATED_ITEMS_COMPONENT = new InjectionToken<TemplatedItemsCompon
 
 @Directive({ selector: '[nsTemplateKey]' })
 export class TemplateKeyDirective {
-	constructor(private templateRef: TemplateRef<any>, @Inject(TEMPLATED_ITEMS_COMPONENT) @Host() private comp: TemplatedItemsComponent) { }
+	constructor(private templateRef: TemplateRef<any>, @Inject(TEMPLATED_ITEMS_COMPONENT) @Host() private comp: TemplatedItemsComponent) {}
 
 	@Input()
 	set nsTemplateKey(value: any) {
