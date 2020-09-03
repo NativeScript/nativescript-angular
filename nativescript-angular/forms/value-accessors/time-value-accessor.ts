@@ -1,12 +1,12 @@
-import { Directive, ElementRef, forwardRef } from "@angular/core";
-import { NG_VALUE_ACCESSOR } from "@angular/forms";
-import { BaseValueAccessor } from "./base-value-accessor";
-import { TimePicker } from "@nativescript/core/ui/time-picker";
+import { Directive, ElementRef, forwardRef } from '@angular/core';
+import { NG_VALUE_ACCESSOR } from '@angular/forms';
+import { BaseValueAccessor } from './base-value-accessor';
+import { TimePicker } from '@nativescript/core';
 
 const TIME_VALUE_ACCESSOR = {
-    provide: NG_VALUE_ACCESSOR,
-    useExisting: forwardRef(() => TimeValueAccessor),
-    multi: true,
+	provide: NG_VALUE_ACCESSOR,
+	useExisting: forwardRef(() => TimeValueAccessor),
+	multi: true,
 };
 
 /**
@@ -19,23 +19,20 @@ const TIME_VALUE_ACCESSOR = {
  *  ```
  */
 @Directive({
-    selector:
-        "TimePicker[ngModel],TimePicker[formControlName],TimePicker[formControl]," +
-        "timepicker[ngModel],timepicker[formControlName],timepicker[formControl]," +
-        "timePicker[ngModel],timePicker[formControlName],timePicker[formControl]," +
-        "time-picker[ngModel],time-picker[formControlName],time-picker[formControl]",
-    providers: [TIME_VALUE_ACCESSOR],
-    host: {
-        "(timeChange)": "onChange($event.value)",
-    },
+	selector: 'TimePicker[ngModel],TimePicker[formControlName],TimePicker[formControl],' + 'timepicker[ngModel],timepicker[formControlName],timepicker[formControl],' + 'timePicker[ngModel],timePicker[formControlName],timePicker[formControl],' + 'time-picker[ngModel],time-picker[formControlName],time-picker[formControl]',
+	providers: [TIME_VALUE_ACCESSOR],
+	host: {
+		'(timeChange)': 'onChange($event.value)',
+	},
 })
-export class TimeValueAccessor extends BaseValueAccessor<TimePicker> { // tslint:disable-line:directive-class-suffix
-    constructor(elementRef: ElementRef) {
-        super(elementRef.nativeElement);
-    }
+export class TimeValueAccessor extends BaseValueAccessor<TimePicker> {
+	// tslint:disable-line:directive-class-suffix
+	constructor(elementRef: ElementRef) {
+		super(elementRef.nativeElement);
+	}
 
-    writeValue(value: any): void {
-        const normalized = super.normalizeValue(value);
-        this.view.time = normalized;
-    }
+	writeValue(value: any): void {
+		const normalized = super.normalizeValue(value);
+		this.view.time = normalized;
+	}
 }

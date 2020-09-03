@@ -3,11 +3,11 @@ import { ActivatedRoute, Router, Route } from "@angular/router";
 import { Location } from "@angular/common";
 import { Observable } from "rxjs";
 import { map } from "rxjs/operators";
-import { Page } from "@nativescript/core/ui/page";
-import { RouterExtensions } from "@nativescript/angular/router";
+import { Page } from "@nativescript/core";
+import { RouterExtensions } from "@nativescript/angular";
 
 @Component({
-    selector: "detail",
+    selector: "nested-detail",
     template: `
     <GridLayout rows="auto, auto">
         <Label [text]="'nested-named-param: ' + (id$ | async)"></Label>

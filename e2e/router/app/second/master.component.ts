@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy } from "@angular/core";
-import { Page } from "@nativescript/core/ui/page";
+import { Page } from "@nativescript/core";
 @Component({
     selector: "master",
     template: `

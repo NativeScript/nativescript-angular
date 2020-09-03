@@ -2,7 +2,7 @@ import { Component } from "@angular/core";
 import * as platform from "@nativescript/core/platform";
 
 @Component({
-    selector: "main",
+    selector: "main-page",
     styles: [
         ".main-btn{" +
         "margin-right:5; margin-bottom:5;" +
@@ -14,7 +14,7 @@ import * as platform from "@nativescript/core/platform";
         <Button class="main-btn"
              *ngFor="let page of pages"
             [text]="page.data.title"
-            [nsRouterLink]="page.path" height="40">
+            [nsRouterLink]="['../' + page.path]" height="40">
         </Button>
     </WrapLayout>
     `,
@@ -58,6 +58,6 @@ export class MainComponent {
 
 @Component({
     selector: "navigation-main",
-    template: `<page-router-outlet></page-router-outlet>`
+    template: `<GridLayout><page-router-outlet></page-router-outlet></GridLayout>`
 })
 export class NavigationMainPageRouterComponent { }

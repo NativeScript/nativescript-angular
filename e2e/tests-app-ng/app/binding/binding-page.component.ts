@@ -3,28 +3,36 @@ import { Component } from "@angular/core";
 @Component({
     selector: "binding",
     template: `
-    <StackLayout>
-        <TextField hint="oneWayDataBinding" keyboardType="email"
-            [text]="oneWayDataBinding" autocorrect="false"
-            autocapitalizationType="none">
-        </TextField>
-        <TextField hint="twoWayDataBindingBanana"
-            keyboardType="email" [(ngModel)]="twoWayDataBinding"
-            autocorrect="false"
-            autocapitalizationType="none">
-        </TextField>
-        <TextField hint="" keyboardType="email"
-            text="{{ curlyBracket }}" autocorrect="false"
-            autocapitalizationType="none">
-        </TextField>
-        <Label text='Label with curlyBaracket binding: {{ twoWayDataBinding }}'></Label>
-        <Label [text]='completedDate | date:"fullDate"' ></Label>
-        <StackLayout orientation="horizontal" automationText="getValues">
-            <Button (tap)="changeValues()" text="update from code" ></Button>
-            <Button (tap)="getValues()" text="get" width="80" height="40"></Button>
-        </StackLayout>
-        <TextView [text]="results" textWrap="true"></TextView>
-    </StackLayout>
+    <ScrollView>
+      <StackLayout>
+          <TextField hint="oneWayDataBinding" keyboardType="email"
+              [text]="oneWayDataBinding" autocorrect="false"
+              autocapitalizationType="none">
+          </TextField>
+          <TextField hint="twoWayDataBindingBanana"
+              keyboardType="email" [(ngModel)]="twoWayDataBinding"
+              autocorrect="false"
+              autocapitalizationType="none">
+          </TextField>
+          <TextField hint="" keyboardType="email"
+              text="{{ curlyBracket }}" autocorrect="false"
+              autocapitalizationType="none">
+          </TextField>
+          <Label text='Label with curlyBaracket binding: {{ twoWayDataBinding }}'></Label>
+          <Label [text]='completedDate | date:"fullDate"' ></Label>
+          <StackLayout orientation="horizontal" automationText="getValues">
+              <Button (tap)="changeValues()" text="update from code" ></Button>
+              <Button (tap)="getValues()" text="get" width="80" height="40"></Button>
+          </StackLayout>
+          <TextView [text]="results" textWrap="true"></TextView>
+          <StackLayout>
+              <Button (tap)="toggle()" text="Toggle"></Button>
+              <Label text="Line 1"></Label>
+              <Label text="Line 2" *ngIf="labelShow"></Label>
+              <Label text="Line 3"></Label>
+          </StackLayout>
+      </StackLayout>
+    </ScrollView>
     `
 })
 
@@ -34,6 +42,7 @@ export class BindingComponent {
     private _curlyBracket: string;
     private _result: string;
     public completedDate: Date = new Date(2016, 5, 3);
+    labelShow = true;
 
     constructor() {
         this.refresh();
@@ -61,6 +70,11 @@ export class BindingComponent {
 
     get results() {
         return this._result;
+    }
+
+    toggle() {
+      this.labelShow = !this.labelShow;
+      console.log(this.labelShow);
     }
 
     changeValues() {

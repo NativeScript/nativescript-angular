@@ -16,7 +16,6 @@
     "@angular/platform-browser-dynamic": "~9.1.0",
     "@angular/router": "~9.1.0",
     "@nativescript/angular": "file:../../dist/nativescript-angular-scoped.tgz",
-    "nativescript-intl": "^3.0.0",
     "reflect-metadata": "~0.1.8",
     "rxjs": "~6.5.5",
     "@nativescript/core": "next",
@@ -43,7 +42,6 @@
   },
   "scripts": {
     "e2e": "tsc -p e2e && mocha --opts ../config/mocha.opts --recursive e2e --appiumCapsLocation ../config/appium.capabilities.json",
-    "compile-tests-w": "tsc -p e2e --watch",
-    "update-app-ng-deps": "update-app-ng-deps"
+    "compile-tests-w": "tsc -p e2e --watch"
   }
 }

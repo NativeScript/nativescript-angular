@@ -8,7 +8,7 @@ import {
     ModalDialogService,
     ModalDialogOptions,
     ModalDialogParams
-} from "@nativescript/angular/directives/dialogs";
+} from "@nativescript/angular";
 
 @Component({
     selector: "modal-content",
@@ -35,18 +35,15 @@ export class ModalContentComponent {
     }
 }
 
-const TEMPLATE = `
-<GridLayout rows="auto, auto, *">
-    <Button text="show component" (tap)="showModal()"></Button>
-    <Button text="show component (async)" (tap)="showModalAsync()" row="1"></Button>
-    <Label [text]="'RESULT: ' + result" row="2" margin="12"></Label>
-</GridLayout>
-`;
-
 @Component({
     selector: "modal-test",
-    providers: [ModalDialogService],
-    template: TEMPLATE
+    template: `
+    <GridLayout rows="auto, auto, *">
+        <Button text="show component" (tap)="showModal()"></Button>
+        <Button text="show component (async)" (tap)="showModalAsync()" row="1"></Button>
+        <Label [text]="'RESULT: ' + result" row="2" margin="12"></Label>
+    </GridLayout>
+    `
 })
 export class ModalTestComponent {
     public result: string = "---";
@@ -75,7 +72,13 @@ export class ModalTestComponent {
 @Component({
     selector: "modal-test-on-push",
     changeDetection: ChangeDetectionStrategy.OnPush,
-    template: TEMPLATE
+    template: `
+    <GridLayout rows="auto, auto, *">
+        <Button text="show component" (tap)="showModal()"></Button>
+        <Button text="show component (async)" (tap)="showModalAsync()" row="1"></Button>
+        <Label [text]="'RESULT: ' + result" row="2" margin="12"></Label>
+    </GridLayout>
+    `
 })
 export class ModalTestWithPushStrategyComponent {
     public result: string = "---";

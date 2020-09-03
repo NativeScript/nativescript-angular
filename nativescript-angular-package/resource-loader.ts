@@ -1,1 +1,1 @@
-export * from "@nativescript/angular/resource-loader";
+export * from "@nativescript/angular";

@@ -5,27 +5,29 @@ import { execSync } from "child_process";
 console.log(`Packing @nativescript/angular package`);
 
 const distFolderPath = path.resolve("../../dist");
-const tempFolderPath = path.resolve("./temp-scoped");
 const outFileName = "nativescript-angular-scoped.tgz";
 
 const nsAngularPackagePath = path.resolve("../../nativescript-angular");
+const nsAngularPackageDistPath = path.resolve(nsAngularPackagePath + "/dist");
 
-execSync(`npm install --save-exact`, {
-    cwd: nsAngularPackagePath
-});
+function getFilesFromPath(path, extension) {
+  let files = fs.readdirSync( path );
+  return files.filter(file => file.match(new RegExp(`.*\.(${extension})`, 'ig')));
+}
+
+// execSync(`npm install --save-exact`, {
+//     cwd: nsAngularPackagePath
+// });
 
 // ensure empty temp and dist folders
-fs.emptyDirSync(tempFolderPath);
 fs.ensureDirSync(distFolderPath);
 
 // create .tgz in temp folder
-execSync(`npm pack ${nsAngularPackagePath}`, {
-    cwd: tempFolderPath
-});
+execSync(`cd ${nsAngularPackagePath} && npm run build.pack`);
 
 // assume we have a single file built in temp folder, take its name
-const currentFileName = fs.readdirSync(tempFolderPath)[0];
+const currentFileName = getFilesFromPath(nsAngularPackageDistPath, ".tgz")[0];
+console.log('currentFileName:', currentFileName);
 
 // move built file and remove temp folder
-fs.moveSync(`${tempFolderPath}/${currentFileName}`, `${distFolderPath}/${outFileName}`, { overwrite: true });
-fs.removeSync(`${tempFolderPath}`);
+fs.moveSync(`${nsAngularPackageDistPath}/${currentFileName}`, `${distFolderPath}/${outFileName}`, { overwrite: true });

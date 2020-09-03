@@ -1,7 +1,7 @@
 import { Component } from "@angular/core";
 
 @Component({
-    selector: "main",
+    selector: "main-modal",
     template: `
     <StackLayout>
         <Button text="modal" [nsRouterLink]="['/modal','modal-dialogs']"></Button>

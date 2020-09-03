@@ -4,5 +4,5 @@ node_js:
 script:
   - cd nativescript-angular
   - npm install
-  - npm run tslint
+  - npm run format-check
   - npm pack

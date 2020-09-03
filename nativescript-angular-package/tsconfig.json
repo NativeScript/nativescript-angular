@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
-    "target": "es5",
-    "module": "commonjs",
+    "target": "es2017",
+    "module": "esnext",
     "moduleResolution": "node",
     "sourceMap": true,
     "emitDecoratorMetadata": true,
@@ -9,9 +9,10 @@
     "noImplicitUseStrict": true,
     "noEmitHelpers": true,
     "declaration": true,
-    "removeComments": false,
+    "removeComments": true,
     "noEmitOnError": true,
     "skipLibCheck": true,
+    "skipDefaultLibCheck": true,
     "noImplicitAny": false,
     "lib": [
       "es2017",
@@ -24,12 +25,14 @@
     "genDir": ".",
     "skipMetadataEmit": false,
     "skipTemplateCodegen": true,
-    "strictMetadataEmit": true
+    "strictMetadataEmit": true,
+    "enableIvy": true
   },
   "include": [
     "**/*.ts"
   ],
-  "exclude":[
-    "node_modules/*"
+  "exclude": [
+    "node_modules",
+    "dist"
   ]
 }

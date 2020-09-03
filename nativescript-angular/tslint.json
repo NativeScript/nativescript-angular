@@ -2,15 +2,22 @@
   "rulesDirectory": [
     "node_modules/codelyzer"
   ],
+  "linterOptions": {
+    "exclude": [
+      "**/node_modules",
+      "**/__test__",
+      "**/*.d.ts",
+      "**/zone-js/dist/*.ts"
+    ]
+  },
   "rules":{
     "directive-selector": [true, "attribute", "ns", "camelCase"],
     "component-selector": [true, "element", "", "camelCase"],
-    "use-input-property-decorator": true,
-    "use-output-property-decorator": true,
+    "no-inputs-metadata-property": true,
+    "no-outputs-metadata-property": true,
     "no-input-rename": true,
     "no-output-rename": true,
     "use-pipe-transform-interface": true,
-    "pipe-naming": [true, "camelCase", "ns"],
     "component-class-suffix": true,
     "directive-class-suffix": true,
     "member-access": false,
@@ -60,7 +67,6 @@
     "no-string-literal": false,
     "no-switch-case-fall-through": true,
     "no-unused-expression": true,
-    "no-unused-variable": true,
     "no-var-keyword": true,
     "radix": false,
     "switch-default": true,
@@ -75,7 +81,7 @@
     ],
     "max-line-length": [
       true,
-      120
+      600
     ],
     "no-require-imports": false,
     "no-trailing-whitespace": true,
@@ -95,7 +101,7 @@
       "check-space"
     ],
     "interface-name": false,
-    "jsdoc-format": true,
+    "jsdoc-format": false,
     "no-consecutive-blank-lines": [
         true, 2
     ],
@@ -109,7 +115,7 @@
     ],
     "quotemark": [
       true,
-      "double",
+      "single",
       "avoid-escape"
     ],
     "semicolon": [true, "always"],

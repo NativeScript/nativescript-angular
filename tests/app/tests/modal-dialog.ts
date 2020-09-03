@@ -13,7 +13,7 @@ import { NSLocationStrategy, Outlet } from "@nativescript/angular";
 import { FrameService } from "@nativescript/angular";
 import { DetachedLoader, NativeScriptModule } from "@nativescript/angular";
 import { platformBrowserDynamicTesting } from "@angular/platform-browser-dynamic/testing";
-import { NS_COMPILER_PROVIDERS } from "@nativescript/angular/platform";
+// import { NS_COMPILER_PROVIDERS } from "@nativescript/angular/platform";
 import { CommonModule } from "@angular/common";
 
 import { FakeFrameService } from "./ns-location-strategy";
@@ -78,7 +78,7 @@ describe("modal-dialog", () => {
       }
       TestBed.initTestEnvironment(
           EntryComponentsTestModule,
-          platformBrowserDynamicTesting(NS_COMPILER_PROVIDERS)
+          platformBrowserDynamicTesting()//NS_COMPILER_PROVIDERS)
       );
       TestBed.configureTestingModule({
           declarations: [FailComponent, SuccessComponent, ModalComponent],

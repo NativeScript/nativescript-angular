@@ -1,61 +1,55 @@
 {
   "description": "NativeScript Application",
+  "main": "main.js",
   "license": "SEE LICENSE IN <your-license-filename>",
   "readme": "NativeScript Application",
   "repository": "<fill-your-repository-here>",
-  "nativescript": {
-    "id": "org.nativescript.ng4animations",
-    "tns-ios": {
-      "version": "6.5.1"
-    },
-    "tns-android": {
-      "version": "latest"
-    }
-  },
   "dependencies": {
-    "@angular/animations": "~9.1.0",
-    "@angular/common": "~9.1.0",
-    "@angular/compiler": "~9.1.0",
-    "@angular/core": "~9.1.0",
-    "@angular/forms": "~9.1.0",
-    "@angular/platform-browser": "~9.1.0",
-    "@angular/platform-browser-dynamic": "~9.1.0",
-    "@angular/router": "~9.1.0",
+    "@angular/animations": "~10.1.0",
+    "@angular/common": "~10.1.0",
+    "@angular/compiler": "~10.1.0",
+    "@angular/core": "~10.1.0",
+    "@angular/forms": "~10.1.0",
+    "@angular/platform-browser": "~10.1.0",
+    "@angular/platform-browser-dynamic": "~10.1.0",
+    "@angular/router": "~10.1.0",
     "@nativescript/angular": "file:../../dist/nativescript-angular-scoped.tgz",
     "nativescript-theme-core": "~1.0.2",
-    "reflect-metadata": "~0.1.8",
-    "rxjs": "~6.5.5",
-    "@nativescript/core": "next",
-    "zone.js": "^0.10.3"
+    "reflect-metadata": "~0.1.13",
+    "rxjs": "~6.6.0",
+    "@nativescript/core": "~7.0.0",
+    "zone.js": "^0.11.1"
   },
   "devDependencies": {
-    "@angular/compiler-cli": "~9.1.0",
-    "@ngtools/webpack": "~9.1.0",
-    "@types/chai": "~4.1.7",
-    "@types/mocha": "~5.2.5",
-    "@types/node": "~10.12.18",
-    "babel-traverse": "6.25.0",
-    "babel-types": "6.25.0",
-    "babylon": "6.17.4",
+    "@angular/compiler-cli": "~10.1.0",
+    "@nativescript/ios": "7.0.0",
+    "@nativescript/webpack": "~3.0.0",
+    "@ngtools/webpack": "~10.1.0",
+    "@types/chai": "~4.2.0",
+    "@types/mocha": "~7.0.0",
+    "@types/node": "~14.0.0",
+    "babel-traverse": "~6.26.0",
+    "babel-types": "~6.26.0",
+    "babylon": "~6.18.0",
     "chai": "^4.2.0",
-    "lazy": "1.0.11",
-    "mocha": "~5.2.0",
-    "mochawesome": "~3.1.2",
+    "lazy": "~1.0.11",
+    "mocha": "~8.0.1",
+    "mochawesome": "~6.1.1",
     "nativescript-css-loader": "~0.26.0",
-    "nativescript-dev-appium": "^6.0.0",
-    "nativescript-dev-webpack": "next",
-    "typescript": "~3.8.3"
+    "node-sass": "~4.14.1",
+    "typescript": "~3.9.0"
   },
   "scripts": {
-    "clean": "npx rimraf hooks node_modules package-lock.json",
-    "setup": "cd ../../nativescript-angular && npm run pack && cd ../e2e/animation-examples && npm run clean",
+    "clean": "ns clean",
+    "setup": "cd ../../nativescript-angular && npm run prep.apps && cd ../e2e/animation-examples && npm run clean",
+    "ngcc": "ngcc --properties es2015 module main --first-only",
+    "postinstall": "npm run ngcc",
     "u": "update-ns-webpack",
     "e2e": "tsc -p e2e && mocha --opts ../config/mocha.opts --recursive e2e --appiumCapsLocation ../config/appium.capabilities.json",
     "e2e-watch": "tsc -p e2e --watch",
-    "update-app-ng-deps": "update-app-ng-deps",
     "ns-verify-bundle": "ns-verify-bundle",
     "update-ns-webpack": "update-ns-webpack",
-    "ngcc": "ngcc --properties es2015 module main --first-only",
-    "postinstall": "npm run ngcc"
+    "ios": "ns debug ios --emulator --no-hmr",
+    "android": "ns debug android --emulator --no-hmr"
   }
 }

@@ -1,0 +1,17 @@
+{
+  "ngPackage": {
+    "lib": {
+      "entryFile": "./src/public_api.ts",
+      "umdModuleIds": {
+        "@nativescript/core": "ns-core"
+      }
+    },
+    "whitelistedNonPeerDependencies": [
+      "."
+    ]
+  },
+  "devDependencies": {
+    "@nativescript/angular": "rc",
+    "@nativescript/core": "rc"
+  }
+}

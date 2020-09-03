@@ -1,9 +1,9 @@
 import { Component, OnInit, OnDestroy } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
 
-import { RouterExtensions } from "@nativescript/angular/router";
-import { Page } from "@nativescript/core/ui/page";
-import { Observable } from "rxjs";
+import { RouterExtensions } from "@nativescript/angular";
+import { Page } from "@nativescript/core";
+import { Observable, Subscription } from "rxjs";
 import { map } from "rxjs/operators";
 import { CounterService } from "../counter.service";
 
@@ -36,6 +36,7 @@ import { CounterService } from "../counter.service";
 export class SecondComponent implements OnInit, OnDestroy {
     public depth$: Observable<string>;
     public nextDepth$: Observable<number>;
+    sub: Subscription;
 
     constructor(
         private routerExt: RouterExtensions,
@@ -48,10 +49,14 @@ export class SecondComponent implements OnInit, OnDestroy {
     }
 
     ngOnInit() {
+        this.sub = this.route.queryParams.subscribe((params) => {
+            console.log("route.queryParams:", params);
+        });
         console.log("SecondComponent - ngOnInit()");
     }
 
     ngOnDestroy() {
+        this.sub.unsubscribe();
         console.log("SecondComponent - ngOnDestroy()");
     }
 

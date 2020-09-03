@@ -1,6 +1,6 @@
 import { Component} from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
-import { Page } from "@nativescript/core/ui/page";
+import { Page } from "@nativescript/core";
 import { Observable } from "rxjs";
 import { map } from "rxjs/operators";
 

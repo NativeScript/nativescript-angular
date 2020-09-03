@@ -4,20 +4,15 @@
 
 import { NativeScriptModule } from "@nativescript/angular";
 import { platformNativeScriptDynamic } from "@nativescript/angular/platform";
-import { NativeScriptRouterModule } from "@nativescript/angular/router";
-import { NativeScriptFormsModule } from "@nativescript/angular/forms";
+import { NativeScriptRouterModule, NativeScriptFormsModule } from "@nativescript/angular";
 
 import { AppComponent } from "./app.component";
 import { GestureComponent } from "./snippets/gestures.component";
 import { LayoutsComponent } from "./snippets/layouts.component";
 import { IconFontComponent } from "./snippets/icon-font.component";
 import { APP_ROOT_VIEW } from "@nativescript/angular/platform-providers";
-import { Page } from "@nativescript/core/ui/page";
-import { StackLayout } from "@nativescript/core/ui/layouts/stack-layout";
+import { Page, StackLayout, Application, Color, GridLayout, ItemSpec } from "@nativescript/core";
 
-import * as application from "@nativescript/core/application";
-import "tns-core-modules/ui/styling/style";
-import "tns-core-modules/ui/frame";
 import { HOOKS_LOG } from "./base.component";
 import { MultiPageMain, routes as multiPageRoutes } from "./multi-page-main.component";
 import { SinglePageMain, routes as singlePageRoutes } from "./single-page-main.component";
@@ -33,10 +28,7 @@ import { rendererTraceCategory, routerTraceCategory } from "@nativescript/angula
 
 import { BehaviorSubject } from "rxjs";
 
-import { GridLayout, ItemSpec } from "@nativescript/core/ui/layouts/grid-layout/grid-layout";
-
 import { enable, addCategories, categories } from "@nativescript/core/trace";
-import { Color } from "@nativescript/core/color/color";
 
 addCategories(rendererTraceCategory);
 // addCategories(routerTraceCategory);
@@ -120,7 +112,7 @@ class MultiPageModule {}
 })
 class LazyLoadModule {}
 
-application.run({
+Application.run({
     create: (): Page => {
         let onLoadedHandler = function(args) {
             root.off("loaded", onLoadedHandler);

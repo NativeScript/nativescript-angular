@@ -17,6 +17,7 @@ import { ListViewComponent } from "./list-view/list-view-page.component";
 import { ListViewControlComponent } from "./list-view/list-view-item-template.component";
 import { ListViewAsyncPipeComponent } from "./list-view/async-pipe-template.component";
 import { ListViewMainPageComponent } from "./list-view/list-view-main-page.component";
+import { ListViewSegmentedBarPageComponent } from "./list-view/list-view-nested-segmented-bar-page.component";
 import { ListViewWithNestedTemplateComponent } from "./list-view/list-view-nested-template.component";
 import { ListViewMultipleTemplatesComponent } from "./list-view/multiple-templates.component";
 
@@ -68,6 +69,7 @@ export const routableComponents = [
     ListViewComponent,
     ListViewControlComponent,
     ListViewAsyncPipeComponent,
+    ListViewSegmentedBarPageComponent,
     ListViewWithNestedTemplateComponent,
     ListViewMultipleTemplatesComponent,
 
@@ -94,8 +96,9 @@ export const routableComponents = [
 
 // Set `isNavigatable: true` if the page is a main page to other sub pages
 export const routes = [
-    { path: "", component: MainComponent, data: { title: "" } },
-    { path: "", component: ModalContentComponent, data: { title: "" } },
+    { path: "", pathMatch: "full", redirectTo: "main" },
+    { path: "main", component: MainComponent, data: { title: "" } },
+    // { path: "", component: ModalContentComponent, data: { title: "" } },
     { path: "template", component: AppComponent, data: { title: "Template", isNavigatable: true } },
 
     {
@@ -131,6 +134,10 @@ export const routes = [
     { path: "ListViewExamples/commonTemplate", component: ListViewComponent, data: { title: "commonTemplate" } },
     { path: "ListViewExamples/customTemplate", component: ListViewControlComponent, data: { title: "customTemplate" } },
     { path: "listView/asyncPipeTemplate", component: ListViewAsyncPipeComponent, data: { title: "asyncPipeTemplate" } },
+    {
+        path: "ListViewExamples/segmentedBarTemplate",
+        component: ListViewSegmentedBarPageComponent,
+        data: { title: "segmentedBarTemplate" } },
     {
         path: "listView/nestedTemplate",
         component: ListViewWithNestedTemplateComponent,
@@ -186,6 +193,6 @@ export const routes = [
     // Needed for AoT compilation
     {
         path: "lazy",
-        loadChildren: "./lazy/lazy.module#LazyModule"
+        loadChildren: () => import("./lazy/lazy.module").then(m => m.LazyModule)
     },
 ];

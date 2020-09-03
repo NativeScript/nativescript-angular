@@ -1,8 +1,10 @@
 import { Component, OnInit, OnDestroy, OnChanges, DoCheck } from "@angular/core";
-import { RouterExtensions } from "@nativescript/angular/router";
-import { Page } from "@nativescript/core/ui/page";
+import { RouterExtensions } from "@nativescript/angular";
+import { Page } from "@nativescript/core";
 
 import { CounterService } from "../counter.service";
+import { ActivatedRoute } from "@angular/router";
+import { Subscription } from "rxjs";
 
 @Component({
     selector: "first",
@@ -10,7 +12,7 @@ import { CounterService } from "../counter.service";
     <StackLayout>
         <Label text="FirstComponent" class="header"></Label>
 
-        <Button text="GO TO SECOND" automationText="GO TO SECOND" [nsRouterLink]="['/second','1']"></Button>
+        <Button text="GO TO SECOND" automationText="GO TO SECOND" [nsRouterLink]="['/second','1']" [queryParams]="{prop: 'xxx'}"></Button>
         <Button text="GO TO C-LESS SECOND" automationText="GO TO C-LESS SECOND" [nsRouterLink]="['/c-less', 'deep', '100', 'detail', '200']"></Button>
         
         <Button text="GO TO LAZY HOME" automationText="GO TO LAZY HOME" [nsRouterLink]="['/lazy','home']"></Button>
@@ -26,20 +28,31 @@ import { CounterService } from "../counter.service";
 export class FirstComponent implements OnInit, OnDestroy, DoCheck {
     public message: string = "";
     public doCheckCount: number = 0;
+    sub: Subscription;
 
     constructor(
         private routerExt: RouterExtensions,
+        private route: ActivatedRoute,
         public service: CounterService,
         page: Page) {
 
         console.log("FirstComponent - constructor() page: " + page);
     }
 
+    tapMe() {
+      console.log('here!!!')
+    }
+
     ngOnInit() {
         console.log("FirstComponent - ngOnInit()");
+        this.sub = this.route.queryParams.subscribe((params) =>{
+            console.log("FIRST PARAMS:");
+            console.log(params);
+        });
     }
 
     ngOnDestroy() {
+        this.sub.unsubscribe();
         console.log("FirstComponent - ngOnDestroy()");
     }
 

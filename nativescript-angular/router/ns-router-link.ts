@@ -1,14 +1,13 @@
-import { Directive, HostListener, Input } from "@angular/core";
-import { NavigationExtras } from "@angular/router";
-import { ActivatedRoute, Router, UrlTree } from "@angular/router";
-import { routerLog, isLogEnabled } from "../trace";
-import { RouterExtensions } from "./router-extensions";
-import { NavigationOptions } from "./ns-location-strategy";
-import { NavigationTransition } from "@nativescript/core/ui/frame";
-import { isString } from "@nativescript/core/utils/types";
+import { Directive, Input, ElementRef, NgZone } from '@angular/core';
+import { NavigationExtras } from '@angular/router';
+import { ActivatedRoute, Router, UrlTree } from '@angular/router';
+import { NavigationTransition } from '@nativescript/core';
+import { NativeScriptDebug } from '../trace';
+import { RouterExtensions } from './router-extensions';
+import { NavigationOptions } from './ns-location-utils';
 
 // Copied from "@angular/router/src/config"
-export type QueryParamsHandling = "merge" | "preserve" | "";
+export type QueryParamsHandling = 'merge' | 'preserve' | '';
 
 /**
  * The nsRouterLink directive lets you link to specific parts of your app.
@@ -34,116 +33,121 @@ export type QueryParamsHandling = "merge" | "preserve" | "";
  * instead look in the current component"s children for the route.
  * And if the segment begins with `../`, the router will go up one level.
  */
-@Directive({ selector: "[nsRouterLink]" })
-export class NSRouterLink { // tslint:disable-line:directive-class-suffix
-    @Input() target: string;
-    @Input() queryParams: { [k: string]: any };
-    @Input() fragment: string;
+@Directive({ selector: '[nsRouterLink]' })
+export class NSRouterLink {
+	// tslint:disable-line:directive-class-suffix
+	@Input() target: string;
+	@Input() queryParams: { [k: string]: any };
+	@Input() fragment: string;
 
-    @Input() queryParamsHandling: QueryParamsHandling;
-    @Input() preserveQueryParams: boolean;
-    @Input() preserveFragment: boolean;
-    @Input() skipLocationChange: boolean;
-    @Input() replaceUrl: boolean;
+	@Input() queryParamsHandling: QueryParamsHandling;
+	@Input() preserveQueryParams: boolean;
+	@Input() preserveFragment: boolean;
+	@Input() skipLocationChange: boolean;
+	@Input() replaceUrl: boolean;
 
-    @Input() clearHistory: boolean;
-    @Input() pageTransition: boolean | string | NavigationTransition = true;
-    @Input() pageTransitionDuration;
+	@Input() clearHistory: boolean;
+	@Input() pageTransition: boolean | string | NavigationTransition = true;
+	@Input() pageTransitionDuration;
 
-    private commands: any[] = [];
+	private commands: any[] = [];
 
-    constructor(
-        private router: Router,
-        private navigator: RouterExtensions,
-        private route: ActivatedRoute) {
-    }
+	constructor(private ngZone: NgZone, private router: Router, private navigator: RouterExtensions, private route: ActivatedRoute, private el: ElementRef) {}
 
-    @Input("nsRouterLink")
-    set params(data: any[] | string) {
-        if (Array.isArray(data)) {
-            this.commands = data;
-        } else {
-            this.commands = [data];
-        }
-    }
+	ngAfterViewInit() {
+		this.el.nativeElement.on('tap', () => {
+			this.ngZone.run(() => {
+				if (NativeScriptDebug.isLogEnabled()) {
+					NativeScriptDebug.routerLog(`nsRouterLink.tapped: ${this.commands} ` + `clear: ${this.clearHistory} ` + `transition: ${JSON.stringify(this.pageTransition)} ` + `duration: ${this.pageTransitionDuration}`);
+				}
 
-    @HostListener("tap")
-    onTap() {
-        if (isLogEnabled()) {
-            routerLog(`nsRouterLink.tapped: ${this.commands} ` +
-                `clear: ${this.clearHistory} ` +
-                `transition: ${JSON.stringify(this.pageTransition)} ` +
-                `duration: ${this.pageTransitionDuration}`);
-        }
+				const extras = this.getExtras();
+				// this.navigator.navigateByUrl(this.urlTree, extras);
+				this.navigator.navigate(this.commands, {
+					...extras,
+					relativeTo: this.route,
+					queryParams: this.queryParams,
+					fragment: this.fragment,
+					preserveQueryParams: attrBoolValue(this.preserveQueryParams),
+					queryParamsHandling: this.queryParamsHandling,
+					preserveFragment: attrBoolValue(this.preserveFragment),
+				});
+			});
+		});
+	}
 
-        const extras = this.getExtras();
-        this.navigator.navigateByUrl(this.urlTree, extras);
-    }
+	@Input('nsRouterLink')
+	set params(data: any[] | string) {
+		if (Array.isArray(data)) {
+			this.commands = data;
+		} else {
+			this.commands = [data];
+		}
+	}
 
-    private getExtras(): NavigationExtras & NavigationOptions {
-        const transition = this.getTransition();
-        return {
-            skipLocationChange: attrBoolValue(this.skipLocationChange),
-            replaceUrl: attrBoolValue(this.replaceUrl),
+	private getExtras(): NavigationExtras & NavigationOptions {
+		const transition = this.getTransition();
+		return {
+			skipLocationChange: attrBoolValue(this.skipLocationChange),
+			replaceUrl: attrBoolValue(this.replaceUrl),
 
-            clearHistory: this.convertClearHistory(this.clearHistory),
-            animated: transition.animated,
-            transition: transition.transition,
-        };
-    }
+			clearHistory: this.convertClearHistory(this.clearHistory),
+			animated: transition.animated,
+			transition: transition.transition,
+		};
+	}
 
-    get urlTree(): UrlTree {
-        const urlTree = this.router.createUrlTree(this.commands, {
-            relativeTo: this.route,
-            queryParams: this.queryParams,
-            fragment: this.fragment,
-            preserveQueryParams: attrBoolValue(this.preserveQueryParams),
-            queryParamsHandling: this.queryParamsHandling,
-            preserveFragment: attrBoolValue(this.preserveFragment),
-        });
+	get urlTree(): UrlTree {
+		const urlTree = this.router.createUrlTree(this.commands, {
+			relativeTo: this.route,
+			queryParams: this.queryParams,
+			fragment: this.fragment,
+			preserveQueryParams: attrBoolValue(this.preserveQueryParams),
+			queryParamsHandling: this.queryParamsHandling,
+			preserveFragment: attrBoolValue(this.preserveFragment),
+		});
 
-        if (isLogEnabled()) {
-            routerLog(`nsRouterLink urlTree created: ${urlTree}`);
-        }
+		if (NativeScriptDebug.isLogEnabled()) {
+			NativeScriptDebug.routerLog(`nsRouterLink urlTree created: ${urlTree}`);
+		}
 
-        return urlTree;
-    }
+		return urlTree;
+	}
 
+	private convertClearHistory(value: boolean | string): boolean {
+		return value === true || value === 'true';
+	}
 
-    private convertClearHistory(value: boolean | string): boolean {
-        return value === true || value === "true";
-    }
+	private getTransition(): { animated: boolean; transition?: NavigationTransition } {
+		let transition: NavigationTransition;
+		let animated: boolean;
 
-    private getTransition(): { animated: boolean, transition?: NavigationTransition } {
-        let transition: NavigationTransition;
-        let animated: boolean;
+		if (typeof this.pageTransition === 'boolean') {
+			animated = this.pageTransition;
+		} else if (typeof this.pageTransition === 'string') {
+			if (this.pageTransition === 'none' || this.pageTransition === 'false') {
+				animated = false;
+			} else {
+				animated = true;
+				transition = {
+					name: <string>this.pageTransition,
+				};
+			}
+		} else {
+			animated = true;
+			transition = <NavigationTransition>this.pageTransition;
+		}
 
-        if (typeof this.pageTransition === "boolean") {
-            animated = this.pageTransition;
-        } else if (isString(this.pageTransition)) {
-            if (this.pageTransition === "none" || this.pageTransition === "false") {
-                animated = false;
-            } else {
-                animated = true;
-                transition = {
-                    name: <string>this.pageTransition
-                };
-            }
-        } else {
-            animated = true;
-            transition = <NavigationTransition>this.pageTransition;
-        }
+		let duration = +this.pageTransitionDuration;
+		if (!isNaN(duration)) {
+			transition = transition || {};
+			transition.duration = duration;
+		}
 
-        let duration = +this.pageTransitionDuration;
-        if (!isNaN(duration)) {
-            transition = transition || {};
-            transition.duration = duration;
-        }
-
-        return { animated, transition };
-    }
+		return { animated, transition };
+	}
 }
 
 function attrBoolValue(s: any): boolean {
-    return s === "" || !!s;
+	return s === '' || !!s;
 }

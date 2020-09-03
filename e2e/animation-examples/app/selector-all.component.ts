@@ -5,7 +5,7 @@ import {
     transition,
     trigger,
 } from "@angular/animations";
-import { Component } from "@angular/core";
+import { Component, NgZone } from "@angular/core";
 
 @Component({
     moduleId: module.id,
@@ -31,7 +31,7 @@ import { Component } from "@angular/core";
     template: `
         <FlexboxLayout flexDirection="column"
             automationText="itemsContainer">
-            <Button text="add" automationText="add" (tap)="items.push('random')"></Button>
+            <Button text="add" automationText="add" (tap)="addRandom()"></Button>
 
             <FlexboxLayout
                 flexDirection="column"
@@ -54,9 +54,17 @@ export class SelectorAllComponent {
         "second",
     ];
 
+    constructor(private zone: NgZone) {}
+
     add() {
         const newItem = `Item ${this.items.length}`;
         this.items.push(newItem);
+    }
+
+    addRandom() {
+      // this.zone.run(() => {
+        this.items.push('random');
+      // });
     }
 
     remove(item) {

@@ -1,1 +1,1 @@
-export * from "@nativescript/angular/lang-facade";
+export * from "@nativescript/angular";

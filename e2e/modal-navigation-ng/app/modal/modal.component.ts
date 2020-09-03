@@ -1,6 +1,6 @@
 import { Component, ViewContainerRef } from "@angular/core";
-import { ModalDialogParams, ModalDialogOptions, ModalDialogService } from "@nativescript/angular/directives/dialogs";
-import { RouterExtensions, PageRoute } from "@nativescript/angular/router";
+import { ModalDialogParams, ModalDialogOptions, ModalDialogService } from "@nativescript/angular";
+import { RouterExtensions, PageRoute } from "@nativescript/angular";
 import { ActivatedRoute } from "@angular/router";
 import { View, ShownModallyData, EventData } from "@nativescript/core/ui/core/view"
 import { confirm } from "@nativescript/core/ui/dialogs";

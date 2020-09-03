@@ -1,1 +1,1 @@
-export * from "@nativescript/angular/dom-adapter";
+export * from "@nativescript/angular";
