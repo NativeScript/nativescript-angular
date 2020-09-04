@@ -1,4 +1,4 @@
-import { ComponentFactoryResolver, ComponentRef, Injectable, Injector, NgModuleRef, Type, ViewContainerRef } from '@angular/core';
+import { ComponentFactoryResolver, ComponentRef, Injectable, Injector, NgModuleRef, NgZone, Type, ViewContainerRef } from '@angular/core';
 import { Frame, View, ViewBase, ProxyViewContainer, ShowModalOptions } from '@nativescript/core';
 
 import { NSLocationStrategy } from '../router/ns-location-strategy';
@@ -32,7 +32,7 @@ export class ModalDialogParams {
 
 @Injectable()
 export class ModalDialogService {
-	constructor(private location: NSLocationStrategy) {}
+	constructor(private location: NSLocationStrategy, private zone: NgZone) {}
 
 	public showModal(type: Type<any>, options: ModalDialogOptions): Promise<any> {
 		if (!options.viewContainerRef) {
@@ -98,8 +98,10 @@ export class ModalDialogService {
 			if (componentView) {
 				componentView.closeModal();
 				this.location._closeModalNavigation();
-				detachedLoaderRef.instance.detectChanges();
-				detachedLoaderRef.destroy();
+				this.zone.run(() => {
+					detachedLoaderRef.instance.detectChanges();
+					detachedLoaderRef.destroy();
+				});
 			}
 		});
 
@@ -111,20 +113,22 @@ export class ModalDialogService {
 		});
 		const detachedFactory = options.resolver.resolveComponentFactory(DetachedLoader);
 		detachedLoaderRef = options.containerRef.createComponent(detachedFactory, 0, childInjector, null);
-		detachedLoaderRef.instance.loadComponent(options.type).then((compRef) => {
-			const detachedProxy = <ProxyViewContainer>compRef.location.nativeElement;
+		this.zone.run(() => {
+			detachedLoaderRef.instance.loadComponent(options.type).then((compRef) => {
+				const detachedProxy = <ProxyViewContainer>compRef.location.nativeElement;
 
-			if (detachedProxy.getChildrenCount() > 1) {
-				throw new Error('Modal content has more than one root view.');
-			}
-			componentView = detachedProxy.getChildAt(0);
+				if (detachedProxy.getChildrenCount() > 1) {
+					throw new Error('Modal content has more than one root view.');
+				}
+				componentView = detachedProxy.getChildAt(0);
 
-			if (componentView.parent) {
-				(<any>componentView.parent)._ngDialogRoot = componentView;
-				(<any>componentView.parent).removeChild(componentView);
-			}
+				if (componentView.parent) {
+					(<any>componentView.parent)._ngDialogRoot = componentView;
+					(<any>componentView.parent).removeChild(componentView);
+				}
 
-			options.parentView.showModal(componentView, { ...options, closeCallback });
+				options.parentView.showModal(componentView, { ...options, closeCallback });
+			});
 		});
 	}
 }

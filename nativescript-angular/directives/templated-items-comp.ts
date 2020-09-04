@@ -1,4 +1,4 @@
-import { AfterContentInit, ContentChild, Directive, DoCheck, ElementRef, EmbeddedViewRef, EventEmitter, Host, Inject, InjectionToken, Input, IterableDiffer, IterableDiffers, OnDestroy, Output, TemplateRef, ViewChild, ViewContainerRef, ɵisListLikeIterable as isListLikeIterable, Injectable } from '@angular/core';
+import { AfterContentInit, ContentChild, Directive, DoCheck, ElementRef, EmbeddedViewRef, EventEmitter, Host, Inject, InjectionToken, Input, IterableDiffer, IterableDiffers, OnDestroy, Output, TemplateRef, ViewChild, ViewContainerRef, ɵisListLikeIterable as isListLikeIterable, Injectable, NgZone } from '@angular/core';
 import { ObservableArray, View, KeyedTemplate, LayoutBase, ItemEventData, TemplatedItemsView, profile } from '@nativescript/core';
 
 import { getSingleViewRecursive } from '../element-registry';
@@ -54,7 +54,7 @@ export abstract class TemplatedItemsComponent implements DoCheck, OnDestroy, Aft
 		this.templatedItemsView.items = this._items;
 	}
 
-	constructor(_elementRef: ElementRef, private _iterableDiffers: IterableDiffers) {
+	constructor(_elementRef: ElementRef, private _iterableDiffers: IterableDiffers, private zone: NgZone) {
 		this.templatedItemsView = _elementRef.nativeElement;
 
 		this.templatedItemsView.on('itemLoading', this.onItemLoading, this);
@@ -188,8 +188,10 @@ export abstract class TemplatedItemsComponent implements DoCheck, OnDestroy, Aft
 			NativeScriptDebug.listViewLog(`Manually detect changes in child: ${index}`);
 		}
 
-		viewRef.markForCheck();
-		viewRef.detectChanges();
+		this.zone.run(() => {
+			viewRef.markForCheck();
+			viewRef.detectChanges();
+		});
 	}
 
 	ngDoCheck() {

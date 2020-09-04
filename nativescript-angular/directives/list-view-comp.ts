@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, ElementRef, IterableDiffers, forwardRef } from '@angular/core';
+import { ChangeDetectionStrategy, Component, ElementRef, IterableDiffers, forwardRef, NgZone } from '@angular/core';
 import { ListView } from '@nativescript/core';
 import { TEMPLATED_ITEMS_COMPONENT, TemplatedItemsComponent } from './templated-items-comp';
 
@@ -17,7 +17,7 @@ export class ListViewComponent extends TemplatedItemsComponent {
 
 	protected templatedItemsView: ListView;
 
-	constructor(_elementRef: ElementRef, _iterableDiffers: IterableDiffers) {
-		super(_elementRef, _iterableDiffers);
+	constructor(_elementRef: ElementRef, _iterableDiffers: IterableDiffers, zone: NgZone) {
+		super(_elementRef, _iterableDiffers, zone);
 	}
 }
