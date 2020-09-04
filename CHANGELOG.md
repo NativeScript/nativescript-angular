@@ -1,3 +1,17 @@
+# [10.1.0](https://github.com/NativeScript/nativescript-angular/compare/10.0.3...10.1.0) (2020-09-04)
+
+
+### Bug Fixes
+
+* **list-view:** fix crash when used with ngFor ([#2121](https://github.com/NativeScript/nativescript-angular/issues/2121)) ([302afb3](https://github.com/NativeScript/nativescript-angular/commit/302afb350dea56ddbf1a0d772f6d9405413890a5))
+
+
+### Features
+
+* **angular:** ng 10.1 and ns 7 ([#2237](https://github.com/NativeScript/nativescript-angular/issues/2237)) ([548e074](https://github.com/NativeScript/nativescript-angular/commit/548e0743eb092ba3fa371ea4d26879ee5bf03983))
+
+
+
 ## [10.0.3](https://github.com/NativeScript/nativescript-angular/compare/10.0.2...10.0.3) (2020-08-27)
 
 
