@@ -1,36 +1,30 @@
 {
   "description": "NativeScript Application",
+  "main": "main.js",
   "license": "SEE LICENSE IN <your-license-filename>",
   "readme": "NativeScript Application",
   "repository": "<fill-your-repository-here>",
-  "nativescript": {
-    "id": "org.nativescript.ng4animations",
-    "tns-ios": {
-      "version": "6.5.2"
-    },
-    "tns-android": {
-      "version": "latest"
-    }
-  },
   "dependencies": {
-    "@angular/animations": "~10.0.0",
-    "@angular/common": "~10.0.0",
-    "@angular/compiler": "~10.0.0",
-    "@angular/core": "~10.0.0",
-    "@angular/forms": "~10.0.0",
-    "@angular/platform-browser": "~10.0.0",
-    "@angular/platform-browser-dynamic": "~10.0.0",
-    "@angular/router": "~10.0.0",
+    "@angular/animations": "~10.1.0",
+    "@angular/common": "~10.1.0",
+    "@angular/compiler": "~10.1.0",
+    "@angular/core": "~10.1.0",
+    "@angular/forms": "~10.1.0",
+    "@angular/platform-browser": "~10.1.0",
+    "@angular/platform-browser-dynamic": "~10.1.0",
+    "@angular/router": "~10.1.0",
     "@nativescript/angular": "file:../../dist/nativescript-angular-scoped.tgz",
     "nativescript-theme-core": "~1.0.2",
-    "reflect-metadata": "~0.1.8",
-    "rxjs": "~6.5.5",
-    "@nativescript/core": "rc",
-    "zone.js": "^0.10.3"
+    "reflect-metadata": "~0.1.13",
+    "rxjs": "~6.6.0",
+    "@nativescript/core": "~7.0.0",
+    "zone.js": "^0.11.1"
   },
   "devDependencies": {
-    "@angular/compiler-cli": "~10.0.0",
-    "@ngtools/webpack": "~10.0.0",
+    "@angular/compiler-cli": "~10.1.0",
+    "@nativescript/ios": "7.0.0",
+    "@nativescript/webpack": "~3.0.0",
+    "@ngtools/webpack": "~10.1.0",
     "@types/chai": "~4.2.0",
     "@types/mocha": "~7.0.0",
     "@types/node": "~14.0.0",
@@ -41,13 +35,12 @@
     "lazy": "~1.0.11",
     "mocha": "~8.0.1",
     "mochawesome": "~6.1.1",
-    "node-sass": "~4.14.1",
     "nativescript-css-loader": "~0.26.0",
-    "@nativescript/webpack": "rc",
+    "node-sass": "~4.14.1",
     "typescript": "~3.9.0"
   },
   "scripts": {
-    "clean": "npx rimraf hooks node_modules platforms package-lock.json",
+    "clean": "ns clean",
     "setup": "cd ../../nativescript-angular && npm run prep.apps && cd ../e2e/animation-examples && npm run clean",
     "ngcc": "ngcc --properties es2015 module main --first-only",
     "postinstall": "npm run ngcc",
@@ -56,7 +49,7 @@
     "e2e-watch": "tsc -p e2e --watch",
     "ns-verify-bundle": "ns-verify-bundle",
     "update-ns-webpack": "update-ns-webpack",
-    "ios": "tns debug ios --emulator --no-hmr",
-    "android": "tns debug android --emulator --no-hmr"
+    "ios": "ns debug ios --emulator --no-hmr",
+    "android": "ns debug android --emulator --no-hmr"
   }
 }

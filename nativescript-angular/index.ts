@@ -5,9 +5,9 @@ import '@nativescript/zone-js';
 // investigate Ivy with templated-items-comp to allow standard zone below to be used instead of patched {N} zone above
 // import 'zone.js/dist/zone';
 import './dom-adapter';
-import 'nativescript-intl';
 // import "./polyfills/array";
 import './polyfills/console';
+import 'nativescript-intl';
 
 export * from './platform-common';
 export * from './platform-providers';
