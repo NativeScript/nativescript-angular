@@ -42,8 +42,6 @@
   "scripts": {
     "clean": "ns clean",
     "setup": "cd ../../nativescript-angular && npm run prep.apps && cd ../e2e/animation-examples && npm run clean",
-    "ngcc": "ngcc --properties es2015 module main --first-only",
-    "postinstall": "npm run ngcc",
     "u": "update-ns-webpack",
     "e2e": "tsc -p e2e && mocha --opts ../config/mocha.opts --recursive e2e --appiumCapsLocation ../config/appium.capabilities.json",
     "e2e-watch": "tsc -p e2e --watch",

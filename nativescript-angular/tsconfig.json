@@ -25,7 +25,7 @@
     "skipMetadataEmit": false,
     "skipTemplateCodegen": true,
     "strictMetadataEmit": true,
-    "enableIvy": true
+    "enableIvy": false
   },
   "include": [
     "**/*.ts"
