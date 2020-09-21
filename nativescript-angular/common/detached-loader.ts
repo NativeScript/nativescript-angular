@@ -11,10 +11,9 @@ import { Trace } from '@nativescript/core';
 	template: `<Placeholder #loader></Placeholder>`,
 })
 export class DetachedLoader implements OnDestroy {
-
 	private disposeFunctions: Array<() => void> = [];
 	// tslint:disable-line:component-class-suffix
-	constructor(private resolver: ComponentFactoryResolver, private changeDetector: ChangeDetectorRef, private containerRef: ViewContainerRef, private appRef: ApplicationRef) { }
+	constructor(private resolver: ComponentFactoryResolver, private changeDetector: ChangeDetectorRef, private containerRef: ViewContainerRef, private appRef: ApplicationRef) {}
 
 	private loadInLocation(componentType: Type<any>): Promise<ComponentRef<any>> {
 		const factory = this.resolver.resolveComponentFactory(componentType);
@@ -25,7 +24,6 @@ export class DetachedLoader implements OnDestroy {
 			this.appRef.detachView(componentRef.hostView);
 			componentRef.destroy();
 		});
-
 
 		// Component is created, built may not be checked if we are loading
 		// inside component with OnPush CD strategy. Mark us for check to be sure CD will reach us.
