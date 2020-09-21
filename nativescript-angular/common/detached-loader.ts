@@ -49,6 +49,13 @@ export class DetachedLoader implements OnDestroy {
 	}
 
 	public loadWithFactory<T>(factory: ComponentFactory<T>): ComponentRef<T> {
-		return this.containerRef.createComponent(factory, this.containerRef.length, this.containerRef.injector, null);
+		const componentRef = factory.create(this.containerRef.injector);
+		this.appRef.attachView(componentRef.hostView);
+
+		this.disposeFunctions.push(() => {
+			this.appRef.detachView(componentRef.hostView);
+			componentRef.destroy();
+		});
+		return componentRef;
 	}
 }
