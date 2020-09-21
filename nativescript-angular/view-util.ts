@@ -63,12 +63,14 @@ export class ViewUtil {
 
 		if (previous) {
 			previous.nextSibling = child;
+			child.previousSibling = previous;
 		} else {
 			parent.firstChild = child;
 		}
 
 		if (next) {
 			child.nextSibling = next;
+			next.previousSibling = child;
 		} else {
 			this.appendToQueue(parent, child);
 		}
@@ -81,6 +83,7 @@ export class ViewUtil {
 
 		if (parent.lastChild) {
 			parent.lastChild.nextSibling = view;
+			view.previousSibling = parent.lastChild;
 		}
 
 		parent.lastChild = view;
@@ -152,6 +155,7 @@ export class ViewUtil {
 			parent.firstChild = null;
 			parent.lastChild = null;
 			child.nextSibling = null;
+			child.previousSibling = null;
 			return;
 		}
 
@@ -159,16 +163,20 @@ export class ViewUtil {
 			parent.firstChild = child.nextSibling;
 		}
 
-		const previous = this.findPreviousElement(parent, child);
+		const previous = child.previousSibling;
 		if (parent.lastChild === child) {
 			parent.lastChild = previous;
 		}
 
 		if (previous) {
 			previous.nextSibling = child.nextSibling;
+			if (child.nextSibling) {
+				child.nextSibling.previousSibling = previous;
+			}
 		}
 
 		child.nextSibling = null;
+		child.previousSibling = null;
 	}
 
 	// NOTE: This one is O(n) - use carefully

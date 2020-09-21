@@ -6,11 +6,6 @@ import { ViewUtil } from './view-util';
 import { NgView, InvisibleNode } from './element-registry';
 import { NativeScriptDebug } from './trace';
 
-export interface ElementReference {
-	previous: NgView;
-	next: NgView;
-}
-
 @Injectable()
 export class NativeScriptRenderer extends Renderer2 {
 	data: { [key: string]: any } = Object.create(null);
@@ -31,8 +26,8 @@ export class NativeScriptRenderer extends Renderer2 {
 	}
 
 	@profile
-	insertBefore(parent: NgView, newChild: NgView, refChild: NgView | ElementReference): void {
-		let { previous, next } = refChild instanceof View ? this.nextSibling(refChild) : refChild;
+	insertBefore(parent: NgView, newChild: NgView, refChild: NgView): void {
+		let { previous, next } = refChild instanceof View ? { previous: refChild.previousSibling, next: refChild } : { previous: null, next: null };
 		if (NativeScriptDebug.isLogEnabled()) {
 			NativeScriptDebug.rendererLog(`NativeScriptRenderer.insertBefore child: ${newChild} ` + `parent: ${parent} previous: ${previous} next: ${next}`);
 		}
@@ -68,15 +63,12 @@ export class NativeScriptRenderer extends Renderer2 {
 	}
 
 	@profile
-	nextSibling(node: NgView): ElementReference {
+	nextSibling(node: NgView): NgView {
 		if (NativeScriptDebug.isLogEnabled()) {
 			NativeScriptDebug.rendererLog(`NativeScriptRenderer.nextSibling of ${node} is ${node.nextSibling}`);
 		}
 
-		return {
-			previous: node,
-			next: node.nextSibling,
-		};
+		return node.nextSibling;
 	}
 
 	@profile
