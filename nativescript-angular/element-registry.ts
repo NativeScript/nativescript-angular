@@ -9,6 +9,7 @@ export interface ViewExtensions {
 	nodeName: string;
 	parentNode: NgView;
 	nextSibling: NgView;
+	previousSibling: NgView;
 	firstChild: NgView;
 	lastChild: NgView;
 	ngCssClasses: Map<string, boolean>;
@@ -22,6 +23,7 @@ export abstract class InvisibleNode extends View implements NgView {
 	nodeName: string;
 	parentNode: NgView;
 	nextSibling: NgView;
+	previousSibling: NgView;
 	firstChild: NgView;
 	lastChild: NgView;
 	ngCssClasses: Map<string, boolean>;
