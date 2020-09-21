@@ -1,4 +1,4 @@
-import { ComponentRef, ComponentFactory, ViewContainerRef, Component, Type, ComponentFactoryResolver, ChangeDetectorRef } from '@angular/core';
+import { ComponentRef, ComponentFactory, ViewContainerRef, Component, Type, ComponentFactoryResolver, ChangeDetectorRef, ApplicationRef, OnDestroy } from '@angular/core';
 import { Trace } from '@nativescript/core';
 
 /**
@@ -10,13 +10,20 @@ import { Trace } from '@nativescript/core';
 	selector: 'DetachedContainer',
 	template: `<Placeholder #loader></Placeholder>`,
 })
-export class DetachedLoader {
+export class DetachedLoader implements OnDestroy {
+	private disposeFunctions: Array<() => void> = [];
 	// tslint:disable-line:component-class-suffix
-	constructor(private resolver: ComponentFactoryResolver, private changeDetector: ChangeDetectorRef, private containerRef: ViewContainerRef) {}
+	constructor(private resolver: ComponentFactoryResolver, private changeDetector: ChangeDetectorRef, private containerRef: ViewContainerRef, private appRef: ApplicationRef) {}
 
 	private loadInLocation(componentType: Type<any>): Promise<ComponentRef<any>> {
 		const factory = this.resolver.resolveComponentFactory(componentType);
-		const componentRef = this.containerRef.createComponent(factory, this.containerRef.length, this.containerRef.injector);
+		const componentRef = factory.create(this.containerRef.injector);
+		this.appRef.attachView(componentRef.hostView);
+
+		this.disposeFunctions.push(() => {
+			this.appRef.detachView(componentRef.hostView);
+			componentRef.destroy();
+		});
 
 		// Component is created, built may not be checked if we are loading
 		// inside component with OnPush CD strategy. Mark us for check to be sure CD will reach us.
@@ -25,6 +32,10 @@ export class DetachedLoader {
 		Trace.write('DetachedLoader.loadInLocation component loaded -> markForCheck', 'detached-loader');
 
 		return Promise.resolve(componentRef);
+	}
+
+	public ngOnDestroy() {
+		this.disposeFunctions.forEach((fn) => fn());
 	}
 
 	public detectChanges() {
