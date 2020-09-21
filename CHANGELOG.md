@@ -1,3 +1,13 @@
+## [10.1.4](https://github.com/NativeScript/nativescript-angular/compare/10.1.3...10.1.4) (2020-09-21)
+
+
+### Bug Fixes
+
+* **detached-loader:** detach loadWithFactory ([#2260](https://github.com/NativeScript/nativescript-angular/issues/2260)) ([1dca81b](https://github.com/NativeScript/nativescript-angular/commit/1dca81bbc4a1a05a9eefe13988848124885f3178))
+* **renderer:** order not preserved ([#2261](https://github.com/NativeScript/nativescript-angular/issues/2261)) ([07abb9e](https://github.com/NativeScript/nativescript-angular/commit/07abb9e62c2408be83e8a694384cd529ba5d3309))
+
+
+
 ## [10.1.3](https://github.com/NativeScript/nativescript-angular/compare/10.1.0...10.1.3) (2020-09-21)
 
 
