@@ -41,7 +41,11 @@ export class ViewUtil {
 		const extendedParent = this.ensureNgViewExtensions(parent);
 		const extendedChild = this.ensureNgViewExtensions(child);
 
-		if (!previous) {
+		// the element should be between previous and next
+		// if there's next but no previous, it's the first element
+		// if there's previous but no next, it's the last element
+		// elements that have no previous/next elements must be appended
+		if (!previous && !next) {
 			previous = extendedParent.lastChild;
 		}
 		this.addToQueue(extendedParent, extendedChild, previous, next);
