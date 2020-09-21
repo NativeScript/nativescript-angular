@@ -1,3 +1,12 @@
+## [10.1.5](https://github.com/NativeScript/nativescript-angular/compare/10.1.4...10.1.5) (2020-09-21)
+
+
+### Bug Fixes
+
+* **renderer:** dynamic views can't be prepended ([#2262](https://github.com/NativeScript/nativescript-angular/issues/2262)) ([5735a01](https://github.com/NativeScript/nativescript-angular/commit/5735a01695d7967b5a63222dcec760ddac0533e3))
+
+
+
 ## [10.1.4](https://github.com/NativeScript/nativescript-angular/compare/10.1.3...10.1.4) (2020-09-21)
 
 
