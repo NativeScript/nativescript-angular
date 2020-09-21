@@ -31,7 +31,8 @@ export class NativeScriptRenderer extends Renderer2 {
 	}
 
 	@profile
-	insertBefore(parent: NgView, newChild: NgView, { previous, next }: ElementReference): void {
+	insertBefore(parent: NgView, newChild: NgView, refChild: NgView | ElementReference): void {
+		let { previous, next } = refChild instanceof View ? this.nextSibling(refChild) : refChild;
 		if (NativeScriptDebug.isLogEnabled()) {
 			NativeScriptDebug.rendererLog(`NativeScriptRenderer.insertBefore child: ${newChild} ` + `parent: ${parent} previous: ${previous} next: ${next}`);
 		}
