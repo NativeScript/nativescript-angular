@@ -1,3 +1,13 @@
+## [10.1.3](https://github.com/NativeScript/nativescript-angular/compare/10.1.0...10.1.3) (2020-09-21)
+
+
+### Bug Fixes
+
+* **detached-loader:** completely deatch components ([#2257](https://github.com/NativeScript/nativescript-angular/issues/2257)) ([623d2f7](https://github.com/NativeScript/nativescript-angular/commit/623d2f79e014017fd993685051d125b3c5c72ada))
+* **ivy:** support view references in insertBefore ([#2258](https://github.com/NativeScript/nativescript-angular/issues/2258)) ([c2eaef5](https://github.com/NativeScript/nativescript-angular/commit/c2eaef52a66dbbee982f73bb968a706cee38f633))
+
+
+
 # [10.1.0](https://github.com/NativeScript/nativescript-angular/compare/10.0.3...10.1.0) (2020-09-04)
 
 
