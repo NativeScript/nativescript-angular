@@ -1,5 +1,5 @@
 import { ListViewComponent } from './list-view-comp';
-import { TemplateKeyDirective, TemplatedItemsComponent } from './templated-items-comp';
+import { TemplateKeyDirective, TemplatedItemsComponent, TEMPLATED_ITEMS_COMPONENT } from './templated-items-comp';
 import { TabViewDirective, TabViewItemDirective } from './tab-view';
 import { ActionBarComponent, ActionBarScope, ActionItemDirective, NavigationButtonDirective } from './action-bar';
 import { AndroidFilterComponent, IosFilterComponent } from './platform-filters';
