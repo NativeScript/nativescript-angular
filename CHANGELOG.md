@@ -1,3 +1,18 @@
+## [10.1.7](https://github.com/NativeScript/nativescript-angular/compare/10.1.5...10.1.7) (2020-10-12)
+
+
+### Bug Fixes
+
+* Export injection token used by plugins ([#2268](https://github.com/NativeScript/nativescript-angular/issues/2268)) ([75865f2](https://github.com/NativeScript/nativescript-angular/commit/75865f214d9e53eb36990c779808d50fb697f1ce))
+* expose NSLocationStrategy and NSRouteReuseStrategy ([9b8435e](https://github.com/NativeScript/nativescript-angular/commit/9b8435e13b7f6f42098e79895af5ab3156d1aac3))
+
+
+### Features
+
+* export injectiontoken for template items ([52a56d7](https://github.com/NativeScript/nativescript-angular/commit/52a56d7201b70b67edb2ca77e9042737f216a07a))
+
+
+
 ## [10.1.5](https://github.com/NativeScript/nativescript-angular/compare/10.1.4...10.1.5) (2020-09-21)
 
 
