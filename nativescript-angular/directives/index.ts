@@ -7,4 +7,4 @@ export { ModalDialogOptions, ModalDialogParams, ModalDialogService } from './dia
 
 export const NS_DIRECTIVES = [ListViewComponent, TemplateKeyDirective, TabViewDirective, TabViewItemDirective, ActionBarComponent, ActionBarScope, ActionItemDirective, NavigationButtonDirective, AndroidFilterComponent, IosFilterComponent];
 
-export { ListViewComponent, TemplateKeyDirective, TemplatedItemsComponent, TabViewDirective, TabViewItemDirective, ActionBarComponent, ActionBarScope, ActionItemDirective, NavigationButtonDirective, AndroidFilterComponent, IosFilterComponent };
+export { ListViewComponent, TemplateKeyDirective, TemplatedItemsComponent, TabViewDirective, TabViewItemDirective, ActionBarComponent, ActionBarScope, ActionItemDirective, NavigationButtonDirective, AndroidFilterComponent, IosFilterComponent, TEMPLATED_ITEMS_COMPONENT };
