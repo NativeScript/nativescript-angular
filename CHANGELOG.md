@@ -1,3 +1,12 @@
+# [11.0.0](https://github.com/NativeScript/nativescript-angular/compare/10.1.7...11.0.0) (2020-11-17)
+
+
+### Features
+
+* **angular:** v11 ([#2297](https://github.com/NativeScript/nativescript-angular/issues/2297)) ([e3657c4](https://github.com/NativeScript/nativescript-angular/commit/e3657c446db7af23d50f8514d001e5709c2b7788))
+
+
+
 ## [10.1.7](https://github.com/NativeScript/nativescript-angular/compare/10.1.5...10.1.7) (2020-10-12)
 
 
