@@ -17,6 +17,7 @@ export class AppHostView extends ContentView {
 		this._ngAppRoot = value;
 	}
 
+  // @ts-ignore
 	get content(): View {
 		return this._content;
 	}

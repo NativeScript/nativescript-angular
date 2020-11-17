@@ -68,7 +68,6 @@ export class NSRouterLink {
 					relativeTo: this.route,
 					queryParams: this.queryParams,
 					fragment: this.fragment,
-					preserveQueryParams: attrBoolValue(this.preserveQueryParams),
 					queryParamsHandling: this.queryParamsHandling,
 					preserveFragment: attrBoolValue(this.preserveFragment),
 				});
@@ -102,7 +101,6 @@ export class NSRouterLink {
 			relativeTo: this.route,
 			queryParams: this.queryParams,
 			fragment: this.fragment,
-			preserveQueryParams: attrBoolValue(this.preserveQueryParams),
 			queryParamsHandling: this.queryParamsHandling,
 			preserveFragment: attrBoolValue(this.preserveFragment),
 		});
