@@ -302,7 +302,7 @@ export class NativeScriptPlatformRef extends PlatformRef {
 
 				lastBootstrappedModule = new WeakRef(moduleRef);
 				Application.resetRootView({
-					create: () => getRootPage(),
+					create: () => (getRootPage() instanceof AppHostView ? ((<any>getRootPage()) as AppHostView).ngAppRoot : getRootPage()),
 				});
 			},
 			(error) => {
