@@ -1,6 +1,6 @@
 {
   "name": "@nativescript/angular",
-  "version": "11.0.0",
+  "version": "11.0.1",
   "description": "An Angular renderer that lets you build mobile apps with NativeScript.",
   "homepage": "https://www.nativescript.org/",
   "bugs": "https://github.com/NativeScript/nativescript-angular/issues",
@@ -79,7 +79,7 @@
     "@angular/platform-browser": "~11.0.0",
     "@angular/platform-browser-dynamic": "~11.0.0",
     "@angular/router": "~11.0.0",
-    "@nativescript/core": "~7.0.0",
+    "@nativescript/core": "~7.1.0",
     "codelyzer": "^5.2.0",
     "conventional-changelog-cli": "^2.0.34",
     "husky": "^4.2.5",

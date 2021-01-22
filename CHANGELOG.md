@@ -1,3 +1,12 @@
+## [11.0.1](https://github.com/NativeScript/nativescript-angular/compare/11.0.0...11.0.1) (2021-01-22)
+
+
+### Bug Fixes
+
+* blank screen on hmr ([#2317](https://github.com/NativeScript/nativescript-angular/issues/2317)) ([197d802](https://github.com/NativeScript/nativescript-angular/commit/197d802976ddf4ae3bba45f2d000a687049c8027))
+
+
+
 # [11.0.0](https://github.com/NativeScript/nativescript-angular/compare/10.1.7...11.0.0) (2020-11-17)
 
 
