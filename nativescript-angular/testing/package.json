@@ -6,12 +6,12 @@
         "@nativescript/core": "ns-core"
       }
     },
-    "whitelistedNonPeerDependencies": [
+    "allowedNonPeerDependencies": [
       "."
     ]
   },
   "devDependencies": {
-    "@nativescript/angular": "rc",
-    "@nativescript/core": "rc"
+    "@nativescript/angular": "latest",
+    "@nativescript/core": "latest"
   }
 }

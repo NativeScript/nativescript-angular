@@ -1,6 +1,6 @@
 {
     "name": "nativescript-angular",
-    "version": "11.0.0",
+    "version": "11.2.0",
     "description": "Compatibility with old style nativescript-angular imports.",
     "homepage": "https://www.nativescript.org/",
     "bugs": "https://github.com/NativeScript/nativescript-angular/issues",
@@ -30,7 +30,7 @@
                 "@nativescript/angular": "ns-angular"
             }
         },
-        "whitelistedNonPeerDependencies": [
+        "allowedNonPeerDependencies": [
             "."
         ]
     },
