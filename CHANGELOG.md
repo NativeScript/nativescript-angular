@@ -1,3 +1,12 @@
+# [11.2.0](https://github.com/NativeScript/nativescript-angular/compare/11.0.1...11.2.0) (2021-03-24)
+
+
+### Bug Fixes
+
+* **ivy:** nsRouterLinkActive works on nsRouterLink ([#2322](https://github.com/NativeScript/nativescript-angular/issues/2322)) ([13a3562](https://github.com/NativeScript/nativescript-angular/commit/13a3562146ef8516fea8bb3d988f8e0ddc9617a7))
+
+
+
 ## [11.0.1](https://github.com/NativeScript/nativescript-angular/compare/11.0.0...11.0.1) (2021-01-22)
 
 
