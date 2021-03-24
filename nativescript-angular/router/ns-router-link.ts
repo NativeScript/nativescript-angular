@@ -1,10 +1,11 @@
-import { Directive, Input, ElementRef, NgZone } from '@angular/core';
+import { Directive, Input, ElementRef, NgZone, OnChanges, SimpleChanges } from '@angular/core';
 import { NavigationExtras } from '@angular/router';
 import { ActivatedRoute, Router, UrlTree } from '@angular/router';
 import { NavigationTransition } from '@nativescript/core';
 import { NativeScriptDebug } from '../trace';
 import { RouterExtensions } from './router-extensions';
 import { NavigationOptions } from './ns-location-utils';
+import { Subject } from 'rxjs';
 
 // Copied from "@angular/router/src/config"
 export type QueryParamsHandling = 'merge' | 'preserve' | '';
@@ -34,7 +35,7 @@ export type QueryParamsHandling = 'merge' | 'preserve' | '';
  * And if the segment begins with `../`, the router will go up one level.
  */
 @Directive({ selector: '[nsRouterLink]' })
-export class NSRouterLink {
+export class NSRouterLink implements OnChanges {
 	// tslint:disable-line:directive-class-suffix
 	@Input() target: string;
 	@Input() queryParams: { [k: string]: any };
@@ -49,6 +50,9 @@ export class NSRouterLink {
 	@Input() clearHistory: boolean;
 	@Input() pageTransition: boolean | string | NavigationTransition = true;
 	@Input() pageTransitionDuration;
+
+	/** @internal */
+	onChanges = new Subject<NSRouterLink>();
 
 	private commands: any[] = [];
 
@@ -73,6 +77,12 @@ export class NSRouterLink {
 				});
 			});
 		});
+	}
+
+	ngOnChanges(changes: SimpleChanges) {
+		// This is subscribed to by `RouterLinkActive` so that it knows to update when there are changes
+		// to the RouterLinks it's tracking.
+		this.onChanges.next(this);
 	}
 
 	@Input('nsRouterLink')
