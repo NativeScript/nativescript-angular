@@ -1,4 +1,4 @@
-import { View, LayoutBase, Page, Frame, AbsoluteLayout, ActivityIndicator, BottomNavigation, Button, ContentView, DatePicker, DockLayout, GridLayout, HtmlView, Image, Label, ListPicker, ListView, Placeholder, Progress, ProxyViewContainer, Repeater, ScrollView, SearchBar, SegmentedBar, SegmentedBarItem, Slider, StackLayout, FlexboxLayout, Switch, TabView, TabStrip, TabStripItem, TabContentItem, Tabs, TextField, TextView, TimePicker, WebView, WrapLayout, FormattedString, Span, RootLayout } from '@nativescript/core';
+import { View, LayoutBase, Page, Frame, AbsoluteLayout, ActivityIndicator, Button, ContentView, DatePicker, DockLayout, GridLayout, HtmlView, Image, Label, ListPicker, ListView, Placeholder, Progress, ProxyViewContainer, Repeater, ScrollView, SearchBar, SegmentedBar, SegmentedBarItem, Slider, StackLayout, FlexboxLayout, Switch, TabView, TextField, TextView, TimePicker, WebView, WrapLayout, FormattedString, Span, RootLayout } from '@nativescript/core';
 
 export interface ViewClass {
 	new (): View;
@@ -164,7 +164,6 @@ const frameMeta: ViewClassMeta = {
 // Note: ActionBar related components are registerd together with action-bar directives.
 registerElement('AbsoluteLayout', () => AbsoluteLayout);
 registerElement('ActivityIndicator', () => ActivityIndicator);
-registerElement('BottomNavigation', () => BottomNavigation);
 registerElement('Button', () => Button);
 registerElement('ContentView', () => ContentView);
 registerElement('DatePicker', () => DatePicker);
@@ -193,10 +192,6 @@ registerElement('StackLayout', () => StackLayout);
 registerElement('FlexboxLayout', () => FlexboxLayout);
 registerElement('Switch', () => Switch);
 registerElement('TabView', () => TabView);
-registerElement('TabStrip', () => TabStrip);
-registerElement('TabStripItem', () => TabStripItem);
-registerElement('TabContentItem', () => TabContentItem);
-registerElement('Tabs', () => Tabs);
 registerElement('TextField', () => TextField);
 registerElement('TextView', () => TextView);
 registerElement('TimePicker', () => TimePicker);

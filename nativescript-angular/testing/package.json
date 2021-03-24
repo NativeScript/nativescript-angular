@@ -12,6 +12,6 @@
   },
   "devDependencies": {
     "@nativescript/angular": "latest",
-    "@nativescript/core": "latest"
+    "@nativescript/core": "8.0.0-alpha.3"
   }
 }
