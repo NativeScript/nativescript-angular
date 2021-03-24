@@ -1,4 +1,4 @@
-import { View, LayoutBase, Page, Frame, AbsoluteLayout, ActivityIndicator, BottomNavigation, Button, ContentView, DatePicker, DockLayout, GridLayout, HtmlView, Image, Label, ListPicker, ListView, Placeholder, Progress, ProxyViewContainer, Repeater, ScrollView, SearchBar, SegmentedBar, SegmentedBarItem, Slider, StackLayout, FlexboxLayout, Switch, TabView, TabStrip, TabStripItem, TabContentItem, Tabs, TextField, TextView, TimePicker, WebView, WrapLayout, FormattedString, Span } from '@nativescript/core';
+import { View, LayoutBase, Page, Frame, AbsoluteLayout, ActivityIndicator, BottomNavigation, Button, ContentView, DatePicker, DockLayout, GridLayout, HtmlView, Image, Label, ListPicker, ListView, Placeholder, Progress, ProxyViewContainer, Repeater, ScrollView, SearchBar, SegmentedBar, SegmentedBarItem, Slider, StackLayout, FlexboxLayout, Switch, TabView, TabStrip, TabStripItem, TabContentItem, Tabs, TextField, TextView, TimePicker, WebView, WrapLayout, FormattedString, Span, RootLayout } from '@nativescript/core';
 
 export interface ViewClass {
 	new (): View;
@@ -183,6 +183,7 @@ registerElement('Placeholder', () => Placeholder);
 registerElement('Progress', () => Progress);
 registerElement('ProxyViewContainer', () => ProxyViewContainer);
 registerElement('Repeater', () => Repeater);
+registerElement('RootLayout', () => RootLayout);
 registerElement('ScrollView', () => ScrollView);
 registerElement('SearchBar', () => SearchBar);
 registerElement('SegmentedBar', () => SegmentedBar);
