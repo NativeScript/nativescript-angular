@@ -45,7 +45,7 @@
         "@angular/platform-browser-dynamic": "~11.0.0",
         "@angular/router": "~11.0.0",
         "@nativescript/angular": "rc",
-        "@nativescript/core": "rc",
+        "@nativescript/core": "~8.0.0",
         "ng-packagr": "^11.0.0",
         "rxjs": "~6.6.0",
         "typescript": "~4.0.0"
