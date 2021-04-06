@@ -1,3 +1,4 @@
+import './polyfills';
 export * from './util';
 export * from './test-root-view';
 export * from './nativescript_test_component_renderer';
