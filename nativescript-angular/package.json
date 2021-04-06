@@ -70,7 +70,7 @@
     "@angular/platform-browser": "~11.2.0",
     "@angular/platform-browser-dynamic": "~11.2.0",
     "@angular/router": "~11.2.0",
-    "@nativescript/core": "8.0.0-alpha.3",
+    "@nativescript/core": "~8.0.0",
     "codelyzer": "^5.2.0",
     "conventional-changelog-cli": "^2.0.34",
     "husky": "^4.2.5",

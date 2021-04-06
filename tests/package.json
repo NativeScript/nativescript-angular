@@ -30,7 +30,7 @@
     "nativescript-angular": "../nativescript-angular-package",
     "nativescript-unit-test-runner": "0.7.0",
     "rxjs": "~6.5.5",
-    "@nativescript/core": "8.0.0-alpha.3",
+    "@nativescript/core": "~8.0.0",
     "zone.js": "^0.10.3"
   },
   "devDependencies": {
