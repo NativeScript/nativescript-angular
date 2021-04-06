@@ -329,7 +329,9 @@ export class PageRouterOutlet implements OnDestroy {
 			const clearCallback = () =>
 				setTimeout(() => {
 					if (this.outlet) {
-						this.routeReuseStrategy.clearCache(this.outlet.outletKeys[0]);
+						this.outlet.outletKeys.forEach((outletKey) => {
+							this.routeReuseStrategy.clearCache(outletKey);
+						});
 					}
 				});
 
