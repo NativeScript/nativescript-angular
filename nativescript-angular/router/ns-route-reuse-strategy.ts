@@ -12,6 +12,10 @@ interface CacheItem {
 }
 
 const getSnapshotKey = function (snapshot: ActivatedRouteSnapshot): string {
+	// https://github.com/angular/angular/issues/13869#issuecomment-344403045
+	while (snapshot.firstChild) {
+		snapshot = snapshot.firstChild;
+	}
 	return snapshot.pathFromRoot.join('->');
 };
 
