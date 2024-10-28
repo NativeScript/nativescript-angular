@@ -1,3 +1,7 @@
+## Note on repo
+
+This repo is for Angular <= 11. If looking for 12+ (including 18+, etc) it's maintained here [NativeScript/angular](https://github.com/NativeScript/angular).
+
 # NativeScript Angular
 [![Build Status](https://travis-ci.org/NativeScript/nativescript-angular.svg?branch=master)](https://travis-ci.org/NativeScript/nativescript-angular)
 
